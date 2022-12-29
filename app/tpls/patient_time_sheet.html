@@ -1,0 +1,367 @@
+
+  <div class="page-body"> 
+    
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+      <div class="title-env">
+        <h1 class="title">Patient Time Sheet</h1>
+        <p class="description">Patient Time Sheet</p>
+      </div>
+    </div>
+    <!--PAGE TITLE END -->
+    
+    
+    
+    
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form class="form-horizontal" role="form">
+              <div class="row">
+                <div class="col-sm-12">
+                	<div class="col-sm-4 pad_lf0" style="margin-top:-15px;">
+                  <div class="user_p mar_bt0"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
+                  <div class="user_av_hd">
+                    <h1>Jack Gates</h1>
+                    <p>Administrator</p>
+                  </div>
+                </div>
+                
+                  <div class="col-sm-8 pull-right pad0 wd_full">
+                    <div class="form-group ">
+                        <label class="col-sm-3 control-label">Search</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control">
+                    </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 pad0">
+                    <div class="form-group col-sm-5 pull-left">
+                      <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                      <div style="width:70px; float:left">
+                        <select class="form-control">
+                          <option value="al">10</option>
+                          <option value="au">20</option>
+                          <option value="au">30</option>
+                        </select>
+                       </div>
+                    </div>
+                
+                  <div class="col-sm-7 pull-right wd_full">
+                    <div class="col-sm-6 pad0 wd_full">
+                      <div class="form-group">
+                        <label for="field-68" class="col-sm-3 control-label">From</label>
+                        <div class="col-sm-9">
+                          <div class="input-group">
+                            <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy">
+                            <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 pad0">
+                      <div class="form-group">
+                        <label for="field-69" class="col-sm-3 control-label">To</label>
+                        <div class="col-sm-9">
+                          <div class="input-group">
+                            <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy">
+                            <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-sm-12 pad0">
+                	<div class="col-sm-6 pull-right">
+                      
+                      <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;">Review</button>
+                      <button type="button" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</button>
+                    
+                    </div>
+                </div>
+              </div>
+              
+
+              
+              <div class="col-sm-12 pad0">
+                <div class="table-responsive scroll border0 timesheet_pg search_hide" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
+                  <script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#example-1").dataTable({
+							aLengthMenu: [
+								[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+							]
+						});
+					});
+					</script>
+                  <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th width="12%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Date</th>
+                        <th width="12%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Time In</th>
+                        <th width="12%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Time Out</th>
+                        <th width="12%" colspan="1" rowspan="1" aria-controls="example-1" aria-label="Name: activate to sort column ascending"  aria-sort="ascending" tabindex="0" nowrap>Hours</th>
+                        
+                        <th width="19%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Employees Name</th>
+                        <th width="20%" data-priority="6" nowrap>Actions</th>
+                        <th width="25%" data-priority="6" nowrap>Signature</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>2008/11/28</th>
+                        <td><div class="green_dot"></div>
+                          09:10 AM</td>
+                        <td><div class="green_dot"></div>
+                          06:00 PM</td>
+                        <td>09:00</td>
+
+                        <td>Capoblanco Anne</td>
+                        <td>
+                        	<div style="float:left; min-width:170px;">
+                            <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                        	<a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                        	<!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
+                            
+                            <a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
+                            </div>
+                        </td>
+                        <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
+                      </tr>
+                      
+                      <tr>
+                        <th>2008/11/28</th>
+                        <td><div class="green_dot"></div>
+                          09:20 AM</td>
+                        <td><div class="red_dot"></div>
+                          06:00 PM</td>
+                        <td>09:00</td>
+
+                        <td>Capoblanco Anne</td>
+                        <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                        	<a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                        	<a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
+                            </div></td>
+                        <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
+                      </tr>
+                      
+                      <tr>
+                        <th>2008/11/28</th>
+                        <td><div class="black_dot"></div>
+                          09:00 AM</td>
+                        <td><div class="black_dot"></div>
+                          06:30 PM</td>
+                        <td>09:00</td>
+
+                        <td>Capoblanco Anne</td>
+                        <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                        	<a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                        	<a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
+                            </div></td>
+                        <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
+                      </tr>
+                      <tr>
+                        <th>2008/11/28</th>
+                        <td><div class="green_dot"></div>
+                          09:00 AM</td>
+                        <td><div class="green_dot"></div>
+                          06:00 PM</td>
+                        <td>09:00</td>
+
+                        <td>Capoblanco Anne</td>
+                        <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                        	<a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                        	<a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
+                            </div></td>
+                        <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
+                      </tr>
+                      <tr>
+                        <th>2008/11/28</th>
+                        <td> 09:00 AM</td>
+                        <td> 06:00 PM</td>
+                        <td>09:00</td>
+
+                        <td>Capoblanco Anne</td>
+                        <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                        	<a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                        	<a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
+                            </div></td>
+                        <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table width="100%"  class="table table-small-font table-bordered table-striped" cellspacing="0">
+                    <tbody>
+                      <tr style="border:0px !important;">
+                        <td width="25%"  class="border0 total" align="right">Total</td>
+                        <td width="25%"  class="border0 total" align="left">00:00 HRS</td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                </div>
+                
+              </div>
+            </form>
+          </div>
+          
+          <div class="panel-body pad_top0">
+            <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="time_sh_bt_buttons">
+                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">&laquo; Previous</button>
+                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">Next &raquo;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="panel-body pad_top0">
+            <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><script type="text/javascript">
+							// This JavaScript Will Replace Checkboxes in dropdown toggles
+							jQuery(document).ready(function($)
+							{
+								setTimeout(function()
+								{
+									$(".checkbox-row input").addClass('cbr');
+									cbr_replace();
+								}, 0);
+							});
+							</script>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+  </div>
+
+
+
+<!-- Modal 7 (Ajax Modal)-->
+	<div class="modal fade" id="modal-7">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Completed Tasks</h4>
+				</div>
+				
+				<div class="modal-body">
+
+                        
+                        <form class="form-horizontal" role="form">
+              <div class="row">
+                
+                
+                <div style="width:100%; float:left;">
+                	
+                    	<div class="col-sm-12">
+                        	<strong>Patient Name:</strong> Pierre, Karl<br>
+							<strong>Provider Name:</strong> Doe, John<br>
+                            <strong>Title:</strong> HHA<br>
+                            <strong>Date:</strong>  April 07 2015
+                        </div>
+                        
+                        <div class="col-sm-12 ">
+                        
+                        <table width="100%"  style="margin-top:15px;"  class="table table-small-font table-bordered table-striped" cellspacing="0">
+                    <tbody>
+                    
+                      <tr>
+                        <td align="left">Batch Toilet</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Catheter Care</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Dressing Assistance</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Errands</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Feeding</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">House Keeping</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Incontient Care</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Laundry</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Maeal Preparations</td>
+                      </tr>
+                      
+                      <tr>
+                        <td align="left">Medication Reminder</td>
+                      </tr>
+                      
+                      
+                      
+                    </tbody>
+                  </table>
+                        
+                        	
+                        </div>
+                        </div>
+              </div>
+              
+            </form>
+                    
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				</div>
+                
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+			function showAjaxModal()
+			{
+				jQuery('#modal-7').modal('show', {backdrop: 'static'});
+				
+				setTimeout(function()
+				{
+					jQuery.ajax({
+						url: "data/ajax-content.txt",
+						success: function(response)
+						{
+							jQuery('#modal-7 .modal-body').html(response);
+						}
+					});
+				}, 800); // just an example
+			}
+			</script>
+<!-- Modal 7 (Ajax Modal)-->
+
+            

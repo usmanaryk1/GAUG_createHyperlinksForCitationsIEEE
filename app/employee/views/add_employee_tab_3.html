@@ -1,0 +1,369 @@
+<div class="page-body">
+ <!--PAGE TITLE START -->
+ <div class="page-title">
+  <div class="title-env">
+   <h1 class="title">
+    Add Employee
+   </h1>
+   <p class="description">
+    Create An Employee Record By Entering Employee Information
+   </p>
+  </div>
+ </div>
+ <!--PAGE TITLE END -->
+ <!-- FORM WIZARD WITH VALIDATION START HERE-->
+ <script type="text/javascript">
+  jQuery(document).ready(function($)
+        {
+          $(".multi-select").multiSelect({
+            afterInit: function()
+            {
+              // Add alternative scrollbar to list
+              this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+            },
+            afterSelect: function()
+            {
+              // Update scrollbar size
+              this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+            }
+          });
+          
+          $(".selectboxit").selectBoxIt().on('open', function()
+          {
+            // Adding Custom Scrollbar
+            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+          });
+        });
+ </script>
+ <form class="form-wizard validate" id="rootwizard" novalidate="" role="forl">
+  <ul class="tabs">
+   <li>
+    <a data-toggle="tab" href="#/app/add_employee_tab_1">
+     Add Employee
+     <span>
+      1
+     </span>
+    </a>
+   </li>
+   <li>
+    <a data-toggle="tab" href="#/app/add_employee_tab_2">
+     Enter Employee Pay Rate
+     <span>
+      2
+     </span>
+    </a>
+   </li>
+   <li class="active">
+    <a data-toggle="tab" href="#/app/add_employee_tab_3">
+     Upload Employee Documents
+     <span>
+      3
+     </span>
+    </a>
+   </li>
+  </ul>
+  <div class="progress-indicator">
+   <span>
+   </span>
+  </div>
+ </form>
+ <div class="row">
+  <div class="col-sm-12">
+   <div class="panel panel-default">
+    <div class="panel-body">
+     <form class="form-horizontal" id="add_employee_tab_3_form" name="add_employee_tab_3_form" role="form">
+      <div class="row">
+       <div class="col-sm-12 pull-right">
+        <button class="btn btn-info green_bt pull-right" type="submit">
+         Save Changes
+        </button>
+        <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+         Reset To Default
+        </button>
+        <a class="btn btn-info btn-single pull-right" href="javascript:;" onclick="showAjaxModal();">
+         View Document
+        </a>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        Application
+       </label>
+       <div class="col-sm-9">
+        <input class="form-control" name="Application" type="file">
+        </input>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        License Or Certificate Expiration Date
+       </label>
+       <div class="col-sm-9">
+        <div class="input-group">
+         <input class="form-control datepicker" data-format="mm/dd/yyyy" name="LicenseOrCertificateExpirationDate" type="text">
+          <div class="input-group-addon">
+           <a href="#">
+            <i class="linecons-calendar">
+            </i>
+           </a>
+          </div>
+         </input>
+        </div>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        I-9 Eligibility
+       </label>
+       <div class="col-sm-9">
+        <input class="form-control" name="I9Eligibility" type="file">
+        </input>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        W-2
+       </label>
+       <div class="col-sm-9">
+        <input class="form-control" name="W2" type="file">
+        </input>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        References
+       </label>
+       <div class="col-sm-9">
+        <input class="form-control" name="References" type="file">
+        </input>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        Physical
+       </label>
+       <div class="col-sm-9">
+        <input class="form-control" name="Physical" type="file">
+        </input>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        Physical Expiration Date
+       </label>
+       <div class="col-sm-9">
+        <div class="input-group">
+         <input class="form-control datepicker" data-format="mm/dd/yyyy" name="PhysicalExpirationDate" type="text">
+          <div class="input-group-addon">
+           <a href="#">
+            <i class="linecons-calendar">
+            </i>
+           </a>
+          </div>
+         </input>
+        </div>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <!-- <div class="form-group">
+                <div class="col-lg-12">
+                  <button class="btn btn-info green_bt pull-right" style="min-width:140px;" type="button">Add New Physical </button>
+                </div>
+                
+              </div>
+              <div class="form-group-separator"></div>-->
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        Start Date
+       </label>
+       <div class="col-sm-9">
+        <div class="input-group">
+         <input class="form-control datepicker" data-format="mm/dd/yyyy" name="StartDate" type="text">
+          <div class="input-group-addon">
+           <a href="#">
+            <i class="linecons-calendar">
+            </i>
+           </a>
+          </div>
+         </input>
+        </div>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="form-group">
+       <label class="col-sm-3 control-label">
+        End Date
+       </label>
+       <div class="col-sm-9">
+        <div class="input-group">
+         <input class="form-control datepicker" data-format="mm/dd/yyyy" name="EndDate" type="text">
+          <div class="input-group-addon">
+           <a href="#">
+            <i class="linecons-calendar">
+            </i>
+           </a>
+          </div>
+         </input>
+        </div>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="row">
+       <div class="col-sm-12 pull-left">
+        <a class="btn btn-info btn-single pull-left" href="javascript:;" onclick="showAjaxModal();">
+         View Document
+        </a>
+        <button class="btn btn-info btn-single gray_bt pull-left" type="reset">
+         Reset To Default
+        </button>
+        <button class="btn btn-info green_bt pull-left" type="submit">
+         Save Changes
+        </button>
+       </div>
+      </div>
+      <div class="form-group-separator">
+      </div>
+      <div class="row">
+       <div class="col-sm-12">
+        <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+         Submit
+        </button>
+       </div>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div>
+ </div>
+ <!-- FORM WIZARD WITH VALIDATION END HERE-->
+</div>
+<!-- Modal 7 (Ajax Modal)-->
+<div class="modal fade" id="modal-7">
+ <div class="modal-dialog">
+  <div class="modal-content">
+   <div class="modal-header">
+    <button aria-hidden="true" class="close" data-dismiss="modal" type="button">
+     ×
+    </button>
+    <h4 class="modal-title">
+     View Document
+    </h4>
+   </div>
+   <div class="modal-body">
+    <form class="form-horizontal" id="add_employee_tab_3_form" name="add_employee_tab_3_form" role="form">
+     <div class="row">
+      <div style="width:100%; float:left;">
+       <div class="col-sm-12">
+        <strong>
+         You Have Uploaded 2 Rates. Click below to review.
+        </strong>
+        <br>
+        </br>
+       </div>
+       <div class="col-sm-12 ">
+        <table cellspacing="0" class="table table-small-font table-bordered table-striped" style="margin-top:15px;" width="100%">
+         <tbody>
+          <tr>
+           <td align="left">
+            References.Zip
+           </td>
+          </tr>
+          <tr>
+           <td align="left">
+            References.Zip
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+    </form>
+   </div>
+   <div class="modal-footer">
+    <button class="btn btn-white" data-dismiss="modal" type="button">
+     Close
+    </button>
+   </div>
+  </div>
+ </div>
+</div>
+<script type="text/javascript">
+ function showAjaxModal()
+      {
+        jQuery('#modal-7').modal('show', {backdrop: 'static'});
+        
+        setTimeout(function()
+        {
+          jQuery.ajax({
+            url: "data/ajax-content.txt",
+            success: function(response)
+            {
+              jQuery('#modal-7 .modal-body').html(response);
+            }
+          });
+        }, 800); // just an example
+      }
+</script>
+<script type="text/javascript">
+   // validate
+   customJqueryValidation();
+    jQuery(document).ready(function($) {
+        setTimeout(function() {
+            $(".fade-in-effect").addClass('in');
+         }, 1);
+
+
+        // Validation
+        $("#add_employee_tab_3_form").validate({
+rules: {StartDate: {required: true, ontimedate: true},
+I9Eligibility: {required: true},
+Application: {required: true},
+PhysicalExpirationDate: {required: true, ontimedate: true},
+References: {required: true},
+W2: {required: true},
+EndDate: {required: true, ontimedate: true},
+LicenseOrCertificateExpirationDate: {ontimedate: true},
+Physical: {required: true},
+},
+
+messages: {StartDate: {required: 'Please enter Start Date.'},
+I9Eligibility: {required: 'Please upload I-9 Eligibility.'},
+Application: {required: 'Please upload Application.'},
+PhysicalExpirationDate: {required: 'Please enter Physical Expiration Date.'},
+References: {required: 'Please upload References.'},
+W2: {required: 'Please upload W-2.'},
+EndDate: {required: 'Please enter End Date.'},
+LicenseOrCertificateExpirationDate: {required: 'Please enter License Or Certificate Expiration Date.'},
+Physical: {required: 'Please upload Physical.'},
+},
+
+errorPlacement: function(error, element) {
+    if (element.attr("name") == "StartDate" || element.attr("name") == "PhysicalExpirationDate" || element.attr("name") == "EndDate" || element.attr("name") == "LicenseOrCertificateExpirationDate") {
+      error.insertAfter($(element).parent());
+    } else {
+      error.insertAfter(element);
+    }
+  },
+
+});// validate
+
+ });// ready 
+</script>

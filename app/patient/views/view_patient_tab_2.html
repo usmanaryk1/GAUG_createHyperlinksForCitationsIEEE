@@ -1,0 +1,197 @@
+
+<div class="page-body"> 
+  
+  <div ng-controller='viewPatientTab2Ctrl'> 
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+      <div class="title-env">
+        <h1 class="title">View Patient Information</h1>
+        <p class="description">View All Patient Information</p>
+      </div>
+    </div>
+    <!--PAGE TITLE END --> 
+    
+    <!--TABLE START -->
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="nav nav-tabs">
+          <li> <a href="#/app/view_patient_tab_1" data-toggle="tab"> <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">Active Patients</span> </a> </li>
+          <li class="active"> <a href="#/app/view_patient_tab_2" data-toggle="tab"> <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Discharged Patients</span> </a> </li>
+          <li> <a href="#/app/view_patient_tab_3" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">All Patients</span> </a> </li>
+        </ul>
+        <div class="tab-content" style="padding-bottom:0px;">
+          <div class="tab-pane active" id="profile">
+            
+            <div class="panel-body">
+              <div class="panel-body pad_top0 pad0">
+                <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                  <div class="table-responsive scroll" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
+                  <script type="text/javascript">
+        					// jQuery(document).ready(function($)
+        					// {
+        					// 	$("#example-5").dataTable({
+        					// 		aLengthMenu: [
+        					// 			[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+        					// 		]
+        					// 	});
+        					// });
+        					</script>
+                    <table id="example-5"  ng-if="patients.length"  datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th width="24%" colspan="1" rowspan="1" tabindex="0">Name & Insurance Provider</th>
+                          <th width="14%" colspan="1" rowspan="1" tabindex="0">Date Of Birth</th>
+                          <th width="13%" colspan="1" rowspan="1" tabindex="0">Phone</th>
+                          <th width="20%" colspan="1" rowspan="1" tabindex="0">Address</th>
+                          <th width="32%" data-priority="6">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="patient in patients">
+                          <th> <div class="user_panel">
+                              <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
+                              <div class="emp_user_hd">
+                                <div class="emp_user_name">{{patient.LName}} {{patient.FName}} {{patient.middleInitial}}</div>
+                              </div>
+                            </div>
+                          </th>
+                          <th>{{patient.dateOfBirth}}</th>
+                          <td >{{patient.phone | tel }}</td>
+                          <td>{{patient.address1}} {{patient.address2}} {{patient.city}}, {{patient.state}}, {{patient.zipcode}}</td>
+                          <td><a class="btn icon-left fa fa-pencil edit_button" ng-click='edit(patient);'><span class="ed_b">Edit</span></a> <a class="btn icon-left fa fa-trash-o delete_button" ng-click='delete(patient.id);'><span class="ed_b" >Dlt</span></a> <a class="btn icon-left fa fa-download download_bt" ng-click='download(patient.id);'><span class="ed_b">Dld</span></a> <a class="btn icon-left fa fa-ban deactivate_bt" ng-click='discharge(patient.id);'><span class="ed_b">Dsch</span></a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <script type="text/javascript">
+							// This JavaScript Will Replace Checkboxes in dropdown toggles
+							jQuery(document).ready(function($)
+							{
+								setTimeout(function()
+								{
+									$(".checkbox-row input").addClass('cbr');
+									cbr_replace();
+								}, 0);
+							});
+							</script>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--TABLE END --> 
+    
+    
+  </div>
+</div>
+
+<script>
+function viewPatientTab2Ctrl($scope, $rootScope, $http) {
+
+    $http({
+      url: "/OnTime/api/patient/getActivePatients",
+      method: 'POST',
+      data: {},
+      // headers: {
+      //   // 'Content-Type': 'application/json',
+      //   'requestToken': appData.authResult.token,
+      //   'userName': appData.authResult.un,
+      // },
+    }).success(function(data, status, headers, config) {
+      showLoadingBar({
+        delay: .5,
+        pct: 100,
+        finish: function() {
+          if (data) {
+            $scope.patients = data;
+          }
+        }
+      }); // showLoadingBar
+
+    }).error(function(data, status, headers, config) {
+      ontimetest.getPatients($scope, $rootScope, $http);
+
+    }); // http
+
+
+    $scope.edit = function(patient) {
+      $rootScope.patient = {
+        patientInfo: patient
+      };
+      
+      window.location.hash = '#/app/add_patient_tab_1';
+    }; // edit
+
+    $scope.delete = function(patientId) {
+      alert("Are you sure you want to delete this patients Record?");
+
+      var jsonObject = {
+        id: patientId
+      };
+      var jsonStr = JSON.stringify(jsonObject);
+      $http({
+        url: "/OnTime/api/patient/deletePatient",
+        method: 'POST',
+        data: {},
+        // headers: {
+        //   // 'Content-Type': 'application/json',
+        //   'payload': jsonStr,
+        //   'requestToken': appData.authResult.token,
+        //   'userName': appData.authResult.un,
+        // },
+      }).success(function(data, status, headers, config) {
+        showLoadingBar({
+          delay: .5,
+          pct: 100,
+          finish: function() {
+            if (data) {
+              // $scope.patients = data;
+            }
+          }
+        }); // showLoadingBar
+      }).error(function(data, status, headers, config) {
+        //ontimetest.getPatients($scope, $rootScope, $http);
+      }); // http
+    }; // delete
+
+    $scope.download = function(patientId) {
+      window.open();
+    }; // download
+
+    $scope.discharge = function(patientId) {
+      alert("Are you sure you want to discharge this patients Record?");
+
+      var jsonObject = {
+        id: patientId
+      };
+      var jsonStr = JSON.stringify(jsonObject);
+      $http({
+        url: "/OnTime/api/patient/dischargePatient",
+        method: 'POST',
+        data: {},
+        // headers: {
+        //   // 'Content-Type': 'application/json',
+        //   'payload': jsonStr,
+        //   'requestToken': appData.authResult.token,
+        //   'userName': appData.authResult.un,
+        // },
+      }).success(function(data, status, headers, config) {
+        showLoadingBar({
+          delay: .5,
+          pct: 100,
+          finish: function() {
+            if (data) {
+              // $scope.patients = data;
+            }
+          }
+        }); // showLoadingBar
+      }).error(function(data, status, headers, config) {
+        //ontimetest.getPatients($scope, $rootScope, $http);
+      }); // http
+    }; // discharge
+
+  } // viewPatientTab1Ctrl
+</script>

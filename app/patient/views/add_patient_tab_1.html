@@ -1,0 +1,343 @@
+<div class="page-body">
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">
+                Add Patient
+            </h1>
+            <p class="description">
+                Create A Patient Record By Entering Patient Information
+            </p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+    <!-- FORM WIZARD WITH VALIDATION START HERE-->
+    <script type="text/javascript">
+        jQuery(document).ready(function($)
+        {
+            $(".multi-select").multiSelect({
+                afterInit: function()
+                {
+                    // Add alternative scrollbar to list
+                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                },
+                afterSelect: function()
+                {
+                    // Update scrollbar size
+                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                }
+            });
+
+            $(".selectboxit").selectBoxIt().on('open', function()
+            {
+                // Adding Custom Scrollbar
+                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+            });
+        });
+
+    </script>
+    <form class="form-wizard validate" id="rootwizard" novalidate="" role="forl">
+        <ul class="tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#/app/add_patient_tab_1">
+                    Patient Information
+                    <span>
+                        1
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#/app/add_patient_tab_2">
+                    Location Information
+                    <span>
+                        2
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#/app/add_patient_tab_3">
+                    Insurance Information
+                    <span>
+                        3
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#/app/add_patient_tab_4">
+                    Authorization Info
+                    <span>
+                        4
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#/app/add_patient_tab_5">
+                    Insurance Subscriber Information
+                    <span>
+                        5
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <div class="progress-indicator">
+            <span>
+            </span>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal fade-in-effect validate" id="add_patient_tab_1_form" name="add_patient_tab_1_form" role="form"  ng-submit="addPatient1.savePatientTab1()">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button class="btn btn-info green_bt pull-right" type="submit">
+                                    Save Changes
+                                </button>
+                                <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                    Reset To Default
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-28">
+                                First Name
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-28" name="FirstName" type="text" ng-model="addPatient1.patient1.FName" data-validate="required" data-message-required="Please enter First Name." >
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-29">
+                                Middle Initial
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-29" name="MiddleInitial" type="text" ng-model="addPatient1.patient1.middleInitial">
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-30">
+                                Last Name
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-30" name="LastName" type="text" ng-model="addPatient1.patient1.LName" data-validate="required" data-message-required='Please enter Last Name.'>
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-31">
+                                Name Suffix
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-31" name="NameSuffix" type="text" ng-model="addPatient1.patient1.nameSuffix">
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-32">
+                                Date of Birth
+                            </label>
+                            <div class="col-sm-9">
+                                <div class="input-group" >
+                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-32" name="DateofBirth" type="text" ng-model="addPatient1.patient1.dateOfBirth" 
+                                           data-validate="required,date" data-message-required="Please enter Date of Birth.">
+                                    </input>
+                                    <div class="input-group-addon">
+                                        <a href="#">
+                                            <i class="linecons-calendar">
+                                            </i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Gender
+                            </label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <label class="cbr-inline">
+                                        <input value="M" name="radio-2" type="radio" ng-model="addPatient1.patient1.Gender" >
+                                        Male
+                                        </input>
+                                    </label>
+                                    <label class="cbr-inline">
+                                        <input name="radio-2" value="F" type="radio" ng-model="addPatient1.patient1.Gender">
+                                        Female
+                                        </input>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-33">
+                                Phone
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-33" name="Phone" type="text" value="{{addPatient1.patient1.phone| tel}}" data-validate="required,number,minlength[10]"
+                                       data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits">
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Staffing Coordinator
+                            </label>
+                            <div class="col-sm-9">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                        $("#StaffingCoordinator").selectBoxIt().on('open', function()
+                                        {
+                                            // Adding Custom Scrollbar
+                                            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="StaffingCoordinator"  ng-model='addPatient1.patient1.staffingCordinatorId' name="StaffingCoordinator"
+                                        data-validate="required" data-message-required="Please select Staffing Coordinator.">
+                                    <option value="">Select</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Nurse Case Manager
+                            </label>
+                            <div class="col-sm-9">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                        $("#sboxit-2").selectBoxIt().on('open', function()
+                                        {
+                                            // Adding Custom Scrollbar
+                                            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="sboxit-2" name="NurseCaseManager" ng-model='addPatient1.patient1.nurseCaseManagerId'
+                                        data-validate="required" data-message-required="Please select Nurse Case Manager.">
+                                    <option value="">
+                                        Select
+                                    </option>
+                                    <option value="1">
+                                        1
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Care Coordinator
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-34" name="CareCoordinator" type="text" ng-model='addPatient1.patient1.careCordinatorId'
+                                       data-validate="required" data-message-required="Please enter Care Coordinator or Emergency Contact Name.">
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-34">
+                                Care Coordinator Contact
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="field-35" name="Care4CoordinatorContact" type="text" ng-model='addPatient1.patient1.careCordinatorContact' 
+                                       data-validate="required" data-message-required="Please enter Care Coordinator or Emergency Contact Phone Number or Email Address.">
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                                    Next »
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FORM WIZARD WITH VALIDATION END HERE-->
+</div>
+<script type="text/javascript">
+    // validate
+    customJqueryValidation();
+
+    jQuery(document).ready(function($) {
+        setTimeout(function() {
+            $(".fade-in-effect").addClass('in');
+        }, 1);
+
+
+//        // Validation
+//        $("#add_patient_tab_1_form").validate({
+//            rules: {FirstName: {required: true},
+//                DateofBirth: {required: true, ontimedate: true},
+//// NameSuffix: {required: true},
+//                LastName: {required: true},
+//// MiddleInitial: {required: true},
+//                Phone: {required: true, digits: true, rangelength: [10, 10]},
+//                StaffingCoordinator: {required: true},
+//                Care4CoordinatorContact: {required: true},
+//                NurseCaseManager: {required: true},
+//                CareCoordinator: {required: true},
+//            },
+//            messages: {FirstName: {required: 'Please enter First Name.'},
+//                DateofBirth: {required: 'Please enter Date of Birth.'},
+//                NameSuffix: {required: 'Please enter Name Suffix.'},
+//                LastName: {required: 'Please enter Last Name.'},
+//                MiddleInitial: {required: 'Please enter Middle Initial.'},
+//                Phone: {required: 'Please enter Phone Number.', rangelength: 'This field must be 10 digits'},
+//                StaffingCoordinator: {required: 'Please select Staffing Coordinator.'},
+//                CareCoordinator: {required: 'Please enter Care Coordinator or Emergency Contact Name.'},
+//                Care4CoordinatorContact: {required: 'Please enter Care Coordinator or Emergency Contact Phone Number or Email Address.'},
+//                NurseCaseManager: {required: 'Please select Nurse Case Manager.'},
+//            },
+//            errorPlacement: function(error, element) {
+//                element['0'].setCustomValidity(error);
+//                if (element.attr("name") == "DateofBirth") {
+//                    error.insertAfter($(element).parent());
+//                } else {
+//                    error.insertAfter(element);
+//                }
+//            },
+//            highlight: function(element) {
+//                $(element).closest('.form-group').addClass('validate-has-error');
+//            },
+//            unhighlight: function(element) {
+//                element.setCustomValidity('');
+//                $(element).closest('.form-group').removeClass('validate-has-error');
+//            },
+//        }); // validate
+
+    }); // ready
+</script>

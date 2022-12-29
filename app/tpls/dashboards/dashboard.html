@@ -1,0 +1,10 @@
+<div ng-controller="dashBoardEmpty">
+	Server message: 
+	{{authResult}}
+</div>
+
+<script type="text/javascript">
+	function dashBoardEmpty($scope) {
+		$scope.authResult = appData.authResult;
+	}
+</script> 
