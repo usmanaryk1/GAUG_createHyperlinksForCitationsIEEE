@@ -96,7 +96,7 @@ angular.module('xenon.services', []).
 				// dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
 
 				// Subitems of employee
-				employee.addItem('Add Employee', 				'./add_employee_tab_1');
+				employee.addItem('Add Employee', 				'./employee/tab1');
 				employee.addItem('View Employee', 				'./view_employee_tab_1');
 
 
@@ -152,9 +152,9 @@ angular.module('xenon.services', []).
 
 
 				// Subitems of employee
-				employee.addItem('Add Employee', 				'./add_employee_tab_1');
-				employee.addItem('Add Employee', 				'./add_employee_tab_2');
-				employee.addItem('Add Employee', 				'./add_employee_tab_3');
+				employee.addItem('Add Employee', 				'./employee/tab1');
+//				employee.addItem('Add Employee', 				'./add_employee_tab_2');
+//				employee.addItem('Add Employee', 				'./add_employee_tab_3');
 				employee.addItem('View Employee', 				'./view_employee');
 
 

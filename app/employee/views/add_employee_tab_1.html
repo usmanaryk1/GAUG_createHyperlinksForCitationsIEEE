@@ -1,342 +1,272 @@
-<div class="page-body">
-    <!--PAGE TITLE START -->
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                Add Employee
-            </h1>
-            <p class="description">
-                Create An Employee Record By Entering Employee Information
-            </p>
-        </div>
-    </div>
-    <!--PAGE TITLE END -->
-    <!-- FORM WIZARD WITH VALIDATION START HERE-->
-    <script type="text/javascript">
-        jQuery(document).ready(function($)
-        {
-            $(".multi-select").multiSelect({
-                afterInit: function()
-                {
-                    // Add alternative scrollbar to list
-                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                },
-                afterSelect: function()
-                {
-                    // Update scrollbar size
-                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-                }
-            });
-
-            $(".selectboxit").selectBoxIt().on('open', function()
-            {
-                // Adding Custom Scrollbar
-                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-            });
-        });
-    </script>
-    <form class="form-wizard validate" id="rootwizard" novalidate="" role="forl">
-        <ul class="tabs">
-            <li class="active">
-                <a data-toggle="tab" href="#/app/add_employee_tab_2">
-                    Add Employee
-                    <span>
-                        1
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a data-toggle="tab" href="#/app/add_employee_tab_2">
-                    Enter Employee Pay Rate
-                    <span>
-                        2
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a data-toggle="tab" href="#/app/add_employee_tab_3">
-                    Upload Employee Documents
-                    <span>
-                        3
-                    </span>
-                </a>
-            </li>
-        </ul>
-        <div class="progress-indicator">
-            <span>
-            </span>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <form class="form-horizontal" id="add_employee_tab_1_form" name="add_employee_tab_1_form" role="form">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="user_p">
-                                    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"/>
-                                </div>
-                                <div class="user_p_hd">
-                                    <h1>
-                                        Jack Gates
-                                    </h1>
-                                    <p>
-                                        Administrator
-                                    </p>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" id="add_employee_tab_1_form" name="add_employee_tab_1_form" role="form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="user_p">
+                                <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"/>
+                            </div>
+                            <div class="user_p_hd">
+                                <h1>
+                                    Jack Gates
+                                </h1>
+                                <p>
+                                    Administrator
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 pull-right">
+                            <button class="btn btn-info green_bt pull-right" type="submit">
+                                Save Changes
+                            </button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                Reset To Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            First Name
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="FirstName" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Last Name
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="LastName" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Social Security #
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="SocialSecurity" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Date Of Birth
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text">
+                                </input>
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-sm-6 pull-right">
-                                <button class="btn btn-info green_bt pull-right" type="submit">
-                                    Save Changes
-                                </button>
-                                <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
-                                    Reset To Default
-                                </button>
-                            </div>
                         </div>
-                        <div class="form-group-separator">
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Phone
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="Phone" type="text">
+                            </input>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                First Name
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="FirstName" type="text">
-                                </input>
-                            </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Email
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="Email" type="text">
+                            </input>
                         </div>
-                        <div class="form-group-separator">
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Address 1
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="Address1" type="text">
+                            </input>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Last Name
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="LastName" type="text">
-                                </input>
-                            </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Address 2
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="Address2" type="text">
+                            </input>
                         </div>
-                        <div class="form-group-separator">
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            City
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="City" type="text">
+                            </input>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Social Security #
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="SocialSecurity" type="text">
-                                </input>
-                            </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            State
+                        </label>
+                        <div class="col-sm-9">
+                            <script type="text/javascript">
+                                // jQuery(document).ready(function($)
+                                //            {
+                                //              $("#sboxit-1").selectBoxIt().on('open', function()
+                                //              {
+                                //                // Adding Custom Scrollbar
+                                //                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                //              });
+                                //            });
+                            </script>
+                            <select class="form-control" id="sboxit-1" name="State">
+                                <option value="">
+                                    Select
+                                </option>
+                                <option value="1">
+                                    1
+                                </option>
+                            </select>
                         </div>
-                        <div class="form-group-separator">
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Zip Code
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="ZipCode" type="text">
+                            </input>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Date Of Birth
-                            </label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text">
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Payroll ID
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="PayrollID" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Position
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="form-block">
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    Personal Care
                                     </input>
-                                    <div class="input-group-addon">
-                                        <a href="#">
-                                            <i class="linecons-calendar">
-                                            </i>
-                                        </a>
-                                    </div>
-                                </div>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input class="cbr" name="radio-1" type="radio">
+                                    Nursing Care
+                                    </input>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    PT
+                                    </input>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    OT
+                                    </input>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    NUT
+                                    </input>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    ST
+                                    </input>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    Admin
+                                    </input>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    Market Rep.
+                                    </input>
+                                </label>
                             </div>
                         </div>
-                        <div class="form-group-separator">
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 pull-left">
+                            <button class="btn btn-info btn-single gray_bt pull-left" type="reset">
+                                Reset To Default
+                            </button>
+                            <button class="btn btn-info green_bt pull-left" type="submit">
+                                Save Changes
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Phone
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="Phone" type="text">
-                                </input>
-                            </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                                Next »
+                            </button>
                         </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Email
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="Email" type="text">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Address 1
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="Address1" type="text">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Address 2
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="Address2" type="text">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                City
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="City" type="text">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                State
-                            </label>
-                            <div class="col-sm-9">
-                                <script type="text/javascript">
-                                    // jQuery(document).ready(function($)
-                                    //            {
-                                    //              $("#sboxit-1").selectBoxIt().on('open', function()
-                                    //              {
-                                    //                // Adding Custom Scrollbar
-                                    //                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                    //              });
-                                    //            });
-                                </script>
-                                <select class="form-control" id="sboxit-1" name="State">
-                                    <option value="">
-                                        Select
-                                    </option>
-                                    <option value="1">
-                                        1
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Zip Code
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="ZipCode" type="text">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Payroll ID
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" name="PayrollID" type="text">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Position
-                            </label>
-                            <div class="col-sm-9">
-                                <div class="form-block">
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        Personal Care
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr" name="radio-1" type="radio">
-                                        Nursing Care
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        PT
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        OT
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        NUT
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        ST
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        Admin
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input checked="" class="cbr" name="radio-1" type="radio">
-                                        Market Rep.
-                                        </input>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 pull-left">
-                                <button class="btn btn-info btn-single gray_bt pull-left" type="reset">
-                                    Reset To Default
-                                </button>
-                                <button class="btn btn-info green_bt pull-left" type="submit">
-                                    Save Changes
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
-                                    Next »
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <!-- FORM WIZARD WITH VALIDATION END HERE-->
 </div>
+<!-- FORM WIZARD WITH VALIDATION END HERE-->
 <script type="text/javascript">
     // validate
     customJqueryValidation();

@@ -1,0 +1,83 @@
+<div class="page-body">
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">
+                Add Employee
+            </h1>
+            <p class="description">
+                Create An Employee Record By Entering Employee Information
+            </p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+    <!-- FORM WIZARD WITH VALIDATION START HERE-->
+    <script type="text/javascript">
+        jQuery(document).ready(function($)
+        {
+            $(".multi-select").multiSelect({
+                afterInit: function()
+                {
+                    // Add alternative scrollbar to list
+                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                },
+                afterSelect: function()
+                {
+                    // Update scrollbar size
+                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                }
+            });
+
+            $(".selectboxit").selectBoxIt().on('open', function()
+            {
+                // Adding Custom Scrollbar
+                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+            });
+        });
+    </script>
+    <form class="form-wizard validate" id="rootwizard" novalidate="" role="form">
+        <ul class="tabs">
+            <li ui-sref='.tab1'>
+                <a data-toggle="tab" >
+                    Add Employee
+                    <span>
+                        1
+                    </span>
+                </a>
+            </li>
+            <li ui-sref='.tab2'>
+                <a data-toggle="tab">
+                    Enter Employee Pay Rate
+                    <span>
+                        2
+                    </span>
+                </a>
+            </li>
+            <li ui-sref='.tab3'>
+                <a data-toggle="tab">
+                    Upload Employee Documents
+                    <span>
+                        3
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <div class="progress-indicator">
+            <span>
+            </span>
+        </div>
+    </form>
+</div>
+<!-- FORM WIZARD WITH VALIDATION END HERE-->
+<div ui-view></div>
+<script type="text/javascript">
+    // validate
+    customJqueryValidation();
+    jQuery(document).ready(function($) {
+        setTimeout(function() {
+            $(".fade-in-effect").addClass('in');
+        }, 1);
+
+
+    });// ready 
+</script>

@@ -515,7 +515,10 @@ angular.module('xenon.directives', []).
                             $tabs = $this.find('> .tabs > li'),
                             $progress = $this.find(".progress-indicator"),
                             _index = $this.find('> ul > li.active').index();
-
+//                    index is set for dynamic tab selection according to tab no of the page
+                    if (_index <= 0 && scope.tabNo){
+                        _index=scope.tabNo - 1;
+                    }
                     // Validation
                     var checkFormWizardValidaion = function(tab, navigation, index)
                     {
@@ -533,7 +536,7 @@ angular.module('xenon.directives', []).
                         return true;
                     };
 
-
+                    
                     // Setup Progress
                     if (_index > 0)
                     {
@@ -620,7 +623,7 @@ angular.module('xenon.directives', []).
                 restrict: 'AC',
                 link: function(scope, el, attr)
                 {
-                    if (!jQuery.isFunction(jQuery.fn.validate)){
+                    if (!jQuery.isFunction(jQuery.fn.validate)) {
                         return false;
                     }
 

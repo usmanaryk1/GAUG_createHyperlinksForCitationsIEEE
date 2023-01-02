@@ -14,7 +14,7 @@ var app = angular.module('xenon-app', [
     'FBAngular'
 ]);
 
-app.run(function()
+app.run(function($rootScope)
 {
     // Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
@@ -23,6 +23,16 @@ app.run(function()
     {
         public_vars.$pageLoadingOverlay.addClass('loaded');
     })
+
+    //this will be called when any state change starts
+    $rootScope.$on('$stateChangeStart',
+            function(event, toState, toParams, fromState, fromParams) {
+                //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
+                if (toState.data && toState.data.tabNo) {
+                    $rootScope.tabNo = toState.data.tabNo;
+                }
+            })
+            ;
 });
 
 
@@ -31,7 +41,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
 
-            $stateProvider.
+    $stateProvider.
             // Main Layout Structure
             state('app', {
                 abstract: true,
@@ -163,9 +173,24 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
+            // employee creation page
+            state('app.employee', {
+                abstract: true,
+                url: '/employee',
+                templateUrl: appHelper.viewTemplatePath('employee', 'add_employee'),
+                controller: 'AddEmployeeCtrl as addEmployee',
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
+            }).
             // add_employee_tab_1
-            state('app.add_employee_tab_1', {
-                url: '/add_employee_tab_1',
+            state('app.employee.tab1', {
+                url: '/tab1',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_1'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -174,13 +199,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 1
                 }
             }).
             // add_employee_tab_2
-            state('app.add_employee_tab_2', {
-                url: '/add_employee_tab_2',
+            state('app.employee.tab2', {
+                url: '/tab2',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
-                controller: 'AddEmployeeTab2Ctrl as addEmployee2',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -188,11 +215,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 2
                 }
             }).
             // add_employee_tab_3
-            state('app.add_employee_tab_3', {
-                url: '/add_employee_tab_3',
+            state('app.employee.tab3', {
+                url: '/tab3',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -201,6 +231,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 3
                 }
             }).
             // view_employee_tab_1
