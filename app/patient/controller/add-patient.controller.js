@@ -152,7 +152,7 @@
                 }
                 $rootScope.maskLoading();
                 PatientDAO.update({action: reqParam, data: patientToSave})
-                        .then(function (res) {
+                        .then(function (res, status) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
 
@@ -176,10 +176,13 @@
                                 $('.dirty').removeClass('dirty');
                             }
                         })
-                        .catch(function () {
+                        .catch(function (data) {
                             //exception logic
-                            toastr.error("Patient cannot be saved.");
-                            console.log('Patient Object : ' + JSON.stringify(patientToSave));
+                            if (data && data.status === 417) {
+                                toastr.error("Patient saved, but schedule creation failed due to less authorized hours.");
+                            } else {
+                                toastr.error("Patient cannot be saved.");
+                            }
                         }).then(function () {
                     $rootScope.unmaskLoading();
                 });
@@ -305,6 +308,7 @@
                     if (!ctrl.patient.isSubscriber && ctrl.patient.isSubscriber !== false) {
                         ctrl.patient.isSubscriber = true;
                     }
+                    ctrl.unbindPatientCondition();
                     $formService.setRadioValues('IsSubscriber', ctrl.patient.isSubscriber);
                     form_data = $('#add_patient_form').serialize();
                     $formService.resetRadios();
@@ -359,6 +363,7 @@
                         ctrl.patient.subscriberInfo[0].nameSuffix = ctrl.patient.nameSuffix;
                         ctrl.patient.subscriberInfo[0].dateOfBirth = ctrl.patient.dateOfBirth;
                         ctrl.patient.subscriberInfo[0].gender = ctrl.patient.gender;
+                        ctrl.patient.subscriberInfo[0].phone = ctrl.patient.phone;
                         ctrl.patient.subscriberInfo[0].relationshipWithPatient = 'I';
 
                     }
@@ -374,6 +379,7 @@
                             address.address2 = ctrl.patient.patientAddress.address2;
                             address.city = ctrl.patient.patientAddress.city;
                             address.state = ctrl.patient.patientAddress.state;
+                            address.county = ctrl.patient.patientAddress.county;
                             address.zipcode = ctrl.patient.patientAddress.zipcode;
                         }
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
@@ -404,11 +410,13 @@
                 address.address2 = ctrl.patient.patientAddress.address2;
                 address.city = ctrl.patient.patientAddress.city;
                 address.state = ctrl.patient.patientAddress.state;
+                address.county = ctrl.patient.patientAddress.county;
                 address.zipcode = ctrl.patient.patientAddress.zipcode;
                 $("#Address1").blur();
                 $("#Address2").blur();
                 $("#City").blur();
                 $("#State").blur();
+                $("#County").blur();
                 $("#ZipCode").blur();
             }
             ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
@@ -724,6 +732,8 @@
                             $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
                         } else if ($scope.careObj.expiryDate == $scope.careObj.previousExpiryDate) {
                             $scope.careObj.changeSchedule = false;
+                        } else if (!$scope.addPatient.currentAuthorizationDocument) {
+                            $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, true, $scope.careObj);
                         }
                     };
 
@@ -1050,7 +1060,7 @@
 
             $rootScope.existingModel.cancel = function () {
                 $timeout(function () {
-                    careObj.expiryDate = careObj.actualExpiryDate;
+                    careObj.expiryDate = careObj.previousExpiryDate;
                     $rootScope.existingModel.close();
                 });
             };
@@ -1065,6 +1075,77 @@
                             ctrl.existingSchedule = JSON.parse(res.data);
                     });
         }
+
+        ctrl.unbindPatientCondition = function () {
+            if (ctrl.patient.patientConditionRelatedTo) {
+                if (ctrl.patient.patientConditionRelatedTo === 'EM') {
+                    ctrl.patient.patientConditionRelatedEM = 'true';
+                    ctrl.patient.patientConditionRelatedAA = 'false';
+                    ctrl.patient.patientConditionRelatedOA = 'false';
+                } else if (ctrl.patient.patientConditionRelatedTo === 'OA') {
+                    ctrl.patient.patientConditionRelatedOA = 'true';
+                    ctrl.patient.patientConditionRelatedEM = 'false';
+                    ctrl.patient.patientConditionRelatedAA = 'false';
+                } else if (ctrl.patient.patientConditionRelatedTo.indexOf('AA:') > -1) {
+                    ctrl.patient.patientConditionRelatedAA = 'true';
+                    ctrl.patient.patientConditionRelatedEM = 'false';
+                    ctrl.patient.patientConditionRelatedOA = 'false';
+                    ctrl.patient.patientConditionRelatedAAState = ctrl.patient.patientConditionRelatedTo.split(':')[1];
+                }
+            } else {
+                ctrl.patient.patientConditionRelatedEM = 'false';
+                ctrl.patient.patientConditionRelatedAA = 'false';
+                ctrl.patient.patientConditionRelatedOA = 'false';
+            }
+            $formService.setRadioValues('patientConditionRelatedEM', ctrl.patient.patientConditionRelatedEM);
+            $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
+            $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
+//            $formService.resetRadios();
+        };
+
+        ctrl.bindPatientCondition = function (type) {
+            switch (type) {
+                case 'EM':
+                    if (ctrl.patient.patientConditionRelatedEM === 'true') {
+                        if (ctrl.patient.patientConditionRelatedAA === 'true')
+                            ctrl.patient.patientConditionRelatedAA = 'false';
+                        if (ctrl.patient.patientConditionRelatedOA === 'true')
+                            ctrl.patient.patientConditionRelatedOA = 'false';
+                        ctrl.patient.patientConditionRelatedTo = 'EM';
+                    } else {
+                        ctrl.patient.patientConditionRelatedTo = null;
+                    }
+                    break;
+                case 'AA':
+                    if (ctrl.patient.patientConditionRelatedAA === 'true') {
+                        if (ctrl.patient.patientConditionRelatedEM === 'true')
+                            ctrl.patient.patientConditionRelatedEM = 'false';
+                        if (ctrl.patient.patientConditionRelatedOA === 'true')
+                            ctrl.patient.patientConditionRelatedOA = 'false';
+                        ctrl.patient.patientConditionRelatedTo = 'AA' + ctrl.patient.patientConditionRelatedAAState ? ':' + ctrl.patient.patientConditionRelatedAAState : '';
+                    } else {
+                        ctrl.patient.patientConditionRelatedTo = null;
+                    }
+                    break;
+                case 'OA':
+                    if (ctrl.patient.patientConditionRelatedOA === 'true') {
+                        if (ctrl.patient.patientConditionRelatedEM === 'true')
+                            ctrl.patient.patientConditionRelatedEM = 'false';
+                        if (ctrl.patient.patientConditionRelatedAA === 'true')
+                            ctrl.patient.patientConditionRelatedAA = 'false';
+                        ctrl.patient.patientConditionRelatedTo = 'OA';
+                    } else {
+                        ctrl.patient.patientConditionRelatedTo = null;
+                    }
+                    break;
+                case 'STATE':
+                    ctrl.patient.patientConditionRelatedTo = 'AA:' + ctrl.patient.patientConditionRelatedAAState;
+            }
+            $formService.setRadioValues('patientConditionRelatedEM', ctrl.patient.patientConditionRelatedEM);
+            $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
+            $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
+//            $formService.resetRadios();
+        };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
 })();

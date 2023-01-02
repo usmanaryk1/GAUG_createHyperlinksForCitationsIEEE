@@ -307,13 +307,14 @@ ontimedata = {
         {id: 'patientcensus', label: "Patient Census"},
         {id: 'patienttimesheet', label: "Patient Time Sheet"},
         {id: 'workedhours', label: "Worked Hours"},
+        {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"}
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
 };
 
 ontimetest = {
-    //'weburl': 'http://localhost:8080/ontime/api/',
-    'weburl': 'http://demotrt.com:8080/ontime/api/',
+    'weburl': 'http://localhost:8080/ontime/api/',
+//    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'login',
     'homepage': 'app.dashboard',
     'patients': ontimedata.patients,

@@ -76,6 +76,13 @@
                     action: 'missedpunch'
                 }
             },
+            getEffectiveMissedPunchesByEmployeeWithinDate: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'missedpunches'
+                }
+            },
             update: {
                 method: 'PUT',
                 params: {
@@ -131,6 +138,9 @@
             },
             getMissedPunch: function (data) {
                 return api.getMissedPunch(data).$promise;
+            },
+            getEffectiveMissedPunchesByEmployeeWithinDate: function (data) {
+                return api.getEffectiveMissedPunchesByEmployeeWithinDate(data).$promise;
             },
             update: function (data) {
                 return api.update(data).$promise;

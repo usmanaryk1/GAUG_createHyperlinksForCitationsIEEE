@@ -71,6 +71,9 @@ a {
 
 .edit_button{ color:#62ba27; font-size:14px; padding:5px 0 0px 0px;}
 .edit_button:hover{ color:#428118;}
+.reset_password_button{font-size:14px; padding:5px 0 0px 0px;}
+.reset_password_button:hover{ color:#2c2e2f;}
+
 .delete_button{ color:#f00; font-size:14px; padding:5px 0 0px 0px;}
 .delete_button:hover{color:#a71010;}
 .view_task_button{ color:#7084e7; font-size:14px; padding:5px 0 0px 0px;}

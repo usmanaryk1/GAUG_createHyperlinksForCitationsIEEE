@@ -1,5 +1,5 @@
 (function () {
-    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, $state, Page) {
+    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, TimesheetDAO, $state, Page) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -404,6 +404,68 @@
                 $rootScope.checkDateModal.dismiss();
             };
         }
+        
+        ctrl.showMissedPunchModal = function(empObj, index, event) {
+
+            var searchParams = {};
+            searchParams.fromDate = ctrl.searchParams.fromDate;
+            searchParams.toDate = ctrl.searchParams.toDate;
+            searchParams.employeeId = empObj.employeeId;
+            ctrl.selectedEmployeeId = empObj.employeeId;
+
+            $rootScope.maskLoading();
+            TimesheetDAO.getEffectiveMissedPunchesByEmployeeWithinDate(searchParams).then(function(response) {
+                ctrl.missedPunchList = response;
+                angular.forEach(ctrl.missedPunchList, function(obj) {
+                    obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
+                    obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                    if (obj.scheduleId && !obj.unauthorizedTime) {
+                        obj.ut = $filter('ut')(obj.scheduleId.roundedStartTime, obj.scheduleId.roundedEndTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+                    }
+                    if (obj.scheduleId) {
+                        obj.scheduleId.roundedStartTime = Date.parse(obj.scheduleId.roundedStartTime);
+                        obj.scheduleId.roundedEndTime = Date.parse(obj.scheduleId.roundedEndTime);
+                    }
+                });
+                ctrl.openMissedPunchModal('payroll-session-missed-punch-modal', 'md', 'static');
+            }).catch(function(e) {
+                if (e.data != null) {
+                    toastr.error(e.data);
+                } else {
+                    toastr.error("Missed Punches cannot be retrieved.");
+                }
+            }).then(function() {
+                $rootScope.unmaskLoading();
+            });
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
+
+
+        ctrl.openMissedPunchModal = function(modal_id, modal_size, modal_backdrop) {
+
+            ctrl.missedPunchModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                resolve: {
+                    payrollSession: function() {
+                        return ctrl;
+                    },
+                    root: function() {
+                        return $rootScope;
+                    }
+                },
+                controller: function(payrollSession, $scope, root, $modalInstance) {
+                    $scope.payrollSession = payrollSession;
+                    $scope.close = function() {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }
+            });
+        };
     }
-    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", "Page", PayrollSessionCtrl]);
+    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "TimesheetDAO", "$state", "Page", PayrollSessionCtrl]);
 })();

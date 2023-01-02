@@ -15,6 +15,7 @@ angular.module('xenon.services', []).
                 icon: '',
                 isActive: false,
                 label: null,
+                feature: '',
                 menuItems: [],
                 setLabel: function (label, color, hideWhenCollapsed)
                 {
@@ -29,14 +30,15 @@ angular.module('xenon.services', []).
 
                     return this;
                 },
-                addItem: function (title, link, icon)
+                addItem: function (title, link, feature, icon)
                 {
                     var parent = this,
                             item = angular.extend(angular.copy(menuItemObj), {
                                 parent: parent,
                                 title: title,
                                 link: link,
-                                icon: icon
+                                icon: icon,
+                                feature: feature
                             });
 
                     if (item.link)
@@ -56,13 +58,14 @@ angular.module('xenon.services', []).
                 }
             };
 
-            this.addItem = function (title, link, icon)
+            this.addItem = function (title, link, icon, feature)
             {
                 var item = angular.extend(angular.copy(menuItemObj), {
                     title: title,
                     link: link,
                     state: this.toStatePath(link),
-                    icon: icon
+                    icon: icon,
+                    feature: feature
                 });
 
                 this.menuItems.push(item);
@@ -78,59 +81,60 @@ angular.module('xenon.services', []).
             this.prepareSidebarMenu = function ()
             {
                 var dashboard = this.addItem('Dashboard', '/app/dashboard', 'fa-home');
-                var employee = this.addItem('Employee', '/app', 'linecons-cog');
-                var patient = this.addItem('Patient', '/app', 'linecons-user');
-                var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock');
-                var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella');
-                var billing = this.addItem('Billing', '/app', 'linecons-money');
-                var payroll = this.addItem('Payroll', '/app', 'linecons-wallet');
-                var company = this.addItem('Company', '/app', 'linecons-key');
-                var calendar = this.addItem('Schedule', '/app', 'linecons-cog');
-                var report = this.addItem('Reports', '/app/report', 'fa-eye');
+                var employee = this.addItem('Employee', '/app', 'linecons-cog', 'CREATE_EMPLOYEE,VIEW_EMPLOYEE');
+                var patient = this.addItem('Patient', '/app', 'linecons-user', 'CREATE_PATIENT,VIEW_PATIENT');
+                var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock', 'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET');
+                var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella', 'CREATE_INSURANCE_PROVIDER,VIEW_INSURANCE_PROVIDER');
+                var billing = this.addItem('Billing', '/app', 'linecons-money', 'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
+                var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
+                var company = this.addItem('Company', '/app', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
+                var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE');
+                var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
 
                 // Subitems of Dashboard
                 // dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
 
                 // Subitems of employee
-                employee.addItem('Add Employee', './employee/tab1/');
-                employee.addItem('View Employee', './employee-list/active');
+                employee.addItem('Add Employee', './employee/tab1/', 'CREATE_EMPLOYEE');
+                employee.addItem('View Employee', './employee-list/active', 'VIEW_EMPLOYEE');
 
 
                 // Subitems of patient
-                patient.addItem('Add Patient', './patient/tab1/');
-                patient.addItem('View Patient', './patient-list/active');
+                patient.addItem('Add Patient', './patient/tab1/', 'CREATE_PATIENT');
+                patient.addItem('View Patient', './patient-list/active', 'VIEW_PATIENT');
 
 
                 // Subitems of timeSheet
-                timeSheet.addItem('Employee Timesheet', './employee_timesheet');
+                timeSheet.addItem('Employee Timesheet', './employee_timesheet', 'VIEW_EMPLOYEE_TIMESHEET');
                 // timeSheet.addItem('Edit Timesheet', 			'./edit_timesheet');
-                timeSheet.addItem('Manual Punch', './manual_punch');
-                timeSheet.addItem('Daily Attendance', './daily_attendance');
-                timeSheet.addItem('Patient Timesheet', './patient_time_sheet');
+                timeSheet.addItem('Manual Punch', './manual_punch', 'CREATE_MANUAL_PUNCH');
+                timeSheet.addItem('Daily Attendance', './daily_attendance', 'VIEW_DAILY_ATTENDANCE');
+                timeSheet.addItem('Patient Timesheet', './patient_time_sheet', 'VIEW_PATIENT_TIMESHEET');
 
 
                 // Subitems of insuranceProvider
-                insuranceProvider.addItem('Add Insurance Provider', './insurer/');
-                insuranceProvider.addItem('View Insurance Provider', './insurer-list');
+                insuranceProvider.addItem('Add Insurance Provider', './insurer/', 'CREATE_INSURANCE_PROVIDER');
+                insuranceProvider.addItem('View Insurance Provider', './insurer-list', 'VIEW_INSURANCE_PROVIDER');
 
                 // Subitems of billing
-                billing.addItem('Billing Session', './billing_tab_1');
-                billing.addItem('Billing History', './biling_history');
-                billing.addItem('Manual Claim', './manual_claim');
+                billing.addItem('Billing Session', './billing_session', 'VIEW_BILLING_SESSION');
+                billing.addItem('Billing History', './biling_history', 'VIEW_BILLING_HISTORY');
+                billing.addItem('Billing Setting', './biling_setting', 'CREATE_BILLING_SETTING');
+                billing.addItem('Manual Claim', './manual_claim', 'CREATE_MANUAL_CLAIM');
 
                 // Subitems of payroll
                 // payroll.addItem('Pay Rates', 			'./pay_rates');
-                payroll.addItem('Payroll History', './payroll_history');
+                payroll.addItem('Payroll History', './payroll_history', 'VIEW_PAYROLL_HISTORY');
                 // payroll.addItem('Payroll Review', 			'./payroll_review');
-                payroll.addItem('Payroll Session', './payroll_session');
-                payroll.addItem('Payroll Settings', './payroll_settings');
+                payroll.addItem('Payroll Session', './payroll_session', 'VIEW_PAYROLL_SESSION');
+                payroll.addItem('Payroll Settings', './payroll_settings', 'VIEW_PAYROLL_SETTINGS');
 
                 // Subitems of company
-                company.addItem('Company Information', './company_information');
+                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 
                 // Subitems of calendar
-                calendar.addItem('Employee', './employee-calendar/');
-                calendar.addItem('Patient', './patient-calendar/');
+                calendar.addItem('Employee', './employee-calendar/', 'VIEW_EMPLOYEE_SCHEDULE');
+                calendar.addItem('Patient', './patient-calendar/', 'VIEW_PATIENT_SCHEDULE');
 
                 return this;
             };
@@ -182,6 +186,21 @@ angular.module('xenon.services', []).
                 calendar.addItem('Employee', './employee_calendar');
                 calendar.addItem('Patient', './patient_calendar');
 
+                return this;
+            }
+
+            this.prepareAdminMenu = function ()
+            {
+                var dashboard = this.addItem('Dashboard', '/admin/dashboard', 'fa-home');
+                var users = this.addItem('Users', '/admin', 'linecons-user','CREATE_USER,EDIT_USER');
+//                var security = this.addItem('Security', '/admin', 'linecons-lock');
+
+                // Subitems of users
+                users.addItem('Add User', './user/','CREATE_USER');
+                users.addItem('View Users', './user-list/active','VIEW_USER');
+
+//                security.addItem('Manage Role', './manage_role')
+//                security.addItem('Manage Access', './manage_access')
                 return this;
             }
 

@@ -422,7 +422,8 @@
                     }
                 }
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false,
+                        doNotBill:false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
                     var id;
@@ -432,7 +433,8 @@
                     } else {
                         id = ctrl.viewPatient.id;
                     }
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false,
+                        doNotBill:false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
                 }
                 $rootScope.patientPopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
@@ -472,6 +474,7 @@
                         $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             $rootScope.patientPopup.data.forLiveIn = false;
+                            $rootScope.patientPopup.data.doNotBill = false;
                             $rootScope.patientPopup.data.startTime = $rootScope.patientPopup.currentStartTime;
                             $rootScope.patientPopup.data.endTime = $rootScope.patientPopup.currentEndTime;
                         }

@@ -1,4 +1,4 @@
-<div class="sidebar-menu" ng-if="layoutOptions.sidebar.isVisible" ng-class="{'collapsed': layoutOptions.sidebar.isCollapsed, 'toggle-others': layoutOptions.sidebar.toggleOthers, 'fixed': layoutOptions.sidebar.isFixed && layoutOptions.container.isBoxed == false}">
+<div class="sidebar-menu" ng-show="layoutOptions.sidebar.isVisible && !layoutOptions.sidebar.hideMenu" ng-class="{'collapsed': layoutOptions.sidebar.isCollapsed, 'toggle-others': layoutOptions.sidebar.toggleOthers, 'fixed': layoutOptions.sidebar.isFixed && layoutOptions.container.isBoxed == false}">
 
 	<div class="sidebar-menu-inner">
 
@@ -14,7 +14,7 @@
 
 <div class="main-content">
 
-	<user-info-navbar ng-show="layoutOptions.horizontalMenu.isVisible == false"></user-info-navbar>
+	<user-info-navbar ng-show="layoutOptions.horizontalMenu.isVisible == false && !layoutOptions.sidebar.hideMenu"></user-info-navbar>
 
 	<ui-view class="main-content-view"></ui-view>
 

@@ -199,11 +199,11 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:120px;">
-                                                    <a ng-if="timesheet.isEdited == true && patTimesheet.selectedPatient.status != 'd'" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=patient_time_sheet" tooltip="Edit"><span class="ed_b"></span></a> 
-                                                    <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true && patTimesheet.selectedPatient.status != 'd' && hasAccess('EDIT_PATIENT_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=patient_time_sheet" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true && hasAccess('DELETE_PATIENT_TIMESHEET')" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 
-                                                    <a class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
+                                                    <a ng-if="hasAccess('VIEW_PATIENT_TASKS')" class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
                                             <td><div ng-if="timesheet.isManualPunch === true">Admin Verified</div>
