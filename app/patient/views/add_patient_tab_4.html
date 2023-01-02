@@ -1,0 +1,300 @@
+<div class="row" ng-init="addPatient.tab4DataInit()">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton" ng-click="addPatient.setFromNext('tab4')">
+                                Save Changes
+                            </button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click="addPatient.resetPatient()">
+                                Reset To Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Care Type
+                        </label>
+                        <div class="col-sm-9">
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                                {
+                                    $("#multi-select").multiSelect({
+                                        afterInit: function ()
+                                        {
+                                            // Add alternative scrollbar to list
+                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                        },
+                                        afterSelect: function ()
+                                        {
+                                            // Update scrollbar size
+                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                        }
+                                    });
+                                });
+                            </script>
+                            <select class="form-control" id="CareTypes" multiple="multiple" name="CareTypes"
+                                    data-validate="required" data-message-required="Please select Care Type." ng-model="addPatient.careTypes"  ng-change="addPatient.displayCareTypeModal = true"
+                                    ng-options='ct.id as ct.companyCaretypeId.careTypeTitle for ct in addPatient.careTypeList'>
+                                <!--                                <option ng-repeat="ct in addPatient.careTypeList" ng-value="{{ct.id}}">
+                                                                    {{ct.careTypeTitle}}
+                                                                </option>-->
+                                <!--                                <option value="1">
+                                    Silky Door
+                                </option>
+                                <option value="2">
+                                    The Absent Twilight
+                                </option>
+                                <option value="3">
+                                    Tales of Flames
+                                </option>
+                                <option value="4">
+                                    The Princess's Dream
+                                </option>
+                                <option value="5">
+                                    The Fairy of the Wind
+                                </option>
+                                <option value="6">
+                                    Children in the Boy
+                                </option>
+                                <option value="7">
+                                    Frozen Savior
+                                </option>
+                                <option value="8">
+                                    The Missing Thorns
+                                </option>
+                                <option value="9">
+                                    Healing of Serpent
+                                </option>
+                                <option value="10">
+                                    The Voyagers's Girlfriend
+                                </option>
+                                <option value="11">
+                                    The Nothing of the Gate
+                                </option>
+                                <option value="12">
+                                    Healing in the Scent
+                                </option>
+                                <option value="13">
+                                    Final Twins
+                                </option>
+                                <option value="14">
+                                    The Willing Rose
+                                </option>
+                                <option value="15">
+                                    Thorn of Emperor
+                                </option>
+                                <option value="16">
+                                    The Predator's Pirates
+                                </option>
+                                <option value="17">
+                                    The Lord of the Girl
+                                </option>
+                                <option value="18">
+                                    Flowers in the Spirit
+                                </option>
+                                <option value="19">
+                                    Healing in the Silence
+                                </option>
+                                <option value="20">
+                                    Planet of Bridges
+                                </option>-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-45">
+                            Authorization
+                        </label>
+                        <div class="col-sm-9">
+                            <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <button type='button' class='btn btn-single gray_bt' id="contract_file" ng-model="addPatient.patient.authorization" flow-btn style="margin-bottom:0px !important" name="contract_file" ng-disabled="addPatient.disableUploadButton">Choose File</button>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <label class="control-label">
+                                            <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.patient.authorization}}">
+                                                authorization{{addPatient.patient.authorization|extension}}
+                                            </a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addPatient.fileObj.errorMsg != null && addPatient.fileObj.errorMsg != ''">
+                                        <span class="red">{{addPatient.fileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addPatient.showfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--                <div class="form-group-separator">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" >
+                                            Authorization Date
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input class="form-control daterange" data-time-picker="true" data-time-picker-increment="5" data-format="MM/DD/YYYY h:mm A"
+                                                       start-date='addPatient.patient.authorizationStartDate' end-date='addPatient.patient.authorizationStartDate'
+                                                       name="AuthorizationDate" type="text"
+                                                       data-validate="required"  data-message-required="Please enter Authorization Dates.">
+                                                <div class="input-group-addon">
+                                                    <a href="#">
+                                                        <i class="linecons-calendar">
+                                                        </i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="StartDate">
+                            Start Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" id="StartDate" 
+                                       name="StartDate" type="text" ng-model="addPatient.patient.authorizationStartDate"
+                                       data-validate="required"  data-message-required="Please enter Start Date." max-date="addPatient.patient.authorizationEndDate">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                                </input>
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="EndDate">
+                            End Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" id="EndDate" 
+                                       name="EndDate" type="text" ng-model="addPatient.patient.authorizationEndDate"
+                                       data-validate="required"  data-message-required="Please enter End Date." min-date="addPatient.patient.authorizationStartDate" ng-change="addPatient.authorizationDateChanged()">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                                </input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext('tab5')">
+                                Next »
+                            </button>
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext('tab3')">
+                                « Previous
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // validate
+    customJqueryValidation();
+    jQuery(document).ready(function ($) {
+        setTimeout(function () {
+            $(".fade-in-effect").addClass('in');
+        }, 1);
+//        $("#StartDate").datepicker({
+//        }).on('changeDate', function(selected) {
+//            var startDate = new Date(selected.date.valueOf());
+//            $('#EndDate').datepicker('setStartDate', startDate);
+//        }).on('clearDate', function(selected) {
+//            $('#EndDate').datepicker('setStartDate', null);
+//        });
+//
+//        $("#EndDate").datepicker({
+//        }).on('changeDate', function(selected) {
+//            var endDate = new Date(selected.date.valueOf());
+//            $('#StartDate').datepicker('setEndDate', endDate);
+//        }).on('clearDate', function(selected) {
+//            $('#StartDate').datepicker('setEndDate', null);
+//        });
+//
+//
+////        // Validation
+////        $("#add_patient_tab_4_form").validate({
+////            rules: {StartDate: {required: true, ontimedate: true},
+////                CareType: {required: true},
+////                EndDate: {required: true, ontimedate: true},
+////                Authorization: {required: true},
+////            },
+////            messages: {StartDate: {required: 'Please enter Start Date.'},
+////                CareType: {required: 'Please select Care Type.'},
+////                EndDate: {required: 'Please enter End Date.'},
+////                Authorization: {required: 'Please upload Authorization Document.'},
+////            },
+////            errorPlacement: function(error, element) {
+////                if (element.attr("name") == "StartDate" || element.attr("name") == "EndDate") {
+////                    error.insertAfter($(element).parent());
+////                } else {
+////                    error.insertAfter(element);
+////                }
+////            },
+////        }); // validate
+//
+    });
+//</script>
+<script type="text/ng-template" id="modal-5">
+    <form class="validate form-horizontal" name="careTypeForm" id="care_type_form" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="careTypeModel.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">{{careTypeModel.title}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    <div class="row">
+    <label class="col-sm-4 control-label add-padding-modal" for="rate">
+    Authorized hours
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="careTypeModel.careTypeObj.authorizedHours"  data-validate="required"  data-message-required="Please enter Authorized Hours."> 
+
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="careTypeModel.cancel();">Close</button>
+    <button type="button" class="btn btn-red" ng-show="careTypeModel.showRemove" ng-click="careTypeModel.remove();">Remove</button>
+    <button type="submit" class="btn btn-success" ng-click="careTypeModel.save();">Save changes</button>
+    </div>
+    </form>
+</script>

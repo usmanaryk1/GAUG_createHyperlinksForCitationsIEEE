@@ -1,0 +1,145 @@
+
+<div class="page-body"> 
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">Company History</h1>
+            <p class="description">Edit Company Information</p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal validate" role="form" id="company_information_form" name="company_information_form" ng-submit="addCompany.saveCompany()" ng-init="addCompany.initForm()">
+                        <div class="row">
+                            <div class="col-sm-12 pull-right">
+                                <button class="btn btn-info green_bt pull-right" type="submit">Save Changes</button>
+                                <button class="btn btn-info btn-single gray_bt pull-right" type="reset">Reset To Default</button>
+
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-73" class="col-sm-3 control-label">Company Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-73" class="form-control" name="CompanyName" ng-model="addCompany.companyObj.companyName" data-validate="required"  data-message-required="Please enter Company Name." maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-74" class="col-sm-3 control-label">Federal Tax ID #</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <label class="cbr-inline">
+                                        <input type="radio" class="cbr cbr-primary"  name="FederalTaxID" ng-model="addCompany.companyObj.federalIdType" value="S">
+                                        SS </label>
+                                    <label class="cbr-inline">
+                                        <input type="radio" class="cbr cbr-primary" name="FederalTaxID" ng-model="addCompany.companyObj.federalIdType" value="E">
+                                        EIN </label>
+
+                                </div>
+                                <input type="text" id="field-74" class="form-control"  name="FederalTaxIDNumber" ng-model="addCompany.companyObj.federalId" data-validate="required"  data-message-required="Please enter Federal Tax ID #." maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-75" class="col-sm-3 control-label">NPI Number</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-75" class="form-control" name="NPINumber" ng-model="addCompany.companyObj.npiNumber" data-validate="required"  data-message-required="Please enter NPI Number." maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-76" class="col-sm-3 control-label">Address 1</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-76" class="form-control" name="Address1" ng-model="addCompany.companyObj.address1" data-validate="required"  data-message-required="Please enter Address 1." maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-77" class="col-sm-3 control-label">Address 2</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-77" class="form-control" name="Address2" ng-model="addCompany.companyObj.address2" maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-78" class="col-sm-3 control-label">City</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-78" class="form-control" name="City" ng-model="addCompany.companyObj.city" data-validate="required"  data-message-required="Please enter City." maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-79" class="col-sm-3 control-label">State</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="sboxit-1" name="State" ng-model="addCompany.companyObj.state" data-validate="required"  data-message-required="Please select the state." ng-options="state.abbreviation as state.name for state in states">
+                                    <option value="">Select the state</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-80" class="col-sm-3 control-label">Zip Code</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-80" class="form-control" name="ZipCode" numbers-only="true" ng-model="addCompany.companyObj.zipcode" data-validate="required"  data-message-required="Please enter Zip Code." maxlength="10">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-80" class="col-sm-3 control-label">Contact Person</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-80" class="form-control" name="ContactPerson" ng-model="addCompany.companyObj.contactPerson" data-validate="required"  data-message-required="Please enter Contact Person." maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-81" class="col-sm-3 control-label">Phone</label>
+                            <div class="col-sm-9">
+                                <input numbers-only="true" maxlength="10" type="text" id="field-81" class="form-control" name="Phone" ng-model="addCompany.companyObj.phone" data-validate="required,number,minlength[10],maxlength[10]"
+                                       data-message-required="Please enter Phone Number." data-message-minlength="Phone Number must contain 10 digits" data-message-maxlength="Phone Number must contain 10 digits">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-82" class="col-sm-3 control-label">Fax</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-82" class="form-control" name="Fax" ng-model="addCompany.companyObj.fax" data-validate="number" maxlength="45">
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+
+                        <div class="form-group">
+                            <label for="field-83" class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="field-83" class="form-control" name="Email" ng-model="addCompany.companyObj.email" data-validate="email"  data-message-email="Please enter valid email." maxlength="255">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        setTimeout(function () {
+            cbr_replace();
+        }, 100);
+    });
+</script>

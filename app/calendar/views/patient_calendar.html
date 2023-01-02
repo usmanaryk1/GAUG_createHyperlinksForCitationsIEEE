@@ -1,0 +1,699 @@
+<div class="page-title full-width" ng-if="layoutOptions.pageTitles" title="Calendar" description="Events management calendar">
+    <div class="title-env">
+        <h1 class="title">Patient Calendar</h1>
+        <p class="description">Events management calendar</p>
+    </div>
+</div>
+
+<div style="background:white;">
+
+    <div class="mwl-toolbar">
+        <div class="mwl-left input-group btn-date-group" style="padding-top:5px;">
+            <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="patientcalendar.showDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            <h2>{{ patientcalendar.calendarTitle}}</h2>
+            <datepicker ng-model="patientcalendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-click="patientcalendar.selectDate($event)" ng-class="{'show':patientcalendar.isOpen,'hide':!patientcalendar.isOpen}"></datepicker>
+        </div>
+        <div class="mwl-right">
+            <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
+            <div class="mwl-button-group">
+                <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="patientcalendar.changeToMonth()" ng-class="{'mwl-state-active': patientcalendar.calendarView == 'month'}">month</button>
+                <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="patientcalendar.changeToWeek()" ng-class="{'mwl-state-active': patientcalendar.calendarView == 'week'}">week</button>
+            </div>
+            <div class="mwl-button-group">
+                <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left" mwl-date-modifier date="patientcalendar.calendarDay" decrement="patientcalendar.calendarView"><span class="mwl-icon mwl-icon-prev fa-angle-left" ></span></button>
+                <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right" mwl-date-modifier date="patientcalendar.calendarDay" increment="patientcalendar.calendarView"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
+            </div>
+        </div>
+        <div class="mwl-center"></div>
+        <div class="mwl-clear"></div>
+    </div>
+
+    <div class="mwl-panel-filter" ng-click="patientcalendar.showDatepicker($event)">
+
+        <div class="mwl-panel-search" ng-if="patientcalendar.calendarView == 'month'">
+            <div class="row">
+                <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
+                    <div class="col-md-7">
+                        <h2 ng-if="patientcalendar.viewPatient" style="margin:0;">{{patientcalendar.viewPatient.lName}}, {{patientcalendar.viewPatient.fName}}</h2>
+                    </div>
+                    <div class="col-md-5" style="padding-right:0px;">
+                        <div class="pull-right col-md-12" style="padding:0;">
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                                {
+                                    setTimeout(function () {
+                                        $("#patientdropdownIds").select2({
+                                            // minimumResultsForSearch: -1,
+                                            placeholder: 'Search Patient...',
+                                            // minimumInputLength: 1,
+                                            // placeholder: 'Search',
+                                        }).on('select2-open', function ()
+                                        {
+                                            // Adding Custom Scrollbar
+                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                        });
+                                    }, 200);
+                                });</script>
+                            <select class="form-control" name="patientdropdownIds" ng-model="patientcalendar.monthPatient" id="patientdropdownIds" ng-options='data as (data.lName+", "+data.fName+" "+data.middleInitial) for data in patientcalendar.patientList' ng-change="navigateToMonthPage(patientcalendar.monthPatient)">
+                                <option value="" selected hidden />
+                            </select>
+                        </div>
+                    </div>           
+                </div>
+            </div>
+        </div>
+        <div class="mwl-panel-filter row" ng-if="patientcalendar.calendarView == 'week'">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Patients</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            setTimeout(function () {
+                                $("#patientIds").select2({
+                                    // minimumResultsForSearch: -1,
+                                    placeholder: 'Select Patient...',
+                                    // minimumInputLength: 1,
+                                    // placeholder: 'Search',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                            }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="patientIds" id="patientIds" ng-model="patientcalendar.searchParams.patientIds" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientcalendar.patientList'>
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Care Coordinators</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            setTimeout(function () {
+                                $("#coordinatorIds").select2({
+                                    //                                                        minimumResultsForSearch: -1,
+                                    placeholder: 'Select Coordinator...',
+                                    //                                                        minimumInputLength: 1,
+                                    //                                                        placeholder: 'Search',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                            }, 200);
+
+                        });
+                    </script>
+                    <select class="form-control" name ="coordinatorIds" id="coordinatorIds" ng-model="patientcalendar.searchParams.coordinatorIds" ng-options='emp.id as (emp.label) for emp in patientcalendar.employeeCoordinateList track by emp.id'>
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Languages</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            setTimeout(function () {
+                                $("#languages").select2({
+                                    placeholder: 'Select Language...',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                            }, 200);
+                        });</script>
+                    <select multiple name ="languages" id="languages" class="form-control" ng-model="patientcalendar.searchParams.languages" ng-options="key as value for (key,value) in languages">
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Open From</label>
+                    <div class="input-group">
+                        <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientcalendar.searchParams.openCaseStartDate" max-date="patientcalendar.searchParams.openCaseEndDate">
+                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Open To</label>
+                    <div class="input-group">
+                        <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientcalendar.searchParams.openCaseEndDate" min-date="patientcalendar.searchParams.openCaseStartDate">
+                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
+                </div>
+                <div class="col-md-3 filter-checkbox row">
+                    <div class="col-md-6" style="padding-left:0;">
+                        <label>Live In Care</label>
+                        <input type="checkbox" name="livein" ng-model="patientcalendar.searchParams.forLiveIn">
+                    </div>
+                    <div class="col-md-6" style="padding-left:0;">
+                        <label>Open Cases</label>
+                        <input type="checkbox" name="opencase" ng-model="patientcalendar.searchParams.openCase" ng-change="patientcalendar.checkOpenCase()">
+                    </div>
+                </div>
+                <div class="col-md-3 filter-checkbox row pull-right">
+                    <div class="col-md-4 col-md-offset-2" style="padding-top:25px;">
+                        <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="patientcalendar.resetFilters()">Reset Filters</button>
+                    </div>
+                    <div class="col-md-4" style="padding-top:25px;">
+                        <button type="button" class="btn btn-success pull-right" ng-click="patientcalendar.applySearch()">Submit</button>
+                    </div>
+                </div>
+                <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
+                    <div class="form-group col-sm-6" style="padding-left: 15px;">
+                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
+                        <div style="width:70px; float:left;">
+                            <select class="form-control input-sm" ng-model="patientcalendar.searchParams.limit" ng-change="patientcalendar.applySearch()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <mwl-calendar
+        events="patientcalendar.events"
+        view="patientcalendar.calendarView"
+        view-title="patientcalendar.calendarTitle"
+        current-day="patientcalendar.calendarDay"
+        on-event-click="eventClicked(calendarEvent)"
+        type-id="patientcalendar.patientId"
+        type="patient"
+        list="patientcalendar.patient_list">
+    </mwl-calendar>
+    <div ng-if="patientcalendar.calendarView == 'week' && patientcalendar.patient_list.length > 0">
+        <div pagination-id="patientPagination" dir-paginate="e in patientcalendar.patient_list | itemsPerPage: patientcalendar.searchParams.limit" total-items="totalRecords" current-page="patientcalendar.pageNo">
+        </div>
+        <div id="paginationButtons" class="text-right" style="padding-right: 10px">
+            <dir-pagination-controls boundary-links="true" 
+                                     max-size="9"
+                                     template-url="app/tpls/dirPagination.tpl.html" pagination-id="patientPagination" on-page-change="patientcalendar.pageChanged(newPageNumber)"></dir-pagination-controls>
+
+        </div>
+    </div>
+</div>
+<!--Patient Modal-->
+<script type="text/ng-template" id="calendar-modal" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="patientPopup.closePopup();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">
+    <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
+    <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
+    </h4>
+    <h6 ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month'">DOB : {{patientPopup.patient.dateOfBirth|date :dateFormat}}</h6>
+    </div>
+    <div>
+    <img alt="user" class="img-cirlce img-responsive" ng-show="patientPopup.showLoadingImage" src="assets/images/loading.gif"/>
+    </div>
+    <form class="form-horizontal" role="form" name="popuptest" id="popuptest" >
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Availability</label>
+    <div  ng-if="patientPopup.isNew" style="margin-top:15px;">
+
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="patientPopup.changed()">
+    <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="S">
+    Schedule
+    </label>
+    </div>
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="patientPopup.changed()">
+    <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="U">
+    Unavailable
+    </label>
+    </div>
+    </div>
+    <div  ng-if="!patientPopup.isNew" style="margin-top:15px;">
+    <div class="col-sm-2" style="margin-top:7px;">
+    {{patientPopup.eventTypes[patientPopup.data.eventType]}}
+    </div>
+    </div>
+    </div>
+    </form>
+    <!-- schedule-->
+    <div ng-if="patientPopup.data.eventType == 'S'">
+    <form class="form-horizontal validate" role="form" name="popuppatients" id="popuppatients" >
+    <div class="modal-body">
+    <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient">
+    <div class="form-group-separator"></div>
+    <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
+    <div class="col-sm-10">
+    <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient" data-validate="required">
+    <option value="" selected hidden />
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+    <div class="form-group">
+    <label class="col-sm-2 control-label">Care</label>
+
+    <div class="col-sm-10">
+    <select class="form-control" id="care" name="care" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.companyCareTypeId" ng-options="care.id as care.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()" data-validate="required" data-message-required="Please select care." ng-required="patientPopup.data.eventType == 'S'">
+    <option value="">Select the care</option>
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label">Employee</label>
+
+    <div class="col-sm-10">
+    <select class="form-control" id="employee" name="employee" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.employeeId" data-message-required="Please select employee." ng-options="employee.id as (employee.lName+', '+employee.fName+' '+employee.middleInitial) for employee in patientPopup.careEmployeeMap[patientPopup.data.companyCareTypeId]">
+    <option value="" selected hidden></option>
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-2">Date</label>
+    <div class="col-sm-4">
+    <div class="input-group" style="z-index:1060">
+    <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="fromDate3" name="fromDate3" data-format="mm/dd/yyyy" ng-model="patientPopup.data.startDate" min-date="patientPopup.todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-calendar"></i></a>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
+    <div class="col-sm-4">
+    <div class="input-group" style="z-index:1060">
+    <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="toDate3" name="toDate3" data-format="mm/dd/yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-calendar"></i></a>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-2">Time</label>
+    <div class="col-sm-3">
+    <div class="input-group input-group-minimal">
+    <input class="form-control punch-time-input" ng-model='patientPopup.data.startTime' ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  id="startTime3" name="startTime3" type="text" data-validate='required,time' data-message-required='Please enter start Time.'/>
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-clock"></i></a>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
+    <div class="col-sm-3">
+    <div class="input-group input-group-minimal">
+    <input class="form-control punch-time-input" ng-model="patientPopup.data.endTime" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  id="endTime3" name="endTime3" type="text" data-validate='required,time' data-message-required='Please enter end Time.'/>
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-clock"></i></a>
+    </div>
+    </div>
+    </div>
+    <label class="col-sm-3 control-label" style="text-align:left;">
+    {{patientPopup.data.startTime| timecount : patientPopup.data.endTime}}
+    </label>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label"></label>
+
+    <div class="col-sm-3">
+
+    <div class="form-block">
+    <label class="no-padding-left checkbox" style="padding-top:0px;">
+    <input type="checkbox" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  class="cbr" id="livein" name="livein" ng-model="patientPopup.data.forLiveIn">
+    Live In Care
+    </label>
+    </div>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-2">Note</label>
+    <div class="col-sm-10">
+    <textarea class="form-control" ng-model="patientPopup.data.note" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  cols="5" id="note" name="note" placeholder="Enter note for this scheduled event."></textarea>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group" style="margin-bottom:0;">
+    <label class="col-sm-2 control-label" for="field-1">Repeat</label>
+    <div  ng-if="patientPopup.isNew">
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+    Daily
+    </label>
+    </div>
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+    Weekly
+    </label>
+    </div>
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
+    None
+    </label>
+    </div>
+    </div>
+    <div  ng-if="!patientPopup.isNew" style="margin-top:7px;">
+    <div class="col-sm-2">
+    {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
+    </div>
+    </div>
+    </div>
+    </div>  
+    <div class="form-group-separator" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited) && !patientPopup.isNew"></div>
+
+    <div class="form-group" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited) && !patientPopup.isNew" style="margin-bottom:10px;">
+    <label class="col-sm-2 control-label" for="field-2" style="padding-top:7px;">Apply To</label>
+    <div class="col-sm-9">
+    <div class="col-sm-3">
+    <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SINGLE">
+    Single
+    </label>
+    </div>
+    <div class="col-sm-3">
+    <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="DOW">
+    Day Of Week
+    </label>
+    </div>
+    <div class="col-sm-3">
+    <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SEQ">
+    Sequence
+    </label>
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
+    <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.save();">Save changes</button>
+    </div>
+    </form>
+    </div>
+
+    <!-- unavailable-->
+    <div  ng-if="patientPopup.data.eventType == 'U'">
+    <form class="form-horizontal validate" role="form" name="popuppatientu" id="popuppatientu" >
+    <div class="modal-body">
+    <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient">
+    <div class="form-group-separator"></div>
+    <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
+    <div class="col-sm-10">
+    <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient" data-validate="required">
+    <option value="" selected hidden />
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+    <div class="form-group">
+    <label class="col-sm-2 control-label">Reason</label>
+
+    <div class="col-sm-10">
+    <select class="form-control" id="reason" name="reason" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  ng-model="patientPopup.data.reason" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in patientPopup.reasons">
+    <option value="">Select the reason</option>
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-2">Date</label>
+    <div class="col-sm-4">
+    <div class="input-group" style="z-index:1060">
+    <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-disabled="!patientPopup.isNew" ng-model="patientPopup.data.startDate" min-date="patientPopup.todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-calendar"></i></a>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
+    <div class="col-sm-4">
+    <div class="input-group" style="z-index:1060">
+    <input type="text" id="toDate" class="form-control datepicker" name="toDate" data-format="mm/dd/yyyy" ng-disabled="!patientPopup.isNew" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-calendar"></i></a>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-2">Note</label>
+    <div class="col-sm-10">
+    <textarea class="form-control" ng-model="patientPopup.data.note" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  cols="5" id="note" name="note" placeholder="Enter note for this scheduled event."></textarea>
+    </div>
+    </div>
+
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
+    <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.save();">Save changes</button>
+    </div>
+    </form>
+    </div>
+</script>
+<script type="text/ng-template" id="modal-5">
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectPatientModel.patient.lName}}, {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
+    <p>{{selectPatientModel.patient.insuranceProviderName}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Gender</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.gender==='M'?'Male':'Female'}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurer</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceProviderName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurance ID</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone 2</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
+    <div class="col-md-8">
+    <span ng-if="selectPatientModel.patient.languagesSpoken== null || selectPatientModel.patient.languagesSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectPatientModel.patient.languagesSpoken">{{languages[language]}}<label ng-if="$index<selectPatientModel.patient.languagesSpoken.length-1">, </label>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
+    <div class="col-md-8" ng-show="selectPatientModel.patient.patientAddress">
+    {{selectPatientModel.patient.patientAddress.address1}}
+    <div ng-if="selectPatientModel.patient.patientAddress.address2 != null">
+    {{selectPatientModel.patient.patientAddress.address2}}
+    </div> 
+    <div>{{selectPatientModel.patient.patientAddress.city}}, {{selectPatientModel.patient.patientAddress.state}}, {{selectPatientModel.patient.patientAddress.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.dateOfBirth|date :dateFormat}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.staffingCordinatorName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Nurse Case Manager</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.nurseCaseManagerName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Care Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinator}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Phone</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorContact | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Email</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorEmail}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Fax</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorFax | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.patientCareTypeCollection && selectPatientModel.patient.patientCareTypeCollection.length>0">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Authorized Services</strong></label>
+    <div class="col-md-8">
+    <span ng-repeat="care in selectPatientModel.patient.patientCareTypeCollection">
+    {{care.insuranceCareTypeId.companyCaretypeId.careTypeTitle}}
+    <span ng-if="care.authorizedHours">
+    ( {{care.authorizedHours}} hours )
+    </span>
+    <br>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectPatientModel.close();">Close</button>
+    </div>
+</script>

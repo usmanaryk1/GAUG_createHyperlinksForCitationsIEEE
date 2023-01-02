@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="xenon-app">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Xenon Boostrap Admin Panel" />
+        <meta name="author" content="" />
+
+        <title>:: Welcome ::</title>
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="stylesheet" href="assets/css/download/font.css">
+        <link rel="stylesheet" href="assets/css/fonts/linecons/css/linecons.css">
+        <link rel="stylesheet" href="assets/css/fonts/fontawesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="assets/js/datatables/dataTables.bootstrap.css"/>
+        <link rel='styleshet' href='assets/css/download/buttons.dataTables.min.css'/>
+        <link rel="stylesheet" href="assets/js/multiselect/css/multi-select.css"/>
+        <link rel="stylesheet" href="assets/css/bootstrap.css">
+        <link rel="stylesheet" href="assets/css/xenon-core.css">
+        <link rel="stylesheet" href="assets/css/xenon-forms.css">
+        <link rel="stylesheet" href="assets/css/xenon-components.css">
+        <link rel="stylesheet" href="assets/css/xenon-skins.css">
+        <link rel="stylesheet" href="assets/css/custom.css">
+        <link rel="stylesheet" href="assets/css/jquery.loadmask.css">
+        <link rel="stylesheet" href="assets/js/cropper/cropper.min.css">
+        <link rel="stylesheet" href="angular-bootstrap-calendar.css">
+
+        <script src="assets/js/jquery-1.11.1.min.js"></script>
+    
+        <script>
+            var appData = {};
+
+            var appHelper = {
+                // Vars (paths without trailing slash)
+                templatesDir: 'app/tpls',
+                moduleTemplatesDir: 'app',
+                assetsDir: 'assets',
+                // Methods
+                viewTemplatePath: function (module, view_name) {
+                    return this.moduleTemplatesDir + '/' + module + '/views/' + view_name + '.html';
+                },
+                templatePath: function (view_name)
+                {
+                    return this.templatesDir + '/' + view_name + '.html';
+                },
+                assetPath: function (file_path)
+                {
+                    return this.assetsDir + '/' + file_path;
+                }
+            };
+        </script>
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    <body class="page-body" ng-controller="MainCtrl" ng-class="{'settings-pane-open': layoutOptions.settingsPane.isOpen, 'chat-open': layoutOptions.chat.isOpen, 'login-page': isLoginPage && isMainPage == false, 'login-light': (isLoginPage || isLightLoginPage) && isMainPage == false, 'lockscreen-page': isLockscreenPage && isMainPage == false, 'right-sidebar': layoutOptions.sidebar.isRight, 'boxed-container': layoutOptions.container.isBoxed}">
+        
+        <!-- 
+        <settings-pane></settings-pane>
+    
+        <horizontal-menu ng-if="layoutOptions.horizontalMenu.isVisible"></horizontal-menu>
+        -->
+        <script type="text/ng-template" id="warning-dialog.html">
+            <div class="modal-header">
+            <h3>Your system is idle from last 15 minutes!</h3>
+            </div>
+            <div idle-countdown="countdown" ng-init="countdown=30" class="modal-body">
+            You will be logged out in {{countdown}} second(s).
+            </div>
+
+        </script>
+        <div ng-cloak style="{{(paginationLoading==true && !maskLoadingRunning)?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
+            <div style="width: 80px;
+                margin: 0 auto;
+                padding: 4px 10px;
+                color: #ae6200;
+                font-weight: bold;
+                text-align: center;
+                background: #ffe7c2;
+                border: 2px solid #ff9d00;
+                border-top: 0;
+                box-shadow: 0 0 10px rgba(0,0,0,0.5);">Loading</div>
+        </div>
+        <div id="mainDiv" class="page-container" ui-view></div>
+        <!--        <div class="page-loading-overlay">
+                    <div class="loader-2"></div>
+                </div>-->
+
+        <!-- Remove this code if you want to disable Loading Overlay in the beginning of document loading -->
+        <!--        <div class="page-loading-overlay">
+                    <div class="loader-2"></div>
+                    <div class="loadr">
+                        <svg viewbox="0 0 74.6 81">
+                        <path d="M67.8,12.9C51.7,5.2,26.2,0.2,26.2,0.2c-10.9-1.8-9.3,11.4-9,20.2c0,0.7,0.1,1.4,0.1,2c7.8,1.5,19.7,4,29.2,7.4c11.4,4.1,9.6,8.3,9.2,16c-0.2,4.9-0.4,14,1.1,21.3c7.7,1.4,13.8,1.9,13.1-0.3c-6.3-7.2-0.1-29.6,1.8-34.2C73.3,28.7,79.3,18.4,67.8,12.9z">      </path>
+                        <path d="M58.9,79.5c-6.5-5.6-6.2-23.6-5.8-31.3c0.4-7.7,2.1-11.9-9.2-16c-15.3-5.5-37.3-8.8-37.3-8.8c-9.1-1.1-6.6,8.4-5.5,15.1c1.7,10,5.4,22,7.9,27.8c2.8,6.5,8.9,7.3,8.9,7.3S65.4,85.1,58.9,79.5z"></path>
+                        </svg>
+                    </div>
+                </div>-->
+
+        <!-- Angular App-->
+        <script src="app/js/angular/angular.min.js"></script>
+        <script src="app/js/angular/angular-resource.min.js"></script>
+        <script src="app/js/angular-ui/angular-ui-router.min.js"></script>
+        <script src="app/js/angular-ui/ui-bootstrap-tpls-0.11.2.min.js"></script>
+        <script src="app/js/angular/angular-cookies.min.js"></script>
+        <script src="app/js/oc-lazyload/ocLazyLoad.min.js"></script>
+        <script src="app/js/common/angular-fullscreen.js"></script>
+        <script src="assets/js/TweenMax.min.js"></script>
+        <script src="assets/js/joinable.js"></script>
+        <script src="assets/js/resizeable.js"></script>
+        <script src="assets/js/ng-flow-standalone.js"></script>
+        <script src="assets/js/jquery.maskedinput-1.2.2.js"></script>
+        <script src="assets/js/jquery.loadmask.min.js"></script>
+        <script src="app/js/moment.js"></script>
+
+        <!-- Xenon App -->
+        <script src="app/app.js"></script>
+        <script src="app/js/common/services.js"></script>
+        <script src="app/js/common/controllers.js"></script>
+        <script src="app/tpls/ontime_test_data.js"></script>
+        <script src="app/js/common/_factory.js"></script>
+        <script src="app/js/common/factory.js"></script>
+        <script src="app/js/directives/xenon-directives.js"></script>
+        <script src="app/js/directives/file-upload-directive.js"></script>
+        <script src="app/js/directives/dirPagination.js"></script>
+        <script src="app/js/filters/xenon-filters.js"></script>
+        <script src="assets/js/custom.js"></script> 
+        <script src="app/js/calendar/ont-module.js"></script>
+        <script src="app/js/calendar/ont-config.js"></script>
+        <script src="app/js/calendar/ont-helper.js"></script>
+        <script src="app/js/calendar/ont-calendar-title.js"></script>
+        <script src="app/js/calendar/ont-calendar-date.js"></script>
+        <script src="app/js/calendar/ont-calendar.js"></script>
+        <script src="app/js/calendar/ont-dimension.js"></script>
+        <script src="app/js/calendar/ont-month.js"></script>
+        <script src="app/js/calendar/ont-week.js"></script>
+        <script src="app/js/calendar/ont-date-modifier.js"></script>
+
+        <!--Services-->
+        <script src="app/patient/service/patient.service.js"></script>
+        <script src="app/employee/service/employee.service.js"></script>
+        <script src="app/company/service/company.service.js"></script>
+        <script src="app/timesheet/service/timesheet.service.js"></script>
+        <script src="app/insurer/service/insurer.service.js"></script>
+        <script src="app/common/service/caretype.service.js"></script>
+        <script src="app/payroll/service/payroll.service.js"></script>
+        <script src="app/common/service/tasks.service.js"></script>
+        <script src="app/common/service/position.service.js"></script>
+        <script src="app/common/service/eventtype.service.js"></script>
+
+        <!--Controllers-->
+        <script src="app/login.controller.js"></script>
+        <script src="app/dashboard/controller/dashboard.controller.js"></script>
+        <script src="app/employee/controller/add-employee.controller.js"></script>
+        <script src="app/employee/controller/view-employees.controller.js"></script>
+        <script src="app/patient/controller/add-patient.controller.js"></script>
+        <script src="app/patient/controller/view-patients.controller.js"></script>
+        <script src="app/billing/controller/billing-tab-1.controller.js"></script>
+        <script src="app/insurer/controller/add-insurer.controller.js"></script>
+        <script src="app/insurer/controller/view-insurer.controller.js"></script>
+        <script src="app/payroll/controller/payroll-settings.controller.js"></script>
+        <script src="app/payroll/controller/payroll-history.controller.js"></script>
+        <script src="app/payroll/controller/payroll-session.controller.js"></script>
+
+        <script src="app/company/controller/add-company.controller.js"></script>
+        <script src="app/timesheet/controller/dailly-attendance.controller.js"></script>
+        <script src="app/timesheet/controller/employee-timesheet.controller.js"></script>
+        <script src="app/timesheet/controller/patient-timesheet.controller.js"></script>
+        <script src="app/timesheet/controller/manual-punch.controller.js"></script>
+        <script src="app/calendar/controller/calendar.controller.js"></script>
+        <script src="app/calendar/controller/patient-calendar.controller.js"></script>
+
+        <!-- JavaScripts initializations and stuff -->
+        <script src="app/xenon-custom.js"></script>
+        <script src="assets/js/xenon-custom.js"></script>
+
+        <!-- Bottom Scripts -->
+       <script src="assets/js/download/jquery.dataTables.min.js"></script>
+        <!-- 
+        <script src="assets/js/datatables/js/jquery.dataTables.min.js"></script>
+        -->
+        <script src="assets/js/datatables/dataTables.bootstrap.js"></script>
+        <script src='assets/js/download/dataTables.buttons.min.js'></script>
+        <script src='assets/js/download/buttons.print.min.js'></script>
+        <!--<script src="assets/js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>-->
+        <!--<script src="assets/js/datatables/tabletools/dataTables.tableTools.min.js"></script>-->
+        <script src="assets/js/bootstrap.min.js"></script> 
+        <script src="assets/js/xenon-api.js"></script> 
+        <script src="assets/js/xenon-toggles.js"></script> 
+        <script src="assets/js/jquery-validate/jquery.validate.min.js"></script> 
+        <script src="assets/js/inputmask/jquery.inputmask.bundle.js"></script> 
+        <script src="assets/js/formwizard/jquery.bootstrap.wizard.min.js"></script> 
+        <script src="assets/js/datepicker/bootstrap-datepicker.js"></script> 
+        <script src="assets/js/multiselect/js/jquery.multi-select.js"></script> 
+        <script src="assets/js/jquery-ui/jquery-ui.min.js"></script> 
+        <script src="assets/js/selectboxit/jquery.selectBoxIt.min.js"></script> 
+        <script src="assets/js/timepicker/bootstrap-timepicker.min.js"></script>
+        <script src="assets/js/jquery.serializeObject.min.js"></script>
+        <script src="assets/js/cropper/cropper.min.js"></script>
+        <script src="assets/js/angular-idle.min.js"></script>
+        <script src="assets/js/download/lodash.min.js"></script>
+        <!-- google map -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script src="app/js/angular-google-maps/load-google-maps.js"></script>
+        <script>
+
+        function sticky_relocate() {
+            $element = $('#sticky-anchor');
+            if (jQuery.contains(document, $element[0])) {
+                var window_top = $(window).scrollTop();
+                var div_top = $('#sticky-anchor').offset().top;
+                var width = $("div#sticky").width();
+                if (window_top > div_top) {
+                    $('#sticky').addClass('stick');
+                    $('#sticky').width(width);
+                } else {
+                    $('#sticky').removeClass('stick');
+                    $('#sticky').removeAttr( 'style' );
+                }
+            }
+        }
+
+        $(function () {
+            $(window).scroll(sticky_relocate);
+        });
+        </script>
+    </body>
+</html>

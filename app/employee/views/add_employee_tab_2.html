@@ -1,0 +1,234 @@
+<div class="row" ng-init="addEmployee.tab2DataInit()">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+                    <div class="row">
+                        <div class="col-sm-12 pull-right">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.setFromNext('tab2')">
+                                Save Changes
+                            </button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click="addEmployee.resetEmployeeTab2()">
+                                Reset To Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Tax Status</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input checked="true" type="radio" name="TaxStatus" value='W' class="cbr cbr-primary" ng-model="addEmployee.employee.taxStatus">
+                                    W-2 </label>
+                                <label class="cbr-inline">
+                                    <input type="radio" name="TaxStatus"  value='1' class="cbr cbr-primary" ng-model="addEmployee.employee.taxStatus">
+                                    1099 </label>
+
+                            </div>
+                        </div>
+                    </div><div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Wages</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <label class="cbr-inline" >
+                                    <input checked="true" type="radio" name="Wages" value='H' class="cbr cbr-primary" ng-model="addEmployee.employee.wages">
+                                    Hourly </label>
+                                <label class="cbr-inline">
+                                    <input type="radio" name="Wages" value='S' class="cbr cbr-primary" ng-model="addEmployee.employee.wages">
+                                    Salary </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-show="addEmployee.employee.wages === 'S'">
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages === 'S'">
+                        <label class="col-sm-2 control-label" >Salary</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input class="form-control" name="Salary" type="text" ng-model="addEmployee.employee.salary"
+                                       numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="Salary">
+                                    <span class="input-group-addon">
+                                        <i>$/week</i>
+                                    </span>
+                                </input>
+                            </div>
+                        </div>
+                        <!--                        <div class="col-sm-5">
+                                                    <div class="input-group">
+                                                        <label class="cbr-inline" >
+                                                            <input type="radio" checked="true" name="SalaryFreq" value='1W' class="cbr cbr-primary" ng-model="addEmployee.employee.salaryFrequency">
+                                                            weekly </label>
+                                                        <label class="cbr-inline">
+                                                            <input type="radio" name="SalaryFreq" value='2W' class="cbr cbr-primary" ng-model="addEmployee.employee.salaryFrequency">
+                                                            bi-weekly </label>
+                        
+                                                    </div>
+                                                </div>-->
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            Rate 1
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="no-padding-left col-sm-3 element-align">
+                                <input class="form-control" name="Rate1" type="text" ng-model="addEmployee.employee.careRatesList.rate1.rate"
+                                       maxlength="10" numbers-only="true" decimalallowed decimalpoints="true"
+                                       onblur="setValidationMessage(this)" itemid="Rate 1">
+                                </input>
+                            </div>
+                            <div class="col-sm-9 largebox-align">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                        $("#rate1").multiSelect({
+                                            afterInit: function()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="rate1" multiple="multiple" name="rate1"
+                                        onblur="setSelectValidationMessage(this)" itemid="Care Types" ng-model="addEmployee.employee.careRatesList.rate1.careTypes"
+                                        ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList1'>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-show="addEmployee.employee.wages !== 'S'">
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            Rate 2
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="no-padding-left col-sm-3 element-align">
+                                <input class="form-control" name="Rate2" type="text" 
+                                       numbers-only="true" decimalallowed maxlength="10" decimalpoints="true" ng-model="addEmployee.employee.careRatesList.rate2.rate">
+                                </input>
+                            </div>
+                            <div class="col-sm-9 largebox-align">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                        $("#rate2").multiSelect({
+                                            afterInit: function()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="rate2" multiple="multiple" name="rate2"
+                                        ng-model="addEmployee.employee.careRatesList.rate2.careTypes"
+                                        ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList2'>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-show="addEmployee.employee.wages !== 'S'">
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            OT Rate
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="OTRate" type="text" ng-model="addEmployee.employee.otRate"
+                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="OT Rate">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-show="addEmployee.employee.wages !== 'S'">
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            HD Rate
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="HDRate" type="text" ng-model="addEmployee.employee.hdRate"
+                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="HD Rate">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-show="addEmployee.employee.wages !== 'S'">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab3')">
+                                Next »
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FORM WIZARD WITH VALIDATION END HERE-->
+<script type="text/javascript">
+// validate
+    function setValidationMessage(element) {
+        var elementName = element.getAttribute("name") + "-error";
+        var itemId = element.getAttribute("itemid");
+        $("#" + elementName).text('Please enter ' + itemId + '.');
+    }
+    function setSelectValidationMessage(element) {
+        var elementName = element.getAttribute("name") + "-error";
+        var itemId = element.getAttribute("itemid");
+        $("#" + elementName).text('Please select ' + itemId + '.');
+    }
+    var form_clean;
+    customJqueryValidation();
+    jQuery(document).ready(function($) {
+        
+        setTimeout(function() {
+            $(".fade-in-effect").addClass('in');
+//            cbr_replace();
+        }, 1);
+        //to set an variable to check dirtiness of form.
+//        setTimeout(function() {
+//        // serialize clean form
+//            $(function() {
+//                form_clean = $("form").serialize();
+//            });
+//        }, 500);
+////
+////
+////        // Validation
+////        $("#add_employee_tab_2_form").validate({
+////            rules: {//Rate2: {required: true},
+////                Rate1: {required: true},
+////                OTHDRate: {required: true},
+////            },
+////            messages: {Rate2: {required: 'Please enter Rate 2.'},
+////                Rate1: {required: 'Please enter Rate 1.'},
+////                OTHDRate: {required: 'Please enter OT/HD Rate.'},
+////            },
+////            errorPlacement: function(error, element) {
+////                if (element.attr("name") == "DateofBirth") {
+////                    error.insertAfter($(element).parent());
+////                } else {
+////                    error.insertAfter(element);
+////                }
+////            },
+////        });// validate
+//
+    });// ready 
+</script>
