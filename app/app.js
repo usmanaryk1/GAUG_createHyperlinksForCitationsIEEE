@@ -31,7 +31,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
 
-    << << << < HEAD
             $stateProvider.
             // Main Layout Structure
             state('app', {
