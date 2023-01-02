@@ -116,7 +116,7 @@
                                     </button>
                                     <div class="col-md-6 pull-right text-right pad0">
                                         <label>Attendance Tracker</label>
-                                        <input type="checkbox" name="schedule" ng-model="dAttendance.isSchedule" ng-change="dAttendance.resetCheckbox()">
+                                        <input type="checkbox" name="schedule" ng-model="dAttendance.searchParams.isSchedule" ng-change="dAttendance.resetCheckbox()">
                                     </div>
                                 </div>
                             </div>
@@ -125,9 +125,18 @@
                     </form>
                 </div>
                 <hr/>
-                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                <div ng-show="dAttendance.attendanceList.length" class="col-sm-12">
+                    <div id="paginationButtons" class="text-right">
+                        <span class="pull-left" style="margin-top: 15px;">Showing {{((dAttendance.searchParams.pageNo - 1) * dAttendance.searchParams.limit) + 1}} - {{(dAttendance.searchParams.pageNo * dAttendance.searchParams.limit) < dAttendance.totalRecords ? (dAttendance.searchParams.pageNo * dAttendance.searchParams.limit) : dAttendance.totalRecords}} of {{dAttendance.totalRecords}} records</span>
+                        <dir-pagination-controls boundary-links="true" 
+                                                 max-size="9"
+                                                 template-url="app/tpls/dirPagination.tpl.html" pagination-id="dailyAttendancePagination" on-page-change="dAttendance.pageChanged(newPageNumber)"></dir-pagination-controls>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="dataTables_wrapper form-inline dt-bootstrap" style="margin-top: 10px;">
                     <div class="table-responsive border0 scroll search_hide">
-                        <div ng-if="!dAttendance.isSchedule">
+                        <div ng-if="!dAttendance.searchParams.isSchedule">
                             <table id="example-1" class="table table-striped table-bordered  table-small-font" ng-if="dAttendance.attendanceList.length" cellspacing="0">
                                 <thead>
                                     <tr>
@@ -155,10 +164,10 @@
                                             </span>
                                             <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                         </th>
-                                        <td>
+                                        <td ng-click="dAttendance.openEmployeeModal(timesheet.employeeId, 'modal-5')" style="cursor: pointer;">
                                             {{timesheet.employeeId.lName + ", " + timesheet.employeeId.fName + " " + timesheet.employeeId.middleInitial}}
                                         </td>
-                                        <td>
+                                        <td ng-click="dAttendance.openPatientModal(timesheet.patientId, 'modal-6')" style="cursor: pointer;">
                                             {{timesheet.patientId.lName + ", " + timesheet.patientId.fName + " " + timesheet.patientId.middleInitial}}
                                         </td>
                                         <td>
@@ -166,21 +175,25 @@
                                             <!--<div class="green_dot"></div>-->
                                             <!--Display red dot for not matched GPS location-->
                                             <!--<div class="red_dot"></div>-->
-                                            <div ng-class="{
+                                            <div ng-click="hide(this);" onclick="hide(this);" style="cursor: pointer;">
+                                                <div ng-class="{
                                                         'black_dot'
                                                                 :timesheet.punchInColorFlag== 'black', 'red_dot
                                                         ':timesheet.punchInColorFlag == 'red', 'green_dot':timesheet.punchInColorFlag == 'green'}"></div> 
-                                            {{timesheet.roundedPunchInTime|date :timeFormat}}
+                                                {{timesheet.roundedPunchInTime|date :timeFormat}}
+                                            </div>
+                                            <div style="display: none;">{{timesheet.punchInTimeInDate|date:'MM/dd/yyyy hh:mm a'}}</div>
                                         </td>
                                         <td>
-                                            <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
+                                            <div ng-if='validNumber(timesheet.roundedPunchOutTime)' style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);">
                                                 <div ng-class="{
                                                             'black_dot'
                                                                     :timesheet.punchOutColorFlag == 'black', 'red_dot
                                                                     ':timesheet.punchOutColorFlag == '
                                                             red', 'green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
                                                 {{timesheet.roundedPunchOutTime|date :timeFormat}}
-                                            </span>
+                                            </div>
+                                            <div style="display: none;">{{timesheet.punchOutTimeInDate|date:'MM/dd/yyyy hh:mm a'}}</div>
                                             <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                         </td>
                                         <td>
@@ -225,17 +238,17 @@
                                 Please select all filters to review daily attendance.
                             </div>
                         </div>
-                        <div ng-if="dAttendance.isSchedule">
+                        <div ng-if="dAttendance.searchParams.isSchedule">
                             <table id="example-1" class="table table-striped table-bordered  table-small-font" ng-if="dAttendance.attendanceList.length" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th width="13%" nowrap ng-class="dAttendance.applySortingClass('startDate')" ng-click="dAttendance.applySorting('startDate')" >Schedule Date</th>
-                                        <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')" >Employee Name</th>
-                                        <th width="15%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>
+                                        <th width="13%" nowrap ng-class="dAttendance.applySortingClass('date')" ng-click="dAttendance.applySorting('date')" >Schedule Date</th>
+                                        <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')">Employee Name</th>
+                                        <th width="15%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')">Patient Name</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')">Start Time</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >End Time</th>
-                                        <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')" >Time In</th>
-                                        <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >Time Out</th>
+                                        <th width="10%" nowrap >Time In</th>
+                                        <th width="10%" nowrap >Time Out</th>
                                         <th width="10%" nowrap>Actions</th>
                                     </tr>
                                 </thead> 
@@ -246,10 +259,10 @@
                                         <th>
                                             {{timesheet.startDate|timesheetformat}} - {{timesheet.startDate|date :dateFormat}}
                                         </th>
-                                        <td>
+                                        <td ng-click="dAttendance.openEmployeeModal(timesheet.employee, 'modal-5')" style="cursor: pointer;">
                                             <span ng-if="timesheet.employee">{{timesheet.employee.lName + ", " + timesheet.employee.fName + " " + timesheet.employee.middleInitial}}</span>
                                         </td>
-                                        <td>
+                                        <td ng-click="dAttendance.openPatientModal(timesheet.patient, 'modal-6')" style="cursor: pointer;">
                                             <span ng-if="timesheet.patient">{{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}</span>
                                         </td>
                                         <th>
@@ -259,11 +272,26 @@
                                             {{timesheet.roundedEndTime|date :timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.timeSheet.roundedPunchInTime|date : timeFormat}}
+                                            <div ng-click="hide(this);" onclick="hide(this);" style="cursor: pointer;">
+                                                <div ng-class="{
+                                                        'black_dot'
+                                                                :timesheet.timeSheet.punchInColorFlag== 'black', 'red_dot
+                                                        ':timesheet.timeSheet.punchInColorFlag == 'red', 'green_dot':timesheet.timeSheet.punchInColorFlag == 'green'}"></div> 
+                                                {{timesheet.timeSheet.roundedPunchInTime|date :timeFormat}}
+                                            </div>
+                                            <div style="display: none;">{{timesheet.timeSheet.punchInTime|date:'MM/dd/yyyy hh:mm a'}}</div>
                                         </th>
                                         <th>
-                                            <span ng-if='validNumber(timesheet.timeSheet.punchOutTime)'>{{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}</span>
-                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.punchOutTime)'>Not Punched</span>
+                                            <div ng-if='validNumber(timesheet.timeSheet.roundedPunchOutTime)' style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);">
+                                                <div ng-class="{
+                                                            'black_dot'
+                                                                    :timesheet.timeSheet.punchOutColorFlag == 'black', 'red_dot
+                                                                    ':timesheet.timeSheet.punchOutColorFlag == '
+                                                            red', 'green_dot':timesheet.timeSheet.punchOutColorFlag == 'green'}"></div>
+                                                {{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}
+                                            </div>
+                                            <div style="display: none;">{{timesheet.timeSheet.punchOutTime|date:'MM/dd/yyyy hh:mm a'}}</div>
+                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.roundedPunchOutTime)'>Not Punched</span>
                                         </th>
                                         <th>
                                 <div class="action-btn" ng-if="timesheet.timeSheet">
@@ -271,7 +299,9 @@
                                     <!--<a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet.timeSheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>--> 
                                     <a class=" btn fa fa-search view_task_button" ng-click="dAttendance.openTaskListModal('modal-3', 'lg', 'static', timesheet.timeSheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                 </div>
-                                <div class="action-btn" ng-if="!timesheet.timeSheet">No Punch</div>
+                                <div class="action-btn" ng-if="!timesheet.timeSheet">
+                                    <a href="#/app/manual_punch{{timesheet.scheduleId==null?'':'/schedule/'+timesheet.scheduleId+'?lastPage=daily_attendance'}}" ng-click="dAttendance.navigateToManualPunch(timesheet)">No Punch</a>
+                                </div>
                                 </th>
                                 </tr>
                                 </tbody>
@@ -399,6 +429,349 @@
     <button type="submit" class="btn btn-success" ng-click="utModal.approve();">Approve</button>
     </div>
     </form>
+</script>
+<script type="text/ng-template" id="modal-5">
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="user_img"> 
+    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
+    <p>{{positions[selectEmployeeModel.employee.companyPositionId]}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectEmployeeModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Position</strong></label>
+    <div class="col-md-7">
+    {{positions[selectEmployeeModel.employee.companyPositionId]}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone 2</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactName!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Name</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactNumber!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactNumber | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Address</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.address1}}<div ng-if="selectEmployeeModel.employee.address2 != null">{{selectEmployeeModel.employee.address2}}</div><div>  {{selectEmployeeModel.employee.city}}, {{selectEmployeeModel.employee.state}}, {{selectEmployeeModel.employee.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Date Of Birth</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.dateOfBirth|date :dateFormat}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Social Security Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.ssn | ssn}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Languages Spoken</strong></label>
+    <div class="col-md-7">
+    <span ng-if="selectEmployeeModel.employee.languageSpoken== null || selectEmployeeModel.employee.languageSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectEmployeeModel.employee.languageSpoken">{{languages[language]}}
+    <label ng-if="$index<selectEmployeeModel.employee.languageSpoken.length-1">, </label>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectEmployeeModel.close();">Close</button>
+    </div>
+</script>
+<script type="text/ng-template" id="modal-6">
+
+
+
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectPatientModel.patient.lName}}, {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
+    <p>{{selectPatientModel.patient.insuranceProviderName}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Gender</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.gender==='M'?'Male':'Female'}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurer</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceProviderName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurance ID</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone 2</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
+    <div class="col-md-8">
+    <span ng-if="selectPatientModel.patient.languagesSpoken== null || selectPatientModel.patient.languagesSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectPatientModel.patient.languagesSpoken">{{languages[language]}}<label ng-if="$index<selectPatientModel.patient.languagesSpoken.length-1">, </label>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
+    <div class="col-md-8" ng-show="selectPatientModel.patient.patientAddress">
+    {{selectPatientModel.patient.patientAddress.address1}}
+    <div ng-if="selectPatientModel.patient.patientAddress.address2 != null">
+    {{selectPatientModel.patient.patientAddress.address2}}
+    </div> 
+    <div>{{selectPatientModel.patient.patientAddress.city}}, {{selectPatientModel.patient.patientAddress.state}}, {{selectPatientModel.patient.patientAddress.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.dateOfBirth|date :dateFormat}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.staffingCordinatorName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Nurse Case Manager</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.nurseCaseManagerName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Care Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinator}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Phone</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorContact | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Email</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorEmail}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Fax</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorFax | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.patientCareTypeCollection && selectPatientModel.patient.patientCareTypeCollection.length>0">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Authorized Services</strong></label>
+    <div class="col-md-8">
+    <span ng-repeat="care in selectPatientModel.patient.patientCareTypeCollection">
+    {{care.insuranceCareTypeId.companyCaretypeId.careTypeTitle}}
+    <span ng-if="care.authorizedHours">
+    ( {{care.authorizedHours}} hours )
+    </span>
+    <br>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectPatientModel.close();">Close</button>
+    </div>
 </script>
 <script type="text/javascript">
     function hide(obj) {

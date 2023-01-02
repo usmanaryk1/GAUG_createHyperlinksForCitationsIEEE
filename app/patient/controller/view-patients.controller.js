@@ -18,7 +18,7 @@
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
-
+        
         EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
@@ -136,7 +136,7 @@
         ctrl.retrievePatients();
         ctrl.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            PatientDAO.getPatientsForSchedule({patientIds: patient.id}).then(function (patients) {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired:true}).then(function (patients) {
                 var patient = patients[0];
                 $rootScope.selectPatientModel = $modal.open({
                     templateUrl: modal_id,
@@ -193,14 +193,16 @@
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+                keyboard: false    
             });
-
+            $rootScope.dischargePatientModel.currentDate = new Date();
             $rootScope.dischargePatientModel.patient = patient;
 
             $rootScope.dischargePatientModel.discharge = function (patient) {
-                $rootScope.maskLoading();
-                PatientDAO.changestatus({id: patient.id, status: 'discharged'}).then(function (res) {
+                
+				if ($('#popup_dis_patient')[0].checkValidity()) {
+				$rootScope.maskLoading();
+                PatientDAO.changestatus({id: patient.id, status: 'discharged', reason:$rootScope.dischargePatientModel.reason, dischargeDate:$rootScope.dischargePatientModel.dischargeDate}).then(function (res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -222,6 +224,7 @@
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
+				}
             };
         };
 

@@ -81,12 +81,13 @@
                 ctrl.attendanceObj.punchOutTime = $filter('date')(new Date(ctrl.attendanceObj.punchOutTime).getTime(), timeFormat).toString();
             }
         }
+        var dailyAttendanceNoPunch = localStorage.getItem('dailyAttendanceNoPunch');
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
             }
-            if ($state.current.name.indexOf('patient') > 0 || $state.current.name.indexOf('employee') > 0) {
+            if ($state.current.name.indexOf('patient') > 0 || $state.current.name.indexOf('employee') > 0 || $state.current.name.indexOf('schedule') > 0) {
                 //nothing to do
             } else {
                 ctrl.editTimesheet = true;
@@ -104,7 +105,34 @@
         var initPage = function () {
             if ($state.params.id && $state.params.id !== '') {
                 var id = $state.params.id;
-                if ($state.current.name.indexOf('patient') > 0) {
+                if ($state.current.name.indexOf('schedule') > 0) {
+                    var param = JSON.parse(dailyAttendanceNoPunch);
+                    if (param.patientId) {
+                        ctrl.attendanceObj.patientId = Number(param.patientId);
+                        $timeout(function () {
+                            $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
+                        });
+                    }
+                    if (param.employeeId) {
+                        ctrl.attendanceObj.employeeId = Number(param.employeeId);
+                        ctrl.retrieveEmployee();
+                        $timeout(function () {
+                            $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
+                        });
+                    }
+                    if (param.startTime) {
+                        ctrl.attendanceObj.punchInTime = param.startTime;
+                    }
+                    if (param.endTime) {
+                        ctrl.attendanceObj.punchOutTime = param.endTime;
+                    }
+                    if (param.startDate) {
+                        ctrl.attendanceObj.punchInDate = param.startDate;
+                    }
+                    if (param.endDate) {
+                        ctrl.attendanceObj.punchOutDate = param.endDate;
+                    }
+                } else if ($state.current.name.indexOf('patient') > 0) {
                     ctrl.attendanceObj.patientId = Number(id);
                     $timeout(function () {
                         $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
@@ -202,15 +230,17 @@
 
         var mergeDateAndTime = function (date, time) {
             date = new Date(date);
-            var hours = Number(time.match(/^(\d+)/)[1]);
-            var minutes = Number(time.match(/:(\d+)/)[1]);
-            var seconds = 0;
+            if (time) {
+                var hours = Number(time.match(/^(\d+)/)[1]);
+                var minutes = Number(time.match(/:(\d+)/)[1]);
+                var seconds = 0;
 //            var AMPM = time.match(/\s(.*)$/)[1];
 //            if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
 //                hours = hours + 12;
 //            if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
 //                hours = hours - 12;
-            date.setHours(hours, minutes, seconds);
+                date.setHours(hours, minutes, seconds);
+            }
             return $filter('date')(date, ontimetest.date_time_format);
         };
 
@@ -223,7 +253,7 @@
 
         ctrl.navigateToState = function () {
             var params = angular.copy(searchParams);
-            if (searchParams !== null && searchParams.lastPage !== null) {
+            if (searchParams !== null && searchParams.lastPage != null) {
                 if (searchParams.lastPage.indexOf("employee_timesheet") >= 0) {
                     $state.go('app.employee_timesheet');
                 } else if (searchParams.lastPage.indexOf("patient_time_sheet") >= 0) {
@@ -265,6 +295,7 @@
                         attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
+                            ctrl.navigateToState();
 //                            ctrl.resetManualPunch();
                             ctrl.formSubmitted = false;
                         }).catch(function (e) {
@@ -279,7 +310,9 @@
                     } else {
                         delete attendanceObjToSave.isMissedPunch;
                         attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        if (ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime !== '') {
+                            attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        }
                         if (attendanceObjToSave.employeeId != null) {
                             attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }
@@ -316,6 +349,7 @@
                         attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addMissedPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
+                            ctrl.navigateToState();
 //                            ctrl.resetManualPunch();
                             ctrl.formSubmitted = false;
                         }).catch(function (e) {
@@ -330,7 +364,9 @@
                     } else {
                         delete attendanceObjToSave.isMissedPunch;
                         attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        if (ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime !== '') {
+                            attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        }
                         if (attendanceObjToSave.employeeId != null) {
                             attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }

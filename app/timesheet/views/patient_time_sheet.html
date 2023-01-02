@@ -107,7 +107,7 @@
                                         patTimesheet.searchParams.order = 'desc';
                                         patTimesheet.filterTimesheet();
                                         patTimesheet.formSubmitted = true">Review</button>
-                                    <a href="#/app/manual_punch{{patTimesheet.searchParams.patientId==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?lastPage=patient_time_sheet'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                    <a href="#/app/manual_punch{{patTimesheet.selectedPatient==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?lastPage=patient_time_sheet'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5" ng-disabled="patTimesheet.selectedPatient.status==='d'">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
                                     </button>
@@ -164,10 +164,10 @@
                                                     <span ng-if='timesheet.unauthorizedTime && timesheet.forBilling && timesheet.scheduleId'>
                                                         {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
                                                     </span>
-                                                    <span ng-if='!timesheet.forBilling && timesheet.scheduleId'>
+                                                    <span ng-if='(timesheet.unauthorizedTime && !timesheet.forBilling && timesheet.scheduleId) || timesheet.ut'>
                                                         {{timesheet.scheduleId.roundedStartTime|duration:timesheet.scheduleId.roundedEndTime}}
                                                     </span>
-                                                    <span ng-if='!timesheet.scheduleId'>
+                                                    <span ng-if='!timesheet.ut && !timesheet.unauthorizedTime'>
                                                         {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
                                                     </span>
                                                 </span>

@@ -1,11 +1,48 @@
 (function () {
-    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO) {
+    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO, PositionDAO, PatientDAO, InsurerDAO) {
         var ctrl = this;
         Page.setTitle("Daily Attendance");
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-        ctrl.isSchedule = false;
+        ctrl.nursingCareMap = {};
+        ctrl.staffCoordinatorMap = {};
+        ctrl.insuranceProviderMap = {};
+        $rootScope.positions = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    $rootScope.positions[position.id] = position.position;
+                });
+            }
+        });
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.nursingCareMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve nursing care list.");
+        });
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve staff coordinator list.");
+        });
+        InsurerDAO.retrieveAll().then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
         //method is called when page is changed
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -42,12 +79,13 @@
         };
 
         ctrl.resetFilters = function () {
-            ctrl.searchParams = {limit: 10, pageNo: 1};
+            ctrl.searchParams = {limit: 10, pageNo: 1, isSchedule: false};
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.searchParams.staffingCordinatorId = null;
             localStorage.removeItem('dailyAttendanceSearchParams');
+            localStorage.removeItem('dailyAttendanceNoPunch');
             ctrl.attendanceList = [];
             ctrl.criteriaSelected = false;
         };
@@ -91,7 +129,7 @@
                     $timeout(function () {
                         $("#sboxit-2").select2("val", ctrl.searchParams.staffingCordinatorId);
                     }, 300);
-                    ctrl.filterTimesheet();
+                    ctrl.commonFilter();
                 } else {
                     ctrl.resetFilters();
                     $rootScope.unmaskLoading();
@@ -113,6 +151,8 @@
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                    obj.punchInTimeInDate = Date.parse(obj.punchInTime);
+                    obj.punchOutTimeInDate = Date.parse(obj.punchOutTime);
                     if (obj.scheduleId) {
                         obj.scheduleId.roundedStartTime = Date.parse(obj.scheduleId.roundedStartTime);
                         obj.scheduleId.roundedEndTime = Date.parse(obj.scheduleId.roundedEndTime);
@@ -290,6 +330,42 @@
             };
             $rootScope.utModal.obj = {id: timesheet.id, unauthorizedTime: timesheet.ut, forPayroll: false, forBilling: false, isMissedPunch: timesheet.isMissedPunch};
         };
+        ctrl.openEmployeeModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.selectEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
+            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
+            $rootScope.selectEmployeeModel.employee = angular.copy(employee);
+            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
+                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
+            }
+
+        };
+
+        ctrl.openPatientModal = function (patient, modal_id, modal_size, modal_backdrop)
+        {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired: true}).then(function (patients) {
+                var patient = patients[0];
+                $rootScope.selectPatientModel = $modal.open({
+                    templateUrl: modal_id,
+                    size: modal_size,
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false
+                });
+                $rootScope.selectPatientModel.patient = angular.copy(patient);
+                $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
+                $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
+                $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
+                if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
+                    $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+                }
+            });
+        };
         ctrl.filterSchedule = function () {
             ctrl.searchParams.pageNo = 1;
             if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
@@ -315,29 +391,57 @@
             params.toDate = ctrl.searchParams.endDate;
             delete params.startDate;
             delete params.endDate;
-            delete params.staffingCordinatorId;
+//            delete params.staffingCordinatorId;
             params.dailyAttendance = true;
             EventTypeDAO.retrieveSchedules(params).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
+                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     delete obj.color;
-                    if (obj.timeSheet) {
-                        var temp = $filter('duration')(obj.roundedStartTime, obj.timeSheet.roundedPunchInTime);
-                        obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
-                        obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
-                        obj.timeSheet.roundedPunchInTime = Date.parse(obj.timeSheet.roundedPunchInTime);
-                        obj.timeSheet.roundedPunchOutTime = Date.parse(obj.timeSheet.roundedPunchOutTime);
+                    if (!obj.timeSheet) {
+                        //No Show - Red
+                        var temp = $filter('duration')(obj.roundedStartTime, new Date());
                         if (temp) {
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#ea9999"; // red color
-                            } else if (h > 0 || (h === 0 && m > 8)) {
-                                obj.color = "#FEFEB8"; // yellow color
+                                obj.color = "#F52226"; // red color
                             }
                         }
-                        if (!obj.timeSheet.punchOutTime) {
+                    } else {
+                        var temp = $filter('duration')(obj.roundedStartTime, obj.timeSheet.roundedPunchInTime);
+                        obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
+                        obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
+                        obj.timeSheet.roundedPunchInTime = Date.parse(obj.timeSheet.roundedPunchInTime);
+                        obj.timeSheet.roundedPunchOutTime = Date.parse(obj.timeSheet.roundedPunchOutTime);
+                        obj.timeSheet.punchInTimeInDate = Date.parse(obj.timeSheet.punchInTime);
+                        obj.timeSheet.punchOutTimeInDate = Date.parse(obj.timeSheet.punchOutTime);
+                        var timesheetDuration;
+                        var scheduleDuration;
+                        obj.color = null;
+                        if (obj.timeSheet.roundedPunchInTime && obj.timeSheet.roundedPunchOutTime) {
+                            timesheetDuration = $filter('duration')(obj.timeSheet.roundedPunchInTime, obj.timeSheet.roundedPunchOutTime);
+                        }
+                        if (obj.roundedStartTime && obj.roundedEndTime) {
+                            scheduleDuration = $filter('duration')(obj.roundedStartTime, obj.roundedEndTime);
+                        }
+                        //Insufficient hours worked - Pink
+                        if (timesheetDuration != null && scheduleDuration != null) {
+                            var t = timesheetDuration.split(":");
+                            var timeSheetHours = Number(t[0]);
+                            var timeSheetMins = Number(t[1]);
+                            var s = scheduleDuration.split(":");
+                            var scheduleHours = Number(s[0]);
+                            var scheduleMins = Number(s[1]);
+                            if (timeSheetHours < scheduleHours) {
+                                obj.color = "#ea9999"; // pink color
+                            } else if (timeSheetHours === scheduleHours && timeSheetMins < scheduleMins) {
+                                obj.color = "#ea9999"; // pink color
+                            }
+                        }
+                        //Purple- Forgot to punch out – no punch out
+                        if (obj.color === null && !obj.timeSheet.punchOutTime) {
                             var temp1 = $filter('duration')(obj.roundedEndTime, new Date());
                             if (temp1) {
                                 var t = temp1.split(":");
@@ -348,15 +452,43 @@
                                 }
                             }
                         }
-                    } else {
-                        var temp = $filter('duration')(obj.roundedStartTime, new Date());
-                        if (temp) {
+                        //Red(change To Bright Yellow)- Excessive lateness – 31 min and above 
+                        if (obj.color === null && temp) {
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#ea9999"; // red color
+                                obj.color = "#F5F52A"; // Bright Yellow color
                             }
+                        }
+                        //Yellow(light yellow)- moderate lateness 8-30 min
+                        if (obj.color === null && temp) {
+                            var t = temp.split(":");
+                            var h = Number(t[0]);
+                            var m = Number(t[1]);
+                            if (h === 0 && m > 8) {
+                                obj.color = "#E0E082"; // yellow color
+                            }
+                        }
+                        //Green- UT time greater than 30minutes, when approved it goes back to
+                        if (timesheetDuration != null && scheduleDuration != null) {
+                            var t = timesheetDuration.split(":");
+                            var timeSheetHours = Number(t[0]);
+                            var timeSheetMins = Number(t[1]);
+                            var s = scheduleDuration.split(":");
+                            var scheduleHours = Number(s[0]);
+                            var scheduleMins = Number(s[1]);
+                            if (!obj.timeSheet.unauthorizedTime || obj.timeSheet.unauthorizedTime == null) {
+                                if (timeSheetHours > scheduleHours) {
+                                    obj.color = "#0ECC1B"; // Green color
+                                } else if (timeSheetHours === scheduleHours && timeSheetMins > scheduleMins) {
+                                    obj.color = "#0ECC1B"; // Green color
+                                }
+                            }
+                        }
+                        //Blue- Manual punch - highlights all punches that were made manually.
+                        if (obj.color === null && !!obj.timeSheet.isManualPunch) {
+                            obj.color = "#02A7DE"; // blue color
                         }
                     }
                     obj.roundedStartTime = Date.parse(obj.roundedStartTime);
@@ -387,20 +519,24 @@
             ctrl.formSubmitted = true;
         };
         ctrl.commonFilter = function () {
-            if (ctrl.isSchedule) {
+            if (ctrl.searchParams.isSchedule) {
+                ctrl.searchParams.order = 'asc';
                 ctrl.filterSchedule();
             } else {
                 ctrl.filterTimesheet();
             }
         };
         ctrl.commonRetrieve = function () {
-            if (ctrl.isSchedule) {
+            if (ctrl.searchParams.isSchedule) {
                 ctrl.retrieveSchedule();
             } else {
                 ctrl.retrieveTimesheet();
             }
         };
+        ctrl.navigateToManualPunch = function (timesheet) {
+            localStorage.setItem('dailyAttendanceNoPunch', JSON.stringify(timesheet));
+        };
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", "PositionDAO", "PatientDAO", "InsurerDAO", DailyAttendanceCtrl]);
 })();

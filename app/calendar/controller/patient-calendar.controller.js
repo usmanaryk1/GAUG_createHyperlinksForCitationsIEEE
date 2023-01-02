@@ -6,6 +6,7 @@
         ctrl.patient_list = [];
 
         var timeFormat = 'HH:mm';
+        ctrl.forShowTime = true;
 
         Page.setTitle("Patient Calendar");
 
@@ -249,7 +250,7 @@
             });
         };
 
-        ctrl.savePatientPopupChanges = function (data) {
+        ctrl.savePatientPopupChanges = function (data, isPast) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
@@ -261,8 +262,12 @@
             if (data1.eventType != 'S') {
                 delete data1.isEdited;
             }
+            delete data1.isEdited1;
             console.log("patient data :: " + JSON.stringify(data1));
-            var obj = {action: data1.eventType, data: data1}
+            var obj = {action: data1.eventType, data: data1, isPast: false};
+            if (isPast) {
+                obj.isPast = true;
+            }
             if ($rootScope.patientPopup.isNew) {
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
@@ -288,6 +293,42 @@
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
+            }
+        };
+        ctrl.passwordModalLogic = function (action, data, modal_id, modal_size, modal_backdrop) {
+            $rootScope.passwordPopup = $modal.open({
+                templateUrl: 'password-modal',
+                size: 'md',
+                backdrop: 'static',
+                keyboard: false
+            });
+            $rootScope.passwordPopup.save = function () {
+                if ($('#popuppassword')[0].checkValidity()) {
+                    if ($rootScope.passwordPopup.password != ontimetest.pastEventAuthorizationPassword) {
+                        toastr.error('Authorization Failed');
+                        $rootScope.passwordPopup.closePopup();
+                    } else {
+                        if (action === 'delete') {
+                            $rootScope.patientPopup.deleteSchedule();
+                        } else if (action === 'edit') {
+                            ctrl.savePatientPopupChanges($rootScope.patientPopup.data, true);
+                        } else if (action === 'add') {
+                            $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
+                        }
+                        $rootScope.passwordPopup.closePopup();
+                    }
+                }
+            };
+            $rootScope.passwordPopup.closePopup = function () {
+                $rootScope.passwordPopup.close();
+            };
+        };
+        $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
+        {
+            if (data != null && data.eventType == null && data.askPassword) {
+                ctrl.passwordModalLogic('add', data, modal_id, modal_size, modal_backdrop);
+            } else {
+                $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
             }
         };
 
@@ -351,11 +392,9 @@
                         var a = moment(new Date(data.startDate));
                         var diff = moment().diff(date, 'days');
                         if (diff > 0) { // past date
-                            data.isEdited = false;
+                            data.isEdited1 = true;
                         }
-                        if (!angular.isDefined(data.isEdited)) {
-                            data.isEdited = true;
-                        }
+                        data.isEdited = true;
                         $rootScope.patientPopup.data = data;
                         if (data.eventType != 'U')
                             $rootScope.patientPopup.data.applyTo = "SINGLE";
@@ -399,7 +438,7 @@
                     $rootScope.paginationLoading = false;
                     $rootScope.patientPopup.close();
                 };
-                $rootScope.patientPopup.save = function () {
+                $rootScope.patientPopup.save1 = function () {
                     $timeout(function () {
                         var name = '#' + "popuppatient" + $rootScope.patientPopup.data.eventType.toLowerCase();
                         if ($(name)[0].checkValidity()) {
@@ -411,10 +450,19 @@
                             } else if (diff > 89 && $rootScope.patientPopup.data.eventType == 'U') {
                                 toastr.error("Date range should be no more of 90 days.");
                             } else {
-                                ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+                                $rootScope.patientPopup.response = true;
                             }
                         } else {
                             console.log("invalid form")
+                        }
+                    });
+                };
+                $rootScope.patientPopup.save = function () {
+                    delete $rootScope.patientPopup.response;
+                    $rootScope.patientPopup.save1();
+                    $timeout(function () {
+                        if ($rootScope.patientPopup.response) {
+                            ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
                         }
                     });
                 };
@@ -461,6 +509,32 @@
                         $("#employee").select2('data', null);
                     }, 100);
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
+                };
+                $rootScope.patientPopup.openPasswordModal = function (action) {
+                    $rootScope.patientPopup.action = action;
+                    if (!$rootScope.patientPopup.data.isEdited1) {
+                        if (action == 'delete') {
+                            $rootScope.patientPopup.deleteSchedule();
+                        } else {
+                            $rootScope.patientPopup.save();
+                        }
+                    } else {
+                        function open() {
+                            $rootScope.patientPopup.close();
+                            ctrl.passwordModalLogic(action);
+                        }
+                        if (action == 'delete') {
+                            open();
+                        } else {
+                            delete $rootScope.patientPopup.response;
+                            $rootScope.patientPopup.save1();
+                            $timeout(function () {
+                                if ($rootScope.patientPopup.response) {
+                                    open();
+                                }
+                            });
+                        }
+                    }
                 };
                 $rootScope.patientPopup.deleteSchedule = function () {
                     var obj = $rootScope.patientPopup.data;
@@ -575,11 +649,9 @@
                                         var a = moment(new Date(data.startDate));
                                         var diff = moment().diff(a, 'days');
                                         if (diff > 0) { // past date
-                                            data.isEdited = false;
+                                            data.isEdited1 = true;
                                         }
-                                        if (!angular.isDefined(data.isEdited)) {
-                                            data.isEdited = true;
-                                        }
+                                        data.isEdited = true;
                                         $rootScope.patientPopup.data = angular.copy(data);
                                     }).catch(function (data) {
                                         toastr.error("Failed to retrieve data");
@@ -638,7 +710,7 @@
         });
         $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            PatientDAO.getPatientsForSchedule({patientIds: patient.id}).then(function (patients) {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired:true}).then(function (patients) {
                 var patient = patients[0];
                 $rootScope.selectPatientModel = $modal.open({
                     templateUrl: modal_id,

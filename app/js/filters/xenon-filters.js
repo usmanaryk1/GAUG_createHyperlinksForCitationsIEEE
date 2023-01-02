@@ -146,7 +146,7 @@ angular.module('xenon.filter', [])
                     var durationSum = 0;
                     angular.forEach(objList, function (obj) {
                         if (!isNaN(obj.roundedPunchOutTime) && !isNaN(obj.roundedPunchInTime) != null) {
-                            if (!obj[name] && obj.scheduleId) {
+                            if ((obj.unauthorizedTime && !obj[name] && obj.scheduleId) || !!obj.ut) {
                                 var earlierdate = new Date(obj.scheduleId.roundedStartTime);
                                 var laterdate = new Date(obj.scheduleId.roundedEndTime);
                                 durationSum += laterdate.getTime() - earlierdate.getTime();

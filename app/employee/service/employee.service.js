@@ -45,6 +45,15 @@
                 params: {
                     action: 'forschedule'
                 }
+            },
+            verifySsn: {
+                method: 'GET',
+                params: {
+                    action: 'verifyssn'
+                },
+                transformResponse: function (data, headersGetter, status) {
+                    return {data: JSON.parse(data)};
+                }
             }
         });
         return {
@@ -58,7 +67,7 @@
                 return api.retrieveEmployeeCareRates({subAction: filter.employee_id}).$promise;
             },
             get: function (params) {
-                return api.get({action: params.id, includeTasks: params.includeTasks}).$promise;
+                return api.get({action: params.id, includeTasks: params.includeTasks, includeAttachment: params.includeAttachment}).$promise;
             },
             save: function (data) {
                 return api.save(data).$promise;
@@ -73,10 +82,13 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, terminationDate: data.terminationDate}).$promise;
             },
             getEmployeesForSchedule: function (data) {
                 return api.getEmployeesForSchedule(data).$promise;
+            },
+            checkIfSsnExists: function (data) {
+                return api.verifySsn(data).$promise;
             }
         };
     };

@@ -48,8 +48,8 @@
                                                 </select>
                                             </div>
                                         </div> 
-                                        <div class="form-group col-md-3 col-sm-6 col-xs-12 pull-right">
-                                            <input type="search" class="form-control input-sm" ng-model="viewEmployee.searchParams.name" placeholder="Search by Name" ng-change="viewEmployee.applySearch()">
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
+                                            <input type="search" class="form-control input-sm" ng-model="viewEmployee.searchParams.name" placeholder="Search by [Name,SSN,City,Language,Phone number]" ng-change="viewEmployee.applySearch()">
                                         </div> 
 
                                     </div>
@@ -293,34 +293,71 @@
     </div>
 </script>
 <script type="text/ng-template" id="deactivateModel">
-    <div class="modal-header">		
-    <h4 class="modal-title">{{deactivateEmployeeModel.employee.lName}} {{deactivateEmployeeModel.employee.fName}} {{deactivateEmployeeModel.employee.middleInitial}}</h4>
+    <form class="form-horizontal validate" role="form" name="popupemployees" id="popup_dea_employees" >     
+    <div class="modal-header">
+    <h4 class="modal-title">Deactivate {{deactivateEmployeeModel.employee.lName}}, {{deactivateEmployeeModel.employee.fName}} {{deactivateEmployeeModel.employee.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
-
-    Are you sure you want to deactivate this Employee?
+       
+       <div class="form-group">
+            <label class="col-sm-3 control-label">Deactivate Reason</label>
+            <div class="col-sm-8">
+            <select class="form-control" name ="reason" id="daReason" ng-model="deactivateEmployeeModel.reason" data-validate="required" required data-message-required="Please select Discharge Reason." ng-init="deactivateEmployeeModel.reason='loa'" >
+                <option value="Leave of Absence" selected>Leave of Absence</option>
+                <option value="Out of Compliance">Out of Compliance</option>
+                <option value="Terminated">Terminated</option>
+            </select>
+            </div>
+        </div>
+        <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'terminated'"></div>
+        <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'terminated'">
+            <label class="col-sm-3 control-label">Termination Date</label>
+            <div class="col-sm-8">
+            <div class="input-group" style="z-index:1060">
+            <input class="datepicker form-control" data-format="mm/dd/yyyy" id="terDate" name="terminationDateDate" type="text" ng-model="deactivateEmployeeModel.terminationDate" 
+                                       data-validate="required,date" data-message-required="Please enter Date of Termination." required/>
+            <div class="input-group-addon">
+            <a href="">
+            <i class="linecons-calendar">
+            </i>
+            </a>
+            </div>
+            </div>
+            </div>
+        </div>
+       
 
     </div>
-
+    
     <div class="modal-footer">
-    <button type="button" class="btn btn-success" ng-click="deactivateEmployeeModel.deactivate(deactivateEmployeeModel.employee);">Yes</button>
-    <button type="button" class="btn btn-red" ng-click="deactivateEmployeeModel.dismiss();">No</button>
+    <button type="submit" class="btn btn-success" ng-click="deactivateEmployeeModel.deactivate(deactivateEmployeeModel.employee);">Deactivate</button>
+    <button type="button" class="btn btn-red" ng-click="deactivateEmployeeModel.dismiss();">Cancel</button>
     </div>
+    </form>
 </script>
 <script type="text/ng-template" id="activateModel">
+    <form class="form-horizontal validate" role="form" name="popupActEmployees" id="popup_act_employees" >     
     <div class="modal-header">		
     <h4 class="modal-title">{{activateEmployeeModel.employee.lName}} {{activateEmployeeModel.employee.fName}} {{activateEmployeeModel.employee.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
 
-    Are you sure you want to activate this Employee?
-
+    
+        <div class="form-group">
+            <label class="col-sm-7 control-label">To activate employee please enter password:</label>
+            <div class="col-sm-4">
+            <input class="form-control" id="actPass" name="actPass" type="password" ng-model="activateEmployeeModel.password" 
+                                       data-validate="required" required/>
+            </div>
+            
+        </div>
     </div>
 
     <div class="modal-footer">
-    <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Yes</button>
-    <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">No</button>
+    <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Activate</button>
+    <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">Cancel</button>
     </div>
+    </form>
 </script>

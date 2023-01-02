@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-3">
                         <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left;">
                             <select class="form-control input-sm" ng-model="calendar.searchParams.limit" ng-change="calendar.applySearch()">
@@ -168,7 +168,11 @@
                                 <option value="100">100</option>
                             </select>
                         </div>
-                    </div> 
+                    </div>
+                    <div class="col-md-3" style="padding-top: 7px;">
+                        <label>Show Time</label>
+                        <input type="checkbox" name="livein" ng-model="calendar.forShowTime">
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,6 +185,7 @@
         on-event-click="eventClicked(calendarEvent)"
         type-id="calendar.employeeId"
         type="employee"
+        show-time="calendar.forShowTime"
         list="calendar.employee_list">
     </mwl-calendar>
     <div ng-if="calendar.calendarView == 'week' && calendar.employee_list.length > 0">
@@ -366,29 +371,29 @@
     <div class="col-sm-9">
     <div class="col-sm-3">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+    Single
+    </label>
+    </div>
+    <div class="col-sm-3" ng-if="!employeePopup.data.isEdited1">
+    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
     Day Of Week
     </label>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3" ng-if="!employeePopup.data.isEdited1">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
     Sequence
-    </label>
-    </div>
-    <div class="col-sm-3">
-    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-    <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-    Single
     </label>
     </div>
     </div>
     </div>
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
     <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-    <button type="submit" class="btn btn-success" ng-click="employeePopup.save();" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)">Save changes</button>
+    <button type="submit" class="btn btn-success" ng-click="employeePopup.openPasswordModal('edit');" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)">Save changes</button>
     </div>
     </form>
     </div>
@@ -534,29 +539,29 @@
     <div class="col-sm-9">
     <div class="col-sm-3">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+    Single
+    </label>
+    </div>
+    <div class="col-sm-3" ng-if="!employeePopup.data.isEdited1">
+    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
     Day Of Week
     </label>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3" ng-if="!employeePopup.data.isEdited1">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
     Sequence
-    </label>
-    </div>
-    <div class="col-sm-3">
-    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-    Single
     </label>
     </div>
     </div>
     </div>
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
     <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-    <button type="submit" class="btn btn-success" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.save();">Save changes</button>
+    <button type="submit" class="btn btn-success" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
     </div>
     </form>
     </div>
@@ -637,9 +642,9 @@
 
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
     <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-    <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.save();">Save changes</button>
+    <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
     </div>
 
     </form>
@@ -772,4 +777,29 @@
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="selectEmployeeModel.close();">Close</button>
     </div>
+</script>
+<script type="text/ng-template" id="password-modal">
+    <form class="validate form-horizontal" name="popuppassword" id="popuppassword" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="passwordPopup.closePopup();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Authorization</h4>
+    </div>
+
+    <div class="modal-body">
+
+    <div class="row">
+    <label class="col-sm-4 control-label add-padding-modal" for="password">
+    Authorized Password
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <input class="form-control" name="password" type="password" ng-model="passwordPopup.password" data-validate="required" data-message-required="Please enter Authorized Password." ng-required='true'> 
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="passwordPopup.closePopup();">Close</button>
+    <button type="submit" class="btn btn-success" ng-click="passwordPopup.save();">Save changes</button>
+    </div>
+    </form>
 </script>

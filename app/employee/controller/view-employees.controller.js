@@ -171,8 +171,10 @@
             $rootScope.deactivateEmployeeModel.employee = employee;
 
             $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
-                $rootScope.maskLoading();
-                EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function (res) {
+                    
+                if ($('#popup_dea_employees')[0].checkValidity()) {
+                 $rootScope.maskLoading();
+                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -195,6 +197,9 @@
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
+                
+                }
+            
             };
         };
         ctrl.openActivateModal = function (employee, modal_id, modal_size, modal_backdrop)
@@ -208,29 +213,35 @@
             $rootScope.activateEmployeeModel.employee = employee;
 
             $rootScope.activateEmployeeModel.activate = function (employee) {
-                $rootScope.maskLoading();
-                EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
-                    var length = ctrl.employeeList.length;
+                
+                if($rootScope.activateEmployeeModel.password =="jorgeHRavalanche")
+                {
+                    $rootScope.maskLoading();
+                    EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
+                        var length = ctrl.employeeList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            if (ctrl.viewType !== 'all') {
-                                ctrl.employeeList.splice(i, 1);
-                            } else {
-                                ctrl.employeeList[i].status = 'a';
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.employeeList[i].id === employee.id) {
+                                if (ctrl.viewType !== 'all') {
+                                    ctrl.employeeList.splice(i, 1);
+                                } else {
+                                    ctrl.employeeList[i].status = 'a';
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Employee activated.");
-                    $rootScope.activateEmployeeModel.close();
-                }).catch(function (data, status) {
-                    toastr.error("Employee cannot be activated.");
-                    $rootScope.activateEmployeeModel.close();
-                }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
+                        ctrl.rerenderDataTable();
+                        toastr.success("Employee activated.");
+                        $rootScope.activateEmployeeModel.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Employee cannot be activated.");
+                        $rootScope.activateEmployeeModel.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+              }else{
+                  toastr.error("Wrong Password.");
+              }
             };
         };
         ctrl.getLanguagesFromCode = function (languageCodes) {

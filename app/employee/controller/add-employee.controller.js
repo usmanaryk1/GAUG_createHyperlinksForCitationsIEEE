@@ -5,7 +5,7 @@
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
-        ctrl.employee = {employeeDocumentId: {}};
+        ctrl.employee = {employeeAttachments: []};
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
@@ -14,7 +14,7 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
-        ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
+        ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
@@ -37,53 +37,43 @@
         ctrl.careTypeList = [];
         ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
         ctrl.applicationFileObj = {};
-        ctrl.licenceFileObj = {};
-        ctrl.i9eligibilityFileObj = {};
         ctrl.w4FileObj = {};
+        ctrl.ssn = {};
         ctrl.referencesFileObj = {};
-        ctrl.physicalFileObj = {};
         ctrl.profileFileObj = {};
         ctrl.resetEmployeeTab3 = function () {
             ctrl.applicationFileObj.errorMsg = null;
-            ctrl.licenceFileObj.errorMsg = null;
-            ctrl.i9eligibilityFileObj.errorMsg = null;
             ctrl.w4FileObj.errorMsg = null;
-            if (ctrl.employee.employeeDocumentId.application != null) {
-                ctrl.employee.employeeDocumentId.application = null;
+            if (ctrl.employee.application != null) {
+                ctrl.employee.application = null;
             }
-            if (ctrl.employee.employeeDocumentId.licence != null) {
-                ctrl.employee.employeeDocumentId.licence = null;
+            if (ctrl.employee.backgroundCheck != null) {
+                ctrl.employee.backgroundCheck = null;
             }
-            if (ctrl.employee.employeeDocumentId.i9 != null) {
-                ctrl.employee.employeeDocumentId.i9 = null;
+            if (ctrl.employee.licence != null) {
+                ctrl.employee.licence = null;
             }
-            if (ctrl.employee.employeeDocumentId.w4 != null) {
-                ctrl.employee.employeeDocumentId.w4 = null;
+            if (ctrl.employee.i9 != null) {
+                ctrl.employee.i9 = null;
             }
-            if (ctrl.employee.employeeDocumentId.references != null) {
-                ctrl.employee.employeeDocumentId.references = null;
+            if (ctrl.employee.w4 != null) {
+                ctrl.employee.w4 = null;
             }
-            if (ctrl.employee.employeeDocumentId.physical != null) {
-                ctrl.employee.employeeDocumentId.physical = null;
+            if (ctrl.employee.references != null) {
+                ctrl.employee.references = null;
             }
-
-            if (ctrl.licenceFileObj.flowObj != null) {
-                ctrl.licenceFileObj.flowObj.cancel();
+            if (ctrl.employee.physical != null) {
+                ctrl.employee.physical = null;
             }
+            ctrl.employee.employeeAttachments = [];
             if (ctrl.applicationFileObj.flowObj != null) {
                 ctrl.applicationFileObj.flowObj.cancel();
-            }
-            if (ctrl.i9eligibilityFileObj.flowObj != null) {
-                ctrl.i9eligibilityFileObj.flowObj.cancel();
             }
             if (ctrl.w4FileObj.flowObj != null) {
                 ctrl.w4FileObj.flowObj.cancel();
             }
             if (ctrl.referencesFileObj.flowObj != null) {
                 ctrl.referencesFileObj.flowObj.cancel();
-            }
-            if (ctrl.physicalFileObj.flowObj != null) {
-                ctrl.physicalFileObj.flowObj.cancel();
             }
             $scope.resetForm = true;
         };
@@ -98,28 +88,12 @@
             }
             $scope.resetForm = true;
         };
-        ctrl.clearLicence = function () {
-            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.licence != null) {
-                ctrl.employee.employeeDocumentId.licence = null;
-            }
-            if (ctrl.licenceFileObj.flowObj != null) {
-                ctrl.licenceFileObj.flowObj.cancel();
-            }
-        };
         ctrl.clearRefereces = function () {
-            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.references != null) {
-                ctrl.employee.employeeDocumentId.references = null;
+            if (ctrl.employee != null && ctrl.employee.references != null) {
+                ctrl.employee.references = null;
             }
             if (ctrl.referencesFileObj.flowObj != null) {
                 ctrl.referencesFileObj.flowObj.cancel();
-            }
-        };
-        ctrl.clearPhysical = function () {
-            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.physical != null) {
-                ctrl.employee.employeeDocumentId.physical = null;
-            }
-            if (ctrl.physicalFileObj.flowObj != null) {
-                ctrl.physicalFileObj.flowObj.cancel();
             }
         };
         ctrl.clearProfileImage = function () {
@@ -167,27 +141,27 @@
 
         ctrl.checkFileUploadValidity = function () {
             var validApplication = true;
-            var validI9Eligibility = true;
             var validW4 = true;
             if ($rootScope.tabNo != 3) {
                 ctrl.applicationFileObj.errorMsg = null;
-                ctrl.i9eligibilityFileObj.errorMsg = null;
                 ctrl.w4FileObj.errorMsg = null;
+            } else {
+                if (ctrl.displayDocumentsByPositionMap) {
+                    if (ctrl.displayDocumentsByPositionMap['a']) {
+                        if ($rootScope.tabNo == 3 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                            ctrl.applicationFileObj.errorMsg = "Please upload Application.";
+                            validApplication = false;
+                        }
+                    }
+                    if (ctrl.displayDocumentsByPositionMap['w']) {
+                        if ($rootScope.tabNo == 3 && ctrl.employee.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                            ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
+                            validW4 = false;
+                        }
+                    }
+                }
             }
-
-            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.applicationFileObj.errorMsg = "Please upload Application.";
-                validApplication = false;
-            }
-            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.i9 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.i9eligibilityFileObj.errorMsg = "Please upload I-9 Eligibility.";
-                validI9Eligibility = false;
-            }
-            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
-                validW4 = false;
-            }
-            return (validApplication && validI9Eligibility && validW4);
+            return (validApplication && validW4);
         };
 
         //ceck if form has been changed or not
@@ -204,6 +178,23 @@
                 }
             }
             event.stopPropagation();
+        };
+
+        //Check if ssn number is already present.
+        $scope.checkSsnNumber = function () {
+            if (ctrl.employee.ssn && ctrl.employee.ssn.trim().length > 0) {
+                EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
+                        .then(function (res) {
+                            if (res.data)
+                                ctrl.ssn.exists = true;
+                            else
+                                ctrl.ssn.exists = false;
+                        })
+                        .catch(function () {
+                        });
+            } else {
+                ctrl.ssn.exists = false;
+            }
         };
 
         //function to save the employee data
@@ -226,56 +217,47 @@
                 }
             });
             employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
-            if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
-                delete employeeToSave.employeeDocumentId;
-            } else {
-//                if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
-//                    employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
-//                    employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
-//                    employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
-//                    employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.startDate) {
-//                    employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.endDate) {
-//                    employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.bgCheckDate) {
-//                    employeeToSave.employeeDocumentId.bgCheckDate = new Date(employeeToSave.employeeDocumentId.bgCheckDate);
-//                }
-            }
+//            if (!ctrl.employee.application || ctrl.employee.application === null) {
+//                delete employeeToSave.employeeDocumentId;
+//            } else {
+//            }
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
-                var reqParam;
-                if (ctrl.employee.id && ctrl.employee.id !== null) {
-                    reqParam = 'updateemployee';
-                    if (ctrl.employee.careRatesList && ctrl.employee.careRatesList !== null) {
-                        var careRateList = angular.copy(ctrl.employee.careRatesList);
-                        careRateList.employeeId = ctrl.employee.id;
-                        EmployeeDAO.updateCareRates(careRateList)
-                                .then(function () {
+                //Check if ssn number is already present
+                EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
+                        .then(function (res) {
+                            if (res.data) {
+                                ctrl.ssn.exists = true;
+                                $('#SocialSecurity').focus();
+                            } else {
+                                ctrl.ssn.exists = false;
+                                var reqParam;
+                                if (ctrl.employee.id && ctrl.employee.id !== null) {
+                                    reqParam = 'updateemployee';
+                                    if (ctrl.employee.careRatesList && ctrl.employee.careRatesList !== null) {
+                                        var careRateList = angular.copy(ctrl.employee.careRatesList);
+                                        careRateList.employeeId = ctrl.employee.id;
+                                        EmployeeDAO.updateCareRates(careRateList)
+                                                .then(function () {
+                                                    updateEmployee(reqParam, employeeToSave);
+                                                })
+                                                .catch(function () {
+                                                    console.log(JSON.stringify(careRateList));
+                                                });
+                                    } else {
+                                        updateEmployee(reqParam, employeeToSave);
+                                    }
+                                } else {
+                                    employeeToSave.orgCode = ontimetest.company_code;
+                                    ctrl.employee.orgCode = ontimetest.company_code;
+                                    reqParam = 'saveemployee';
                                     updateEmployee(reqParam, employeeToSave);
-                                })
-                                .catch(function () {
-                                    console.log(JSON.stringify(careRateList));
-                                });
-                    } else {
-                        updateEmployee(reqParam, employeeToSave);
-                    }
-                } else {
-                    employeeToSave.orgCode = ontimetest.company_code;
-                    ctrl.employee.orgCode = ontimetest.company_code;
-                    reqParam = 'saveemployee';
-                    updateEmployee(reqParam, employeeToSave);
-                }
+                                }
+                            }
+                        })
+                        .catch(function () {
+                        });
             }
         }
 
@@ -327,6 +309,11 @@
                             $state.go('^.' + ctrl.nextTab, {id: employeeRes.id});
                         }
                         toastr.success("Employee saved.");
+                        //Reset dirty status of form
+                        if ($.fn.dirtyForms) {
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                        }
                     })
                     .catch(function () {
                         toastr.error("Employee cannot be saved.");
@@ -341,6 +328,7 @@
         function retrieveEmployeeCareTypeAfterSave(employeeRes) {
             EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function (res) {
                 ctrl.employee = employeeRes;
+                ctrl.displayDocumentsByPosition();
                 ctrl.employee.careRatesList = res;
                 $timeout(function () {
                     $("#rate2").multiSelect('refresh');
@@ -353,7 +341,7 @@
         function pageInit() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
-                EmployeeDAO.get({id: $state.params.id}).then(function (res) {
+                EmployeeDAO.get({id: $state.params.id, includeAttachment: true}).then(function (res) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
@@ -366,6 +354,7 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
+                    ctrl.displayDocumentsByPosition();
                     if (res.languageSpoken != null) {
                         var languages = res.languageSpoken;
                         angular.forEach(ctrl.languagesKeyValue, function (obj) {
@@ -400,6 +389,13 @@
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
                 }).then(function () {
+                    setTimeout(function () {
+                        //Reset dirty status of form
+                        if ($.fn.dirtyForms) {
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                        }
+                    }, 100);
                     $rootScope.unmaskLoading();
                 });
             } else {
@@ -421,10 +417,7 @@
         }
 
         $scope.$watch(function () {
-            if (!ctrl.employee.employeeDocumentId) {
-                ctrl.employee.employeeDocumentId = {};
-            }
-            return ctrl.employee.employeeDocumentId.physical;
+            return ctrl.employee.physical;
         }, function (newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='PhysicalExpirationDate']").attr('required', true);
@@ -434,10 +427,7 @@
         });
 
         $scope.$watch(function () {
-            if (!ctrl.employee.employeeDocumentId) {
-                ctrl.employee.employeeDocumentId = {};
-            }
-            return ctrl.employee.employeeDocumentId.tbTesting;
+            return ctrl.employee.tbTesting;
         }, function (newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='TBTestingExpirationDate']").attr('required', true);
@@ -511,8 +501,8 @@
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function () {
-                if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
-                    ctrl.employee.employeeDocumentId = {};
+                if (!ctrl.employee.employeeAttachments) {
+                    ctrl.employee.employeeAttachments = [];
                 }
                 if (!ctrl.retrivalRunning) {
                     form_data = $('#add_employee_form').serialize();
@@ -592,6 +582,10 @@
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
+
+                    if (!ctrl.employee.gender) {
+                        ctrl.employee.gender = 'M';
+                    }
                     if (ctrl.positionList && ctrl.positionList.length > 0) {
                         if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
                             ctrl.employee.companyPositionId = ctrl.positionList[0].id;
@@ -628,7 +622,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.application = response.fileName;
+                    ctrl.employee.application = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -638,13 +632,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableApplicationUploadButton = false;
-            ctrl.employee.employeeDocumentId.application = null;
+            ctrl.employee.application = null;
             ctrl.applicationFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.applicationFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.application = null;
+            ctrl.employee.application = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.applicationFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -678,7 +672,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.licence = response.fileName;
+                    ctrl.employee.licence = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -688,13 +682,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableLicenceUploadButton = false;
-            ctrl.employee.employeeDocumentId.licence = null;
+            ctrl.employee.licence = null;
             ctrl.licenceFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.licenceFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.licence = null;
+            ctrl.employee.licence = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.licenceFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -728,7 +722,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.i9 = response.fileName;
+                    ctrl.employee.i9 = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -738,13 +732,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
-            ctrl.employee.employeeDocumentId.i9 = null;
+            ctrl.employee.i9 = null;
             ctrl.i9eligibilityFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.i9eligibilityFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.i9 = null;
+            ctrl.employee.i9 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.i9eligibilityFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -778,7 +772,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.w4 = response.fileName;
+                    ctrl.employee.w4 = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -788,13 +782,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
-            ctrl.employee.employeeDocumentId.w4 = null;
+            ctrl.employee.w4 = null;
             ctrl.w4FileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.w4FileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.w4 = null;
+            ctrl.employee.w4 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.w4FileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -828,7 +822,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.references = response.fileName;
+                    ctrl.employee.references = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -838,13 +832,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableReferencesUploadButton = false;
-            ctrl.employee.employeeDocumentId.references = null;
+            ctrl.employee.references = null;
             ctrl.referencesFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.referencesFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.references = null;
+            ctrl.employee.references = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.referencesFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -878,7 +872,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.physical = response.fileName;
+                    ctrl.employee.physical = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -888,13 +882,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disablePhysicalUploadButton = false;
-            ctrl.employee.employeeDocumentId.physical = null;
+            ctrl.employee.physical = null;
             ctrl.physicalFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.physicalFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.physical = null;
+            ctrl.employee.physical = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.physicalFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -1035,7 +1029,160 @@
 //        });
 
 //        ctrl.pageInitCall();
+        ctrl.deleteAttachment = function (i) {
+            ctrl.employee.employeeAttachments = $filter('orderBy')(ctrl.employee.employeeAttachments, '-expiryDate');
+            ctrl.employee.employeeAttachments.splice(i, 1);
+        };
 
+        ctrl.openAttachmentModal = function (modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.unmaskLoading();
+            $rootScope.uploadPopup = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.uploadPopup.baseUrl = ontimetest.weburl;
+            $rootScope.uploadPopup.companyCode = ontimetest.company_code;
+            $rootScope.uploadPopup.data = {employeeId: ctrl.employee.id};
+            $rootScope.uploadPopup.fileObj = {};
+            $rootScope.uploadPopup.closePopup = function () {
+                $rootScope.uploadPopup.close();
+            };
+            $rootScope.uploadPopup.save = function () {
+                var required = true;
+                if ($rootScope.uploadPopup.data.type == 'l' && ctrl.position == 'staff') {
+                    required = false;
+                }
+                if (required) {
+                    if (!$rootScope.uploadPopup.data.filePath) {
+                        $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
+                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
+                        $rootScope.uploadPopup.errorMsg = "Please select Tb Testing.";
+                    } else if ($rootScope.uploadPopup.data.type == 'b' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
+                        $rootScope.uploadPopup.errorMsg = "Please select Background Status.";
+                    } else {
+                        ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
+                        $rootScope.uploadPopup.closePopup();
+                    }
+                } else {
+                    ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
+                    $rootScope.uploadPopup.closePopup();
+                }
+
+            };
+            $rootScope.uploadPopup.typeList = [];
+            if (ctrl.displayDocumentsByPositionMap['l']) {
+                if (ctrl.position == 'staff') {
+                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License"});
+                } else {
+                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License or Certificate"});
+                }
+            }
+            if (ctrl.displayDocumentsByPositionMap['9']) {
+                $rootScope.uploadPopup.typeList.push({id: '9', label: "I-9 Eligibility"});
+            }
+            if (ctrl.displayDocumentsByPositionMap['z']) {
+                $rootScope.uploadPopup.typeList.push({id: 'z', label: "Physical"});
+            }
+            if (ctrl.displayDocumentsByPositionMap['t']) {
+                $rootScope.uploadPopup.typeList.push({id: 't', label: "Tb Testing"});
+            }
+            if (ctrl.displayDocumentsByPositionMap['b']) {
+                $rootScope.uploadPopup.typeList.push({id: 'b', label: "Background Check"});
+            }
+            $rootScope.uploadPopup.setUploadFile = function () {
+                $formService.resetRadios();
+                $rootScope.uploadPopup.disableUploadButton = false;
+                if ($rootScope.uploadPopup.fileObj.flowObj != null) {
+                    $rootScope.uploadPopup.fileObj.flowObj.cancel();
+                }
+                delete $rootScope.uploadPopup.errorMsg;
+                $rootScope.uploadPopup.fileObj = {};
+                delete $rootScope.uploadPopup.data.filePath;
+                if ($rootScope.uploadPopup.data.type == 't' || $rootScope.uploadPopup.data.type == 'b') {
+                    delete $rootScope.uploadPopup.data.result;
+                    delete $rootScope.uploadPopup.data.name;
+                }
+                $rootScope.uploadPopup.uploadFile = {
+                    target: ontimetest.weburl + 'file/upload',
+                    chunkSize: 1024 * 1024 * 1024,
+                    testChunks: false,
+                    fileParameterName: "fileUpload",
+                    singleFile: true,
+                    headers: {
+                        type: $rootScope.uploadPopup.data.type,
+                        company_code: ontimetest.company_code
+                    }
+                };
+            }
+            //When file is selected from browser file picker
+            $rootScope.uploadPopup.fileSelected = function (file, flow) {
+                $rootScope.uploadPopup.fileObj.flowObj = flow;
+                $rootScope.maskLoading();
+                $rootScope.uploadPopup.fileObj.flowObj.upload();
+            };
+            //When file is uploaded this method will be called.
+            $rootScope.uploadPopup.fileUploaded = function (response, file, flow) {
+                if (response != null) {
+                    response = JSON.parse(response);
+                    if (response.fileName != null && response.status != null && response.status == 's') {
+                        $rootScope.uploadPopup.data.filePath = response.fileName;
+                        if ($rootScope.uploadPopup.data.name == null || $rootScope.uploadPopup.data.name == '') {
+                            $rootScope.uploadPopup.data.name = file.name.substring(0, file.name.lastIndexOf('.'));
+                        }
+                    }
+                }
+                $rootScope.uploadPopup.disableSaveButton = false;
+                $rootScope.uploadPopup.disableUploadButton = false;
+                $rootScope.unmaskLoading();
+            };
+            $rootScope.uploadPopup.fileError = function ($file, $message, $flow) {
+                $flow.cancel();
+                $rootScope.uploadPopup.disableSaveButton = false;
+                $rootScope.uploadPopup.disableUploadButton = false;
+                $rootScope.uploadPopup.data.filePath = null;
+                $rootScope.uploadPopup.data.name = null;
+                $rootScope.uploadPopup.fileObj.errorMsg = "File cannot be uploaded";
+                $rootScope.unmaskLoading();
+            };
+            //When file is added in file upload
+            $rootScope.uploadPopup.fileAdded = function (file, flow) { //It will allow all types of attahcments'
+                $rootScope.uploadPopup.formDirty = true;
+                $rootScope.uploadPopup.data.filePath = null;
+                if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                    $rootScope.uploadPopup.fileObj.errorMsg = "Please upload a valid file.";
+                    return false;
+                }
+                $rootScope.uploadPopup.disableSaveButton = true;
+                $rootScope.uploadPopup.disableUploadButton = true;
+                $rootScope.uploadPopup.showfileProgress = true;
+                $rootScope.uploadPopup.fileObj.errorMsg = null;
+                $rootScope.uploadPopup.fileObj.flow = flow;
+                return true;
+            };
+        };
+        ctrl.officeStaffIds = [];
+        PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    ctrl.officeStaffIds.push(position.id);
+                });
+            }
+        });
+        ctrl.displayDocumentsByPosition = function () {
+            ctrl.displayDocumentsByPositionMap = {};
+            if (ctrl.employee.companyPositionId && ctrl.officeStaffIds.indexOf(ctrl.employee.companyPositionId) > -1) {
+                ctrl.position = "staff";
+                ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, l: false};
+                ctrl.typeMap = {'l': "License", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing"};
+            } else {
+                ctrl.position = "other";
+                ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, z: true, t: true, b: true, l: true};
+                ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
+            }
+        };
     }
     ;
     angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddEmployeeCtrl]);

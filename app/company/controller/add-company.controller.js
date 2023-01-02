@@ -1,15 +1,19 @@
-(function() {
+(function () {
     function AddCompanyCtrl(Page, $rootScope, CompanyDAO, $formService) {
         var ctrl = this;
         ctrl.companyObj = {};
+        ctrl.profileFileObj = {};
         ctrl.saveCompany = saveCompanyData;
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.bucketKey = 'c';
         Page.setTitle("Company Information");
-        ctrl.initForm = function() {
+        ctrl.initForm = function () {
             $("#company_information_form input:text, #company_information_form textarea").first().focus();
         };
-        ctrl.retrieveCompany = function() {
+        ctrl.retrieveCompany = function () {
             $rootScope.maskLoading();
-            CompanyDAO.retrieveByCompanyCode({companyCode: ontimetest.company_code}).then(function(res) {
+            CompanyDAO.retrieveByCompanyCode({companyCode: ontimetest.company_code}).then(function (res) {
                 ctrl.companyObj = res;
                 if (ctrl.companyObj != null) {
 
@@ -18,11 +22,130 @@
                     }
                 }
 
-            }).catch(function() {
+            }).catch(function () {
                 toastr.error("Failed to retrieve Company Information.");
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
             });
+        };
+
+        ctrl.profileUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "c",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.profileFileSelected = function (file, flow) {
+            ctrl.profileFileObj.flowObj = flow;
+
+        };
+        //When file is uploaded this method will be called.
+        ctrl.profileFileUploaded = function (response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.companyObj.logoPath = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableUploadButton = false;
+            ctrl.hideLoadingImage = false;
+        };
+        ctrl.profileFileError = function ($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableUploadButton = false;
+            ctrl.companyObj.logoPath = null;
+            ctrl.profileFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.profileFileAdded = function (file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.profileUploadFile.headers.fileExt = file.getExtension();
+            ctrl.companyObj.logoPath = null;
+            if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.profileFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            } else {
+                $("#cropper-example-2-modal").modal('show');
+            }
+
+            ctrl.profileFileObj.errorMsg = null;
+            ctrl.profileFileObj.flow = flow;
+            return true;
+        };
+        ctrl.clearProfileImage = function () {
+            if (ctrl.companyObj.logoPath != null) {
+                ctrl.companyObj.logoPath = null;
+            }
+            if (ctrl.profileFileObj.flowObj != null) {
+                ctrl.profileFileObj.flowObj.cancel();
+            }
+        }
+
+        ctrl.crop = function () {
+            ctrl.profileUploadFile.query = $image.cropper("getData");
+            var cropObj = $image.cropper("getData");
+            ctrl.profileUploadFile.headers.x = parseInt(cropObj.x);
+            ctrl.profileUploadFile.headers.y = parseInt(cropObj.y);
+            ctrl.profileUploadFile.headers.height = parseInt(cropObj.height);
+            ctrl.profileUploadFile.headers.width = parseInt(cropObj.width);
+            console.log($image.cropper("getData"));
+            ctrl.profileFileObj.flowObj.upload();
+            $("#cropper-example-2-modal").modal('hide');
+            ctrl.disableSaveButton = true;
+            ctrl.disableUploadButton = true;
+            ctrl.profileShowfileProgress = true;
+        }
+        ctrl.closeCropModal = function () {
+            $("#cropper-example-2-modal").modal('hide');
+            ctrl.profileFileObj.flowObj.cancel();
+        };
+        var $image = $('#cropper-example-2 > img'),
+                cropBoxData,
+                canvasData;
+        $('body').on('shown.bs.modal', "#cropper-example-2-modal", function () {
+            $image = $('#cropper-example-2 > img'),
+                    cropBoxData,
+                    canvasData;
+            $image.cropper("destroy");
+            if (cropBoxData != null) {
+                canvasData = null;
+                cropBoxData = null;
+            }
+
+            $image = $('#cropper-example-2 > img'),
+                    cropBoxData,
+                    canvasData;
+            $image.cropper({
+                autoCropArea: 0.5,
+                aspectRatio: 1 / 1,
+                preview: ".img-preview",
+                built: function () {
+                    // Strict mode: set crop box data first
+                    $image.cropper('setCropBoxData', cropBoxData);
+                    $image.cropper('setCanvasData', canvasData);
+                }
+            });
+        }).on('hidden.bs.modal', function () {
+            cropBoxData = $image.cropper('getCropBoxData');
+            canvasData = $image.cropper('getCanvasData');
+            $image.cropper('destroy');
+        });
+        ctrl.zoomIn = function () {
+            $image.cropper('zoom', 0.1);
+        };
+        ctrl.zoomOut = function () {
+            $image.cropper('zoom', -0.1);
+        };
+        ctrl.reset = function () {
+            $image.cropper('reset');
         };
 
         function saveCompanyData() {
@@ -30,10 +153,10 @@
                 var companyObjToSave = angular.copy(ctrl.companyObj);
                 console.log('Company Object : ' + JSON.stringify(companyObjToSave));
                 $rootScope.maskLoading();
-                CompanyDAO.save(companyObjToSave).then(function() {
+                CompanyDAO.save(companyObjToSave).then(function () {
                     toastr.success("Company Information saved.");
                     ctrl.retrieveCompany();
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             }

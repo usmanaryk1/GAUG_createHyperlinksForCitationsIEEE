@@ -297,11 +297,18 @@ ontimedata = {
         "Sick", "Personal Day", "Vacation"
     ],
     patientReasons: [
-        "Hospital", "Vacation", "As per Pt."
+        "Hospital", "Vacation", "As per Pt.", "No Service"
     ],
     eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
-    recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"}
-
+    recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"},
+    reportTypes: [
+        {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
+        {id: 'employeetimesheet', label: "Employee Time Sheet"},
+        {id: 'patientcensus', label: "Patient Census"},
+        {id: 'patienttimesheet', label: "Patient Time Sheet"},
+        {id: 'workedhours', label: "Worked Hours"},
+    ],
+    unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
 };
 
 ontimetest = {
@@ -324,9 +331,12 @@ ontimetest = {
         'STAFFING_COORDINATOR': "SC",
         'OFFICE_STAFF': "OS"
     },
-    'date_time_format': "yyyy/MM/dd hh:mm:ss aa",
-    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
-    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/"
+    'pastEventAuthorizationPassword': '!avalanche!',
+    'date_time_format': "yyyy/MM/dd hh:mm:ss a",
+    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/",
+    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/ontimepatientsign/",
+    reportTypes: ontimedata.reportTypes,
+    unitValues: ontimedata.unitValues,
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },
