@@ -435,9 +435,9 @@
                             var scheduleHours = Number(s[0]);
                             var scheduleMins = Number(s[1]);
                             if (timeSheetHours < scheduleHours) {
-                                obj.color = "#ea9999"; // pink color
+                                obj.color = "#FACAE4"; // pink color
                             } else if (timeSheetHours === scheduleHours && timeSheetMins < scheduleMins) {
-                                obj.color = "#ea9999"; // pink color
+                                obj.color = "#FACAE4"; // pink color
                             }
                         }
                         //Purple- Forgot to punch out – no punch out
@@ -458,7 +458,7 @@
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#F5F52A"; // Bright Yellow color
+                                obj.color = "#FAF334"; // Bright Yellow color
                             }
                         }
                         //Yellow(light yellow)- moderate lateness 8-30 min
@@ -467,7 +467,7 @@
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h === 0 && m > 8) {
-                                obj.color = "#E0E082"; // yellow color
+                                obj.color = "#FAF9C0"; // yellow color
                             }
                         }
                         //Green- UT time greater than 30minutes, when approved it goes back to
@@ -480,15 +480,15 @@
                             var scheduleMins = Number(s[1]);
                             if (!obj.timeSheet.unauthorizedTime || obj.timeSheet.unauthorizedTime == null) {
                                 if (timeSheetHours > scheduleHours) {
-                                    obj.color = "#0ECC1B"; // Green color
+                                    obj.color = "#AEEBAF"; // Green color
                                 } else if (timeSheetHours === scheduleHours && timeSheetMins > scheduleMins) {
-                                    obj.color = "#0ECC1B"; // Green color
+                                    obj.color = "#AEEBAF"; // Green color
                                 }
                             }
                         }
                         //Blue- Manual punch - highlights all punches that were made manually.
                         if (obj.color === null && !!obj.timeSheet.isManualPunch) {
-                            obj.color = "#02A7DE"; // blue color
+                            obj.color = "#ABDBEB"; // blue color
                         }
                     }
                     obj.roundedStartTime = Date.parse(obj.roundedStartTime);
