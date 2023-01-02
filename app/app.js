@@ -30,6 +30,8 @@ app.run(function($rootScope)
                 //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
                 if (toState.data && toState.data.tabNo) {
                     $rootScope.tabNo = toState.data.tabNo;
+                }else{
+                    $rootScope.tabNo = undefined;
                 }
             })
             ;

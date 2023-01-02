@@ -5,9 +5,9 @@
         ctrl.employee = {};
         ctrl.employee.Wages = 'H';
         ctrl.employee.TaxStatus = 'W-2';
-        ctrl.saveEmployeeTab2 = saveEmployeeTab2Data;
-        function saveEmployeeTab2Data() {
-            if ($('#add_employee_tab_2_form')[0].checkValidity()) {
+        ctrl.saveEmployee = saveEmployeeData;
+        function saveEmployeeData() {
+            if ($('#add_employee_form')[0].checkValidity()) {
                 alert('Employee2 Object : ' + JSON.stringify(ctrl.employee));
             }
         };
