@@ -343,20 +343,23 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // add_inusrer
             state('app.add_inusrer', {
                 url: '/add_inusrer',
-                templateUrl: appHelper.templatePath('add_inusrer'),
+                controller: 'AddInsurerCtrl as addInsurer',
+                templateUrl: appHelper.viewTemplatePath('insurer', 'add_inusrer'),
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker
                         ]);
-                    },
+                    }
                 }
             }).
             // view_insurer
             state('app.view_insurer', {
                 url: '/view_insurer',
-                templateUrl: appHelper.templatePath('view_insurer'),
+                templateUrl: appHelper.viewTemplatePath('insurer', 'view_insurer'),
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([

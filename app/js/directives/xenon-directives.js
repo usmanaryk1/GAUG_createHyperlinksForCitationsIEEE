@@ -536,7 +536,7 @@ angular.module('xenon.directives', []).
                         return true;
                     };
 
-                    
+
                     // Setup Progress
                     if (_index > 0)
                     {
@@ -880,6 +880,8 @@ angular.module('xenon.directives', []).
         directive('daterange', function() {
             return {
                 restrict: 'AC',
+                //Added by 'K' for date range assignement to scope value
+                scope: {startDate: "=", endDate: "="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.daterangepicker))
@@ -936,6 +938,10 @@ angular.module('xenon.directives', []).
 
                     $this.daterangepicker(opts, function(start, end)
                     {
+                        //Added by 'K' for date range assignement to scope value
+                        scope.startDate = start;
+                        scope.endDate = end;
+                        scope.$apply();
                         var drp = $this.data('daterangepicker');
 
                         if ($this.is('[data-callback]'))
