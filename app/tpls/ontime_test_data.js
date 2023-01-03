@@ -29,7 +29,7 @@ ontimedata = {
 		zipcode: '300400',
 		careCordinator: 'Bruce Lee',
 		careCordinatorContact: '(130) 400-8000',
-
+                insuranceProvider: 'National Insurance Ltd.'
 	}, {
 		id: '2',
 		FName: 'Bichael',
@@ -60,7 +60,7 @@ ontimedata = {
 		zipcode: '300400',
 		careCordinator: 'Bruce Lee',
 		careCordinatorContact: '(130) 400-8000',
-
+                insuranceProvider: 'National Insurance Ltd.'
 	}, {
 		id: '3',
 		FName: 'Cichael',
@@ -91,7 +91,7 @@ ontimedata = {
 		zipcode: '300400',
 		careCordinator: 'Bruce Lee',
 		careCordinatorContact: '(130) 400-8000',
-
+                insuranceProvider: 'National Insurance Ltd.'
 	}, ],
 
 

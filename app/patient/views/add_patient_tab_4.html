@@ -1,291 +1,201 @@
-<div class="page-body">
- <!--PAGE TITLE START -->
- <div class="page-title">
-  <div class="title-env">
-   <h1 class="title">
-    Add Patient
-   </h1>
-   <p class="description">
-    Create A Patient Record By Entering Patient Information
-   </p>
-  </div>
- </div>
- <!--PAGE TITLE END -->
- <!-- FORM WIZARD WITH VALIDATION START HERE-->
- <script type="text/javascript">
-  jQuery(document).ready(function($)
-        {
-          $(".multi-select").multiSelect({
-            afterInit: function()
-            {
-              // Add alternative scrollbar to list
-              this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-            },
-            afterSelect: function()
-            {
-              // Update scrollbar size
-              this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-            }
-          });
-          
-          $(".selectboxit").selectBoxIt().on('open', function()
-          {
-            // Adding Custom Scrollbar
-            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-          });
-        });
- </script>
- <form class="form-wizard validate" id="rootwizard" novalidate="" role="forl">
-  <ul class="tabs">
-   <li>
-    <a data-toggle="tab" href="#/app/add_patient_tab_1">
-     Patient Information
-     <span>
-      1
-     </span>
-    </a>
-   </li>
-   <li>
-    <a data-toggle="tab" href="#/app/add_patient_tab_2">
-     Location Information
-     <span>
-      2
-     </span>
-    </a>
-   </li>
-   <li>
-    <a data-toggle="tab" href="#/app/add_patient_tab_3">
-     Insurance Information
-     <span>
-      3
-     </span>
-    </a>
-   </li>
-   <li class="active">
-    <a data-toggle="tab" href="#/app/add_patient_tab_4">
-     Authorization Info
-     <span>
-      4
-     </span>
-    </a>
-   </li>
-   <li>
-    <a data-toggle="tab" href="#/app/add_patient_tab_5">
-     Insurance Subscriber Information
-     <span>
-      5
-     </span>
-    </a>
-   </li>
-  </ul>
-  <div class="progress-indicator">
-   <span>
-   </span>
-  </div>
- </form>
- <div class="row">
-  <div class="col-sm-12">
-   <div class="panel panel-default">
-    <div class="panel-body">
-     <form class="form-horizontal" id="add_patient_tab_4_form" name="add_patient_tab_4_form" role="form">
-      <div class="row">
-       <div class="col-sm-12">
-        <button class="btn btn-info green_bt pull-right" type="submit">
-         Save Changes
-        </button>
-        <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
-         Reset To Default
-        </button>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label">
-        Care Type
-       </label>
-       <div class="col-sm-9">
-        <script type="text/javascript">
-         jQuery(document).ready(function($)
-                      {
-                        $("#multi-select").multiSelect({
-                          afterInit: function()
-                          {
-                            // Add alternative scrollbar to list
-                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                          },
-                          afterSelect: function()
-                          {
-                            // Update scrollbar size
-                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-                          }
-                        });
-                      });
-        </script>
-        <select class="form-control" id="multi-select" multiple="multiple" name="CareType">
-         <option value="1">
-          Silky Door
-         </option>
-         <option value="2">
-          The Absent Twilight
-         </option>
-         <option value="3">
-          Tales of Flames
-         </option>
-         <option value="4">
-          The Princess's Dream
-         </option>
-         <option value="5">
-          The Fairy of the Wind
-         </option>
-         <option value="6">
-          Children in the Boy
-         </option>
-         <option value="7">
-          Frozen Savior
-         </option>
-         <option value="8">
-          The Missing Thorns
-         </option>
-         <option value="9">
-          Healing of Serpent
-         </option>
-         <option value="10">
-          The Voyagers's Girlfriend
-         </option>
-         <option value="11">
-          The Nothing of the Gate
-         </option>
-         <option value="12">
-          Healing in the Scent
-         </option>
-         <option value="13">
-          Final Twins
-         </option>
-         <option value="14">
-          The Willing Rose
-         </option>
-         <option value="15">
-          Thorn of Emperor
-         </option>
-         <option selected="" value="16">
-          The Predator's Pirates
-         </option>
-         <option value="17">
-          The Lord of the Girl
-         </option>
-         <option selected="" value="18">
-          Flowers in the Spirit
-         </option>
-         <option selected="" value="19">
-          Healing in the Silence
-         </option>
-         <option value="20">
-          Planet of Bridges
-         </option>
-        </select>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-45">
-        Authorization
-       </label>
-       <div class="col-sm-9">
-        <input class="form-control" id="field-45" name="Authorization" type="file">
-        </input>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-46">
-        Start Date
-       </label>
-       <div class="col-sm-9">
-        <div class="input-group">
-         <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-46" name="StartDate" type="text">
-          <div class="input-group-addon">
-           <a href="#">
-            <i class="linecons-calendar">
-            </i>
-           </a>
-          </div>
-         </input>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" id="add_patient_tab_4_form" name="add_patient_tab_4_form" role="form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" type="submit">
+                                Save Changes
+                            </button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                Reset To Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Care Type
+                        </label>
+                        <div class="col-sm-9">
+                            <script type="text/javascript">
+                                jQuery(document).ready(function($)
+                                {
+                                    $("#multi-select").multiSelect({
+                                        afterInit: function()
+                                        {
+                                            // Add alternative scrollbar to list
+                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                        },
+                                        afterSelect: function()
+                                        {
+                                            // Update scrollbar size
+                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                        }
+                                    });
+                                });
+                            </script>
+                            <select class="form-control" id="multi-select" multiple="multiple" name="CareType">
+                                <option value="1">
+                                    Silky Door
+                                </option>
+                                <option value="2">
+                                    The Absent Twilight
+                                </option>
+                                <option value="3">
+                                    Tales of Flames
+                                </option>
+                                <option value="4">
+                                    The Princess's Dream
+                                </option>
+                                <option value="5">
+                                    The Fairy of the Wind
+                                </option>
+                                <option value="6">
+                                    Children in the Boy
+                                </option>
+                                <option value="7">
+                                    Frozen Savior
+                                </option>
+                                <option value="8">
+                                    The Missing Thorns
+                                </option>
+                                <option value="9">
+                                    Healing of Serpent
+                                </option>
+                                <option value="10">
+                                    The Voyagers's Girlfriend
+                                </option>
+                                <option value="11">
+                                    The Nothing of the Gate
+                                </option>
+                                <option value="12">
+                                    Healing in the Scent
+                                </option>
+                                <option value="13">
+                                    Final Twins
+                                </option>
+                                <option value="14">
+                                    The Willing Rose
+                                </option>
+                                <option value="15">
+                                    Thorn of Emperor
+                                </option>
+                                <option selected="" value="16">
+                                    The Predator's Pirates
+                                </option>
+                                <option value="17">
+                                    The Lord of the Girl
+                                </option>
+                                <option selected="" value="18">
+                                    Flowers in the Spirit
+                                </option>
+                                <option selected="" value="19">
+                                    Healing in the Silence
+                                </option>
+                                <option value="20">
+                                    Planet of Bridges
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-45">
+                            Authorization
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-45" name="Authorization" type="file">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-46">
+                            Start Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-46" name="StartDate" type="text">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                                </input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-47">
+                            End Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-47" name="EndDate" type="text">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                                </input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                                Next »
+                            </button>
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button">
+                                « Previous
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-47">
-        End Date
-       </label>
-       <div class="col-sm-9">
-        <div class="input-group">
-         <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-47" name="EndDate" type="text">
-          <div class="input-group-addon">
-           <a href="#">
-            <i class="linecons-calendar">
-            </i>
-           </a>
-          </div>
-         </input>
-        </div>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-     <div class="row">
-      <div class="col-sm-12">
-       <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
-        Next »
-       </button>
-       <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button">
-        « Previous
-       </button>
-      </div>
-     </div>
-     </form>
     </div>
-   </div>
-  </div>
- </div>
- <!-- FORM WIZARD WITH VALIDATION END HERE-->
 </div>
 <script type="text/javascript">
-   // validate
-   customJqueryValidation();
+    // validate
+    customJqueryValidation();
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
-         }, 1);
+        }, 1);
 
 
         // Validation
         $("#add_patient_tab_4_form").validate({
-rules: {StartDate: {required: true, ontimedate: true},
-CareType: {required: true},
-EndDate: {required: true, ontimedate: true},
-Authorization: {required: true},
-},
+            rules: {StartDate: {required: true, ontimedate: true},
+                CareType: {required: true},
+                EndDate: {required: true, ontimedate: true},
+                Authorization: {required: true},
+            },
+            messages: {StartDate: {required: 'Please enter Start Date.'},
+                CareType: {required: 'Please select Care Type.'},
+                EndDate: {required: 'Please enter End Date.'},
+                Authorization: {required: 'Please upload Authorization Document.'},
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("name") == "StartDate" || element.attr("name") == "EndDate") {
+                    error.insertAfter($(element).parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+        }); // validate
 
-messages: {StartDate: {required: 'Please enter Start Date.'},
-CareType: {required: 'Please select Care Type.'},
-EndDate: {required: 'Please enter End Date.'},
-Authorization: {required: 'Please upload Authorization Document.'},
-},
-
-errorPlacement: function(error, element) {
-    if (element.attr("name") == "StartDate" || element.attr("name") == "EndDate") {
-      error.insertAfter($(element).parent());
-    } else {
-      error.insertAfter(element);
-    }
-  },
-
-}); // validate
-
- });
+    });
 </script>

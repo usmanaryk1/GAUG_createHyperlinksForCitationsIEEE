@@ -53,7 +53,7 @@
                             I-9 Eligibility
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="I9Eligibility" type="file"
+                            <input class="form-control" name="I9Eligibility" type="file" fileread="addEmployee.employee.i9Eligibility"
                                    data-validate="required" data-message-required="Please upload I-9 Eligibility."/>
                         </div>
                     </div>
@@ -61,11 +61,31 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
-                            W-2
+                            I-9 Eligibility Expiration Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="I9EligibilityExpirationDate" type="text" ng-model="addEmployee.employee.I9EligibilityExpirationDate"
+                                       onblur="setValidationMessage('I9EligibilityExpirationDate','I-9 Eligibility Expiration Date')" required="false"   data-validate="" data-message-required="uhy" itemid="I-9 Eligibility Expiration Date"/>
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            W-4 or I9
                         </label>
                         <div class="col-sm-9">
                             <input class="form-control" name="W2" type="file"
-                                   data-validate="required" data-message-required="Please upload W-2."/>
+                                   data-validate="required" data-message-required="Please upload W-4 or I9."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -76,7 +96,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input class="form-control" name="References" type="file"
-                                   data-validate="required" data-message-required="Please upload References."/>
+                                   data-message-required="Please upload References."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -86,8 +106,8 @@
                             Physical
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Physical" type="file"
-                                   data-validate="required" data-message-required="Please upload Physical."/>
+                            <input class="form-control" name="Physical" type="file" fileread="addEmployee.employee.physical"
+                                   data-message-required="Please upload Physical."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -99,7 +119,45 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="PhysicalExpirationDate" type="text"
-                                       data-validate="required,date" data-message-required="Please enter Physical Expiration Date"/>
+                                       onblur="setValidationMessage('PhysicalExpirationDate','Physical Expiration Date')" required="false" itemid="Physical Expiration Date"/>
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            TB Testing
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input value="OPPD" name="TBTesting" type="radio" class="cbr" ng-model="addEmployee.employee.tbTesting"/>
+                                    OPPD
+                                </label>
+                                <label class="cbr-inline">
+                                    <input name="TBTesting" value="OCXR" type="radio" class="cbr" ng-model="addEmployee.employee.tbTesting"/>
+                                    OCXR
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            TB Testing Expiration Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="TBTestingExpirationDate" type="text" itemid="TB Testing Expiration Date"
+                                       onblur="setValidationMessage('TBTestingExpirationDate','TB Testing Expiration Date')" required="false"/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -144,7 +202,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="EndDate" type="text"
-                                       data-validate="required,date" data-message-required="Please enter End Date">
+                                       data-validate="date" data-message-required="Please enter End Date">
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -152,21 +210,6 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 pull-left">
-                            <a class="btn btn-info btn-single pull-left" href="javascript:;" onclick="showAjaxModal();">
-                                View Document
-                            </a>
-                            <button class="btn btn-info btn-single gray_bt pull-left" type="reset">
-                                Reset To Default
-                            </button>
-                            <button class="btn btn-info green_bt pull-left" type="submit">
-                                Save Changes
-                            </button>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -252,6 +295,9 @@
     }
 </script>
 <script type="text/javascript">
+    function setValidationMessage(elementName, itemId) {
+        $("#" + elementName + "-error").text('Please enter ' + itemId + '.');
+    }
     // validate
     customJqueryValidation();
     jQuery(document).ready(function($) {

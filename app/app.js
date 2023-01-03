@@ -30,7 +30,7 @@ app.run(function($rootScope)
                 //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
                 if (toState.data && toState.data.tabNo) {
                     $rootScope.tabNo = toState.data.tabNo;
-                }else{
+                } else {
                     $rootScope.tabNo = undefined;
                 }
             })
@@ -70,11 +70,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
-            // add_patient_tab_1
-            state('app.add_patient_tab_1', {
-                url: '/add_patient_tab_1',
-                templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_1'),
-                controller: 'AddPatientTab1Ctrl as addPatient1',
+            // patient creation page
+            state('app.patient', {
+                abstract: true,
+                url: '/patient',
+                templateUrl: appHelper.viewTemplatePath('patient', 'add_patient'),
+                controller: 'AddPatientCtrl as addPatient',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -84,9 +85,25 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
+            // add_patient_tab_1
+            state('app.patient.tab1', {
+                url: '/tab1',
+                templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_1'),
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                },
+                data: {
+                    tabNo: 1
+                }
+            }).
             // add_patient_tab_2
-            state('app.add_patient_tab_2', {
-                url: '/add_patient_tab_2',
+            state('app.patient.tab2', {
+                url: '/tab2',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_2'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -95,11 +112,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 2
                 }
             }).
             // add_patient_tab_3
-            state('app.add_patient_tab_3', {
-                url: '/add_patient_tab_3',
+            state('app.patient.tab3', {
+                url: '/tab3',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_3'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -108,11 +128,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 3
                 }
             }).
             // add_patient_tab_4
-            state('app.add_patient_tab_4', {
-                url: '/add_patient_tab_4',
+            state('app.patient.tab4', {
+                url: '/tab4',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_4'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -121,11 +144,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 4
                 }
             }).
             // add_patient_tab_5
-            state('app.add_patient_tab_5', {
-                url: '/add_patient_tab_5',
+            state('app.patient.tab5', {
+                url: '/tab5',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_5'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -134,6 +160,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.extra.toastr,
                         ]);
                     },
+                },
+                data: {
+                    tabNo: 5
                 }
             }).
             // view_patient_tab_1

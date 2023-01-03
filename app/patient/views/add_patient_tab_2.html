@@ -1,449 +1,333 @@
-<div class="page-body">
- <div>
-  <!--PAGE TITLE START -->
-  <div class="page-title">
-   <div class="title-env">
-    <h1 class="title">
-     Add Patient
-    </h1>
-    <p class="description">
-     Create A Patient Record By Entering Patient Information
-    </p>
-   </div>
-  </div>
-  <!--PAGE TITLE END -->
-  <!-- FORM WIZARD WITH VALIDATION STARTS HERE-->
-  <script type="text/javascript">
-   jQuery(document).ready(function($) {
-          $(".multi-select").multiSelect({
-            afterInit: function() {
-              // Add alternative scrollbar to list
-              this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-            },
-            afterSelect: function() {
-              // Update scrollbar size
-              this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-            }
-          });
-
-          $(".selectboxit").selectBoxIt().on('open', function() {
-            // Adding Custom Scrollbar
-            $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-          });
-        });
-
-  </script>
-  <form class="form-wizard validate" id="rootwizard" role="forl">
-   <ul class="tabs">
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_1">
-      Patient Information
-      <span>
-       1
-      </span>
-     </a>
-    </li>
-    <li class="active">
-     <a data-toggle="tab" href="#/app/add_patient_tab_2">
-      Location Information
-      <span>
-       2
-      </span>
-     </a>
-    </li>
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_3">
-      Insurance Information
-      <span>
-       3
-      </span>
-     </a>
-    </li>
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_4">
-      Authorization Info
-      <span>
-       4
-      </span>
-     </a>
-    </li>
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_5">
-      Insurance Subscriber Information
-      <span>
-       5
-      </span>
-     </a>
-    </li>
-   </ul>
-   <div class="progress-indicator">
-    <span>
-    </span>
-   </div>
-  </form>
-  <div class="row">
-   <div class="col-sm-12">
-    <div class="panel panel-default">
-     <div class="panel-body">
-      <form class="form-horizontal" id="add_patient_tab_2_form" name="add_patient_tab_2_form" role="form">
-       <div class="row">
-        <div class="col-sm-12">
-         <button class="btn btn-info green_bt pull-right" type="submit">
-          Save Changes
-         </button>
-         <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
-          Reset To Default
-         </button>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal validate" id="add_patient_tab_2_form" name="add_patient_tab_2_form" role="form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" type="submit">
+                                Save Changes
+                            </button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                Reset To Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Map
+                        </label>
+                        <div class="col-sm-9">
+                            <div id="map-1" class="map_panel"></div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-35">
+                            Search
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control width100 no-right-border form-focus-info" id="Search" name="Search" type="text"
+                                       required data-message-required="Please enter patient's address to establish GPS coordinates.">
+                                </input>
+                                                 <span class="input-group-btn">
+                                                  <button class="btn btn-info" type="submit" id="address-search">
+                                                   Go!
+                                                  </button>
+                                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-36">
+                            GPS Location
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly id="GPSLocation" name="GPSLocation" placeholder="GPS Location" type="text"
+                                   data-validate="required" data-message-required="Please enter GPS Location."/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-37">
+                            Address 1
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-37" name="Address1" ng-model="patient.patientInfo.address1" type="text"
+                                   data-validate="required" data-message-required="Please enter Address 1."/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-38">
+                            Address 2
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-38" name="Address2" ng-model="patient.patientInfo.address2" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-39">
+                            City
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-39" name="City" ng-model="patient.patientInfo.city" type="text"
+                                   data-validate="required" data-message-required="Please enter City."/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            State
+                        </label>
+                        <div class="col-sm-9">
+                            <script type="text/javascript">
+                                // jQuery(document).ready(function($) {
+                                //             $("#sboxit-1").selectBoxIt().on('open', function() {
+                                //               // Adding Custom Scrollbar
+                                //               $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                //             });
+                                //           });
+                            </script>
+                            <select class="form-control" id="sboxit-1" name="State">
+                                <option value="">
+                                    Select
+                                </option>
+                                <option value="1">
+                                    1
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-40">
+                            Zip Code
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-40" name="ZipCode" ng-model="patient.patientInfo.zipcode" type="text"
+                                   data-validate="required" data-message-required="Please enter Zip Code."/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                                Next »
+                            </button>
+                            <a class="btn btn-info green_bt pull-right" href="#/app/add_patient_tab_1" style="width:auto;">
+                                « Previous
+                            </a>
+                        </div>
+                    </div>
+                    <input name="patientId" type="hidden" value="{{patient.patientInfo.id}}">
+                    </input>
+                </form>
+            </div>
         </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label">
-         Map
-        </label>
-        <div class="col-sm-9">
-            <div id="map-1" class="map_panel"></div>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-          <label class="col-sm-3 control-label" for="field-35">
-           Search
-          </label>
-          <div class="col-sm-9">
-           <div class="input-group">
-            <input class="form-control no-right-border form-focus-info" id="Search" name="Search" type="text">
-            </input>
-             <span class="input-group-btn">
-              <button class="btn btn-info" type="submit" id="address-search">
-               Go!
-              </button>
-             </span>
-           </div>
-          </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label" for="field-36">
-         GPS Location
-        </label>
-        <div class="col-sm-9">
-         <input class="form-control" readonly id="GPSLocation" name="GPSLocation" placeholder="Placeholder" type="text">
-         </input>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label" for="field-37">
-         Address 1
-        </label>
-        <div class="col-sm-9">
-         <input class="form-control" id="field-37" name="Address1" ng-model="patient.patientInfo.address1" type="text">
-         </input>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label" for="field-38">
-         Address 2
-        </label>
-        <div class="col-sm-9">
-         <input class="form-control" id="field-38" name="Address2" ng-model="patient.patientInfo.address2" type="text">
-         </input>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label" for="field-39">
-         City
-        </label>
-        <div class="col-sm-9">
-         <input class="form-control" id="field-39" name="City" ng-model="patient.patientInfo.city" type="text">
-         </input>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label">
-         State
-        </label>
-        <div class="col-sm-9">
-         <script type="text/javascript">
-          // jQuery(document).ready(function($) {
-          //             $("#sboxit-1").selectBoxIt().on('open', function() {
-          //               // Adding Custom Scrollbar
-          //               $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-          //             });
-          //           });
-         </script>
-         <select class="form-control" id="sboxit-1" name="State">
-          <option value="">
-           Select
-          </option>
-          <option value="1">
-           1
-          </option>
-         </select>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="form-group">
-        <label class="col-sm-3 control-label" for="field-40">
-         Zip Code
-        </label>
-        <div class="col-sm-9">
-         <input class="form-control" id="field-40" name="ZipCode" ng-model="patient.patientInfo.zipcode" type="text">
-         </input>
-        </div>
-       </div>
-       <div class="form-group-separator">
-       </div>
-       <div class="row">
-        <div class="col-sm-12">
-         <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
-          Next »
-         </button>
-         <a class="btn btn-info green_bt pull-right" href="#/app/add_patient_tab_1" style="width:auto;">
-          « Previous
-         </a>
-        </div>
-       </div>
-       <input name="patientId" type="hidden" value="{{patient.patientInfo.id}}">
-       </input>
-      </form>
-     </div>
     </div>
-   </div>
-  </div>
-  <!-- FORM WIZARD WITH VALIDATION END HERE-->
- </div>
 </div>
 
-
 <script>
- function addPatientTab2Ctrl($scope, $rootScope, $http) {
+    function addPatientTab2Ctrl($scope, $rootScope, $http) {
 
-  // edit mode
-  if($rootScope.patient.patientInfo.mode == 'edit') {
-    //url: "/OnTime/api/patient/getPatientAddress",
-    $rootScope.patient = ontimedata.patients[0];
-  }
+        // edit mode
+        if ($rootScope.patient.patientInfo.mode == 'edit') {
+            //url: "/OnTime/api/patient/getPatientAddress",
+            $rootScope.patient = ontimedata.patients[0];
+        }
 
-  $scope.submitHandler = function() {
-    if ($('#addPatientTab2CtrlForm').valid()) {
-      showLoadingBar(70); // Fill progress bar to 70% (just a given value)
+        $scope.submitHandler = function() {
+            if ($('#addPatientTab2CtrlForm').valid()) {
+                showLoadingBar(70); // Fill progress bar to 70% (just a given value)
 
-      var jsonObject = $('#addPatientTab2CtrlForm').serializeObject();
-      var jsonStr = JSON.stringify(jsonObject);
-      $http({
-        url: "/OnTime/api/patient/savePatientAddress",
-        method: 'POST',
-        data: {},
-        headers: {
-          // 'Content-Type': 'application/json',
-          'payload': jsonStr,
-          'requestToken': appData.authResult.token,
-          'userName': appData.authResult.un,
-        },
-        // transformRequest: function(data) {
-        //   return $.param(data); // jquery util
-        // }
-      }).success(function(data, status, headers, config) {
-        showLoadingBar({
-          delay: .5,
-          pct: 100,
-          finish: function() {
-            if (data.id) {
-              $rootScope.patient.patientAddresses = data;
+                var jsonObject = $('#addPatientTab2CtrlForm').serializeObject();
+                var jsonStr = JSON.stringify(jsonObject);
+                $http({
+                    url: "/OnTime/api/patient/savePatientAddress",
+                    method: 'POST',
+                    data: {},
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        'payload': jsonStr,
+                        'requestToken': appData.authResult.token,
+                        'userName': appData.authResult.un,
+                    },
+                    // transformRequest: function(data) {
+                    //   return $.param(data); // jquery util
+                    // }
+                }).success(function(data, status, headers, config) {
+                    showLoadingBar({
+                        delay: .5,
+                        pct: 100,
+                        finish: function() {
+                            if (data.id) {
+                                $rootScope.patient.patientAddresses = data;
 
-              window.location.hash = '#/app/add_patient_tab_3';
-            }
-          }
-        }); // showLoadingBar
+                                window.location.hash = '#/app/add_patient_tab_3';
+                            }
+                        }
+                    }); // showLoadingBar
 
-      }).error(function(data, status, headers, config) {}); // http
-    } // isValid
-  }; // end of submitHandler
+                }).error(function(data, status, headers, config) {
+                }); // http
+            } // isValid
+        }; // end of submitHandler
 
-}; // end of addPatientTab2Ctrl
+    }
+    ; // end of addPatientTab2Ctrl
 </script>
 <script type="text/javascript">
-   // validate
-   customJqueryValidation();
+    // validate
+    customJqueryValidation();
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
-         }, 1);
-
-
-        // Validation
-        $("#add_patient_tab_2_form").validate({
-rules: {City: {required: true},
-Search: {required: true},
-Address1: {required: true},
-Address2: {required: true},
-ZipCode: {required: true},
-State: {required: true},
-GPSLocation: {required: true},
-},
-
-messages: {City: {required: 'Please enter City.'},
-Search: {required: "Please enter patient's address to establish GPS coordinates."},
-Address1: {required: 'Please enter Address 1.'},
-Address2: {required: 'Please enter Address 2.'},
-ZipCode: {required: 'Please enter Zip Code.'},
-State: {required: 'Please select State.'},
-GPSLocation: {required: 'Please enter GPS Location.'},
-},
-
-errorPlacement: function(error, element) {
-    if (element.attr("name") == "Search") {
-      error.insertAfter($(element).parent());
-    } else {
-      error.insertAfter(element);
-    }
-  },
-  
-});
- });
+        }, 1);
+    });
 </script>
 
 <script type="text/javascript">
 // google map begin
-function searchGoogleMap() {
+    function searchGoogleMap() {
 
-}
-
-loadGoogleMaps( 3 ).done(function()
-{
-
-  var map;
-  var geocoder = new google.maps.Geocoder();
-
-  var markers = [];
-  var iterator = 0;
-  
-  var newyork = new google.maps.LatLng(40.7127837, -74.00594);
-    // stockholm = new google.maps.LatLng(59.32522, 18.07002);
-  
-  var neighborhoods = [
-    // new google.maps.LatLng(52.511467, 13.447179),
-    // new google.maps.LatLng(52.549061, 13.422975),
-    // new google.maps.LatLng(52.497622, 13.396110),
-    // new google.maps.LatLng(52.517683, 13.394393),
-    // new google.maps.LatLng(52.530843, 13.382721),
-    // new google.maps.LatLng(52.514549, 13.350105),
-    // new google.maps.LatLng(52.534394, 13.340492),
-  ];
-  
-  function initialize()
-  {
-    var mapOptions = {
-      zoom: 12,
-      center: newyork
-    };
-    
-    // Calculate Height
-    var el = document.getElementById('map-1'),
-      doc_height = $('#map-1').height();
-    
-    // Adjust map height to fit the document contianer
-    el.style.height = doc_height + 'px';
-    
-    map = new google.maps.Map(el, mapOptions);
-    
-    for (var i = 0; i < neighborhoods.length; i++)
-    {
-      setTimeout(function() {
-        addMarker();
-      }, i * 200 + 200);
     }
-      
-    // Stockholm Marker
-    new google.maps.Marker({
-      map: map,
-      position: newyork,
-      draggable: true
-    });
-  }
-  
-  function addMarker()
-  {
-    markers.push(new google.maps.Marker({
-      position: neighborhoods[iterator],
-      map: map,
-      draggable: true,
-      animation: google.maps.Animation.DROP
-    }));
-    
-    iterator++;
-  }
 
-    initialize();
-    
-  
-  // $("#map-unzoom").on('click', function(ev)
-  // {
-  //   ev.preventDefault();
-    
-  //   map.setZoom(map.getZoom() - 1);
-  // });
-  
-  // $("#map-resetzoom").on('click', function(ev)
-  // {
-  //   ev.preventDefault();
-    
-  //   map.setZoom(12);
-  // });
-  
-  // $("#map-zoom").on('click', function(ev)
-  // {
-  //   ev.preventDefault();
-    
-  //   map.setZoom(map.getZoom() + 1);
-  // });
-  
-  $("#address-search").click(function(ev)
-  {
-    ev.preventDefault();
-    
-    // var $inp = $(this).find('.form-control'),
-     var address = $('#Search').val().trim();
-    
-    // $inp.prev().find('i').addClass('fa-spinner fa-spin');
-    
-    if(address.length != 0)
+    loadGoogleMaps(3).done(function()
     {
-      geocoder.geocode( { 'address': address}, function(results, status)
-      {
-        // $inp.prev().find('i').removeClass('fa-spinner fa-spin');
-        
-        if(status == google.maps.GeocoderStatus.OK)
+
+        var map;
+        var geocoder = new google.maps.Geocoder();
+
+        var markers = [];
+        var iterator = 0;
+
+        var newyork = new google.maps.LatLng(40.7127837, -74.00594);
+        // stockholm = new google.maps.LatLng(59.32522, 18.07002);
+
+        var neighborhoods = [
+            // new google.maps.LatLng(52.511467, 13.447179),
+            // new google.maps.LatLng(52.549061, 13.422975),
+            // new google.maps.LatLng(52.497622, 13.396110),
+            // new google.maps.LatLng(52.517683, 13.394393),
+            // new google.maps.LatLng(52.530843, 13.382721),
+            // new google.maps.LatLng(52.514549, 13.350105),
+            // new google.maps.LatLng(52.534394, 13.340492),
+        ];
+
+        function initialize()
         {
-          $('#GPSLocation').val(results[0].geometry.location);
+            var mapOptions = {
+                zoom: 12,
+                center: newyork
+            };
 
-          map.setCenter(results[0].geometry.location);
-          
-          var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location,
-            draggable: true
-          });
-        
-        } else {
-          alert('Geocode was not successful for the following reason: ' + status);
+            // Calculate Height
+            var el = document.getElementById('map-1'),
+                    doc_height = $('#map-1').height();
+
+            // Adjust map height to fit the document contianer
+            el.style.height = doc_height + 'px';
+
+            map = new google.maps.Map(el, mapOptions);
+
+            for (var i = 0; i < neighborhoods.length; i++)
+            {
+                setTimeout(function() {
+                    addMarker();
+                }, i * 200 + 200);
+            }
+
+            // Stockholm Marker
+            new google.maps.Marker({
+                map: map,
+                position: newyork,
+                draggable: true
+            });
         }
-      });
-    }
-  });
-});
+
+        function addMarker()
+        {
+            markers.push(new google.maps.Marker({
+                position: neighborhoods[iterator],
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            }));
+
+            iterator++;
+        }
+
+        initialize();
+
+
+        // $("#map-unzoom").on('click', function(ev)
+        // {
+        //   ev.preventDefault();
+
+        //   map.setZoom(map.getZoom() - 1);
+        // });
+
+        // $("#map-resetzoom").on('click', function(ev)
+        // {
+        //   ev.preventDefault();
+
+        //   map.setZoom(12);
+        // });
+
+        // $("#map-zoom").on('click', function(ev)
+        // {
+        //   ev.preventDefault();
+
+        //   map.setZoom(map.getZoom() + 1);
+        // });
+
+        $("#address-search").click(function(ev)
+        {
+            ev.preventDefault();
+
+            // var $inp = $(this).find('.form-control'),
+            var address = $('#Search').val().trim();
+
+            // $inp.prev().find('i').addClass('fa-spinner fa-spin');
+
+            if (address.length != 0)
+            {
+                geocoder.geocode({'address': address}, function(results, status)
+                {
+                    // $inp.prev().find('i').removeClass('fa-spinner fa-spin');
+
+                    if (status == google.maps.GeocoderStatus.OK)
+                    {
+                        $('#GPSLocation').val(results[0].geometry.location);
+
+                        map.setCenter(results[0].geometry.location);
+
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location,
+                            draggable: true
+                        });
+
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+        });
+    });
 // google map end
-      </script>
+</script>

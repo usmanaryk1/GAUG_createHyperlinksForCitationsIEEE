@@ -1,248 +1,192 @@
-
-  <div class="page-body"> 
-    
-    
-    <!--PAGE TITLE START -->
-    <div class="page-title">
-      <div class="title-env">
-        <h1 class="title">Add Patient</h1>
-        <p class="description">Create A Patient Record By Entering Patient Information</p>
-      </div>
-    </div>
-    <!--PAGE TITLE END --> 
-    
-    <!-- FORM WIZARD WITH VALIDATION START HERE--> 
-    
-    <script type="text/javascript">
-				jQuery(document).ready(function($)
-				{
-					$(".multi-select").multiSelect({
-						afterInit: function()
-						{
-							// Add alternative scrollbar to list
-							this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-						},
-						afterSelect: function()
-						{
-							// Update scrollbar size
-							this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-						}
-					});
-					
-					$(".selectboxit").selectBoxIt().on('open', function()
-					{
-						// Adding Custom Scrollbar
-						$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-					});
-				});
-			</script>
-    <form role="forl" id="rootwizard" class="form-wizard validate" novalidate>
-     <ul class="tabs">
-        <li> <a href="#/app/add_patient_tab_1" data-toggle="tab"> Patient Information <span>1</span> </a> </li>
-        <li> <a href="#/app/add_patient_tab_2" data-toggle="tab"> Location Information <span>2</span> </a> </li>
-        <li> <a href="#/app/add_patient_tab_3" data-toggle="tab"> Insurance Information <span>3</span> </a> </li>
-        <li> <a href="#/app/add_patient_tab_4" data-toggle="tab"> Authorization Info <span>4</span> </a> </li>
-        <li class="active"> <a href="#/app/add_patient_tab_5" data-toggle="tab"> Insurance Subscriber Information <span>5</span> </a> </li>
-      </ul>
-      <div class="progress-indicator"> <span></span> </div>
-    </form>
-    <div class="row">
-      <div class="col-sm-12">
+<div class="row">
+    <div class="col-sm-12">
         <div class="panel panel-default">
-          <div class="panel-body">
-            <form class="form-horizontal" role="form" id="add_patient_tab_5_form" name="add_patient_tab_5_form">
-              <div class="row">
-                <div class="col-sm-12">
-                  <button class="btn btn-info green_bt pull-right" type="submit">Save Changes</button>
-                  <button class="btn btn-info btn-single gray_bt pull-right" type="reset">Reset To Default</button>
-                  
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-48" class="col-sm-3 control-label">First Name</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-48" class="form-control" name="FirstName">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-49" class="col-sm-3 control-label">Middle Initial</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-49" class="form-control" name="MiddleInitial">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-50" class="col-sm-3 control-label">Last Name</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-50" class="form-control" name="LastName">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-51" class="col-sm-3 control-label">Name Suffix</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-51" class="form-control" name="NameSuffix">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-52" class="col-sm-3 control-label">Date of Birth</label>
-                <div class="col-sm-9">
-                  <div class="input-group">
-                    <input type="text" id="field-52" class="form-control datepicker" data-format="mm/dd/yyyy" name="DateofBirth">
-                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Gender</label>
-                <div class="col-sm-9">
-                  <div class="input-group">
-                    <label class="cbr-inline">
-                      <input type="radio" name="radio-2" class="cbr" checked name="Gender">
-                      Male </label>
-                    <label class="cbr-inline">
-                      <input type="radio" name="radio-2" class="cbr" name="Gender">
-                      Female </label>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-53" class="col-sm-3 control-label">Relationship With Patient</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-53" class="form-control" name="RelationshipWithPatient">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Is Billing Address Same As Patient?</label>
-                <div class="col-sm-9">
-                  <div class="input-group">
-                    <label class="cbr-inline">
-                      <input type="radio" name="radio-3" class="cbr" checked name="IsBillingAddressSameAsPatient">
-                      Yes </label>
-                    <label class="cbr-inline">
-                      <input type="radio" name="radio-3" class="cbr" name="IsBillingAddressSameAsPatient">
-                      No </label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-54" class="col-sm-3 control-label">Address 1</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-54" class="form-control" name="Address1">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-55" class="col-sm-3 control-label">Address 2</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-55" class="form-control" name="Address2">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label for="field-56" class="col-sm-3 control-label">City</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-56" class="form-control" name="City">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              <div class="form-group">
-                <label class="col-sm-3 control-label">State</label>
-                <div class="col-sm-9"> 
-                  <script type="text/javascript">
-										// jQuery(document).ready(function($)
-										// {
-										// 	$("#sboxit-1").selectBoxIt().on('open', function()
-										// 	{
-										// 		// Adding Custom Scrollbar
-										// 		$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-										// 	});
-										// });
-									</script>
-                  <select class="form-control" id="sboxit-1" name="State">
-                    <option value="">Select</option>
-                    <option value="1">1</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-              
-              <div class="form-group">
-                <label for="field-57" class="col-sm-3 control-label">Zip Code</label>
-                <div class="col-sm-9">
-                  <input type="text" id="field-57" class="form-control" name="ZipCode">
-                </div>
-              </div>
-              <div class="form-group-separator"></div>
-            <div class="row">
-              <div class="col-sm-12">
-                <button style="width:auto;" class="btn btn-info green_bt pull-right" type="submit">Submit</button>
-              </div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form" id="add_patient_tab_5_form" name="add_patient_tab_5_form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" type="submit">Save Changes</button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">Reset To Default</button>
+
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-48" class="col-sm-3 control-label">First Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-48" class="form-control" name="FirstName">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-49" class="col-sm-3 control-label">Middle Initial</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-49" class="form-control" name="MiddleInitial">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-50" class="col-sm-3 control-label">Last Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-50" class="form-control" name="LastName">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-51" class="col-sm-3 control-label">Name Suffix</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-51" class="form-control" name="NameSuffix">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-52" class="col-sm-3 control-label">Date of Birth</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" id="field-52" class="form-control datepicker" data-format="mm/dd/yyyy" name="DateofBirth">
+                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Gender</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input type="radio" name="radio-2" class="cbr" checked name="Gender">
+                                    Male </label>
+                                <label class="cbr-inline">
+                                    <input type="radio" name="radio-2" class="cbr" name="Gender">
+                                    Female </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-53" class="col-sm-3 control-label">Relationship With Patient</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-53" class="form-control" name="RelationshipWithPatient">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Is Billing Address Same As Patient?</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input type="radio" name="radio-3" class="cbr" checked name="IsBillingAddressSameAsPatient">
+                                    Yes </label>
+                                <label class="cbr-inline">
+                                    <input type="radio" name="radio-3" class="cbr" name="IsBillingAddressSameAsPatient">
+                                    No </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-54" class="col-sm-3 control-label">Address 1</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-54" class="form-control" name="Address1">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-55" class="col-sm-3 control-label">Address 2</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-55" class="form-control" name="Address2">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label for="field-56" class="col-sm-3 control-label">City</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-56" class="form-control" name="City">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">State</label>
+                        <div class="col-sm-9"> 
+                            <script type="text/javascript">
+                                // jQuery(document).ready(function($)
+                                // {
+                                // 	$("#sboxit-1").selectBoxIt().on('open', function()
+                                // 	{
+                                // 		// Adding Custom Scrollbar
+                                // 		$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                // 	});
+                                // });
+                            </script>
+                            <select class="form-control" id="sboxit-1" name="State">
+                                <option value="">Select</option>
+                                <option value="1">1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                        <label for="field-57" class="col-sm-3 control-label">Zip Code</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="field-57" class="form-control" name="ZipCode">
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button style="width:auto;" class="btn btn-info green_bt pull-right" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            </form>
-          </div>
         </div>
-      </div>
     </div>
-    
-    <!-- FORM WIZARD WITH VALIDATION END HERE-->
-</div>    
-    
+</div>
 
 <script type="text/javascript">
-   // validate
-   customJqueryValidation();
+    // validate
+    customJqueryValidation();
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
-         }, 1);
+        }, 1);
 
 
         // Validation
         $("#add_patient_tab_5_form").validate({
-rules: {City: {required: true},
-FirstName: {required: true},
+            rules: {City: {required: true},
+                FirstName: {required: true},
 // NameSuffix: {required: true},
-LastName: {required: true},
-Address2: {required: true},
+                LastName: {required: true},
+                Address2: {required: true},
 // MiddleInitial: {required: true},
-ZipCode: {required: true},
-DateofBirth: {required: true, ontimedate: true},
-State: {required: true},
-RelationshipWithPatient: {required: true},
-Address1: {required: true},
-},
+                ZipCode: {required: true},
+                DateofBirth: {required: true, ontimedate: true},
+                State: {required: true},
+                RelationshipWithPatient: {required: true},
+                Address1: {required: true},
+            },
+            messages: {City: {required: 'Please enter City.'},
+                FirstName: {required: 'Please enter First Name.'},
+                NameSuffix: {required: 'Please enter Name Suffix.'},
+                LastName: {required: 'Please enter Last Name.'},
+                Address2: {required: 'Please enter Address 2.'},
+                MiddleInitial: {required: 'Please enter Middle Initial.'},
+                ZipCode: {required: 'Please enter Zip Code.'},
+                DateofBirth: {required: 'Please enter Date of Birth.'},
+                State: {required: 'Please enter State.'},
+                RelationshipWithPatient: {required: 'Please enter Relationship With Patient.'},
+                Address1: {required: 'Please enter Address 1.'},
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("name") == "DateofBirth") {
+                    error.insertAfter($(element).parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+        }); // validate
 
-messages: {City: {required: 'Please enter City.'},
-FirstName: {required: 'Please enter First Name.'},
-NameSuffix: {required: 'Please enter Name Suffix.'},
-LastName: {required: 'Please enter Last Name.'},
-Address2: {required: 'Please enter Address 2.'},
-MiddleInitial: {required: 'Please enter Middle Initial.'},
-ZipCode: {required: 'Please enter Zip Code.'},
-DateofBirth: {required: 'Please enter Date of Birth.'},
-State: {required: 'Please enter State.'},
-RelationshipWithPatient: {required: 'Please enter Relationship With Patient.'},
-Address1: {required: 'Please enter Address 1.'},
-},
-
-errorPlacement: function(error, element) {
-    if (element.attr("name") == "DateofBirth") {
-      error.insertAfter($(element).parent());
-    } else {
-      error.insertAfter(element);
-    }
-  },
-
-}); // validate
-
- });
+    });
 </script>

@@ -516,8 +516,8 @@ angular.module('xenon.directives', []).
                             $progress = $this.find(".progress-indicator"),
                             _index = $this.find('> ul > li.active').index();
 //                    index is set for dynamic tab selection according to tab no of the page
-                    if (_index <= 0 && scope.tabNo){
-                        _index=scope.tabNo - 1;
+                    if (_index <= 0 && scope.tabNo) {
+                        _index = scope.tabNo - 1;
                     }
                     // Validation
                     var checkFormWizardValidaion = function(tab, navigation, index)
@@ -536,7 +536,7 @@ angular.module('xenon.directives', []).
                         return true;
                     };
 
-                    
+
                     // Setup Progress
                     if (_index > 0)
                     {
@@ -621,6 +621,7 @@ angular.module('xenon.directives', []).
         directive('validate', function() {
             return {
                 restrict: 'AC',
+//                scope:{required:"="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.validate)) {
@@ -637,11 +638,12 @@ angular.module('xenon.directives', []).
                                     $(element).closest('.form-group').addClass('validate-has-error');
                                 },
                                 unhighlight: function(element) {
+                                    //remove custom invalidity of component when it has valid value - by hardik
                                     element.setCustomValidity('');
                                     $(element).closest('.form-group').removeClass('validate-has-error');
                                 },
                                 errorPlacement: function(error, element)
-                                {
+                                {                                    //setting custom validity of for component so we cn check form-validity in controller. - by hardik
                                     element['0'].setCustomValidity(error);
                                     if (element.closest('.has-switch').length)
                                     {
@@ -654,8 +656,13 @@ angular.module('xenon.directives', []).
                                     }
                                     else
                                     {
-
                                         error.insertAfter(element);
+                                    }
+                                    // for dynaic validation we can not use data-validate, so For required field validations 
+                                    // For such elements set itemid attribute with Element name. - by hardik
+                                    if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
+                                        console.log(error);
+                                        error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
                                     }
                                 }
                             },
@@ -673,7 +680,6 @@ angular.module('xenon.directives', []).
                             var rule = _validate[k],
                                     params,
                                     message;
-
                             if (typeof opts['rules'][name] == 'undefined')
                             {
                                 opts['rules'][name] = {};
@@ -706,6 +712,15 @@ angular.module('xenon.directives', []).
                                     }
                                 }
                             }
+//                            if(!message && $field.attr("itemid")){
+//                                if($field.attr("required")==='required'){
+//                                    opts['rules'][name]['required'] = true;
+//                                }else{
+//                                    opts['rules'][name]['required'] = false;
+//                                }
+//                                opts['messages'][name]['required'] = 'Please enter ' + $field.attr("itemid") + '.';
+//                            }
+//                            alert(message + ' ' + rule + ' ' + params);
                         }
                     });
 
