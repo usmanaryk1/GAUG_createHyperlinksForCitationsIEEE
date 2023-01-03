@@ -100,7 +100,8 @@
                     </div>
                     <div class="pull-right col-sm-7 pad0" ng-if="billingSession.processdMode">
                         <div>
-                            <a style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" >Download Data</a>
+                            <a style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                               ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download">Download EDI</a>
                         </div>
                         <div class="text-left">
                             Billing Batch Number: {{billingSession.sessionId}}
