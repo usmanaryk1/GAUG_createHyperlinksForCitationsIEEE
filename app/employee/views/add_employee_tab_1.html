@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal" id="add_employee_tab_1_form" name="add_employee_tab_1_form" role="form">
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="user_p">
@@ -33,8 +33,19 @@
                             First Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="FirstName" type="text">
-                            </input>
+                            <input class="form-control" name="FirstName" type="text"
+                                   data-validate="required" data-message-required="Please enter First Name."/>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-29">
+                            Middle Initial
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-29" name="MiddleInitial" type="text"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -44,8 +55,8 @@
                             Last Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="LastName" type="text">
-                            </input>
+                            <input class="form-control" name="LastName" type="text"
+                                   data-validate="required" data-message-required="Please enter Last Name."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -55,8 +66,8 @@
                             Social Security #
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="SocialSecurity" type="text">
-                            </input>
+                            <input class="form-control" name="SocialSecurity" type="text"
+                                   data-validate="required" data-message-required="Please enter Social Security."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -67,8 +78,8 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text">
-                                </input>
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text"
+                                       data-validate="required,date" data-message-required="Please enter Date of Birth."/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -85,8 +96,8 @@
                             Phone
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Phone" type="text">
-                            </input>
+                            <input class="form-control" name="Phone" type="text" data-validate="required,number,minlength[10]"
+                                       data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -96,8 +107,7 @@
                             Email
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Email" type="text">
-                            </input>
+                            <input class="form-control" name="Email" type="email"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -107,8 +117,8 @@
                             Address 1
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Address1" type="text">
-                            </input>
+                            <input class="form-control" name="Address1" type="text"
+                                   data-validate="required" data-message-required="Please enter Address 1"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -118,8 +128,7 @@
                             Address 2
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Address2" type="text">
-                            </input>
+                            <input class="form-control" name="Address2" type="text"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -129,8 +138,8 @@
                             City
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="City" type="text">
-                            </input>
+                            <input class="form-control" name="City" type="text"
+                                   data-validate="required" data-message-required="Please enter City."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -150,7 +159,7 @@
                                 //              });
                                 //            });
                             </script>
-                            <select class="form-control" id="sboxit-1" name="State">
+                            <select class="form-control" id="sboxit-1" name="State" data-validate="required" data-message-required="Please enter State.">
                                 <option value="">
                                     Select
                                 </option>
@@ -167,8 +176,8 @@
                             Zip Code
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="ZipCode" type="text">
-                            </input>
+                            <input class="form-control" name="ZipCode" type="text"
+                                   data-validate="required" data-message-required="Please enter Zip Code."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -178,8 +187,7 @@
                             Payroll ID
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="PayrollID" type="text">
-                            </input>
+                            <input class="form-control" name="PayrollID" type="text"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -276,42 +284,42 @@
         }, 1);
 
 
-        // Validation
-        $("#add_employee_tab_1_form").validate({
-            rules: {City: {required: true},
-                FirstName: {required: true},
-                Phone: {required: true},
-                LastName: {required: true},
-// Address2: {required: true},
-                ZipCode: {required: true},
-                DateOfBirth: {required: true, ontimedate: true},
-                State: {required: true},
-                Address1: {required: true},
-                SocialSecurity: {required: true},
-// Email: {required: true, email: true},
-// PayrollID: {required: true},
-            },
-            messages: {City: {required: 'Please enter City.'},
-                FirstName: {required: 'Please enter First Name.'},
-                Phone: {required: 'Please enter Phone.'},
-                LastName: {required: 'Please enter Last Name.'},
-                Address2: {required: 'Please enter Address 2.'},
-                ZipCode: {required: 'Please enter Zip Code.'},
-                DateOfBirth: {required: 'Please enter Date Of Birth.'},
-                State: {required: 'Please select State.'},
-                Address1: {required: 'Please enter Address 1.'},
-                SocialSecurity: {required: 'Please enter Social Security #.'},
-                Email: {required: 'Please enter Email.'},
-                PayrollID: {required: 'Please enter Payroll ID.'},
-            },
-            errorPlacement: function(error, element) {
-                if (element.attr("name") == "DateOfBirth") {
-                    error.insertAfter($(element).parent());
-                } else {
-                    error.insertAfter(element);
-                }
-            },
-        });// validate
+//        // Validation
+//        $("#add_employee_tab_1_form").validate({
+//            rules: {City: {required: true},
+//                FirstName: {required: true},
+//                Phone: {required: true},
+//                LastName: {required: true},
+//// Address2: {required: true},
+//                ZipCode: {required: true},
+//                DateOfBirth: {required: true, ontimedate: true},
+//                State: {required: true},
+//                Address1: {required: true},
+//                SocialSecurity: {required: true},
+//// Email: {required: true, email: true},
+//// PayrollID: {required: true},
+//            },
+//            messages: {City: {required: 'Please enter City.'},
+//                FirstName: {required: 'Please enter First Name.'},
+//                Phone: {required: 'Please enter Phone.'},
+//                LastName: {required: 'Please enter Last Name.'},
+//                Address2: {required: 'Please enter Address 2.'},
+//                ZipCode: {required: 'Please enter Zip Code.'},
+//                DateOfBirth: {required: 'Please enter Date Of Birth.'},
+//                State: {required: 'Please select State.'},
+//                Address1: {required: 'Please enter Address 1.'},
+//                SocialSecurity: {required: 'Please enter Social Security #.'},
+//                Email: {required: 'Please enter Email.'},
+//                PayrollID: {required: 'Please enter Payroll ID.'},
+//            },
+//            errorPlacement: function(error, element) {
+//                if (element.attr("name") == "DateOfBirth") {
+//                    error.insertAfter($(element).parent());
+//                } else {
+//                    error.insertAfter(element);
+//                }
+//            },
+//        });// validate
 
     });// ready 
 </script>

@@ -101,7 +101,7 @@ angular.module('xenon.services', []).
 
 
 				// Subitems of patient
-				patient.addItem('Add Patient',		'./add_patient_tab_1');
+				patient.addItem('Add Patient',		'./patient/tab1');
 				patient.addItem('View Patient',		'./view_patient_tab_1');
 
 
@@ -159,7 +159,7 @@ angular.module('xenon.services', []).
 
 
 				// Subitems of patient
-				patient.addItem('Add Patient',		'./add_patient_tab_1');
+				patient.addItem('Add Patient',		'./patient/tab1');
 				patient.addItem('View Patient',		'./view_patient_tab_1');
 
 

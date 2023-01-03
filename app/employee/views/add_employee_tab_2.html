@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_tab_2_form" name="add_employee_tab_2_form" role="form" ng-submit="addEmployee.saveEmployeeTab2()">
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
                     <div class="row">
                         <div class="col-sm-12 pull-right">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -19,10 +19,10 @@
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input type="radio" name="TaxStatus" value='W-2' ng-model="addEmployee.employee.TaxStatus">
+                                    <input type="radio" name="TaxStatus" value='W-2' class="cbr" ng-model="addEmployee.employee.TaxStatus">
                                     W-2 </label>
                                 <label class="cbr-inline">
-                                    <input type="radio" name="TaxStatus"  value='1099' ng-model="addEmployee.employee.TaxStatus">
+                                    <input type="radio" name="TaxStatus"  value='1099' class="cbr" ng-model="addEmployee.employee.TaxStatus">
                                     1099 </label>
 
                             </div>
@@ -33,10 +33,10 @@
                         <div class="col-sm-10 col-md-3">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input type="radio" name="Wages" value='H' ng-model="addEmployee.employee.Wages">
+                                    <input type="radio" name="Wages" value='H' class="cbr" ng-model="addEmployee.employee.Wages">
                                     Hourly </label>
                                 <label class="cbr-inline">
-                                    <input type="radio" name="Wages" value='S' ng-model="addEmployee.employee.Wages">
+                                    <input type="radio" name="Wages" value='S' class="cbr" ng-model="addEmployee.employee.Wages">
                                     Salary </label>
 
                             </div>
@@ -291,10 +291,15 @@
 <script type="text/javascript">
 //    // validate
 //    customJqueryValidation();
-//    jQuery(document).ready(function($) {
-//        setTimeout(function() {
-//            $(".fade-in-effect").addClass('in');
-//        }, 1);
+    jQuery(document).ready(function($) {
+        //to select radio buttons by default in angular. It was having issue due to cbr theme.
+        setTimeout(function() {
+            $(".fade-in-effect").addClass('in');
+            $("input[name='Wages'][value='H']").attr('checked', 'checked');
+            $("input[name='Wages'][value='H']").parent().parent().addClass('cbr-checked');
+            $("input[name='TaxStatus'][value='W-2']").attr('checked', 'checked');
+            $("input[name='TaxStatus'][value='W-2']").parent().parent().addClass('cbr-checked');
+        }, 1);
 ////
 ////
 ////        // Validation
@@ -316,5 +321,5 @@
 ////            },
 ////        });// validate
 //
-//    });// ready 
+    });// ready 
 </script>

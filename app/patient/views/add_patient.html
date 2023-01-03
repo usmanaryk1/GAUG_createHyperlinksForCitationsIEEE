@@ -1,0 +1,143 @@
+<div class="page-body">
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">
+                Add Patient
+            </h1>
+            <p class="description">
+                Create A Patient Record By Entering Patient Information
+            </p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+    <!-- FORM WIZARD WITH VALIDATION START HERE-->
+    <script type="text/javascript">
+        jQuery(document).ready(function($)
+        {
+            $(".multi-select").multiSelect({
+                afterInit: function()
+                {
+                    // Add alternative scrollbar to list
+                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                },
+                afterSelect: function()
+                {
+                    // Update scrollbar size
+                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                }
+            });
+
+            $(".selectboxit").selectBoxIt().on('open', function()
+            {
+                // Adding Custom Scrollbar
+                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+            });
+        });
+
+    </script>
+    <form class="form-wizard validate" id="rootwizard" novalidate="" role="form">
+        <ul class="tabs">
+            <li ui-sref=".tab1">
+                <a data-toggle="tab" href="">
+                    Patient Information
+                    <span>
+                        1
+                    </span>
+                </a>
+            </li>
+            <li ui-sref=".tab2">
+                <a data-toggle="tab" href="">
+                    Location Information
+                    <span>
+                        2
+                    </span>
+                </a>
+            </li>
+            <li ui-sref=".tab3">
+                <a data-toggle="tab" href="">
+                    Insurance Information
+                    <span>
+                        3
+                    </span>
+                </a>
+            </li>
+            <li ui-sref=".tab4">
+                <a data-toggle="tab" href="">
+                    Authorization Info
+                    <span>
+                        4
+                    </span>
+                </a>
+            </li>
+            <li ui-sref=".tab5">
+                <a data-toggle="tab" href="">
+                    Insurance Subscriber Information
+                    <span>
+                        5
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <div class="progress-indicator">
+            <span>
+            </span>
+        </div>
+    </form>
+</div>
+    <!-- FORM WIZARD WITH VALIDATION END HERE-->
+<div ui-view></div>
+
+<script type="text/javascript">
+    // validate
+    customJqueryValidation();
+
+    jQuery(document).ready(function($) {
+        setTimeout(function() {
+            $(".fade-in-effect").addClass('in');
+        }, 1);
+
+
+//        // Validation
+//        $("#add_patient_tab_1_form").validate({
+//            rules: {FirstName: {required: true},
+//                DateofBirth: {required: true, ontimedate: true},
+//// NameSuffix: {required: true},
+//                LastName: {required: true},
+//// MiddleInitial: {required: true},
+//                Phone: {required: true, digits: true, rangelength: [10, 10]},
+//                StaffingCoordinator: {required: true},
+//                Care4CoordinatorContact: {required: true},
+//                NurseCaseManager: {required: true},
+//                CareCoordinator: {required: true},
+//            },
+//            messages: {FirstName: {required: 'Please enter First Name.'},
+//                DateofBirth: {required: 'Please enter Date of Birth.'},
+//                NameSuffix: {required: 'Please enter Name Suffix.'},
+//                LastName: {required: 'Please enter Last Name.'},
+//                MiddleInitial: {required: 'Please enter Middle Initial.'},
+//                Phone: {required: 'Please enter Phone Number.', rangelength: 'This field must be 10 digits'},
+//                StaffingCoordinator: {required: 'Please select Staffing Coordinator.'},
+//                CareCoordinator: {required: 'Please enter Care Coordinator or Emergency Contact Name.'},
+//                Care4CoordinatorContact: {required: 'Please enter Care Coordinator or Emergency Contact Phone Number or Email Address.'},
+//                NurseCaseManager: {required: 'Please select Nurse Case Manager.'},
+//            },
+//            errorPlacement: function(error, element) {
+//                element['0'].setCustomValidity(error);
+//                if (element.attr("name") == "DateofBirth") {
+//                    error.insertAfter($(element).parent());
+//                } else {
+//                    error.insertAfter(element);
+//                }
+//            },
+//            highlight: function(element) {
+//                $(element).closest('.form-group').addClass('validate-has-error');
+//            },
+//            unhighlight: function(element) {
+//                element.setCustomValidity('');
+//                $(element).closest('.form-group').removeClass('validate-has-error');
+//            },
+//        }); // validate
+
+    }); // ready
+</script>

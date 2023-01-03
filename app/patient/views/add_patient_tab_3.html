@@ -1,238 +1,151 @@
-<div class="page-body">
- <!--PAGE TITLE START -->
- <div class="page-title">
-  <div class="title-env">
-   <h1 class="title">
-    Add Patient
-   </h1>
-   <p class="description">
-    Create A Patient Record By Entering Patient Information
-   </p>
-  </div>
- </div>
- <!--PAGE TITLE END -->
- <!-- FORM WIZARD WITH VALIDATION START HERE-->
- <script type="text/javascript">
-  jQuery(document).ready(function($)
-				{
-					$(".multi-select").multiSelect({
-						afterInit: function()
-						{
-							// Add alternative scrollbar to list
-							this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-						},
-						afterSelect: function()
-						{
-							// Update scrollbar size
-							this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-						}
-					});
-					
-					$(".selectboxit").selectBoxIt().on('open', function()
-					{
-						// Adding Custom Scrollbar
-						$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-					});
-				});
- </script>
- <form class="form-wizard validate" id="rootwizard" role="forl">
-   <ul class="tabs">
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_1">
-      Patient Information
-      <span>
-       1
-      </span>
-     </a>
-    </li>
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_2">
-      Location Information
-      <span>
-       2
-      </span>
-     </a>
-    </li>
-    <li class="active">
-     <a data-toggle="tab" href="#/app/add_patient_tab_3">
-      Insurance Information
-      <span>
-       3
-      </span>
-     </a>
-    </li>
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_4">
-      Authorization Info
-      <span>
-       4
-      </span>
-     </a>
-    </li>
-    <li>
-     <a data-toggle="tab" href="#/app/add_patient_tab_5">
-      Insurance Subscriber Information
-      <span>
-       5
-      </span>
-     </a>
-    </li>
-   </ul>
-   <div class="progress-indicator">
-    <span>
-    </span>
-   </div>
-  </form>
- <div class="row">
-  <div class="col-sm-12">
-   <div class="panel panel-default">
-    <div class="panel-body">
-     <form class="form-horizontal" id="add_patient_tab_3_form" name="add_patient_tab_3_form" role="form">
-      <div class="row">
-       <div class="col-sm-12">
-        <button class="btn btn-info green_bt pull-right" type="submit">
-         Save Changes
-        </button>
-        <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
-         Reset To Default
-        </button>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label">
-        Insurance Provider
-       </label>
-       <div class="col-sm-9">
-        <script type="text/javascript">
-         // jQuery(document).ready(function($)
-									// 	{
-									// 		$("#sboxit-1").selectBoxIt().on('open', function()
-									// 		{
-									// 			// Adding Custom Scrollbar
-									// 			$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-									// 		});
-									// 	});
-        </script>
-        <select class="form-control" id="sboxit-1" name="InsuranceProvider">
-         <option value="">
-          Select Insurance
-         </option>
-         <option value="1">
-          Company Name
-         </option>
-        </select>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-41">
-        Plan Name
-       </label>
-       <div class="col-sm-9">
-        <input class="form-control" id="field-41" name="PlanName" type="text">
-        </input>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-42">
-        Policy Number
-       </label>
-       <div class="col-sm-9">
-        <input class="form-control" id="field-42" name="PolicyNumber" type="text">
-        </input>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-43">
-        Insurance ID
-       </label>
-       <div class="col-sm-9">
-        <input class="form-control" id="field-43" name="InsuranceID" type="text">
-        </input>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label" for="field-44">
-        MRN Number
-       </label>
-       <div class="col-sm-9">
-        <input class="form-control" id="field-44" name="MRNNumber" type="text">
-        </input>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-      <div class="form-group">
-       <label class="col-sm-3 control-label">
-        Is Patient The Subscriber
-       </label>
-       <div class="col-sm-9">
-        <div class="input-group">
-         <label class="cbr-inline">
-          <input checked="" class="cbr" name="radio-2" type="radio">
-           Yes
-          </input>
-         </label>
-         <label class="cbr-inline">
-          <input class="cbr" name="radio-2" type="radio">
-           No
-          </input>
-         </label>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" id="add_patient_tab_3_form" name="add_patient_tab_3_form" role="form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" type="submit">
+                                Save Changes
+                            </button>
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                Reset To Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Insurance Provider
+                        </label>
+                        <div class="col-sm-9">
+                            <script type="text/javascript">
+                                // jQuery(document).ready(function($)
+                                // 	{
+                                // 		$("#sboxit-1").selectBoxIt().on('open', function()
+                                // 		{
+                                // 			// Adding Custom Scrollbar
+                                // 			$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                // 		});
+                                // 	});
+                            </script>
+                            <select class="form-control" id="sboxit-1" name="InsuranceProvider">
+                                <option value="">
+                                    Select Insurance
+                                </option>
+                                <option value="1">
+                                    Company Name
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-41">
+                            Plan Name
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-41" name="PlanName" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-42">
+                            Policy Number
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-42" name="PolicyNumber" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-43">
+                            Insurance ID
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-43" name="InsuranceID" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-44">
+                            MRN Number
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="field-44" name="MRNNumber" type="text">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Is Patient The Subscriber
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input checked="" class="cbr" name="radio-2" type="radio">
+                                    Yes
+                                    </input>
+                                </label>
+                                <label class="cbr-inline">
+                                    <input class="cbr" name="radio-2" type="radio">
+                                    No
+                                    </input>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                                Next »
+                            </button>
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button">
+                                « Previous
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-       </div>
-      </div>
-      <div class="form-group-separator">
-      </div>
-     <div class="row">
-      <div class="col-sm-12">
-       <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
-        Next »
-       </button>
-       <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button">
-        « Previous
-       </button>
-      </div>
-     </div>
-     </form>
     </div>
-   </div>
-  </div>
- </div>
- <!-- FORM WIZARD WITH VALIDATION END HERE-->
 </div>
+<!-- FORM WIZARD WITH VALIDATION END HERE-->
 <script type="text/javascript">
-   // validate
-   customJqueryValidation();
+    // validate
+    customJqueryValidation();
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
-         }, 1);
+        }, 1);
 
 
         // Validation
         $("#add_patient_tab_3_form").validate({
- rules: {//PlanName: {required: true},
+            rules: {//PlanName: {required: true},
 // PolicyNumber: {required: true},
-InsuranceProvider: {required: true},
+                InsuranceProvider: {required: true},
 // MRNNumber: {required: true},
 // InsuranceID: {required: true},
-},
-
-messages: {PlanName: {required: 'Please enter Plan Name.'},
-PolicyNumber: {required: 'Please enter Policy Number.'},
-InsuranceProvider: {required: 'Please select Insurance Provider.'},
-MRNNumber: {required: 'Please enter MRN Number.'},
-InsuranceID: {required: 'Please enter Insurance ID.'},
-},
-});
- });
+            },
+            messages: {PlanName: {required: 'Please enter Plan Name.'},
+                PolicyNumber: {required: 'Please enter Policy Number.'},
+                InsuranceProvider: {required: 'Please select Insurance Provider.'},
+                MRNNumber: {required: 'Please enter MRN Number.'},
+                InsuranceID: {required: 'Please enter Insurance ID.'},
+            },
+        });
+    });
 </script>
