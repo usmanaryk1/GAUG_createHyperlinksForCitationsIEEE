@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form"  onended="onFormSubmit()" ng-submit="addEmployee.saveEmployee()">
                     <div class="row">
                         <div class="col-sm-12 pull-right">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -66,7 +66,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="I9EligibilityExpirationDate" type="text" ng-model="addEmployee.employee.I9EligibilityExpirationDate"
-                                       onblur="setValidationMessage('I9EligibilityExpirationDate','I-9 Eligibility Expiration Date')" required="false"   data-validate="" data-message-required="uhy" itemid="I-9 Eligibility Expiration Date"/>
+                                       data-validate="required" data-message-required="Please enter I-9 Eligibility Expiration Date."/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -119,7 +119,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="PhysicalExpirationDate" type="text"
-                                       onblur="setValidationMessage('PhysicalExpirationDate','Physical Expiration Date')" required="false" itemid="Physical Expiration Date"/>
+                                       onblur="setValidationMessage(this)" itemid="Physical Expiration Date"/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -157,7 +157,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="TBTestingExpirationDate" type="text" itemid="TB Testing Expiration Date"
-                                       onblur="setValidationMessage('TBTestingExpirationDate','TB Testing Expiration Date')" required="false"/>
+                                       onblur="setValidationMessage(this)" />
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -295,8 +295,15 @@
     }
 </script>
 <script type="text/javascript">
-    function setValidationMessage(elementName, itemId) {
-        $("#" + elementName + "-error").text('Please enter ' + itemId + '.');
+    function setValidationMessage(element) {
+        var elementName = element.getAttribute("name") + "-error";
+        var itemId = element.getAttribute("itemid");
+        $("#" + elementName).text('Please enter ' + itemId + '.');
+    }
+    function onFormSubmit() {
+        alert(1)
+        $("#TBTestingExpirationDate-error").text('Please enter TB Testing Expiration Date.');
+        $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
     }
     // validate
     customJqueryValidation();
