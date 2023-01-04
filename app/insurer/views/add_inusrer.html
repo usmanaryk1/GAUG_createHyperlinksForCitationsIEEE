@@ -269,11 +269,18 @@
                             <label class="col-sm-3 control-label" for="rate">
                                Rate
                             </label>
+                            <div class="col-sm-3">
+                              <input class="form-control" name="radioRate" type="text" > 
+                                       
+                            </div>
+                            <div class="col-sm-1">
+                                <label class="control-label" >Per</label>
+                            </div>
                             <div class="col-sm-5">
                             <div class="input-group">
                                     <label class="cbr-inline">
                                         <input value="unit" name="radioRate" type="radio" ng-model="careTypeModel.rate" >
-                                        Per O Unit
+                                        O Unit
                                     </label>
                                     <label class="cbr-inline">
                                         <input name="radioRate" value="visit" type="radio" ng-model="careTypeModel.rate">
