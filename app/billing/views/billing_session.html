@@ -108,7 +108,7 @@
                             <br/>
                             Insurance Provider: {{billingSession.insuranceProvider}}
                             <br/>
-                            <span ng-if="billingSession.sessionStartDate && billingSession.sessionEndDate">Pay Period: {{billingSession.sessionStartDate|date :dateFormat}} - {{billingSession.sessionEndDate|date :dateFormat}}</span>
+                            <span ng-if="billingSession.sessionStartDate && billingSession.sessionEndDate">Date Range: {{billingSession.sessionStartDate|date :dateFormat}} - {{billingSession.sessionEndDate|date :dateFormat}}</span>
                         </div>
 
                     </div>
@@ -128,9 +128,9 @@
                                         <th nowrap class='nosorting text-center' ng-if="!billingSession.processdMode">
                                             <span class="">View Claim</span>
                                         </th>
-                                        <th nowrap class='nosorting text-center' ng-if="billingSession.processdMode">
+<!--                                        <th nowrap class='nosorting text-center' ng-if="billingSession.processdMode">
                                             <span class="">Download EDI</span>
-                                        </th>
+                                        </th>-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -147,11 +147,11 @@
                                                 <a class="btn icon-left fa fa-file-text-o edit_button" tooltip="View Claim" tooltip-append-to-body="true" ng-click="billingSession.openClaim1500(session);"><span class="ed_b"></span></a>
                                             </div>
                                         </td>
-                                        <td class="text-center" ng-if="billingSession.processdMode">
+<!--                                        <td class="text-center" ng-if="billingSession.processdMode">
                                             <div class="center">
                                                 <a class="btn icon-left fa fa-download download_bt" tooltip="Download EDI" tooltip-append-to-body="true" ng-href="{{billingSession.baseUrl}}billing/claim/{{session.id}}/edi/download"><span class="ed_b"></span></a>
                                             </div>
-                                        </td>
+                                        </td>-->
                                     </tr>
                                 </tbody>
                             </table>

@@ -1144,7 +1144,7 @@
             $formService.setRadioValues('patientConditionRelatedEM', ctrl.patient.patientConditionRelatedEM);
             $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
             $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
-//            $formService.resetRadios();
+            $formService.resetRadios();
         };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
