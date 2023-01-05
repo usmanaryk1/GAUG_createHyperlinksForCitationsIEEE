@@ -2,7 +2,7 @@
     function PayrollSettingsCtrl($rootScope, $scope, $http, $modal, $timeout, PayrollDAO, $filter, Page) {
         var ctrl = this;
         Page.setTitle("Payroll Settings");
-        ctrl.payrollObj = {companyCode: ontimetest.company_code};
+        ctrl.payrollObj = {companyCode: ontime_data.company_code};
         ctrl.holidays = [{name: 'Christmas'}, {name: 'Columbus Day'}, {name: 'Independence Day'}, {name: 'Labor'}, {name: 'Memorial Day'}, {name: 'MLK Birthday'}, {name: 'New Year\'s Day'}, {name: 'Thanks giving Day'}, {name: 'Veterans Day'}, {name: 'Washington\'s Birthday'}];
         ctrl.unselecteModalOpen = false;
         ctrl.retrievedHolidaysMap = {};
@@ -12,7 +12,7 @@
             PayrollDAO.getSettings().then(function (res) {
                 if (res != null) {
                     ctrl.payrollObj = res;
-                    ctrl.payrollObj.companyCode = ontimetest.company_code;
+                    ctrl.payrollObj.companyCode = ontime_data.company_code;
                     angular.forEach(res.holidays, function (holiday) {
                         ctrl.retrievedHolidaysMap[holiday.name] = holiday;
                     });

@@ -39,8 +39,8 @@
         }, function (value) {
             $formService.resetRadios();
         });
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.nextTab;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
@@ -95,7 +95,7 @@
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontimetest.defaultState);
+                $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
             Page.setTitle("Update User");
@@ -161,8 +161,8 @@
                                     reqParam = 'updateuser';
                                     updateUser(reqParam, employeeToSave);
                                 } else {
-                                    employeeToSave.orgCode = ontimetest.company_code;
-                                    ctrl.user.employee.orgCode = ontimetest.company_code;
+                                    employeeToSave.orgCode = ontime_data.company_code;
+                                    ctrl.user.employee.orgCode = ontime_data.company_code;
                                     reqParam = 'saveuser';
                                     updateUser(reqParam, employeeToSave);
                                 }
@@ -186,7 +186,7 @@
             }
             var userToSave = angular.copy(ctrl.user);
             userToSave.employee = employeeToSave;
-            userToSave.orgCode = ontimetest.company_code;
+            userToSave.orgCode = ontime_data.company_code;
             delete userToSave.bindToExisting;
             if (ctrl.user.bindToExisting == 'w') {                
                 userToSave.withoutEmployee = 'y';
@@ -300,14 +300,14 @@
         };
 
         ctrl.profileUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "c",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker

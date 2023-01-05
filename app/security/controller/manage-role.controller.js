@@ -2,7 +2,7 @@
     function ManageRoleCtrl($timeout, Page, PositionDAO) {
         var ctrl = this;
         Page.setTitle("Manage Role");
-        ctrl.roleObj = {companyCode: ontimetest.company_code};
+        ctrl.roleObj = {companyCode: ontime_data.company_code};
         ctrl.accessList = [{name: 'Employee'}, {name: 'Patient'}, {name: 'Timesheet'}, {name: 'Billing'}, {name: 'Payroll'}];
         ctrl.saveSettings = saveSettings;
         $timeout(function () {

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var UserDAO = function (resource) {
-        var api = resource(ontimetest.weburl + 'admin/user/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontime_data.weburl + 'admin/user/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var CompanyDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'companies/:action/:subAction/:subAction1/:companyCode', {}, {
+        var api = resource(ontime_data.weburl + 'companies/:action/:subAction/:subAction1/:companyCode', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,

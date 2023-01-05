@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var PositionDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'positions/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontime_data.weburl + 'positions/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 params: {

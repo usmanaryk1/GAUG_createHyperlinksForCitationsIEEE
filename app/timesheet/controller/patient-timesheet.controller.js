@@ -2,8 +2,8 @@
     function PatientTimeSheetCtrl(Page, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location, $filter, CareTypeDAO) {
         var ctrl = this;
         Page.setTitle("Patient Timesheet");
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.criteriaSelected = false;
         ctrl.viewRecords = 10;
         ctrl.nursingCareMap = {};
@@ -11,7 +11,7 @@
         ctrl.insuranceProviderMap = {};
         ctrl.patientList = [];
         ctrl.patientIdMap = {};
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
@@ -20,7 +20,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
@@ -146,7 +146,7 @@
 
                     }
                 }); // showLoadingBar
-//                ctrl.timesheetList = ontimetest.employeeTimesheet;
+//                ctrl.timesheetList = ontime_data.employeeTimesheet;
             }).then(function () {
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
@@ -178,7 +178,7 @@
 
             }).catch(function (data, status) {
                 $rootScope.unmaskLoading();
-//                ctrl.patientList = ontimetest.patients;
+//                ctrl.patientList = ontime_data.patients;
             });
         }
         ;
@@ -289,8 +289,8 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.utModal.companyCode = ontimetest.company_code;
-            $rootScope.utModal.baseUrl = ontimetest.weburl;
+            $rootScope.utModal.companyCode = ontime_data.company_code;
+            $rootScope.utModal.baseUrl = ontime_data.weburl;
             $rootScope.utModal.docFileObj = {};
             $rootScope.utModal.cancel = function () {
                 $rootScope.utModal.close();
@@ -310,14 +310,14 @@
                 });
             };
             $rootScope.utModal.documentUploadFile = {
-                target: ontimetest.weburl + 'file/upload',
+                target: ontime_data.weburl + 'file/upload',
                 chunkSize: 1024 * 1024 * 1024,
                 testChunks: false,
                 fileParameterName: "fileUpload",
                 singleFile: true,
                 headers: {
                     type: "u",
-                    company_code: ontimetest.company_code
+                    company_code: ontime_data.company_code
                 }
             };
             //When file is selected from browser file picker

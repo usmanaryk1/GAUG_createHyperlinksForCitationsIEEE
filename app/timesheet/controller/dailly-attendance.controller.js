@@ -3,8 +3,8 @@
         var ctrl = this;
         Page.setTitle("Daily Attendance");
         ctrl.criteriaSelected = false;
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
@@ -16,7 +16,7 @@
                 });
             }
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
@@ -25,7 +25,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
@@ -121,7 +121,7 @@
         retrieveEmployeesData();
         function retrieveEmployeesData() {
             $rootScope.maskLoading();
-            EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR + "," + ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+            EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR + "," + ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
                 ctrl.employeeList = res;
                 var params = localStorage.getItem('dailyAttendanceSearchParams');
                 if (params !== null) {
@@ -137,7 +137,7 @@
             }).catch(function (data, status) {
                 toastr.error("Could not load Coordinators");
                 $rootScope.unmaskLoading();
-//                ctrl.employeeList = ontimetest.employees;
+//                ctrl.employeeList = ontime_data.employees;
             });
         }
 
@@ -253,8 +253,8 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.utModal.companyCode = ontimetest.company_code;
-            $rootScope.utModal.baseUrl = ontimetest.weburl;
+            $rootScope.utModal.companyCode = ontime_data.company_code;
+            $rootScope.utModal.baseUrl = ontime_data.weburl;
             $rootScope.utModal.docFileObj = {};
             $rootScope.utModal.cancel = function () {
                 $rootScope.utModal.close();
@@ -274,14 +274,14 @@
                 });
             };
             $rootScope.utModal.documentUploadFile = {
-                target: ontimetest.weburl + 'file/upload',
+                target: ontime_data.weburl + 'file/upload',
                 chunkSize: 1024 * 1024 * 1024,
                 testChunks: false,
                 fileParameterName: "fileUpload",
                 singleFile: true,
                 headers: {
                     type: "u",
-                    company_code: ontimetest.company_code
+                    company_code: ontime_data.company_code
                 }
             };
             //When file is selected from browser file picker

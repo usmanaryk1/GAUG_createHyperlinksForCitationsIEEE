@@ -45,13 +45,13 @@ angular.module('xenon.controllers', []).
                 }
             };
 
-            $rootScope.serverPath = ontimetest.weburl;
+            $rootScope.serverPath = ontime_data.weburl;
             $rootScope.validNumber = function (number) {
                 return !isNaN(number);
             };
             $rootScope.languages = {"English": "English", "Creole": "Creole", "Spanish": "Spanish", "Russian": "Russian", "French": "French", "Hindi": "Hindi", "Bengali": "Bengali", "Mandarin": "Mandarin", "Korean": "Korean", "Arabic": "Arabic", "Farsi": "Farsi", "Urdu": "Urdu"};
-            $rootScope.amazonPublicUrl = ontimetest.amazonPublicUrl;
-            $rootScope.amazonSignatureUrl = ontimetest.amazonSignatureUrl;
+            $rootScope.amazonPublicUrl = ontime_data.amazonPublicUrl;
+            $rootScope.amazonSignatureUrl = ontime_data.amazonSignatureUrl;
             $rootScope.todayDate = new Date();
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;

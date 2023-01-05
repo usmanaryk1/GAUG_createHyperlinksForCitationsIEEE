@@ -11,7 +11,7 @@
         ctrl.patientMandatory = true;
         ctrl.tasksErrorMsg = null;
         ctrl.officeStaffIds = [];
-        PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+        PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
             if (res && res.length > 0) {
                 angular.forEach(res, function (position) {
                     ctrl.officeStaffIds.push(position.id)
@@ -86,7 +86,7 @@
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontimetest.defaultState);
+                $state.transitionTo(ontime_data.defaultState);
             }
             if ($state.current.name.indexOf('patient') > 0 || $state.current.name.indexOf('employee') > 0 || $state.current.name.indexOf('schedule') > 0) {
                 //nothing to do
@@ -226,7 +226,7 @@
             EmployeeDAO.retrieveByPosition({}).then(function (res) {
                 ctrl.employeeList = res;
             }).catch(function (data, status) {
-                ctrl.employeeList = ontimetest.employees;
+//                ctrl.employeeList = ontime_data.employees;
             }).then(function () {
                 ctrl.employeeListLoaded = true;
                 if (ctrl.patientListLoaded) {
@@ -242,7 +242,7 @@
             PatientDAO.retrieveForSelect({}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
-                ctrl.patientList = ontimetest.patients;
+//                ctrl.patientList = ontime_data.patients;
             }).then(function () {
                 ctrl.patientListLoaded = true;
                 if (ctrl.employeeListLoaded) {
@@ -266,7 +266,7 @@
 //                hours = hours - 12;
                 date.setHours(hours, minutes, seconds);
             }
-            return $filter('date')(date, ontimetest.date_time_format);
+            return $filter('date')(date, ontime_data.date_time_format);
         };
 
 //        var verifyTimeValidation=function(){

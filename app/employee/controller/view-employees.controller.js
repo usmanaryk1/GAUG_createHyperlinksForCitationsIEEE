@@ -5,8 +5,8 @@
         ctrl.datatableObj = {};
         $rootScope.selectEmployeeModel = {};
         Page.setTitle("View Employees");
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         $rootScope.positions = {};
         PositionDAO.retrieveAll({}).then(function (res) {
             if (res && res.length > 0) {
@@ -19,7 +19,7 @@
         ctrl.employeeList = [];
 
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
-            $state.transitionTo(ontimetest.defaultState);
+            $state.transitionTo(ontime_data.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
         }
@@ -87,7 +87,7 @@
 
                     }
                 }); // showLoadingBar
-//                ctrl.employeeList = ontimetest.employees;
+//                ctrl.employeeList = ontime_data.employees;
                 console.log('Error in retrieving data')
             }).then(function () {
                 $rootScope.unmaskLoading();

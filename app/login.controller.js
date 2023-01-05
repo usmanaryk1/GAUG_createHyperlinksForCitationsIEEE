@@ -24,7 +24,7 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
             };
             $rootScope.maskLoading();
             $http({
-                url: ontimetest.weburl + "login",
+                url: ontime_data.weburl + "login",
                 method: 'POST',
                 data: {
                     do_login: true,
@@ -62,7 +62,7 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                                 }
                             }
 //                            window.location.hash = '#/app/dashboard';
-                            $state.transitionTo(ontimetest.homepage);
+                            $state.transitionTo(ontime_data.homepage);
                             Page.setTitle("Welcome");
                             $rootScope.startIdle();
                             $rootScope.unmaskLoading();
