@@ -257,113 +257,113 @@
 </div>
 <script type="text/ng-template" id="modal-5">
     <form class="validate form-horizontal" name="careTypeForm" id="care_type_form" >
-	<div class="modal-header">
-		<button type="button" class="close" ng-click="careTypeModel.cancel();" aria-hidden="true">&times;</button>
-		<h4 class="modal-title"></h4>
-	</div>
-	
-	<div class="modal-body">
-	
-		<div class="row">
-                 <div class="form-group">
-                            <label class="col-sm-3 control-label" for="rate">
-                               Rate
-                            </label>
-                            <div class="col-sm-3">
-                              <input class="form-control" name="radioRate" type="text" > 
-                                       
-                            </div>
-                            <div class="col-sm-1">
-                                <label class="control-label" >Per</label>
-                            </div>
-                            <div class="col-sm-5">
-                            <div class="input-group">
-                                    <label class="cbr-inline">
-                                        <input value="unit" name="radioRate" type="radio" ng-model="careTypeModel.rate" >
-                                        O Unit
-                                    </label>
-                                    <label class="cbr-inline">
-                                        <input name="radioRate" value="visit" type="radio" ng-model="careTypeModel.rate">
-                                        O Visit
-                                    </label>
-                                    <label class="cbr-inline">
-                                        <input name="radioRate" value="day" type="radio" ng-model="careTypeModel.rate">
-                                      O Day
-                                    </label>
-                                </div>
-                      </div>
-                 </div>
-                </div>
-                <div class="row">
-                 <div class="form-group">
-                            <label class="col-sm-3 control-label" for="billingCode">
-                               Billing Code 
-                            </label>
-                            <div class="col-sm-5">
-                                <input class="form-control" id="billingCode" name="billingCode" type="text" data-validate="required"  data-message-required="Please enter Billing Code.">
-                            </div>
-                            <div class="col-sm-4">
-                                
-                            </div>
-                 </div>
-                </div>
-                <div class="row">
-                 <div class="form-group">
-                            <label class="col-sm-3 control-label" for="modifires1">
-                               Modifiers
-                            </label>
-                            <div class="col-sm-9">
-                                <div class="row">
-                                    <div class="col-sm-1">
-                                        <span class="form-control-static">1</span>
-                                    </div>
-                                    <div class="col-sm-5">
-                                         <input class="form-control" id="modifires1" name="modifires1" type="text" />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <span class="form-control-static">2</span>
-                                    </div>
-                                    <div class="col-sm-5">
-                                         <input class="form-control" id="modifires2" name="modifires2" type="text" />
-                                    </div>
-                                </div>
-                            </div>
-                            
-                 </div>
-                 <div class="form-group">
-                            <label class="col-sm-3 control-label" for="modifires1">
-                               
-                            </label>
-                            <div class="col-sm-9">
-                                 <div class="row">
-                                    <div class="col-sm-1">
-                                        <span class="form-control-static">3</span>
-                                    </div>
-                                    <div class="col-sm-5">
-                                         <input class="form-control" id="modifires3" name="modifires3" type="text" />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <span class="form-control-static">4</span>
-                                    </div>
-                                    <div class="col-sm-5">
-                                         <input class="form-control" id="modifires4" name="modifires4" type="text" />
-                                    </div>
-                                </div>
-                               
-                            </div>
-                            
-                 </div>
-                </div>
-			
-	
-		
-		
-	</div>
-	
-	<div class="modal-footer">
-		<button type="button" class="btn btn-white" ng-click="careTypeModel.cancel();">Close</button>
-		<button type="submit" class="btn btn-info" ng-click="careTypeModel.save();">Save changes</button>
-	</div>
-</form>
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="careTypeModel.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Enter Billing Information</h4>
+    </div>
+
+    <div class="modal-body">
+
+    <div class="row">
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="rate">
+    Rate
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" name="radioRate" type="text" > 
+
+    </div>
+    <div class="col-sm-1">
+    <label class="control-label" >Per</label>
+    </div>
+    <div class="col-sm-5">
+    <div class="input-group">
+    <label class="cbr-inline">
+    <input value="unit" name="radioRate" type="radio" ng-model="careTypeModel.rate" >
+    Unit
+    </label>
+    <label class="cbr-inline">
+    <input name="radioRate" value="visit" type="radio" ng-model="careTypeModel.rate">
+    Visit
+    </label>
+    <label class="cbr-inline">
+    <input name="radioRate" value="day" type="radio" ng-model="careTypeModel.rate">
+    Day
+    </label>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="billingCode">
+    Billing Code 
+    </label>
+    <div class="col-sm-5">
+    <input class="form-control" id="billingCode" name="billingCode" type="text" data-validate="required"  data-message-required="Please enter Billing Code.">
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="modifires1">
+    Modifiers
+    </label>
+    <div class="col-sm-9">
+    <div class="row">
+    <div class="col-sm-1">
+    <span class="form-control-static">1</span>
+    </div>
+    <div class="col-sm-5">
+    <input class="form-control" id="modifires1" name="modifires1" type="text" />
+    </div>
+    <div class="col-sm-1">
+    <span class="form-control-static">2</span>
+    </div>
+    <div class="col-sm-5">
+    <input class="form-control" id="modifires2" name="modifires2" type="text" />
+    </div>
+    </div>
+    </div>
+
+    </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="modifires1">
+
+    </label>
+    <div class="col-sm-9">
+    <div class="row">
+    <div class="col-sm-1">
+    <span class="form-control-static">3</span>
+    </div>
+    <div class="col-sm-5">
+    <input class="form-control" id="modifires3" name="modifires3" type="text" />
+    </div>
+    <div class="col-sm-1">
+    <span class="form-control-static">4</span>
+    </div>
+    <div class="col-sm-5">
+    <input class="form-control" id="modifires4" name="modifires4" type="text" />
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="careTypeModel.cancel();">Close</button>
+    <button type="submit" class="btn btn-info" ng-click="careTypeModel.save();">Save changes</button>
+    </div>
+    </form>
 </script>
 
