@@ -17,7 +17,8 @@ var app = angular.module('xenon-app', [
     'flow',
     'ngIdle',
     'angularUtils.directives.dirPagination',
-    'toggle-switch'
+    'toggle-switch',
+    'angular.chips'
 ]);
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -680,6 +681,26 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             state('admin.dashboard', {
                 url: '/dashboard',
                 templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard')
+            }).
+            state('admin.position-list', {
+                url: '/position-list',
+                templateUrl: appHelper.viewTemplatePath('position', 'view_position'),
+                controller: 'ViewPositionsCtrl as viewPosition'
+            }).            
+            state('admin.caretype-list', {
+                url: '/caretype-list',
+                templateUrl: appHelper.viewTemplatePath('caretype', 'view_caretype'),
+                controller: 'ViewCareTypesCtrl as viewCareType'
+            }).
+            state('admin.language-list', {
+                url: '/language-list',
+                templateUrl: appHelper.viewTemplatePath('language', 'view_language'),
+                controller: 'ViewLanguagesCtrl as viewLanguage'
+            }).
+            state('admin.task-list', {
+                url: '/task-list',
+                templateUrl: appHelper.viewTemplatePath('task', 'view_task'),
+                controller: 'ViewTasksCtrl as viewTask'
             }).
             state('admin.user', {
                 url: '/user/:id',
