@@ -1,3 +1,245 @@
-<div>
+<!--<div>
     Welcome {{currentUser.userName}}
+</div>-->
+<div class="row">
+
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-counter" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+            <div class="xe-icon">
+                <i class="linecons-cloud"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">0.0%</strong>
+                <span>Compliance Tracker</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-3">
+        <div class="xe-widget xe-counter xe-counter-blue" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+            <div class="xe-icon">
+                <i class="linecons-user"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">1k</strong>
+                <span>Total Active Patients</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-counter xe-counter-info"  data-count=".num" data-from="0" data-to="57" data-prefix="-," data-suffix="%" data-duration="5" data-easing="true" data-delay="1">
+            <div class="xe-icon">
+                <i class="linecons-discharge"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">-,0%</strong>
+                <span>Discharged Patients</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-3">
+        <div class="xe-widget xe-counter xe-counter-red" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+            <div class="xe-icon">
+                <i class="linecons-user"></i>
+            </div>
+            <div class="xe-label">
+                <strong class="num">1k</strong>
+                <span>Open Cases</span>
+            </div>
+        </div>
+    </div>
+    
 </div>
+<div class="row">
+
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-todo-list xe-todo-list-turquoise">
+            <div class="xe-header">
+                <div class="xe-icon">
+                    <i class="fa-file-text-o"></i>
+                </div>
+                <div class="xe-label">
+                    <span>to do list</span>
+                    <strong>Tasks</strong>
+                </div>
+            </div>
+            <div class="xe-body">
+
+                <ul class="list-unstyled">
+                    <li class="done">
+                        <label>
+                            <input type="checkbox" class="cbr cbr-turquoise" checked />
+                            <span>Web Design</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="checkbox" class="cbr cbr-turquoise" />
+                            <span>Slicing</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="checkbox" class="cbr cbr-turquoise" />
+                            <span>WooCommerce</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="checkbox" class="cbr cbr-turquoise" />
+                            <span>Programming</span>
+                        </label>
+                    </li>
+                    
+                </ul>
+
+            </div>
+            <div class="xe-footer">
+                <input type="text" class="form-control" placeholder="Add task..." />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-9">
+
+        <div class="xe-widget xe-weather">
+            <div class="xe-background xe-background-animated">
+                <img src="assets/images/clouds.png" />
+            </div>
+
+            <div class="xe-current-day">
+                <div class="xe-now">
+                    <div class="xe-temperature">
+                        <div class="xe-icon">
+                            <i class="meteocons-cloud-moon"></i>
+                        </div>
+                        <div class="xe-label">
+                            Now
+                            <strong>21&deg;</strong>
+                        </div>
+                    </div>
+                    <div class="xe-location">
+                        <h4>San Francisco, USA</h4>
+                        <time>Today, 06 December</time>
+                    </div>
+                </div>
+
+                <div class="xe-forecast">
+                    <ul>
+                        <li>
+                            <div class="xe-forecast-entry">
+                                <time>11:00</time>
+                                <div class="xe-icon">
+                                    <i class="meteocons-sunrise"></i>
+                                </div>
+                                <strong class="xe-temp">12&deg;</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="xe-forecast-entry">
+                                <time>12:00</time>
+                                <div class="xe-icon">
+                                    <i class="meteocons-clouds-flash"></i>
+                                </div>
+                                <strong class="xe-temp">13&deg;</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="xe-forecast-entry">
+                                <time>13:00</time>
+                                <div class="xe-icon">
+                                    <i class="meteocons-cloud-moon-inv"></i>
+                                </div>
+                                <strong class="xe-temp">16&deg;</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="xe-forecast-entry">
+                                <time>14:00</time>
+                                <div class="xe-icon">
+                                    <i class="meteocons-eclipse"></i>
+                                </div>
+                                <strong class="xe-temp">19&deg;</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="xe-forecast-entry">
+                                <time>15:00</time>
+                                <div class="xe-icon">
+                                    <i class="meteocons-rain"></i>
+                                </div>
+                                <strong class="xe-temp">21&deg;</strong>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="xe-forecast-entry">
+                                <time>16:00</time>
+                                <div class="xe-icon">
+                                    <i class="meteocons-cloud-sun"></i>
+                                </div>
+                                <strong class="xe-temp">25&deg;</strong>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="xe-weekdays">
+                <ul class="list-unstyled">
+                    <li>
+                        <div class="xe-weekday-forecast">
+                            <div class="xe-temp">21&deg;</div>
+                            <div class="xe-day">Monday</div>
+                            <div class="xe-icon">
+                                <i class="meteocons-windy-inv"></i>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="xe-weekday-forecast">
+                            <div class="xe-temp">23&deg;</div>
+                            <div class="xe-day">Tuesday</div>
+                            <div class="xe-icon">
+                                <i class="meteocons-sun"></i>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="xe-weekday-forecast">
+                            <div class="xe-temp">19&deg;</div>
+                            <div class="xe-day">Wednesday</div>
+                            <div class="xe-icon">
+                                <i class="meteocons-na"></i>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="xe-weekday-forecast">
+                            <div class="xe-temp">18&deg;</div>
+                            <div class="xe-day">Thursday</div>
+                            <div class="xe-icon">
+                                <i class="meteocons-windy"></i>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="xe-weekday-forecast">
+                            <div class="xe-temp">20&deg;</div>
+                            <div class="xe-day">Friday</div>
+                            <div class="xe-icon">
+                                <i class="meteocons-sun"></i>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>

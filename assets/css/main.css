@@ -35,3 +35,9 @@ chips {
 
 .chip-in-focus {
   border-bottom: 1px solid #106cc8; }
+
+.linecons-discharge {
+    font-size: 14px !important;
+    word-break: normal;
+    text-align: left !important;
+}

@@ -98,3 +98,4 @@
 .linecons-diamond:before { content: '\e82d'; } /* '' */
 .linecons-t-shirt:before { content: '\e82e'; } /* '' */
 .linecons-wallet:before { content: '\e82f'; } /* '' */
+.linecons-discharge:before { content: '\00a0\00a0\00a0 D/C'; } /* 'D/C' */
