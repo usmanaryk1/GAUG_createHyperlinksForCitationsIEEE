@@ -455,7 +455,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // payroll_settings
             state('app.payroll_settings', {
                 url: '/payroll_settings',
-                templateUrl: appHelper.templatePath('payroll_settings'),
+                templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_settings'),
+                controller: 'PayrollSettingsCtrl as payrollSet',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
