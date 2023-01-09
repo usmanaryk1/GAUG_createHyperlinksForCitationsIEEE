@@ -41,3 +41,6 @@ chips {
     word-break: normal;
     text-align: left !important;
 }
+#taskList .ps-scrollbar-y{
+    background-color: white;
+}

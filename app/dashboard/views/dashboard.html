@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 <div class="row">
 
@@ -69,38 +69,17 @@
                 </div>
             </div>
             <div class="xe-body">
-
-                <ul class="list-unstyled">
-                    <li class="done">
+                <ul class="list-unstyled" id="taskList" style="height:100px;position:relative" >
+                    <li ng-repeat="task in dashboard.taskList track by $index">
                         <label>
-                            <input type="checkbox" class="cbr cbr-turquoise" checked />
-                            <span>Web Design</span>
+                            <input type="checkbox" ng-model="taskValue" class="cbr cbr-turquoise" ng-change="dashboard.taskMarked($index);taskValue=null"/>
+                            <span class="form-control-static">{{task}}</span>
                         </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="checkbox" class="cbr cbr-turquoise" />
-                            <span>Slicing</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="checkbox" class="cbr cbr-turquoise" />
-                            <span>WooCommerce</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="checkbox" class="cbr cbr-turquoise" />
-                            <span>Programming</span>
-                        </label>
-                    </li>
-                    
+                    </li>                    
                 </ul>
-
             </div>
             <div class="xe-footer">
-                <input type="text" class="form-control" placeholder="Add task..." />
+                <input type="text" ng-model="dashboard.taskName" ng-keyup="$event.keyCode == 13 ? dashboard.addTask() : null" class="form-control" placeholder="Add task..." />
             </div>
         </div>
 
