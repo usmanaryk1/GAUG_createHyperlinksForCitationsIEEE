@@ -145,35 +145,43 @@ angular.module('xenon.directives', []).
 
             return {
                 restrict: 'EAC',
+                scope: {
+                    to: '='
+                },
                 link: function (scope, el, attrs)
                 {
-                    var $el = angular.element(el),
-                            sm = scrollMonitor.create(el);
+                    scope.$watch("to", function (value) {
+                        if(value!=null){
 
-                    sm.fullyEnterViewport(function ()
-                    {
-                        var opts = {
-                            useEasing: attrDefault($el, 'easing', true),
-                            useGrouping: attrDefault($el, 'grouping', true),
-                            separator: attrDefault($el, 'separator', ','),
-                            decimal: attrDefault($el, 'decimal', '.'),
-                            prefix: attrDefault($el, 'prefix', ''),
-                            suffix: attrDefault($el, 'suffix', ''),
-                        },
-                                $count = attrDefault($el, 'count', 'this') == 'this' ? $el : $el.find($el.data('count')),
-                                from = attrDefault($el, 'from', 0),
-                                to = attrDefault($el, 'to', 100),
-                                duration = attrDefault($el, 'duration', 2.5),
-                                delay = attrDefault($el, 'delay', 0),
-                                decimals = new String(to).match(/\.([0-9]+)/) ? new String(to).match(/\.([0-9]+)$/)[1].length : 0,
-                                counter = new countUp($count.get(0), from, to, decimals, duration, opts);
+                        var $el = angular.element(el),
+                                sm = scrollMonitor.create(el);
 
-                        setTimeout(function () {
-                            counter.start();
-                        }, delay * 1000);
+                        sm.fullyEnterViewport(function ()
+                        {
+                            var opts = {
+                                useEasing: attrDefault($el, 'easing', true),
+                                useGrouping: attrDefault($el, 'grouping', true),
+                                separator: attrDefault($el, 'separator', ','),
+                                decimal: attrDefault($el, 'decimal', '.'),
+                                prefix: attrDefault($el, 'prefix', ''),
+                                suffix: attrDefault($el, 'suffix', ''),
+                            },
+                                    $count = attrDefault($el, 'count', 'this') == 'this' ? $el : $el.find($el.data('count')),
+                                    from = attrDefault($el, 'from', 0),
+                                    to = scope.to != null ? scope.to : attrDefault($el, 'to', 100),
+                                    duration = attrDefault($el, 'duration', 2.5),
+                                    delay = attrDefault($el, 'delay', 0),
+                                    decimals = new String(to).match(/\.([0-9]+)/) ? new String(to).match(/\.([0-9]+)$/)[1].length : 0,
+                                    counter = new countUp($count.get(0), from, to, decimals, duration, opts);
 
-                        sm.destroy();
-                    });
+                            setTimeout(function () {
+                                counter.start();
+                            }, delay * 1000);
+
+                            sm.destroy();
+                        });
+                    }
+                    })
                 }
             };
         }).
@@ -254,7 +262,6 @@ angular.module('xenon.directives', []).
                                     ;
                                 });
                     }
-
                     function goTo(plus_one)
                     {
                         index = (index + plus_one) % $status_list.length;
@@ -264,7 +271,6 @@ angular.module('xenon.directives', []).
 
                         var $to_hide = $status_list.filter('.active'),
                                 $to_show = $status_list.eq(index);
-
                         $to_hide.removeClass('active');
                         $to_show.addClass('active').fadeTo(0, 0).fadeTo(320, 1);
                     }
@@ -306,8 +312,7 @@ angular.module('xenon.directives', []).
                     {
                         $($this.get(0)).toggleClass('fixed', this.isAboveViewport)
                     });
-                }
-            }
+                }}
         }).
         directive('scrollable', function () {
             return {
@@ -342,21 +347,19 @@ angular.module('xenon.directives', []).
                     $el.tagsinput();
                 }
             }
-        }).
-        directive('dropzone', function () {
-            return {
-                restrict: 'AC',
-                link: function (scope, el, attr)
-                {
-                    var $el = angular.element(el);
+        }).directive('dropzone', function () {
+    return {
+        restrict: 'AC',
+        link: function (scope, el, attr)
+        {
+            var $el = angular.element(el);
 
-                    if (!jQuery.isFunction(jQuery.fn.dropzone))
-                        return false;
+            if (!jQuery.isFunction(jQuery.fn.dropzone))
+                return false;
 
-                    $el.dropzone();
-                }
-            }
-        }).
+            $el.dropzone();
+        }}
+}).
         directive('wysihtml5', function () {
 
             return {
@@ -378,21 +381,20 @@ angular.module('xenon.directives', []).
                     });
                 }
             }
-        }).
-        directive('autogrow', function () {
-            return {
-                restrict: 'AC',
-                link: function (scope, el, attr)
-                {
-                    if (!jQuery.isFunction(jQuery.fn.autosize))
-                        return false;
+        }).directive('autogrow', function () {
+    return {
+        restrict: 'AC',
+        link: function (scope, el, attr)
+        {
+            if (!jQuery.isFunction(jQuery.fn.autosize))
+                return false;
 
-                    var $el = angular.element(el);
+            var $el = angular.element(el);
 
-                    $el.autosize();
-                }
-            }
-        }).
+            $el.autosize();
+        }
+    }
+}).
         directive('slider', function () {
             return {
                 restrict: 'AC',
@@ -441,8 +443,7 @@ angular.module('xenon.directives', []).
                                     $fill.val(min_val + ',' + max_val);
 
                                 reps++;
-                            },
-                            change: function (ev, ui)
+                            }, change: function (ev, ui)
                             {
                                 if (reps == 1)
                                 {
@@ -459,7 +460,6 @@ angular.module('xenon.directives', []).
                                 reps = 0;
                             }
                         });
-
                         var $handles = $this.find('.ui-slider-handle');
 
                         $label_1.html((prefix ? prefix : '') + min_val + (postfix ? postfix : ''));
@@ -478,9 +478,7 @@ angular.module('xenon.directives', []).
                             min: min,
                             max: max,
                             value: value,
-                            step: step,
-                            slide: function (ev, ui)
-                            {
+                            step: step, slide: function (ev, ui) {
                                 var val = (prefix ? prefix : '') + ui.value + (postfix ? postfix : '');
 
                                 $label_1.html(val);
@@ -490,8 +488,7 @@ angular.module('xenon.directives', []).
                                     $fill.val(val);
 
                                 reps++;
-                            },
-                            change: function (ev, ui)
+                            }, change: function (ev, ui)
                             {
                                 if (reps == 1)
                                 {
@@ -518,8 +515,7 @@ angular.module('xenon.directives', []).
                         //$fill.width($handles.get(0).style.left);
                     }
                     ;
-                }
-            }
+                }}
         }).
         directive('formWizard', function () {
             return {
@@ -535,7 +531,7 @@ angular.module('xenon.directives', []).
                             $tabs = $this.find('> .tabs > li'),
                             $progress = $this.find(".progress-indicator"),
                             _index = $this.find('> ul > li.active').index();
-//                    index is set for dynamic tab selection according to tab no of the page
+                    //                    index is set for dynamic tab selection according to tab no of the page
                     if (_index <= 0 && scope.selectedtab) {
                         _index = scope.selectedtab - 1;
                     }
@@ -584,8 +580,8 @@ angular.module('xenon.directives', []).
                         {
 //                            var pct = $tabs.eq(index).position().left / $tabs.parent().width() * 100;
 //
-//                            $tabs.removeClass('completed').slice(0, index).addClass('completed');
-//                            $progress.css({width: pct + '%'});
+                            //                            $tabs.removeClass('completed').slice(0, index).addClass('completed');
+                            //                            $progress.css({width: pct + '%'});
                         },
                         onNext: checkFormWizardValidaion,
                         onTabClick: checkFormWizardValidaion
@@ -720,7 +716,6 @@ angular.module('xenon.directives', []).
                                     name = $field.attr('name'),
                                     validate = attrDefault($field, 'validate', '').toString(),
                                     _validate = validate.split(',');
-
                             for (var k in _validate)
                             {
                                 var rule = _validate[k],
@@ -732,7 +727,7 @@ angular.module('xenon.directives', []).
                                     opts['messages'][name] = {};
                                 }
                                 //Date commented by jack to give input maask for datepicker
-//                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
+                                //                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
                                 if ($.inArray(rule, ['required', 'url', 'email', 'number', 'creditcard', 'time']) != -1)
                                 {
                                     opts['rules'][name][rule] = true;
@@ -762,13 +757,13 @@ angular.module('xenon.directives', []).
 //                                if (scope.form != null) {
 //                                    var validation = opts['rules'][name];
 //                                    validation.messages = opts['messages'][name];
-//                                    $("[name='" + name + "']").rules("add", validation);
-//                                    scope.form.validate(opts);
-//                                }
+                                //                                    $("[name='" + name + "']").rules("add", validation);
+                                //                                    scope.form.validate(opts);
+                                //                                }
 
                             }
                         });
-//                        scope.form = $this;
+                        //                        scope.form = $this;
                         validator = $this.validate(opts);
                     }
                     validateForm();
@@ -821,7 +816,6 @@ angular.module('xenon.directives', []).
 
                             var sign = attrDefault($this, 'sign', '$');
                             ;
-
                             mask = "999,999,999.99";
 
                             if ($this.data('mask').toLowerCase() == 'rcurrency')
@@ -844,8 +838,8 @@ angular.module('xenon.directives', []).
                             break;
                         case "zip":
                             mask = '99999 9999';
-//                            opts.greedy = false;
-//                            opts.removeMaskOnSubmit = true;
+                            //                            opts.greedy = false;
+                            //                            opts.removeMaskOnSubmit = true;
                             break;
                         case "fdecimal":
                             mask = 'decimal';
@@ -864,8 +858,7 @@ angular.module('xenon.directives', []).
                     }
 
                     $this.inputmask(mask, opts);
-                }
-            }
+                }}
         }).
         directive('timepicker', function () {
             return {
@@ -910,10 +903,10 @@ angular.module('xenon.directives', []).
 //                        $p.on('click', function(ev)
 //                        {
 //                            ev.preventDefault();
-//
-//                            $this.timepicker('showWidget');
+                    //
+                    //                            $this.timepicker('showWidget');
 //                        });
-//                    }
+                    //                    }
                 }
             }
         }).
@@ -923,23 +916,22 @@ angular.module('xenon.directives', []).
                 scope: {minDate: "=", maxDate: "=", ngModel: "="},
                 link: function (scope, el, attr)
                 {
-//                    $(el).attr('maxlength', '10');
-//                    $(el).mask("99/99/9999");
+                    //                    $(el).attr('maxlength', '10');
+                    //                    $(el).mask("99/99/9999");
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
 
 
                     $(el).keydown(function (e) {
                         var key = e.keyCode || e.which;
-
                         if (key == 37 || key == 38 || key == 39 || key == 40 || key == 8 || key == 46 || key == 191 || key == 9) { // Left / Up / Right / Down Arrow, Backspace, Delete keys
                             return;
                         }
 //                        key = String.fromCharCode(key);
 //                        var regex = /[0-9|/]/;
-//                        if (!regex.test(key)) {
+                        //                        if (!regex.test(key)) {
 //                            return false;
-//                        }
+                        //                        }
                         if ((key >= 48 && key <= 57) || key === 191 || (key >= 96 && key <= 105) || key === 111) {
                             return;
                         } else {
@@ -949,9 +941,9 @@ angular.module('xenon.directives', []).
 //                    $(el).keydown(function(e) {
 //                        if (e.keyCode !== 9) {
 //                            return false;
-//                        } else {
-//                            return true;
-//                        }
+                    //                        } else {
+                    //                            return true;
+                    //                        }
 //                    });
                     var $this = angular.element(el),
                             opts = {
@@ -974,9 +966,9 @@ angular.module('xenon.directives', []).
 //                                    .on('show', function(ev) {
 //                                        for (var i = 0; i < 6; i++) {
 //                                            $('.datepicker-days tbody tr td:eq(' + i + ')').css('pointer-events', 'none');
-//                                        }
+                    //                                        }
 //
-//                                    });
+                    //                                    });
 //                        }
 //                    }
                     scope.$watch("minDate", function (value) {
@@ -1001,7 +993,7 @@ angular.module('xenon.directives', []).
                             if (value.length >= 10 && new Date(value).toString() !== "Invalid Date") {
                                 $this.datepicker("setDate", new Date(value));
                                 $this.datepicker("fill"); // added to highligh date, was not updating if changed from controller.
-//                            dateWatch();
+                                //                            dateWatch();
                             }
                             modelUpdated = true;
                         }
@@ -1029,8 +1021,8 @@ angular.module('xenon.directives', []).
 //$("#StartDate").datepicker({}).on('changeDate', function(selected) {
 //            var startDate = new Date(selected.date.valueOf());
 //            $('#EndDate').datepicker('setStartDate', startDate);
-//        }).on('clearDate', function(selected) {
-//            $('#EndDate').datepicker('setStartDate', null);
+                    //        }).on('clearDate', function(selected) {
+                    //            $('#EndDate').datepicker('setStartDate', null);
 //        });
                     if ($n.is('.input-group-addon') && $n.has('a'))
                     {
@@ -1070,8 +1062,7 @@ angular.module('xenon.directives', []).
                     var $this = angular.element(el);
 
                     // Change the range as you desire
-                    var ranges = {
-                        'Today': [moment(), moment()],
+                    var ranges = {'Today': [moment(), moment()],
                         'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
                         'Last 7 Days': [moment().subtract('days', 6), moment()],
                         'Last 30 Days': [moment().subtract('days', 29), moment()],
@@ -1130,8 +1121,7 @@ angular.module('xenon.directives', []).
                             callback_test(start, end);
                         }
 
-                        if ($this.hasClass('daterange-inline'))
-                        {
+                        if ($this.hasClass('daterange-inline')) {
                             $this.find('span').html(start.format(drp.format) + drp.separator + end.format(drp.format));
                         }
                     });
@@ -1210,8 +1200,7 @@ angular.module('xenon.directives', []).
                             $this.addClass('is-focused');
                         });
 
-                        $input.on('blur', function ()
-                        {
+                        $input.on('blur', function () {
                             $this.removeClass('is-focused');
 
                             if ($input.val().trim().length > 0)
@@ -1268,8 +1257,7 @@ angular.module('xenon.directives', []).
                                             attrs.decimalallowed.toString() === "true"))) {
                                 return;
                             }
-                            if (attrs.negativeallowed === undefined ||
-                                    attrs.negativeallowed.toString() === "false") {
+                            if (attrs.negativeallowed === undefined || attrs.negativeallowed.toString() === "false") {
                                 if ((newValue != null)) {
                                     transformedNewValue =
                                             newValue.toString().replace('-', '');
@@ -1352,7 +1340,7 @@ angular.module('xenon.directives', []).
                         }
                         //Get rid of hypen
                         var clean = val.replace(/[-]/g, '');
-                        
+
                         if (val !== clean) {
                             ngModelCtrl.$setViewValue(clean);
                             ngModelCtrl.$render();
@@ -1368,7 +1356,7 @@ angular.module('xenon.directives', []).
                 }
             };
         })
-        .directive("onRepeatEnd", function(){
+        .directive("onRepeatEnd", function () {
             return {
                 restrict: "A",
                 link: function (scope, element, attrs) {

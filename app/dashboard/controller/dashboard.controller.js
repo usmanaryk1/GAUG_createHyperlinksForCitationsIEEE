@@ -1,5 +1,5 @@
 (function () {
-    function DashboardCtrl(Page, $rootScope, $modal, $timeout, UserDAO) {
+    function DashboardCtrl(Page, $rootScope, $modal, $timeout, UserDAO, DashboardDAO, $filter) {
         var ctrl = this;
         Page.setTitle("Dashboard");
         $rootScope.isAdminPortal = false;
@@ -13,19 +13,18 @@
             $("#taskList").perfectScrollbar().addClass('overflow-hidden');
         });
         ctrl.taskMarked = function (index) {
-            ctrl.taskList.splice(index, 1);                        
+            ctrl.taskList.splice(index, 1);
             setTasksInLocalStorage();
         };
         ctrl.addTask = function () {
-            
-            if (ctrl.taskName != null && ctrl.taskName != '') {                
-                ctrl.taskList.push(ctrl.taskName);                
+            if (ctrl.taskName != null && ctrl.taskName != '') {
+                ctrl.taskList.push(ctrl.taskName);
                 ctrl.taskName = null;
                 setTasksInLocalStorage();
             }
         };
         var setTasksInLocalStorage = function () {
-            $timeout(function(){
+            $timeout(function () {
                 $("#taskList").perfectScrollbar("update");
             });
             if (tasks == null) {
@@ -34,8 +33,23 @@
             tasks[$rootScope.currentUser.userName] = ctrl.taskList;
             localStorage.setItem("tasks", JSON.stringify(tasks));
         };
+        ctrl.retrieveCounts = function () {
+            DashboardDAO.getCompianceTrackerCount({currentDate: $filter('date')(new Date(), $rootScope.dateFormat)}).then(function (res) {
+                ctrl.complianceTracker = res.count;
+            });
+            DashboardDAO.getActivePatientCount().then(function (res) {
+                ctrl.activePatientCount = res.count;
+            });
+            DashboardDAO.getOpenCasesCount({currentDate: $filter('date')(new Date(), $rootScope.dateFormat)}).then(function (res) {
+                ctrl.openCasesCount = res.count;
+            });
+            DashboardDAO.getDischargedPatientsCount({currentDate: $filter('date')(new Date(), $rootScope.dateFormat)}).then(function (res) {
+                ctrl.dischargedPatientsCount = res.count;
+            });
+        };
+        ctrl.retrieveCounts();
 
     }
     ;
-    angular.module('xenon.controllers').controller('DashboardCtrl', ["Page", "$rootScope", "$modal", "$timeout", "UserDAO", DashboardCtrl]);
+    angular.module('xenon.controllers').controller('DashboardCtrl', ["Page", "$rootScope", "$modal", "$timeout", "UserDAO", "DashboardDAO", "$filter", DashboardCtrl]);
 })();

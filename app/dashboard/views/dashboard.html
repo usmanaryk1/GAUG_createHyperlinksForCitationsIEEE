@@ -5,7 +5,7 @@
 
     <div class="col-sm-3">
 
-        <div class="xe-widget xe-counter" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+        <div class="xe-widget xe-counter" data-count=".num" id="complianceCount" data-from="0" data-to="dashboard.complianceTracker" data-suffix="%" data-duration="2">
             <div class="xe-icon">
                 <i class="linecons-cloud"></i>
             </div>
@@ -17,12 +17,12 @@
 
     </div>
     <div class="col-sm-3">
-        <div class="xe-widget xe-counter xe-counter-blue" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+        <div class="xe-widget xe-counter xe-counter-blue" data-count=".num" data-from="1" data-to="dashboard.activePatientCount" data-duration="3" data-easing="false">
             <div class="xe-icon">
                 <i class="linecons-user"></i>
             </div>
             <div class="xe-label">
-                <strong class="num">1k</strong>
+                <strong class="num">0</strong>
                 <span>Total Active Patients</span>
             </div>
         </div>
@@ -30,24 +30,24 @@
     </div>
     <div class="col-sm-3">
 
-        <div class="xe-widget xe-counter xe-counter-info"  data-count=".num" data-from="0" data-to="57" data-prefix="-," data-suffix="%" data-duration="5" data-easing="true" data-delay="1">
+        <div class="xe-widget xe-counter xe-counter-info"  data-count=".num" data-from="0" data-to="dashboard.dischargedPatientsCount" data-duration="5" data-easing="true" data-delay="1">
             <div class="xe-icon">
                 <i class="linecons-discharge"></i>
             </div>
             <div class="xe-label">
-                <strong class="num">-,0%</strong>
+                <strong class="num">0</strong>
                 <span>Discharged Patients</span>
             </div>
         </div>
 
     </div>
     <div class="col-sm-3">
-        <div class="xe-widget xe-counter xe-counter-red" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+        <div class="xe-widget xe-counter xe-counter-red" data-count=".num" data-from="1" data-to="dashboard.openCasesCount" data-duration="3" data-easing="false">
             <div class="xe-icon">
                 <i class="linecons-user"></i>
             </div>
             <div class="xe-label">
-                <strong class="num">1k</strong>
+                <strong class="num">0</strong>
                 <span>Open Cases</span>
             </div>
         </div>
@@ -69,10 +69,11 @@
                 </div>
             </div>
             <div class="xe-body">
-                <ul class="list-unstyled" id="taskList" style="height:100px;position:relative" >
+                <ul class="list-unstyled" id="taskList" style="height:9em;position:relative" >
                     <li ng-repeat="task in dashboard.taskList track by $index">
                         <label>
-                            <input type="checkbox" ng-model="taskValue" class="cbr cbr-turquoise" ng-change="dashboard.taskMarked($index);taskValue=null"/>
+                            <input type="checkbox" ng-model="taskValue" class="cbr cbr-turquoise" ng-change="dashboard.taskMarked($index);
+                                        taskValue = null"/>
                             <span class="form-control-static">{{task}}</span>
                         </label>
                     </li>                    
