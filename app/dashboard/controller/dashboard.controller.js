@@ -1,11 +1,12 @@
 (function () {
-    function DashboardCtrl(Page, $rootScope, $modal, $timeout, UserDAO, DashboardDAO, $filter) {
+    function DashboardCtrl(Page, $rootScope, $formService, $timeout, UserDAO, DashboardDAO, $filter) {
         var ctrl = this;
         Page.setTitle("Dashboard");
         $rootScope.isAdminPortal = false;
         var tasks = JSON.parse(localStorage.getItem("tasks"));
         if (tasks != null && tasks[$rootScope.currentUser.userName] != null) {
             ctrl.taskList = tasks[$rootScope.currentUser.userName];
+            $formService.resetRadios();
         } else {
             ctrl.taskList = [];
         }
@@ -13,12 +14,13 @@
             $("#taskList").perfectScrollbar().addClass('overflow-hidden');
         });
         ctrl.taskMarked = function (index) {
-            ctrl.taskList.splice(index, 1);
-            setTasksInLocalStorage();
+                ctrl.taskList.splice(index, 1);
+                setTasksInLocalStorage();
         };
         ctrl.addTask = function () {
             if (ctrl.taskName != null && ctrl.taskName != '') {
                 ctrl.taskList.push(ctrl.taskName);
+                $formService.resetRadios();
                 ctrl.taskName = null;
                 setTasksInLocalStorage();
             }
@@ -51,5 +53,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('DashboardCtrl', ["Page", "$rootScope", "$modal", "$timeout", "UserDAO", "DashboardDAO", "$filter", DashboardCtrl]);
+    angular.module('xenon.controllers').controller('DashboardCtrl', ["Page", "$rootScope", "$formService", "$timeout", "UserDAO", "DashboardDAO", "$filter", DashboardCtrl]);
 })();
