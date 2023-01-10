@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal fade-in-effect" id="add_patient_form" name="add_patient_form" role="form"  ng-submit="addPatient.savePatient()">
+                <form class="form-horizontal fade-in-effect validate" id="add_patient_form" name="add_patient_form" role="form"  ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -99,7 +99,8 @@
                             Phone
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-33" name="Phone" type="text" value="{{addPatient.patient.phone| tel}}" data-validate="required,number,minlength[10]"
+                            <input class="form-control" id="field-33" name="Phone" type="text" value="{{addPatient.patient.phone| tel}}" 
+                                   data-validate="required,number,minlength[10],maxlength[10]"
                                    data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
                         </div>
                     </div>

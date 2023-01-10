@@ -1,24 +1,24 @@
 (function() {
-    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal) {
+    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal) {
         var ctrl = this;
-        $rootScope.selectPatientModel = {};
+        $rootScope.selectEmployeeModel={};
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
         }
-        this.patient = {Gender: 'M'};
-        ctrl.retrievePatients = retrievePatientsData;
+        this.employee = {Gender: 'M'};
+        ctrl.retrieveEmployees = retrieveEmployeesData;
         ctrl.edit = edit;
-        retrievePatientsData();
-        function retrievePatientsData() {
-            PatientDAO.retrieveAll().then(function(res) {
+        retrieveEmployeesData();
+        function retrieveEmployeesData() {
+            EmployeeDAO.retrieveAll().then(function(res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
                     finish: function() {
                         if (res) {
-                            ctrl.patientList = res;
+                            ctrl.employeeList = res;
                         }
                     }
                 }); // showLoadingBar
@@ -31,26 +31,26 @@
                         
                     }
                 }); // showLoadingBar
-                ctrl.patientList = ontimetest.patients;
+                ctrl.employeeList = ontimetest.employees;
             });
         }
         ;
-        ctrl.openEditModal = function(patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.selectPatientModel = $modal.open({
+            $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
-            $rootScope.selectPatientModel.patient=patient;
+            $rootScope.selectEmployeeModel.employee=employee;
 
         };
-        function edit(patient){
-            alert(JSON.stringify(patient));
-            ctrl.selectedPatient = patient;
+        function edit(employee){
+            alert(JSON.stringify(employee));
+            ctrl.selectedEmployee = employee;
             $rootScope.openModal('modal-5');
         }
     }
     ;
-    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewPatientsCtrl]);
+    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewEmployeesCtrl]);
 })();

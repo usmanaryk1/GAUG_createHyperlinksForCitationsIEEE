@@ -97,12 +97,12 @@ angular.module('xenon.services', []).
 
 				// Subitems of employee
 				employee.addItem('Add Employee', 				'./employee/tab1');
-				employee.addItem('View Employee', 				'./view_employee_tab_1');
+				employee.addItem('View Employee', 				'./employee-list/active');
 
 
 				// Subitems of patient
 				patient.addItem('Add Patient',		'./patient/tab1');
-				patient.addItem('View Patient',		'./view_patient_tab_1');
+				patient.addItem('View Patient',		'./patient-list/active');
 
 
 				// Subitems of timeSheet
