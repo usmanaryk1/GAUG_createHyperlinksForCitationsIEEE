@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('xenon.factory', []).
+angular.module('xenon.factory').
 	factory('$layoutToggles', function($rootScope, $layout){
 
 		return {

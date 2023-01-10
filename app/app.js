@@ -2,6 +2,7 @@
 
 var app = angular.module('xenon-app', [
     'ngCookies',
+    'ngResource',
     'ui.router',
     'ui.bootstrap',
     'oc.lazyLoad',
@@ -14,7 +15,7 @@ var app = angular.module('xenon-app', [
     'FBAngular'
 ]);
 
-app.run(function($rootScope)
+app.run(function($rootScope, $modal)
 {
     // Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
@@ -166,9 +167,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 }
             }).
             // view_patient_tab_1
-            state('app.view_patient_tab_1', {
-                url: '/view_patient_tab_1',
-                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_1'),
+            state('app.patient-list', {
+                url: '/patient-list/:status',
+                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient'),
+                controller: 'ViewPatientsCtrl as viewPatient',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -178,32 +180,45 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
-            // view_patient_tab_2
-            state('app.view_patient_tab_2', {
-                url: '/view_patient_tab_2',
-                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_2'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
-            }).
-            // view_patient_tab_3
-            state('app.view_patient_tab_3', {
-                url: '/view_patient_tab_3',
-                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_3'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
-            }).
+//            // view_patient_tab_1
+//            state('app.view_patient_tab_1', {
+//                url: '/view_patient_tab_1',
+//                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_1'),
+//                resolve: {
+//                    resources: function($ocLazyLoad) {
+//                        return $ocLazyLoad.load([
+//                            ASSETS.forms.jQueryValidate,
+//                            ASSETS.extra.toastr,
+//                        ]);
+//                    },
+//                }
+//            }).
+//            // view_patient_tab_2
+//            state('app.view_patient_tab_2', {
+//                url: '/view_patient_tab_2',
+//                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_2'),
+//                resolve: {
+//                    resources: function($ocLazyLoad) {
+//                        return $ocLazyLoad.load([
+//                            ASSETS.forms.jQueryValidate,
+//                            ASSETS.extra.toastr,
+//                        ]);
+//                    },
+//                }
+//            }).
+//            // view_patient_tab_3
+//            state('app.view_patient_tab_3', {
+//                url: '/view_patient_tab_3',
+//                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_3'),
+//                resolve: {
+//                    resources: function($ocLazyLoad) {
+//                        return $ocLazyLoad.load([
+//                            ASSETS.forms.jQueryValidate,
+//                            ASSETS.extra.toastr,
+//                        ]);
+//                    },
+//                }
+//            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,
