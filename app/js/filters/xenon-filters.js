@@ -46,5 +46,21 @@ angular.module('xenon.filter',[])
 
 		return (country + " (" + city + ") " + number).trim();
 	};
+}).filter('ssn', function() {
+	return function(ssn) {
+		if (!ssn) {
+			return '';
+		}
+
+		var value = ssn.toString().trim().replace(/^\+/, '');
+
+		if (value.match(/[^0-9]/)) {
+			return ssn;
+		}
+
+		ssn = ssn.slice(0, 3) + '-' + ssn.slice(3,5)+'-'+ssn.slice(5);
+
+		return ssn.trim();
+	};
 });
 

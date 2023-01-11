@@ -91,10 +91,10 @@ a {
 .user_img{ width:40px; float:left; border-radius:100px;}
 
 .emp_user_hd{ width:auto; font-size:22px; float:left; margin-left:10px;}
-.emp_user_name{ width:100%; font-size:15px; float:left; font-weight:bold; margin-top:3px; margin-bottom:2px;}
+.emp_user_name{ width:100%; font-size:15px; /* float:left; */ font-weight:bold; margin-top:3px; margin-bottom:2px;}
 
 .emp_user_hd h1{ width:100%; font-size:15px; float:left; font-weight:bold; margin-top:3px; margin-bottom:2px;}
-.emp_user_hd p{ width:100%; font-size:12px; float:left; margin-top:0px; font-weight:normal;}
+.emp_user_hd p{ width: 100%; font-size:12px; float:left; margin-top:0px; font-weight:normal;}
 
 
 

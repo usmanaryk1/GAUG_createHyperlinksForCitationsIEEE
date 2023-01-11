@@ -140,15 +140,6 @@
                   <input type="text" id="field-83" class="form-control" name="Email">
                 </div>
               </div>
-              <div class="form-group-separator"></div>
-              
-              <div class="row">
-                <div class="col-sm-12 pull-left">
-                  <button type="reset" class="btn btn-info btn-single gray_bt pull-left">Reset To Default</button>
-                  <button class="btn btn-info green_bt pull-left" type="submit">Save Changes</button>
-                </div>
-              </div>
-              
             </form>
           </div>
           
@@ -170,7 +161,7 @@
         // Validation
         $("#company_information_form").validate({
 rules: {City: {required: true},
-Fax: {required: true},
+//Fax: {required: true},
 FederalTaxIDNumber: {required: true},
 CompanyName: {required: true},
 NPINumber: {required: true},
@@ -180,7 +171,7 @@ ContactPerson: {required: true},
 Phone: {required: true},
 State: {required: true},
 Address1: {required: true},
-Email: {required: true, email: true,},
+//Email: {required: true, email: true,},
 },
 
 messages: {City: {required: 'Please enter City.'},

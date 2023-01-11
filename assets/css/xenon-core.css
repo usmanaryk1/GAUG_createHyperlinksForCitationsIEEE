@@ -5906,7 +5906,7 @@ form .form-group.validate-has-error .form-control:-ms-input-placeholder {
 form .form-group.validate-has-error .form-control+span {
     /*commented for patient tab 2 search button, it gets compressed when error is thrown*/
     /*display: block;*/
-    padding-top: 5px;
+    /*padding-top: 5px;*/
     font-size: 12px;
     color: #cc3f44
 }

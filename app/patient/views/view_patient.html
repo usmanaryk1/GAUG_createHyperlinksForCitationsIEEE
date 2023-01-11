@@ -40,14 +40,14 @@
                                 <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                                     <div class="table-responsive scroll" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
                                         <script type="text/javascript">
-                                            // jQuery(document).ready(function($)
-                                            // {
-                                            // 	$("#example-4").dataTable({
-                                            // 		aLengthMenu: [
-                                            // 			[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
-                                            // 		]
-                                            // 	});
-                                            // });
+//                                             jQuery(document).ready(function($)
+//                                             {
+//                                             	$("#example-4").dataTable({
+//                                             		aLengthMenu: [
+//                                             			[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+//                                             		]
+//                                             	});
+//                                             });
                                         </script>
                                         <table id="example-4" ng-if="viewPatient.patientList.length" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
                                             <thead>
@@ -285,7 +285,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 				<div class="form-group">
 					<label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
                                         <div class="col-md-8">
-                                            {{selectPatientModel.patient.address1}}<div ng-if="selectPatientModel.patient.address2 != null"> {{selectPatientModel.patient.address2}}</div> {{selectPatientModel.patient.city}}, {{selectPatientModel.patient.state}}, {{selectPatientModel.patient.zipcode}}
+                                            {{selectPatientModel.patient.address1}}<div ng-if="selectPatientModel.patient.address2 != null"> {{selectPatientModel.patient.address2}}</div> <div>{{selectPatientModel.patient.city}}, {{selectPatientModel.patient.state}}, {{selectPatientModel.patient.zipcode}}</div>
                                         </div>
 				</div>	
 				

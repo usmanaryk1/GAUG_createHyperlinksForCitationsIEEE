@@ -32,8 +32,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control width100 no-right-border form-focus-info" id="Search" name="Search" type="text"
-                                       required data-message-required="Please enter patient's address to establish GPS coordinates.">
-                                </input>
+                                      data-validate="required" data-message-required="Please enter patient's address to establish GPS coordinates."/>
                                                  <span class="input-group-btn">
                                                   <button class="btn btn-info" type="submit" id="address-search">
                                                    Go!
@@ -100,7 +99,8 @@
                                 //             });
                                 //           });
                             </script>
-                            <select class="form-control" id="sboxit-1" name="State">
+                            <select class="form-control" id="sboxit-1" name="State"
+                                    data-validate="required" data-message-required="Please enter State.">
                                 <option value="">
                                     Select
                                 </option>

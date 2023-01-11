@@ -95,13 +95,66 @@ ontimedata = {
             careCordinatorContact: '(130) 400-8000',
             insuranceProvider: 'National Insurance.',
             insuranceId: 'National Insurance.'
-        }, ],
+        }],
+    employees: [{"id": 60,
+            "fName": "Hamma",
+            "lName": "Kureshi",
+            middleInitial: 'ami',
+            dateOfBirth: '05/12/1984',
+            "socialSecurity":"3423783452",
+            "phone": "0216596425",
+            "email": "mohamed.abderrahmen@gmail.com",
+            "city": "Tunis",
+            "state": "NV",
+            "address1": "209-NY Avenue",
+            "zipcode": "2036",
+            "role": "Administrator",
+            "position": "Engineer",
+            "status": "OK",
+            "timeSheetList": []
+        },{"id": 61,
+            "fName": "Namma",
+            "lName": "Abderran",
+            middleInitial: 'cmi',
+            dateOfBirth: '05/12/1984',
+            "socialSecurity":"3423783452",
+            "phone": "0216596425",
+            "email": "mohamed.abderrahmen@gmail.com",
+            "city": "Tunis",
+            "state": "NV",
+            "address1": "203-NY Avenue",
+            "address2":"Street No-5",
+            "zipcode": "2036",
+            "role": "Administrator",
+            "position": "Doctor",
+            "status": "OK",
+            "timeSheetList": []
+        },{"id": 62,
+            "fName": "Karry",
+            "lName": "Neil",
+            middleInitial: 'bmi',
+            dateOfBirth: '05/12/1984',
+            "socialSecurity":"3423783452",
+            "phone": "0216596425",
+            "email": "mohamed.abderrahmen@gmail.com",
+            "city": "Tunis",
+            "state": "NV",
+            "address1": "23-NYC Planet",
+            "address2":"Street No-7",
+            "zipcode": "2036",
+            "role": "Staff",
+            "position": "Staff",
+            "status": "OK",
+            "timeSheetList": []
+        } ]
 };
 
 ontimetest = {
     'weburl': 'api/',
-    'patients' : ontimedata.patients,
-    'getPatients': function($scope, $rootScope, $http) {
-        $scope.patients = ontimedata.patients;
-    },
+    'defaultState': 'login',
+    'patients': ontimedata.patients,
+    'employees': ontimedata.employees
+//    'getPatients': function($scope, $rootScope, $http) {
+//        $scope.patients = ontimedata.patients;
+//    },
 };

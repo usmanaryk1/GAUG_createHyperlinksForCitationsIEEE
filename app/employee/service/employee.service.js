@@ -1,7 +1,7 @@
 (function() {
     'use strict';
-    var PatientDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'patients/:action/:subAction/:subAction1', {}, {
+    var EmployeeDAO = function(resource) {
+        var api = resource(ontimetest.weburl + 'employees/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,
@@ -16,5 +16,5 @@
             }
         };
     };
-    angular.module("xenon.factory").factory('PatientDAO', ['$resource', PatientDAO]);
+    angular.module("xenon.factory").factory('EmployeeDAO', ['$resource', EmployeeDAO]);
 })();
