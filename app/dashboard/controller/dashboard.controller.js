@@ -5,8 +5,13 @@
         $rootScope.isAdminPortal = false;
         var tasks = JSON.parse(localStorage.getItem("tasks"));
         if (tasks != null && tasks[$rootScope.currentUser.userName] != null) {
+            //this flag is used to hide the flickering from normal checkbox to theme checkbox
+            ctrl.inProgress = true;
             ctrl.taskList = tasks[$rootScope.currentUser.userName];
-            $formService.resetRadios();
+            $timeout(function () {
+                cbr_replace();
+                ctrl.inProgress = false;
+            });
         } else {
             ctrl.taskList = [];
         }
@@ -14,15 +19,20 @@
             $("#taskList").perfectScrollbar().addClass('overflow-hidden');
         });
         ctrl.taskMarked = function (index) {
-                ctrl.taskList.splice(index, 1);
-                setTasksInLocalStorage();
+            ctrl.taskList.splice(index, 1);
+            setTasksInLocalStorage();
         };
         ctrl.addTask = function () {
             if (ctrl.taskName != null && ctrl.taskName != '') {
+                //this flag is used to hide the flickering from normal checkbox to theme checkbox
+                ctrl.inProgress = true;
                 ctrl.taskList.push(ctrl.taskName);
-                $formService.resetRadios();
-                ctrl.taskName = null;
-                setTasksInLocalStorage();
+                $timeout(function () {
+                    cbr_replace();
+                    ctrl.inProgress = false;
+                    ctrl.taskName = null;
+                    setTasksInLocalStorage();
+                });
             }
         };
         var setTasksInLocalStorage = function () {

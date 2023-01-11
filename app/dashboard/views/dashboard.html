@@ -70,7 +70,7 @@
             </div>
             <div class="xe-body">
                 <ul class="list-unstyled" id="taskList" style="height:9em;position:relative" >
-                    <li ng-repeat="task in dashboard.taskList track by $index">
+                    <li ng-hide="dashboard.inProgress" ng-repeat="task in dashboard.taskList track by $index">
                         <label>
                             <input type="checkbox" ng-model="taskValue" class="cbr cbr-turquoise" ng-change="dashboard.taskMarked($index);taskValue=null;"/>
                             <span>{{task}}</span>
