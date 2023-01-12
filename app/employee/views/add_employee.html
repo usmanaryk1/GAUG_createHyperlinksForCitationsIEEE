@@ -3,10 +3,10 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                Add Employee
+                {{addEmployee.editMode?'Update Employee':'Add Employee'}}
             </h1>
             <p class="description">
-                Create An Employee Record By Entering Employee Information
+                {{addEmployee.editMode?'Update An Employee Record By Entering Employee Information':'Create An Employee Record By Entering Employee Information'}}
             </p>
         </div>
     </div>
@@ -37,8 +37,8 @@
     </script>
     <form class="form-wizard validate" id="rootwizard" novalidate="" role="form">
         <ul class="tabs">
-            <li ui-sref='.tab1'>
-                <a data-toggle="tab" href="">
+            <li>
+                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab('tab1')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa-user"></i></div> 
                     <div class="hidden-xs">Add Employee</div>
                     <span>
@@ -46,8 +46,8 @@
                     </span>
                 </a>
             </li>
-            <li ui-sref='.tab2'>
-                <a data-toggle="tab" href="">
+            <li>
+                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab('tab2')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-credit-card"></i></div> 
                     <div class="hidden-xs">Enter Employee Pay Rate</div>
                     
@@ -56,8 +56,8 @@
                     </span>
                 </a>
             </li>
-            <li ui-sref='.tab3'>
-                <a data-toggle="tab" href="">
+            <li>
+                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab('tab3')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
                     <div class="hidden-xs">Upload Employee Documents</div>
                     <span>

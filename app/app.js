@@ -236,7 +236,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_employee_tab_1
             state('app.employee.tab1', {
-                url: '/tab1',
+                url: '/tab1/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_1'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -252,7 +252,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_employee_tab_2
             state('app.employee.tab2', {
-                url: '/tab2',
+                url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -268,7 +268,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_employee_tab_3
             state('app.employee.tab3', {
-                url: '/tab3',
+                url: '/tab3/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
                 resolve: {
                     resources: function($ocLazyLoad) {

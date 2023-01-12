@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" ng-init="addEmployee.tab1DataInit()">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -33,9 +33,9 @@
                             First Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="FirstName" type="text"
+                            <input class="form-control" name="FirstName" type="text" ng-model="addEmployee.employee.fName"
                                    data-validate="required" data-message-required="Please enter First Name."/>
-                            
+
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -45,7 +45,7 @@
                             Middle Initial
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-29" name="MiddleInitial" type="text"/>
+                            <input class="form-control" id="field-29" name="MiddleInitial" type="text" ng-model="addEmployee.employee.middleInitial"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -55,7 +55,7 @@
                             Last Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="LastName" type="text"
+                            <input class="form-control" name="LastName" type="text" ng-model="addEmployee.employee.lName"
                                    data-validate="required" data-message-required="Please enter Last Name."/>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                             Social Security #
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="SocialSecurity" type="text"
+                            <input class="form-control" name="SocialSecurity" type="text" ng-model="addEmployee.employee.socialSecurity"
                                    data-validate="required" data-message-required="Please enter Social Security."/>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text"
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text" ng-model="addEmployee.employee.dateOfBirth"
                                        data-validate="required,date" data-message-required="Please enter Date of Birth."/>
                                 <div class="input-group-addon">
                                     <a href="#">
@@ -96,8 +96,8 @@
                             Phone
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Phone" type="text" data-validate="required,number,minlength[10]"
-                                       data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
+                            <input class="form-control" name="Phone" type="text" data-validate="required,number,minlength[10]" ng-model="addEmployee.employee.phone"
+                                   data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -107,7 +107,7 @@
                             Email
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Email" type="email"/>
+                            <input class="form-control" name="Email" type="email" ng-model="addEmployee.employee.email"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -117,7 +117,7 @@
                             Address 1
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Address1" type="text"
+                            <input class="form-control" name="Address1" type="text" ng-model="addEmployee.employee.address1"
                                    data-validate="required" data-message-required="Please enter Address 1"/>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                             Address 2
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Address2" type="text"/>
+                            <input class="form-control" name="Address2" type="text" ng-model="addEmployee.employee.address2"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -138,7 +138,7 @@
                             City
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="City" type="text"
+                            <input class="form-control" name="City" type="text" ng-model="addEmployee.employee.city"
                                    data-validate="required" data-message-required="Please enter City."/>
                         </div>
                     </div>
@@ -159,7 +159,8 @@
                                 //              });
                                 //            });
                             </script>
-                            <select class="form-control" id="sboxit-1" name="State" data-validate="required" data-message-required="Please enter State.">
+                            <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.employee.state"
+                                    data-validate="required" data-message-required="Please enter State.">
                                 <option value="">
                                     Select
                                 </option>
@@ -176,7 +177,7 @@
                             Zip Code
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="ZipCode" type="text"
+                            <input class="form-control" name="ZipCode" type="text" ng-model="addEmployee.employee.zipcode"
                                    data-validate="required" data-message-required="Please enter Zip Code."/>
                         </div>
                     </div>
@@ -187,7 +188,7 @@
                             Payroll ID
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="PayrollID" type="text"/>
+                            <input class="form-control" name="PayrollID" type="text" ng-model="addEmployee.employee.payrollId"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -199,51 +200,50 @@
                         <div class="col-sm-9">
                             <div class="form-block">
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" id="Position" name="Position" value="Personal Care" type="radio" ng-model="addEmployee.employee.position">
                                     Personal Care
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input class="cbr" name="radio-1" type="radio">
+                                    <input class="cbr" name="Position" type="radio" value="Nursing Care" ng-model="addEmployee.employee.position">
                                     Nursing Care
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" name="Position" value="PT" type="radio" ng-model="addEmployee.employee.position">
                                     PT
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" name="Position" value="OT" type="radio" ng-model="addEmployee.employee.position">
                                     OT
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" name="Position" value="NUT" type="radio" ng-model="addEmployee.employee.position">
                                     NUT
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" name="Position" value="ST" type="radio" ng-model="addEmployee.employee.position">
                                     ST
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" name="Position" value="Admin" type="radio" ng-model="addEmployee.employee.position">
                                     Admin
                                     </input>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input checked="" class="cbr" name="radio-1" type="radio">
+                                    <input checked="" class="cbr" name="Position" value="Market Rep." type="radio" ng-model="addEmployee.employee.position"/>
                                     Market Rep.
-                                    </input>
                                 </label>
                             </div>
                         </div>
@@ -252,7 +252,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.navigateToTab('tab2')">
                                 Next »
                             </button>
                         </div>
@@ -265,12 +265,20 @@
 <!-- FORM WIZARD WITH VALIDATION END HERE-->
 <script type="text/javascript">
     // validate
+    var form_clean;
     customJqueryValidation();
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
+
         }, 1);
 
+        setTimeout(function() {
+// serialize clean form
+            $(function() {
+                form_clean = $("form").serialize();
+            });
+        }, 500);
 
 //        // Validation
 //        $("#add_employee_tab_1_form").validate({

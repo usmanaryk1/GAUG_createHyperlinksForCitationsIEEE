@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" ng-init="addEmployee.tab2DataInit()">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -19,10 +19,10 @@
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input type="radio" name="TaxStatus" value='W-2' class="cbr" ng-model="addEmployee.employee.TaxStatus">
+                                    <input type="radio" name="TaxStatus" value='W-2' class="cbr" ng-model="addEmployee.employee.taxStatus">
                                     W-2 </label>
                                 <label class="cbr-inline">
-                                    <input type="radio" name="TaxStatus"  value='1099' class="cbr" ng-model="addEmployee.employee.TaxStatus">
+                                    <input type="radio" name="TaxStatus"  value='1099' class="cbr" ng-model="addEmployee.employee.taxStatus">
                                     1099 </label>
 
                             </div>
@@ -32,19 +32,19 @@
                         <label class="col-sm-2 col-md-2 control-label">Wages</label>
                         <div class="col-sm-10 col-md-3">
                             <div class="input-group">
-                                <label class="cbr-inline">
-                                    <input type="radio" name="Wages" value='H' class="cbr" ng-model="addEmployee.employee.Wages">
+                                <label class="cbr-inline" >
+                                    <input type="radio" name="Wages" value='H' class="cbr" ng-model="addEmployee.employee.wages">
                                     Hourly </label>
                                 <label class="cbr-inline">
-                                    <input type="radio" name="Wages" value='S' class="cbr" ng-model="addEmployee.employee.Wages">
+                                    <input type="radio" name="Wages" value='S' class="cbr" ng-model="addEmployee.employee.wages">
                                     Salary </label>
 
                             </div>
                         </div>
-                        <label class="col-sm-2 col-md-2 control-label" ng-show="addEmployee.employee.Wages === 'S'">Salary</label>
-                        <div class="col-sm-10 col-md-5" ng-show="addEmployee.employee.Wages === 'S'">
-                            <input class="form-control" name="Salary" type="text" ng-model="addEmployee.employee.Salary"
-                                   data-validate="{{addEmployee.employee.Wages==='S'?'number,required':''}}" data-message-required="Please enter Salary.">
+                        <label class="col-sm-2 col-md-2 control-label" ng-show="addEmployee.employee.wages === 'S'">Salary</label>
+                        <div class="col-sm-10 col-md-5" ng-show="addEmployee.employee.wages === 'S'">
+                            <input class="form-control" name="Salary" type="text" ng-model="addEmployee.employee.salary"
+                                   data-validate="{{addEmployee.employee.wages==='S'?'number,required':''}}" data-message-required="Please enter Salary.">
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -55,15 +55,15 @@
                         </label>
                         <div class="col-sm-10">
                             <div class="col-sm-3">
-                                <input class="form-control" name="Rate1" type="text" ng-model="addEmployee.employee.Rate1"
-                                       data-validate="number,required" data-message-required="Please enter Rate 2.">
+                                <input class="form-control" name="Rate1" type="text" ng-model="addEmployee.employee.employeeCareRatesList.rate1.rate"
+                                       data-validate="number,required" data-message-required="Please enter Rate 1.">
                                 </input>
                             </div>
                             <div class="col-sm-6">
                                 <script type="text/javascript">
                                     jQuery(document).ready(function($)
                                     {
-                                        $("#multi-select").multiSelect({
+                                        $("#rate1").multiSelect({
                                             afterInit: function()
                                             {
                                                 // Add alternative scrollbar to list
@@ -77,8 +77,8 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" id="multi-select" multiple="multiple" name="my-select[]" ng-model="addEmployee.employee.rate1Jobs">
-                                    <option value="1">
+                                <select class="form-control" id="rate1" multiple="multiple" name="my-select[]" ng-model="addEmployee.employee.employeeCareRatesList.rate1.careTypes">
+                                    <option value=1>
                                         Silky Door
                                     </option>
                                     <option value="2">
@@ -87,7 +87,7 @@
                                     <option value="3">
                                         Tales of Flames
                                     </option>
-                                    <option value="4">
+                                    <option value="4" ng-selected="{{addEmployee.employee.wages !== 'S'}}">
                                         The Princess's Dream
                                     </option>
                                     <option value="5">
@@ -123,16 +123,16 @@
                                     <option value="15">
                                         Thorn of Emperor
                                     </option>
-                                    <option selected="" value="16">
+                                    <option value="16">
                                         The Predator's Pirates
                                     </option>
                                     <option value="17">
                                         The Lord of the Girl
                                     </option>
-                                    <option selected="" value="18">
+                                    <option value="18">
                                         Flowers in the Spirit
                                     </option>
-                                    <option selected="" value="19">
+                                    <option value="19">
                                         Healing in the Silence
                                     </option>
                                     <option value="20">
@@ -150,7 +150,7 @@
                         </label>
                         <div class="col-sm-10">
                             <div class="col-sm-3">
-                                <input class="form-control" name="Rate2" type="text" ng-model="addEmployee.employee.Rate2"
+                                <input class="form-control" name="Rate2" type="text" ng-model="addEmployee.employee.employeeCareRatesList.rate2.rate"
                                        data-validate="number,required" data-message-required="Please enter Rate 2.">
                                 </input>
                             </div>
@@ -158,7 +158,7 @@
                                 <script type="text/javascript">
                                     jQuery(document).ready(function($)
                                     {
-                                        $("#multi-select1").multiSelect({
+                                        $("#rate2").multiSelect({
                                             afterInit: function()
                                             {
                                                 // Add alternative scrollbar to list
@@ -172,7 +172,7 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" id="multi-select1" multiple="multiple" name="my-select[]" ng-model="addEmployee.employee.rate2Jobs">
+                                <select class="form-control" id="rate2" multiple="multiple" name="my-select[]" ng-model="addEmployee.employee.employeeCareRatesList.rate2.careTypes">
                                     <option value="1">
                                         Silky Door
                                     </option>
@@ -218,16 +218,16 @@
                                     <option value="15">
                                         Thorn of Emperor
                                     </option>
-                                    <option selected="" value="16">
+                                    <option value="16">
                                         The Predator's Pirates
                                     </option>
                                     <option value="17">
                                         The Lord of the Girl
                                     </option>
-                                    <option selected="" value="18">
+                                    <option  value="18">
                                         Flowers in the Spirit
                                     </option>
-                                    <option selected="" value="19">
+                                    <option value="19">
                                         Healing in the Silence
                                     </option>
                                     <option value="20">
@@ -244,7 +244,7 @@
                             OT Rate
                         </label>
                         <div class="col-sm-10">
-                            <input class="form-control" name="OTRate" type="text" ng-model="addEmployee.employee.OTRate"
+                            <input class="form-control" name="OTRate" type="text" ng-model="addEmployee.employee.employeeCareRatesList.otRate"
                                    data-validate="number,required" data-message-required="Please enter OT Rate.">
                             </input>
                         </div>
@@ -252,11 +252,11 @@
                     <div class="form-group-separator">
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" ng-model="addEmployee.employee.HDRate">
+                        <label class="col-sm-2 control-label">
                             HD Rate
                         </label>
                         <div class="col-sm-10">
-                            <input class="form-control" name="HDRate" type="text"
+                            <input class="form-control" name="HDRate" type="text" ng-model="addEmployee.employee.employeeCareRatesList.hdRate"
                                    data-validate="number,required" data-message-required="Please enter HD Rate.">
                             </input>
                         </div>
@@ -265,7 +265,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.navigateToTab('tab3')">
                                 Next »
                             </button>
                         </div>
@@ -277,17 +277,21 @@
 </div>
 <!-- FORM WIZARD WITH VALIDATION END HERE-->
 <script type="text/javascript">
-//    // validate
-//    customJqueryValidation();
+// validate
+    var form_clean;
+    customJqueryValidation();
     jQuery(document).ready(function($) {
-        //to select radio buttons by default in angular. It was having issue due to cbr theme.
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
-            $("input[name='Wages'][value='H']").attr('checked', 'checked');
-            $("input[name='Wages'][value='H']").parent().parent().addClass('cbr-checked');
-            $("input[name='TaxStatus'][value='W-2']").attr('checked', 'checked');
-            $("input[name='TaxStatus'][value='W-2']").parent().parent().addClass('cbr-checked');
+
         }, 1);
+
+        setTimeout(function() {
+// serialize clean form
+            $(function() {
+                form_clean = $("form").serialize();
+            });
+        }, 500);
 ////
 ////
 ////        // Validation

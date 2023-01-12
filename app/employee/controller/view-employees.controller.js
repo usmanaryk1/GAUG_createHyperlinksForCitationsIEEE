@@ -46,9 +46,7 @@
 
         };
         function edit(employee){
-            alert(JSON.stringify(employee));
-            ctrl.selectedEmployee = employee;
-            $rootScope.openModal('modal-5');
+            $state.go('app.employee.tab1', {id: employee.id});
         }
     }
     ;

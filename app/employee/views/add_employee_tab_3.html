@@ -306,10 +306,17 @@
         $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
     }
     // validate
+    var form_clean;
     customJqueryValidation();
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);
-    });// ready 
+        setTimeout(function() {
+// serialize clean form
+            $(function() {
+                form_clean = $("form").serialize();
+            });
+        }, 500);
+    });
 </script>
