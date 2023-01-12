@@ -4,6 +4,7 @@
         Page.setTitle("Dashboard");
         $rootScope.isAdminPortal = false;
         var tasks = JSON.parse(localStorage.getItem("tasks"));
+        ctrl.weatherIcons={'clear-day':'meteocons-sun','clear-night':'meteocons-moon','rain':'meteocons-rain','snow':'meteocons-snow','sleet':'meteocons-rain','wind':'meteocons-wind','fog':'meteocons-fog','cloudy':'meteocons-cloud','partly-cloudy-day':'meteocons-cloud-sun','partly-cloudy-night':'meteocons-cloud-moon'}
         if (tasks != null && tasks[$rootScope.currentUser.userName] != null) {
             //this flag is used to hide the flickering from normal checkbox to theme checkbox
             ctrl.inProgress = true;
@@ -59,7 +60,13 @@
                 ctrl.dischargedPatientsCount = res.count;
             });
         };
-        ctrl.retrieveCounts();
+        ctrl.retrieveWeather = function () {
+            DashboardDAO.getWeather().then(function (res) {
+                ctrl.weatherObj = res;
+            });
+        };        
+        ctrl.retrieveCounts();        
+        ctrl.retrieveWeather();
 
     }
     ;

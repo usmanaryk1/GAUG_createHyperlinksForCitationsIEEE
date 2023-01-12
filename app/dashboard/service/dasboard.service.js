@@ -41,6 +41,12 @@
                 transformResponse: function (res) {
                     return {count: res};
                 }
+            },
+            getWeather: {
+                method: 'GET',
+                params: {
+                    action: 'weather'
+                }
             }
         });
         return {
@@ -55,6 +61,9 @@
             },
             getCompianceTrackerCount: function (data) {
                 return api.getCompianceTrackerCount(data).$promise;
+            },
+            getWeather: function () {
+                return api.getWeather().$promise;
             }
         };
     };
