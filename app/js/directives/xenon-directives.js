@@ -4,10 +4,15 @@ angular.module('xenon.directives', []).
             function($timeout) {
                 return {
                     restrict: 'A',
+                    scope: {datatableObj: "="},
                     link: function(scope, element, attrs) {
 
                         $timeout(function() {
-                            element.dataTable();
+                            if (attrs.datatableObj != null) {
+                                scope.datatableObj = element.dataTable();
+                            } else {
+                                element.dataTable()
+                            }
                         });
                     }
                 }
@@ -900,6 +905,9 @@ angular.module('xenon.directives', []).
                 scope: {startDate: "=", endDate: "="},
                 link: function(scope, el, attr)
                 {
+                    $(el).keydown(function(e) {
+                        return;
+                    });
                     if (!jQuery.isFunction(jQuery.fn.daterangepicker))
                         return false;
 

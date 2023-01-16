@@ -167,6 +167,7 @@ div.dataTables_length label{ width:100% !important;}
 
 .search_hide .dataTables_length{display:none !important;}
 .search_hide #example-1_filter{display:none !important;}
+.search_only_hide #example-1_filter{display:none !important;}
 
 .pad_lf0{ padding-left:0px !important;}
 

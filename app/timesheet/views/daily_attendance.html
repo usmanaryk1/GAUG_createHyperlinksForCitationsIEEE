@@ -1,0 +1,158 @@
+
+<div class="page-body"> 
+
+
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">Daily Attendance</h1>
+            <p class="description">Daily Attendance</p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <form class="form-horizontal" role="form">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group col-sm-5 pull-left">
+                                    <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                                    <div style="width:70px; float:left">
+                                        <select class="form-control" ng-model="dAttendance.viewRecords" ng-change="dAttendance.changeViewRecords()">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-7 pull-right pad0 wd_full">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label pad_lf0">Employee Name</label>
+                                        <div class="col-sm-9"> 
+                                            <script type="text/javascript">
+                                                jQuery(document).ready(function($)
+                                                {
+                                                    $("#sboxit-2").selectBoxIt().on('open', function()
+                                                    {
+                                                        // Adding Custom Scrollbar
+                                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                                    });
+                                                });
+                                            </script>
+                                            <select class="form-control" id="sboxit-2" ng-model="dAttendance.empName" ng-change="dAttendance.filterTimesheet()">
+                                                <option value="">Select Coordinator</option>
+                                                <option value="Jack Straw">Jack Straw</option>
+                                                <option value="Janvier Rosiane">Janvier Rosiane</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 pad0">
+
+
+                                <div class="col-sm-6 pull-right wd_full pad0">
+                                    <div class="col-sm-6 pad0 wd_full">
+                                        <div class="form-group">
+                                            <label for="field-68" class="col-sm-3 control-label">From</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="dAttendance.fromDate" ng-change="dAttendance.filterTimesheet()">
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <div class="form-group">
+                                            <label for="field-69" class="col-sm-3 control-label">To</label>
+                                            <div class="col-sm-9 pad_lf0">
+                                                <div class="input-group">
+                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="dAttendance.toDate" ng-change="dAttendance.filterTimesheet()">
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12 pad0">
+                            <div class=" col-sm-8 pull-right" style="padding-right:0px;">
+
+                                <button type="button" class="btn btn-info green_bt  pull-right">Review</button>
+                                <button style="width:auto; margin-right:5px;" class="btn btn-info edit_bt pull-right" type="button">Edit</button>
+
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-body pad_top0">
+                    <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap ">
+                        <div class="table-responsive border0 scroll search_hide" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
+
+                            <script type="text/javascript">
+//                                					jQuery(document).ready(function($)
+//                                					{
+//                                						$("#example-1").dataTable({
+//                                							aLengthMenu: [
+//                                								[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+//                                							]
+//                                						});
+//                                					});
+                            </script>
+                            <table datatable-setup id="example-1" ng-if="dAttendance.attendanceList.length" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" datatable-obj="dAttendance.datatableObj">
+                                <thead>
+                                    <tr>
+                                        <th width="10%" colspan="1" rowspan="1" tabindex="0" nowrap>Date</th>
+                                        <th width="25%" colspan="1" rowspan="1" tabindex="0" nowrap>Employee Name</th>
+                                        <th width="25%" colspan="1" rowspan="1" tabindex="0" nowrap>Patient Name</th>
+                                        <th width="10%" colspan="1" rowspan="1" tabindex="0" nowrap>Time In</th>
+                                        <th width="10%" colspan="1" rowspan="1" tabindex="0" nowrap>Time Out</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <tr ng-repeat="attendance in dAttendance.attendanceList">
+                                        <th>
+                                            {{attendance.punchInTime|date :dateFormat}}
+                                        </th>
+                                        <td>{{attendance.employeeId.fName + " " + attendance.employeeId.lName}}</td>
+                                        <td>{{attendance.patientId.FName + " " + attendance.patientId.LName}}</td>
+                                        <td>{{attendance.punchInTime| date:timeFormat}}</td>
+                                        <td>{{attendance.punchOutTime|date:timeFormat }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <script type="text/javascript">
+                            // This JavaScript Will Replace Checkboxes in dropdown toggles
+                            jQuery(document).ready(function($)
+                            {
+                                setTimeout(function()
+                                {
+                                    $(".checkbox-row input").addClass('cbr');
+                                    cbr_replace();
+                                }, 0);
+                            });
+                        </script> 
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
