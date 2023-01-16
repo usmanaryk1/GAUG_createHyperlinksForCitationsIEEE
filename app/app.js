@@ -273,7 +273,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // timesheet
             state('app.employee_timesheet', {
                 url: '/employee_timesheet',
-                templateUrl: appHelper.templatePath('employee_timesheet'),
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
+                controller: 'EmployeeTimeSheetCtrl as empTimesheet',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -299,7 +300,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // patient_time_sheet
             state('app.patient_time_sheet', {
                 url: '/patient_time_sheet',
-                templateUrl: appHelper.templatePath('patient_time_sheet'),
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
+                controller: 'EmployeeTimeSheetCtrl as empTimesheet',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -312,7 +314,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // daily_attendance
             state('app.daily_attendance', {
                 url: '/daily_attendance',
-                templateUrl: appHelper.templatePath('daily_attendance'),
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
+                controller: 'DailyAttendanceCtrl as dAttendance',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
