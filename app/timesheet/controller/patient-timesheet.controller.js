@@ -34,12 +34,12 @@
                     if (ctrl.fromDate != null) {
                         if (date.getTime() < new Date(ctrl.fromDate).getTime()) {
                             return false;
-                        } 
+                        }
                     }
                     if (ctrl.toDate != null) {
                         if (date.getTime() > new Date(ctrl.toDate).getTime()) {
                             return false;
-                        } 
+                        }
                     }
                     return true;
                 }

@@ -511,7 +511,7 @@ angular.module('xenon.directives', []).
         directive('formWizard', function() {
             return {
                 restrict: 'AC',
-                scope:{'selectedtab':"=", dirty:"="},
+                scope: {'selectedtab': "=", dirty: "="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.bootstrapWizard))
@@ -634,90 +634,99 @@ angular.module('xenon.directives', []).
                         return false;
                     }
 
-                    var $this = angular.element(el),
-                            opts = {
-                                rules: {},
-                                messages: {},
-                                errorElement: 'span',
-                                errorClass: 'validate-has-error',
-                                highlight: function(element) {
-                                    $(element).closest('.form-group').addClass('validate-has-error');
-                                },
-                                unhighlight: function(element) {
-                                    //remove custom invalidity of component when it has valid value - by hardik
-                                    element.setCustomValidity('');
-                                    $(element).closest('.form-group').removeClass('validate-has-error');
-                                },
-                                errorPlacement: function(error, element)
-                                {                                    //setting custom validity of for component so we cn check form-validity in controller. - by hardik
-                                    element['0'].setCustomValidity(error);
-                                    if (element.closest('.has-switch').length)
-                                    {
-                                        error.insertAfter(element.closest('.has-switch'));
-                                    }
-                                    else
-                                    if (element.parent('.checkbox, .radio').length || element.parent('.input-group').length)
-                                    {
-                                        error.insertAfter(element.parent());
-                                    }
-                                    else
-                                    {
-                                        error.insertAfter(element);
-                                    }
-                                    // for dynaic validation we can not use data-validate, so For required field validations 
-                                    // For such elements set itemid attribute with Element name. - by hardik
-                                    if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
-                                        console.log(error);
-                                        error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
-                                    }
-                                }
-                            },
-                    $fields = $this.find('[data-validate]');
+                    var validateForm = function() {
 
-                    $fields.each(function(j, el2)
-                    {
-                        var $field = $(el2),
-                                name = $field.attr('name'),
-                                validate = attrDefault($field, 'validate', '').toString(),
-                                _validate = validate.split(',');
+                        var $this = angular.element(el),
+                                opts = {
+                                    rules: {},
+                                    messages: {},
+                                    errorElement: 'span',
+                                    errorClass: 'validate-has-error',
+                                    highlight: function(element) {
+                                        $(element).closest('.form-group').addClass('validate-has-error');
+                                    },
+                                    unhighlight: function(element) {
+                                        //remove custom invalidity of component when it has valid value - by hardik
+                                        element.setCustomValidity('');
+                                        $(element).closest('.form-group').removeClass('validate-has-error');
+                                    },
+                                    errorPlacement: function(error, element)
+                                    {                                    //setting custom validity of for component so we cn check form-validity in controller. - by hardik
+                                        element['0'].setCustomValidity(error);
+                                        if (element.closest('.has-switch').length)
+                                        {
+                                            error.insertAfter(element.closest('.has-switch'));
+                                        }
+                                        else
+                                        if (element.parent('.checkbox, .radio').length || element.parent('.input-group').length)
+                                        {
+                                            error.insertAfter(element.parent());
+                                        }
+                                        else
+                                        {
+                                            error.insertAfter(element);
+                                        }
+                                        // for dynaic validation we can not use data-validate, so For required field validations 
+                                        // For such elements set itemid attribute with Element name. - by hardik
+                                        if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
+                                            console.log(error);
+                                            error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
+                                        }
+                                    }
+                                },
+                        $fields = $this.find('[data-validate]');
 
-                        for (var k in _validate)
+                        $fields.each(function(j, el2)
                         {
-                            var rule = _validate[k],
-                                    params,
-                                    message;
-                            if (typeof opts['rules'][name] == 'undefined')
-                            {
-                                opts['rules'][name] = {};
-                                opts['messages'][name] = {};
-                            }
+                            var $field = $(el2),
+                                    name = $field.attr('name'),
+                                    validate = attrDefault($field, 'validate', '').toString(),
+                                    _validate = validate.split(',');
 
-                            if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
+                            for (var k in _validate)
                             {
-                                opts['rules'][name][rule] = true;
-
-                                message = $field.data('message-' + rule);
-                                if (message)
+                                var rule = _validate[k],
+                                        params,
+                                        message;
+                                if (typeof opts['rules'][name] == 'undefined')
                                 {
-                                    opts['messages'][name][rule] = message;
+                                    opts['rules'][name] = {};
+                                    opts['messages'][name] = {};
                                 }
-                            }
-                            // Parameter Value (#1 parameter)
-                            else
-                            if (params = rule.match(/(\w+)\[(.*?)\]/i))
-                            {
-                                if ($.inArray(params[1], ['min', 'max', 'minlength', 'maxlength', 'equalTo']) != -1)
+
+                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
                                 {
-                                    opts['rules'][name][params[1]] = params[2];
+                                    opts['rules'][name][rule] = true;
 
-
-                                    message = $field.data('message-' + params[1]);
+                                    message = $field.data('message-' + rule);
                                     if (message)
                                     {
-                                        opts['messages'][name][params[1]] = message;
+                                        opts['messages'][name][rule] = message;
                                     }
                                 }
-                            }
+                                // Parameter Value (#1 parameter)
+                                else
+                                if (params = rule.match(/(\w+)\[(.*?)\]/i))
+                                {
+                                    if ($.inArray(params[1], ['min', 'max', 'minlength', 'maxlength', 'equalTo']) != -1)
+                                    {
+                                        opts['rules'][name][params[1]] = params[2];
+
+
+                                        message = $field.data('message-' + params[1]);
+                                        if (message)
+                                        {
+                                            opts['messages'][name][params[1]] = message;
+                                        }
+                                    }
+                                }
+                                if (scope.form != null) {
+                                    var validation = opts['rules'][name];
+                                    validation.messages = opts['messages'][name];
+                                    $("[name='" + name + "']").rules("add", validation);
+                                    scope.form.validate(opts);
+                                }
+
 //                            if(!message && $field.attr("itemid")){
 //                                if($field.attr("required")==='required'){
 //                                    opts['rules'][name]['required'] = true;
@@ -727,10 +736,19 @@ angular.module('xenon.directives', []).
 //                                opts['messages'][name]['required'] = 'Please enter ' + $field.attr("itemid") + '.';
 //                            }
 //                            alert(message + ' ' + rule + ' ' + params);
-                        }
-                    });
+                            }
+                        });
+                        scope.form = $this;
+                        $this.validate(opts);
+                    }
+                    validateForm();
+                    //Added for dynamic form validation by Jack
 
-                    $this.validate(opts);
+                    scope.$watch("refreshForm", function(value) {
+                        if (value != null) {
+                            validateForm();
+                        }
+                    }, true);
                 }
             }
         }).
@@ -857,6 +875,7 @@ angular.module('xenon.directives', []).
         directive('datepicker', function() {
             return {
                 restrict: 'AC',
+                scope: {minDate: "=", maxDate: "="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
@@ -875,7 +894,29 @@ angular.module('xenon.directives', []).
                             $p = $this.prev();
 
                     $this.datepicker(opts);
+                    scope.$watch("minDate", function(value) {
+                        if (value == null || value == "") {
+                            $this.datepicker("setStartDate", null);
+                        } else {
+                        $this.datepicker("setStartDate", new Date(value));
+                    }
+                    });
+                    scope.$watch("maxDate", function(value) {
+                        if (value == null || value == "") {
+                            $this.datepicker("setEndDate", null);
+                        } else {
+                            $this.datepicker("setEndDate", new Date(value));
+                        }
 
+                    });
+
+
+//$("#StartDate").datepicker({}).on('changeDate', function(selected) {
+//            var startDate = new Date(selected.date.valueOf());
+//            $('#EndDate').datepicker('setStartDate', startDate);
+//        }).on('clearDate', function(selected) {
+//            $('#EndDate').datepicker('setStartDate', null);
+//        });
                     if ($n.is('.input-group-addon') && $n.has('a'))
                     {
                         $n.on('click', function(ev)

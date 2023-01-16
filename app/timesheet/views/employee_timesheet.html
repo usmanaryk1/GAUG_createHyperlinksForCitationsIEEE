@@ -50,7 +50,7 @@
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.fromDate" ng-change="empTimesheet.filterTimesheet()">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.fromDate" ng-change="empTimesheet.filterTimesheet()" max-date="empTimesheet.toDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -61,7 +61,7 @@
                                             <label for="field-69" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9 pad_lf0">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.toDate" ng-change="empTimesheet.filterTimesheet()">
+                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.toDate" ng-change="empTimesheet.filterTimesheet()" min-date="empTimesheet.fromDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>

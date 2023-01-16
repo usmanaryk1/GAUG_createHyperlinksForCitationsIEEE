@@ -301,7 +301,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.patient_time_sheet', {
                 url: '/patient_time_sheet',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
-                controller: 'EmployeeTimeSheetCtrl as empTimesheet',
+                controller: 'PatientTimeSheetCtrl as patTimesheet',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
