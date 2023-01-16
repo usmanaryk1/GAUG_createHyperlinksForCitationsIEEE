@@ -506,6 +506,7 @@ angular.module('xenon.directives', []).
         directive('formWizard', function() {
             return {
                 restrict: 'AC',
+                scope:{'selectedtab':"=", dirty:"="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.bootstrapWizard))
@@ -516,17 +517,17 @@ angular.module('xenon.directives', []).
                             $progress = $this.find(".progress-indicator"),
                             _index = $this.find('> ul > li.active').index();
 //                    index is set for dynamic tab selection according to tab no of the page
-                    if (_index <= 0 && scope.tabNo) {
-                        _index = scope.tabNo - 1;
+                    if (_index <= 0 && scope.selectedtab) {
+                        _index = scope.selectedtab - 1;
                     }
                     // Validation
                     var checkFormWizardValidaion = function(tab, navigation, index)
                     {
-                        if ($this.hasClass('validate'))
+                        if ($this.hasClass('validate') || $this.hasClass('custom-form'))
                         {
-                            var $valid = $this.valid();
 
-                            if (!$valid)
+                            var $valid = $this.valid();
+                            if (!$valid && scope.dirty)
                             {
                                 $this.data('validator').focusInvalid();
                                 return false;

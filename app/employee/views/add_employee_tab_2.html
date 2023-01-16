@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+                <!--<form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">-->
                     <div class="row">
                         <div class="col-sm-12 pull-right">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -270,7 +270,7 @@
                             </button>
                         </div>
                     </div>
-                </form>
+                <!--</form>-->
             </div>
         </div>
     </div>
@@ -285,13 +285,13 @@
             $(".fade-in-effect").addClass('in');
 
         }, 1);
-
-        setTimeout(function() {
-// serialize clean form
-            $(function() {
-                form_clean = $("form").serialize();
-            });
-        }, 500);
+        //to set an variable to check dirtiness of form.
+//        setTimeout(function() {
+//        // serialize clean form
+//            $(function() {
+//                form_clean = $("form").serialize();
+//            });
+//        }, 500);
 ////
 ////
 ////        // Validation

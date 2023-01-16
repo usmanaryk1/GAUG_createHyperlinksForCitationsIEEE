@@ -88,7 +88,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_patient_tab_1
             state('app.patient.tab1', {
-                url: '/tab1',
+                url: '/tab1/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_1'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -104,7 +104,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_patient_tab_2
             state('app.patient.tab2', {
-                url: '/tab2',
+                url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_2'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -120,7 +120,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_patient_tab_3
             state('app.patient.tab3', {
-                url: '/tab3',
+                url: '/tab3/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_3'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -136,7 +136,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_patient_tab_4
             state('app.patient.tab4', {
-                url: '/tab4',
+                url: '/tab4/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_4'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -152,7 +152,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // add_patient_tab_5
             state('app.patient.tab5', {
-                url: '/tab5',
+                url: '/tab5/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_5'),
                 resolve: {
                     resources: function($ocLazyLoad) {
@@ -180,45 +180,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
-//            // view_patient_tab_1
-//            state('app.view_patient_tab_1', {
-//                url: '/view_patient_tab_1',
-//                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_1'),
-//                resolve: {
-//                    resources: function($ocLazyLoad) {
-//                        return $ocLazyLoad.load([
-//                            ASSETS.forms.jQueryValidate,
-//                            ASSETS.extra.toastr,
-//                        ]);
-//                    },
-//                }
-//            }).
-//            // view_patient_tab_2
-//            state('app.view_patient_tab_2', {
-//                url: '/view_patient_tab_2',
-//                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_2'),
-//                resolve: {
-//                    resources: function($ocLazyLoad) {
-//                        return $ocLazyLoad.load([
-//                            ASSETS.forms.jQueryValidate,
-//                            ASSETS.extra.toastr,
-//                        ]);
-//                    },
-//                }
-//            }).
-//            // view_patient_tab_3
-//            state('app.view_patient_tab_3', {
-//                url: '/view_patient_tab_3',
-//                templateUrl: appHelper.viewTemplatePath('patient', 'view_patient_tab_3'),
-//                resolve: {
-//                    resources: function($ocLazyLoad) {
-//                        return $ocLazyLoad.load([
-//                            ASSETS.forms.jQueryValidate,
-//                            ASSETS.extra.toastr,
-//                        ]);
-//                    },
-//                }
-//            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,
@@ -296,45 +257,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
-            // view_employee_tab_1
-//            state('app.view_employee_tab_1', {
-//                url: '/view_employee_tab_1',
-//                templateUrl: appHelper.viewTemplatePath('employee', 'view_employee_tab_1'),
-//                resolve: {
-//                    resources: function($ocLazyLoad) {
-//                        return $ocLazyLoad.load([
-//                            ASSETS.forms.jQueryValidate,
-//                            ASSETS.extra.toastr,
-//                        ]);
-//                    },
-//                }
-//            }).
-//            // view_employee_tab_2
-//            state('app.view_employee_tab_2', {
-//                url: '/view_employee_tab_2',
-//                templateUrl: appHelper.viewTemplatePath('employee', 'view_employee_tab_2'),
-//                resolve: {
-//                    resources: function($ocLazyLoad) {
-//                        return $ocLazyLoad.load([
-//                            ASSETS.forms.jQueryValidate,
-//                            ASSETS.extra.toastr,
-//                        ]);
-//                    },
-//                }
-//            }).
-//            // view_employee_tab_3
-//            state('app.view_employee_tab_3', {
-//                url: '/view_employee_tab_3',
-//                templateUrl: appHelper.viewTemplatePath('employee', 'view_employee_tab_3'),
-//                resolve: {
-//                    resources: function($ocLazyLoad) {
-//                        return $ocLazyLoad.load([
-//                            ASSETS.forms.jQueryValidate,
-//                            ASSETS.extra.toastr,
-//                        ]);
-//                    },
-//                }
-//            }).
             // edit_timesheet
             state('app.edit_timesheet', {
                 url: '/edit_timesheet',

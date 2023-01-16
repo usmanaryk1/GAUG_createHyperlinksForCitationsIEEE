@@ -1,25 +1,33 @@
 (function() {
-    function AddEmployeeCtrl($scope, $rootScope, $http, $stateParams, $state, EmployeeDAO, $timeout) {
+    function AddEmployeeCtrl($scope, $stateParams, $state, EmployeeDAO, $timeout, $formService) {
         var ctrl = this;
-        ctrl.employee = {Wages: 'H', TaxStatus: 'W-2', position: 'Market Rep.'};
+        ctrl.retrivalRunning = false;
+        ctrl.employee = {};
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
             }
             ctrl.editMode = true;
         } else if ($state.current.name.indexOf('tab1') > -1) {
+            ctrl.employee = {}
             ctrl.editMode = false;
         } else {
             $state.transitionTo(ontimetest.defaultState);
         }
         ctrl.saveEmployee = saveEmployeeData;
         ctrl.pageInitCall = pageInit;
-        ctrl.submitSave = false;
+        var form_data;
 
+        //ceck if form has been changed or not
+        //If changed then it should be valid
         ctrl.navigateToTab = function(state) {
-            if ($('#add_employee_form').valid() || $('#add_employee_form').serialize() == form_clean) {
+            if ($('#add_employee_form').serialize() !== form_data) {
+                ctrl.formDirty = true;
+            }
+            if ($('#add_employee_form').valid() || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
+
                 }
             }
 
@@ -47,14 +55,14 @@
 
                 EmployeeDAO.update({action: reqParam, data: ctrl.employee})
                         .then(function(res) {
-                            if(!ctrl.employee.id || ctrl.employee.id === null){
+                            if (!ctrl.employee.id || ctrl.employee.id === null) {
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
                                 ctrl.employee = res;
                             }
                         })
                         .catch(function() {
-                            if(!ctrl.employee.id || ctrl.employee.id === null){
+                            if (!ctrl.employee.id || ctrl.employee.id === null) {
                                 $state.go('^.tab1', {id: 1});
                                 ctrl.editMode = true;
                                 ctrl.employee.id = 1;
@@ -70,8 +78,10 @@
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
+                ctrl.retrivalRunning = true;
                 EmployeeDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.employee = res;
+                    ctrl.retrivalRunning = false;
                     $timeout(function() {
                         $("#rate2").multiSelect('refresh');
                         $("#rate1").multiSelect('refresh');
@@ -85,10 +95,12 @@
                         }
                     }); // showLoadingBar
                     ctrl.employee = ontimetest.employees[($state.params.id - 1)];
+                    ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
-                })
+                });
             }
         }
+        ;
 
 
 //        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
@@ -117,57 +129,81 @@
             }
         });
 
-        function setRadioValues(name, newVal) {
-            $("input[name='" + name + "'][value='" + newVal + "']").attr('checked', 'checked');
-            $("input[name='" + name + "'][value='" + newVal + "']").parent().parent().addClass('cbr-checked');
-        }
+        ctrl.tab3DataInit = function() {
+            ctrl.formDirty = false;
+            $timeout(function() {
+                if (!ctrl.retrivalRunning) {
+                    form_data = $('#add_employee_form').serialize();
+                } else {
+                    ctrl.tab1DataInit();
+                }
+            }, 100);
+
+        };
 
         ctrl.tab2DataInit = function() {
-            if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus===null) {
-                ctrl.employee.taxStatus = 'W-2';
-            }
-            if (!ctrl.employee.wages) {
-                ctrl.employee.wages = 'H';
-            }
-            setTimeout(function() {
-                setRadioValues('TaxStatus', ctrl.employee.taxStatus || ctrl.employee.taxStatus===null);
-                setRadioValues('Wages', ctrl.employee.wages);
+            ctrl.formDirty = false;
+
+            //to set radio buttons on tab init..
+            $timeout(function() {
+                if (!ctrl.retrivalRunning) {
+                    if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
+                        ctrl.employee.taxStatus = 'W-2';
+                    }
+                    if (!ctrl.employee.wages) {
+                        ctrl.employee.wages = 'H';
+                    }
+                    $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
+                    $formService.setRadioValues('Wages', ctrl.employee.wages);
+                    form_data = $('#add_employee_form').serialize();
+                } else {
+                    ctrl.tab2DataInit();
+                }
             }, 100);
 
         };
         ctrl.tab1DataInit = function() {
-            if(!$state.params.id || $state.params.id === ''){
+            ctrl.formDirty = false;
+            //to set edit mode in tab change
+            if (!$state.params.id || $state.params.id === '') {
                 ctrl.editMode = false;
-                ctrl.employee = {Wages: 'H', TaxStatus: 'W-2', position: 'Market Rep.'};
-            }else{
+                ctrl.employee = {};
+            } else {
                 ctrl.editMode = true;
             }
-            if (!ctrl.employee.position || ctrl.employee.position===null) {
-                ctrl.employee.position = 'Market Rep.';
-            }
-            setTimeout(function() {
-                setRadioValues('Position', ctrl.employee.position);
+            //to set radio buttons on tab init..
+            $timeout(function() {
+                if (!ctrl.retrivalRunning) {
+                    if (!ctrl.employee.position || ctrl.employee.position === null) {
+                        ctrl.employee.position = 'Market Rep.';
+                    }
+                    $formService.setRadioValues('Position', ctrl.employee.position);
+                    form_data = $('#add_employee_form').serialize();
+                } else {
+                    ctrl.tab1DataInit();
+                }
             }, 100);
 
         };
-        $scope.$watch(function() {
-            return ctrl.employee.position;
-        }, function(newVal, oldValue) {
-            setRadioValues('Position', newVal);
-        });
-        $scope.$watch(function() {
-            return ctrl.employee.Wages;
-        }, function(newVal, oldValue) {
-            setRadioValues('Wages', newVal);
-        });
-        $scope.$watch(function() {
-            return ctrl.employee.TaxStatus;
-        }, function(newVal, oldValue) {
-            setRadioValues('TaxStatus', newVal);
-        });
+
+//        $scope.$watch(function() {
+//            return ctrl.employee.position;
+//        }, function(newVal, oldValue) {
+//            $formService.setRadioValues('Position', newVal);
+//        });
+//        $scope.$watch(function() {
+//            return ctrl.employee.Wages;
+//        }, function(newVal, oldValue) {
+//            $formService.setRadioValues('Wages', newVal);
+//        });
+//        $scope.$watch(function() {
+//            return ctrl.employee.TaxStatus;
+//        }, function(newVal, oldValue) {
+//            $formService.setRadioValues('TaxStatus', newVal);
+//        });
 
         ctrl.pageInitCall();
     }
     ;
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "$rootScope", "$http", "$stateParams", "$state", "EmployeeDAO", "$timeout", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "$stateParams", "$state", "EmployeeDAO", "$timeout", "$formService", AddEmployeeCtrl]);
 })();

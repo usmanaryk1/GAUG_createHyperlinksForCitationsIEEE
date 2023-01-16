@@ -35,7 +35,7 @@
             });
         });
     </script>
-    <form class="form-wizard validate" id="rootwizard" novalidate="" role="form">
+    <form class="form-wizard form-horizontal validate" id="add_employee_form" dirty="addEmployee.formDirty" selectedtab="tabNo" novalidate="" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
         <ul class="tabs">
             <li>
                 <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab('tab1')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
@@ -70,10 +70,11 @@
             <span>
             </span>
         </div>
+        <div ui-view></div>
     </form>
 </div>
 <!-- FORM WIZARD WITH VALIDATION END HERE-->
-<div ui-view></div>
+
 <script type="text/javascript">
     // validate
     customJqueryValidation();

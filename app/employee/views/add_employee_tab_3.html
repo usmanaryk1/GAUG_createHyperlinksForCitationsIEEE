@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row" ng-init="addEmployee.tab3DataInit()">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form"  onended="onFormSubmit()" ng-submit="addEmployee.saveEmployee()">
+                <!--<form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form"  ng-submit="addEmployee.saveEmployee()">-->
                     <div class="row">
                         <div class="col-sm-12 pull-right">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -267,7 +267,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                <!--</form>-->
             </div>
             <div class="modal-footer">
                 <button class="btn btn-white" data-dismiss="modal" type="button">
@@ -300,11 +300,6 @@
         var itemId = element.getAttribute("itemid");
         $("#" + elementName).text('Please enter ' + itemId + '.');
     }
-    function onFormSubmit() {
-        alert(1)
-        $("#TBTestingExpirationDate-error").text('Please enter TB Testing Expiration Date.');
-        $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
-    }
     // validate
     var form_clean;
     customJqueryValidation();
@@ -312,11 +307,12 @@
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);
-        setTimeout(function() {
-// serialize clean form
-            $(function() {
-                form_clean = $("form").serialize();
-            });
-        }, 500);
+        //to set an variable to check dirtiness of form.
+//        setTimeout(function() {
+//        // serialize clean form
+//            $(function() {
+//                form_clean = $("form").serialize();
+//            });
+//        }, 500);
     });
 </script>
