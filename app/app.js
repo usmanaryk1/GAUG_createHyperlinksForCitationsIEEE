@@ -233,6 +233,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     $rootScope.isLightLoginPage = false;
                     $rootScope.isLockscreenPage = false;
                     $rootScope.isMainPage = true;
+                    $rootScope.isAdminPortal = false;
                 },
                 resolve: {
                     resources: function ($ocLazyLoad) {
@@ -612,7 +613,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 }
             }).
             // company_information
-            state('app.company_information', {
+            state('admin.company_information', {
                 url: '/company_information',
                 templateUrl: appHelper.viewTemplatePath('company', 'company_information'),
                 controller: 'AddCompanyCtrl as addCompany',
@@ -680,7 +681,21 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             state('admin.dashboard', {
                 url: '/dashboard',
-                templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard')
+                templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard'),
+                controller: 'DashboardCtrl as dashboard',
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.charts.dxGlobalize,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                    dxCharts: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.charts.dxCharts,
+                        ]);
+                    },
+                }
             }).
             state('admin.position-list', {
                 url: '/position-list',

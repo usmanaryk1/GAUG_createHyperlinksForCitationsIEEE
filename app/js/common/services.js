@@ -87,7 +87,6 @@ angular.module('xenon.services', []).
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella', 'CREATE_INSURANCE_PROVIDER,VIEW_INSURANCE_PROVIDER');
                 var billing = this.addItem('Billing', '/app', 'linecons-money', 'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
-                var company = this.addItem('Company', '/app', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
                 var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE');
                 var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
 
@@ -129,8 +128,6 @@ angular.module('xenon.services', []).
                 payroll.addItem('Payroll Session', './payroll_session', 'VIEW_PAYROLL_SESSION');
                 payroll.addItem('Payroll Settings', './payroll_settings', 'VIEW_PAYROLL_SETTINGS');
 
-                // Subitems of company
-                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 
                 // Subitems of calendar
                 calendar.addItem('Employee', './employee-calendar/', 'VIEW_EMPLOYEE_SCHEDULE');
@@ -192,6 +189,7 @@ angular.module('xenon.services', []).
             this.prepareAdminMenu = function ()
             {
                 var dashboard = this.addItem('Dashboard', '/admin/dashboard', 'fa-home');
+                var company = this.addItem('Company', '/admin/company_information', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
                 var users = this.addItem('Users', '/admin', 'linecons-user','CREATE_USER,EDIT_USER,VIEW_USER');
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
@@ -202,6 +200,8 @@ angular.module('xenon.services', []).
                 // Subitems of users
                 users.addItem('Add User', './user/','CREATE_USER');
                 users.addItem('View Users', './user-list/active','VIEW_USER');
+                // Subitems of company
+//                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 
 //                security.addItem('Manage Role', './manage_role')
 //                security.addItem('Manage Access', './manage_access')

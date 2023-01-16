@@ -3,7 +3,7 @@
         var ctrl = this;
         Page.setTitle("Dashboard");        
         ctrl.weatherObj = {location: ontime_data.weatherCity,currentTime:new Date().getTime()/1000};
-        $rootScope.isAdminPortal = false;
+//        $rootScope.isAdminPortal = false;
         var tasks = JSON.parse(localStorage.getItem("tasks"));
         ctrl.weatherIcons = {'clear-day': 'meteocons-sun', 'clear-night': 'meteocons-moon', 'rain': 'meteocons-rain', 'snow': 'meteocons-snow', 'sleet': 'meteocons-rain', 'wind': 'meteocons-wind', 'fog': 'meteocons-fog', 'cloudy': 'meteocons-cloud', 'partly-cloudy-day': 'meteocons-cloud-sun', 'partly-cloudy-night': 'meteocons-cloud-moon'}
         if (tasks != null && tasks[$rootScope.currentUser.userName] != null) {
