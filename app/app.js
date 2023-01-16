@@ -567,7 +567,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // company_information
             state('app.company_information', {
                 url: '/company_information',
-                templateUrl: appHelper.templatePath('company_information'),
+                templateUrl: appHelper.viewTemplatePath('company', 'company_information'),
+                controller: 'AddCompanyCtrl as addCompany',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
