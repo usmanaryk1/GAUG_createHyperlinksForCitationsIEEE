@@ -3,6 +3,7 @@ ontime_data = {
 //    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'login',
     'homepage': 'app.dashboard',
+    'weatherCity':'New York, NY',
     'employeeReasons': [
         "Sick", "Personal Day", "Vacation"
     ],
