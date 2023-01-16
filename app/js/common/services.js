@@ -95,7 +95,7 @@ angular.module('xenon.services', []).
 
 
                 // Subitems of patient
-                patient.addItem('Add Patient', './patient/tab1');
+                patient.addItem('Add Patient', './patient/tab1/');
                 patient.addItem('View Patient', './patient-list/active');
 
 

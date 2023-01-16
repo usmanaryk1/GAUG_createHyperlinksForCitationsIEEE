@@ -72,10 +72,14 @@
                                                     <td>{{patient.dateOfBirth}}</td>
                                                     <td>{{patient.phone| tel }}</td>
                                                     <td>
-                                                        <div>{{patient.address1}}</div> <div ng-if="patient.address2 != null">{{patient.address2}}</div> {{patient.city}}, {{patient.state}}, {{patient.zipcode}}
+                                                        <div ng-show="patient.addressDataId">
+                                                            <div>{{patient.addressDataId.address1}}</div>
+                                                            <div ng-if="patient.addressDataId.address2 !== null">{{patient.addressDataId.address2}}</div>
+                                                            {{patient.addressDataId.city}}, {{patient.addressDataId.state}}, {{patient.addressDataId.zipcode}}
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <a class="btn icon-left fa fa-pencil edit_button" ng-click="edit(patient);"><span class="ed_b">Edit</span></a> 
+                                                        <a class="btn icon-left fa fa-pencil edit_button" ng-click="viewPatient.edit(patient);"><span class="ed_b">Edit</span></a> 
                                                         <a class="btn icon-left fa fa-trash-o delete_button" ng-click='delete(patient.id);'><span class="ed_b" >Dlt</span></a>
                                                         <a class="btn icon-left fa fa-download download_bt" ng-click='download(patient.id);'><span class="ed_b">Dld</span></a>
                                                         <a class="btn icon-left fa fa-ban deactivate_bt" ng-click='discharge(patient.id);'><span class="ed_b">Dsch</span></a></td>
@@ -84,6 +88,7 @@
                                         </table> 
                                     </div>
                                     <script type="text/javascript">
+
                                         // This JavaScript Will Replace Checkboxes in dropdown toggles
                                         jQuery(document).ready(function($)
                                         {
@@ -215,145 +220,149 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
   } // viewPatientTab1Ctrl
 </script>-->
 <script type="text/ng-template" id="modal-5">
-	
 
-	
-	<div class="modal-body">
-        <div class="row">
-            <div class="user_panel col-md-12">
-                              <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
-                              <div class="emp_user_hd">
-                                <div class="emp_user_name">{{selectPatientModel.patient.LName}} {{selectPatientModel.patient.FName}} {{selectPatientModel.patient.middleInitial}}</div>
-                                <p>{{selectPatientModel.patient.insuranceProvider}}</p>
-                              </div>
-                      <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
-                            </div>
-                    
-                    </div>
-                    <hr/>
-		<div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Gender</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.gender==='M'?'Male':'Female'}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Insurer</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.insuranceProvider}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Insurance ID</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.insuraneId}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.phone | tel}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.address1}}<div ng-if="selectPatientModel.patient.address2 != null"> {{selectPatientModel.patient.address2}}</div> <div>{{selectPatientModel.patient.city}}, {{selectPatientModel.patient.state}}, {{selectPatientModel.patient.zipcode}}</div>
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.dateOfBirth}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Coordinator</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.careCordinatorId}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Nurse Case Manager</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.nurseCaseManagerId}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Care Coordinator</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.careCordinator}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-        <div class="row">
-			<div class="col-md-12">
-				
-				<div class="form-group">
-					<label for="field-1" class="control-label col-md-4"><strong>Care Coordinator Contact</strong></label>
-                                        <div class="col-md-8">
-                                            {{selectPatientModel.patient.careCordinatorContact}} 
-                                        </div>
-				</div>	
-				
-			</div>
-                </div>
-	</div>
-	
-	<div class="modal-footer">
-		<button type="button" class="btn btn-white" ng-click="selectPatientModel.close();">Close</button>
-	</div>
+
+
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectPatientModel.patient.LName}} {{selectPatientModel.patient.FName}} {{selectPatientModel.patient.middleInitial}}</div>
+    <p>{{selectPatientModel.patient.insuranceProvider}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Gender</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.gender==='M'?'Male':'Female'}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurer</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceProvider}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurance ID</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuraneId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
+    <div class="col-md-8" ng-show="selectPatientModel.patient.addressDataId">
+    {{selectPatientModel.patient.addressDataId.address1}}
+    <div ng-if="selectPatientModel.patient.addressDataId.address2 != null">
+    {{selectPatientModel.patient.addressDataId.address2}}
+    </div> 
+    <div>{{selectPatientModel.patient.addressDataId.city}}, {{selectPatientModel.patient.addressDataId.state}}, {{selectPatientModel.patient.addressDataId.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.dateOfBirth}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Nurse Case Manager</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.nurseCaseManagerId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Care Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinator}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Care Coordinator Contact</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorContact}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectPatientModel.close();">Close</button>
+    </div>
 </script>

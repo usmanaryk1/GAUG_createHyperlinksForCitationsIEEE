@@ -35,10 +35,10 @@
             });
         });
     </script>
-    <form class="form-wizard form-horizontal validate" id="add_employee_form" dirty="addEmployee.formDirty" selectedtab="tabNo" novalidate="" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+    <form class="form-wizard" dirty="addEmployee.formDirty" selectedtab="tabNo" novalidate="" role="form">
         <ul class="tabs">
-            <li>
-                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab('tab1')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+            <li class="{{tabNo==1?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab1')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa-user"></i></div> 
                     <div class="hidden-xs">Add Employee</div>
                     <span>
@@ -46,8 +46,8 @@
                     </span>
                 </a>
             </li>
-            <li>
-                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab('tab2')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+            <li class="{{tabNo==2?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab2')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-credit-card"></i></div> 
                     <div class="hidden-xs">Enter Employee Pay Rate</div>
                     
@@ -56,8 +56,8 @@
                     </span>
                 </a>
             </li>
-            <li>
-                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab('tab3')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+            <li class="{{tabNo==3?'active':''}}">
+                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab3')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
                     <div class="hidden-xs">Upload Employee Documents</div>
                     <span>

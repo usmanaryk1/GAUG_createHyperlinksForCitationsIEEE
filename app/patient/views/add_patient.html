@@ -3,10 +3,11 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                Add Patient
+                {{addPatient.editMode?'Update Patient':'Add Patient'}}
             </h1>
             <p class="description">
-                Create A Patient Record By Entering Patient Information
+                {{addPatient.editMode?'Create A Patient Record By Entering Patient Information':'Create A Patient Record By Entering Patient Information'}}
+                
             </p>
         </div>
     </div>
@@ -36,10 +37,10 @@
         });
 
     </script>
-    <form class="form-wizard validate" id="rootwizard" novalidate="" role="form">
+    <form class="form-wizard custom-form" dirty="addPatient.formDirty" selectedtab="tabNo" novalidate="" role="form">
         <ul class="tabs">
-            <li ui-sref=".tab1">
-                <a data-toggle="tab" href="">
+            <li class="{{tabNo==1?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab1')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-user"></i></div> 
                     <div class="hidden-xs">Patient Information</div>
                     <span>
@@ -47,8 +48,8 @@
                     </span>
                 </a>
             </li>
-            <li ui-sref=".tab2">
-                <a data-toggle="tab" href="">
+            <li class="{{tabNo==2?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab2')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-location-arrow"></i></div> 
                     <div class="hidden-xs">Location Information</div>
                     <span>
@@ -56,8 +57,8 @@
                     </span>
                 </a>
             </li>
-            <li ui-sref=".tab3">
-                <a data-toggle="tab" href="">
+            <li class="{{tabNo==3?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab3')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     
                     <div class="visible-xs"><i class="fa  fa-edit"></i></div> 
                     <div class="hidden-xs">Insurance Information</div>
@@ -66,8 +67,8 @@
                     </span>
                 </a>
             </li>
-            <li ui-sref=".tab4">
-                <a data-toggle="tab" href="">
+            <li class="{{tabNo==4?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab4')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-key"></i></div> 
                     <div class="hidden-xs">Authorization Info</div>
                     <span>
@@ -75,8 +76,8 @@
                     </span>
                 </a>
             </li>
-            <li ui-sref=".tab5">
-                <a data-toggle="tab" href="">
+            <li class="{{tabNo==5?'active':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab5')" style="{{(!addPatient.editMode || addPatient.patient.isSubscriber === false)?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-info-circle"></i></div> 
                     <div class="hidden-xs">Insurance Subscriber Information</div>
                     <span>
@@ -89,20 +90,19 @@
             <span>
             </span>
         </div>
+        <div ui-view></div>
     </form>
 </div>
     <!-- FORM WIZARD WITH VALIDATION END HERE-->
-<div ui-view></div>
+
 
 <script type="text/javascript">
-    // validate
     customJqueryValidation();
 
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);
-
 
 //        // Validation
 //        $("#add_patient_tab_1_form").validate({

@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row"  ng-init="addPatient.tab3DataInit()">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal" id="add_patient_tab_3_form" name="add_patient_tab_3_form" role="form">
+                <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -30,9 +30,10 @@
                                 // 		});
                                 // 	});
                             </script>
-                            <select class="form-control" id="sboxit-1" name="InsuranceProvider">
+                            <select class="form-control" id="sboxit-1" name="InsuranceProvider"
+                                    data-validate="required" data-message-required="Please select Insurance Provider." ng-model="addPatient.patient.insuranceProviderId">
                                 <option value="">
-                                    Select Insurance
+                                    Select
                                 </option>
                                 <option value="1">
                                     Company Name
@@ -47,8 +48,7 @@
                             Plan Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-41" name="PlanName" type="text">
-                            </input>
+                            <input class="form-control" id="field-41" name="PlanName" type="text" ng-model="addPatient.patient.planName"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -58,8 +58,7 @@
                             Policy Number
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-42" name="PolicyNumber" type="text">
-                            </input>
+                            <input class="form-control" id="field-42" name="PolicyNumber" type="text" ng-model="addPatient.patient.policyNumber"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -69,8 +68,7 @@
                             Insurance ID
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-43" name="InsuranceID" type="text">
-                            </input>
+                            <input class="form-control" id="field-43" name="InsuranceID" type="text" ng-model="addPatient.patient.insuranceId"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -80,8 +78,7 @@
                             MRN Number
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-44" name="MRNNumber" type="text">
-                            </input>
+                            <input class="form-control" id="field-44" name="MRNNumber" type="text" ng-model="addPatient.patient.mrnNumber"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -93,12 +90,12 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input checked="" class="cbr" name="radio-2" type="radio">
+                                    <input class="cbr" name="IsSubscriber" type="radio" ng-value="true" ng-model="addPatient.patient.isSubscriber">
                                     Yes
                                     </input>
                                 </label>
                                 <label class="cbr-inline">
-                                    <input class="cbr" name="radio-2" type="radio">
+                                    <input class="cbr" name="IsSubscriber" type="radio" ng-value="false" ng-model="addPatient.patient.isSubscriber">
                                     No
                                     </input>
                                 </label>
@@ -109,10 +106,10 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.navigateToTab($event, 'tab4')">
                                 Next »
                             </button>
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addPatient.navigateToTab($event, 'tab2')">
                                 « Previous
                             </button>
                         </div>
@@ -132,20 +129,20 @@
         }, 1);
 
 
-        // Validation
-        $("#add_patient_tab_3_form").validate({
-            rules: {//PlanName: {required: true},
-// PolicyNumber: {required: true},
-                InsuranceProvider: {required: true},
-// MRNNumber: {required: true},
-// InsuranceID: {required: true},
-            },
-            messages: {PlanName: {required: 'Please enter Plan Name.'},
-                PolicyNumber: {required: 'Please enter Policy Number.'},
-                InsuranceProvider: {required: 'Please select Insurance Provider.'},
-                MRNNumber: {required: 'Please enter MRN Number.'},
-                InsuranceID: {required: 'Please enter Insurance ID.'},
-            },
-        });
+//        // Validation
+//        $("#add_patient_tab_3_form").validate({
+//            rules: {//PlanName: {required: true},
+//// PolicyNumber: {required: true},
+//                InsuranceProvider: {required: true},
+//// MRNNumber: {required: true},
+//// InsuranceID: {required: true},
+//            },
+//            messages: {PlanName: {required: 'Please enter Plan Name.'},
+//                PolicyNumber: {required: 'Please enter Policy Number.'},
+//                InsuranceProvider: {required: 'Please select Insurance Provider.'},
+//                MRNNumber: {required: 'Please enter MRN Number.'},
+//                InsuranceID: {required: 'Please enter Insurance ID.'},
+//            },
+//        });
     });
 </script>

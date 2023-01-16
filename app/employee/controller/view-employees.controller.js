@@ -7,10 +7,9 @@
         } else {
             ctrl.viewType = $stateParams.status;
         }
-        this.employee = {Gender: 'M'};
         ctrl.retrieveEmployees = retrieveEmployeesData;
         ctrl.edit = edit;
-        retrieveEmployeesData();
+        
         function retrieveEmployeesData() {
             EmployeeDAO.retrieveAll().then(function(res) {
                 showLoadingBar({
@@ -34,7 +33,12 @@
                 ctrl.employeeList = ontimetest.employees;
             });
         }
-        ;
+        
+        function edit(employee){
+            $state.go('app.employee.tab1', {id: employee.id});
+        }
+        
+        ctrl.retrieveEmployees();
         ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectEmployeeModel = $modal.open({
@@ -45,9 +49,7 @@
             $rootScope.selectEmployeeModel.employee=employee;
 
         };
-        function edit(employee){
-            $state.go('app.employee.tab1', {id: employee.id});
-        }
+        
     }
     ;
     angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewEmployeesCtrl]);
