@@ -125,6 +125,9 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     if (toParams.lastPage !== "patient_time_sheet") {
                         localStorage.removeItem('patientTimesheetSearchParams');
                     }
+                    if (toParams.lastPage !== "patient_time_sheet") {
+                        localStorage.removeItem('patientTimesheetSearchParams');
+                    }
                 } else {
                     if (toState.url.indexOf("daily_attendance") < 0) {
                         localStorage.removeItem('dailyAttendanceSearchParams');
@@ -633,7 +636,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // Patient Calendar
             state('app.patient-calendar', {
-                url: '/patient-calendar/:id',
+                url: '/patient-calendar/:id?lastPage',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'patient_calendar'),
                 controller: 'PatientCalendarCtrl as patientcalendar',
                 data: {

@@ -69,6 +69,9 @@
         };
 
         ctrl.applySearch = function () {
+            if ($state.params.lastPage) {
+                $state.params.lastPage = '';
+            }
             ctrl.pageNo = 1;
             $rootScope.paginationLoading = true;
             $debounce(ctrl.retrievePatients, 500);
@@ -91,6 +94,10 @@
         };
 
         ctrl.retrievePatients = function () {
+            if ($state.params.lastPage && $state.params.lastPage === 'dashboard') {
+                ctrl.searchParams.openCaseStartDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                ctrl.searchParams.openCaseEndDate = $filter('date')(new Date(), $rootScope.dateFormat);
+            }
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = (ctrl.pageNo - 1) * ctrl.searchParams.limit;
             } else {
@@ -423,7 +430,7 @@
                 }
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
                     $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false,
-                        doNotBill:false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
+                        doNotBill: false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
                     var id;
@@ -434,7 +441,7 @@
                         id = ctrl.viewPatient.id;
                     }
                     $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false,
-                        doNotBill:false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
+                        doNotBill: false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
                 }
                 $rootScope.patientPopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
@@ -713,7 +720,7 @@
         });
         $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired:true}).then(function (patients) {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired: true}).then(function (patients) {
                 var patient = patients[0];
                 $rootScope.selectPatientModel = $modal.open({
                     templateUrl: modal_id,
