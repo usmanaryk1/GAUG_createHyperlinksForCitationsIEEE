@@ -143,6 +143,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker
                         ]);
                     },
                 },

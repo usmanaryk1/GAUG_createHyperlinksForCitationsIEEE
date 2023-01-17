@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <!--<form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">-->
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
                     <div class="row">
                         <div class="col-sm-12 pull-right">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -265,12 +265,12 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.navigateToTab('tab3')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.navigateToTab($event, 'tab3')">
                                 Next »
                             </button>
                         </div>
                     </div>
-                <!--</form>-->
+                </form>
             </div>
         </div>
     </div>

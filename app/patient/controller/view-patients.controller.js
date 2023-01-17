@@ -7,10 +7,9 @@
         } else {
             ctrl.viewType = $stateParams.status;
         }
-        this.patient = {Gender: 'M'};
         ctrl.retrievePatients = retrievePatientsData;
         ctrl.edit = edit;
-        retrievePatientsData();
+        
         function retrievePatientsData() {
             PatientDAO.retrieveAll().then(function(res) {
                 showLoadingBar({
@@ -34,7 +33,12 @@
                 ctrl.patientList = ontimetest.patients;
             });
         }
-        ;
+        
+        function edit(patient){
+            $state.go('app.patient.tab1', {id: patient.id});
+        }
+        
+        ctrl.retrievePatients();
         ctrl.openEditModal = function(patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectPatientModel = $modal.open({
@@ -45,11 +49,7 @@
             $rootScope.selectPatientModel.patient=patient;
 
         };
-        function edit(patient){
-            alert(JSON.stringify(patient));
-            ctrl.selectedPatient = patient;
-            $rootScope.openModal('modal-5');
-        }
+        
     }
     ;
     angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewPatientsCtrl]);

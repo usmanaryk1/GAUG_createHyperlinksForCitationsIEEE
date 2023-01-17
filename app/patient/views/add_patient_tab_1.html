@@ -1,9 +1,8 @@
-
-<div class="row">
+<div class="row" ng-init="addPatient.tab1DataInit()">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal fade-in-effect validate" id="add_patient_form" name="add_patient_form" role="form"  ng-submit="addPatient.savePatient()">
+                <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -21,7 +20,8 @@
                             First Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-28" name="FirstName" type="text" ng-model="addPatient.patient.FName" data-validate="required" data-message-required="Please enter First Name." />
+                            <input class="form-control" id="field-28" name="FirstName" type="text" 
+                                   ng-model="addPatient.patient.FName" data-validate="required" data-message-required="Please enter First Name." />
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -82,11 +82,11 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input value="M" name="radio-2" type="radio" class="cbr" ng-model="addPatient.patient.Gender" />
+                                    <input value="M" name="Gender" type="radio" class="cbr" ng-model="addPatient.patient.gender" />
                                     Male
                                 </label>
                                 <label class="cbr-inline">
-                                    <input name="radio-2" value="F" type="radio" class="cbr" ng-model="addPatient.patient.Gender"/>
+                                    <input name="Gender" value="F" type="radio" class="cbr" ng-model="addPatient.patient.gender"/>
                                     Female
                                 </label>
                             </div>
@@ -99,7 +99,7 @@
                             Phone
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-33" name="Phone" type="text" value="{{addPatient.patient.phone| tel}}" 
+                            <input class="form-control" id="field-33" name="Phone" type="text" value="{{addPatient.patient.phone}}" 
                                    data-validate="required,number,minlength[10],maxlength[10]"
                                    data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
                         </div>
@@ -178,11 +178,11 @@
                                    data-validate="required" data-message-required="Please enter Care Coordinator or Emergency Contact Phone Number or Email Address."/>
                         </div>
                     </div>
-                    <div class="form-group-separator">
+                    <div class="form-group-separator" ng-if="addPatient.editMode">
                     </div>
-                    <div class="row">
+                    <div class="row" ng-if="addPatient.editMode">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.navigateToTab($event, 'tab2')">
                                 Next »
                             </button>
                         </div>
@@ -199,10 +199,6 @@
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
-            //to select gender radio by default in angular. It was having issue due to cbr theme.
-            $("input[value='M']").attr('checked', 'checked');
-            $("input[value='M']").parent().parent().addClass('cbr-checked');
-//            $(".cbr-inline input").addClass('cbr');
         }, 1);
     }); // ready
     

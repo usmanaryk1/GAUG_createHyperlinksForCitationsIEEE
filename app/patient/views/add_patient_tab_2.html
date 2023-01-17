@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row"  ng-init="addPatient.tab2DataInit()">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_patient_tab_2_form" name="add_patient_tab_2_form" role="form">
+                <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
                             <button class="btn btn-info green_bt pull-right" type="submit">
@@ -29,12 +29,11 @@
                         <label class="col-sm-3 control-label" for="field-35">
                             Search
                         </label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-9" >
                             <div class="input-group">
-                                <input class="form-control width100 no-right-border form-focus-info" id="Search" name="Search" type="text"
-                                      data-validate="required" data-message-required="Please enter patient's address to establish GPS coordinates."/>
+                                <input class="form-control width100 no-right-border form-focus-info" id="Search" name="Search" type="text"/>
                                                  <span class="input-group-btn">
-                                                  <button class="btn btn-info" type="submit" id="address-search">
+                                                  <button class="btn btn-info" type="button" id="address-search">
                                                    Go!
                                                   </button>
                                                  </span>
@@ -49,7 +48,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input class="form-control" readonly id="GPSLocation" name="GPSLocation" placeholder="GPS Location" type="text"
-                                   data-validate="required" data-message-required="Please enter GPS Location."/>
+                                   data-validate="required" data-message-required="Please search patient's address to establish GPS coordinates."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -59,7 +58,7 @@
                             Address 1
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-37" name="Address1" ng-model="patient.patientInfo.address1" type="text"
+                            <input class="form-control" id="field-37" name="Address1" ng-model="addPatient.patient.addressDataId.address1" type="text"
                                    data-validate="required" data-message-required="Please enter Address 1."/>
                         </div>
                     </div>
@@ -70,7 +69,7 @@
                             Address 2
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-38" name="Address2" ng-model="patient.patientInfo.address2" type="text"/>
+                            <input class="form-control" id="field-38" name="Address2" ng-model="addPatient.patient.addressDataId.address2" type="text"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -80,7 +79,7 @@
                             City
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-39" name="City" ng-model="patient.patientInfo.city" type="text"
+                            <input class="form-control" id="field-39" name="City" ng-model="addPatient.patient.addressDataId.city" type="text"
                                    data-validate="required" data-message-required="Please enter City."/>
                         </div>
                     </div>
@@ -99,13 +98,13 @@
                                 //             });
                                 //           });
                             </script>
-                            <select class="form-control" id="sboxit-1" name="State"
+                            <select class="form-control" id="sboxit-1" name="State" ng-model="addPatient.patient.addressDataId.state"
                                     data-validate="required" data-message-required="Please enter State.">
-                                <option value="">
+                                <option>
                                     Select
                                 </option>
-                                <option value="1">
-                                    1
+                                <option value="NY">
+                                    NY
                                 </option>
                             </select>
                         </div>
@@ -117,7 +116,7 @@
                             Zip Code
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-40" name="ZipCode" ng-model="patient.patientInfo.zipcode" type="text"
+                            <input class="form-control" id="field-40" name="ZipCode" ng-model="addPatient.patient.addressDataId.zipcode" type="text"
                                    data-validate="required" data-message-required="Please enter Zip Code."/>
                         </div>
                     </div>
@@ -125,71 +124,22 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addPatient.navigateToTab($event, 'tab3')">
                                 Next »
                             </button>
-                            <a class="btn btn-info green_bt pull-right" href="#/app/add_patient_tab_1" style="width:auto;">
+                            <a class="btn btn-info green_bt pull-right" href="" style="width:auto;"ng-click="addPatient.navigateToTab($event, 'tab1')" >
                                 « Previous
                             </a>
                         </div>
                     </div>
-                    <input name="patientId" type="hidden" value="{{patient.patientInfo.id}}">
-                    </input>
+<!--                    <input name="patientId" type="hidden" value="{{addPatient.patient.id}}">
+                    </input>-->
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function addPatientTab2Ctrl($scope, $rootScope, $http) {
-
-        // edit mode
-        if ($rootScope.patient.patientInfo.mode == 'edit') {
-            //url: "/OnTime/api/patient/getPatientAddress",
-            $rootScope.patient = ontimedata.patients[0];
-        }
-
-        $scope.submitHandler = function() {
-            if ($('#addPatientTab2CtrlForm').valid()) {
-                showLoadingBar(70); // Fill progress bar to 70% (just a given value)
-
-                var jsonObject = $('#addPatientTab2CtrlForm').serializeObject();
-                var jsonStr = JSON.stringify(jsonObject);
-                $http({
-                    url: "/OnTime/api/patient/savePatientAddress",
-                    method: 'POST',
-                    data: {},
-                    headers: {
-                        // 'Content-Type': 'application/json',
-                        'payload': jsonStr,
-                        'requestToken': appData.authResult.token,
-                        'userName': appData.authResult.un,
-                    },
-                    // transformRequest: function(data) {
-                    //   return $.param(data); // jquery util
-                    // }
-                }).success(function(data, status, headers, config) {
-                    showLoadingBar({
-                        delay: .5,
-                        pct: 100,
-                        finish: function() {
-                            if (data.id) {
-                                $rootScope.patient.patientAddresses = data;
-
-                                window.location.hash = '#/app/add_patient_tab_3';
-                            }
-                        }
-                    }); // showLoadingBar
-
-                }).error(function(data, status, headers, config) {
-                }); // http
-            } // isValid
-        }; // end of submitHandler
-
-    }
-    ; // end of addPatientTab2Ctrl
-</script>
 <script type="text/javascript">
     // validate
     customJqueryValidation();
@@ -198,136 +148,4 @@
             $(".fade-in-effect").addClass('in');
         }, 1);
     });
-</script>
-
-<script type="text/javascript">
-// google map begin
-    function searchGoogleMap() {
-
-    }
-
-    loadGoogleMaps(3).done(function()
-    {
-
-        var map;
-        var geocoder = new google.maps.Geocoder();
-
-        var markers = [];
-        var iterator = 0;
-
-        var newyork = new google.maps.LatLng(40.7127837, -74.00594);
-        // stockholm = new google.maps.LatLng(59.32522, 18.07002);
-
-        var neighborhoods = [
-            // new google.maps.LatLng(52.511467, 13.447179),
-            // new google.maps.LatLng(52.549061, 13.422975),
-            // new google.maps.LatLng(52.497622, 13.396110),
-            // new google.maps.LatLng(52.517683, 13.394393),
-            // new google.maps.LatLng(52.530843, 13.382721),
-            // new google.maps.LatLng(52.514549, 13.350105),
-            // new google.maps.LatLng(52.534394, 13.340492),
-        ];
-
-        function initialize()
-        {
-            var mapOptions = {
-                zoom: 12,
-                center: newyork
-            };
-
-            // Calculate Height
-            var el = document.getElementById('map-1'),
-                    doc_height = $('#map-1').height();
-
-            // Adjust map height to fit the document contianer
-            el.style.height = doc_height + 'px';
-
-            map = new google.maps.Map(el, mapOptions);
-
-            for (var i = 0; i < neighborhoods.length; i++)
-            {
-                setTimeout(function() {
-                    addMarker();
-                }, i * 200 + 200);
-            }
-
-            // Stockholm Marker
-            new google.maps.Marker({
-                map: map,
-                position: newyork,
-                draggable: true
-            });
-        }
-
-        function addMarker()
-        {
-            markers.push(new google.maps.Marker({
-                position: neighborhoods[iterator],
-                map: map,
-                draggable: true,
-                animation: google.maps.Animation.DROP
-            }));
-
-            iterator++;
-        }
-
-        initialize();
-
-
-        // $("#map-unzoom").on('click', function(ev)
-        // {
-        //   ev.preventDefault();
-
-        //   map.setZoom(map.getZoom() - 1);
-        // });
-
-        // $("#map-resetzoom").on('click', function(ev)
-        // {
-        //   ev.preventDefault();
-
-        //   map.setZoom(12);
-        // });
-
-        // $("#map-zoom").on('click', function(ev)
-        // {
-        //   ev.preventDefault();
-
-        //   map.setZoom(map.getZoom() + 1);
-        // });
-
-        $("#address-search").click(function(ev)
-        {
-            ev.preventDefault();
-
-            // var $inp = $(this).find('.form-control'),
-            var address = $('#Search').val().trim();
-
-            // $inp.prev().find('i').addClass('fa-spinner fa-spin');
-
-            if (address.length != 0)
-            {
-                geocoder.geocode({'address': address}, function(results, status)
-                {
-                    // $inp.prev().find('i').removeClass('fa-spinner fa-spin');
-
-                    if (status == google.maps.GeocoderStatus.OK)
-                    {
-                        $('#GPSLocation').val(results[0].geometry.location);
-
-                        map.setCenter(results[0].geometry.location);
-
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location,
-                            draggable: true
-                        });
-
-                    } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
-                    }
-                });
-            }
-        });
-    });
-// google map end
 </script>

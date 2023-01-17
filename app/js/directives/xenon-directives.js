@@ -511,6 +511,7 @@ angular.module('xenon.directives', []).
         directive('formWizard', function() {
             return {
                 restrict: 'AC',
+                //by Hardik
                 scope: {'selectedtab': "=", dirty: "="},
                 link: function(scope, el, attr)
                 {
@@ -525,12 +526,29 @@ angular.module('xenon.directives', []).
                     if (_index <= 0 && scope.selectedtab) {
                         _index = scope.selectedtab - 1;
                     }
+
+                    //watch on tabNo in rootscope for next previous click, to set progress bar
+                    //by Hardik
+                    scope.$watch("selectedtab", function(value) {
+                        if (value) {
+                            _index = scope.selectedtab - 1;
+                            // Setup Progress
+                            if (_index > 0)
+                            {
+                                $progress.css({width: _index / $tabs.length * 100 + '%'});
+                                $tabs.removeClass('completed').slice(0, _index).addClass('completed');
+                            }
+                            var pct = $tabs.eq(_index).position().left / $tabs.parent().width() * 100;
+
+                            $tabs.removeClass('completed').slice(0, _index).addClass('completed');
+                            $progress.css({width: pct + '%'});
+                        }
+                    }, true);
                     // Validation
                     var checkFormWizardValidaion = function(tab, navigation, index)
                     {
-                        if ($this.hasClass('validate') || $this.hasClass('custom-form'))
+                        if ($this.hasClass('validate'))
                         {
-
                             var $valid = $this.valid();
                             if (!$valid && scope.dirty)
                             {
@@ -538,11 +556,8 @@ angular.module('xenon.directives', []).
                                 return false;
                             }
                         }
-
                         return true;
                     };
-
-
                     // Setup Progress
                     if (_index > 0)
                     {
@@ -554,10 +569,10 @@ angular.module('xenon.directives', []).
                         tabClass: "",
                         onTabShow: function($tab, $navigation, index)
                         {
-                            var pct = $tabs.eq(index).position().left / $tabs.parent().width() * 100;
-
-                            $tabs.removeClass('completed').slice(0, index).addClass('completed');
-                            $progress.css({width: pct + '%'});
+//                            var pct = $tabs.eq(index).position().left / $tabs.parent().width() * 100;
+//
+//                            $tabs.removeClass('completed').slice(0, index).addClass('completed');
+//                            $progress.css({width: pct + '%'});
                         },
                         onNext: checkFormWizardValidaion,
                         onTabClick: checkFormWizardValidaion
@@ -662,6 +677,10 @@ angular.module('xenon.directives', []).
                                         {
                                             error.insertAfter(element.parent());
                                         }
+                                        //added by Hardik. for multiple
+                                        else if (element.attr('multiple') === 'multiple') {
+                                            error.insertAfter(element.next());
+                                        }
                                         else
                                         {
                                             error.insertAfter(element);
@@ -669,7 +688,6 @@ angular.module('xenon.directives', []).
                                         // for dynaic validation we can not use data-validate, so For required field validations 
                                         // For such elements set itemid attribute with Element name. - by hardik
                                         if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
-                                            console.log(error);
                                             error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
                                         }
                                     }
@@ -720,35 +738,26 @@ angular.module('xenon.directives', []).
                                         }
                                     }
                                 }
-                                if (scope.form != null) {
-                                    var validation = opts['rules'][name];
-                                    validation.messages = opts['messages'][name];
-                                    $("[name='" + name + "']").rules("add", validation);
-                                    scope.form.validate(opts);
-                                }
-
-//                            if(!message && $field.attr("itemid")){
-//                                if($field.attr("required")==='required'){
-//                                    opts['rules'][name]['required'] = true;
-//                                }else{
-//                                    opts['rules'][name]['required'] = false;
+//                                if (scope.form != null) {
+//                                    var validation = opts['rules'][name];
+//                                    validation.messages = opts['messages'][name];
+//                                    $("[name='" + name + "']").rules("add", validation);
+//                                    scope.form.validate(opts);
 //                                }
-//                                opts['messages'][name]['required'] = 'Please enter ' + $field.attr("itemid") + '.';
-//                            }
-//                            alert(message + ' ' + rule + ' ' + params);
+
                             }
                         });
-                        scope.form = $this;
+//                        scope.form = $this;
                         $this.validate(opts);
                     }
                     validateForm();
                     //Added for dynamic form validation by Jack
 
-                    scope.$watch("refreshForm", function(value) {
-                        if (value != null) {
-                            validateForm();
-                        }
-                    }, true);
+//                    scope.$watch("refreshForm", function(value) {
+//                        if (value != null) {
+//                            validateForm();
+//                        }
+//                    }, true);
                 }
             }
         }).
@@ -898,8 +907,8 @@ angular.module('xenon.directives', []).
                         if (value == null || value == "") {
                             $this.datepicker("setStartDate", null);
                         } else {
-                        $this.datepicker("setStartDate", new Date(value));
-                    }
+                            $this.datepicker("setStartDate", new Date(value));
+                        }
                     });
                     scope.$watch("maxDate", function(value) {
                         if (value == null || value == "") {

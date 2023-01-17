@@ -20,18 +20,17 @@
 
         //ceck if form has been changed or not
         //If changed then it should be valid
-        ctrl.navigateToTab = function(state) {
+        ctrl.navigateToTab = function(event, state) {
             if ($('#add_employee_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
             if ($('#add_employee_form').valid() || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
-
                 }
             }
-
-        }
+            event.stopPropagation();
+        };
 
         //function to save the employee data
         function saveEmployeeData() {
@@ -58,7 +57,7 @@
                             if (!ctrl.employee.id || ctrl.employee.id === null) {
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
-                                ctrl.employee = res;
+                                ctrl.employee.id = res.id;
                             }
                         })
                         .catch(function() {
@@ -73,7 +72,6 @@
 
             }
         }
-        ;
 
         //function called on page initialization.
         function pageInit() {
@@ -85,7 +83,7 @@
                     $timeout(function() {
                         $("#rate2").multiSelect('refresh');
                         $("#rate1").multiSelect('refresh');
-                    })
+                    }, 100);
                 }).catch(function(data, status) {
                     showLoadingBar({
                         delay: .5,
@@ -135,7 +133,7 @@
                 if (!ctrl.retrivalRunning) {
                     form_data = $('#add_employee_form').serialize();
                 } else {
-                    ctrl.tab1DataInit();
+                    ctrl.tab3DataInit();
                 }
             }, 100);
 
@@ -147,6 +145,8 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
+                    $("#rate2").multiSelect('refresh');
+                    $("#rate1").multiSelect('refresh');
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W-2';
                     }
