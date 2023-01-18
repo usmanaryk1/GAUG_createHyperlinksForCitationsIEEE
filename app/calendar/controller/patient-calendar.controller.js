@@ -116,7 +116,7 @@
             delete searchParams.openCase;
             PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
                 ctrl.patient_list = res;
-                ctrl.count = $rootScope.totalRecords;
+                ctrl.count = Number($rootScope.totalRecords);
                 if (!ctrl.viewPatient) {
                     ctrl.viewPatient = res[0];
                 }
