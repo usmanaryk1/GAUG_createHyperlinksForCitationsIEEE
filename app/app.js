@@ -289,7 +289,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // manual_punch
             state('app.manual_punch', {
                 url: '/manual_punch',
-                templateUrl: appHelper.templatePath('manual_punch'),
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
