@@ -15,6 +15,12 @@
                 params: {
                     action: 'all'
                 }
+            },
+            addPunchRecord:{
+                method:'POST',
+                params:{
+                    action:'addemployeepunchrecord'
+                }
             }
         });
         return {
@@ -24,8 +30,8 @@
             query: function(filter) {
                 return api.query(filter).$promise;
             },
-            save: function(data) {
-                return api.save(data).$promise;
+            addPunchRecord:function(){
+                return api.addPunchRecord().$promise;
             }
         };
     };
