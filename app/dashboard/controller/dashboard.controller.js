@@ -68,7 +68,7 @@
         };
         ctrl.retrieveCounts();
         ctrl.retrieveWeather();
-
+        ctrl.companyCode = ontime_data.company_code;
     }
     ;
     angular.module('xenon.controllers').controller('DashboardCtrl', ["Page", "$rootScope", "$formService", "$timeout", "UserDAO", "DashboardDAO", "$filter", DashboardCtrl]);
