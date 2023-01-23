@@ -436,6 +436,19 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
 //                    },
 //                }
 //            }).
+            state('app.manual_claim', {
+                url: '/manual_claim',
+                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim'),
+                controller: 'BillingTab1Ctrl as billing1',
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
+            }).
             state('app.billing_tab_1', {
                 url: '/billing_tab_1',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_1'),
