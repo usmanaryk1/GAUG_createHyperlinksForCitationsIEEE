@@ -4,7 +4,7 @@
 <div class="row">
 
     <div class="col-sm-3">
-        <a ng-href="{{serverPath}}reports/employeecensus/download?format=xls&companyCode={{dashboard.company_code}}">
+        <a ng-href="{{serverPath}}reports/employeecensus/download?format=xls&companyCode={{dashboard.companyCode}}">
             <div class="xe-widget xe-counter" data-count=".num" id="complianceCount" data-from="0" data-to="dashboard.complianceTracker" data-suffix="%" data-duration="2">
                 <div class="xe-icon">
                     <i class="linecons-cloud"></i>
@@ -20,7 +20,7 @@
         <a ng-href="#/app/patient-list/active">
             <div class="xe-widget xe-counter xe-counter-blue" data-count=".num" data-from="1" data-to="dashboard.activePatientCount" data-duration="3" data-easing="false">
                 <div class="xe-icon">
-                    <i class="linecons-user"></i>
+                    <i class="fa fa-users"></i>
                 </div>
                 <div class="xe-label">
                     <strong class="num">0</strong>
