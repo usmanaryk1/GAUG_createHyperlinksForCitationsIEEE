@@ -1,5 +1,5 @@
 (function() {
-    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO) {
+    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -7,7 +7,7 @@
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
         };
-         ctrl.filterTimesheet = function() {
+        ctrl.filterTimesheet = function() {
             if (ctrl.searchValue == "") {
                 ctrl.searchVallue = null;
             }
@@ -34,37 +34,58 @@
                     if (ctrl.fromDate != null) {
                         if (date.getTime() < new Date(ctrl.fromDate).getTime()) {
                             return false;
-                        } 
+                        }
                     }
                     if (ctrl.toDate != null) {
                         if (date.getTime() > new Date(ctrl.toDate).getTime()) {
                             return false;
-                        } 
+                        }
                     }
                     return true;
                 }
         );
-        TimesheetDAO.query().then(function(res) {
-            showLoadingBar({
-                delay: .5,
-                pct: 100,
-                finish: function() {
-                    if (res) {
-                        ctrl.timesheetList = res;
+        ctrl.retrieveTimesheet = function() {
+            TimesheetDAO.query().then(function(res) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function() {
+                        if (res) {
+                            ctrl.timesheetList = res;
+                        }
                     }
-                }
-            }); // showLoadingBar
-        }).catch(function() {
-            showLoadingBar({
-                delay: .5,
-                pct: 100,
-                finish: function() {
+                }); // showLoadingBar
+            }).catch(function() {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function() {
 
-                }
-            }); // showLoadingBar
-            ctrl.timesheetList = ontimetest.employeeTimesheet;
-        });
+                    }
+                }); // showLoadingBar
+                ctrl.timesheetList = ontimetest.employeeTimesheet;
+            });
+        };
+
+        ctrl.selectEmployee = function(empObj) {
+            console.log(empObj);
+            ctrl.selectedEmployee = empObj;
+            ctrl.emp = empObj;
+            ctrl.retrieveTimesheet();
+        };
+
+        retrieveEmployeesData();
+        function retrieveEmployeesData() {
+            EmployeeDAO.retrieveAll().then(function(res) {
+                ctrl.employeeList = res;
+                ctrl.selectEmployee(ctrl.employeeList[0]);
+            }).catch(function(data, status) {
+                ctrl.employeeList = ontimetest.employees;
+                ctrl.selectEmployee(ctrl.employeeList[0]);
+            });
+        }
+        ;
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", EmployeeTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", EmployeeTimeSheetCtrl]);
 })();

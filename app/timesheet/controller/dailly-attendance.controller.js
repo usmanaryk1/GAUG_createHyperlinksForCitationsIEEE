@@ -1,5 +1,5 @@
 (function() {
-    function DailyAttendanceCtrl($scope, $rootScope, TimesheetDAO) {
+    function DailyAttendanceCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -26,8 +26,8 @@
                             return false;
                         }
                     }
-                      if (ctrl.empName != null) {
-                        if (data[1].toLowerCase()!=ctrl.empName.toLowerCase()) {
+                    if (ctrl.empName != null) {
+                        if (data[1].toLowerCase() != ctrl.empName.toLowerCase()) {
                             return false;
                         }
                     }
@@ -72,9 +72,18 @@
             }); // showLoadingBar
             ctrl.attendanceList = ontimetest.dailyAttendance;
         });
+        retrieveEmployeesData();
+        function retrieveEmployeesData() {
+            EmployeeDAO.retrieveAll().then(function(res) {
+                ctrl.employeeList = res;
+            }).catch(function(data, status) {
+                ctrl.employeeList = ontimetest.employees;
+            });
+        }
+        ;
 
 
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$scope", "$rootScope", "TimesheetDAO", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", DailyAttendanceCtrl]);
 })();

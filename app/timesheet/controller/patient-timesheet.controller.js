@@ -1,5 +1,5 @@
 (function() {
-    function PatientTimeSheetCtrl($scope, $rootScope, TimesheetDAO) {
+    function PatientTimeSheetCtrl($scope, $rootScope, TimesheetDAO, PatientDAO) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -44,27 +44,47 @@
                     return true;
                 }
         );
-        TimesheetDAO.query().then(function(res) {
-            showLoadingBar({
-                delay: .5,
-                pct: 100,
-                finish: function() {
-                    if (res) {
-                        ctrl.timesheetList = res;
+        ctrl.retrieveTimesheet = function() {
+            TimesheetDAO.query().then(function(res) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function() {
+                        if (res) {
+                            ctrl.timesheetList = res;
+                        }
                     }
-                }
-            }); // showLoadingBar
-        }).catch(function() {
-            showLoadingBar({
-                delay: .5,
-                pct: 100,
-                finish: function() {
+                }); // showLoadingBar
+            }).catch(function() {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function() {
 
-                }
-            }); // showLoadingBar
-            ctrl.timesheetList = ontimetest.employeeTimesheet;
-        });
+                    }
+                }); // showLoadingBar
+                ctrl.timesheetList = ontimetest.employeeTimesheet;
+            });
+        };
+
+        ctrl.selectPatient = function(empObj) {
+            ctrl.selectedPatient = empObj;
+            ctrl.pat = empObj;
+            ctrl.retrieveTimesheet();
+        };
+
+        retrievePatientsData();
+        function retrievePatientsData() {
+            PatientDAO.retrieveAll().then(function(res) {
+                ctrl.patientList = res;
+                ctrl.selectPatient(ctrl.patientList[0]);
+            }).catch(function(data, status) {
+                ctrl.patientList = ontimetest.patients;
+                ctrl.selectPatient(ctrl.patientList[0]);
+            });
+        }
+        ;
     }
     ;
-    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", PatientTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "PatientDAO", PatientTimeSheetCtrl]);
 })();
