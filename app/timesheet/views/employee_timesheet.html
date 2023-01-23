@@ -17,15 +17,27 @@
                                 <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">
                                     <div class="user_p mar_bt0"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
                                     <div class="user_av_hd">
-                                        <h1>Jack Gates</h1>
-                                        <p>Administrator</p>
+                                        <h1>{{empTimesheet.selectedEmployee.fName + ' ' + empTimesheet.selectedEmployee.lName}}</h1>
+                                        <p>{{empTimesheet.selectedEmployee.position}}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 pull-right pad0 wd_full">
                                     <div class="form-group ">
-                                        <label class="col-sm-3 control-label">Search</label>
+                                        <label class="col-sm-3 control-label">Employee Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="empTimesheet.searchValue" ng-change="empTimesheet.filterTimesheet()">
+                                            <!--                                            <script type="text/javascript">
+                                                                                            jQuery(document).ready(function($)
+                                                                                            {
+                                                                                                $("#sboxit-2").selectBoxIt().on('open', function()
+                                                                                                {
+                                                                                                    // Adding Custom Scrollbar
+                                                                                                    $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                                                                                });
+                                                                                            });
+                                                                                        </script>-->
+                                            <select class="form-control" id="sboxit-2" ng-model="empTimesheet.emp" ng-options='emp as (emp.fName+" "+emp.lName) for emp in empTimesheet.employeeList' ng-change="empTimesheet.selectEmployee(empTimesheet.emp)">
+                                            </select>
+                                            <!--<input type="text" class="form-control" ng-model="empTimesheet.searchValue" ng-change="empTimesheet.filterTimesheet()">-->
                                         </div>
                                     </div>
                                 </div>
@@ -106,10 +118,10 @@
                                                 {{timesheet.punchOutTime|date :timeFormat}}
                                             </td>
                                             <td>
-                                                {{timesheet.punchInTime |duration:timesheet.punchOutTime}}
+                                                {{timesheet.punchInTime|duration:timesheet.punchOutTime}}
                                             </td>
                                             <td>
-                                                {{timesheet.patientId.FName +" "+timesheet.patientId.LName}}
+                                                {{timesheet.patientId.FName + " " + timesheet.patientId.LName}}
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:170px;">
@@ -119,60 +131,60 @@
                                                 </div>
                                             </td>
                                         </tr>
-<!--                                        <tr>
-                                            <th>11/28/2008</th>
-                                            <td><div class="green_dot"></div>
-                                                09:20 AM</td>
-                                            <td><div class="red_dot"></div>
-                                                06:00 PM</td>
-                                            <td>09:00</td>
-                                            <td>Capoblanco Anne</td>
-                                            <td><div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                    <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                                </div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>11/28/2008</th>
-                                            <td><div class="black_dot"></div>
-                                                09:00 AM</td>
-                                            <td><div class="black_dot"></div>
-                                                06:30 PM</td>
-                                            <td>09:00</td>
-                                            <td>Capoblanco Anne</td>
-                                            <td><div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                    <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                                </div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>11/28/2008</th>
-                                            <td><div class="green_dot"></div>
-                                                09:00 AM</td>
-                                            <td><div class="green_dot"></div>
-                                                06:00 PM</td>
-                                            <td>09:00</td>
-                                            <td>Capoblanco Anne</td>
-                                            <td><div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                    <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                                </div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>11/28/2008</th>
-                                            <td> 09:00 AM</td>
-                                            <td> 06:00 PM</td>
-                                            <td>09:00</td>
-                                            <td>Capoblanco Anne</td>
-                                            <td><div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                    <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                                </div></td>
-                                        </tr>-->
+                                        <!--                                        <tr>
+                                                                                    <th>11/28/2008</th>
+                                                                                    <td><div class="green_dot"></div>
+                                                                                        09:20 AM</td>
+                                                                                    <td><div class="red_dot"></div>
+                                                                                        06:00 PM</td>
+                                                                                    <td>09:00</td>
+                                                                                    <td>Capoblanco Anne</td>
+                                                                                    <td><div style="float:left; min-width:170px;">
+                                                                                            <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                                                                                            <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
+                                                                                        </div></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th>11/28/2008</th>
+                                                                                    <td><div class="black_dot"></div>
+                                                                                        09:00 AM</td>
+                                                                                    <td><div class="black_dot"></div>
+                                                                                        06:30 PM</td>
+                                                                                    <td>09:00</td>
+                                                                                    <td>Capoblanco Anne</td>
+                                                                                    <td><div style="float:left; min-width:170px;">
+                                                                                            <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                                                                                            <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
+                                                                                        </div></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th>11/28/2008</th>
+                                                                                    <td><div class="green_dot"></div>
+                                                                                        09:00 AM</td>
+                                                                                    <td><div class="green_dot"></div>
+                                                                                        06:00 PM</td>
+                                                                                    <td>09:00</td>
+                                                                                    <td>Capoblanco Anne</td>
+                                                                                    <td><div style="float:left; min-width:170px;">
+                                                                                            <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                                                                                            <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
+                                                                                        </div></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th>11/28/2008</th>
+                                                                                    <td> 09:00 AM</td>
+                                                                                    <td> 06:00 PM</td>
+                                                                                    <td>09:00</td>
+                                                                                    <td>Capoblanco Anne</td>
+                                                                                    <td><div style="float:left; min-width:170px;">
+                                                                                            <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
+                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
+                                                                                            <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
+                                                                                        </div></td>
+                                                                                </tr>-->
                                     </tbody>
                                 </table>
                                 <table width="100%"  class="table table-small-font table-bordered table-striped" cellspacing="0">
@@ -187,28 +199,28 @@
                         </div>
                     </form>
                 </div>
-<!--                <div class="panel-body pad_top0">
-                    <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><script type="text/javascript">
-                        // This JavaScript Will Replace Checkboxes in dropdown toggles
-                        jQuery(document).ready(function($)
-                        {
-                            setTimeout(function()
-                            {
-                                $(".checkbox-row input").addClass('cbr');
-                                cbr_replace();
-                            }, 0);
-                        });
-                        </script>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="time_sh_bt_buttons">
-                                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">&laquo; Previous</button>
-                                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">Next &raquo;</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
+                <!--                <div class="panel-body pad_top0">
+                                    <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><script type="text/javascript">
+                                        // This JavaScript Will Replace Checkboxes in dropdown toggles
+                                        jQuery(document).ready(function($)
+                                        {
+                                            setTimeout(function()
+                                            {
+                                                $(".checkbox-row input").addClass('cbr');
+                                                cbr_replace();
+                                            }, 0);
+                                        });
+                                        </script>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="time_sh_bt_buttons">
+                                                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">&laquo; Previous</button>
+                                                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">Next &raquo;</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
             </div>
         </div>
     </div>

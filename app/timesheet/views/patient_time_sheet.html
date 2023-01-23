@@ -19,16 +19,18 @@
                                 <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">
                                     <div class="user_p mar_bt0"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
                                     <div class="user_av_hd">
-                                        <h1>Jack Gates</h1>
-                                        <p>Administrator</p>
+                                        <h1>{{patTimesheet.selectedPatient.FName + ' ' + patTimesheet.selectedPatient.LName}}</h1>
+                                        <!--<p>{{patTimesheet.selectedPatient.position}}</p>-->
                                     </div>
                                 </div>
 
                                 <div class="col-sm-8 pull-right pad0 wd_full">
                                     <div class="form-group ">
-                                        <label class="col-sm-3 control-label">Search</label>
+                                        <label class="col-sm-3 control-label">Patient Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="patTimesheet.searchValue" ng-change="patTimesheet.filterTimesheet()">
+                                            <!--<input type="text" class="form-control" ng-model="patTimesheet.searchValue" ng-change="patTimesheet.filterTimesheet()">-->
+                                            <select class="form-control" id="sboxit-2" ng-model="patTimesheet.pat" ng-options='pat as (pat.FName+" "+pat.LName) for pat in patTimesheet.patientList' ng-change="patTimesheet.selectPatient(patTimesheet.pat)">
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
