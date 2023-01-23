@@ -177,11 +177,11 @@ ontimedata = {
     dailyAttendance: [
         {
             "employeeId": {
-                "FName": "Jack",
+                "FName": "Namma",
                 "employeeCareRatesList": [],
-                "fName": "Jack",
+                "fName": "Namma",
                 "id": 1,
-                "lName": "Straw",
+                "lName": "Abderran",
                 "orgCode": ""
             },
             "id": 1,
@@ -208,11 +208,11 @@ ontimedata = {
         },
         {
             "employeeId": {
-                "FName": "Janvier",
+                "FName": "Karry",
                 "employeeCareRatesList": [],
-                "fName": "Janvier",
+                "fName": "Karry",
                 "id": 1,
-                "lName": "Rosiane",
+                "lName": "Neil",
                 "orgCode": ""
             },
             "id": 1,

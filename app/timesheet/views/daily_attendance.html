@@ -36,19 +36,17 @@
                                         <label class="col-sm-3 control-label pad_lf0">Employee Name</label>
                                         <div class="col-sm-9"> 
                                             <script type="text/javascript">
-                                                jQuery(document).ready(function($)
-                                                {
-                                                    $("#sboxit-2").selectBoxIt().on('open', function()
-                                                    {
-                                                        // Adding Custom Scrollbar
-                                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                                    });
-                                                });
+//                                                jQuery(document).ready(function($)
+//                                                {
+//                                                    $("#sboxit-2").selectBoxIt().on('open', function()
+//                                                    {
+//                                                        // Adding Custom Scrollbar
+//                                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+//                                                    });
+//                                                });
                                             </script>
-                                            <select class="form-control" id="sboxit-2" ng-model="dAttendance.empName" ng-change="dAttendance.filterTimesheet()">
+                                            <select class="form-control" id="sboxit-2" ng-model="dAttendance.empName" ng-change="dAttendance.filterTimesheet()" ng-options='(emp.fName+" "+emp.lName) as (emp.fName+" "+emp.lName) for emp in dAttendance.employeeList'>
                                                 <option value="">Select Coordinator</option>
-                                                <option value="Jack Straw">Jack Straw</option>
-                                                <option value="Janvier Rosiane">Janvier Rosiane</option>
                                             </select>
                                         </div>
                                     </div>
