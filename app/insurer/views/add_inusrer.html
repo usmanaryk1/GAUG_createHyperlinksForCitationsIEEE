@@ -3,10 +3,10 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                Add Insurance Provider
+                {{addInsurer.editMode?'Update Insurance Provider':'Add Insurance Provider'}}
             </h1>
             <p class="description">
-                Add Insurance Provider
+                {{addInsurer.editMode?'Edit A Insurance Provider Record By Following Information':'Create A Insurance Provider Record By Following Information'}}
             </p>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-horizontal validate" novalidate="" id="add_inusrer_form" name="add_inusrer_form" role="form">
+                    <form class="form-horizontal validate" novalidate="" id="add_inusrer_form" name="add_inusrer_form" role="form" ng-submit="addInsurer.saveInsurer()">
                         <div class="row">
                             <div class="col-sm-12 pull-right">
                                 <button class="btn btn-info green_bt pull-right" type="submit">
@@ -34,7 +34,8 @@
                                 Insurance Name
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-12" name="InsuranceName" type="text" data-validate="required"  data-message-required="Please enter Insurance Name.">
+                                <input class="form-control" id="field-12" name="InsuranceName" type="text" ng-model="addInsurer.insurerObj.insuranceName"
+                                       data-validate="required"  data-message-required="Please enter Insurance Name.">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -44,7 +45,8 @@
                                 Billing ID
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-13" name="BillingId" type="text" data-validate="required"  data-message-required="Please enter Billing ID.">
+                                <input class="form-control" id="field-13" name="BillingId" type="text"  ng-model="addInsurer.insurerObj.billingID"
+                                       data-validate="required"  data-message-required="Please enter Billing ID.">
 
                             </div>
                         </div>
@@ -55,7 +57,8 @@
                                 EDI Processor 
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="ediProcessor" data-validate="required"  data-message-required="Please select EDI Processor.">
+                                <select class="form-control" id="sboxit-1" name="ediProcessor" ng-model="addInsurer.insurerObj.mdol"
+                                        data-validate="required"  data-message-required="Please select EDI Processor.">
                                     <option value="">
                                         Select
                                     </option>
@@ -72,7 +75,8 @@
                                 Plan Type
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="PlanType" data-validate="required"  data-message-required="Please select Plan Type.">
+                                <select class="form-control" id="sboxit-1" name="PlanType" ng-model="addInsurer.insurerObj.planType"
+                                        data-validate="required"  data-message-required="Please select Plan Type.">
                                     <option value="">
                                         Select
                                     </option>
@@ -89,7 +93,8 @@
                                 Contact Name
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-14" name="ContactName" type="text" data-validate="required"  data-message-required="Please enter Contact Name.">
+                                <input class="form-control" id="field-14" name="ContactName" type="text" ng-model="addInsurer.insurerObj.contactName"
+                                       data-validate="required"  data-message-required="Please enter Contact Name.">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -99,7 +104,8 @@
                                 Contact Number
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-15" name="ContactNumber" type="text" data-validate="required"  data-message-required="Please enter Contact Number.">
+                                <input class="form-control" id="field-15" name="ContactNumber" type="text" ng-model="addInsurer.insurerObj.contactNumber"
+                                       data-validate="required"  data-message-required="Please enter Contact Number.">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -109,7 +115,8 @@
                                 Contact Address
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-16" name="ContactAddress" type="text" data-validate="required"  data-message-required="Please enter Contact Address.">
+                                <input class="form-control" id="field-16" name="ContactAddress" type="text" ng-model="addInsurer.insurerObj.contactAddress"
+                                       data-validate="required"  data-message-required="Please enter Contact Address.">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -119,7 +126,8 @@
                                 Contact Email
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-17" name="ContactEmail" type="text" data-validate="email"  data-message-email="Please enter valid Contact Email.">
+                                <input class="form-control" id="field-17" name="ContactEmail" type="text" ng-model="addInsurer.insurerObj.contactEmail"
+                                       data-validate="email"  data-message-email="Please enter valid Contact Email.">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -129,7 +137,8 @@
                                 Contract File
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-18" name="ContractFile" type="file" data-validate="required"  data-message-required="Please upload Contract File.">
+                                <input class="form-control" id="field-18" name="ContractFile" type="file" ng-model="addInsurer.insurerObj.contractFile"
+                                       data-validate="required"  data-message-required="Please upload Contract File.">
 
                             </div>
                         </div>
@@ -141,7 +150,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input class="form-control daterange" start-date='addInsurer.contractStartDate' end-date='addInsurer.contractEndDate' data-format="MM/DD/YYYY" id="field-19" name="ContractStartDate" type="text" data-validate="required"  data-message-required="Please enter Contract Date.">
+                                    <input class="form-control daterange" start-date='addInsurer.insurerObj.contractStartDate' end-date='addInsurer.insurerObj.contractEndDate' data-format="MM/DD/YYYY" id="field-19" name="ContractStartDate" type="text" data-validate="required"  data-message-required="Please enter Contract Date.">
                                     <div class="input-group-addon">
                                         <a href="#">
                                             <i class="linecons-calendar">
@@ -193,7 +202,7 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" ng-model='addInsurer.insurerObj.careType'  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type.">
+                                <select class="form-control" ng-model='addInsurer.insurerObj.careTypes'  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type.">
                                     <option value="1" >
                                         Personal Care HHA Hourly       
                                     </option>

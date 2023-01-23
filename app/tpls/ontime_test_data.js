@@ -273,6 +273,21 @@ ontimedata = {
             "punchInTime": "2015-04-15T09:00:01+01:00",
             "punchOutTime": "2015-04-15T10:03:01+01:00"
         }
+    ],
+    insuranceProviders: [
+        {"id": 1,
+            "insuranceName": "Insurer 1",
+            "billingID": "1234",
+            "mdol": "MD Online",
+            "planType": "1",
+            "contactName": "Contact 1",
+            "contactNumber": "124567890",
+            "contactAddress": "Address 1",
+            "contactEmail": "h@f",
+            "contractStartDate": "2015-06-01T18:30:00.000Z",
+            "contractEndDate": "2015-06-03T18:29:59.999Z",
+//            "careTypes": ["1"]
+        }
     ]
 };
 
@@ -282,7 +297,8 @@ ontimetest = {
     'patients': ontimedata.patients,
     'employees': ontimedata.employees,
     'dailyAttendance': ontimedata.dailyAttendance,
-    'employeeTimesheet': ontimedata.employeeTimesheet
+    'employeeTimesheet': ontimedata.employeeTimesheet,
+    'insuranceProviders': ontimedata.insuranceProviders,
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },

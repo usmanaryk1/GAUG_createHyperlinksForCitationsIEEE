@@ -329,8 +329,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 }
             }).
             // add_inusrer
-            state('app.add_inusrer', {
-                url: '/add_inusrer',
+            state('app.insurer', {
+                url: '/insurer/:id',
                 controller: 'AddInsurerCtrl as addInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'add_inusrer'),
                 resolve: {
@@ -345,8 +345,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 }
             }).
             // view_insurer
-            state('app.view_insurer', {
-                url: '/view_insurer',
+            state('app.insurer-list', {
+                url: '/insurer-list',
+                controller: 'ViewInsurersCtrl as viewInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'view_insurer'),
                 resolve: {
                     resources: function($ocLazyLoad) {

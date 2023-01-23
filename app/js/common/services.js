@@ -108,8 +108,8 @@ angular.module('xenon.services', []).
 
 
                 // Subitems of insuranceProvider
-                insuranceProvider.addItem('Add Insurance Provider', './add_inusrer');
-                insuranceProvider.addItem('View Insurance Provider', './view_insurer');
+                insuranceProvider.addItem('Add Insurance Provider', './insurer/');
+                insuranceProvider.addItem('View Insurance Provider', './insurer-list');
 
                 // Subitems of billing
                 billing.addItem('Billing Session', './billing_tab_1');
