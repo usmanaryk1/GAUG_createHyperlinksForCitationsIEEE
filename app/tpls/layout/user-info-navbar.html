@@ -11,7 +11,7 @@
         <li class="dropdown user-profile open"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-click="openMenu($event)"> <img src="assets/images/user-4.png" alt="user-image" class="img-circle img-inline userpic-32" width="28" /> <span> {{currentUser.userName}} <i class="fa-angle-down"></i> </span> </a>
             <div ng-show="showMenu">
                 <ul class="dropdown-menu user-profile-menu list-unstyled" style="display:block;">
-                    <li class="last" ng-if="hasAccess('MANAGE_ADMIN_PORTAL') && !isAdminPortal"> <a ui-sref="#/admin/user-list/active" > <i class="fa-sign-in"></i> Go to Admin Portal </a> </li>
+                    <li class="last" ng-if="hasAccess('MANAGE_ADMIN_PORTAL') && !isAdminPortal"> <a ui-sref="admin.user-list({status:'active'})" > <i class="fa-sign-in"></i> Go to Admin Portal </a> </li>
                     <li class="last" ng-if="hasAccess('MANAGE_ADMIN_PORTAL') && isAdminPortal"> <a ui-sref="app.dashboard" > <i class="fa-sign-in"></i> Go to User Portal </a> </li>
                     <li class="last"> <a href="" ng-click='openResetPasswordModal("resetPasswordModal", "md","static", true)'> <i class="fa-key"></i>Change Password</a> </li>
                     <li class="last"> <a href="" ng-click="logout()"> <i class="fa-lock"></i> Logout </a> </li>
