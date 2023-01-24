@@ -56,7 +56,7 @@
                                 <td>{{insurer.contactName}}</td>
                                 <td></td>
                                 <td><a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)"><span class="ed_b">Edit</span></a> 
-                                    <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.deleteInsurer(insurer)"><span class="ed_b">Dlt</span></a> 
+                                    <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')"><span class="ed_b">Dlt</span></a> 
                                     <a href="#" class="btn icon-left fa fa-download download_bt"><span class="ed_b">Download</span></a> 
                                 </td>
                             </tr>
@@ -195,3 +195,19 @@
 
 </div>
 
+<script type="text/ng-template" id="modal-3">
+	<div class="modal-header">
+		<h4 class="modal-title">{{deleteInsurerModel.insurer.insuranceName}}</h4>
+	</div>
+	
+	<div class="modal-body">
+	
+		Are you sure you want to delete this Insurer?
+		
+	</div>
+	
+	<div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="deleteInsurerModel.delete(deleteInsurerModel.insurer);">Yes</button>
+		<button type="button" class="btn btn-red" ng-click="deleteInsurerModel.dismiss();">No</button>
+	</div>
+</script>
