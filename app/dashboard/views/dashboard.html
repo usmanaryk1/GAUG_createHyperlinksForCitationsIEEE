@@ -70,16 +70,17 @@
                     <span>TO DO LIST</span>
                     <strong>Tasks</strong>
                 </div>
+                <div class="pull-right">
+                    <i class="fa fa-trash" style="font-size: 15px;cursor: pointer" tooltip="Remove all Marked Tasks" ng-click="dashboard.removeAllMarkedTasks()"></i>
+                </div>
             </div>
             <div class="xe-body">
                 <ul class="list-unstyled" id="taskList" style="height:9.8em;position:relative" >
-                    <li ng-hide="dashboard.inProgress" ng-repeat="task in dashboard.taskList track by $index">
+                    <li ng-class="{'done':task.taskMarked}" ng-hide="dashboard.inProgress" ng-repeat="task in dashboard.taskList track by $index">
                         <label>
-                            <input type="checkbox" ng-model="taskValue" class="cbr cbr-turquoise" ng-change="dashboard.taskMarked($index);
-                                        taskValue = null;"/>
+                            <input type="checkbox" ng-model="task.taskMarked" class="cbr cbr-turquoise" ng-change="dashboard.taskMarked($index);"/>
+                            <span>{{task.taskValue}}</span>
                         </label>
-                        <span>{{task}}</span>
-
                     </li>                    
                 </ul>
             </div>
@@ -129,7 +130,7 @@
                 </div>
             </div>
 
-            <div class="xe-weekdays">
+            <div class="xe-weekdays" style="height:23em">
                 <ul class="list-unstyled">
                     <li ng-repeat="dailyTemprature in dashboard.weatherObj.dailyDataPoints">
                         <div class="xe-weekday-forecast">
