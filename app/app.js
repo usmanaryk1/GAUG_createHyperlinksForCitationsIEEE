@@ -39,7 +39,7 @@ app.run(function($rootScope, $modal)
 });
 
 
-app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS) {
+app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider) {
 
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
@@ -1192,6 +1192,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             });
+    $httpProvider.interceptors.push([function() {
+            return {
+                request: function(config) {
+                    config.headers = config.headers || {};
+                    $httpProvider.defaults.headers.common['company_code'] = ontimetest.company_code;
+                    return config;
+                }
+            };
+        }]);
 });
 
 

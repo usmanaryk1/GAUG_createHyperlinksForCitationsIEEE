@@ -6,7 +6,7 @@
                 method: 'GET',
                 isArray: true,
                 params: {
-                    action: 'all'
+                    action: 'view'
                 }
             },
             //this method will be used for employee save or update based on the action passed

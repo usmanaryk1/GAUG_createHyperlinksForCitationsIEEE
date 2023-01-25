@@ -292,13 +292,14 @@ ontimedata = {
 };
 
 ontimetest = {
-    'weburl': 'api/',
+    'weburl': 'http://localhost:8080/ontime/api/',
     'defaultState': 'login',
     'patients': ontimedata.patients,
     'employees': ontimedata.employees,
     'dailyAttendance': ontimedata.dailyAttendance,
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
+    'company_code': "TRT",
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },

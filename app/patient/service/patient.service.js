@@ -1,12 +1,12 @@
 (function() {
     'use strict';
     var PatientDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'patients/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontimetest.weburl + 'patient/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,
                 params: {
-                    action: 'all'
+                    action: 'view'
                 }
             },
             //this method will be used for patient save or update based on the action passed
