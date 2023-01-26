@@ -19,6 +19,12 @@
                 params:{
                     action:'updatecarerates'
                 }
+            },
+            delete: {
+                method: 'GET'
+            },
+            deactivate:{
+                method: 'GET'
             }
         });
         return {
@@ -36,6 +42,12 @@
             },
             updateCareRates: function (data) {
                 return api.updateCareRates(data).$promise;
+            },
+            delete: function (data) {
+                return api.delete({action:'delete', subAction:data.id}).$promise;
+            },
+            deactivate: function (data) {
+                return api.delete({action:'deactivate', subAction:data.id}).$promise;
             },
         };
     };
