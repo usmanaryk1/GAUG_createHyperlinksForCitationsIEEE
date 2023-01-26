@@ -12,7 +12,8 @@ var app = angular.module('xenon-app', [
     'xenon.services',
     'xenon.filter',
     // Added in v1.3
-    'FBAngular'
+    'FBAngular',
+    'flow'
 ]);
 
 app.run(function($rootScope, $modal)

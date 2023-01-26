@@ -2,6 +2,7 @@
     function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope) {
         var ctrl = this;
         ctrl.retrivalRunning = false;
+        ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
         if ($state.params.id && $state.params.id !== '') {
@@ -54,7 +55,7 @@
                     delete patientToSave.careTypes;
                     if (ctrl.patient.careTypes && ctrl.patient.careTypes !== null) {
                         patientToSave.patientCareTypeCollection = [];
-                        for(var i=0; i<ctrl.patient.careTypes.length;i++){
+                        for (var i = 0; i < ctrl.patient.careTypes.length; i++) {
                             patientToSave.patientCareTypeCollection.push(Number(ctrl.patient.careTypes[i]));
                         }
                     }
@@ -328,6 +329,40 @@
                 });
             });
         }
+        ctrl.uploadFile = {
+            target: ontimetest.weburl + '/file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            query: {
+                type: "p",
+                company_code: null
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.fileSelected = function(file, flow) {
+            ctrl.fileObj.flowObj = flow;
+            ctrl.fileObj.selectedFile = file;
+            ctrl.disableSaveButton = true;
+            ctrl.showfileProgress = true;
+            ctrl.fileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.fileUploaded = function(response, file, flow) {
+            ctrl.filePaths[file.name] = response;
+            if (Object.keys(ctrl.filePaths).length == flow.files.length) {
+                ctrl.disableSaveButton = false;
+            }
+            ctrl.disableUploadButton = false;
+        };
+        //When file is added in file upload
+        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments
+            ctrl.fileObj.flow = flow;
+            ctrl.fileName = file.name;
+            ctrl.fileExt = "";
+            ctrl.fileExt = file.getExtension();
+            return true;
+        };
+
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", AddPatientCtrl]);
 })();
