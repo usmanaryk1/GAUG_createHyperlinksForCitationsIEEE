@@ -7,7 +7,7 @@
         <a ng-href="{{serverPath}}reports/employeecensus/download?format=xls&companyCode={{dashboard.companyCode}}">
             <div class="xe-widget xe-counter" data-count=".num" id="complianceCount" data-from="0" data-to="dashboard.complianceTracker" data-suffix="%" data-duration="2">
                 <div class="xe-icon">
-                    <i class="linecons-cloud"></i>
+                    <i><img alt="compliance tracker" class="img-cirlce img-responsive" src="assets/images/dashboard/compliance tracker.png" style="padding: 5px 5px 5px 5px;"></i>
                 </div>
                 <div class="xe-label">
                     <strong class="num">0.0%</strong>
@@ -20,7 +20,7 @@
         <a ng-href="#/app/patient-list/active">
             <div class="xe-widget xe-counter xe-counter-blue" data-count=".num" data-from="1" data-to="dashboard.activePatientCount" data-duration="3" data-easing="false">
                 <div class="xe-icon">
-                    <i class="fa fa-users"></i>
+                    <i><img alt="patients" class="img-cirlce img-responsive" src="assets/images/dashboard/patients.png"></i>
                 </div>
                 <div class="xe-label">
                     <strong class="num">0</strong>
@@ -33,7 +33,7 @@
 
         <div class="xe-widget xe-counter xe-counter-info"  data-count=".num" data-from="0" data-to="dashboard.dischargedPatientsCount" data-duration="5" data-easing="true" data-delay="1">
             <div class="xe-icon">
-                <i class="linecons-discharge"></i>
+                <i><img alt="patient discharge" class="img-cirlce img-responsive" src="assets/images/dashboard/patient discharge.png"></i>
             </div>
             <div class="xe-label">
                 <strong class="num">0</strong>
@@ -46,7 +46,7 @@
         <a ng-href="#/app/patient-calendar/?lastPage=dashboard">
             <div class="xe-widget xe-counter xe-counter-red" data-count=".num" data-from="1" data-to="dashboard.openCasesCount" data-duration="3" data-easing="false">
                 <div class="xe-icon">
-                    <i class="linecons-lightbulb"></i>
+                    <i><img alt="open case" class="img-cirlce img-responsive" src="assets/images/dashboard/open case.png"></i>
                 </div>
                 <div class="xe-label">
                     <strong class="num">0</strong>
