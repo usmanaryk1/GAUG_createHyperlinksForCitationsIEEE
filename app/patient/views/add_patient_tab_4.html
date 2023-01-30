@@ -109,13 +109,13 @@
                             Authorization
                         </label>
                         <div class="col-sm-9">
-
-
                             <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)">
                                 <div>
-                                    <button type="button" class=" btn  btn-default btn-xs " style="width:100px;" flow-btn id="uploadBtn" >
+                                    <input type="file" flow-btn name="authorization_upload" style="color:transparent" data-validate="required"  data-message-required="Please upload Authorization Document."/>
+<!--                                    <button type="button" class=" btn btn-default btn-xs " style="width:100px;background-color: #ccc" flow-btn id="uploadBtn" >
                                         Choose file
-                                    </button>&nbsp;&nbsp;&nbsp;{{addPatient.fileName}}
+                                    </button>-->
+                                    &nbsp;&nbsp;&nbsp;{{addPatient.fileName}}
                                     <div>
                                         <div ng-show="(!(addPatient.fileName.length > 0) && addPatient.uploadDocumentSubmitted)">
                                             <span class="red">Upload file</span>
@@ -131,15 +131,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
-
-
-
-
-
-
-
-                            <!--<input class="form-control" id="field-45" name="Authorization" type="file" data-validate="required" data-message-required="Please upload Authorization Document." ng-model="addPatient.patient.authorization"/>-->
+                            
                         </div>
                     </div>
                     <!--                <div class="form-group-separator">
