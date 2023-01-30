@@ -122,9 +122,11 @@
 //                                });
                             </script>
                             <select class="form-control" id="StaffingCoordinator"  ng-model='addPatient.patient.staffingCordinatorId' name="StaffingCoordinator"
-                                    data-validate="required" data-message-required="Please select Staffing Coordinator.">
+                                    data-validate="required" data-message-required="Please select Staffing Coordinator."
+                                    ng-options='emp.id as (emp.fName+" "+emp.lName) for emp in addPatient.staffCoordinatorList'>
                                 <option value="">Select</option>
-                                <option value="1">1</option>
+                                <!--<option ng-repeat="emp in addPatient.staffCoordinatorList" ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
+                                <!--<option value="1">1</option>-->
                             </select>
                         </div>
                     </div>
@@ -146,13 +148,12 @@
 //                                });
                             </script>
                             <select class="form-control" id="sboxit-2" name="NurseCaseManager" ng-model='addPatient.patient.nurseCaseManagerId'
-                                    data-validate="required" data-message-required="Please select Nurse Case Manager.">
+                                    data-validate="required" data-message-required="Please select Nurse Case Manager."
+                                    ng-options='emp.id as (emp.fName+" "+emp.lName) for emp in addPatient.nursingCareList'>
                                 <option value="">
                                     Select
                                 </option>
-                                <option value="1">
-                                    1
-                                </option>
+                                <!--<option ng-repeat="emp in " ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
                             </select>
                         </div>
                     </div>

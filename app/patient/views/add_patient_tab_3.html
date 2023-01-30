@@ -31,12 +31,10 @@
                                 // 	});
                             </script>
                             <select class="form-control" id="sboxit-1" name="InsuranceProvider"
-                                    data-validate="required" data-message-required="Please select Insurance Provider." ng-model="addPatient.patient.insuranceProviderId">
+                                    data-validate="required" data-message-required="Please select Insurance Provider." ng-model="addPatient.patient.insuranceProviderId"
+                                    ng-options='ins.id as (ins.insuranceName) for ins in addPatient.insuranceProviderList'>
                                 <option value="">
                                     Select
-                                </option>
-                                <option value="1">
-                                    Company Name
                                 </option>
                             </select>
                         </div>

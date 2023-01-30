@@ -1,5 +1,5 @@
 (function() {
-    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO) {
+    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
@@ -7,6 +7,9 @@
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
+        ctrl.nursingCareList = [];
+        ctrl.staffCoordinatorList = [];
+        ctrl.insuranceProviderList = [];
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -18,7 +21,21 @@
             $state.transitionTo(ontimetest.defaultState);
         }
         var form_data;
-
+        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
+            ctrl.nursingCareList = res;
+        }).catch(function() {
+            ctrl.nursingCareList.push({fNmae: "Test", lName: "Data", id: 1});
+        });
+        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
+            ctrl.staffCoordinatorList = res;
+        }).catch(function() {
+            ctrl.staffCoordinatorList.push({fNmae: "Test", lName: "Data", id: 1});
+        });
+        InsurerDAO.retrieveAll().then(function(res) {
+            ctrl.insuranceProviderList = res;
+        }).catch(function() {
+            ctrl.insuranceProviderList.push({insuranceNmae: "Test Data", id: 1});
+        });
         //funcions
         ctrl.savePatient = savePatientData;
         ctrl.pageInitCall = pageInit;
@@ -82,7 +99,6 @@
                                 ctrl.editMode = true;
                             }
                             ctrl.patient = res;
-                            delete ctrl.patient.patientCareTypeCollection;
                             if (res.patientCareTypeCollection) {
                                 var careTypesSelected = [];
                                 var length = res.patientCareTypeCollection.length;
@@ -91,6 +107,7 @@
                                 }
                                 ctrl.patient.careTypes = careTypesSelected;
                             }
+                            delete ctrl.patient.patientCareTypeCollection;
                         })
                         .catch(function() {
                             //exception logic
@@ -113,7 +130,6 @@
                         }
                         ctrl.patient.careTypes = careTypesSelected;
                         delete ctrl.patient.patientCareTypeCollection;
-                        $scope.$apply();
                         console.log(JSON.stringify(ctrl.patient))
                     }
                     ctrl.retrivalRunning = false;
@@ -444,5 +460,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", AddPatientCtrl]);
+    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", AddPatientCtrl]);
 })();

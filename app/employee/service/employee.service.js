@@ -9,6 +9,13 @@
                     action: 'view'
                 }
             },
+            retrieveByPosition: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'select'
+                }
+            },
             //this method will be used for employee save or update based on the action passed
             update: {
                 method: 'POST'
@@ -24,6 +31,9 @@
         return {
             retrieveAll: function (filter) {
                 return api.retrieveAll(filter).$promise;
+            },
+            retrieveByPosition: function (filter) {
+                return api.retrieveByPosition(filter).$promise;
             },
             get: function (params) {
                 return api.get({action:params.id}).$promise;
