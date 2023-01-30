@@ -65,7 +65,8 @@
                     if (ctrl.patient.careTypes && ctrl.patient.careTypes !== null) {
                         patientToSave.patientCareTypeCollection = [];
                         for (var i = 0; i < ctrl.patient.careTypes.length; i++) {
-                            patientToSave.patientCareTypeCollection.push(Number(ctrl.patient.careTypes[i]));
+                            var patientCareType = {'insuranceCareTypeId': {'id': Number(ctrl.patient.careTypes[i])}};
+                            patientToSave.patientCareTypeCollection.push(patientCareType);
                         }
                     }
                 } else {
@@ -81,6 +82,15 @@
                                 ctrl.editMode = true;
                             }
                             ctrl.patient = res;
+                            delete ctrl.patient.patientCareTypeCollection;
+                            if (res.patientCareTypeCollection) {
+                                var careTypesSelected = [];
+                                var length = res.patientCareTypeCollection.length;
+                                for (var i = 0; i < length; i++) {
+                                    careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
+                                }
+                                ctrl.patient.careTypes = careTypesSelected;
+                            }
                         })
                         .catch(function() {
                             //exception logic
@@ -95,13 +105,23 @@
             if (ctrl.editMode) {
                 PatientDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.patient = res;
+                    if (res.patientCareTypeCollection) {
+                        var careTypesSelected = [];
+                        var length = res.patientCareTypeCollection.length;
+                        for (var i = 0; i < length; i++) {
+                            careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
+                        }
+                        ctrl.patient.careTypes = careTypesSelected;
+                        delete ctrl.patient.patientCareTypeCollection;
+                        $scope.$apply();
+                        console.log(JSON.stringify(ctrl.patient))
+                    }
                     ctrl.retrivalRunning = false;
                 }).catch(function(data, status) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
                         finish: function() {
-
                         }
                     }); // showLoadingBar
                     ctrl.patient = ontimetest.patients[($state.params.id - 1)];
@@ -115,6 +135,13 @@
 
         function tab1DataInit() {
             ctrl.formDirty = false;
+            //to set edit mode in tab change
+            if (!$state.params.id || $state.params.id === '') {
+                ctrl.editMode = false;
+                ctrl.patient = {};
+            } else {
+                ctrl.editMode = true;
+            }
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
@@ -160,16 +187,19 @@
             ctrl.formDirty = false;
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    CareTypeDAO.retrieveAll().then(function(res) {
-                        ctrl.careTypeList = res;
-                        $timeout(function() {
-                            $('#CareTypes').multiSelect('refresh');
+                    if (ctrl.patient.insuranceProviderId && ctrl.patient.insuranceProviderId !== null) {
+                        CareTypeDAO.retrieveForInsurer({insurer_id: ctrl.patient.insuranceProviderId}).then(function(res) {
+                            ctrl.careTypeList = res;
+                            $timeout(function() {
+                                $('#CareTypes').multiSelect('refresh');
+                                form_data = $('#add_patient_form').serialize();
+                            }, 200);
+                        }).catch(function() {
                             form_data = $('#add_patient_form').serialize();
-                        }, 200);
-                    }).catch(function() {
+                        });
+                    } else {
                         form_data = $('#add_patient_form').serialize();
-                    });
-
+                    }
                 } else {
                     ctrl.tab4DataInit();
                 }
@@ -191,10 +221,12 @@
                     }
                     if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].address1
                             || ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].address1 === null) {
-                        var address = angular.copy(ctrl.patient.patientAddress);
-                        delete address.id;
-                        delete address.dateInserted;
-                        delete address.dateUpdated;
+                        var address = {};
+                        address.address1 = ctrl.patient.patientAddress.address1;
+                        address.address2 = ctrl.patient.patientAddress.address2;
+                        address.city = ctrl.patient.patientAddress.city;
+                        address.state = ctrl.patient.patientAddress.state;
+                        address.zipcode = ctrl.patient.patientAddress.zipcode;
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
                         $scope.$apply();
                         ctrl.isBillingAddressSameAsPatient = 'Yes';
@@ -217,10 +249,12 @@
         }
 
         function setBillingAddress() {
-            var address = angular.copy(ctrl.patient.patientAddress);
-            delete address.id;
-            delete address.dateInserted;
-            delete address.dateUpdated;
+            var address = {};
+            address.address1 = ctrl.patient.patientAddress.address1;
+            address.address2 = ctrl.patient.patientAddress.address2;
+            address.city = ctrl.patient.patientAddress.city;
+            address.state = ctrl.patient.patientAddress.state;
+            address.zipcode = ctrl.patient.patientAddress.zipcode;
             ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
         }
 

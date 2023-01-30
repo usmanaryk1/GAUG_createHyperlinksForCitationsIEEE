@@ -8,11 +8,21 @@
                 params: {
                     action: 'getall'
                 }
+            },
+            retrieveForInsurer: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'getinsurance'
+                }
             }
         });
         return {
             retrieveAll: function (filter) {
                 return api.retrieveAll(filter).$promise;
+            },
+            retrieveForInsurer: function (data) {
+                return api.retrieveForInsurer({'subAction':data.insurer_id}).$promise;
             }
         };
     };
