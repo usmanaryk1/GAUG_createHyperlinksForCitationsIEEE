@@ -3,6 +3,8 @@
         var ctrl = this;
         ctrl.insurerObj = {};
         ctrl.fileObj = {};
+        ctrl.companyCode=ontimetest.company_code;
+        ctrl.baseUrl=ontimetest.weburl;
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -38,7 +40,10 @@
 
         //function to save insurer data.
         function saveInsurerData() {
-            if ($('#add_inusrer_form')[0].checkValidity()) {
+            if (ctrl.insurerObj.contractFile == null) {
+                ctrl.fileObj.errorMsg = "Please upload Contract File.";
+            }
+            if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile!=null) {
                 var insurerToSave = angular.copy(ctrl.insurerObj);
                 var reqParam;
                 if (ctrl.insurerObj.id && ctrl.insurerObj.id !== null) {
@@ -150,7 +155,7 @@
             singleFile: true,
             headers: {
                 type: "i",
-                company_code: "elance"
+                company_code: ontimetest.company_code
             }
         };
         //When file is selected from browser file picker
@@ -174,16 +179,24 @@
             ctrl.disableUploadButton = false;
         };
         ctrl.fileError = function($file, $message, $flow) {
-            console.log("File cannot be uploaded");
             $flow.cancel();
+            $('#contract_file').rules('add', {
+                required: true   // overwrite an existing rule
+            });
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
             ctrl.fileName = "";
             ctrl.fileExt = "";
+            ctrl.insurerObj.contractFile = null;
             ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments
+        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+
+            ctrl.insurerObj.contractFile = null;
+            $('#contract_file').rules('add', {
+                required: true   // overwrite an existing rule
+            });
             ctrl.fileObj.errorMsg = null;
             ctrl.fileObj.flow = flow;
             ctrl.fileName = file.name;

@@ -330,12 +330,14 @@
             });
         }
         ctrl.uploadFile = {
-            target: ontimetest.weburl + '/file/upload',
+            target: ontimetest.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
-            query: {
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
                 type: "p",
-                company_code: null
+                company_code: ontimetest.company_code
             }
         };
         //When file is selected from browser file picker
@@ -343,19 +345,33 @@
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
             ctrl.disableSaveButton = true;
+            ctrl.disableUploadButton = true;
             ctrl.showfileProgress = true;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
         ctrl.fileUploaded = function(response, file, flow) {
-            ctrl.filePaths[file.name] = response;
-            if (Object.keys(ctrl.filePaths).length == flow.files.length) {
-                ctrl.disableSaveButton = false;
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.patient.authorization = response.fileName;
+                }
             }
+            ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
+        };
+        ctrl.fileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableUploadButton = false;
+            ctrl.fileName = "";
+            ctrl.fileExt = "";
+            ctrl.patient.authorization = null;
+            ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments
+            ctrl.fileObj.errorMsg = null;
             ctrl.fileObj.flow = flow;
             ctrl.fileName = file.name;
             ctrl.fileExt = "";
