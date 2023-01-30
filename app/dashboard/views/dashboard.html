@@ -119,7 +119,7 @@
                     <ul>
                         <li ng-repeat="hourlyTemprature in dashboard.weatherObj.hourlyDataPoints">
                             <div class="xe-forecast-entry">
-                                <time>{{hourlyTemprature.time * 1000|date:'HH:mm'}}</time>
+                                <time>{{hourlyTemprature.time * 1000|date:'HH:mm'|ampmshort}}</time>
                                 <div class="xe-icon">
                                     <i class="{{dashboard.weatherIcons[hourlyTemprature.icon]!=null?dashboard.weatherIcons[hourlyTemprature.icon]:'meteocons-na'}}"></i>
                                 </div>
