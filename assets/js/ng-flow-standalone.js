@@ -389,7 +389,8 @@
         var $ = this;
         input.addEventListener('change', function (e) {
           $.addFiles(e.target.files, e);
-          e.target.value = '';
+          //Commented by JACK to allow required validation on input type file
+//          e.target.value = '';
         }, false);
       }, this);
     },

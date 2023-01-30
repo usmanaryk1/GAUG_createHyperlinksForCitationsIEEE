@@ -5,7 +5,7 @@
                 <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" type="submit">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -112,37 +112,31 @@
                             Authorization
                         </label>
                         <div class="col-sm-9">
-
-
-                            <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)">
-                                <div>
-                                    <button type="button" class=" btn  btn-default btn-xs " style="width:100px;" flow-btn id="uploadBtn" >
-                                        Choose file
-                                    </button>&nbsp;&nbsp;&nbsp;{{addPatient.fileName}}
+                         <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <input type="file" id="contract_file" ng-model="addPatient.patient.authorization" flow-btn name="contract_file" style="color:transparent" ng-disabled="addPatient.disableUploadButton"/>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.patient.authorization}}">{{addPatient.patient.authorization}}</a>
+                                        </div>
+                                    </div>
                                     <div>
-                                        <div ng-show="(!(addPatient.fileName.length > 0) && addPatient.uploadDocumentSubmitted)">
-                                            <span class="red">Upload file</span>
+                                        <div ng-show="addPatient.fileObj.errorMsg != null && addPatient.fileObj.errorMsg != ''">
+                                            <span class="red">{{addPatient.fileObj.errorMsg}}</span>
                                         </div> 
                                     </div>
                                     <div flow-transfers class="col-md-12 form-control-static">
                                         <div ng-repeat="file in transfers">
                                             <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addPatient.showfileProgress">
                                                 <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-                                                    {{file.progress() * 100 | number : 0}} %
+                                                    <!--{{file.progress() * 100 | number : 0}} %-->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-
-
-
-
-
-
-                            <!--<input class="form-control" id="field-45" name="Authorization" type="file" data-validate="required" data-message-required="Please upload Authorization Document." ng-model="addPatient.patient.authorization"/>-->
                         </div>
                     </div>
                     <!--                <div class="form-group-separator">

@@ -2,11 +2,16 @@
     function AddInsurerCtrl($scope, $rootScope, $state, $modal, $timeout, InsurerDAO) {
         var ctrl = this;
         ctrl.insurerObj = {};
+        ctrl.fileObj = {};
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
             }
             ctrl.editMode = true;
+            ctrl.displayCareTypeModal = false;
+
         } else {
             ctrl.editMode = false;
         }
@@ -35,7 +40,10 @@
 
         //function to save insurer data.
         function saveInsurerData() {
-            if ($('#add_inusrer_form')[0].checkValidity()) {
+            if (ctrl.insurerObj.contractFile == null) {
+                ctrl.fileObj.errorMsg = "Please upload Contract File.";
+            }
+            if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile != null) {
                 var insurerToSave = angular.copy(ctrl.insurerObj);
                 var reqParam;
                 if (ctrl.insurerObj.id && ctrl.insurerObj.id !== null) {
@@ -67,12 +75,12 @@
                                 ctrl.editMode = true;
                                 ctrl.insurerObj.id = 1;
                             }
-                            
+
                         });
 
             }
         }
-        
+
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
@@ -117,7 +125,7 @@
                 ctrl.insurerObj.careTypes.splice(ctrl.insurerObj.careTypes.indexOf(ctrl.newSelectedType), 1);
                 $timeout(function() {
                     $("#multi-select").multiSelect('refresh');
-                })
+                });
                 $rootScope.careTypeModel.close();
             };
 
@@ -127,7 +135,10 @@
         $scope.$watch(function() {
             return ctrl.insurerObj.careTypes;
         }, function(newValue, oldValue) {
-            if (newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
+            $timeout(function() {
+                $("#multi-select").multiSelect('refresh');
+            });
+            if (ctrl.displayCareTypeModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
                 ctrl.openModal('modal-5', 'md', false);
                 if (oldValue == null) {
                     ctrl.newSelectedType = newValue;
@@ -135,7 +146,61 @@
                     ctrl.newSelectedType = arr_diff(newValue, oldValue);
                 }
             }
-        });
+        }, true);
+        ctrl.uploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "i",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.fileSelected = function(file, flow) {
+            ctrl.fileObj.flowObj = flow;
+            ctrl.fileObj.selectedFile = file;
+            ctrl.fileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.fileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.insurerObj.contractFile = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableUploadButton = false;
+        };
+        ctrl.fileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableUploadButton = false;
+            ctrl.fileName = "";
+            ctrl.fileExt = "";
+            ctrl.insurerObj.contractFile = null;
+            ctrl.fileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+            ctrl.insurerObj.contractFile = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.fileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableUploadButton = true;
+            ctrl.showfileProgress = true;
+            ctrl.fileObj.errorMsg = null;
+            ctrl.fileObj.flow = flow;
+            ctrl.fileName = file.name;
+            ctrl.fileExt = "";
+            ctrl.fileExt = file.getExtension();
+            return true;
+        };
     }
     ;
     angular.module('xenon.controllers').controller('AddInsurerCtrl', ["$scope", "$rootScope", "$state", "$modal", "$timeout", "InsurerDAO", AddInsurerCtrl]);

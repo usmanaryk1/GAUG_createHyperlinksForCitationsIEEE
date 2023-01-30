@@ -286,7 +286,8 @@ ontimedata = {
             "contactEmail": "h@f",
             "contractStartDate": "2015-06-01T18:30:00.000Z",
             "contractEndDate": "2015-06-03T18:29:59.999Z",
-//            "careTypes": ["1"]
+            "contractFile":"Contract File",
+            "careTypes": ["1"]
         }
     ]
 };
