@@ -286,19 +286,21 @@ ontimedata = {
             "contactEmail": "h@f",
             "contractStartDate": "2015-06-01T18:30:00.000Z",
             "contractEndDate": "2015-06-03T18:29:59.999Z",
-//            "careTypes": ["1"]
+            "contractFile":"Contract File",
+            "careTypes": ["1"]
         }
     ]
 };
 
 ontimetest = {
-    'weburl': 'api/',
+    'weburl': 'http://localhost:8080/ontime/api/',
     'defaultState': 'login',
     'patients': ontimedata.patients,
     'employees': ontimedata.employees,
     'dailyAttendance': ontimedata.dailyAttendance,
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
+    'company_code': "TRT",
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },

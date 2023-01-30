@@ -27,7 +27,7 @@
                   //                        });
                   //                    });
                     </script>
-                    <table id="example-1" ng-if="viewInsurer.insurerList.length" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                    <table id="example-1" ng-if="viewInsurer.insurerList.length>0" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
                         <!--<thead>
                                 <tr>
                                         <th width="20%">Name</th>
@@ -57,7 +57,7 @@
                                 <td></td>
                                 <td><a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)"><span class="ed_b">Edit</span></a> 
                                     <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')"><span class="ed_b">Dlt</span></a> 
-                                    <a href="#" class="btn icon-left fa fa-download download_bt"><span class="ed_b">Download</span></a> 
+                                    <a class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}" tooltip="Download Contract"><span class="ed_b"></span></a> 
                                 </td>
                             </tr>
 

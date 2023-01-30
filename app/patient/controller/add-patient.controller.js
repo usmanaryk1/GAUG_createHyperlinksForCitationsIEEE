@@ -1,10 +1,15 @@
 (function() {
-    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope) {
+    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
-        ctrl.retrivalRunning = false;
+        ctrl.retrivalRunning = true;
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
+        ctrl.nursingCareList = [];
+        ctrl.staffCoordinatorList = [];
+        ctrl.insuranceProviderList = [];
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -16,7 +21,21 @@
             $state.transitionTo(ontimetest.defaultState);
         }
         var form_data;
-
+        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
+            ctrl.nursingCareList = res;
+        }).catch(function() {
+            ctrl.nursingCareList.push({fNmae: "Test", lName: "Data", id: 1});
+        });
+        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
+            ctrl.staffCoordinatorList = res;
+        }).catch(function() {
+            ctrl.staffCoordinatorList.push({fNmae: "Test", lName: "Data", id: 1});
+        });
+        InsurerDAO.retrieveAll().then(function(res) {
+            ctrl.insuranceProviderList = res;
+        }).catch(function() {
+            ctrl.insuranceProviderList.push({insuranceNmae: "Test Data", id: 1});
+        });
         //funcions
         ctrl.savePatient = savePatientData;
         ctrl.pageInitCall = pageInit;
@@ -33,11 +52,17 @@
         //If changed then it should be valid
         //function to navigate to different tab by state
         function navigateToTab(event, state) {
+            var validAuthorization = true;
+            if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && ctrl.formDirty) {
+                ctrl.fileObj.errorMsg = "Please upload Authorization Document.";
+                validAuthorization = false;
+            }
+
             // Don't propogate the event to the document
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
-            if ($('#add_patient_form').valid() || !ctrl.formDirty) {
+            if (($('#add_patient_form').valid() && validAuthorization) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
                 }
@@ -49,6 +74,7 @@
         function savePatientData() {
             if ($('#add_patient_form')[0].checkValidity()) {
                 var patientToSave = angular.copy(ctrl.patient);
+                patientToSave.phone = patientToSave.phone.toString();
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
@@ -56,10 +82,13 @@
                     if (ctrl.patient.careTypes && ctrl.patient.careTypes !== null) {
                         patientToSave.patientCareTypeCollection = [];
                         for (var i = 0; i < ctrl.patient.careTypes.length; i++) {
-                            patientToSave.patientCareTypeCollection.push(Number(ctrl.patient.careTypes[i]));
+                            var patientCareType = {'insuranceCareTypeId': {'id': Number(ctrl.patient.careTypes[i])}};
+                            patientToSave.patientCareTypeCollection.push(patientCareType);
                         }
                     }
                 } else {
+                    ctrl.patient.orgCode = ontimetest.company_code;
+                    patientToSave.orgCode = ontimetest.company_code;
                     reqParam = 'save';
                 }
 
@@ -68,15 +97,19 @@
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
-                                ctrl.patient.id = res.id;
                             }
+                            ctrl.patient = res;
+                            if (res.patientCareTypeCollection) {
+                                var careTypesSelected = [];
+                                var length = res.patientCareTypeCollection.length;
+                                for (var i = 0; i < length; i++) {
+                                    careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
+                                }
+                                ctrl.patient.careTypes = careTypesSelected;
+                            }
+                            delete ctrl.patient.patientCareTypeCollection;
                         })
                         .catch(function() {
-                            if (!ctrl.patient.id || ctrl.patient.id === null) {
-                                $state.go('^.tab1', {id: 1});
-                                ctrl.editMode = true;
-                                ctrl.patient.id = 1;
-                            }
                             //exception logic
                             console.log('Patient Object : ' + JSON.stringify(patientToSave));
                         });
@@ -87,27 +120,44 @@
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
-                ctrl.retrivalRunning = true;
                 PatientDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.patient = res;
+                    if (res.patientCareTypeCollection) {
+                        var careTypesSelected = [];
+                        var length = res.patientCareTypeCollection.length;
+                        for (var i = 0; i < length; i++) {
+                            careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
+                        }
+                        ctrl.patient.careTypes = careTypesSelected;
+                        delete ctrl.patient.patientCareTypeCollection;
+                        console.log(JSON.stringify(ctrl.patient))
+                    }
                     ctrl.retrivalRunning = false;
                 }).catch(function(data, status) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
                         finish: function() {
-
                         }
                     }); // showLoadingBar
                     ctrl.patient = ontimetest.patients[($state.params.id - 1)];
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.patient));
                 });
+            } else {
+                ctrl.retrivalRunning = false;
             }
         }
 
         function tab1DataInit() {
             ctrl.formDirty = false;
+            //to set edit mode in tab change
+            if (!$state.params.id || $state.params.id === '') {
+                ctrl.editMode = false;
+                ctrl.patient = {};
+            } else {
+                ctrl.editMode = true;
+            }
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
@@ -153,8 +203,19 @@
             ctrl.formDirty = false;
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    form_data = $('#add_patient_form').serialize();
-                    $('#CareTypes').multiSelect('refresh');
+                    if (ctrl.patient.insuranceProviderId && ctrl.patient.insuranceProviderId !== null) {
+                        CareTypeDAO.retrieveForInsurer({insurer_id: ctrl.patient.insuranceProviderId}).then(function(res) {
+                            ctrl.careTypeList = res;
+                            $timeout(function() {
+                                $('#CareTypes').multiSelect('refresh');
+                                form_data = $('#add_patient_form').serialize();
+                            }, 200);
+                        }).catch(function() {
+                            form_data = $('#add_patient_form').serialize();
+                        });
+                    } else {
+                        form_data = $('#add_patient_form').serialize();
+                    }
                 } else {
                     ctrl.tab4DataInit();
                 }
@@ -165,19 +226,25 @@
             ctrl.formDirty = false;
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    if (!ctrl.patient.subscriberInfo) {
-                        ctrl.patient.subscriberInfo = {};
+                    if (!ctrl.patient.subscriberInfo || ctrl.patient.subscriberInfo === null
+                            || ctrl.patient.subscriberInfo.length === 0) {
+                        ctrl.patient.subscriberInfo = [];
+                        ctrl.patient.subscriberInfo[0] = {};
                     }
-                    if (!ctrl.patient.subscriberInfo.subscriberAddressCollection) {
-                        ctrl.patient.subscriberInfo.subscriberAddressCollection = {};
+                    if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection) {
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = {};
                     }
-                    if (!ctrl.patient.subscriberInfo.subscriberAddressCollection.address1
-                            || ctrl.patient.subscriberInfo.subscriberAddressCollection.address1 === null) {
-                        ctrl.patient.subscriberInfo.subscriberAddressCollection = angular.copy(ctrl.patient.addressDataId);
+                    if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].address1
+                            || ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].address1 === null) {
+                        var address = {};
+                        address.address1 = ctrl.patient.patientAddress.address1;
+                        address.address2 = ctrl.patient.patientAddress.address2;
+                        address.city = ctrl.patient.patientAddress.city;
+                        address.state = ctrl.patient.patientAddress.state;
+                        address.zipcode = ctrl.patient.patientAddress.zipcode;
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
                         $scope.$apply();
-                        ctrl.isBillingAddressSameAsPatient = 'Yes';
-                        $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
-                    } else if (JSON.stringify(ctrl.patient.subscriberInfo.subscriberAddressCollection) === JSON.stringify(ctrl.patient.addressDataId)) {
                         ctrl.isBillingAddressSameAsPatient = 'Yes';
                         $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
                     } else {
@@ -186,10 +253,10 @@
                     }
 
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
-                    if (!ctrl.patient.subscriberInfo.gender) {
-                        ctrl.patient.subscriberInfo.gender = 'M';
+                    if (!ctrl.patient.subscriberInfo[0].gender) {
+                        ctrl.patient.subscriberInfo[0].gender = 'M';
                     }
-                    $formService.setRadioValues('Gender', ctrl.patient.subscriberInfo.gender);
+                    $formService.setRadioValues('Gender', ctrl.patient.subscriberInfo[0].gender);
                     form_data = $('#add_patient_form').serialize();
                 } else {
                     ctrl.tab5DataInit();
@@ -198,11 +265,17 @@
         }
 
         function setBillingAddress() {
-            ctrl.patient.subscriberInfo.subscriberAddressCollection = angular.copy(ctrl.patient.addressDataId);
+            var address = {};
+            address.address1 = ctrl.patient.patientAddress.address1;
+            address.address2 = ctrl.patient.patientAddress.address2;
+            address.city = ctrl.patient.patientAddress.city;
+            address.state = ctrl.patient.patientAddress.state;
+            address.zipcode = ctrl.patient.patientAddress.zipcode;
+            ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
         }
 
         function setBillingAddressRadioButton() {
-            if (JSON.stringify(ctrl.patient.subscriberInfo.subscriberAddressCollection) === JSON.stringify(ctrl.patient.addressDataId)) {
+            if (JSON.stringify(ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0]) === JSON.stringify(ctrl.patient.patientAddress)) {
                 ctrl.isBillingAddressSameAsPatient = 'Yes';
                 $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
             } else {
@@ -330,32 +403,55 @@
             });
         }
         ctrl.uploadFile = {
-            target: ontimetest.weburl + '/file/upload',
+            target: ontimetest.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
-            query: {
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
                 type: "p",
-                company_code: null
+                company_code: ontimetest.company_code
             }
         };
         //When file is selected from browser file picker
         ctrl.fileSelected = function(file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
-            ctrl.disableSaveButton = true;
-            ctrl.showfileProgress = true;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
         ctrl.fileUploaded = function(response, file, flow) {
-            ctrl.filePaths[file.name] = response;
-            if (Object.keys(ctrl.filePaths).length == flow.files.length) {
-                ctrl.disableSaveButton = false;
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.patient.authorization = response.fileName;
+                }
             }
+            ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
         };
+        ctrl.fileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableUploadButton = false;
+            ctrl.fileName = "";
+            ctrl.fileExt = "";
+            ctrl.patient.authorization = null;
+            ctrl.fileObj.errorMsg = "File cannot be uploaded";
+        };
         //When file is added in file upload
-        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments
+        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+            ctrl.formDirty = true;
+            ctrl.patient.authorization = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.fileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableUploadButton = true;
+            ctrl.showfileProgress = true;
+
+            ctrl.fileObj.errorMsg = null;
             ctrl.fileObj.flow = flow;
             ctrl.fileName = file.name;
             ctrl.fileExt = "";
@@ -364,5 +460,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", AddPatientCtrl]);
+    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", AddPatientCtrl]);
 })();

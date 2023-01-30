@@ -2,7 +2,9 @@
     function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal) {
         var ctrl = this;
         $rootScope.selectPatientModel = {};
-        if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
+        if ($stateParams.status !== 'active' && $stateParams.status !== 'discharged' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
@@ -11,26 +13,28 @@
         ctrl.edit = edit;
 
         function retrievePatientsData() {
-            PatientDAO.retrieveAll().then(function (res) {
+            PatientDAO.retrieveAll({status: ctrl.viewType}).then(function(res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
-                        if (res) {
-                            ctrl.patientList = res;
-                        }
+                    finish: function() {
+
                     }
+
                 }); // showLoadingBar
+                if (res) {
+                    ctrl.patientList = res;
+                }
 
             }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
 
                     }
                 }); // showLoadingBar
-                ctrl.patientList = ontimetest.patients;
+//                ctrl.patientList = ontimetest.patients;
             });
         }
 

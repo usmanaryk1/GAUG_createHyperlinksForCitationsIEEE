@@ -1,8 +1,17 @@
 (function() {
-    function AddEmployeeCtrl($scope, $stateParams, $state, EmployeeDAO, $timeout, $formService) {
+    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope) {
         var ctrl = this;
-        ctrl.retrivalRunning = false;
+        ctrl.retrivalRunning = true;
         ctrl.employee = {};
+        ctrl.employee.employeeDocumentId={};
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.careTypeList = [];
+        ctrl.applicationFileObj = {};
+        ctrl.i9eligibilityFileObj = {};
+        ctrl.w4FileObj = {};
+        ctrl.referencesFileObj = {};
+        ctrl.physicalFileObj = {};
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -14,9 +23,45 @@
         } else {
             $state.transitionTo(ontimetest.defaultState);
         }
+
+        CareTypeDAO.retrieveAll().then(function(res) {
+            ctrl.careTypeList = res;
+            $timeout(function() {
+                $('#rate1').multiSelect('refresh');
+                $('#rate2').multiSelect('refresh');
+                form_data = $('#add_employee_form').serialize();
+            }, 200);
+        }).catch(function() {
+            form_data = $('#add_employee_form').serialize();
+        });
         ctrl.saveEmployee = saveEmployeeData;
         ctrl.pageInitCall = pageInit;
         var form_data;
+
+        ctrl.checkFileUploadValidity = function() {
+            var validApplication = true;
+            var validI9Eligibility = true;
+            var validW4 = true;
+            if ($rootScope.tabNo != 3) {
+                ctrl.applicationFileObj.errorMsg = null;
+                ctrl.i9eligibilityFileObj.errorMsg = null;
+                ctrl.w4FileObj.errorMsg = null;
+            }
+
+            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                ctrl.applicationFileObj.errorMsg = "Please upload Application.";
+                validApplication = false;
+            }
+            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.i9 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                ctrl.i9eligibilityFileObj.errorMsg = "Please upload I-9 Eligibility.";
+                validI9Eligibility = false;
+            }
+            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                ctrl.w4FileObj.errorMsg = "Please upload W-4 or I9.";
+                validW4 = false;
+            }
+            return (validApplication && validI9Eligibility && validW4);
+        };
 
         //ceck if form has been changed or not
         //If changed then it should be valid
@@ -24,7 +69,8 @@
             if ($('#add_employee_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
-            if ($('#add_employee_form').valid() || !ctrl.formDirty) {
+            var fileUploadValid = ctrl.checkFileUploadValidity();
+            if (($('#add_employee_form').valid() && fileUploadValid) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
                 }
@@ -34,21 +80,25 @@
 
         //function to save the employee data
         function saveEmployeeData() {
+            ctrl.formSubmitted = true;
             setFormDynamicValidityMessages();
-            if ($('#add_employee_form')[0].checkValidity()) {
+            var fileUploadValid = ctrl.checkFileUploadValidity();
+            ctrl.employee.phone = ctrl.employee.phone.toString();
+            if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 var reqParam;
                 if (ctrl.employee.id && ctrl.employee.id !== null) {
                     reqParam = 'updateemployee';
-                    if (ctrl.employee.employeeCareRatesList && ctrl.employee.employeeCareRatesList !== null) {
-                        var careRateList = angular.copy(ctrl.employee.employeeCareRatesList);
+                    if (ctrl.employee.careRatesList && ctrl.employee.careRatesList !== null) {
+                        var careRateList = angular.copy(ctrl.employee.careRatesList);
                         careRateList.employeeId = ctrl.employee.id;
                         EmployeeDAO.updateCareRates(careRateList)
                                 .then()
                                 .catch(function() {
                                     console.log(JSON.stringify(careRateList));
-                                })
+                                });
                     }
                 } else {
+                    ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
                 }
 
@@ -57,15 +107,12 @@
                             if (!ctrl.employee.id || ctrl.employee.id === null) {
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
-                                ctrl.employee.id = res.id;
                             }
+                            ctrl.employee = res;
+                            ctrl.formSubmitted = false;
                         })
                         .catch(function() {
-                            if (!ctrl.employee.id || ctrl.employee.id === null) {
-                                $state.go('^.tab1', {id: 1});
-                                ctrl.editMode = true;
-                                ctrl.employee.id = 1;
-                            }
+                            ctrl.formSubmitted = false;
                             //exception logic
                             console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
                         });
@@ -76,8 +123,13 @@
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
-                ctrl.retrivalRunning = true;
                 EmployeeDAO.get({id: $state.params.id}).then(function(res) {
+                    showLoadingBar({
+                        delay: .5,
+                        pct: 100,
+                        finish: function() {
+                        }
+                    }); // showLoadingBar
                     ctrl.employee = res;
                     ctrl.retrivalRunning = false;
                     $timeout(function() {
@@ -85,17 +137,11 @@
                         $("#rate1").multiSelect('refresh');
                     }, 100);
                 }).catch(function(data, status) {
-                    showLoadingBar({
-                        delay: .5,
-                        pct: 100,
-                        finish: function() {
-
-                        }
-                    }); // showLoadingBar
-                    ctrl.employee = ontimetest.employees[($state.params.id - 1)];
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
                 });
+            } else {
+                ctrl.retrivalRunning = false;
             }
         }
         ;
@@ -108,7 +154,7 @@
         }
 
         $scope.$watch(function() {
-            return ctrl.employee.physical;
+            return ctrl.employee.employeeDocumentId.physical;
         }, function(newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='PhysicalExpirationDate']").attr('required', true);
@@ -118,7 +164,7 @@
         });
 
         $scope.$watch(function() {
-            return ctrl.employee.tbTesting;
+            return ctrl.employee.employeeDocumentId.tbTesting;
         }, function(newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='TBTestingExpirationDate']").attr('required', true);
@@ -130,6 +176,9 @@
         ctrl.tab3DataInit = function() {
             ctrl.formDirty = false;
             $timeout(function() {
+                if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
+                    ctrl.employee.employeeDocumentId={};
+                }
                 if (!ctrl.retrivalRunning) {
                     form_data = $('#add_employee_form').serialize();
                 } else {
@@ -145,8 +194,15 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    $("#rate2").multiSelect('refresh');
-                    $("#rate1").multiSelect('refresh');
+                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
+                        ctrl.employee.careRatesList = res;
+                        $timeout(function() {
+                            $("#rate2").multiSelect('refresh');
+                            $("#rate1").multiSelect('refresh');
+                        }, 200);
+                        form_data = $('#add_employee_form').serialize();
+                    });
+
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W-2';
                     }
@@ -175,7 +231,7 @@
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.employee.position || ctrl.employee.position === null) {
-                        ctrl.employee.position = 'Market Rep.';
+                        ctrl.employee.position = 'mp';
                     }
                     $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();
@@ -185,6 +241,257 @@
             }, 100);
 
         };
+
+        ctrl.applicationUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "a",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.applicationFileSelected = function(file, flow) {
+            ctrl.applicationFileObj.flowObj = flow;
+            ctrl.applicationFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.applicationFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.application = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableApplicationUploadButton = false;
+        };
+        ctrl.applicationFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableApplicationUploadButton = false;
+            ctrl.employee.employeeDocumentId.application = null;
+            ctrl.applicationFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.applicationFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.application = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.applicationFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableApplicationUploadButton = true;
+            ctrl.applicationShowfileProgress = true;
+            ctrl.applicationFileObj.errorMsg = null;
+            ctrl.applicationFileObj.flow = flow;
+            return true;
+        };
+
+        ctrl.i9eligibilityUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "9",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.i9eligibilityFileSelected = function(file, flow) {
+            ctrl.i9eligibilityFileObj.flowObj = flow;
+            ctrl.i9eligibilityFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.i9eligibilityFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.i9 = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableW4UploadButton = false;
+        };
+        ctrl.i9eligibilityFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableW4UploadButton = false;
+            ctrl.employee.employeeDocumentId.i9 = null;
+            ctrl.i9eligibilityFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.i9eligibilityFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.i9 = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.i9eligibilityFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableW4UploadButton = true;
+            ctrl.i9eligibilityShowfileProgress = true;
+            ctrl.i9eligibilityFileObj.errorMsg = null;
+            ctrl.i9eligibilityFileObj.flow = flow;
+            return true;
+        };
+
+        ctrl.w4UploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "w",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.w4FileSelected = function(file, flow) {
+            ctrl.w4FileObj.flowObj = flow;
+            ctrl.w4FileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.w4FileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.w4 = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableW4UploadButton = false;
+        };
+        ctrl.w4FileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableW4UploadButton = false;
+            ctrl.employee.employeeDocumentId.w4 = null;
+            ctrl.w4FileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.w4FileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.w4 = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.w4FileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableW4UploadButton = true;
+            ctrl.w4ShowfileProgress = true;
+            ctrl.w4FileObj.errorMsg = null;
+            ctrl.w4FileObj.flow = flow;
+            return true;
+        };
+
+        ctrl.referencesUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "r",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.referencesFileSelected = function(file, flow) {
+            ctrl.referencesFileObj.flowObj = flow;
+            ctrl.referencesFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.referencesFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.references = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableReferencesUploadButton = false;
+        };
+        ctrl.referencesFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableReferencesUploadButton = false;
+            ctrl.employee.employeeDocumentId.references = null;
+            ctrl.referencesFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.referencesFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.references = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.referencesFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableReferencesUploadButton = true;
+            ctrl.referencesShowfileProgress = true;
+            ctrl.referencesFileObj.errorMsg = null;
+            ctrl.referencesFileObj.flow = flow;
+            return true;
+        };
+
+        ctrl.physicalUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "z",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.physicalFileSelected = function(file, flow) {
+            ctrl.physicalFileObj.flowObj = flow;
+            ctrl.physicalFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.physicalFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.physical = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disablePhysicalUploadButton = false;
+        };
+        ctrl.physicalFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disablePhysicalUploadButton = false;
+            ctrl.employee.employeeDocumentId.physical = null;
+            ctrl.physicalFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.physicalFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.physical = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.physicalFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disablePhysicalUploadButton = true;
+            ctrl.physicalShowfileProgress = true;
+            ctrl.physicalFileObj.errorMsg = null;
+            ctrl.physicalFileObj.flow = flow;
+            return true;
+        };
+
 
 //        $scope.$watch(function() {
 //            return ctrl.employee.position;
@@ -205,5 +512,5 @@
         ctrl.pageInitCall();
     }
     ;
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "$stateParams", "$state", "EmployeeDAO", "$timeout", "$formService", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", AddEmployeeCtrl]);
 })();

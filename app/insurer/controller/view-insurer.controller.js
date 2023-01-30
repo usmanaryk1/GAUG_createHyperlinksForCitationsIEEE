@@ -4,6 +4,8 @@
         $rootScope.selectEmployeeModel = {};
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
 
         function retrieveInsurersData() {
             InsurerDAO.retrieveAll().then(function(res) {
@@ -12,10 +14,10 @@
                     pct: 100,
                     finish: function() {
                         if (res) {
-                            ctrl.insurerList = res;
                         }
                     }
                 }); // showLoadingBar
+                ctrl.insurerList = res;
 
             }).catch(function(data, status) {
                 showLoadingBar({

@@ -5,7 +5,7 @@
                 <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" type="submit">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -21,7 +21,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input class="form-control" id="field-28" name="FirstName" type="text" 
-                                   ng-model="addPatient.patient.FName" data-validate="required" data-message-required="Please enter First Name." />
+                                   ng-model="addPatient.patient.fName" data-validate="required" data-message-required="Please enter First Name." />
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -41,7 +41,7 @@
                             Last Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-30" name="LastName" type="text" ng-model="addPatient.patient.LName" data-validate="required" data-message-required='Please enter Last Name.'/>
+                            <input class="form-control" id="field-30" name="LastName" type="text" ng-model="addPatient.patient.lName" data-validate="required" data-message-required='Please enter Last Name.'/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -99,7 +99,7 @@
                             Phone
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-33" name="Phone" type="text" value="{{addPatient.patient.phone}}" 
+                            <input class="form-control" id="field-33" name="Phone" type="text" ng-model="addPatient.patient.phone" 
                                    data-validate="required,number,minlength[10],maxlength[10]"
                                    data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
                         </div>
@@ -122,9 +122,11 @@
 //                                });
                             </script>
                             <select class="form-control" id="StaffingCoordinator"  ng-model='addPatient.patient.staffingCordinatorId' name="StaffingCoordinator"
-                                    data-validate="required" data-message-required="Please select Staffing Coordinator.">
+                                    data-validate="required" data-message-required="Please select Staffing Coordinator."
+                                    ng-options='emp.id as (emp.fName+" "+emp.lName) for emp in addPatient.staffCoordinatorList'>
                                 <option value="">Select</option>
-                                <option value="1">1</option>
+                                <!--<option ng-repeat="emp in addPatient.staffCoordinatorList" ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
+                                <!--<option value="1">1</option>-->
                             </select>
                         </div>
                     </div>
@@ -146,13 +148,12 @@
 //                                });
                             </script>
                             <select class="form-control" id="sboxit-2" name="NurseCaseManager" ng-model='addPatient.patient.nurseCaseManagerId'
-                                    data-validate="required" data-message-required="Please select Nurse Case Manager.">
+                                    data-validate="required" data-message-required="Please select Nurse Case Manager."
+                                    ng-options='emp.id as (emp.fName+" "+emp.lName) for emp in addPatient.nursingCareList'>
                                 <option value="">
                                     Select
                                 </option>
-                                <option value="1">
-                                    1
-                                </option>
+                                <!--<option ng-repeat="emp in " ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
                             </select>
                         </div>
                     </div>
@@ -163,7 +164,7 @@
                             Care Coordinator
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-34" name="CareCoordinator" type="text" ng-model='addPatient.patient.careCordinatorId'
+                            <input class="form-control" id="field-34" name="CareCoordinator" type="text" ng-model='addPatient.patient.careCordinator'
                                    data-validate="required" data-message-required="Please enter Care Coordinator or Emergency Contact Name."/>
                         </div>
                     </div>

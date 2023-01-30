@@ -23,8 +23,31 @@
                             Application
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Application" type="file"
-                                   data-validate="required" data-message-required="Please upload Application."/>
+                            <div flow-init="addEmployee.applicationUploadFile" flow-file-added="addEmployee.applicationFileAdded($file, $flow)" flow-file-success="addEmployee.applicationFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.applicationFileSelected($file,$flow)" flow-file-error="addEmployee.applicationFileError( $file, $message, $flow )">
+                                <!--<input class="form-control" name="Application" type="file" data-message-required="Please upload Application."/>-->
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="Application" ng-model="addEmployee.employee.employeeDocumentId.application" flow-btn name="Application" style="color:transparent" ng-disabled="addEmployee.disableApplicationUploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.employeeDocumentId.application}}">{{addEmployee.employee.employeeDocumentId.application}}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.applicationFileObj.errorMsg != null && addEmployee.applicationFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.applicationFileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.applicationShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -35,7 +58,8 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="LicenseOrCertificateExpirationDate" type="text"/>
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="LicenseOrCertificateExpirationDate" type="text"
+                                       ng-model='addEmployee.employee.employeeDocumentId.licenceExpirationDate'/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -53,8 +77,33 @@
                             I-9 Eligibility
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="I9Eligibility" type="file" fileread="addEmployee.employee.i9Eligibility"
-                                   data-validate="required" data-message-required="Please upload I-9 Eligibility."/>
+                            <!--                            <input class="form-control" name="I9Eligibility" type="file" fileread="addEmployee.employee.employeeDocumentId.i9Eligibility"
+                                                               data-validate="required" data-message-required="Please upload I-9 Eligibility."/>-->
+
+                            <div flow-init="addEmployee.i9eligibilityUploadFile" flow-file-added="addEmployee.i9eligibilityFileAdded($file, $flow)" flow-file-success="addEmployee.i9eligibilityFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.i9eligibilityFileSelected($file,$flow)" flow-file-error="addEmployee.i9eligibilityFileError( $file, $message, $flow )">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="I9Eligibility" ng-model="addEmployee.employee.employeeDocumentId.i9" flow-btn name="I9Eligibility" style="color:transparent" ng-disabled="addEmployee.disableI9ElgibilityUploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/9/{{addEmployee.employee.employeeDocumentId.i9}}">{{addEmployee.employee.employeeDocumentId.i9}}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.i9eligibilityFileObj.errorMsg != null && addEmployee.i9eligibilityFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.i9eligibilityFileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.i9eligibilityShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -65,7 +114,7 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="I9EligibilityExpirationDate" type="text" ng-model="addEmployee.employee.I9EligibilityExpirationDate"
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="I9EligibilityExpirationDate" type="text" ng-model="addEmployee.employee.employeeDocumentId.i9ExpirationDate"
                                        data-validate="required" data-message-required="Please enter I-9 Eligibility Expiration Date."/>
                                 <div class="input-group-addon">
                                     <a href="#">
@@ -84,8 +133,32 @@
                             W-4 or I9
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="W2" type="file"
-                                   data-validate="required" data-message-required="Please upload W-4 or I9."/>
+                            <!--                            <input class="form-control" name="W2" type="file"
+                                                               data-validate="required" data-message-required="Please upload W-4 or I9."/>-->
+                            <div flow-init="addEmployee.w4UploadFile" flow-file-added="addEmployee.w4FileAdded($file, $flow)" flow-file-success="addEmployee.w4FileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.w4FileSelected($file,$flow)" flow-file-error="addEmployee.w4FileError( $file, $message, $flow )">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="W2" ng-model="addEmployee.employee.employeeDocumentId.w4" flow-btn name="W2" style="color:transparent" ng-disabled="addEmployee.disableW4UploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/w/{{addEmployee.employee.employeeDocumentId.w4}}">{{addEmployee.employee.employeeDocumentId.w4}}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.w4FileObj.errorMsg != null && addEmployee.w4FileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.w4FileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.w4ShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -95,8 +168,32 @@
                             References
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="References" type="file"
-                                   data-message-required="Please upload References."/>
+                            <!--                            <input class="form-control" name="References" type="file"
+                                                               data-message-required="Please upload References."/>-->
+                            <div flow-init="addEmployee.referencesUploadFile" flow-file-added="addEmployee.referencesFileAdded($file, $flow)" flow-file-success="addEmployee.referencesFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.referencesFileSelected($file,$flow)" flow-file-error="addEmployee.referencesFileError( $file, $message, $flow )">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="references" ng-model="addEmployee.employee.employeeDocumentId.references" flow-btn name="references" style="color:transparent" ng-disabled="addEmployee.disableReferencesUploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/r/{{addEmployee.employee.employeeDocumentId.references}}">{{addEmployee.employee.employeeDocumentId.references}}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.referencesFileObj.errorMsg != null && addEmployee.referencesFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.referencesFileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.referencesShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -106,8 +203,32 @@
                             Physical
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" name="Physical" type="file" fileread="addEmployee.employee.physical"
-                                   data-message-required="Please upload Physical."/>
+<!--                            <input class="form-control" name="Physical" type="file" fileread="addEmployee.employee.employeeDocumentId.physical"
+                                   data-message-required="Please upload Physical."/>-->
+                                   <div flow-init="addEmployee.physicalUploadFile" flow-file-added="addEmployee.physicalFileAdded($file, $flow)" flow-file-success="addEmployee.physicalFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.physicalFileSelected($file,$flow)" flow-file-error="addEmployee.physicalFileError( $file, $message, $flow )">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="Physical" ng-model="addEmployee.employee.employeeDocumentId.physical" flow-btn name="Physical" style="color:transparent" ng-disabled="addEmployee.disablePhysicalUploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/z/{{addEmployee.employee.employeeDocumentId.physical}}">{{addEmployee.employee.employeeDocumentId.physical}}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.physicalFileObj.errorMsg != null && addEmployee.physicalFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.physicalFileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.physicalShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -119,7 +240,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="PhysicalExpirationDate" type="text"
-                                       onblur="setValidationMessage(this)" itemid="Physical Expiration Date"/>
+                                       onblur="setValidationMessage(this)" itemid="Physical Expiration Date" ng-model="addEmployee.employee.employeeDocumentId.physicalExpirationDate"/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -138,11 +259,11 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input value="PPD" name="TBTesting" type="radio" class="cbr" ng-model="addEmployee.employee.tbTesting"/>
+                                    <input value="PPD" name="TBTesting" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
                                     PPD
                                 </label>
                                 <label class="cbr-inline">
-                                    <input name="TBTesting" value="CXR" type="radio" class="cbr" ng-model="addEmployee.employee.tbTesting"/>
+                                    <input name="TBTesting" value="CXR" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
                                     CXR
                                 </label>
                             </div>
@@ -157,7 +278,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="TBTestingExpirationDate" type="text" itemid="TB Testing Expiration Date"
-                                       onblur="setValidationMessage(this)" />
+                                       onblur="setValidationMessage(this)" ng-model="addEmployee.employee.employeeDocumentId.tbTestingExpirationDate"/>
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -183,7 +304,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="StartDate" type="text"
-                                       data-validate="required,date" data-message-required="Please enter Start Date">
+                                       data-validate="required,date" data-message-required="Please enter Start Date" ng-model="addEmployee.employee.employeeDocumentId.startDate">
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -202,7 +323,7 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" name="EndDate" type="text"
-                                       data-validate="date" data-message-required="Please enter End Date">
+                                       data-validate="date" data-message-required="Please enter End Date" ng-model="addEmployee.employee.employeeDocumentId.endDate">
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">

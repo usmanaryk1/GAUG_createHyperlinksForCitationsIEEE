@@ -28,9 +28,11 @@ angular.module('xenon.controllers', []).
             $rootScope.isLightLoginPage = false;
             $rootScope.isLockscreenPage = false;
             $rootScope.isMainPage = true;
-            $rootScope.dateFormat = "MM/dd/yyyy"
-            $rootScope.timeFormat = "hh:mm a"
-
+            $rootScope.dateFormat = "MM/dd/yyyy";
+            $rootScope.timeFormat = "hh:mm a";
+            $rootScope.validFileTypes = ["png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
+            $rootScope.states = ['UT', 'TX', 'NY'];
+//                    ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $rootScope.layoutOptions = {
                 horizontalMenu: {
                     isVisible: false,

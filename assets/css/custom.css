@@ -207,3 +207,7 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 
 /* valign center */
 .table > tbody > tr > td, .table > tbody > tr > th {vertical-align: middle;}
+.red{
+  font-size: 12px;
+  color: #cc3f44;
+}

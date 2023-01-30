@@ -5,7 +5,7 @@
                 <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" type="submit">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -58,7 +58,7 @@
                             Address 1
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-37" name="Address1" ng-model="addPatient.patient.addressDataId.address1" type="text"
+                            <input class="form-control" id="field-37" name="Address1" ng-model="addPatient.patient.patientAddress.address1" type="text"
                                    data-validate="required" data-message-required="Please enter Address 1."/>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                             Address 2
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-38" name="Address2" ng-model="addPatient.patient.addressDataId.address2" type="text"/>
+                            <input class="form-control" id="field-38" name="Address2" ng-model="addPatient.patient.patientAddress.address2" type="text"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -79,7 +79,7 @@
                             City
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-39" name="City" ng-model="addPatient.patient.addressDataId.city" type="text"
+                            <input class="form-control" id="field-39" name="City" ng-model="addPatient.patient.patientAddress.city" type="text"
                                    data-validate="required" data-message-required="Please enter City."/>
                         </div>
                     </div>
@@ -98,13 +98,11 @@
                                 //             });
                                 //           });
                             </script>
-                            <select class="form-control" id="sboxit-1" name="State" ng-model="addPatient.patient.addressDataId.state"
-                                    data-validate="required" data-message-required="Please enter State.">
+                            <select class="form-control" id="sboxit-1" name="State" ng-model="addPatient.patient.patientAddress.state"
+                                    data-validate="required" data-message-required="Please enter State."
+                                    ng-options="state for state in states">
                                 <option value="">
                                     Select
-                                </option>
-                                <option value="NY">
-                                    NY
                                 </option>
                             </select>
                         </div>
@@ -116,7 +114,7 @@
                             Zip Code
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-40" name="ZipCode" ng-model="addPatient.patient.addressDataId.zipcode" type="text"
+                            <input class="form-control" id="field-40" name="ZipCode" ng-model="addPatient.patient.patientAddress.zipcode" type="text"
                                    data-validate="required" data-message-required="Please enter Zip Code."/>
                         </div>
                     </div>
