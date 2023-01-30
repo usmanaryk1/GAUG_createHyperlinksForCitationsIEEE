@@ -3,8 +3,8 @@
         var ctrl = this;
         ctrl.insurerObj = {};
         ctrl.fileObj = {};
-        ctrl.companyCode=ontimetest.company_code;
-        ctrl.baseUrl=ontimetest.weburl;
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -43,7 +43,7 @@
             if (ctrl.insurerObj.contractFile == null) {
                 ctrl.fileObj.errorMsg = "Please upload Contract File.";
             }
-            if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile!=null) {
+            if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile != null) {
                 var insurerToSave = angular.copy(ctrl.insurerObj);
                 var reqParam;
                 if (ctrl.insurerObj.id && ctrl.insurerObj.id !== null) {
@@ -162,9 +162,6 @@
         ctrl.fileSelected = function(file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
-            ctrl.disableSaveButton = true;
-            ctrl.disableUploadButton = true;
-            ctrl.showfileProgress = true;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
@@ -180,9 +177,6 @@
         };
         ctrl.fileError = function($file, $message, $flow) {
             $flow.cancel();
-            $('#contract_file').rules('add', {
-                required: true   // overwrite an existing rule
-            });
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
             ctrl.fileName = "";
@@ -192,11 +186,14 @@
         };
         //When file is added in file upload
         ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
-
             ctrl.insurerObj.contractFile = null;
-            $('#contract_file').rules('add', {
-                required: true   // overwrite an existing rule
-            });
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.fileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableUploadButton = true;
+            ctrl.showfileProgress = true;
             ctrl.fileObj.errorMsg = null;
             ctrl.fileObj.flow = flow;
             ctrl.fileName = file.name;

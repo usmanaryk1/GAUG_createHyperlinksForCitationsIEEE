@@ -1,7 +1,9 @@
 (function() {
-    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope) {
+    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope) {
         var ctrl = this;
         ctrl.retrivalRunning = false;
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
@@ -33,11 +35,17 @@
         //If changed then it should be valid
         //function to navigate to different tab by state
         function navigateToTab(event, state) {
+            var validAuthorization = true;
+            if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && ctrl.formDirty) {
+                ctrl.fileObj.errorMsg = "Please upload Authorization Document.";
+                validAuthorization = false;
+            }
+
             // Don't propogate the event to the document
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
-            if ($('#add_patient_form').valid() || !ctrl.formDirty) {
+            if (($('#add_patient_form').valid() && validAuthorization) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
                 }
@@ -344,9 +352,6 @@
         ctrl.fileSelected = function(file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
-            ctrl.disableSaveButton = true;
-            ctrl.disableUploadButton = true;
-            ctrl.showfileProgress = true;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
@@ -370,7 +375,17 @@
             ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments
+        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+            ctrl.formDirty = true;
+            ctrl.patient.authorization = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.fileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableUploadButton = true;
+            ctrl.showfileProgress = true;
+             
             ctrl.fileObj.errorMsg = null;
             ctrl.fileObj.flow = flow;
             ctrl.fileName = file.name;
@@ -380,5 +395,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", AddPatientCtrl]);
+    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", AddPatientCtrl]);
 })();
