@@ -2,6 +2,7 @@
     function AddInsurerCtrl($scope, $rootScope, $state, $modal, $timeout, InsurerDAO, CareTypeDAO) {
         var ctrl = this;
         ctrl.insurerObj = {insuranceCareTypeCollection: []};
+        ctrl.selectedCareTypes = [];
         ctrl.fileObj = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
@@ -48,21 +49,28 @@
                 var reqParam;
                 if (ctrl.insurerObj.id && ctrl.insurerObj.id !== null) {
                     reqParam = 'update';
-                    delete insurerToSave.careTypes;
-                    if (ctrl.selectedCareTypes && ctrl.selectedCareTypes !== null) {
-                        insurerToSave.insuranceCareTypeCollection = [];
-                        for (var i = 0; i < ctrl.selectedCareTypes.length; i++) {
-                            insurerToSave.insuranceCareTypeCollection.push(Number(ctrl.selectedCareTypes[i]));
-                        }
-                    }
+//                    delete insurerToSave.careTypes;
+//                    if (ctrl.selectedCareTypes && ctrl.selectedCareTypes !== null) {
+//                        insurerToSave.insuranceCareTypeCollection = [];
+//                        for (var i = 0; i < ctrl.selectedCareTypes.length; i++) {
+//                            insurerToSave.insuranceCareTypeCollection.push(Number(ctrl.selectedCareTypes[i]));
+//                        }
+//                    }
                 } else {
                     reqParam = 'save';
                 }
+                if(insurerToSave.insuranceCareTypeCollection!=null){
+                    angular.forEach(insurerToSave.insuranceCareTypeCollection,function(obj){
+                        delete obj.id;
+                    })
+                }
                 insurerToSave.orgCode = ctrl.companyCode;
-                
+
                 InsurerDAO.update({action: reqParam, data: insurerToSave})
                         .then(function(res) {
+                            console.log(res);
                             if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
+                                
                                 $state.go('^.insurer', {id: res.id});
                                 ctrl.editMode = true;
                                 ctrl.insurerObj.id = res.id;
@@ -100,6 +108,7 @@
                 ctrl.retrivalRunning = true;
                 InsurerDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.insurerObj = res;
+
                     if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
                         ctrl.insurerObj.insuranceCareTypeCollection = [];
                     } else {
