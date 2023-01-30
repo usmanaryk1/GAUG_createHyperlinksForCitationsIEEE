@@ -109,17 +109,19 @@
                             Authorization
                         </label>
                         <div class="col-sm-9">
-                            <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
-                                <div>
-                                    <input type="file" flow-btn name="authorization_upload" style="color:transparent" data-validate="required"  data-message-required="Please upload Authorization Document." ng-disabled="addPatient.disableUploadButton"/>
-                                    <!--                                    <button type="button" class=" btn btn-default btn-xs " style="width:100px;background-color: #ccc" flow-btn id="uploadBtn" >
-                                                                            Choose file
-                                                                        </button>-->
-                                    &nbsp;&nbsp;&nbsp;{{addPatient.fileName}}
+                         <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <input type="file" id="contract_file" ng-model="addPatient.patient.authorization" flow-btn name="contract_file" style="color:transparent" ng-disabled="addPatient.disableUploadButton"/>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.patient.authorization}}">{{addPatient.patient.authorization}}</a>
+                                        </div>
+                                    </div>
                                     <div>
                                         <div ng-show="addPatient.fileObj.errorMsg != null && addPatient.fileObj.errorMsg != ''">
-                                            <span class="validate-has-error">{{addPatient.fileObj.errorMsg}}</span>
-                                        </div>  
+                                            <span class="red">{{addPatient.fileObj.errorMsg}}</span>
+                                        </div> 
                                     </div>
                                     <div flow-transfers class="col-md-12 form-control-static">
                                         <div ng-repeat="file in transfers">
@@ -131,8 +133,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
 
                         </div>
                     </div>
