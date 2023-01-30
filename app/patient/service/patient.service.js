@@ -15,8 +15,8 @@
             },
         });
         return {
-            retrieveAll: function (filter) {
-                return api.retrieveAll(filter).$promise;
+            retrieveAll: function (data) {
+                return api.retrieveAll({subAction : data.status}).$promise;
             },
             get: function (params) {
                 return api.get({action:params.id}).$promise;

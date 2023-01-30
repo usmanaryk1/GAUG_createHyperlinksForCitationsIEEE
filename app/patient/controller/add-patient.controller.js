@@ -1,7 +1,7 @@
 (function() {
-    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope) {
+    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, CareTypeDAO) {
         var ctrl = this;
-        ctrl.retrivalRunning = false;
+        ctrl.retrivalRunning = true;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
@@ -49,6 +49,7 @@
         function savePatientData() {
             if ($('#add_patient_form')[0].checkValidity()) {
                 var patientToSave = angular.copy(ctrl.patient);
+                patientToSave.phone = patientToSave.phone.toString();
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
@@ -60,6 +61,8 @@
                         }
                     }
                 } else {
+                    ctrl.patient.orgCode = ontimetest.company_code;
+                    patientToSave.orgCode = ontimetest.company_code;
                     reqParam = 'save';
                 }
 
@@ -68,15 +71,10 @@
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
-                                ctrl.patient.id = res.id;
                             }
+                            ctrl.patient = res;
                         })
                         .catch(function() {
-                            if (!ctrl.patient.id || ctrl.patient.id === null) {
-                                $state.go('^.tab1', {id: 1});
-                                ctrl.editMode = true;
-                                ctrl.patient.id = 1;
-                            }
                             //exception logic
                             console.log('Patient Object : ' + JSON.stringify(patientToSave));
                         });
@@ -87,7 +85,6 @@
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
-                ctrl.retrivalRunning = true;
                 PatientDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.patient = res;
                     ctrl.retrivalRunning = false;
@@ -103,6 +100,8 @@
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.patient));
                 });
+            } else {
+                ctrl.retrivalRunning = false;
             }
         }
 
@@ -153,8 +152,16 @@
             ctrl.formDirty = false;
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    form_data = $('#add_patient_form').serialize();
-                    $('#CareTypes').multiSelect('refresh');
+                    CareTypeDAO.retrieveAll().then(function(res) {
+                        ctrl.careTypeList = res;
+                        $timeout(function() {
+                            $('#CareTypes').multiSelect('refresh');
+                            form_data = $('#add_patient_form').serialize();
+                        }, 200);
+                    }).catch(function() {
+                        form_data = $('#add_patient_form').serialize();
+                    });
+
                 } else {
                     ctrl.tab4DataInit();
                 }
@@ -165,19 +172,23 @@
             ctrl.formDirty = false;
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    if (!ctrl.patient.subscriberInfo) {
-                        ctrl.patient.subscriberInfo = {};
+                    if (!ctrl.patient.subscriberInfo || ctrl.patient.subscriberInfo === null
+                            || ctrl.patient.subscriberInfo.length === 0) {
+                        ctrl.patient.subscriberInfo = [];
+                        ctrl.patient.subscriberInfo[0] = {};
                     }
-                    if (!ctrl.patient.subscriberInfo.subscriberAddressCollection) {
-                        ctrl.patient.subscriberInfo.subscriberAddressCollection = {};
+                    if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection) {
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = {};
                     }
-                    if (!ctrl.patient.subscriberInfo.subscriberAddressCollection.address1
-                            || ctrl.patient.subscriberInfo.subscriberAddressCollection.address1 === null) {
-                        ctrl.patient.subscriberInfo.subscriberAddressCollection = angular.copy(ctrl.patient.addressDataId);
+                    if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].address1
+                            || ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].address1 === null) {
+                        var address = angular.copy(ctrl.patient.patientAddress);
+                        delete address.id;
+                        delete address.dateInserted;
+                        delete address.dateUpdated;
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
                         $scope.$apply();
-                        ctrl.isBillingAddressSameAsPatient = 'Yes';
-                        $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
-                    } else if (JSON.stringify(ctrl.patient.subscriberInfo.subscriberAddressCollection) === JSON.stringify(ctrl.patient.addressDataId)) {
                         ctrl.isBillingAddressSameAsPatient = 'Yes';
                         $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
                     } else {
@@ -186,10 +197,10 @@
                     }
 
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
-                    if (!ctrl.patient.subscriberInfo.gender) {
-                        ctrl.patient.subscriberInfo.gender = 'M';
+                    if (!ctrl.patient.subscriberInfo[0].gender) {
+                        ctrl.patient.subscriberInfo[0].gender = 'M';
                     }
-                    $formService.setRadioValues('Gender', ctrl.patient.subscriberInfo.gender);
+                    $formService.setRadioValues('Gender', ctrl.patient.subscriberInfo[0].gender);
                     form_data = $('#add_patient_form').serialize();
                 } else {
                     ctrl.tab5DataInit();
@@ -198,11 +209,15 @@
         }
 
         function setBillingAddress() {
-            ctrl.patient.subscriberInfo.subscriberAddressCollection = angular.copy(ctrl.patient.addressDataId);
+            var address = angular.copy(ctrl.patient.patientAddress);
+            delete address.id;
+            delete address.dateInserted;
+            delete address.dateUpdated;
+            ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
         }
 
         function setBillingAddressRadioButton() {
-            if (JSON.stringify(ctrl.patient.subscriberInfo.subscriberAddressCollection) === JSON.stringify(ctrl.patient.addressDataId)) {
+            if (JSON.stringify(ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0]) === JSON.stringify(ctrl.patient.patientAddress)) {
                 ctrl.isBillingAddressSameAsPatient = 'Yes';
                 $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
             } else {
@@ -364,5 +379,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", AddPatientCtrl]);
+    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "CareTypeDAO", AddPatientCtrl]);
 })();

@@ -39,7 +39,10 @@
                             </script>
                             <select class="form-control" id="CareTypes" multiple="multiple" name="CareTypes"
                                     data-validate="required" data-message-required="Please select Care Type." ng-model="addPatient.patient.careTypes">
-                                <option value="1">
+                                <option ng-repeat="ct in addPatient.careTypeList" ng-value="ct.id">
+                                    {{ct.careTypeTitle}}
+                                </option>
+                                <!--                                <option value="1">
                                     Silky Door
                                 </option>
                                 <option value="2">
@@ -98,7 +101,7 @@
                                 </option>
                                 <option value="20">
                                     Planet of Bridges
-                                </option>
+                                </option>-->
                             </select>
                         </div>
                     </div>
