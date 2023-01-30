@@ -5,7 +5,7 @@
 
     <div class="col-sm-3">
         <a ng-href="{{serverPath}}reports/employeecensus/download?format=xls&companyCode={{dashboard.companyCode}}">
-            <div class="xe-widget xe-counter" data-count=".num" id="complianceCount" data-from="0" data-to="dashboard.complianceTracker" data-suffix="%" data-duration="2">
+            <div class="xe-widget xe-counter" data-count=".num" id="complianceCount" data-from="0" data-to="dashboard.complianceTracker| number:2" data-suffix="%" data-duration="2">
                 <div class="xe-icon">
                     <i><img alt="compliance tracker" class="img-cirlce img-responsive" src="assets/images/dashboard/compliance tracker.png" style="padding: 5px 5px 5px 5px;"></i>
                 </div>
