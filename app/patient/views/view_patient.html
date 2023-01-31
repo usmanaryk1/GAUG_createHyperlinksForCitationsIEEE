@@ -81,8 +81,9 @@
                                                     <td>
                                                         <a class="btn icon-left fa fa-pencil edit_button" ng-click="viewPatient.edit(patient);"><span class="ed_b">Edit</span></a> 
                                                         <a class="btn icon-left fa fa-trash-o delete_button" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');"><span class="ed_b" >Dlt</span></a>
-                                                        <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status != 'D'" ng-click="viewPatient.openDischargeModal(patient,'dischargeModel');"><span class="ed_b">Dsch</span></a></td>
-                                                        <a class="btn icon-left fa fa-download download_bt"  ng-href="{{patient.baseUrl}}file/download/{{patient.companyCode}}/p/{{patient.authorization}}" tooltip="Download Authorization"><span class="ed_b"></span></a>
+                                                        <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status != 'D'" ng-click="viewPatient.openDischargeModal(patient, 'dischargeModel');"><span class="ed_b">Dsch</span></a>
+                                                        <a class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}" tooltip="Download Authorization"><span class="ed_b"></span></a>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table> 
@@ -90,9 +91,9 @@
                                     <script type="text/javascript">
 
                                         // This JavaScript Will Replace Checkboxes in dropdown toggles
-                                        jQuery(document).ready(function ($)
+                                        jQuery(document).ready(function($)
                                         {
-                                            setTimeout(function ()
+                                            setTimeout(function()
                                             {
                                                 $(".checkbox-row input").addClass('cbr');
                                                 cbr_replace();
