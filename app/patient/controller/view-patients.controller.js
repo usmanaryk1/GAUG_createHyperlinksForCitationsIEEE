@@ -2,6 +2,8 @@
     function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal) {
         var ctrl = this;
         $rootScope.selectPatientModel = {};
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         if ($stateParams.status !== 'active' && $stateParams.status !== 'discharged' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
         } else {
