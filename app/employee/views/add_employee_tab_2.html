@@ -55,7 +55,7 @@
                         </label>
                         <div class="col-sm-10">
                             <div class="col-sm-3">
-                                <input class="form-control" name="Rate1" type="text" ng-model="addEmployee.employee.employeeCareRatesList.rate1.rate"
+                                <input class="form-control" name="Rate1" type="text" ng-model="addEmployee.employee.careRatesList.rate1.rate"
                                        data-validate="number,required" data-message-required="Please enter Rate 1.">
                                 </input>
                             </div>
@@ -77,67 +77,9 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" id="rate1" multiple="multiple" name="my-select[]" ng-model="addEmployee.employee.employeeCareRatesList.rate1.careTypes">
-                                    <option value=1>
-                                        Silky Door
-                                    </option>
-                                    <option value="2">
-                                        The Absent Twilight
-                                    </option>
-                                    <option value="3">
-                                        Tales of Flames
-                                    </option>
-                                    <option value="4" ng-selected="{{addEmployee.employee.wages !== 'S'}}">
-                                        The Princess's Dream
-                                    </option>
-                                    <option value="5">
-                                        The Fairy of the Wind
-                                    </option>
-                                    <option value="6">
-                                        Children in the Boy
-                                    </option>
-                                    <option value="7">
-                                        Frozen Savior
-                                    </option>
-                                    <option value="8">
-                                        The Missing Thorns
-                                    </option>
-                                    <option value="9">
-                                        Healing of Serpent
-                                    </option>
-                                    <option value="10">
-                                        The Voyagers's Girlfriend
-                                    </option>
-                                    <option value="11">
-                                        The Nothing of the Gate
-                                    </option>
-                                    <option value="12">
-                                        Healing in the Scent
-                                    </option>
-                                    <option value="13">
-                                        Final Twins
-                                    </option>
-                                    <option value="14">
-                                        The Willing Rose
-                                    </option>
-                                    <option value="15">
-                                        Thorn of Emperor
-                                    </option>
-                                    <option value="16">
-                                        The Predator's Pirates
-                                    </option>
-                                    <option value="17">
-                                        The Lord of the Girl
-                                    </option>
-                                    <option value="18">
-                                        Flowers in the Spirit
-                                    </option>
-                                    <option value="19">
-                                        Healing in the Silence
-                                    </option>
-                                    <option value="20">
-                                        Planet of Bridges
-                                    </option>
+                                <select class="form-control" id="rate1" multiple="multiple" name="rate1"
+                                    data-validate="required" data-message-required="Please select Care Type." ng-model="addEmployee.employee.careRatesList.rate1.careTypes"
+                                    ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList'>
                                 </select>
                             </div>
                         </div>
@@ -150,7 +92,7 @@
                         </label>
                         <div class="col-sm-10">
                             <div class="col-sm-3">
-                                <input class="form-control" name="Rate2" type="text" ng-model="addEmployee.employee.employeeCareRatesList.rate2.rate"
+                                <input class="form-control" name="Rate2" type="text" ng-model="addEmployee.employee.careRatesList.rate2.rate"
                                        data-validate="number,required" data-message-required="Please enter Rate 2.">
                                 </input>
                             </div>
@@ -172,67 +114,9 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" id="rate2" multiple="multiple" name="my-select[]" ng-model="addEmployee.employee.employeeCareRatesList.rate2.careTypes">
-                                    <option value="1">
-                                        Silky Door
-                                    </option>
-                                    <option value="2">
-                                        The Absent Twilight
-                                    </option>
-                                    <option value="3">
-                                        Tales of Flames
-                                    </option>
-                                    <option value="4">
-                                        The Princess's Dream
-                                    </option>
-                                    <option value="5">
-                                        The Fairy of the Wind
-                                    </option>
-                                    <option value="6">
-                                        Children in the Boy
-                                    </option>
-                                    <option value="7">
-                                        Frozen Savior
-                                    </option>
-                                    <option value="8">
-                                        The Missing Thorns
-                                    </option>
-                                    <option value="9">
-                                        Healing of Serpent
-                                    </option>
-                                    <option value="10">
-                                        The Voyagers's Girlfriend
-                                    </option>
-                                    <option value="11">
-                                        The Nothing of the Gate
-                                    </option>
-                                    <option value="12">
-                                        Healing in the Scent
-                                    </option>
-                                    <option value="13">
-                                        Final Twins
-                                    </option>
-                                    <option value="14">
-                                        The Willing Rose
-                                    </option>
-                                    <option value="15">
-                                        Thorn of Emperor
-                                    </option>
-                                    <option value="16">
-                                        The Predator's Pirates
-                                    </option>
-                                    <option value="17">
-                                        The Lord of the Girl
-                                    </option>
-                                    <option  value="18">
-                                        Flowers in the Spirit
-                                    </option>
-                                    <option value="19">
-                                        Healing in the Silence
-                                    </option>
-                                    <option value="20">
-                                        Planet of Bridges
-                                    </option>
+                                <select class="form-control" id="rate2" multiple="multiple" name="rate2"
+                                    data-validate="required" data-message-required="Please select Care Type." ng-model="addEmployee.employee.careRatesList.rate2.careTypes"
+                                    ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList'>
                                 </select>
                             </div>
                         </div>
@@ -244,7 +128,7 @@
                             OT Rate
                         </label>
                         <div class="col-sm-10">
-                            <input class="form-control" name="OTRate" type="text" ng-model="addEmployee.employee.employeeCareRatesList.otRate"
+                            <input class="form-control" name="OTRate" type="text" ng-model="addEmployee.employee.otRate"
                                    data-validate="number,required" data-message-required="Please enter OT Rate.">
                             </input>
                         </div>
@@ -256,7 +140,7 @@
                             HD Rate
                         </label>
                         <div class="col-sm-10">
-                            <input class="form-control" name="HDRate" type="text" ng-model="addEmployee.employee.employeeCareRatesList.hdRate"
+                            <input class="form-control" name="HDRate" type="text" ng-model="addEmployee.employee.hdRate"
                                    data-validate="number,required" data-message-required="Please enter HD Rate.">
                             </input>
                         </div>

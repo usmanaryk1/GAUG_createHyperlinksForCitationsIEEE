@@ -16,6 +16,12 @@
                     action: 'select'
                 }
             },
+            retrieveEmployeeCareRates: {
+                method: 'GET',
+                params: {
+                    action: 'carerates'
+                }
+            },
             //this method will be used for employee save or update based on the action passed
             update: {
                 method: 'POST'
@@ -23,28 +29,31 @@
             //this method will be used for employee save or update based on the action passed
             updateCareRates: {
                 method: 'POST',
-                params:{
-                    action:'updatecarerates'
+                params: {
+                    action: 'updatecarerates'
                 }
             }
         });
         return {
-            retrieveAll: function (filter) {
+            retrieveAll: function(filter) {
                 return api.retrieveAll(filter).$promise;
             },
-            retrieveByPosition: function (filter) {
+            retrieveByPosition: function(filter) {
                 return api.retrieveByPosition(filter).$promise;
             },
-            get: function (params) {
-                return api.get({action:params.id}).$promise;
+            retrieveEmployeeCareRates: function(filter) {
+                return api.retrieveEmployeeCareRates({subAction: filter.employee_id}).$promise;
             },
-            save: function (data) {
+            get: function(params) {
+                return api.get({action: params.id}).$promise;
+            },
+            save: function(data) {
                 return api.save(data).$promise;
             },
-            update: function (data) {
-                return api.update({action:data.action}, data.data).$promise;
+            update: function(data) {
+                return api.update({action: data.action}, data.data).$promise;
             },
-            updateCareRates: function (data) {
+            updateCareRates: function(data) {
                 return api.updateCareRates(data).$promise;
             },
         };
