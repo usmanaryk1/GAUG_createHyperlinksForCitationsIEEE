@@ -3,8 +3,8 @@
     <!--PAGE TITLE START -->
     <div class="page-title">
         <div class="title-env">
-            <h1 class="title">Add Company Information</h1>
-            <p class="description">Add Company Information</p>
+            <h1 class="title">Update Company Information</h1>
+            <p class="description">Update Company Information</p>
         </div>
     </div>
     <!--PAGE TITLE END -->
@@ -35,14 +35,14 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <label class="cbr-inline">
-                                        <input type="radio" class="cbr"  name="FederalTaxID" ng-model="addCompany.companyObj.federalTax" value="SS">
+                                        <input type="radio" class="cbr"  name="FederalTaxID" ng-model="addCompany.companyObj.federalId.type" value="SS">
                                         SS </label>
                                     <label class="cbr-inline">
-                                        <input type="radio" class="cbr" name="FederalTaxID" ng-model="addCompany.companyObj.federalTax" value="EIN">
+                                        <input type="radio" class="cbr" name="FederalTaxID" ng-model="addCompany.companyObj.federalId.type" value="EIN">
                                         EIN </label>
 
                                 </div>
-                                <input type="text" id="field-74" class="form-control"  name="FederalTaxIDNumber" ng-model="addCompany.companyObj.federalTaxIdNumber" data-validate="required"  data-message-required="Please enter Federal Tax ID #.">
+                                <input type="text" id="field-74" class="form-control"  name="FederalTaxIDNumber" ng-model="addCompany.companyObj.federalId.number" data-validate="required"  data-message-required="Please enter Federal Tax ID #.">
                             </div>
                         </div>
                         <div class="form-group-separator"></div>
@@ -82,9 +82,8 @@
                         <div class="form-group">
                             <label for="field-79" class="col-sm-3 control-label">State</label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="State" ng-model="addCompany.companyObj.state" data-validate="required"  data-message-required="Please select State.">
+                                <select class="form-control" id="sboxit-1" name="State" ng-model="addCompany.companyObj.state" data-validate="required"  data-message-required="Please select State." ng-options="state for state in states">
                                     <option value="">Select</option>
-                                    <option value="1">1</option>
                                 </select>
                             </div>
                         </div>

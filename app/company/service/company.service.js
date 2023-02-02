@@ -1,21 +1,33 @@
 (function() {
     'use strict';
     var CompanyDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'companies/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontimetest.weburl + 'companies/:action/:subAction/:subAction1/:companyCode', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,
                 params: {
                     action: 'all'
                 }
+            },
+            retrieveByCompanyCode: {
+                method: 'GET'
+            },
+            save: {
+                method: "POST",
+                params: {
+                    action: "updatecompany"
+                }
             }
         });
         return {
-            retrieveAll: function (filter) {
+            retrieveAll: function(filter) {
                 return api.retrieveAll(filter).$promise;
             },
-            save:function(data){
+            save: function(data) {
                 return api.save(data).$promise;
+            },
+            retrieveByCompanyCode: function(data) {
+                return api.retrieveByCompanyCode(data).$promise;
             }
         };
     };
