@@ -1258,6 +1258,13 @@ angular.module('xenon.directives', []).
                                 return;
                             }
                             if (attrs.negativeallowed === undefined || attrs.negativeallowed.toString() === "false") {
+                                if (attrs.decimalallowed == '2' && newValue.indexOf(".") > 0 && newValue.toString().substring(newValue.indexOf(".")).length > 2) {
+                                    transformedNewValue =
+                                            newValue.toString().substring(0, newValue.indexOf(".") + 3);
+                                    model.assign(scope,
+                                            transformedNewValue);
+                                    return;
+                                }
                                 if ((newValue != null)) {
                                     transformedNewValue =
                                             newValue.toString().replace('-', '');

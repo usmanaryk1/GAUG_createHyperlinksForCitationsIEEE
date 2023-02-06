@@ -1041,13 +1041,15 @@
 
                     <td class="border" >
 
-                        <input type="text" class="width_100 first_sec" name="serviceTotalBill" ng-model="serviceLine.serviceTotalBill" ng-change="manualClaim.calculateTotalCharges();" required />
+                        <input type="text" class="width_100 first_sec" numbers-only decimalallowed='2'
+                               name="serviceTotalBill" ng-model="serviceLine.serviceTotalBill" ng-change="manualClaim.calculateTotalCharges();" required />
 
                     </td>
 
                     <td class="border" >
 
-                        <input type="text" class="width_100 first_sec" name="serviceUnits" ng-model="serviceLine.serviceUnits"  required/>
+                        <input type="text" class="width_100 first_sec" numbers-only decimalallowed='2'
+                               name="serviceUnits" ng-model="serviceLine.serviceUnits"  required/>
 
                     </td>
 
@@ -1132,12 +1134,14 @@
                             <div class="width_35 pull-left">
                                 <font class="numbers">28</font>
                                 <b>TOTALCHARGES </b><br/>
-                                $<input type="text" class="width_90" name="totalCharges" ng-model="manualClaim.manualClaimObj.totalCharges" />
+                                $<input type="text" class="width_90" numbers-only decimalallowed='2'
+                                        name="totalCharges" ng-model="manualClaim.manualClaimObj.totalCharges" />
                             </div>
                             <div class="width_35 pull-left">
                                 <font class="numbers">29</font>
                                 <b>AMOUNTPAID </b><br/>
-                                $<input type="text" class="width_90" name="amountPaid" ng-model="manualClaim.manualClaimObj.amountPaid" />
+                                $<input type="text" class="width_90" numbers-only decimalallowed='2'
+                                        name="amountPaid" ng-model="manualClaim.manualClaimObj.amountPaid" />
                             </div>
                             <div class="width_30 pull-left text-right">
                                 <font class="numbers">30</font>
