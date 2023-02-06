@@ -151,36 +151,36 @@ angular.module('xenon.directives', []).
                 link: function (scope, el, attrs)
                 {
                     scope.$watch("to", function (value) {
-                        if(value!=null){
+                        if (value != null) {
 
-                        var $el = angular.element(el),
-                                sm = scrollMonitor.create(el);
+                            var $el = angular.element(el),
+                                    sm = scrollMonitor.create(el);
 
-                        sm.fullyEnterViewport(function ()
-                        {
-                            var opts = {
-                                useEasing: attrDefault($el, 'easing', true),
-                                useGrouping: attrDefault($el, 'grouping', true),
-                                separator: attrDefault($el, 'separator', ','),
-                                decimal: attrDefault($el, 'decimal', '.'),
-                                prefix: attrDefault($el, 'prefix', ''),
-                                suffix: attrDefault($el, 'suffix', ''),
-                            },
-                                    $count = attrDefault($el, 'count', 'this') == 'this' ? $el : $el.find($el.data('count')),
-                                    from = attrDefault($el, 'from', 0),
-                                    to = scope.to != null ? scope.to : attrDefault($el, 'to', 100),
-                                    duration = attrDefault($el, 'duration', 2.5),
-                                    delay = attrDefault($el, 'delay', 0),
-                                    decimals = new String(to).match(/\.([0-9]+)/) ? new String(to).match(/\.([0-9]+)$/)[1].length : 0,
-                                    counter = new countUp($count.get(0), from, to, decimals, duration, opts);
+                            sm.fullyEnterViewport(function ()
+                            {
+                                var opts = {
+                                    useEasing: attrDefault($el, 'easing', true),
+                                    useGrouping: attrDefault($el, 'grouping', true),
+                                    separator: attrDefault($el, 'separator', ','),
+                                    decimal: attrDefault($el, 'decimal', '.'),
+                                    prefix: attrDefault($el, 'prefix', ''),
+                                    suffix: attrDefault($el, 'suffix', ''),
+                                },
+                                        $count = attrDefault($el, 'count', 'this') == 'this' ? $el : $el.find($el.data('count')),
+                                        from = attrDefault($el, 'from', 0),
+                                        to = scope.to != null ? scope.to : attrDefault($el, 'to', 100),
+                                        duration = attrDefault($el, 'duration', 2.5),
+                                        delay = attrDefault($el, 'delay', 0),
+                                        decimals = new String(to).match(/\.([0-9]+)/) ? new String(to).match(/\.([0-9]+)$/)[1].length : 0,
+                                        counter = new countUp($count.get(0), from, to, decimals, duration, opts);
 
-                            setTimeout(function () {
-                                counter.start();
-                            }, delay * 1000);
+                                setTimeout(function () {
+                                    counter.start();
+                                }, delay * 1000);
 
-                            sm.destroy();
-                        });
-                    }
+                                sm.destroy();
+                            });
+                        }
                     })
                 }
             };
@@ -1258,14 +1258,14 @@ angular.module('xenon.directives', []).
                                 return;
                             }
                             if (attrs.negativeallowed === undefined || attrs.negativeallowed.toString() === "false") {
-                                if (attrs.decimalallowed == '2' && newValue.indexOf(".") > 0 && newValue.toString().substring(newValue.indexOf(".")).length > 2) {
-                                    transformedNewValue =
-                                            newValue.toString().substring(0, newValue.indexOf(".") + 3);
-                                    model.assign(scope,
-                                            transformedNewValue);
-                                    return;
-                                }
                                 if ((newValue != null)) {
+                                    if (attrs.decimalallowed == '2' && newValue.indexOf(".") > 0 && newValue.toString().substring(newValue.indexOf(".")).length > 2) {
+                                        transformedNewValue =
+                                                newValue.toString().substring(0, newValue.indexOf(".") + 3);
+                                        model.assign(scope,
+                                                transformedNewValue);
+                                        return;
+                                    }
                                     transformedNewValue =
                                             newValue.toString().replace('-', '');
                                     if (newValue !== transformedNewValue) {
