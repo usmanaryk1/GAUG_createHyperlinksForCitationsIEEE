@@ -132,9 +132,13 @@
                     patientToSave.orgCode = ontime_data.company_code;
                     reqParam = 'save';
                 }
+                var authDocIds = [];
                 if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
                     patientToSave.patientAuthorizationDocuments = [];
                     angular.forEach(ctrl.authorizationDocuments, function (doc) {
+                        if (doc.id) {
+                            authDocIds.push(doc.id);
+                        }
                         var docEntity = {
                             id: doc.id,
                             patientId: patientToSave.id,
@@ -167,6 +171,19 @@
                                 var length = res.patientCareTypeCollection.length;
                                 for (var i = 0; i < length; i++) {
                                     ctrl.patientCareTypeMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id] = res.patientCareTypeCollection[i];
+                                }
+                            }
+                            if (res.patientAuthorizationDocuments) {
+                                var length = res.patientAuthorizationDocuments.length;
+                                for (var i = 0; i < length; i++) {
+                                    if (authDocIds.indexOf(res.patientAuthorizationDocuments[i].id) === -1) {
+                                        for (var j = 0; j < ctrl.authorizationDocuments.length; j++) {
+                                            if (ctrl.authorizationDocuments[j].companyCareTypeId === res.patientAuthorizationDocuments[i].companyCareTypeId && !ctrl.authorizationDocuments[j].id) {
+                                                ctrl.authorizationDocuments[j].id = res.patientAuthorizationDocuments[i].id;
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             toastr.success("Patient saved.");
