@@ -1,6 +1,6 @@
-(function() {
+(function () {
     'use strict';
-    var PatientDAO = function(resource) {
+    var PatientDAO = function (resource) {
         var api = resource(ontimetest.weburl + 'patient/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
@@ -13,16 +13,28 @@
             update: {
                 method: 'POST'
             },
+            delete: {
+                method: 'GET'
+            },
+            discharge: {
+                method: 'GET'
+            }
         });
         return {
             retrieveAll: function (data) {
-                return api.retrieveAll({subAction : data.status}).$promise;
+                return api.retrieveAll({subAction: data.status}).$promise;
             },
             get: function (params) {
-                return api.get({action:params.id}).$promise;
+                return api.get({action: params.id}).$promise;
             },
             update: function (data) {
-                return api.update({action:data.action}, data.data).$promise;
+                return api.update({action: data.action}, data.data).$promise;
+            },
+            delete: function (data) {
+                return api.delete({action: 'delete', subAction: data.id}).$promise;
+            },
+            discharge: function (data) {
+                return api.delete({action: 'discharge', subAction: data.id}).$promise;
             },
         };
     };

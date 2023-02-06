@@ -36,7 +36,7 @@
         }
 
         ctrl.retrieveEmployees();
-        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -45,6 +45,58 @@
             });
             $rootScope.selectEmployeeModel.employee = employee;
 
+        };
+
+        ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.deactivateEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+            });
+            $rootScope.deactivateEmployeeModel.employee = employee;
+
+            $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
+                EmployeeDAO.delete({id: employee.id}).then(function (res) {
+                    var length = ctrl.employeeList.length;
+
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.employeeList[i].id === employee.id) {
+                            ctrl.employeeList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    $rootScope.deactivateEmployeeModel.close();
+                }).catch(function (data, status) {
+                    $rootScope.deactivateEmployeeModel.close();
+                });
+            };
+
+        };
+        ctrl.openDeactivateModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.deactivateEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+            });
+            $rootScope.deactivateEmployeeModel.employee = employee;
+
+            $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
+                EmployeeDAO.deactivate({id: employee.id}).then(function (res) {
+                    var length = ctrl.employeeList.length;
+
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.employeeList[i].id === employee.id) {
+                            ctrl.employeeList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    $rootScope.deactivateEmployeeModel.close();
+                }).catch(function (data, status) {
+                    $rootScope.deactivateEmployeeModel.close();
+                });
+            };
         };
 //        
 //        $scope.$watch(function() {

@@ -80,9 +80,9 @@
                                                     </td>
                                                     <td>
                                                         <a class="btn icon-left fa fa-pencil edit_button" ng-click="viewPatient.edit(patient);"><span class="ed_b">Edit</span></a> 
-                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-click='delete(patient.id);'><span class="ed_b" >Dlt</span></a>
+                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');"><span class="ed_b" >Dlt</span></a>
+                                                        <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status != 'D'" ng-click="viewPatient.openDischargeModal(patient,'dischargeModel');"><span class="ed_b">Dsch</span></a></td>
                                                         <a class="btn icon-left fa fa-download download_bt"  ng-href="{{patient.baseUrl}}file/download/{{patient.companyCode}}/p/{{patient.authorization}}" tooltip="Download Authorization"><span class="ed_b"></span></a>
-                                                        <a class="btn icon-left fa fa-ban deactivate_bt" ng-click='discharge(patient.id);'><span class="ed_b">Dsch</span></a></td>
                                                 </tr>
                                             </tbody>
                                         </table> 
@@ -90,9 +90,9 @@
                                     <script type="text/javascript">
 
                                         // This JavaScript Will Replace Checkboxes in dropdown toggles
-                                        jQuery(document).ready(function($)
+                                        jQuery(document).ready(function ($)
                                         {
-                                            setTimeout(function()
+                                            setTimeout(function ()
                                             {
                                                 $(".checkbox-row input").addClass('cbr');
                                                 cbr_replace();
@@ -364,5 +364,37 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="selectPatientModel.close();">Close</button>
+    </div>
+</script>
+<script type="text/ng-template" id="deleteModel">
+    <div class="modal-header">
+    <h4 class="modal-title">{{deletePatientModel.patient.LName}} {{deletePatientModel.patient.FName}} {{deletePatientModel.patient.middleInitial}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to delete this Patient?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="deletePatientModel.delete(deletePatientModel.patient);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="deletePatientModel.dismiss();">No</button>
+    </div>
+</script>
+<script type="text/ng-template" id="dischargeModel">
+    <div class="modal-header">
+    <h4 class="modal-title">{{dischargePatientModel.patient.LName}} {{dischargePatientModel.patient.FName}} {{dischargePatientModel.patient.middleInitial}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to discharge this Patient?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="dischargePatientModel.discharge(dischargePatientModel.patient);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="dischargePatientModel.dismiss();">No</button>
     </div>
 </script>
