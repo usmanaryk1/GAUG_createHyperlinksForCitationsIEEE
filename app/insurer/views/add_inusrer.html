@@ -227,8 +227,8 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" ng-model='addInsurer.insurerObj.careTypes'  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type." ng-change="addInsurer.displayCareTypeModal = true">
-                                    <option value="1" >
+                                <select class="form-control" ng-model='addInsurer.selectedCareTypes' ng-options="careType.id as careType.careTypeTitle for careType in addInsurer.careTypeList"  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type." ng-change="addInsurer.displayCareTypeModal = true">
+<!--                                    <option value="1" >
                                         Personal Care HHA Hourly       
                                     </option>
                                     <option value="2">
@@ -266,7 +266,7 @@
                                     </option>
                                     <option value="13">
                                         NUT Scheduled Visit 
-                                    </option>
+                                    </option>-->
                                 </select>
                             </div>
                         </div>
@@ -292,7 +292,7 @@
     Rate
     </label>
     <div class="col-sm-3">
-    <input class="form-control" name="radioRate" type="text" > 
+    <input class="form-control" name="radioRate" type="text" ng-model="careTypeModel.careTypeObj.rate"> 
 
     </div>
     <div class="col-sm-1">
@@ -301,15 +301,15 @@
     <div class="col-sm-5">
     <div class="input-group">
     <label class="cbr-inline">
-    <input value="unit" name="radioRate" type="radio" ng-model="careTypeModel.rate" >
+    <input value="unit" name="radioRate" type="radio" ng-model="careTypeModel.careTypeObj.unit" >
     Unit
     </label>
     <label class="cbr-inline">
-    <input name="radioRate" value="visit" type="radio" ng-model="careTypeModel.rate">
+    <input name="radioRate" value="visit" type="radio" ng-model="careTypeModel.careTypeObj.unit">
     Visit
     </label>
     <label class="cbr-inline">
-    <input name="radioRate" value="day" type="radio" ng-model="careTypeModel.rate">
+    <input name="radioRate" value="day" type="radio" ng-model="careTypeModel.careTypeObj.unit">
     Day
     </label>
     </div>
@@ -322,7 +322,7 @@
     Billing Code 
     </label>
     <div class="col-sm-5">
-    <input class="form-control" id="billingCode" name="billingCode" type="text" data-validate="required"  data-message-required="Please enter Billing Code.">
+    <input class="form-control" id="billingCode" name="billingCode" type="text" ng-model="careTypeModel.careTypeObj.billingCode" data-validate="required"  data-message-required="Please enter Billing Code.">
     </div>
     <div class="col-sm-4">
 
@@ -340,13 +340,13 @@
     <span class="form-control-static">1</span>
     </div>
     <div class="col-sm-5">
-    <input class="form-control" id="modifires1" name="modifires1" type="text" />
+    <input class="form-control" id="modifires1" name="modifires1" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier1"/>
     </div>
     <div class="col-sm-1">
     <span class="form-control-static">2</span>
     </div>
     <div class="col-sm-5">
-    <input class="form-control" id="modifires2" name="modifires2" type="text" />
+    <input class="form-control" id="modifires2" name="modifires2" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier2"/>
     </div>
     </div>
     </div>
@@ -362,13 +362,13 @@
     <span class="form-control-static">3</span>
     </div>
     <div class="col-sm-5">
-    <input class="form-control" id="modifires3" name="modifires3" type="text" />
+    <input class="form-control" id="modifires3" name="modifires3" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier3"/>
     </div>
     <div class="col-sm-1">
     <span class="form-control-static">4</span>
     </div>
     <div class="col-sm-5">
-    <input class="form-control" id="modifires4" name="modifires4" type="text" />
+    <input class="form-control" id="modifires4" name="modifires4" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier4"/>
     </div>
     </div>
 
