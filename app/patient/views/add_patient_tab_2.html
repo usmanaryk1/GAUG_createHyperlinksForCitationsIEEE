@@ -99,12 +99,10 @@
                                 //           });
                             </script>
                             <select class="form-control" id="sboxit-1" name="State" ng-model="addPatient.patient.patientAddress.state"
-                                    data-validate="required" data-message-required="Please enter State.">
+                                    data-validate="required" data-message-required="Please enter State."
+                                    ng-options="state for state in states">
                                 <option value="">
                                     Select
-                                </option>
-                                <option value="NY">
-                                    NY
                                 </option>
                             </select>
                         </div>

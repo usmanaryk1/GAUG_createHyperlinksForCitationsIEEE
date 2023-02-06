@@ -160,12 +160,10 @@
                                 //            });
                             </script>
                             <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.employee.state"
-                                    data-validate="required" data-message-required="Please enter State.">
+                                    data-validate="required" data-message-required="Please enter State."
+                                    ng-options="state for state in states">
                                 <option value="">
                                     Select
-                                </option>
-                                <option value="1">
-                                    1
                                 </option>
                             </select>
                         </div>
