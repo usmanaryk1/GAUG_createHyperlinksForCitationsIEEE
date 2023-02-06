@@ -14,10 +14,10 @@
                     pct: 100,
                     finish: function() {
                         if (res) {
-                            ctrl.insurerList = res;
                         }
                     }
                 }); // showLoadingBar
+                ctrl.insurerList = res;
 
             }).catch(function(data, status) {
                 showLoadingBar({
