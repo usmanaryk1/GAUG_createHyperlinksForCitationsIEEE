@@ -2,8 +2,7 @@
     function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
-        ctrl.employee = {};
-        ctrl.employee.employeeDocumentId={};
+        ctrl.employee = {employeeDocumentId: {}};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.careTypeList = [];
@@ -83,7 +82,8 @@
             ctrl.formSubmitted = true;
             setFormDynamicValidityMessages();
             var fileUploadValid = ctrl.checkFileUploadValidity();
-            ctrl.employee.phone = ctrl.employee.phone.toString();
+            var employeeToSave = angular.copy(ctrl.employee);
+            employeeToSave.phone = employeeToSave.phone.toString();
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 var reqParam;
                 if (ctrl.employee.id && ctrl.employee.id !== null) {
@@ -98,6 +98,7 @@
                                 });
                     }
                 } else {
+                    delete employeeToSave.employeeDocumentId;
                     ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
                 }
@@ -154,6 +155,9 @@
         }
 
         $scope.$watch(function() {
+            if(!ctrl.employee.employeeDocumentId){
+               ctrl.employee.employeeDocumentId ={}; 
+            }
             return ctrl.employee.employeeDocumentId.physical;
         }, function(newVal, oldValue) {
             if (newVal && newVal !== '') {
@@ -164,6 +168,9 @@
         });
 
         $scope.$watch(function() {
+            if(!ctrl.employee.employeeDocumentId){
+               ctrl.employee.employeeDocumentId ={}; 
+            }
             return ctrl.employee.employeeDocumentId.tbTesting;
         }, function(newVal, oldValue) {
             if (newVal && newVal !== '') {
@@ -177,7 +184,7 @@
             ctrl.formDirty = false;
             $timeout(function() {
                 if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
-                    ctrl.employee.employeeDocumentId={};
+                    ctrl.employee.employeeDocumentId = {};
                 }
                 if (!ctrl.retrivalRunning) {
                     form_data = $('#add_employee_form').serialize();
