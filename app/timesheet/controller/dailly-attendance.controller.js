@@ -470,18 +470,15 @@
                                 obj.color = "#FAF9C0"; // yellow color
                             }
                         }
-                        //Green- UT time greater than 30minutes, when approved it goes back to
+                        //Green- UT time greater than 60minutes, when approved it goes back to
                         if (timesheetDuration != null && scheduleDuration != null) {
                             var t = timesheetDuration.split(":");
-                            var timeSheetHours = Number(t[0]);
-                            var timeSheetMins = Number(t[1]);
+                            var timeSheetInTime = (Number(t[0])*60) +Number(t[1]);
                             var s = scheduleDuration.split(":");
-                            var scheduleHours = Number(s[0]);
-                            var scheduleMins = Number(s[1]);
+                            var scheduleInTime = (Number(s[0])*60) + Number(s[1]);
+                            
                             if (!obj.timeSheet.unauthorizedTime || obj.timeSheet.unauthorizedTime == null) {
-                                if (timeSheetHours > scheduleHours) {
-                                    obj.color = "#AEEBAF"; // Green color
-                                } else if (timeSheetHours === scheduleHours && timeSheetMins > scheduleMins) {
+                                if (timeSheetInTime -  scheduleInTime> 60) {
                                     obj.color = "#AEEBAF"; // Green color
                                 }
                             }
