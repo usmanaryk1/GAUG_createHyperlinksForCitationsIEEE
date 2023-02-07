@@ -211,7 +211,7 @@
                     });
 
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
-                        ctrl.employee.taxStatus = 'W-2';
+                        ctrl.employee.taxStatus = 'W';
                     }
                     if (!ctrl.employee.wages) {
                         ctrl.employee.wages = 'H';
