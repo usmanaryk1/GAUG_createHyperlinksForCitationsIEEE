@@ -41,7 +41,7 @@
         ctrl.ssn = {};
         ctrl.referencesFileObj = {};
         ctrl.profileFileObj = {};
-        ctrl.resetEmployeeTab3 = function () {
+        ctrl.resetEmployeeTab4 = function () {
             ctrl.applicationFileObj.errorMsg = null;
             ctrl.w4FileObj.errorMsg = null;
             if (ctrl.employee.application != null) {
@@ -142,19 +142,19 @@
         ctrl.checkFileUploadValidity = function () {
             var validApplication = true;
             var validW4 = true;
-            if ($rootScope.tabNo != 3) {
+            if ($rootScope.tabNo != 4) {
                 ctrl.applicationFileObj.errorMsg = null;
                 ctrl.w4FileObj.errorMsg = null;
             } else {
                 if (ctrl.displayDocumentsByPositionMap) {
                     if (ctrl.displayDocumentsByPositionMap['a']) {
-                        if ($rootScope.tabNo == 3 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                        if ($rootScope.tabNo == 4 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
                             ctrl.applicationFileObj.errorMsg = "Please upload Application.";
                             validApplication = false;
                         }
                     }
                     if (ctrl.displayDocumentsByPositionMap['w']) {
-                        if ($rootScope.tabNo == 3 && ctrl.employee.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                        if ($rootScope.tabNo == 4 && ctrl.employee.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
                             ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
                             validW4 = false;
                         }
@@ -303,7 +303,7 @@
                         } else {
                             retrieveEmployeeCareTypeAfterSave(employeeRes);
                         }
-                        if ($rootScope.tabNo == 3) {
+                        if ($rootScope.tabNo == 4) {
                             $state.go('app.employee-list', {status: "active"});
                         } else {
                             $state.go('^.' + ctrl.nextTab, {id: employeeRes.id});
@@ -496,8 +496,22 @@
                 $("input[name='HDRate']").attr('required', true);
             }
         }
+        
+        ctrl.tab3DataInit = function() {
+            ctrl.formDirty = false;
+            $("#add_employee_form input:text, #add_employee_form textarea, #add_employee_form select").first().focus();
+            $timeout(function () {
+                if (!ctrl.retrivalRunning) {
+                    googleMapFunctions(ctrl.employee.locationLatitude, ctrl.employee.locationLongitude);
+                    form_data = $('#add_employee_form').serialize();
 
-        ctrl.tab3DataInit = function () {
+                } else {
+                    ctrl.tab3DataInit();
+                }
+            }, 100);
+        }
+
+        ctrl.tab4DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function () {
@@ -508,7 +522,7 @@
                     form_data = $('#add_employee_form').serialize();
                     $formService.resetRadios();
                 } else {
-                    ctrl.tab3DataInit();
+                    ctrl.tab4DataInit();
                 }
             }, 100);
 
@@ -1183,7 +1197,85 @@
                 ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
             }
         };
+        function googleMapFunctions(latitude, longitude) {
+            loadGoogleMaps(3).done(function ()
+            {
+                var map;
+                var geocoder = new google.maps.Geocoder();
+                var newyork;
+                if (latitude && latitude !== null && longitude && longitude !== null) {
+                    newyork = new google.maps.LatLng(latitude, longitude);
+                } else {
+                    newyork = new google.maps.LatLng(40.7127837, -74.00594);
+                }
+                var marker;
+// Add a marker to the map and push to the array.
+                function addMarker(location) {
+                    marker.setPosition(location);
+                }
+                function initialize()
+                {
+                    var mapOptions = {
+                        zoom: 12,
+                        center: newyork
+                    };
+                    // Calculate Height
+                    var el = document.getElementById('map-1'),
+                            doc_height = $('#map-1').height();
+
+                    // Adjust map height to fit the document contianer
+                    el.style.height = doc_height + 'px';
+
+                    map = new google.maps.Map(el, mapOptions);
+                    marker = new google.maps.Marker({
+                        position: newyork,
+                        map: map,
+                        draggable: true,
+//                        animation: google.maps.Animation.DROP
+                    });
+
+                    google.maps.event.addListener(marker, 'drag', function (event) {
+                        $('#GPSLocation').val(event.latLng);
+                        $('#GPSLocation').blur();
+                        ctrl.employee.locationLatitude = event.latLng.lat();
+                        ctrl.employee.locationLongitude = event.latLng.lng();
+                    });
+
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
+                        $('#GPSLocation').val(event.latLng);
+                        $('#GPSLocation').blur();
+                        ctrl.employee.locationLatitude = event.latLng.lat();
+                        ctrl.employee.locationLongitude = event.latLng.lng();
+                    });
+                    $('#GPSLocation').val(newyork);
+                    form_data = $('#add_patient_form').serialize();
+                }
+
+                initialize();
+                $("#address-search").click(function (ev)
+                {
+                    ev.preventDefault();
+                    var address = $('#Search').val().trim();
+                    if (address.length != 0)
+                    {
+                        geocoder.geocode({'address': address}, function (results, status)
+                        {
+                            if (status == google.maps.GeocoderStatus.OK)
+                            {
+                                $('#GPSLocation').val(results[0].geometry.location);
+                                $('#GPSLocation').blur();
+                                ctrl.employee.locationLatitude = results[0].geometry.location.lat();
+                                ctrl.employee.locationLongitude = results[0].geometry.location.lng()
+                                map.setCenter(results[0].geometry.location);
+                                addMarker(results[0].geometry.location);
+                            } else {
+                                alert('Geocode was not successful for the following reason: ' + status);
+                            }
+                        });
+                    }
+                });
+            });
+        }
     }
-    ;
     angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddEmployeeCtrl]);
 })();

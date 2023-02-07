@@ -168,7 +168,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                 }
             });
     var includedStatesForDirtyCheck = ['app.patient.tab1', 'app.patient.tab2', 'app.patient.tab3', 'app.patient.tab4', 'app.patient.tab5',
-        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3'];
+        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4'];
     $rootScope.$on('$stateChangeSuccess',
             function (event, currentState) {
                 if (currentState.data != null && currentState.data.feature != null && $rootScope.currentUser.allowedFeature != null) {
@@ -181,7 +181,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     }
                     if (featureAllowed == 0) {
                         event.preventDefault();
-                        $state.transitionTo(ontime_data.defaultState);                      
+                        $state.transitionTo(ontime_data.defaultState);
                     }
                 }
                 setTimeout(function () {
@@ -368,6 +368,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
                 data: {
                     tabNo: 3,
+                    feature: 'CREATE_EMPLOYEE'
+                }
+            }).
+            // add_employee_tab_4
+            state('app.employee.tab4', {
+                url: '/tab4/:id',
+                templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_4'),
+                data: {
+                    tabNo: 4,
                     feature: 'CREATE_EMPLOYEE'
                 }
             }).
@@ -704,7 +713,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/position-list',
                 templateUrl: appHelper.viewTemplatePath('position', 'view_position'),
                 controller: 'ViewPositionsCtrl as viewPosition'
-            }).            
+            }).
             state('admin.caretype-list', {
                 url: '/caretype-list',
                 templateUrl: appHelper.viewTemplatePath('caretype', 'view_caretype'),
