@@ -82,7 +82,7 @@
                         <div class="form-group">
                             <label for="field-79" class="col-sm-3 control-label">State</label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="State" ng-model="addCompany.companyObj.state" data-validate="required"  data-message-required="Please select State." ng-options="state for state in states">
+                                <select class="form-control" id="sboxit-1" name="State" ng-model="addCompany.companyObj.state" data-validate="required"  data-message-required="Please select State." ng-options="state.abbreviation as state.name for state in states">
                                     <option value="">Select</option>
                                 </select>
                             </div>

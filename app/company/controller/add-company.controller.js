@@ -19,11 +19,12 @@
 
         function saveCompanyData() {
             if ($('#company_information_form')[0].checkValidity()) {
-                console.log('Company Object : ' + JSON.stringify(ctrl.companyObj));
-                if (ctrl.companyObj.federalId != null) {
-                    ctrl.companyObj.federalId = JSON.stringify(ctrl.companyObj.federalId);
+                var companyObjToSave=angular.copy(ctrl.companyObj);
+                console.log('Company Object : ' + JSON.stringify(companyObjToSave));
+                if (companyObjToSave.federalId != null) {
+                    companyObjToSave.federalId = JSON.stringify(companyObjToSave.federalId);
                 }
-                CompanyDAO.save(ctrl.companyObj).then(function() {
+                CompanyDAO.save(companyObjToSave).then(function() {
                     ctrl.retrieveCompany();
                 });
             }
