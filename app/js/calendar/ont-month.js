@@ -35,7 +35,8 @@ angular
                                 eventCell = {startDate: day, askPassword: true};
                             }
                             if (eventCell) {
-                                $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                                $scope.eventClickCallback(angular.copy(eventCell));
+//                                $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                             }
                         } else {
                             $scope.eventClickCalled = false;
@@ -63,7 +64,8 @@ angular
                     cellTemplateUrl: '@',
                     cellEventsTemplateUrl: '@',
                     typeId: '=',
-                    type: '='
+                    type: '=',
+                    eventClickCallback: '='
                 },
                 controller: controller
             };

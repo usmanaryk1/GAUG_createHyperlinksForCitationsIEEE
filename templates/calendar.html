@@ -12,6 +12,7 @@
         ng-switch-when="month"
         type-id="typeId"
         type="type"
+        event-click-callback='eventClickCallback'
         ></mwl-calendar-month>
 
     <mwl-calendar-week
@@ -23,8 +24,9 @@
         on-list-click="onListClick"
         ng-switch-when="week"
         list="list"
-        type="type",
+        type="type"
         show-time="showTime"
+        event-click-callback='eventClickCallback'
         >
     </mwl-calendar-week>
 </div>

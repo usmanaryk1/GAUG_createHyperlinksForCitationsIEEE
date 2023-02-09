@@ -28,7 +28,8 @@ angular
                             $scope.eventClickCalled = true;
                         }
                         if (eventCell) {
-                            $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                            $scope.eventClickCallback(angular.copy(eventCell));
+//                            $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                         }
                     };
 
@@ -60,7 +61,8 @@ angular
                     onLinkClick: '=',
                     list: '=',
                     type: '=',
-                    showTime: '='
+                    showTime: '=',
+                    eventClickCallback: '='
                 },
                 controller: controller
             };

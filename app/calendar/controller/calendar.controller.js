@@ -1,7 +1,11 @@
 (function () {
     function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
         var ctrl = this;
-
+        if ($state.current.name.indexOf('search-employee-calendar') >= 0) {
+            ctrl.isEmployeeSearchPage = true;
+        } else {
+            ctrl.isEmployeeSearchPage = false;
+        }
         ctrl.employee_list = [];
         $rootScope.selectEmployeeModel = {};
         ctrl.viewEmployee;
@@ -213,6 +217,10 @@
                 $rootScope.passwordPopup.close();
             };
         };
+        ctrl.eventClicked = function (eventObj) {
+            $rootScope.openModalCalendar1(eventObj, 'calendar-modal', 'lg', 'static');
+        };
+
         $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
         {
             if (data != null && data.eventType == null && data.askPassword) {
@@ -261,7 +269,7 @@
                     });
                 }, 200);
                 $rootScope.employeePopup = $modal.open({
-                    templateUrl: modal_id,
+                    templateUrl: 'app/calendar/views/employee_calendar_modal.html',
                     size: modal_size,
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
@@ -667,6 +675,141 @@
         ctrl.retrieveEmployees();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPositions();
+        if (ctrl.isEmployeeSearchPage) {
+            function googleMapFunctions(latitude, longitude) {
+                loadGoogleMaps(3).done(function ()
+                {
+                    var map;
+                    var geocoder = new google.maps.Geocoder();
+                    var newyork;
+                    if (latitude && latitude !== null && longitude && longitude !== null) {
+                        newyork = new google.maps.LatLng(latitude, longitude);
+                    } else {
+                        newyork = new google.maps.LatLng(40.7127837, -74.00594);
+                    }
+                    var marker;
+                    function initialize()
+                    {
+                        var mapOptions = {
+                            zoom: 14,
+                            center: newyork
+                        };
+                        // Calculate Height
+                        var el = document.getElementById('map-1'),
+                                doc_height = $('#map-1').height();
+                        // Adjust map height to fit the document contianer
+                        el.style.height = doc_height + 'px';
+                        map = new google.maps.Map(el, mapOptions);
+                        var input = /** @type {!HTMLInputElement} */(
+                                document.getElementById('pac-input'));
+                        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+                        var autocomplete = new google.maps.places.Autocomplete(input);
+                        autocomplete.bindTo('bounds', map);
+                        marker = new google.maps.Marker({
+                            position: newyork,
+                            map: map,
+                            draggable: true,
+                        });
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                        // Data for the markers consisting of a name, a LatLng and a zIndex for the
+                        // order in which these markers should display on top of each other.
+                        var beaches = [
+                            ['New Museum', 40.7223416, -73.9950792],
+                            ['Freeemans', 40.7220533, -73.9946083],
+                            ['Rice To Riches', 40.7218906, -73.997949],
+                            ['Church Street', 40.7151974, -74.0099406]
+                        ];
+                        function showInfo(latlng, infowindow) {
+                            geocoder.geocode({
+                                'latLng': latlng
+                            }, function (results, status) {
+                                if (status == google.maps.GeocoderStatus.OK) {
+                                    if (results[1]) {
+                                        // here assign the data to asp lables
+                                        infowindow.setContent('<div id="content">' +
+                                                '<div id="firstHeading" class="firstHeading">Abreu, Rafaela</div>' +
+                                                '<div id="bodyContent">' + results[1].formatted_address +
+                                                '</div><div>10 Miles</div>' +
+                                                '</div>');
+                                    } else {
+                                        alert('No results found');
+                                    }
+                                } else {
+                                    alert('Geocoder failed due to: ' + status);
+                                }
+                            });
+                        }
+                        function setMarkers(map) {
+                            // Adds markers to the map.
+                            // Marker sizes are expressed as a Size of X,Y where the origin of the image
+                            // (0,0) is located in the top left of the image.
+                            for (var i = 0; i < beaches.length; i++) {
+                                var beach = beaches[i];
+                                var marker = new google.maps.Marker({
+                                    position: {lat: beach[1], lng: beach[2]},
+                                    map: map,
+                                    title: beach[0]
+                                });
+                                marker.addListener('click', function (e) {
+                                    var infowindow = new google.maps.InfoWindow();
+                                    showInfo(this.position, infowindow);
+                                    infowindow.open(map, this);
+                                });
+                            }
+                        }
+                        setMarkers(map);
+                        autocomplete.addListener('place_changed', function () {
+                            marker.setVisible(false);
+                            var place = autocomplete.getPlace();
+                            if (!place.geometry) {
+                                try {
+                                    if (place.name != null && place.name.indexOf(",") >= 0) {
+                                        var locationArray = place.name.split(",");
+                                        var LatLong = new google.maps.LatLng(Number(locationArray[0]), Number(locationArray[1]));
+                                        map.setCenter(LatLong);
+                                        place.geometry = {location: LatLong};
+                                    }
+                                } catch (e) {
+                                    return;
+                                }
+//                                window.alert("Autocomplete's returned place contains no geometry");
+//                                return;
+                            }
+                            // If the place has a geometry, then present it on a map.
+                            if (place.geometry != null) {
+                                if (place.geometry.viewport) {
+                                    map.fitBounds(place.geometry.viewport);
+                                } else {
+                                    map.setCenter(place.geometry.location);
+                                    map.setZoom(17);  // Why 17? Because it looks good.
+                                }
+                            }
+                            marker.setIcon(/** @type {google.maps.Icon} */({
+                                url: place.icon,
+                                size: new google.maps.Size(71, 71),
+                                origin: new google.maps.Point(0, 0),
+                                anchor: new google.maps.Point(17, 34),
+                                scaledSize: new google.maps.Size(35, 35)
+                            }));
+//                            alert(place.geometry.location)
+                            marker.setPosition(place.geometry.location);
+                            marker.setVisible(true);
+                            var infowindow = new google.maps.InfoWindow();
+                            showInfo(place.geometry.location, infowindow);
+                            infowindow.open(map, marker);
+                        });
+                    }
+                    initialize();
+                });
+            }
+            googleMapFunctions(null, null);
+            ctrl.retrieveAllPatients = function () {
+                PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                    ctrl.patientList = res;
+                });
+            };
+            ctrl.retrieveAllPatients();
+        }
     }
 
     angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", CalendarCtrl]);

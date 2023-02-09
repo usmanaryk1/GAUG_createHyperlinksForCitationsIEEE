@@ -28,9 +28,9 @@
         <link rel="stylesheet" href="assets/css/calendar/angular-bootstrap-calendar.css">
         <link rel="stylesheet" href="assets/css/angulartoggleswitch/angular-toggle-switch-bootstrap-3.css">
         <link rel="stylesheet" href="assets/css/main.css">
-        
+
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-        
+
         <script>
             var appData = {};
 
@@ -79,52 +79,52 @@
         </script>
         <script type="text/ng-template" id="resetPasswordModal">
 
-    <form class="validate form-horizontal" name="resetPasswordForm" id="reset_password_form" >
-        <div class="modal-header">
+            <form class="validate form-horizontal" name="resetPasswordForm" id="reset_password_form" >
+            <div class="modal-header">
             <button type="button" ng-if="resetPasswordModal.changePassword" class="close" ng-click="resetPasswordModal.close();" aria-hidden="true">&times;</button>
             <h4 class="modal-title" ng-if="!resetPasswordModal.changePassword">Reset Password</h4>
             <h4 class="modal-title" ng-if="resetPasswordModal.changePassword">Change Password</h4>            
-        </div>
+            </div>
 
-        <div class="modal-body">
+            <div class="modal-body">
 
             <div class="row" ng-if="resetPasswordModal.changePassword">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label add-padding-modal" for="oldPassword">
-                        Old Password
-                    </label>
-                    <div class="col-sm-6 add-padding-modal">
-                        <input class="form-control" id="oldPassword" name="oldPassword" type="password" ng-model="resetPasswordModal.oldPassword" data-validate="required"  data-message-required="Please enter old password.">
-                    </div>
-                </div>
+            <div class="form-group">
+            <label class="col-sm-4 control-label add-padding-modal" for="oldPassword">
+            Old Password
+            </label>
+            <div class="col-sm-6 add-padding-modal">
+            <input class="form-control" id="oldPassword" name="oldPassword" type="password" ng-model="resetPasswordModal.oldPassword" data-validate="required"  data-message-required="Please enter old password.">
+            </div>
+            </div>
             </div>
             <div class="row">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label add-padding-modal" for="password">
-                        New Password
-                    </label>
-                    <div class="col-sm-6 add-padding-modal">
-                        <input class="form-control" id="password" name="password" type="password" ng-model="resetPasswordModal.password" data-validate="required"  data-message-required="Please enter password.">
-                    </div>
-                </div>
+            <div class="form-group">
+            <label class="col-sm-4 control-label add-padding-modal" for="password">
+            New Password
+            </label>
+            <div class="col-sm-6 add-padding-modal">
+            <input class="form-control" id="password" name="password" type="password" ng-model="resetPasswordModal.password" data-validate="required"  data-message-required="Please enter password.">
+            </div>
+            </div>
             </div>
             <div class="row">
-                <div class="form-group" ng-class="{'validate-has-error':resetPasswordModal.passwordNotMatch}">
-                    <label class="col-sm-4 control-label add-padding-modal" for="confirmPassword">
-                        Confirm Password
-                    </label>
-                    <div class="col-sm-6 add-padding-modal">
-                        <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" ng-model="resetPasswordModal.confirmPassword" data-validate="required"  data-message-required="Please enter confirm password.">
-                        <span id="password-error" class="validate-has-error" ng-if="resetPasswordModal.passwordNotMatch">Password and confirm password does not match.</span>
-                    </div>
-                </div>
+            <div class="form-group" ng-class="{'validate-has-error':resetPasswordModal.passwordNotMatch}">
+            <label class="col-sm-4 control-label add-padding-modal" for="confirmPassword">
+            Confirm Password
+            </label>
+            <div class="col-sm-6 add-padding-modal">
+            <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" ng-model="resetPasswordModal.confirmPassword" data-validate="required"  data-message-required="Please enter confirm password.">
+            <span id="password-error" class="validate-has-error" ng-if="resetPasswordModal.passwordNotMatch">Password and confirm password does not match.</span>
             </div>
-        </div>
-        <div class="modal-footer">
+            </div>
+            </div>
+            </div>
+            <div class="modal-footer">
             <button type="submit" class="btn btn-success" ng-click="resetPasswordModal.save();">Save</button>            
             <button type="button" ng-if="resetPasswordModal.changePassword" class="btn btn-white" ng-click="resetPasswordModal.close();">Close</button>
-        </div>
-</form>
+            </div>
+            </form>
         </script>
 
         <div ng-cloak style="{{(paginationLoading==true && !maskLoadingRunning)?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
@@ -282,7 +282,8 @@
         <script src="assets/js/download/lodash.min.js"></script>
         <script src="assets/js/angulartoggleswitch/angular-toggle-switch.min.js"></script>
         <!-- google map -->
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9GfPYd_ZWDjwfIy17Dv4NWF3u45r4s7s&libraries=places"
+        defer></script>
         <script src="app/js/angular-google-maps/load-google-maps.js"></script>
         <script>
 

@@ -330,6 +330,10 @@
                 $rootScope.passwordPopup.close();
             };
         };
+        ctrl.eventClicked = function (eventObj) {
+            $rootScope.openModalCalendar1(eventObj, 'calendar-modal', 'lg', 'static');
+        };
+
         $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
         {
             if (data != null && data.eventType == null && data.askPassword) {

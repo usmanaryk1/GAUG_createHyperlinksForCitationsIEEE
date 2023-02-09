@@ -755,6 +755,16 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('security', 'manage_access'),
                 controller: 'ManageAccessCtrl as manageAccess',
             }).
+            
+            // Dispatch Calendar
+            state('app.search-employee-calendar', {
+                url: '/search-employee-calendar/:id',
+                templateUrl: appHelper.viewTemplatePath('calendar', 'employee_calendar'),
+                controller: 'CalendarCtrl as calendar',
+                data: {
+                    feature: 'VIEW_EMPLOYEE_SCHEDULE'
+                }
+            }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',

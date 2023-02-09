@@ -113,7 +113,8 @@
             list:'=',
             typeId:'=',
             type:'@',
-            showTime: '='   
+            showTime: '=',
+            eventClickCallback:'='
 	      },
 	      controller: controller
 	    };
