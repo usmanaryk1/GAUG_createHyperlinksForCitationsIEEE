@@ -84,6 +84,11 @@
             var fileUploadValid = ctrl.checkFileUploadValidity();
             var employeeToSave = angular.copy(ctrl.employee);
             employeeToSave.phone = employeeToSave.phone.toString();
+            if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
+                delete employeeToSave.employeeDocumentId;
+            }
+            delete employeeToSave.careRatesList;
+            delete employeeToSave.employeeCareRatesList;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 var reqParam;
                 if (ctrl.employee.id && ctrl.employee.id !== null) {
@@ -92,33 +97,45 @@
                         var careRateList = angular.copy(ctrl.employee.careRatesList);
                         careRateList.employeeId = ctrl.employee.id;
                         EmployeeDAO.updateCareRates(careRateList)
-                                .then()
+                                .then(function() {
+//                                    updateEmployee(reqParam, employeeToSave);
+                                })
                                 .catch(function() {
                                     console.log(JSON.stringify(careRateList));
                                 });
-                    }
+//                    } else {
+                        updateEmployee(reqParam, employeeToSave);
+//                    }
                 } else {
-                    delete employeeToSave.employeeDocumentId;
                     ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
+                    updateEmployee(reqParam, employeeToSave);
                 }
-
-                EmployeeDAO.update({action: reqParam, data: ctrl.employee})
-                        .then(function(res) {
-                            if (!ctrl.employee.id || ctrl.employee.id === null) {
-                                $state.go('^.tab1', {id: res.id});
-                                ctrl.editMode = true;
-                            }
-                            ctrl.employee = res;
-                            ctrl.formSubmitted = false;
-                        })
-                        .catch(function() {
-                            ctrl.formSubmitted = false;
-                            //exception logic
-                            console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
-                        });
-
             }
+        }
+
+        function updateEmployee(reqParam) {
+            EmployeeDAO.update({action: reqParam, data: employeeToSave})
+                    .then(function(res) {
+                        if (!ctrl.employee.id || ctrl.employee.id === null) {
+                            $state.go('^.tab1', {id: res.id});
+                            ctrl.editMode = true;
+                        }
+                        ctrl.employee = res;
+                        EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
+                            ctrl.employee.careRatesList = res;
+                            $timeout(function() {
+                                $("#rate2").multiSelect('refresh');
+                                $("#rate1").multiSelect('refresh');
+                            }, 200);
+                        });
+                        ctrl.formSubmitted = false;
+                    })
+                    .catch(function() {
+                        ctrl.formSubmitted = false;
+                        //exception logic
+                        console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
+                    });
         }
 
         //function called on page initialization.
@@ -133,10 +150,14 @@
                     }); // showLoadingBar
                     ctrl.employee = res;
                     ctrl.retrivalRunning = false;
-                    $timeout(function() {
-                        $("#rate2").multiSelect('refresh');
-                        $("#rate1").multiSelect('refresh');
-                    }, 100);
+                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
+                        ctrl.employee.careRatesList = res;
+                        $timeout(function() {
+                            $("#rate2").multiSelect('refresh');
+                            $("#rate1").multiSelect('refresh');
+                        }, 200);
+                        ctrl.retrivalRunning = false;
+                    });
                 }).catch(function(data, status) {
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
@@ -155,8 +176,8 @@
         }
 
         $scope.$watch(function() {
-            if(!ctrl.employee.employeeDocumentId){
-               ctrl.employee.employeeDocumentId ={}; 
+            if (!ctrl.employee.employeeDocumentId) {
+                ctrl.employee.employeeDocumentId = {};
             }
             return ctrl.employee.employeeDocumentId.physical;
         }, function(newVal, oldValue) {
@@ -168,8 +189,8 @@
         });
 
         $scope.$watch(function() {
-            if(!ctrl.employee.employeeDocumentId){
-               ctrl.employee.employeeDocumentId ={}; 
+            if (!ctrl.employee.employeeDocumentId) {
+                ctrl.employee.employeeDocumentId = {};
             }
             return ctrl.employee.employeeDocumentId.tbTesting;
         }, function(newVal, oldValue) {
@@ -201,14 +222,7 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
-                        ctrl.employee.careRatesList = res;
-                        $timeout(function() {
-                            $("#rate2").multiSelect('refresh');
-                            $("#rate1").multiSelect('refresh');
-                        }, 200);
-                        form_data = $('#add_employee_form').serialize();
-                    });
+
 
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
