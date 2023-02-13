@@ -1,5 +1,5 @@
 (function () {
-    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
+    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO) {
         var ctrl = this;
         ctrl.pageNo = 1;
         if ($state.current.name.indexOf('search-employee-calendar') >= 0) {
@@ -695,7 +695,7 @@
                     if (patientMarker != null) {
                         patientMarker.setMap(null);
                     }
-                    
+                    addPatientMarker();
                 } else {
                     isAutoCompleteChanged = false;
                 }
@@ -785,14 +785,36 @@
                             isAutoCompleteChanged = true;
                             ctrl.applySearch();
                             var location = place.geometry.location;
-                            
+                            addGreenMarker(location);
                             patientMarker.setVisible(true);
                         });
                     }
                     initialize();
                 });
             }
-            
+            var addPatientMarker = function () {
+                if (ctrl.selectedPatient != null && ctrl.selectedPatient.locationLatitude != null) {
+                    var location = new google.maps.LatLng(ctrl.selectedPatient.locationLatitude, ctrl.selectedPatient.locationLongitude);
+                    addGreenMarker(location);
+                } else if (patientMarker != null) {
+                    patientMarker.setVisible(false)
+                }
+            };
+            var addGreenMarker = function (location) {
+
+                patientMarker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: false,
+                });
+                patientMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                patientMarker.addListener('click', function (e) {
+                    var infowindow = new google.maps.InfoWindow();
+                    showInfo(this.position, infowindow);
+                    infowindow.open(map, this);
+                });
+                map.setCenter(location);
+            }
             var clearMarkers = function () {
                 for (var i = 0; i < markers.length; i++) {
                     markers[i].setMap(null);
@@ -810,9 +832,30 @@
                     ctrl.patientList = res;
                 });
             };
+            ctrl.dispatchConfirmModal = function () {
+                var modalInstance = $modal.open({
+                    templateUrl: 'app/common/views/confirmation_modal.html',
+                    controller: 'ConfirmModalController as confirmModal',
+                    size: 'med',
+                    resolve: {
+                        message: function () {
+                            return "Are you sure you want to send dispatch message to filtered employees?";
+                        },
+                        title: function () {
+                            return ''
+                        }
+                    }
+                });
+                modalInstance.result.then(function () {
+                    DispatchDAO.save(ctrl.searchParams).then(function (res) {
+                        toastr.success("Dispatch message has been sent to all filtered employees.");
+                    });
+                }, function () {
+                });
+            };
             ctrl.retrieveAllPatients();
         }
     }
 
-    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", CalendarCtrl]);
+    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", CalendarCtrl]);
 })();

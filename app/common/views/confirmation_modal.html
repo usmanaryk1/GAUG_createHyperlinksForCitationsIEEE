@@ -1,0 +1,14 @@
+<div>
+    <div class="modal-header">		
+        <h4 class="modal-title">{{confirmModal.title}}</h4>
+    </div>
+
+    <div class="modal-body">
+        {{confirmModal.message}}
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" ng-click="confirmModal.ok();">Yes</button>
+        <button type="button" class="btn btn-red" ng-click="confirmModal.cancel();">No</button>
+    </div>
+</div>
