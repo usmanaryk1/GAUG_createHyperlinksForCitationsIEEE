@@ -253,7 +253,7 @@
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.employee.position || ctrl.employee.position === null) {
-                        ctrl.employee.position = 'mp';
+                        ctrl.employee.position = 'mr';
                     }
                     $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();

@@ -32,6 +32,15 @@ angular.module('xenon.controllers', []).
             $rootScope.timeFormat = "hh:mm a";
             $rootScope.validFileTypes = ["png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
 //            $rootScope.states = ['UT', 'TX', 'NY'];
+            $rootScope.positions = {
+                'pc': 'Personal Care',
+                'nc': 'Nursing Care',
+                'pt': 'PT',
+                'ot':'OT',
+                'nut': 'NUT',
+                'a': 'Admin',
+                'mr': 'Market Rep.'
+            };
             $rootScope.states = [
                 {name: 'ALABAMA', abbreviation: 'AL'},
                 {name: 'ALASKA', abbreviation: 'AK'},

@@ -64,7 +64,7 @@
                                                     <td> <div class="user_panel" ng-click="viewPatient.openEditModal(patient, 'modal-5')" style="cursor: pointer">
                                                             <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
                                                             <div class="emp_user_hd">
-                                                                <div class="emp_user_name">{{patient.LName}} {{patient.FName}} {{patient.middleInitial}}</div>
+                                                                <div class="emp_user_name">{{patient.lName}} {{patient.fName}} {{patient.middleInitial}}</div>
                                                                 <p>{{patient.insuranceProvider}}</p>
                                                             </div>
                                                         </div>
@@ -229,7 +229,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="user_panel col-md-12">
     <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
     <div class="emp_user_hd">
-    <div class="emp_user_name">{{selectPatientModel.patient.LName}} {{selectPatientModel.patient.FName}} {{selectPatientModel.patient.middleInitial}}</div>
+    <div class="emp_user_name">{{selectPatientModel.patient.lName}} {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
     <p>{{selectPatientModel.patient.insuranceProvider}}</p>
     </div>
     <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
@@ -369,7 +369,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 </script>
 <script type="text/ng-template" id="deleteModel">
     <div class="modal-header">
-    <h4 class="modal-title">{{deletePatientModel.patient.LName}} {{deletePatientModel.patient.FName}} {{deletePatientModel.patient.middleInitial}}</h4>
+    <h4 class="modal-title">{{deletePatientModel.patient.lName}} {{deletePatientModel.patient.fName}} {{deletePatientModel.patient.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
@@ -385,7 +385,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 </script>
 <script type="text/ng-template" id="dischargeModel">
     <div class="modal-header">
-    <h4 class="modal-title">{{dischargePatientModel.patient.LName}} {{dischargePatientModel.patient.FName}} {{dischargePatientModel.patient.middleInitial}}</h4>
+    <h4 class="modal-title">{{dischargePatientModel.patient.lName}} {{dischargePatientModel.patient.fName}} {{dischargePatientModel.patient.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
