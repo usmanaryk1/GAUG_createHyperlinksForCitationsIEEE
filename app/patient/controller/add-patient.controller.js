@@ -1,4 +1,4 @@
-(function() {
+(function () {
     function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
@@ -21,19 +21,19 @@
             $state.transitionTo(ontimetest.defaultState);
         }
         var form_data;
-        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function (res) {
             ctrl.nursingCareList = res;
-        }).catch(function() {
+        }).catch(function () {
             ctrl.nursingCareList.push({fNmae: "Test", lName: "Data", id: 1});
         });
-        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function (res) {
             ctrl.staffCoordinatorList = res;
-        }).catch(function() {
+        }).catch(function () {
             ctrl.staffCoordinatorList.push({fNmae: "Test", lName: "Data", id: 1});
         });
-        InsurerDAO.retrieveAll().then(function(res) {
+        InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
-        }).catch(function() {
+        }).catch(function () {
             ctrl.insuranceProviderList.push({insuranceNmae: "Test Data", id: 1});
         });
         //funcions
@@ -74,7 +74,9 @@
         function savePatientData() {
             if ($('#add_patient_form')[0].checkValidity()) {
                 var patientToSave = angular.copy(ctrl.patient);
-                patientToSave.phone = patientToSave.phone.toString();
+                if (patientToSave.dateOfBirth) {
+                    patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
+                }
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
@@ -93,7 +95,7 @@
                 }
 
                 PatientDAO.update({action: reqParam, data: patientToSave})
-                        .then(function(res) {
+                        .then(function (res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
@@ -109,7 +111,7 @@
                             }
                             delete ctrl.patient.patientCareTypeCollection;
                         })
-                        .catch(function() {
+                        .catch(function () {
                             //exception logic
                             console.log('Patient Object : ' + JSON.stringify(patientToSave));
                         });
@@ -120,7 +122,7 @@
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
-                PatientDAO.get({id: $state.params.id}).then(function(res) {
+                PatientDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.patient = res;
                     if (res.patientCareTypeCollection) {
                         var careTypesSelected = [];
@@ -133,11 +135,11 @@
                         console.log(JSON.stringify(ctrl.patient))
                     }
                     ctrl.retrivalRunning = false;
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
-                        finish: function() {
+                        finish: function () {
                         }
                     }); // showLoadingBar
                     ctrl.patient = ontimetest.patients[($state.params.id - 1)];
@@ -158,7 +160,7 @@
             } else {
                 ctrl.editMode = true;
             }
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
                     if (!ctrl.patient.gender) {
@@ -173,7 +175,7 @@
         }
         function tab2DataInit() {
             ctrl.formDirty = false;
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     googleMapFunctions(ctrl.patient.locationLatitude, ctrl.patient.locationLongitude);
                     form_data = $('#add_patient_form').serialize();
@@ -185,7 +187,7 @@
         }
         function tab3DataInit() {
             ctrl.formDirty = false;
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
                     if (!ctrl.patient.isSubscriber && ctrl.patient.isSubscriber !== false) {
@@ -201,16 +203,16 @@
         }
         function tab4DataInit() {
             ctrl.formDirty = false;
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (ctrl.patient.insuranceProviderId && ctrl.patient.insuranceProviderId !== null) {
-                        CareTypeDAO.retrieveForInsurer({insurer_id: ctrl.patient.insuranceProviderId}).then(function(res) {
+                        CareTypeDAO.retrieveForInsurer({insurer_id: ctrl.patient.insuranceProviderId}).then(function (res) {
                             ctrl.careTypeList = res;
-                            $timeout(function() {
+                            $timeout(function () {
                                 $('#CareTypes').multiSelect('refresh');
                                 form_data = $('#add_patient_form').serialize();
                             }, 200);
-                        }).catch(function() {
+                        }).catch(function () {
                             form_data = $('#add_patient_form').serialize();
                         });
                     } else {
@@ -224,7 +226,7 @@
         }
         function tab5DataInit() {
             ctrl.formDirty = false;
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.patient.subscriberInfo || ctrl.patient.subscriberInfo === null
                             || ctrl.patient.subscriberInfo.length === 0) {
@@ -287,7 +289,7 @@
         ctrl.pageInitCall();
         function googleMapFunctions(latitude, longitude) {
 
-            loadGoogleMaps(3).done(function()
+            loadGoogleMaps(3).done(function ()
             {
 
                 var map;
@@ -346,13 +348,13 @@
 //                        animation: google.maps.Animation.DROP
                     });
 
-                    google.maps.event.addListener(marker, 'drag', function(event) {
+                    google.maps.event.addListener(marker, 'drag', function (event) {
                         $('#GPSLocation').val(event.latLng);
                         ctrl.patient.locationLatitude = event.latLng.lat();
                         ctrl.patient.locationLongitude = event.latLng.lng();
                     });
 
-                    google.maps.event.addListener(marker, 'dragend', function(event) {
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
                         $('#GPSLocation').val(event.latLng);
                         ctrl.patient.locationLatitude = event.latLng.lat();
                         ctrl.patient.locationLongitude = event.latLng.lng();
@@ -366,7 +368,7 @@
                 }
 
                 initialize();
-                $("#address-search").click(function(ev)
+                $("#address-search").click(function (ev)
                 {
                     ev.preventDefault();
 
@@ -377,7 +379,7 @@
 
                     if (address.length != 0)
                     {
-                        geocoder.geocode({'address': address}, function(results, status)
+                        geocoder.geocode({'address': address}, function (results, status)
                         {
                             // $inp.prev().find('i').removeClass('fa-spinner fa-spin');
 
@@ -414,13 +416,13 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.fileSelected = function(file, flow) {
+        ctrl.fileSelected = function (file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.fileUploaded = function(response, file, flow) {
+        ctrl.fileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -430,7 +432,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
         };
-        ctrl.fileError = function($file, $message, $flow) {
+        ctrl.fileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
@@ -440,7 +442,7 @@
             ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
             ctrl.formDirty = true;
             ctrl.patient.authorization = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
