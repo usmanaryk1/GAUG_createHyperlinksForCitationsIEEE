@@ -1,6 +1,7 @@
 (function () {
     function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
         var ctrl = this;
+        ctrl.pageNo = 1;
         if ($state.current.name.indexOf('search-employee-calendar') >= 0) {
             ctrl.isEmployeeSearchPage = true;
         } else {
@@ -107,7 +108,9 @@
             }
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
-
+                if (ctrl.isEmployeeSearchPage) {
+                    addMarkersToMap(ctrl.employee_list);
+                }
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
                 }
@@ -676,22 +679,72 @@
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPositions();
         if (ctrl.isEmployeeSearchPage) {
-            function googleMapFunctions(latitude, longitude) {
+            var map;
+            var patientMarker;
+            var markers = [];
+            var isAutoCompleteChanged = false;
+            function addMarkersToMap(emplyeeList) {
+                if (map == null) {
+                    googleMapFunctions();
+                } else {
+                    clearMarkers();
+
+                }
+                if (!isAutoCompleteChanged) {
+//                    clear patient marker is marker is not created through location filter
+                    if (patientMarker != null) {
+                        patientMarker.setMap(null);
+                    }
+                    
+                } else {
+                    isAutoCompleteChanged = false;
+                }
+                for (var i = 0; i < emplyeeList.length; i++) {
+                    if (emplyeeList[i].locationLatitude != null) {
+                        var location = [emplyeeList[i].locationLatitude, emplyeeList[i].locationLongitude]
+                        var marker = new google.maps.Marker({
+                            position: {lat: location[0], lng: location[1]},
+                            map: map
+                        });
+                        marker.addListener('click', function (e) {
+                            var infowindow = new google.maps.InfoWindow();
+                            showInfo(this.position, infowindow);
+                            infowindow.open(map, this);
+                        });
+                        markers.push(marker);
+                    }
+                }
+            }
+            function showInfo(latlng, infowindow) {
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({
+                    'latLng': latlng
+                }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                            // here assign the data to asp lables
+                            infowindow.setContent('<div id="content">' +
+                                    '<div id="firstHeading" class="firstHeading">Abreu, Rafaela</div>' +
+                                    '<div id="bodyContent">' + results[1].formatted_address +
+                                    '</div><div>10 Miles</div>' +
+                                    '</div>');
+                        } else {
+                            alert('No results found');
+                        }
+                    } else {
+                        alert('Geocoder failed due to: ' + status);
+                    }
+                });
+            }
+
+            function googleMapFunctions() {
                 loadGoogleMaps(3).done(function ()
                 {
-                    var map;
-                    var geocoder = new google.maps.Geocoder();
-                    var newyork;
-                    if (latitude && latitude !== null && longitude && longitude !== null) {
-                        newyork = new google.maps.LatLng(latitude, longitude);
-                    } else {
-                        newyork = new google.maps.LatLng(40.7127837, -74.00594);
-                    }
-                    var marker;
+                    var newyork = new google.maps.LatLng(40.7127837, -74.00594);
                     function initialize()
                     {
                         var mapOptions = {
-                            zoom: 14,
+                            zoom: 12,
                             center: newyork
                         };
                         // Calculate Height
@@ -705,61 +758,7 @@
                         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
                         var autocomplete = new google.maps.places.Autocomplete(input);
                         autocomplete.bindTo('bounds', map);
-                        marker = new google.maps.Marker({
-                            position: newyork,
-                            map: map,
-                            draggable: true,
-                        });
-                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-                        // Data for the markers consisting of a name, a LatLng and a zIndex for the
-                        // order in which these markers should display on top of each other.
-                        var beaches = [
-                            ['New Museum', 40.7223416, -73.9950792],
-                            ['Freeemans', 40.7220533, -73.9946083],
-                            ['Rice To Riches', 40.7218906, -73.997949],
-                            ['Church Street', 40.7151974, -74.0099406]
-                        ];
-                        function showInfo(latlng, infowindow) {
-                            geocoder.geocode({
-                                'latLng': latlng
-                            }, function (results, status) {
-                                if (status == google.maps.GeocoderStatus.OK) {
-                                    if (results[1]) {
-                                        // here assign the data to asp lables
-                                        infowindow.setContent('<div id="content">' +
-                                                '<div id="firstHeading" class="firstHeading">Abreu, Rafaela</div>' +
-                                                '<div id="bodyContent">' + results[1].formatted_address +
-                                                '</div><div>10 Miles</div>' +
-                                                '</div>');
-                                    } else {
-                                        alert('No results found');
-                                    }
-                                } else {
-                                    alert('Geocoder failed due to: ' + status);
-                                }
-                            });
-                        }
-                        function setMarkers(map) {
-                            // Adds markers to the map.
-                            // Marker sizes are expressed as a Size of X,Y where the origin of the image
-                            // (0,0) is located in the top left of the image.
-                            for (var i = 0; i < beaches.length; i++) {
-                                var beach = beaches[i];
-                                var marker = new google.maps.Marker({
-                                    position: {lat: beach[1], lng: beach[2]},
-                                    map: map,
-                                    title: beach[0]
-                                });
-                                marker.addListener('click', function (e) {
-                                    var infowindow = new google.maps.InfoWindow();
-                                    showInfo(this.position, infowindow);
-                                    infowindow.open(map, this);
-                                });
-                            }
-                        }
-                        setMarkers(map);
                         autocomplete.addListener('place_changed', function () {
-                            marker.setVisible(false);
                             var place = autocomplete.getPlace();
                             if (!place.geometry) {
                                 try {
@@ -773,7 +772,6 @@
                                     return;
                                 }
 //                                window.alert("Autocomplete's returned place contains no geometry");
-//                                return;
                             }
                             // If the place has a geometry, then present it on a map.
                             if (place.geometry != null) {
@@ -781,28 +779,32 @@
                                     map.fitBounds(place.geometry.viewport);
                                 } else {
                                     map.setCenter(place.geometry.location);
-                                    map.setZoom(17);  // Why 17? Because it looks good.
+                                    map.setZoom(12);
                                 }
                             }
-                            marker.setIcon(/** @type {google.maps.Icon} */({
-                                url: place.icon,
-                                size: new google.maps.Size(71, 71),
-                                origin: new google.maps.Point(0, 0),
-                                anchor: new google.maps.Point(17, 34),
-                                scaledSize: new google.maps.Size(35, 35)
-                            }));
-//                            alert(place.geometry.location)
-                            marker.setPosition(place.geometry.location);
-                            marker.setVisible(true);
-                            var infowindow = new google.maps.InfoWindow();
-                            showInfo(place.geometry.location, infowindow);
-                            infowindow.open(map, marker);
+                            isAutoCompleteChanged = true;
+                            ctrl.applySearch();
+                            var location = place.geometry.location;
+                            
+                            patientMarker.setVisible(true);
                         });
                     }
                     initialize();
                 });
             }
-            googleMapFunctions(null, null);
+            
+            var clearMarkers = function () {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+                markers = [];
+            }
+
+            ctrl.patientChanged = function (patient) {
+                ctrl.selectedPatient = patient;
+                ctrl.searchParams.patientId = patient.id;
+                ctrl.applySearch();
+            }
             ctrl.retrieveAllPatients = function () {
                 PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
                     ctrl.patientList = res;

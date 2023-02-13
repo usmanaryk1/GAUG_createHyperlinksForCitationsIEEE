@@ -36,7 +36,7 @@
                     });
                     }, 200);
                     });</script>
-                <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.searchParams.patientId" ng-options='pat.id as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.applySearch()">
+                <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.patientObj" ng-options='pat as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.patientChanged(calendar.patientObj)">
                     <option value="" selected hidden />
                 </select>
                 <div ng-show='patTimesheet.searchParams.patientId == null && patTimesheet.formSubmitted'>
