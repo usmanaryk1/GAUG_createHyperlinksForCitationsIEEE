@@ -4,11 +4,20 @@
         var api = resource(ontime_data.weburl + 'dispatch/:action/:subAction', {}, {
             save: {
                 method: 'POST'
+            },
+            saveResponse: {
+                method: 'POST'
             }
         });
         return {
+            get: function (params) {
+                return api.get({action: params.id}).$promise;
+            },
             save: function (data) {
                 return api.save(data).$promise;
+            },
+            saveResponse: function (params,data) {
+                return api.saveResponse({action: params.id,subAction:"response"}, data).$promise;
             }
         };
     };

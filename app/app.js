@@ -765,6 +765,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_EMPLOYEE_SCHEDULE'
                 }
             }).
+            state('app.dispatch-info', {
+                url: '/dispatch-info/:id',
+                templateUrl: appHelper.viewTemplatePath('calendar', 'view_dispatch_info'),
+                controller: 'ViewDispatchCtrl as viewDispatch'
+            }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',

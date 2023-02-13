@@ -100,21 +100,23 @@
         }
 
         ctrl.retrieveEmployees();
-        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (employeeId, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.selectEmployeeModel = $modal.open({
-                templateUrl: modal_id,
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+                keyboard: false,
+                controller: 'EmployeeInfoCtrl as employeeinfo',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId;
+                    }
+                }
             });
-            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
-            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
-            $rootScope.selectEmployeeModel.employee = angular.copy(employee);
-            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
-                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
-            }
-
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
         };
 
         ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
@@ -171,35 +173,35 @@
             $rootScope.deactivateEmployeeModel.employee = employee;
 
             $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
-                    
-                if ($('#popup_dea_employees')[0].checkValidity()) {
-                 $rootScope.maskLoading();
-                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
-                    var length = ctrl.employeeList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            if (ctrl.viewType !== 'all') {
-                                ctrl.employeeList.splice(i, 1);
-                            } else {
-                                ctrl.employeeList[i].status = 'i';
+                if ($('#popup_dea_employees')[0].checkValidity()) {
+                    $rootScope.maskLoading();
+                    EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, terminationDate: $rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
+                        var length = ctrl.employeeList.length;
+
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.employeeList[i].id === employee.id) {
+                                if (ctrl.viewType !== 'all') {
+                                    ctrl.employeeList.splice(i, 1);
+                                } else {
+                                    ctrl.employeeList[i].status = 'i';
+                                }
+                                break;
                             }
-                            break;
                         }
+                        ctrl.rerenderDataTable();
+                        toastr.success("Employee deactivated.");
+                        $rootScope.deactivateEmployeeModel.close();
                     }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Employee deactivated.");
-                    $rootScope.deactivateEmployeeModel.close();
+                    ).catch(function (data, status) {
+                        toastr.error("Employee cannot be deactivated.");
+                        $rootScope.deactivateEmployeeModel.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+
                 }
-                ).catch(function (data, status) {
-                    toastr.error("Employee cannot be deactivated.");
-                    $rootScope.deactivateEmployeeModel.close();
-                }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
-                
-                }
-            
+
             };
         };
         ctrl.openActivateModal = function (employee, modal_id, modal_size, modal_backdrop)
@@ -213,8 +215,8 @@
             $rootScope.activateEmployeeModel.employee = employee;
 
             $rootScope.activateEmployeeModel.activate = function (employee) {
-                
-                if($rootScope.activateEmployeeModel.password =="jorgeHRavalanche")
+
+                if ($rootScope.activateEmployeeModel.password == "jorgeHRavalanche")
                 {
                     $rootScope.maskLoading();
                     EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
@@ -239,9 +241,9 @@
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     });
-              }else{
-                  toastr.error("Wrong Password.");
-              }
+                } else {
+                    toastr.error("Wrong Password.");
+                }
             };
         };
         ctrl.getLanguagesFromCode = function (languageCodes) {
