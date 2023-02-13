@@ -23,16 +23,7 @@
             $state.transitionTo(ontimetest.defaultState);
         }
 
-        CareTypeDAO.retrieveAll().then(function(res) {
-            ctrl.careTypeList = res;
-            $timeout(function() {
-                $('#rate1').multiSelect('refresh');
-                $('#rate2').multiSelect('refresh');
-                form_data = $('#add_employee_form').serialize();
-            }, 200);
-        }).catch(function() {
-            form_data = $('#add_employee_form').serialize();
-        });
+
         ctrl.saveEmployee = saveEmployeeData;
         ctrl.pageInitCall = pageInit;
         var form_data;
@@ -98,14 +89,14 @@
                         careRateList.employeeId = ctrl.employee.id;
                         EmployeeDAO.updateCareRates(careRateList)
                                 .then(function() {
-//                                    updateEmployee(reqParam, employeeToSave);
+                                    updateEmployee(reqParam, employeeToSave);
                                 })
                                 .catch(function() {
                                     console.log(JSON.stringify(careRateList));
                                 });
-//                    } else {
+                    } else {
                         updateEmployee(reqParam, employeeToSave);
-//                    }
+                    }
                 } else {
                     ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
@@ -114,7 +105,7 @@
             }
         }
 
-        function updateEmployee(reqParam) {
+        function updateEmployee(reqParam, employeeToSave) {
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
@@ -140,6 +131,16 @@
 
         //function called on page initialization.
         function pageInit() {
+            CareTypeDAO.retrieveAll().then(function(res) {
+                ctrl.careTypeList = res;
+                $timeout(function() {
+                    $('#rate1').multiSelect('refresh');
+                    $('#rate2').multiSelect('refresh');
+                    form_data = $('#add_employee_form').serialize();
+                }, 200);
+            }).catch(function() {
+                form_data = $('#add_employee_form').serialize();
+            });
             if (ctrl.editMode) {
                 EmployeeDAO.get({id: $state.params.id}).then(function(res) {
                     showLoadingBar({
@@ -222,8 +223,8 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-
-
+                    $("#rate2").multiSelect('refresh');
+                    $("#rate1").multiSelect('refresh');
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
                     }
@@ -236,7 +237,7 @@
                 } else {
                     ctrl.tab2DataInit();
                 }
-            }, 100);
+            }, 300);
 
         };
         ctrl.tab1DataInit = function() {
@@ -530,7 +531,7 @@
 //            $formService.setRadioValues('TaxStatus', newVal);
 //        });
 
-        ctrl.pageInitCall();
+//        ctrl.pageInitCall();
     }
     ;
     angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", AddEmployeeCtrl]);
