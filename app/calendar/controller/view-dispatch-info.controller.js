@@ -1,0 +1,172 @@
+(function () {
+    function ViewDispatchInfoCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO, DispatchDAO, InsurerDAO, $timeout) {
+        var ctrl = this;
+        $rootScope.maskLoading();
+        ctrl.datatableObj = {};
+        Page.setTitle("View Dispatch");
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
+        $rootScope.positions = {};
+
+        var insuranceProviderMap = [];
+        var nursingCareMap = [];
+        var staffCoordinatorMap = [];
+
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    $rootScope.positions[position.id] = position.position;
+                });
+            }
+        });
+
+        ctrl.searchParams = {};
+        ctrl.viewRecords = 10;
+
+        ctrl.employeeList = [];
+
+        if ($state.params.id && $state.params.id !== '') {
+            ctrl.processdMode = true;
+            DispatchDAO.get({id: $state.params.id}).then(function (res) {
+                ctrl.dispatchInfo = angular.copy(res);
+                ctrl.employees = angular.copy(res.employeeDispatchResponses);
+                ctrl.rerenderDataTable();
+            });
+        } else {
+            ctrl.processdMode = false;
+        }
+
+        ctrl.changeViewRecords = function () {
+            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
+        };
+
+        ctrl.rerenderDataTable = function () {
+            var pageInfo;
+            if (ctrl.datatableObj.page != null) {
+                pageInfo = ctrl.datatableObj.page.info();
+            }
+            var employees = angular.copy(ctrl.employees);            
+            ctrl.employees = [];
+            $("#example-1_wrapper").remove();
+
+            $timeout(function () {
+                ctrl.employees = employees;
+                $timeout(function () {
+                    $("#example-1").wrap("<div class='table-responsive scroll'></div>");
+                    if (ctrl.processdMode) {
+                        $(".dt-button").attr("class", "btn btn-info green_bt pull-right print-btn");
+                    }
+                }, 50);
+                if (pageInfo != null) {
+                    $timeout(function () {
+                        var pageNo = Number(pageInfo.page);
+                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                            pageNo--;
+                        }
+                        ctrl.datatableObj.page(pageNo).draw(false);
+                    }, 20);
+                }
+                $rootScope.unmaskLoading();
+            });
+        };
+
+//        ctrl.retrieveEmployees();
+        ctrl.openEditModal = function (employeeId, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'EmployeeInfoCtrl as employeeinfo',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    nursingCareMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve nursing care list.");
+        });
+
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    staffCoordinatorMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve staff coordinator list.");
+        });
+
+        InsurerDAO.retrieveAll().then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    insuranceProviderMap[res[i].id] = res[i].insuranceName;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
+
+        ctrl.openPatientInfoModal = function (patientId, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'patient-info'),
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'PatientInfoCtrl as Patientinfo',
+                resolve: {
+                    patientId: function () {
+                        return patientId;
+                    },
+                    insuranceProviderMap: function () {
+                        return insuranceProviderMap;
+                    },
+                    nursingCareMap: function () {
+                        return nursingCareMap;
+                    },
+                    staffCoordinatorMap: function () {
+                        return staffCoordinatorMap;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+
+        ctrl.openDispatchResponseModel = function (responseId, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('calendar', 'response_model'),
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'DispatchResponseCtrl as dispatchResponse',
+                resolve: {
+                    responseId: function () {
+                        return responseId;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+    }
+    ;
+    angular.module('xenon.controllers').controller('ViewDispatchInfoCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", "DispatchDAO", "InsurerDAO", "$timeout", ViewDispatchInfoCtrl]);
+})();
