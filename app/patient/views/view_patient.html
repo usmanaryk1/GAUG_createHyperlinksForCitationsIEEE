@@ -72,10 +72,10 @@
                                                     <td>{{patient.dateOfBirth}}</td>
                                                     <td>{{patient.phone| tel }}</td>
                                                     <td>
-                                                        <div ng-show="patient.addressDataId">
-                                                            <div>{{patient.addressDataId.address1}}</div>
-                                                            <div ng-if="patient.addressDataId.address2 !== null">{{patient.addressDataId.address2}}</div>
-                                                            {{patient.addressDataId.city}}, {{patient.addressDataId.state}}, {{patient.addressDataId.zipcode}}
+                                                        <div ng-show="patient.patientAddress">
+                                                            <div>{{patient.patientAddress.address1}}</div>
+                                                            <div ng-if="patient.patientAddress.address2 !== null">{{patient.patientAddress.address2}}</div>
+                                                            {{patient.patientAddress.city}}, {{patient.patientAddress.state}}, {{patient.patientAddress.zipcode}}
                                                         </div>
                                                     </td>
                                                     <td>
@@ -290,12 +290,12 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
-    <div class="col-md-8" ng-show="selectPatientModel.patient.addressDataId">
-    {{selectPatientModel.patient.addressDataId.address1}}
-    <div ng-if="selectPatientModel.patient.addressDataId.address2 != null">
-    {{selectPatientModel.patient.addressDataId.address2}}
+    <div class="col-md-8" ng-show="selectPatientModel.patient.patientAddress">
+    {{selectPatientModel.patient.patientAddress.address1}}
+    <div ng-if="selectPatientModel.patient.patientAddress.address2 != null">
+    {{selectPatientModel.patient.patientAddress.address2}}
     </div> 
-    <div>{{selectPatientModel.patient.addressDataId.city}}, {{selectPatientModel.patient.addressDataId.state}}, {{selectPatientModel.patient.addressDataId.zipcode}}</div>
+    <div>{{selectPatientModel.patient.patientAddress.city}}, {{selectPatientModel.patient.patientAddress.state}}, {{selectPatientModel.patient.patientAddress.zipcode}}</div>
     </div>
     </div>	
 

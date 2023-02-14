@@ -4,8 +4,8 @@
     <!--PAGE TITLE START -->
     <div class="page-title">
         <div class="title-env">
-            <h1 class="title">View Insurer Information</h1>
-            <p class="description">View All Insurance Provider Information</p>
+            <h1 class="title">View Employee Information</h1>
+            <p class="description">View All Employee Information</p>
         </div>
     </div>
     <!--PAGE TITLE END -->
@@ -15,17 +15,17 @@
             <ul class="nav nav-tabs">
                 <li ui-sref="app.employee-list({status:'active'})" class="{{viewEmployee.viewType=='active'?'active':''}}">
                     <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">Active Employee</span> 
+                        <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">Active Employee</span> 
                     </a>
                 </li>
                 <li ui-sref="app.employee-list({status:'inactive'})" class="{{viewEmployee.viewType=='inactive'?'active':''}}">
                     <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">Inactive Employees</span> 
+                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Inactive Employees</span> 
                     </a>
                 </li>
                 <li ui-sref="app.employee-list({status:'all'})" class="{{viewEmployee.viewType=='all'?'active':''}}">
                     <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">All Employees</span> 
+                        <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">All Employees</span> 
                     </a>
                 </li>
             </ul>
