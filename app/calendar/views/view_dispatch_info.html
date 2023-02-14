@@ -17,37 +17,18 @@
                         <div class="row adjust-row-padding">
                             <div class="col-sm-12 element-align sm-flex-align">
                                 <div class="element-align user-info">
-                                    <span style="color: #16191e"><span class='h3 text-bold'>{{viewDispatchInfo.dispatchInfo.patientName}} </span>&nbsp; {{viewDispatchInfo.dispatchInfo.careType}}&nbsp; <i class='fa fa-info-circle' style="cursor: pointer" ng-show="viewDispatchInfo.dispatchInfo.patientId" ng-click="viewDispatchInfo.openPatientInfoModal(viewDispatchInfo.dispatchInfo.patientId)"></i></span>
+                                    <span style="color: #16191e"><span style="cursor: pointer" class='h3 text-bold' ng-click="viewDispatchInfo.openPatientInfoModal(viewDispatchInfo.dispatchInfo.patientId)">{{viewDispatchInfo.dispatchInfo.patientName}} </span>&nbsp; {{viewDispatchInfo.dispatchInfo.careType}}&nbsp; <i class='fa fa-info-circle' style="cursor: pointer" ng-show="viewDispatchInfo.dispatchInfo.patientId" ng-click="viewDispatchInfo.openDispatchInfoModal()"></i></span>
                                 </div>
                             </div>
                         </div>
                         <br/>
                         <div class='form-group-separator'></div>
                         <div class="panel-body pad_top0">
-                            <div class="row" ng-if="viewDispatchInfo.employees.length && viewDispatchInfo.processdMode">                             
-                                <div class="col-sm-12">
-                                    <div class="form-group col-sm-7 pad0">
-                                        <label class="col-sm-3 control-label"><span style="float:left;">Show Entries</span></label>
-                                        <div class='col-sm-2 pad0'>
-                                            <select class="form-control input-sm" ng-model="viewDispatchInfo.viewRecords" ng-change="viewDispatchInfo.changeViewRecords()">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </div>
-                                    </div> 
-<!--                                    <div class="form-group col-md-3 col-sm-3 col-xs-12 pull-right">
-                                        <input type="search" class="form-control input-sm" ng-model="viewDispatchInfo.searchParams.name" placeholder="Search by Name" ng-change="viewDispatchInfo.applySearch()">
-                                    </div> -->
-
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
+                            
                             <div>
 
-                                <div class="dataTables_wrapper form-inline dt-bootstrap" ng-class='{
-                                    "dataTables_length_hide":viewDispatchInfo.processdMode}'>
+                                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                                    <div class="table-responsive scroll" >
                                     <table id="example-1" class="table table-striped table-bordered  table table-small-font" cellspacing="0" ng-if="viewDispatchInfo.employees.length" datatable-setup datatable-obj="viewDispatchInfo.datatableObj">
                                         <thead>
                                             <tr>
@@ -91,26 +72,15 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn icon-left fa fa-check edit_button" href=""  tooltip="Accept Case"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-pencil edit_button ng-scope" href="" ng-click="viewDispatchInfo.openDispatchResponseModel(emp.id, 'responseModal')" tooltip="Edit"><span class="ed_b"></span></a>
+                                                    <a class="btn icon-left fa fa-pencil edit_button ng-scope" href="" ng-click="viewDispatchInfo.openDispatchResponseModel($index, emp, 'responseModal')" tooltip="Edit"><span class="ed_b"></span></a>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                     <div class="clearfix"></div>
                                     <div>&nbsp;</div>
                                 </div>
-
-                                <script type="text/javascript">
-                                    // This JavaScript Will Replace Checkboxes in dropdown toggles
-                                    jQuery(document).ready(function ($)
-                                    {
-                                        setTimeout(function ()
-                                        {
-                                            $(".checkbox-row input").addClass('cbr');
-                                            cbr_replace();
-                                        }, 0);
-                                    });
-                                </script>
 
                             </div>
                         </div>

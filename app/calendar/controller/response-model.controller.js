@@ -1,14 +1,14 @@
 (function () {
-    function DispatchResponseCtrl(responseId, $rootScope, $modalInstance, DispatchDAO) {
+    function DispatchResponseCtrl(responseObj, $rootScope, $modalInstance, DispatchDAO) {
         var ctrl = this;
-
+        ctrl.employeeDispatchResponse = responseObj;
         ctrl.save = function () {
             ctrl.DispatchResponseForm.$submitted = true;
             if (ctrl.DispatchResponseForm.$valid) {
                 $rootScope.maskLoading();
-                DispatchDAO.saveResponse({id: responseId},{responseStatus: ctrl.responseStatus, responseMessage: ctrl.responseMessage}).then(function (res) {
+                DispatchDAO.saveResponse({id: responseObj.id},ctrl.employeeDispatchResponse).then(function (res) {
                     toastr.success("Response saved successfully.");
-                    ctrl.close();
+                    $modalInstance.close(res);
                 }).catch(function (data, status) {
                     toastr.error("Response not saved.");
                 }).then(function () {
@@ -22,5 +22,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('DispatchResponseCtrl', ["responseId", "$rootScope", "$modalInstance", "DispatchDAO", DispatchResponseCtrl]);
+    angular.module('xenon.controllers').controller('DispatchResponseCtrl', ["responseObj", "$rootScope", "$modalInstance", "DispatchDAO", DispatchResponseCtrl]);
 })();

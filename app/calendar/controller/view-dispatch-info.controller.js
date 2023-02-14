@@ -45,7 +45,7 @@
             if (ctrl.datatableObj.page != null) {
                 pageInfo = ctrl.datatableObj.page.info();
             }
-            var employees = angular.copy(ctrl.employees);            
+            var employees = angular.copy(ctrl.employees);
             ctrl.employees = [];
             $("#example-1_wrapper").remove();
 
@@ -53,9 +53,6 @@
                 ctrl.employees = employees;
                 $timeout(function () {
                     $("#example-1").wrap("<div class='table-responsive scroll'></div>");
-                    if (ctrl.processdMode) {
-                        $(".dt-button").attr("class", "btn btn-info green_bt pull-right print-btn");
-                    }
                 }, 50);
                 if (pageInfo != null) {
                     $timeout(function () {
@@ -147,8 +144,27 @@
                 console.log("popup closed");
             });
         };
+        
+        ctrl.openDispatchInfoModal = function (modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('calendar', 'dispatch_info_modal'),
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'DispatchInfoModalCtrl as DispatchInfoModal',
+                resolve: {
+                    dispatch: function () {
+                        return ctrl.dispatchInfo;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
 
-        ctrl.openDispatchResponseModel = function (responseId, modal_size, modal_backdrop)
+        ctrl.openDispatchResponseModel = function (index, responseObj, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('calendar', 'response_model'),
@@ -157,13 +173,15 @@
                 keyboard: false,
                 controller: 'DispatchResponseCtrl as dispatchResponse',
                 resolve: {
-                    responseId: function () {
-                        return responseId;
+                    responseObj: function () {
+                        return angular.copy(responseObj);
                     }
                 }
             });
-            modalInstance.result.then(function () {
-                console.log("popup closed");
+            modalInstance.result.then(function (employeeResponseUpdated) {
+                if (employeeResponseUpdated) {
+                    ctrl.employees[index] = employeeResponseUpdated;
+                }
             });
         };
     }
