@@ -7,8 +7,9 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">Status</label>
             <div class="col-sm-8">
-                <select class="form-control" name ="status" id="status" ng-model="dispatchResponse.employeeDispatchResponse.responseStatus" data-validate="required" required data-message-required="Please select Discharge Reason." ng-init="dispatchResponse.reason = 'loa'" >
-                    <option value="Interested" selected>Interested</option>
+                <select class="form-control" name ="status" id="status" ng-model="dispatchResponse.employeeDispatchResponse.responseStatus" data-validate="required" data-message-required="Please select status.">
+                    <option value="" selected>Select</option>
+                    <option value="Interested">Interested</option>
                     <option value="Not Interested">Not Interested</option>
                     <option value="Not Sure">Not Sure</option>
                 </select>
@@ -18,7 +19,9 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">Message</label>
             <div class="col-sm-8">
-                <textarea class="form-control" id="responseMessage" name="responseMessage" ng-model="dispatchResponse.employeeDispatchResponse.responseMessage" />
+                <textarea class="form-control" id="responseMessage" name="responseMessage" ng-model="dispatchResponse.employeeDispatchResponse.responseMessage" 
+                          data-validate="required" required data-message-required="Please enter message."
+                          />
             </div>
         </div>
     </div>
