@@ -1,4 +1,4 @@
-(function () {
+(function() {
     function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
@@ -28,7 +28,7 @@
         ctrl.pageInitCall = pageInit;
         var form_data;
 
-        ctrl.checkFileUploadValidity = function () {
+        ctrl.checkFileUploadValidity = function() {
             var validApplication = true;
             var validI9Eligibility = true;
             var validW4 = true;
@@ -55,7 +55,7 @@
 
         //ceck if form has been changed or not
         //If changed then it should be valid
-        ctrl.navigateToTab = function (event, state) {
+        ctrl.navigateToTab = function(event, state) {
             if ($('#add_employee_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
@@ -77,30 +77,32 @@
             employeeToSave.phone = employeeToSave.phone.toString();
             if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
                 delete employeeToSave.employeeDocumentId;
+            } else {
+                if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
+                    employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
+                }
+                if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
+                    employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
+                }
+                if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
+                    employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
+                }
+                if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
+                    employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
+                }
+                if (employeeToSave.employeeDocumentId.startDate) {
+                    employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
+                }
+                if (employeeToSave.employeeDocumentId.endDate) {
+                    employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
+                }
             }
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
             if (employeeToSave.dateOfBirth) {
                 employeeToSave.dateOfBirth = new Date(employeeToSave.dateOfBirth);
             }
-            if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
-                employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
-                employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
-                employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
-                employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.startDate) {
-                employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
-            }
-            if (employeeToSave.employeeDocumentId.endDate) {
-                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-            }
+
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 var reqParam;
                 if (ctrl.employee.id && ctrl.employee.id !== null) {
@@ -109,10 +111,10 @@
                         var careRateList = angular.copy(ctrl.employee.careRatesList);
                         careRateList.employeeId = ctrl.employee.id;
                         EmployeeDAO.updateCareRates(careRateList)
-                                .then(function () {
+                                .then(function() {
                                     updateEmployee(reqParam, employeeToSave);
                                 })
-                                .catch(function () {
+                                .catch(function() {
                                     console.log(JSON.stringify(careRateList));
                                 });
                     } else {
@@ -127,41 +129,41 @@
         }
 
         function updateEmployee(reqParam, employeeToSave) {
-            if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
-                employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
-                employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
-                employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
-                employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
-            }
-            if (employeeToSave.employeeDocumentId.startDate) {
-                employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
-            }
-            if (employeeToSave.employeeDocumentId.endDate) {
-                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-            }
+//            if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
+//                employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
+//            }
+//            if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
+//                employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
+//            }
+//            if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
+//                employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
+//            }
+//            if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
+//                employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
+//            }
+//            if (employeeToSave.employeeDocumentId.startDate) {
+//                employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
+//            }
+//            if (employeeToSave.employeeDocumentId.endDate) {
+//                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
+//            }
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
-                    .then(function (res) {
+                    .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             $state.go('^.tab1', {id: res.id});
                             ctrl.editMode = true;
                         }
                         ctrl.employee = res;
-                        EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function (res) {
+                        EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
                             ctrl.employee.careRatesList = res;
-                            $timeout(function () {
+                            $timeout(function() {
                                 $("#rate2").multiSelect('refresh');
                                 $("#rate1").multiSelect('refresh');
                             }, 200);
                         });
                         ctrl.formSubmitted = false;
                     })
-                    .catch(function () {
+                    .catch(function() {
                         ctrl.formSubmitted = false;
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
@@ -170,35 +172,35 @@
 
         //function called on page initialization.
         function pageInit() {
-            CareTypeDAO.retrieveAll().then(function (res) {
+            CareTypeDAO.retrieveAll().then(function(res) {
                 ctrl.careTypeList = res;
-                $timeout(function () {
+                $timeout(function() {
                     $('#rate1').multiSelect('refresh');
                     $('#rate2').multiSelect('refresh');
                     form_data = $('#add_employee_form').serialize();
                 }, 200);
-            }).catch(function () {
+            }).catch(function() {
                 form_data = $('#add_employee_form').serialize();
             });
             if (ctrl.editMode) {
-                EmployeeDAO.get({id: $state.params.id}).then(function (res) {
+                EmployeeDAO.get({id: $state.params.id}).then(function(res) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
-                        finish: function () {
+                        finish: function() {
                         }
                     }); // showLoadingBar
                     ctrl.employee = res;
                     ctrl.retrivalRunning = false;
-                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function (res) {
+                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
                         ctrl.employee.careRatesList = res;
-                        $timeout(function () {
+                        $timeout(function() {
                             $("#rate2").multiSelect('refresh');
                             $("#rate1").multiSelect('refresh');
                         }, 200);
                         ctrl.retrivalRunning = false;
                     });
-                }).catch(function (data, status) {
+                }).catch(function(data, status) {
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
                 });
@@ -215,12 +217,12 @@
             $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
         }
 
-        $scope.$watch(function () {
+        $scope.$watch(function() {
             if (!ctrl.employee.employeeDocumentId) {
                 ctrl.employee.employeeDocumentId = {};
             }
             return ctrl.employee.employeeDocumentId.physical;
-        }, function (newVal, oldValue) {
+        }, function(newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='PhysicalExpirationDate']").attr('required', true);
             } else {
@@ -228,12 +230,12 @@
             }
         });
 
-        $scope.$watch(function () {
+        $scope.$watch(function() {
             if (!ctrl.employee.employeeDocumentId) {
                 ctrl.employee.employeeDocumentId = {};
             }
             return ctrl.employee.employeeDocumentId.tbTesting;
-        }, function (newVal, oldValue) {
+        }, function(newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='TBTestingExpirationDate']").attr('required', true);
             } else {
@@ -241,9 +243,9 @@
             }
         });
 
-        ctrl.tab3DataInit = function () {
+        ctrl.tab3DataInit = function() {
             ctrl.formDirty = false;
-            $timeout(function () {
+            $timeout(function() {
                 if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
                     ctrl.employee.employeeDocumentId = {};
                 }
@@ -256,11 +258,11 @@
 
         };
 
-        ctrl.tab2DataInit = function () {
+        ctrl.tab2DataInit = function() {
             ctrl.formDirty = false;
 
             //to set radio buttons on tab init..
-            $timeout(function () {
+            $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     $("#rate2").multiSelect('refresh');
                     $("#rate1").multiSelect('refresh');
@@ -279,7 +281,7 @@
             }, 300);
 
         };
-        ctrl.tab1DataInit = function () {
+        ctrl.tab1DataInit = function() {
             ctrl.formDirty = false;
             //to set edit mode in tab change
             if (!$state.params.id || $state.params.id === '') {
@@ -289,7 +291,7 @@
                 ctrl.editMode = true;
             }
             //to set radio buttons on tab init..
-            $timeout(function () {
+            $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.employee.position || ctrl.employee.position === null) {
                         ctrl.employee.position = 'mr';
@@ -315,12 +317,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.applicationFileSelected = function (file, flow) {
+        ctrl.applicationFileSelected = function(file, flow) {
             ctrl.applicationFileObj.flowObj = flow;
             ctrl.applicationFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.applicationFileUploaded = function (response, file, flow) {
+        ctrl.applicationFileUploaded = function(response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -330,7 +332,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableApplicationUploadButton = false;
         };
-        ctrl.applicationFileError = function ($file, $message, $flow) {
+        ctrl.applicationFileError = function($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableApplicationUploadButton = false;
@@ -338,7 +340,7 @@
             ctrl.applicationFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.applicationFileAdded = function (file, flow) { //It will allow all types of attahcments'
+        ctrl.applicationFileAdded = function(file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.application = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -365,12 +367,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.i9eligibilityFileSelected = function (file, flow) {
+        ctrl.i9eligibilityFileSelected = function(file, flow) {
             ctrl.i9eligibilityFileObj.flowObj = flow;
             ctrl.i9eligibilityFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.i9eligibilityFileUploaded = function (response, file, flow) {
+        ctrl.i9eligibilityFileUploaded = function(response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -380,7 +382,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
         };
-        ctrl.i9eligibilityFileError = function ($file, $message, $flow) {
+        ctrl.i9eligibilityFileError = function($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
@@ -388,7 +390,7 @@
             ctrl.i9eligibilityFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.i9eligibilityFileAdded = function (file, flow) { //It will allow all types of attahcments'
+        ctrl.i9eligibilityFileAdded = function(file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.i9 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -415,12 +417,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.w4FileSelected = function (file, flow) {
+        ctrl.w4FileSelected = function(file, flow) {
             ctrl.w4FileObj.flowObj = flow;
             ctrl.w4FileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.w4FileUploaded = function (response, file, flow) {
+        ctrl.w4FileUploaded = function(response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -430,7 +432,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
         };
-        ctrl.w4FileError = function ($file, $message, $flow) {
+        ctrl.w4FileError = function($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
@@ -438,7 +440,7 @@
             ctrl.w4FileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.w4FileAdded = function (file, flow) { //It will allow all types of attahcments'
+        ctrl.w4FileAdded = function(file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.w4 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -465,12 +467,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.referencesFileSelected = function (file, flow) {
+        ctrl.referencesFileSelected = function(file, flow) {
             ctrl.referencesFileObj.flowObj = flow;
             ctrl.referencesFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.referencesFileUploaded = function (response, file, flow) {
+        ctrl.referencesFileUploaded = function(response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -480,7 +482,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableReferencesUploadButton = false;
         };
-        ctrl.referencesFileError = function ($file, $message, $flow) {
+        ctrl.referencesFileError = function($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableReferencesUploadButton = false;
@@ -488,7 +490,7 @@
             ctrl.referencesFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.referencesFileAdded = function (file, flow) { //It will allow all types of attahcments'
+        ctrl.referencesFileAdded = function(file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.references = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -515,12 +517,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.physicalFileSelected = function (file, flow) {
+        ctrl.physicalFileSelected = function(file, flow) {
             ctrl.physicalFileObj.flowObj = flow;
             ctrl.physicalFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.physicalFileUploaded = function (response, file, flow) {
+        ctrl.physicalFileUploaded = function(response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -530,7 +532,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disablePhysicalUploadButton = false;
         };
-        ctrl.physicalFileError = function ($file, $message, $flow) {
+        ctrl.physicalFileError = function($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disablePhysicalUploadButton = false;
@@ -538,7 +540,7 @@
             ctrl.physicalFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.physicalFileAdded = function (file, flow) { //It will allow all types of attahcments'
+        ctrl.physicalFileAdded = function(file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.physical = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
