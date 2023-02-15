@@ -27,6 +27,7 @@
 
                     }
                 }); // showLoadingBar
+                toastr.error("Failed to retrieve insurance provider.");
                 ctrl.insurerList = ontimetest.insuranceProviders;
             });
         }

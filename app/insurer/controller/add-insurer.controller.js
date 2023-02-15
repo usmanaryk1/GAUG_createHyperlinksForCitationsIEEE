@@ -75,14 +75,15 @@
                         .then(function (res) {
                             console.log(res);
                             if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
-
                                 $state.go('^.insurer', {id: res.id});
                                 ctrl.editMode = true;
                                 ctrl.insurerObj.id = res.id;
                             }
+                            toastr.success("Insurance provider saved.");
                         })
                         .catch(function () {
                             //exception logic
+                            toastr.error("Insurance provider cannot be saved.");
                             console.log('Insurer Object : ' + JSON.stringify(insurerToSave));
                             if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
                                 $state.go('^.insurer', {id: 1});
@@ -106,7 +107,8 @@
                 $timeout(function () {
                     $('#multi-select').multiSelect('refresh');
                 });
-            }).catch(function () {
+            }).catch(function() {
+                toastr.error("Failed to retrieve care type.");
                 form_data = $('#add_patient_form').serialize();
             });
             if (ctrl.editMode) {
@@ -122,7 +124,8 @@
                         });
                     }
                     ctrl.retrivalRunning = false;
-                }).catch(function (data, status) {
+                }).catch(function(data, status) {
+                    toastr.error("Failed to retrieve insurance provider.");
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
