@@ -153,6 +153,7 @@
                             $state.go('^.tab1', {id: res.id});
                             ctrl.editMode = true;
                         }
+                        toastr.success("Employee saved.");
                         ctrl.employee = res;
                         EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
                             ctrl.employee.careRatesList = res;
@@ -164,6 +165,7 @@
                         ctrl.formSubmitted = false;
                     })
                     .catch(function() {
+                        toastr.error("Employee cannot be saved.");
                         ctrl.formSubmitted = false;
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
@@ -180,6 +182,7 @@
                     form_data = $('#add_employee_form').serialize();
                 }, 200);
             }).catch(function() {
+                toastr.error("Failed to retrieve care types.");
                 form_data = $('#add_employee_form').serialize();
             });
             if (ctrl.editMode) {
@@ -199,8 +202,11 @@
                             $("#rate1").multiSelect('refresh');
                         }, 200);
                         ctrl.retrivalRunning = false;
+                    }).catch(function(){
+                        toastr.error("Failed to retrieve employee care rates.");
                     });
                 }).catch(function(data, status) {
+                    toastr.error("Failed to retrieve employee.");
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
                 });

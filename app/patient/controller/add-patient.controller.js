@@ -24,16 +24,19 @@
         EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function (res) {
             ctrl.nursingCareList = res;
         }).catch(function () {
+            toastr.error("Failed to retrieve nursing care list.");
             ctrl.nursingCareList.push({fNmae: "Test", lName: "Data", id: 1});
         });
         EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function (res) {
             ctrl.staffCoordinatorList = res;
         }).catch(function () {
+            toastr.error("Failed to retrieve staff coordinator list.");
             ctrl.staffCoordinatorList.push({fNmae: "Test", lName: "Data", id: 1});
         });
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
             ctrl.insuranceProviderList.push({insuranceNmae: "Test Data", id: 1});
         });
         //funcions
@@ -113,9 +116,11 @@
                                 ctrl.patient.careTypes = careTypesSelected;
                             }
                             delete ctrl.patient.patientCareTypeCollection;
+                            toastr.success("Patient saved.");
                         })
                         .catch(function () {
                             //exception logic
+                            toastr.error("Patient cannot be saved.");
                             console.log('Patient Object : ' + JSON.stringify(patientToSave));
                         });
 
@@ -148,6 +153,7 @@
                     ctrl.patient = ontimetest.patients[($state.params.id - 1)];
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.patient));
+                    toastr.error("Failed to retrieve patient");
                 });
             } else {
                 ctrl.retrivalRunning = false;
@@ -216,6 +222,7 @@
                                 form_data = $('#add_patient_form').serialize();
                             }, 200);
                         }).catch(function () {
+                            toastr.error("Failed to retrieve care types.");
                             form_data = $('#add_patient_form').serialize();
                         });
                     } else {

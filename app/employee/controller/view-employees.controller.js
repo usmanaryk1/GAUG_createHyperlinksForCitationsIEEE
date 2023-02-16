@@ -20,6 +20,7 @@
                 }); // showLoadingBar
                 ctrl.employeeList = res;
             }).catch(function(data, status) {
+                toastr.error("Failed to retrieve employees.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -66,8 +67,10 @@
                             break;
                         }
                     }
+                    toastr.success("Employee deleted.");
                     $rootScope.deactivateEmployeeModel.close();
                 }).catch(function (data, status) {
+                     toastr.error("Failed to delete employee.");
                     $rootScope.deactivateEmployeeModel.close();
                 });
             };
@@ -92,8 +95,10 @@
                             break;
                         }
                     }
+                    toastr.success("Employee deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 }).catch(function (data, status) {
+                    toastr.error("Employee cannot be deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 });
             };
