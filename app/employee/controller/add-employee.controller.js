@@ -294,7 +294,7 @@
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.employee.position || ctrl.employee.position === null) {
-                        ctrl.employee.position = 'mr';
+                        ctrl.employee.position = 'pc';
                     }
                     $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();

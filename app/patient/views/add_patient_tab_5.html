@@ -132,7 +132,7 @@
                             </script>
                             <select class="form-control" id="sboxit-1" name="State" ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state"
                                     data-validate="required" data-message-required="Please enter State."
-                                    ng-options="state.abbreviation as state.name for state in states">
+                                    ng-options="state.abbreviation as state.abbreviation for state in states">
                                 <option value="">
                                     Select
                                 </option>
