@@ -785,6 +785,10 @@
                             isAutoCompleteChanged = true;
                             ctrl.applySearch();
                             var location = place.geometry.location;
+                            ctrl.searchParams.patientId = null;
+                            ctrl.patientObj = null;
+                            $('#patientDropdown').select2('val', null);
+                            ctrl.searchParams.location = location;
                             addGreenMarker(location);
                             patientMarker.setVisible(true);
                         });
@@ -825,6 +829,8 @@
             ctrl.patientChanged = function (patient) {
                 ctrl.selectedPatient = patient;
                 ctrl.searchParams.patientId = patient.id;
+                ctrl.location = null;
+                ctrl.searchParams.location = null;
                 ctrl.applySearch();
             }
             ctrl.retrieveAllPatients = function () {
@@ -834,20 +840,19 @@
             };
             ctrl.dispatchConfirmModal = function () {
                 var modalInstance = $modal.open({
-                    templateUrl: 'app/common/views/confirmation_modal.html',
-                    controller: 'ConfirmModalController as confirmModal',
+                    templateUrl: 'app/calendar/views/dispatch_confirmation_modal.html',
+                    controller: 'DispatchConfirmModalController as dispatchConfirm',
                     size: 'med',
                     resolve: {
-                        message: function () {
-                            return "Are you sure you want to send dispatch message to filtered employees?";
-                        },
-                        title: function () {
-                            return ''
+                        patientId: function () {
+                            return ctrl.searchParams.patientId;
                         }
                     }
                 });
-                modalInstance.result.then(function () {
-                    DispatchDAO.save(ctrl.searchParams).then(function (res) {
+                modalInstance.result.then(function (selectedCareType) {
+                    var dispatchObj = angular.copy(ctrl.searchParams);
+                    dispatchObj.careTypeId = selectedCareType;
+                    DispatchDAO.save(dispatchObj).then(function (res) {
                         toastr.success("Dispatch message has been sent to all filtered employees.");
                     });
                 }, function () {
