@@ -52,9 +52,10 @@
                                                     <div class="form-group" >
                                                         <label for='fromDate' class="col-sm-1 control-label"><i class="linecons-calendar"></i></label>
                                                         <div class="col-sm-7 pad_rg0 pad_lf0">
-                                                            <input readonly style="border:none;pointer-events: none;width:100px;" type="text" placeholder='Start Date' id="fromDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="patTimesheet.searchParams.startDate" max-date="patTimesheet.searchParams.endDate" name='fromDate'>
+                                                            <input readonly style="border:none;pointer-events: none;width:100px;" type="text" placeholder='Start Date' id="fromDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.fromDate" max-date="viewDispatch.searchParams.endDate" name='fromDate' ng-change="viewDispatch.applySearch()">
                                                         </div>
-                                                        <span class="col-sm-1 form-control-static pad_rg0 pad_lf0"><i class="fa fa-remove"></i></span>
+                                                        <span class="col-sm-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.fromDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.fromDate = undefined;viewDispatch.applySearch()"></i></span>
+
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 pad0">
@@ -66,15 +67,15 @@
                                                             </label>
                                                         </span>
                                                          <div class="col-sm-7 pad_rg0 pad_lf0">
-                                                            <input readonly style="border:none;pointer-events: none;width:100px" type="text" placeholder='End Date' id="toDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="patTimesheet.searchParams.startDate" max-date="patTimesheet.searchParams.endDate" name='toDate'>
+                                                            <input readonly style="border:none;pointer-events: none;width:100px" type="text" placeholder='End Date' id="toDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.toDate" max-date="viewDispatch.searchParams.endDate" name='toDate' ng-change="viewDispatch.applySearch()">
                                                         </div>
-                                                        <span class="col-sm-1 form-control-static pad_rg0 pad_lf0"><i class="fa fa-remove"></i></span>
+                                                        <span class="col-sm-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.toDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.toDate = undefined;viewDispatch.applySearch()"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div> 
                                         <div class="form-group col-md-5 col-sm-5 col-xs-12 pull-right">
-                                            <input type="search" class="form-control input-sm" ng-model="viewDispatch.searchParams.name" placeholder="Search by [Dispatch,Assigned employee]" ng-change="viewDispatch.applySearch()">
+                                            <input type="search" class="form-control input-sm" ng-model="viewDispatch.searchParams.searchString" placeholder="Search by Patient Name" ng-change="viewDispatch.applySearch()">
                                         </div> 
 
                                     </div>
@@ -83,12 +84,12 @@
                                 <div class="dataTables_wrapper form-inline dt-bootstrap">
                                     <div class="table-responsive scroll">
 
-                                        <table id="example-1" ng-if="viewDispatch.employeeList.length" class="table table-striped table-bordered  table table-small-font" cellspacing="0">
+                                        <table id="example-1" ng-if="viewDispatch.dispatchList.length" class="table table-striped table-bordered  table table-small-font" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th width="25%">Dispatch
+                                                    <th width="25%" ng-class="viewDispatch.applySortingClass('patientName')" ng-click="viewDispatch.applySorting('patientName')" >Patient
                                                     </th>
-                                                    <th width="15%" >Date
+                                                    <th width="15%" ng-class="viewDispatch.applySortingClass('dispatchCreatedOn')" ng-click="viewDispatch.applySorting('dispatchCreatedOn')" >Date
                                                     </th>
                                                     <th width="10%">Total Recipients</th>
                                                     <th width="25%">Assigned employee</th>
@@ -96,18 +97,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr pagination-id="drinksPagination" dir-paginate="emp in viewDispatch.employeeList| itemsPerPage: viewDispatch.searchParams.limit" 
+                                                <tr pagination-id="drinksPagination" dir-paginate="dispatch in viewDispatch.dispatchList| itemsPerPage: viewDispatch.searchParams.limit" 
                                                     total-items="totalRecords"
                                                     current-page="viewDispatch.searchParams.pageNo">
                                                     <td> 
 
-                                                        Ahmad, Bilquis
+                                                        {{dispatch.patientName}}
                                                     </td>
-                                                    <td>06/25/2016</td>
+                                                    <td>{{dispatch.dispatchCreatedOn}}</td>
                                                     <td>
-                                                        45
+                                                        {{dispatch.totalRecipient}}
                                                     </td>
-                                                    <td>Abreu, Rafaela</td>
+                                                    <td>{{dispatch.assignedEmployeeName}}</td>
                                                     <td>
                                                         <div class="center">
                                                             <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-click="viewDispatch.openDeactivateModal(emp, 'deactivateModel')" tooltip="Disable"><span class="ed_b"></span></a>
@@ -132,7 +133,7 @@
                                     </script>
 
                                 </div>
-                                <div ng-show="viewDispatch.employeeList.length">
+                                <div ng-show="viewDispatch.dispatchList.length">
                                     <div id="paginationButtons" class="text-right">
                                         <dir-pagination-controls boundary-links="true" 
                                                                  max-size="9"

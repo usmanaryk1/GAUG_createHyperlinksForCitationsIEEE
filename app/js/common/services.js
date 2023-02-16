@@ -133,6 +133,7 @@ angular.module('xenon.services', []).
                 calendar.addItem('Employee', './employee-calendar/', 'VIEW_EMPLOYEE_SCHEDULE');
                 calendar.addItem('Patient', './patient-calendar/', 'VIEW_PATIENT_SCHEDULE');
                 calendar.addItem('Search Employee', './search-employee-calendar/', 'VIEW_EMPLOYEE_SCHEDULE');
+                calendar.addItem('View Dispatch', './dispatch-list', 'VIEW_EMPLOYEE_SCHEDULE');
 
                 return this;
             };
@@ -184,6 +185,7 @@ angular.module('xenon.services', []).
                 calendar.addItem('Employee', './employee_calendar');
                 calendar.addItem('Patient', './patient_calendar');
                 calendar.addItem('Search Employee', './search-employee-calendar');
+                calendar.addItem('View Dispatch', './dispatch-list/');
 
                 return this;
             }

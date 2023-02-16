@@ -1,36 +1,28 @@
 (function () {
-    function ViewDispatchCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO) {
+    function ViewDispatchCtrl(DispatchDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO) {
+        console.log("ViewDispatchCtrl");
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.datatableObj = {};
-        $rootScope.selectEmployeeModel = {};
         Page.setTitle("View Dispatch");
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
-        $rootScope.positions = {};
-        PositionDAO.retrieveAll({}).then(function (res) {
-            if (res && res.length > 0) {
-                angular.forEach(res, function (position) {
-                    $rootScope.positions[position.id] = position.position;
-                });
-            }
-        });
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
-        ctrl.employeeList = [];
+
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc', status: "active"};
+        ctrl.dispatchList = [];
 
         ctrl.viewType = 'active';
-        ctrl.retrieveEmployees = retrieveEmployeesData;
-        ctrl.edit = edit;
+        ctrl.retrieveDispatchList = retrieveDispatchListData;
 
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
             ctrl.searchParams.pageNo = pagenumber;
-            ctrl.retrieveEmployees();
+            ctrl.retrieveDispatchList();
         };
 
         ctrl.applySearch = function () {
             ctrl.searchParams.pageNo = 1;
-            $debounce(retrieveEmployeesData, 500);
+            $debounce(retrieveDispatchListData, 500);
         };
 
         ctrl.applySorting = function (sortBy) {
@@ -44,7 +36,7 @@
                     ctrl.searchParams.order = "desc";
                 }
             }
-            ctrl.retrieveEmployees();
+            ctrl.retrieveDispatchList();
         };
 
         ctrl.applySortingClass = function (sortBy) {
@@ -59,17 +51,17 @@
             }
         };
 
-        function retrieveEmployeesData() {
+        function retrieveDispatchListData() {
             $rootScope.paginationLoading = true;
-            ctrl.searchParams.subAction = ctrl.viewType;
-            EmployeeDAO.retrieveAll(ctrl.searchParams).then(function (res) {
+//            ctrl.searchParams.subAction = ctrl.viewType;
+            DispatchDAO.retrieveAll(ctrl.searchParams).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
                     finish: function () {
                     }
                 }); // showLoadingBar
-                ctrl.employeeList = res;
+                ctrl.dispatchList = res;
                 if (res.length === 0) {
 //                    $("#paginationButtons").remove();
 //                    toastr.error("No data in the system.");
@@ -83,7 +75,7 @@
 
                     }
                 }); // showLoadingBar
-//                ctrl.employeeList = ontime_data.employees;
+//                ctrl.dispatchList = ontime_data.employees;
                 console.log('Error in retrieving data')
             }).then(function () {
                 $rootScope.unmaskLoading();
@@ -91,28 +83,66 @@
             });
         }
 
-        function edit(employee) {
-            $state.go('app.employee.tab1', {id: employee.id});
-        }
+        ctrl.retrieveDispatchList();
 
-        ctrl.retrieveEmployees();
-        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
-        {
-            $rootScope.selectEmployeeModel = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
-            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
-            $rootScope.selectEmployeeModel.employee = angular.copy(employee);
-            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
-                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
+        ctrl.rerenderDataTable = function () {
+            if (ctrl.dispatchList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
+                }
+//                ctrl.retrieveDispatchList();
+            } else {
+                ctrl.retrieveDispatchList();
+            }
+        };
+
+        ctrl.getLanguagesFromCode = function (languageCodes) {
+            if (languageCodes != null && languageCodes.length > 0) {
+                languageCodes = languageCodes.split(",");
+                var languageToDisplay = "";
+                angular.forEach(languageCodes, function (code, index) {
+                    languageToDisplay += $rootScope.languages[code];
+                    if (index < languageCodes.length - 1) {
+                        languageToDisplay += ", ";
+                    }
+                });
+                return languageToDisplay;
+            } else {
+                return "N/A";
+            }
+        };
+
+        ctrl.openDeactivateModal = function (employee) {
+            if ($('#popup_dea_employees')[0].checkValidity()) {
+                $rootScope.maskLoading();
+                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
+                    var length = ctrl.employeeList.length;
+
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.employeeList[i].id === employee.id) {
+                            if (ctrl.viewType !== 'all') {
+                                ctrl.employeeList.splice(i, 1);
+                            } else {
+                                ctrl.employeeList[i].status = 'i';
+                            }
+                            break;
+                        }
+                    }
+                    ctrl.rerenderDataTable();
+                    toastr.success("Employee deactivated.");
+                    $rootScope.deactivateEmployeeModel.close();
+                }
+                ).catch(function (data, status) {
+                    toastr.error("Employee cannot be deactivated.");
+                    $rootScope.deactivateEmployeeModel.close();
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+
             }
 
         };
-
+        
         ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deleteEmployeeModel = $modal.open({
@@ -146,127 +176,8 @@
             };
 
         };
-        ctrl.rerenderDataTable = function () {
-            if (ctrl.employeeList.length === 0) {
-                if (ctrl.searchParams.pageNo > 1) {
-                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
-                }
-//                ctrl.retrieveEmployees();
-            } else {
-                ctrl.retrieveEmployees();
-            }
-        };
-        ctrl.openDeactivateModal = function (employee, modal_id, modal_size, modal_backdrop)
-        {
-            $rootScope.deactivateEmployeeModel = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-            $rootScope.deactivateEmployeeModel.employee = employee;
 
-            $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
-                    
-                if ($('#popup_dea_employees')[0].checkValidity()) {
-                 $rootScope.maskLoading();
-                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
-                    var length = ctrl.employeeList.length;
-
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            if (ctrl.viewType !== 'all') {
-                                ctrl.employeeList.splice(i, 1);
-                            } else {
-                                ctrl.employeeList[i].status = 'i';
-                            }
-                            break;
-                        }
-                    }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Employee deactivated.");
-                    $rootScope.deactivateEmployeeModel.close();
-                }
-                ).catch(function (data, status) {
-                    toastr.error("Employee cannot be deactivated.");
-                    $rootScope.deactivateEmployeeModel.close();
-                }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
-                
-                }
-            
-            };
-        };
-        ctrl.openActivateModal = function (employee, modal_id, modal_size, modal_backdrop)
-        {
-            $rootScope.activateEmployeeModel = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-            $rootScope.activateEmployeeModel.employee = employee;
-
-            $rootScope.activateEmployeeModel.activate = function (employee) {
-                
-                if($rootScope.activateEmployeeModel.password =="jorgeHRavalanche")
-                {
-                    $rootScope.maskLoading();
-                    EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
-                        var length = ctrl.employeeList.length;
-
-                        for (var i = 0; i < length; i++) {
-                            if (ctrl.employeeList[i].id === employee.id) {
-                                if (ctrl.viewType !== 'all') {
-                                    ctrl.employeeList.splice(i, 1);
-                                } else {
-                                    ctrl.employeeList[i].status = 'a';
-                                }
-                                break;
-                            }
-                        }
-                        ctrl.rerenderDataTable();
-                        toastr.success("Employee activated.");
-                        $rootScope.activateEmployeeModel.close();
-                    }).catch(function (data, status) {
-                        toastr.error("Employee cannot be activated.");
-                        $rootScope.activateEmployeeModel.close();
-                    }).then(function () {
-                        $rootScope.unmaskLoading();
-                    });
-              }else{
-                  toastr.error("Wrong Password.");
-              }
-            };
-        };
-        ctrl.getLanguagesFromCode = function (languageCodes) {
-            if (languageCodes != null && languageCodes.length > 0) {
-                languageCodes = languageCodes.split(",");
-                var languageToDisplay = "";
-                angular.forEach(languageCodes, function (code, index) {
-                    languageToDisplay += $rootScope.languages[code];
-                    if (index < languageCodes.length - 1) {
-                        languageToDisplay += ", ";
-                    }
-                });
-                return languageToDisplay;
-            } else {
-                return "N/A";
-            }
-        };
-
-        ctrl.navigateToCalendar = function (employee) {
-            $state.go('app.employee-calendar', {id: employee.id});
-        };
-//        
-//        $scope.$watch(function() {
-//            return ctrl.viewType;
-//        }, function(newVal, oldValue) {
-//            ctrl.employeeList = [];
-//            ctrl.retrieveEmployees();
-        //        });
     }
     ;
-    angular.module('xenon.controllers').controller('ViewDispatchCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewDispatchCtrl]);
+    angular.module('xenon.controllers').controller('ViewDispatchCtrl', ["DispatchDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewDispatchCtrl]);
 })();

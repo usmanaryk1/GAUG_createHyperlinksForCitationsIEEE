@@ -2,6 +2,10 @@
     'use strict';
     var DispatchDAO = function (resource) {
         var api = resource(ontime_data.weburl + 'dispatch/:action/:subAction', {}, {
+            retrieveAll: {
+                method: 'GET',
+                isArray: true
+            },
             save: {
                 method: 'POST'
             },
@@ -10,6 +14,9 @@
             }
         });
         return {
+            retrieveAll: function (params) {
+                return api.retrieveAll(params).$promise;
+            },
             get: function (params) {
                 return api.get({action: params.id}).$promise;
             },
