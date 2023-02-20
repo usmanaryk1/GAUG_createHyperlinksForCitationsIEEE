@@ -54,7 +54,7 @@
                                 <th>{{insurer.insuranceName}}</th>
                                 <td>{{insurer.billingId}}</td>
                                 <td>{{insurer.contactName}}</td>
-                                <td></td>
+                                <td>{{insurer.contractEndDate|date :dateFormat}}</td>
                                 <td><a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)"><span class="ed_b">Edit</span></a> 
                                     <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')"><span class="ed_b">Dlt</span></a> 
                                     <a class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}" tooltip="Download Contract"><span class="ed_b"></span></a> 
