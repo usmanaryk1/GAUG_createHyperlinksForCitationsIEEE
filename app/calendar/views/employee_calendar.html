@@ -38,15 +38,12 @@
                     });</script>
                 <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.patientObj" ng-options='pat as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.patientChanged(calendar.patientObj)">
                     <option value="" selected hidden />
-                </select>
-                <div ng-show='patTimesheet.searchParams.patientId == null && patTimesheet.formSubmitted'>
-                    <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient Name.</span>
-                </div>
+                </select>               
             </div>
 
             <div class='col-sm-12 col-md-6 text-right pad0 pull-right'>
                 <a ng-if='!calendar.isEmployeeSearchPage' href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
-                <a ng-if='calendar.isEmployeeSearchPage' href="" ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
+                <a ng-if='calendar.isEmployeeSearchPage' href="" ng-disabled='calendar.searchParams.patientId==null' ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
                 <div class="mwl-button-group">
                     <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
                             'mwl-state-active'
@@ -66,7 +63,7 @@
     </div>
     <div class="col-sm-12" ng-show='calendar.isEmployeeSearchPage'>
         <input id="pac-input" class="controls" type="text"
-               placeholder="Enter a location" > 
+               placeholder="Enter a location" ng-model='calendar.location'> 
         <div id="map-1" class="map_panel"></div>
     </div>
     <div class="mwl-panel-filter" style='background-color: transparent' ng-click="calendar.showDatepicker($event)">
