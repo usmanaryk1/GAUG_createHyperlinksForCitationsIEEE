@@ -884,7 +884,7 @@ angular.module('xenon.directives', []).
         directive('datepicker', function() {
             return {
                 restrict: 'AC',
-                scope: {minDate: "=", maxDate: "="},
+                scope: {minDate: "=", maxDate: "=", ngModel: "="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
@@ -918,6 +918,12 @@ angular.module('xenon.directives', []).
                         }
 
                     });
+                    
+                    scope.$watch("ngModel",function(value){
+                        if(value!=null){
+                             $this.datepicker("setDate",new Date(value));
+                        }
+                    })
 
 
 //$("#StartDate").datepicker({}).on('changeDate', function(selected) {
