@@ -8,14 +8,14 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
 
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc', status: "active"};
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc', status: ''};
+
         ctrl.dispatchList = [];
 
         ctrl.viewType = 'active';
         ctrl.retrieveDispatchList = retrieveDispatchListData;
 
         ctrl.pageChanged = function (pagenumber) {
-            console.log("pagenumber", pagenumber);
             ctrl.searchParams.pageNo = pagenumber;
             ctrl.retrieveDispatchList();
         };
@@ -112,68 +112,40 @@
             }
         };
 
-        ctrl.openDeactivateModal = function (employee) {
-            if ($('#popup_dea_employees')[0].checkValidity()) {
-                $rootScope.maskLoading();
-                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
-                    var length = ctrl.employeeList.length;
-
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            if (ctrl.viewType !== 'all') {
-                                ctrl.employeeList.splice(i, 1);
-                            } else {
-                                ctrl.employeeList[i].status = 'i';
-                            }
-                            break;
-                        }
-                    }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Employee deactivated.");
-                    $rootScope.deactivateEmployeeModel.close();
-                }
-                ).catch(function (data, status) {
-                    toastr.error("Employee cannot be deactivated.");
-                    $rootScope.deactivateEmployeeModel.close();
-                }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
-
-            }
-
-        };
-        
-        ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (dispatch)
         {
-            $rootScope.deleteEmployeeModel = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
+                controller: 'ConfirmModalController as confirmModal',
+                size: 'med',
+                resolve: {
+                    message: function () {
+                        return "Are you sure you want to delete this Dispatch?";
+                    },
+                    title: function () {
+                        return dispatch.patientName;
+                    }
+                }
             });
-            $rootScope.deleteEmployeeModel.employee = employee;
-
-            $rootScope.deleteEmployeeModel.delete = function (employee) {
+            modalInstance.result.then(function (res) {
                 $rootScope.maskLoading();
-                EmployeeDAO.delete({id: employee.id}).then(function (res) {
-                    var length = ctrl.employeeList.length;
-
+                DispatchDAO.delete({id: dispatch.id}).then(function () {
+                    var length = ctrl.dispatchList.length;
                     for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            ctrl.employeeList.splice(i, 1);
+                        if (ctrl.dispatchList[i].id === dispatch.id) {
+                            ctrl.dispatchList.splice(i, 1);
                             break;
                         }
                     }
+                    toastr.success("Dispatch deleted.");
                     ctrl.rerenderDataTable();
-                    toastr.success("Employee deleted.");
-                    $rootScope.deleteEmployeeModel.close();
                 }).catch(function (data, status) {
                     toastr.error(data.data);
-                    $rootScope.deleteEmployeeModel.close();
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
-            };
+            }, function () {
+            });
 
         };
 

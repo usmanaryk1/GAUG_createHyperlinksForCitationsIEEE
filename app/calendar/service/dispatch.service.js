@@ -11,6 +11,9 @@
             },
             saveResponse: {
                 method: 'POST'
+            },
+            delete: {
+                method: 'DELETE'
             }
         });
         return {
@@ -25,6 +28,9 @@
             },
             saveResponse: function (params,data) {
                 return api.saveResponse({action: params.id,subAction:"response"}, data).$promise;
+            },
+            delete: function (data) {
+                return api.delete({action: data.id}).$promise;
             }
         };
     };
