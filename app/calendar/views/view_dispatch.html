@@ -11,89 +11,70 @@
     <!--PAGE TITLE END -->
 
     <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-tabs">
-                <li ui-sref="app.employee-list({status:'active'})" class="{{viewDispatch.viewType=='active'?'active':''}}">
-                    <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">Active Dispatch</span> 
-                    </a>
-                </li>
-                <li ui-sref="app.employee-list({status:'inactive'})" class="{{viewDispatch.viewType=='inactive'?'active':''}}">
-                    <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Inactive Dispatch</span> 
-                    </a>
-                </li>
-                <li ui-sref="app.employee-list({status:'all'})" class="{{viewDispatch.viewType=='all'?'active':''}}">
-                    <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">All Dispatch</span> 
-                    </a>
-                </li>
-            </ul>
-            <div class="tab-content" style="padding-bottom:0px;">
-                <div id="home" class="tab-pane active">
-                    <form class="form-horizontal">
-
-                        <div class="panel-body">                        
-                            <div class="panel-body pad_top0 pad0">
-                                <div class="row">                            
-                                    <div class="col-sm-12">
-                                        <div class="form-group col-sm-3 pad0">
-                                            <label class="col-sm-7 control-label"><span style="float:left;">Show Entries</span></label>
-                                            <div class="col-sm-5" style="
-                                                 padding-left: 10px;
-                                                 margin-left: -20px;
-                                                 ">
-                                                <select class="form-control input-sm" ng-model="viewDispatch.searchParams.limit">
-                                                    <option value="10">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select>
-                                            </div>
+        <div class="col-md-12">            
+            <div class="panel panel-default">
+                <div>
+                    <form class="form-horizontal">                                            
+                        <div class="panel-body pad_top0 pad0">
+                            <div class="row">                            
+                                <div class="col-sm-12">
+                                    <div class="form-group col-sm-3 pad0">
+                                        <label class="col-sm-7 control-label"><span style="float:left;">Show Entries</span></label>
+                                        <div class="col-sm-5" style="
+                                             padding-left: 10px;
+                                             margin-left: -20px;
+                                             ">
+                                            <select class="form-control input-sm" ng-model="viewDispatch.searchParams.limit">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
                                         </div>
-                                        <div class="form-group col-sm-5 pad0">
-                                            <div class="col-sm-5 pad0">
-                                                <div class="form-group" >
-                                                    <label for='fromDate' class="col-sm-1 control-label"><i class="linecons-calendar"></i></label>
-                                                    <div class="col-sm-7 pad_rg0 pad_lf0">
-                                                        <input readonly style="border:none;pointer-events: none;width:100px;" type="text" placeholder='Start Date' id="fromDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.fromDate" max-date="viewDispatch.searchParams.endDate" name='fromDate' ng-change="viewDispatch.applySearch()">
-                                                    </div>
-                                                    <span class="col-sm-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.fromDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.fromDate = undefined;viewDispatch.applySearch()"></i></span>
+                                    </div>
+                                    <div class="form-group col-sm-4 pad0">
+                                        <div class="col-sm-5 pad0  pull-right">
+                                            <div class="form-group" >
+                                                <label for='toDate' class="col-sm-1 control-label"><i class="linecons-calendar"></i></label>
+                                                <div class="col-sm-7 pad_rg0 pad_lf0">
+                                                    <input readonly style="border:none;pointer-events: none;width:100px" type="text" placeholder='End Date' id="toDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.toDate" max-date="viewDispatch.searchParams.endDate" name='toDate' ng-change="viewDispatch.applySearch()">
                                                 </div>
-                                            </div>    
-                                            <div class="col-sm-1 center pad0" style="top: 7px;">
-                                                <span class="control-label">
+                                                <span class="col-sm-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.toDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.toDate = undefined;viewDispatch.applySearch()"></i></span>
+                                            </div>
+                                        </div>    
+                                        <div class="col-sm-1 center pad0  pull-right">
+                                            <label class="control-label">
                                                 To
-                                            </span>
-                                            </div>
-                                            <div class="col-sm-5 pad0">
-                                                <div class="form-group" >
-                                                    <label for='toDate' class="col-sm-1 control-label"><i class="linecons-calendar"></i></label>
-                                                    <div class="col-sm-7 pad_rg0 pad_lf0">
-                                                        <input readonly style="border:none;pointer-events: none;width:100px" type="text" placeholder='End Date' id="toDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.toDate" max-date="viewDispatch.searchParams.endDate" name='toDate' ng-change="viewDispatch.applySearch()">
-                                                    </div>
-                                                    <span class="col-sm-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.toDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.toDate = undefined;viewDispatch.applySearch()"></i></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-5 pad0  pull-right">
+                                            <div class="form-group" >
+                                                <label for='fromDate' class="col-sm-1 control-label"><i class="linecons-calendar"></i></label>
+                                                <div class="col-sm-7 pad_rg0 pad_lf0">
+                                                    <input readonly style="border:none;pointer-events: none;width:100px;" type="text" placeholder='Start Date' id="fromDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.fromDate" max-date="viewDispatch.searchParams.endDate" name='fromDate' ng-change="viewDispatch.applySearch()">
                                                 </div>
+                                                <span class="col-sm-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.fromDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.fromDate = undefined;viewDispatch.applySearch()"></i></span>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="form-group col-sm-5 pad0">
-                                            <div class="form-group col-md-7 col-sm-3 col-xs-12 pull-right no-pad">
-                                                <input type="search" class="form-control input-sm" ng-model="viewDispatch.searchParams.searchString" placeholder="Search by Patient Name" ng-change="viewDispatch.applySearch()">
-                                            </div> 
-                                            <div class='form-group col-md-6 col-sm-3 col-xs-12 pull-left'>
-                                                <select class="form-control input-sm" ng-model="viewDispatch.searchParams.status"  ng-change="viewDispatch.applySearch()">
-                                                    <option value="">Select Status</option>
-                                                    <option value="Active">Active</option>
-                                                    <option value="Inactive">Inactive</option>
-                                                    <option value="Expired">Expired</option>
-                                                    <option value="Assigned">Assigned</option>
-                                                </select>
-                                            </div>
-                                        </div>                                     
-                                    </div>   
-                                </div>
+                                    <div class="form-group col-sm-5 pad0 pull-right">
+                                        <div class="form-group col-md-7 col-sm-3 col-xs-12 pull-right no-pad">
+                                            <input type="search" class="form-control input-sm" ng-model="viewDispatch.searchParams.searchString" placeholder="Search by Patient Name" ng-change="viewDispatch.applySearch()">
+                                        </div> 
+                                        <div class='form-group col-md-6 col-sm-3 col-xs-12 pull-left'>
+                                            <select class="form-control input-sm" ng-model="viewDispatch.searchParams.status"  ng-change="viewDispatch.applySearch()">
+                                                <option value="">Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                                <option value="Expired">Expired</option>
+                                                <option value="Assigned">Assigned</option>
+                                            </select>
+                                        </div>
+                                    </div>                                     
+                                </div>   
                             </div>
+
                             <div class="row">  </div>
                             <div class="dataTables_wrapper form-inline dt-bootstrap">
                                 <div class="table-responsive scroll">
