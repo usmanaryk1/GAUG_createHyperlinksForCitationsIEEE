@@ -374,7 +374,7 @@
                     });
                 }, 200);
                 $rootScope.patientPopup = $modal.open({
-                    templateUrl: modal_id,
+                    templateUrl: 'app/calendar/views/patient_calendar_modal.html',
                     size: modal_size,
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
