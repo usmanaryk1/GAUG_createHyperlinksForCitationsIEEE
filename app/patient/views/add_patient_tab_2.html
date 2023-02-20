@@ -114,8 +114,8 @@
                             Zip Code
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-40" name="ZipCode" ng-model="addPatient.patient.patientAddress.zipcode" type="text"
-                                   data-validate="required" data-message-required="Please enter Zip Code."/>
+                            <input numbers-only="true" maxlength="8" class="form-control" id="field-40" name="ZipCode" ng-model="addPatient.patient.patientAddress.zipcode" type="text"
+                                   data-validate="required,maxlength[8]" data-message-required="Please enter Zip Code."/>
                         </div>
                     </div>
                     <div class="form-group-separator">
