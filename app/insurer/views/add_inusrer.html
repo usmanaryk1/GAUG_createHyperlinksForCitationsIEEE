@@ -104,7 +104,7 @@
                                 Contact Number
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-15" name="ContactNumber" type="text" ng-model="addInsurer.insurerObj.contactNumber"
+                                <input numbers-only="true" maxlength="10" class="form-control" id="field-15" name="ContactNumber" type="text" ng-model="addInsurer.insurerObj.contactNumber"
                                        data-validate="required,number,minlength[10]"  data-message-required="Please enter Contact Number." data-message-maxlength="This field must be 10 digits">
                             </div>
                         </div>

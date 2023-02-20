@@ -99,7 +99,7 @@
                             Phone
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-33" name="Phone" type="text" ng-model="addPatient.patient.phone" 
+                            <input numbers-only="true" maxlength="10" class="form-control" id="field-33" name="Phone" type="text" ng-model="addPatient.patient.phone" 
                                    data-validate="required,number,minlength[10],maxlength[10]"
                                    data-message-required="Please enter Phone Number." data-message-minlength="This field must be 10 digits" data-message-maxlength="This field must be 10 digits"/>
                         </div>
