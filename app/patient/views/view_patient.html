@@ -69,7 +69,7 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>{{patient.dateOfBirth}}</td>
+                                                    <td>{{patient.dateOfBirth|date :dateFormat}}</td>
                                                     <td>{{patient.phone| tel }}</td>
                                                     <td>
                                                         <div ng-show="patient.patientAddress">
