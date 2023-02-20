@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <div class="mwl-panel-filter row" style='background-color: transparent;padding-left: 23px'   ng-if="calendar.calendarView == 'week'">
+        <div class="mwl-panel-filter row" style='background-color: transparent;padding-left: 23px' ng-if="calendar.calendarView == 'week'" ng-form="filterForm">
             <div class="row">
 
             </div>
@@ -107,7 +107,7 @@
                 <div class="col-md-4" ng-if='calendar.isEmployeeSearchPage'>
                     <label>Distance in Miles</label>
                     <input class="form-control" placeholder="Distance" name="Distance" type="text" maxlength="20" 
-                           ng-model="calendar.searchParams.distance"/>
+                           ng-model="calendar.searchParams.distance" numbers-only negativeallowed="false" decimalallowed="true"/>
                 </div>
                 <div class="col-md-4" ng-if='!calendar.isEmployeeSearchPage'>
                     <label>Employees</label>
