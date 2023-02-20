@@ -27,6 +27,7 @@
                 }
 
             }).catch(function (data, status) {
+                toastr.error("Failed to retrieve patients.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -73,9 +74,10 @@
                             break;
                         }
                     }
+                    toastr.success("Patient deleted.");
                     $rootScope.dischargePatientModel.close();
                 }).catch(function (data, status) {
-
+                    toastr.error("Patient cannot be deleted.");
                     $rootScope.dischargePatientModel.close();
                 });
             };
@@ -101,9 +103,10 @@
                             break;
                         }
                     }
+                    toastr.success("Patient discharged.");
                     $rootScope.dischargePatientModel.close();
                 }).catch(function (data, status) {
-
+                    toastr.error("Patient cannot be discharged.");
                     $rootScope.dischargePatientModel.close();
                 });
             };

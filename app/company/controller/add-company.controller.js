@@ -14,6 +14,8 @@
                     }
                 }
 
+            }).catch(function(){
+                toastr.error("Failed to retrieve Company Information.");
             });
         };
 
@@ -25,6 +27,7 @@
                     companyObjToSave.federalId = JSON.stringify(companyObjToSave.federalId);
                 }
                 CompanyDAO.save(companyObjToSave).then(function() {
+                    toastr.success("Company Information saved.");
                     ctrl.retrieveCompany();
                 });
             }
