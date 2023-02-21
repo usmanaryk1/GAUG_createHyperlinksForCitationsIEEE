@@ -1,5 +1,5 @@
 (function () {
-    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO) {
+    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService) {
 
         var ctrl = this;
 
@@ -383,6 +383,9 @@
                 if (data != null && data.eventType == null) {
                     $rootScope.patientPopup.todayDate = data.startDate;
                 }
+
+                $rootScope.patientPopup.dispatchClicked = false;
+                $rootScope.patientPopup.positions = ctrl.positions;
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
                 $rootScope.patientPopup.reasons = ontime_data.patientReasons;
@@ -390,6 +393,7 @@
                 $rootScope.patientPopup.eventTypes = ontime_data.eventTypes;
                 $rootScope.patientPopup.recurranceTypes = ontime_data.recurranceTypes;
                 $rootScope.patientPopup.patient = angular.copy(patientObj);
+                $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn};
                 if (data == null) {
                     $rootScope.patientPopup.isNew = true;
                     $rootScope.patientPopup.showPatient = true;
@@ -407,6 +411,11 @@
                         }
                         data.isEdited = true;
                         $rootScope.patientPopup.data = data;
+                        if ($rootScope.patientPopup.data.employeeId == null && $rootScope.patientPopup.data.eventType == 'S') {
+                            $rootScope.patientPopup.isOpenCase = true;
+                        } else {
+                            $rootScope.patientPopup.isOpenCase = false;
+                        }
                         if (data.eventType != 'U')
                             $rootScope.patientPopup.data.applyTo = "SINGLE";
                     }
@@ -584,6 +593,16 @@
                         $rootScope.paginationLoading = true;
                         PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
                             patientObj = res[0];
+                            if ($rootScope.patientPopup.searchParams != null) {
+                                $rootScope.patientPopup.searchParams.languages = [];
+                                var languages = patientObj.languagesSpoken.split(",");
+                                if (languages != null && languages.length > 0) {
+                                    angular.forEach(languages, function (language) {
+                                        $rootScope.patientPopup.searchParams.languages.push(language);
+                                    });
+                                }
+                                $rootScope.patientPopup.searchParams.sex = patientObj.gender;
+                            }
                             if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
                                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                             }
@@ -688,7 +707,24 @@
                 } else if (ctrl.calendarView == 'month') {
                     $rootScope.patientPopup.patientChanged(ctrl.viewPatient.id, false, true);
                 }
+                $rootScope.patientPopup.dispatchBtnClick = function () {
+                    $rootScope.patientPopup.dispatchClicked = true;
+                    if ($rootScope.patientPopup.data.forLiveIn != null) {
+                        $rootScope.patientPopup.searchParams.forLiveIn = $rootScope.patientPopup.data.forLiveIn;
+                    }
+                };
+                $rootScope.patientPopup.searchParamChanged = function () {
+                    var searchJsonToSend = angular.copy($rootScope.patientPopup.searchParams);
+                    if (searchJsonToSend != null && searchJsonToSend.languages != null) {
+                        searchJsonToSend.languages = searchJsonToSend.languages.toString();
+                    }
+                    if (searchJsonToSend != null && searchJsonToSend.positionIds != null) {
+                        searchJsonToSend.positionIds = searchJsonToSend.positionIds.toString();
+                    }
+                    console.log(JSON.stringify(searchJsonToSend));
+                };
             }
+
             $rootScope.maskLoading();
             var careTypes;
             var careEmployeeMap;
@@ -757,10 +793,22 @@
             delete ctrl.monthPatient;
             $state.go('app.patient-calendar', {id: patient.id});
         };
+        ctrl.retrieveAllPositions = function () {
+            PositionDAO.retrieveAll({}).then(function (res) {
+                ctrl.positions = res;
+                ctrl.positionMap = {};
+                if (res && res.length > 0) {
+                    angular.forEach(res, function (position) {
+                        ctrl.positionMap[position.id] = position.position;
+                    });
+                }
+            });
+        };
         ctrl.retrievePatients();
         ctrl.retrieveAllPatients();
         ctrl.retrieveAllCoordinators();
+        ctrl.retrieveAllPositions();
     }
 
-    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", PatientCalendarCtrl]);
+    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", "PositionDAO", "$formService", PatientCalendarCtrl]);
 })();
