@@ -36,7 +36,7 @@
             delete: {
                 method: 'GET'
             },
-            deactivate:{
+            changestatus:{
                 method: 'GET'
             }
         });
@@ -65,8 +65,8 @@
             delete: function (data) {
                 return api.delete({action:'delete', subAction:data.id}).$promise;
             },
-            deactivate: function (data) {
-                return api.delete({action:'deactivate', subAction:data.id}).$promise;
+            changestatus: function (data) {
+                return api.changestatus({action:'changestatus', subAction:data.id, status:data.status}).$promise;
             },
         };
     };

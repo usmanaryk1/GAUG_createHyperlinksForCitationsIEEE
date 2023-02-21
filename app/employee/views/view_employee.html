@@ -76,7 +76,8 @@
                                         <td>
                                             <a class="btn icon-left fa fa-pencil edit_button" href="" ng-click="viewEmployee.edit(emp)"><span class="ed_b">Edit</span></a> 
                                             <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewEmployee.openDeleteModal(emp, 'deleteModel')" ><span class="ed_b">Dlt</span></a>
-                                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status !='I'" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')"><span class="ed_b">Deactivate</span></a>
+                                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status =='a'" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')"><span class="ed_b">Deactivate</span></a>
+                                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status =='i'" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')"><span class="ed_b">Activate</span></a>
                                         </td>
                                         </tr>
                                         </tbody>
@@ -211,5 +212,21 @@
     <div class="modal-footer">
     <button type="button" class="btn btn-success" ng-click="deactivateEmployeeModel.deactivate(deactivateEmployeeModel.employee);">Yes</button>
     <button type="button" class="btn btn-red" ng-click="deactivateEmployeeModel.dismiss();">No</button>
+    </div>
+</script>
+<script type="text/ng-template" id="activateModel">
+    <div class="modal-header">		
+    <h4 class="modal-title">{{activateEmployeeModel.employee.lName}} {{activateEmployeeModel.employee.fName}} {{activateEmployeeModel.employee.middleInitial}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to activate this Employee?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">No</button>
     </div>
 </script>
