@@ -395,11 +395,11 @@
                 <div class="input-group">
 
                     <label class="cbr-inline">
-                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="patientPopup.searchParams.drives" value="Y" ng-change="patientPopup.searchParamChanged()">
+                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="patientPopup.searchParams.drives" ng-value="true" ng-change="patientPopup.searchParamChanged()">
                         Yes
                     </label>
                     <label class="cbr-inline">
-                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="patientPopup.searchParams.drives" value="N" ng-change="patientPopup.searchParamChanged()">
+                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="patientPopup.searchParams.drives" ng-value="false" ng-change="patientPopup.searchParamChanged()">
                         No
                     </label>
                 </div>
@@ -410,13 +410,13 @@
         <div class='row'>
             <div class="col-md-12">
                 <label><b>Dispatch Message</b></label>
-                <textarea disabled class='form-control'>Dispatch message goes here.</textarea>
+                <textarea disabled class='form-control' ng-model='patientPopup.dispatchMessage'></textarea>
             </div>
         </div>
         <div class='form-group-separator'></div>
         <div class='row'>
             <div class="col-md-12">
-                <b>99</b> Employees will receive this dispatch.
+                <b>{{patientPopup.employeeCount}}</b> Employees will receive this dispatch.
             </div>
         </div>
     </form>

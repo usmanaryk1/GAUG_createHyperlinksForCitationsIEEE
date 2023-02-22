@@ -14,6 +14,15 @@
             },
             delete: {
                 method: 'DELETE'
+            },
+            getEmployeeCountForDispatch: {
+                method: 'POST',
+                params: {
+                    action: 'employeecount'
+                },
+                transformResponse: function (res) {
+                    return {count: res};
+                }
             }
         });
         return {
@@ -26,11 +35,14 @@
             save: function (data) {
                 return api.save(data).$promise;
             },
-            saveResponse: function (params,data) {
-                return api.saveResponse({action: params.id,subAction:"response"}, data).$promise;
+            saveResponse: function (params, data) {
+                return api.saveResponse({action: params.id, subAction: "response"}, data).$promise;
             },
             delete: function (data) {
                 return api.delete({action: data.id}).$promise;
+            },
+            getEmployeeCountForDispatch: function (data) {
+                return api.getEmployeeCountForDispatch(data).$promise;
             }
         };
     };

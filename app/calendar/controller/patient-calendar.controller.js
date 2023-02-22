@@ -1,7 +1,8 @@
 (function () {
-    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService) {
+    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService, DispatchDAO) {
 
         var ctrl = this;
+        var dispatchMessage = "Open Case, $age $sex in $city, $state - $date from $startTime to $endTime $liveIn. Accept case now using OnTime or contact $patientCoordinator for more information.";
 
         ctrl.patient_list = [];
 
@@ -591,7 +592,7 @@
                     }
                     if (!($rootScope.patientPopup.data.eventType != 'S' && !editMode && !viewMode)) {
                         $rootScope.paginationLoading = true;
-                        PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
+                        PatientDAO.getPatientsForSchedule({patientIds: patientId, addressRequired: true}).then(function (res) {
                             patientObj = res[0];
                             if ($rootScope.patientPopup.searchParams != null) {
                                 $rootScope.patientPopup.searchParams.languages = [];
@@ -709,9 +710,13 @@
                 }
                 $rootScope.patientPopup.dispatchBtnClick = function () {
                     $rootScope.patientPopup.dispatchClicked = true;
+
+                    $rootScope.patientPopup.dispatchMessage = getDispatchMessage();
+
                     if ($rootScope.patientPopup.data.forLiveIn != null) {
                         $rootScope.patientPopup.searchParams.forLiveIn = $rootScope.patientPopup.data.forLiveIn;
                     }
+                    $rootScope.patientPopup.searchParamChanged();
                 };
                 $rootScope.patientPopup.searchParamChanged = function () {
                     var searchJsonToSend = angular.copy($rootScope.patientPopup.searchParams);
@@ -721,7 +726,9 @@
                     if (searchJsonToSend != null && searchJsonToSend.positionIds != null) {
                         searchJsonToSend.positionIds = searchJsonToSend.positionIds.toString();
                     }
-                    console.log(JSON.stringify(searchJsonToSend));
+                    DispatchDAO.getEmployeeCountForDispatch(searchJsonToSend).then(function (res) {
+                        $rootScope.patientPopup.employeeCount = res.count;
+                    });
                 };
             }
 
@@ -808,7 +815,20 @@
         ctrl.retrieveAllPatients();
         ctrl.retrieveAllCoordinators();
         ctrl.retrieveAllPositions();
+        var getDispatchMessage = function () {
+            var dispatchMessageToDisplay = angular.copy(dispatchMessage);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$age", moment().diff($rootScope.patientPopup.patient.dateOfBirth, 'years') + ' Years ');
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$sex", ($rootScope.patientPopup.patient.gender === 'M' ? 'Male' : 'Female'));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$city", $rootScope.patientPopup.patient.patientAddress.city);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$state", $rootScope.patientPopup.patient.patientAddress.state);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$date", moment($rootScope.patientPopup.data.startDate).format("dddd, MMMM Do YYYY"));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$startTime", $rootScope.patientPopup.data.startTime);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$endTime", $rootScope.patientPopup.data.endTime);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$liveIn", ($rootScope.patientPopup.data.forLiveIn == true ? ' - live in' : ''));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$patientCoordinator", $rootScope.patientPopup.patient.careCordinator);
+            return dispatchMessageToDisplay;
+        }
     }
 
-    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", "PositionDAO", "$formService", PatientCalendarCtrl]);
+    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", "PositionDAO", "$formService", "DispatchDAO", PatientCalendarCtrl]);
 })();
