@@ -162,6 +162,7 @@
 
         function tab1DataInit() {
             ctrl.formDirty = false;
+            $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
             //to set edit mode in tab change
             if (!$state.params.id || $state.params.id === '') {
                 ctrl.editMode = false;
@@ -184,6 +185,7 @@
         }
         function tab2DataInit() {
             ctrl.formDirty = false;
+            $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     googleMapFunctions(ctrl.patient.locationLatitude, ctrl.patient.locationLongitude);
@@ -196,6 +198,7 @@
         }
         function tab3DataInit() {
             ctrl.formDirty = false;
+            $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
@@ -212,6 +215,7 @@
         }
         function tab4DataInit() {
             ctrl.formDirty = false;
+            $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (ctrl.patient.insuranceProviderId && ctrl.patient.insuranceProviderId !== null) {
@@ -236,6 +240,7 @@
         }
         function tab5DataInit() {
             ctrl.formDirty = false;
+            $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.patient.subscriberInfo || ctrl.patient.subscriberInfo === null

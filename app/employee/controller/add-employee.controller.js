@@ -251,6 +251,7 @@
 
         ctrl.tab3DataInit = function() {
             ctrl.formDirty = false;
+            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function() {
                 if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
                     ctrl.employee.employeeDocumentId = {};
@@ -266,7 +267,7 @@
 
         ctrl.tab2DataInit = function() {
             ctrl.formDirty = false;
-
+            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
@@ -289,6 +290,7 @@
         };
         ctrl.tab1DataInit = function() {
             ctrl.formDirty = false;
+            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             //to set edit mode in tab change
             if (!$state.params.id || $state.params.id === '') {
                 ctrl.editMode = false;

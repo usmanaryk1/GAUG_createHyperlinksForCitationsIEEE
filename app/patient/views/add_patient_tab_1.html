@@ -20,7 +20,7 @@
                             First Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-28" name="FirstName" type="text" 
+                            <input class="form-control" id="field-28" name="FirstName" type="text" maxlength="50"
                                    ng-model="addPatient.patient.fName" data-validate="required" data-message-required="Please enter First Name." />
                         </div>
                     </div>
@@ -31,7 +31,8 @@
                             Middle Initial
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-29" name="MiddleInitial" type="text" ng-model="addPatient.patient.middleInitial"/>
+                            <input class="form-control" id="field-29" name="MiddleInitial" type="text" maxlength="50"
+                                   ng-model="addPatient.patient.middleInitial"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -41,7 +42,8 @@
                             Last Name
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-30" name="LastName" type="text" ng-model="addPatient.patient.lName" data-validate="required" data-message-required='Please enter Last Name.'/>
+                            <input class="form-control" id="field-30" name="LastName" type="text" maxlength="50"
+                                   ng-model="addPatient.patient.lName" data-validate="required" data-message-required='Please enter Last Name.'/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -51,7 +53,8 @@
                             Name Suffix
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-31" name="NameSuffix" type="text" ng-model="addPatient.patient.nameSuffix"/>
+                            <input class="form-control" id="field-31" name="NameSuffix" type="text" maxlength="50"
+                                   ng-model="addPatient.patient.nameSuffix"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -164,7 +167,8 @@
                             Care Coordinator
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-34" name="CareCoordinator" type="text" ng-model='addPatient.patient.careCordinator'
+                            <input class="form-control" id="field-34" name="CareCoordinator" type="text" maxlength="255"
+                                   ng-model='addPatient.patient.careCordinator'
                                    data-validate="required" data-message-required="Please enter Care Coordinator or Emergency Contact Name."/>
                         </div>
                     </div>
@@ -175,7 +179,8 @@
                             Care Coordinator Contact
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="field-35" name="Care4CoordinatorContact" type="text" ng-model='addPatient.patient.careCordinatorContact' 
+                            <input class="form-control" id="field-35" name="Care4CoordinatorContact" type="text" maxlength="45"
+                                   ng-model='addPatient.patient.careCordinatorContact' 
                                    data-validate="required" data-message-required="Please enter Care Coordinator or Emergency Contact Phone Number or Email Address."/>
                         </div>
                     </div>
