@@ -393,12 +393,12 @@
                 $rootScope.patientPopup.employees = [];
                 $rootScope.patientPopup.eventTypes = ontime_data.eventTypes;
                 $rootScope.patientPopup.recurranceTypes = ontime_data.recurranceTypes;
-                $rootScope.patientPopup.patient = angular.copy(patientObj);
-                $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn};
+                $rootScope.patientPopup.patient = angular.copy(patientObj);                
                 if (data == null) {
                     $rootScope.patientPopup.isNew = true;
                     $rootScope.patientPopup.showPatient = true;
                 } else {
+                    $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn};
                     if (data.eventType == null) {
                         $rootScope.patientPopup.isNew = true;
                         $rootScope.patientPopup.showPatient = false;
