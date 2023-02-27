@@ -83,18 +83,18 @@
         };
 
         ctrl.calculateTotalCharges = function () {
+            var totalCharges = 0;
             if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                var totalCharges = 0;
                 angular.forEach(ctrl.manualClaimObj.serviceLines, function (item) {
                     if (!isNaN(item.serviceTotalBill)) {
                         totalCharges += parseFloat(item.serviceTotalBill);
                     }
                 });
-                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2);
+                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g,"");
             } else {
                 if (!ctrl.manualClaimObj)
                     ctrl.manualClaimObj = {};
-                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2);
+                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g,"");
             }
         };
         if ($state.params.id && $state.params.id !== '') {
@@ -210,10 +210,9 @@
                 }
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
-                    ctrl.billingClaimObj.totalCosts = 0;
+                    ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
                     ctrl.billingClaimObj.authorizedCodes = [];
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                        ctrl.billingClaimObj.totalCosts += serviceLine.serviceTotalBill ? serviceLine.serviceTotalBill : 0;
                         if (ctrl.billingClaimObj.authorizedCodes.indexOf(serviceLine.serviceProcedureCode) === -1) {
                             ctrl.billingClaimObj.authorizedCodes.push(serviceLine.serviceProcedureCode);
                         }
@@ -224,7 +223,11 @@
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat)}, ctrl.billingClaimObj)
                         .then(function (res) {
-                            $state.go('app.billing_batch', {id: res.id});
+                            toastr.success("Manual claim processed.");
+                            window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                            ctrl.manualClaimObj={};
+                            ctrl.manualClaimObj.serviceLines = [{}];
+                            $("#sboxit-1").select2("val", null);
                         }).catch(function () {
                     toastr.error("Can not process manual claim.");
                 });
