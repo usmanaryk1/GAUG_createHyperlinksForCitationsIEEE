@@ -16,7 +16,7 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-horizontal validate" novalidate="" id="add_inusrer_form" name="add_inusrer_form" role="form" ng-submit="addInsurer.saveInsurer()">
+                    <form class="form-horizontal validate" novalidate="" id="add_inusrer_form" name="add_inusrer_form" role="form" ng-submit="addInsurer.saveInsurer()" ng-init="addInsurer.initForm()">
                         <div class="row">
                             <div class="col-sm-12 pull-right">
                                 <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addInsurer.disableSaveButton">
@@ -35,7 +35,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="field-12" name="InsuranceName" type="text" ng-model="addInsurer.insurerObj.insuranceName"
-                                       data-validate="required"  data-message-required="Please enter Insurance Name.">
+                                       data-validate="required"  data-message-required="Please enter Insurance Name." maxlength="100">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -46,7 +46,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="field-13" name="BillingId" type="text"  ng-model="addInsurer.insurerObj.billingId"
-                                       data-validate="required"  data-message-required="Please enter Billing ID.">
+                                       data-validate="required"  data-message-required="Please enter Billing ID." maxlength="100">
 
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="sboxit-1" name="ediProcessor" ng-model="addInsurer.insurerObj.mdol"
-                                        data-validate="required"  data-message-required="Please select EDI Processor.">
+                                        data-validate="required"  data-message-required="Please select EDI Processor." maxlength="100">
                                     <option value="">
                                         Select
                                     </option>
@@ -76,7 +76,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="sboxit-1" name="PlanType" ng-model="addInsurer.insurerObj.planType"
-                                        data-validate="required"  data-message-required="Please select Plan Type.">
+                                        data-validate="required"  data-message-required="Please select Plan Type." >
                                     <option value="">
                                         Select
                                     </option>
@@ -121,7 +121,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="field-14" name="ContactName" type="text" ng-model="addInsurer.insurerObj.contactName"
-                                       data-validate="required"  data-message-required="Please enter Contact Name.">
+                                       data-validate="required"  data-message-required="Please enter Contact Name." maxlength="100">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -144,7 +144,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="field-16" name="ContactAddress" type="text" ng-model="addInsurer.insurerObj.contactAddress"
-                                       data-validate="required"  data-message-required="Please enter Contact Address.">
+                                       data-validate="required"  data-message-required="Please enter Contact Address." maxlength="255">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -155,7 +155,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="field-17" name="ContactEmail" type="text" ng-model="addInsurer.insurerObj.contactEmail"
-                                       data-validate="email"  data-message-email="Please enter valid Contact Email.">
+                                       data-validate="email"  data-message-email="Please enter valid Contact Email." maxlength="100">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -170,7 +170,7 @@
                                 <div flow-init="addInsurer.uploadFile" flow-file-added="addInsurer.fileAdded($file, $flow)" flow-file-success="addInsurer.fileUploaded($message,$file,$flow)" flow-files-submitted="addInsurer.fileSelected($file,$flow)" flow-file-error="addInsurer.fileError( $file, $message, $flow )">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <input type="file" id="contract_file" ng-model="addInsurer.insurerObj.contractFile" flow-btn name="contract_file" style="color:transparent" ng-disabled="addInsurer.disableUploadButton"/>
+                                            <input type="file" id="contract_file" ng-model="addInsurer.insurerObj.contractFile" flow-btn name="contract_file" style="color:transparent" ng-disabled="addInsurer.disableUploadButton" />
                                         </div>
                                         <div class="col-sm-9">
                                             <a style="color: blue;text-decoration: underline" ng-href="{{addInsurer.baseUrl}}file/download/{{addInsurer.companyCode}}/i/{{addInsurer.insurerObj.contractFile}}">{{addInsurer.insurerObj.contractFile}}</a>

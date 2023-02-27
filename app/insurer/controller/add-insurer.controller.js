@@ -1,4 +1,4 @@
-(function () {
+(function() {
     function AddInsurerCtrl($scope, $rootScope, $state, $modal, $timeout, InsurerDAO, CareTypeDAO) {
         var ctrl = this;
         ctrl.insurerObj = {insuranceCareTypeCollection: []};
@@ -6,6 +6,10 @@
         ctrl.fileObj = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.initForm = function() {
+            $("#add_inusrer_form input:text, #add_inusrer_form textarea").first().focus();
+        };
+
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -60,7 +64,7 @@
                     reqParam = 'save';
                 }
                 if (insurerToSave.insuranceCareTypeCollection != null) {
-                    angular.forEach(insurerToSave.insuranceCareTypeCollection, function (obj) {
+                    angular.forEach(insurerToSave.insuranceCareTypeCollection, function(obj) {
                         delete obj.id;
                     })
                 }
@@ -72,7 +76,7 @@
                     insurerToSave.contractEndDate = new Date(insurerToSave.contractEndDate);
                 }
                 InsurerDAO.update({action: reqParam, data: insurerToSave})
-                        .then(function (res) {
+                        .then(function(res) {
                             console.log(res);
                             if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
                                 $state.go('^.insurer', {id: res.id});
@@ -81,7 +85,7 @@
                             }
                             toastr.success("Insurance provider saved.");
                         })
-                        .catch(function () {
+                        .catch(function() {
                             //exception logic
                             toastr.error("Insurance provider cannot be saved.");
                             console.log('Insurer Object : ' + JSON.stringify(insurerToSave));
@@ -98,13 +102,13 @@
 
         //function called on page initialization.
         function pageInit() {
-            CareTypeDAO.retrieveAll().then(function (res) {
+            CareTypeDAO.retrieveAll().then(function(res) {
                 ctrl.careTypeList = res;
                 ctrl.careTypeIdMap = {};
-                angular.forEach(ctrl.careTypeList, function (obj) {
+                angular.forEach(ctrl.careTypeList, function(obj) {
                     ctrl.careTypeIdMap[obj.id] = obj;
                 });
-                $timeout(function () {
+                $timeout(function() {
                     $('#multi-select').multiSelect('refresh');
                 });
             }).catch(function() {
@@ -113,13 +117,13 @@
             });
             if (ctrl.editMode) {
                 ctrl.retrivalRunning = true;
-                InsurerDAO.get({id: $state.params.id}).then(function (res) {
+                InsurerDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.insurerObj = res;
 
                     if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
                         ctrl.insurerObj.insuranceCareTypeCollection = [];
                     } else {
-                        angular.forEach(ctrl.insurerObj.insuranceCareTypeCollection, function (obj) {
+                        angular.forEach(ctrl.insurerObj.insuranceCareTypeCollection, function(obj) {
                             ctrl.selectedCareTypes.push(obj.companyCaretypeId.id);
                         });
                     }
@@ -129,7 +133,7 @@
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
-                        finish: function () {
+                        finish: function() {
 
                         }
                     }); // showLoadingBar
@@ -146,7 +150,7 @@
         }
 
 // Open Simple Modal
-        ctrl.openModal = function (modal_id, modal_size, modal_backdrop)
+        ctrl.openModal = function(modal_id, modal_size, modal_backdrop)
         {
             $rootScope.careTypeModel = $modal.open({
                 templateUrl: modal_id,
@@ -156,8 +160,8 @@
             $rootScope.careTypeModel.careTypeObj = {};
             $rootScope.careTypeModel.careTypeObj.unit = "unit";
 
-            $rootScope.careTypeModel.save = function () {
-                $timeout(function () {
+            $rootScope.careTypeModel.save = function() {
+                $timeout(function() {
                     if ($('#care_type_form')[0].checkValidity()) {
                         $rootScope.careTypeModel.dismiss();
 //                        console.log(ctrl.selectedCareTypes);
@@ -171,9 +175,9 @@
                 });
             };
 
-            $rootScope.careTypeModel.cancel = function () {
+            $rootScope.careTypeModel.cancel = function() {
                 ctrl.selectedCareTypes.splice(ctrl.selectedCareTypes.indexOf(ctrl.newSelectedType), 1);
-                $timeout(function () {
+                $timeout(function() {
                     $("#multi-select").multiSelect('refresh');
                 });
                 $rootScope.careTypeModel.close();
@@ -182,10 +186,10 @@
         };
         ctrl.pageInitCall();
 
-        $scope.$watch(function () {
+        $scope.$watch(function() {
             return ctrl.selectedCareTypes;
-        }, function (newValue, oldValue) {
-            $timeout(function () {
+        }, function(newValue, oldValue) {
+            $timeout(function() {
                 $("#multi-select").multiSelect('refresh');
             });
             if (ctrl.displayCareTypeModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
@@ -209,13 +213,13 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.fileSelected = function (file, flow) {
+        ctrl.fileSelected = function(file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.fileUploaded = function (response, file, flow) {
+        ctrl.fileUploaded = function(response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -225,7 +229,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
         };
-        ctrl.fileError = function ($file, $message, $flow) {
+        ctrl.fileError = function($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
@@ -235,7 +239,7 @@
             ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
+        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
             ctrl.insurerObj.contractFile = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.fileObj.errorMsg = "Please upload a valid file.";

@@ -889,7 +889,9 @@ angular.module('xenon.directives', []).
                 {
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
-
+                    $(el).keydown(function(e) {
+                        return false;
+                    });
                     var $this = angular.element(el),
                             opts = {
                                 format: attrDefault($this, 'format', 'mm/dd/yyyy'),
