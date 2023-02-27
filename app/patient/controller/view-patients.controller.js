@@ -24,6 +24,9 @@
                 }); // showLoadingBar
                 if (res) {
                     ctrl.patientList = res;
+                    if(res.length ===0){
+                        toastr.error("No data in the system.");
+                    }
                 }
 
             }).catch(function (data, status) {
@@ -35,7 +38,7 @@
 
                     }
                 }); // showLoadingBar
-                ctrl.patientList = ontimetest.patients;
+//                ctrl.patientList = ontimetest.patients;
             });
         }
 

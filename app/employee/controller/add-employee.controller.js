@@ -121,6 +121,7 @@
                         updateEmployee(reqParam, employeeToSave);
                     }
                 } else {
+                    employeeToSave.orgCode = ontimetest.company_code;
                     ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
                     updateEmployee(reqParam, employeeToSave);
