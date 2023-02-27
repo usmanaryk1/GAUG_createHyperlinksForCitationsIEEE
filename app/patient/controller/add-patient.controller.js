@@ -80,9 +80,9 @@
                 if(patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth){
                     patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
                 }
-//                if (patientToSave.dateOfBirth) {
-//                    patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
-//                }
+                if (patientToSave.dateOfBirth) {
+                    patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
+                }
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
