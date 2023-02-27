@@ -83,6 +83,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
                         ]);
                     },
                 }
@@ -194,6 +195,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
                         ]);
                     },
                 }
@@ -517,6 +519,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
                         ]);
                     },
                 }
