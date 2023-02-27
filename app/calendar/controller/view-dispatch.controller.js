@@ -8,7 +8,7 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
 
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc', status: ''};
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc', status: 'active'};
 
         ctrl.dispatchList = [];
 
