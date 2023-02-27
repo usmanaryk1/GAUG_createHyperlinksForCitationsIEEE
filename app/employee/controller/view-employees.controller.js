@@ -1,4 +1,4 @@
-(function() {
+(function () {
     function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope) {
         var ctrl = this;
         $rootScope.selectEmployeeModel = {};
@@ -11,23 +11,24 @@
         ctrl.edit = edit;
 
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveAll({subAction: ctrl.viewType}).then(function(res) {
+            EmployeeDAO.retrieveAll({subAction: ctrl.viewType}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
                     }
                 }); // showLoadingBar
                 ctrl.employeeList = res;
-            }).catch(function(data, status) {
+            }).catch(function (data, status) {
                 toastr.error("Failed to retrieve employees.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 }); // showLoadingBar
+                ctrl.employeeList = ontimetest.employees;
                 console.log('Error in retrieving data')
             });
         }
@@ -37,7 +38,7 @@
         }
 
         ctrl.retrieveEmployees();
-        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -48,17 +49,17 @@
 
         };
 
-        ctrl.openDeleteModal = function(employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.deactivateEmployeeModel = $modal.open({
+            $rootScope.deleteEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
-            $rootScope.deactivateEmployeeModel.employee = employee;
+            $rootScope.deleteEmployeeModel.employee = employee;
 
-            $rootScope.deactivateEmployeeModel.deactivate = function(employee) {
-                EmployeeDAO.delete({id: employee.id}).then(function(res) {
+            $rootScope.deleteEmployeeModel.delete = function (employee) {
+                EmployeeDAO.delete({id: employee.id}).then(function (res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -68,15 +69,15 @@
                         }
                     }
                     toastr.success("Employee deleted.");
-                    $rootScope.deactivateEmployeeModel.close();
-                }).catch(function(data, status) {
+                    $rootScope.deleteEmployeeModel.close();
+                }).catch(function (data, status) {
                     toastr.error("Failed to delete employee.");
-                    $rootScope.deactivateEmployeeModel.close();
+                    $rootScope.deleteEmployeeModel.close();
                 });
             };
 
         };
-        ctrl.openDeactivateModal = function(employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeactivateModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deactivateEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -85,8 +86,8 @@
             });
             $rootScope.deactivateEmployeeModel.employee = employee;
 
-            $rootScope.deactivateEmployeeModel.deactivate = function(employee) {
-                EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function(res) {
+            $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
+                EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function (res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -97,13 +98,13 @@
                     }
                     toastr.success("Employee deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error("Employee cannot be deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 });
             };
         };
-        ctrl.openActivateModal = function(employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openActivateModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.activateEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -112,8 +113,8 @@
             });
             $rootScope.activateEmployeeModel.employee = employee;
 
-            $rootScope.activateEmployeeModel.activate = function(employee) {
-                EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function(res) {
+            $rootScope.activateEmployeeModel.activate = function (employee) {
+                EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -124,7 +125,7 @@
                     }
                     toastr.success("Employee activated.");
                     $rootScope.activateEmployeeModel.close();
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error("Employee cannot be activated.");
                     $rootScope.activateEmployeeModel.close();
                 });

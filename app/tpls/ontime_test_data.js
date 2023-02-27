@@ -30,6 +30,7 @@ ontimedata = {
             careCordinatorContact: '(130) 400-8000',
             insuranceProvider: 'National Insurance.',
             insuranceId: '1223343',
+            status:'d',
             subscriberInfo: {
                 FName: 'Aichael',
                 middleInitial: 'ami',
@@ -50,6 +51,7 @@ ontimedata = {
             staffingCordinatorId: '1',
             nurseCaseManagerId: '1',
             careCordinatorId: '1',
+             status:'a',
             addressDataId: {
                 address1: 'Avenue #1',
                 address2: 'Newyork',
@@ -86,6 +88,7 @@ ontimedata = {
             dateOfBirth: '05/12/1984',
             gender: 'M',
             phone: '2304008002',
+             status:'d',
             addressDataId: {
                 address1: 'Avenue #1',
                 address2: 'Newyork',
@@ -133,7 +136,7 @@ ontimedata = {
             "zipcode": "2036",
             "role": "Administrator",
             "position": "Admin",
-            "status": "OK",
+            "status": "i",
             "timeSheetList": []
         }, {"id": 2,
             wages: "H",
@@ -152,7 +155,7 @@ ontimedata = {
             "zipcode": "2036",
             "role": "Administrator",
             "position": "Personal Care",
-            "status": "OK",
+            "status": "a",
             "timeSheetList": []
         }, {"id": 3,
             wages: "H",
@@ -171,7 +174,7 @@ ontimedata = {
             "zipcode": "2036",
             "role": "Staff",
             "position": "Admin",
-            "status": "OK",
+            "status": "i",
             "timeSheetList": []
         }],
     dailyAttendance: [

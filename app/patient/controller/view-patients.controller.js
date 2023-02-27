@@ -13,11 +13,11 @@
         ctrl.edit = edit;
 
         function retrievePatientsData() {
-            PatientDAO.retrieveAll({status: ctrl.viewType}).then(function(res) {
+            PatientDAO.retrieveAll({status: ctrl.viewType}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
 
@@ -31,11 +31,11 @@
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 }); // showLoadingBar
-//                ctrl.patientList = ontimetest.patients;
+                ctrl.patientList = ontimetest.patients;
             });
         }
 
@@ -57,14 +57,14 @@
 
         ctrl.openDeleteModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.dischargePatientModel = $modal.open({
+            $rootScope.deletePatientModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
             });
-            $rootScope.dischargePatientModel.patient = patient;
+            $rootScope.deletePatientModel.patient = patient;
 
-            $rootScope.dischargePatientModel.delete = function (patient) {
+            $rootScope.deletePatientModel.delete = function (patient) {
                 PatientDAO.delete({id: patient.id}).then(function (res) {
                     var length = ctrl.patientList.length;
 
@@ -75,10 +75,10 @@
                         }
                     }
                     toastr.success("Patient deleted.");
-                    $rootScope.dischargePatientModel.close();
+                    $rootScope.deletePatientModel.close();
                 }).catch(function (data, status) {
                     toastr.error("Patient cannot be deleted.");
-                    $rootScope.dischargePatientModel.close();
+                    $rootScope.deletePatientModel.close();
                 });
             };
         };
@@ -88,7 +88,7 @@
             $rootScope.dischargePatientModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop                
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
 
             $rootScope.dischargePatientModel.patient = patient;
