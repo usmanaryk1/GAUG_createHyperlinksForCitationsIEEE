@@ -422,6 +422,6 @@
     </form>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
-        <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openPasswordModal('edit');">Send</button>
+        <button type="submit" class="btn btn-success" ng-click="patientPopup.sendDispatch();">Send</button>
     </div>
 </div>

@@ -393,12 +393,12 @@
                 $rootScope.patientPopup.employees = [];
                 $rootScope.patientPopup.eventTypes = ontime_data.eventTypes;
                 $rootScope.patientPopup.recurranceTypes = ontime_data.recurranceTypes;
-                $rootScope.patientPopup.patient = angular.copy(patientObj);                
+                $rootScope.patientPopup.patient = angular.copy(patientObj);
                 if (data == null) {
                     $rootScope.patientPopup.isNew = true;
                     $rootScope.patientPopup.showPatient = true;
                 } else {
-                    $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn};
+                    $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn, careTypeId: data.companyCareTypeId};
                     if (data.eventType == null) {
                         $rootScope.patientPopup.isNew = true;
                         $rootScope.patientPopup.showPatient = false;
@@ -603,6 +603,7 @@
                                     });
                                 }
                                 $rootScope.patientPopup.searchParams.sex = patientObj.gender;
+                                $rootScope.patientPopup.searchParams.patientId = patientObj.id;
                             }
                             if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
                                 $rootScope.patientPopup.patient = angular.copy(patientObj);
@@ -728,6 +729,13 @@
                     }
                     DispatchDAO.getEmployeeCountForDispatch(searchJsonToSend).then(function (res) {
                         $rootScope.patientPopup.employeeCount = res.count;
+                    });
+                };
+                $rootScope.patientPopup.sendDispatch = function () {
+                    var dispatchObj = angular.copy($rootScope.patientPopup.searchParams);
+                    DispatchDAO.save(dispatchObj).then(function (res) {
+                        toastr.success("Dispatch message has been sent to all filtered employees.");
+                        $rootScope.patientPopup.close();
                     });
                 };
             }

@@ -788,7 +788,9 @@
                             ctrl.searchParams.patientId = null;
                             ctrl.patientObj = null;
                             $('#patientDropdown').select2('val', null);
-                            ctrl.searchParams.location = location;
+                            var locationJson = JSON.parse(JSON.stringify(location));
+                            ctrl.searchParams.longitude = locationJson.lng;
+                            ctrl.searchParams.latitude = locationJson.lat;
                             addGreenMarker(location);
                             patientMarker.setVisible(true);
                         });
@@ -830,7 +832,8 @@
                 ctrl.selectedPatient = patient;
                 ctrl.searchParams.patientId = patient.id;
                 ctrl.location = null;
-                ctrl.searchParams.location = null;
+                ctrl.searchParams.longitude = null;
+                ctrl.searchParams.latitude = null;
                 ctrl.applySearch();
             }
             ctrl.retrieveAllPatients = function () {
