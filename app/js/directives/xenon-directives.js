@@ -893,12 +893,11 @@ angular.module('xenon.directives', []).
                 {
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
-                    $(el).keydown(function (e) {
-                        var keyCode = e.keyCode || e.which;
-                        if (keyCode == 9) {
-                            return true;
-                        } else {
+                    $(el).keydown(function(e) {
+                        if (e.keyCode !== 9) {
                             return false;
+                        } else {
+                            return true;
                         }
                     });
                     var $this = angular.element(el),
