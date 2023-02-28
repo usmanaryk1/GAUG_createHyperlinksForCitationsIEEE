@@ -1,6 +1,13 @@
-<div>
+<style>
+    h4 span {
+        font-size: 12px;
+        padding-left: 5px;
+        color: #979898;
+    }            
+</style>
+<div>    
     <div class="modal-header">		
-        <h4 class="modal-title">{{confirmModal.title}}</h4>
+        <h4 class="modal-title">{{confirmModal.title}}<span ng-if="confirmModal.subtitle">  {{confirmModal.subtitle}}</span></h4>        
     </div>
 
     <div class="modal-body">
