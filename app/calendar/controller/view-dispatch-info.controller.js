@@ -144,7 +144,7 @@
                 console.log("popup closed");
             });
         };
-        
+
         ctrl.openDispatchInfoModal = function (modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
@@ -183,6 +183,35 @@
                     ctrl.employees[index] = employeeResponseUpdated;
                 }
             });
+        };
+
+        ctrl.assignCase = function (emp) {
+            var patientObj;
+            function open() {
+                $rootScope.unmaskLoading();
+                ctrl.patientPopup = $modal.open({
+                    templateUrl: 'app/calendar/views/dispatch_info_case_modal.html',
+                    controller: 'DispatchInfoCaseModalCtrl as caseModal',
+                    size: 'lg',
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false,
+                    resolve: {
+                        dispatchInfo: function () {
+                            return ctrl.dispatchInfo;
+                        },
+                        empId: function () {
+                            return emp.employeeId;
+                        }
+                    }
+                });
+            }
+            ;
+            $rootScope.maskLoading();
+            var careTypes;
+            var careEmployeeMap;
+            patientObj = {};
+            open();
+
         };
     }
     ;

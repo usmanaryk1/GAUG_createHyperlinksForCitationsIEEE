@@ -708,14 +708,15 @@
                         });
                         marker.addListener('click', function (e) {
                             var infowindow = new google.maps.InfoWindow();
-                            showInfo(this.position, infowindow);
+                            showInfo(this.position, infowindow, this.title);
                             infowindow.open(map, this);
                         });
+                        marker.title = emplyeeList[i].lName + ", " + emplyeeList[i].fName;
                         markers.push(marker);
                     }
                 }
             }
-            function showInfo(latlng, infowindow) {
+            function showInfo(latlng, infowindow, title) {
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     'latLng': latlng
@@ -724,7 +725,7 @@
                         if (results[1]) {
                             // here assign the data to asp lables
                             infowindow.setContent('<div id="content">' +
-                                    '<div id="firstHeading" class="firstHeading">Abreu, Rafaela</div>' +
+                                    '<div id="firstHeading" class="firstHeading">' + title + '</div>' +
                                     '<div id="bodyContent">' + results[1].formatted_address +
                                     '</div><div>10 Miles</div>' +
                                     '</div>');
@@ -801,12 +802,12 @@
             var addPatientMarker = function () {
                 if (ctrl.selectedPatient != null && ctrl.selectedPatient.locationLatitude != null) {
                     var location = new google.maps.LatLng(ctrl.selectedPatient.locationLatitude, ctrl.selectedPatient.locationLongitude);
-                    addGreenMarker(location);
+                    addGreenMarker(location, ctrl.selectedPatient.lName + ', ' + ctrl.selectedPatient.fName);
                 } else if (patientMarker != null) {
                     patientMarker.setVisible(false)
                 }
             };
-            var addGreenMarker = function (location) {
+            var addGreenMarker = function (location, title) {
 
                 patientMarker = new google.maps.Marker({
                     position: location,
@@ -816,7 +817,10 @@
                 patientMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
                 patientMarker.addListener('click', function (e) {
                     var infowindow = new google.maps.InfoWindow();
-                    showInfo(this.position, infowindow);
+                    if (title == null) {
+                        title = '';
+                    }
+                    showInfo(this.position, infowindow, title);
                     infowindow.open(map, this);
                 });
                 map.setCenter(location);

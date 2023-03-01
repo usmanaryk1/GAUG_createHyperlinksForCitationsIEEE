@@ -22,6 +22,7 @@
                     str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id;
                 }
                 ctrl.careTypes = careTypesSelected;
+                ctrl.careType = ctrl.careTypes[0].id;
             }
         });
     };
