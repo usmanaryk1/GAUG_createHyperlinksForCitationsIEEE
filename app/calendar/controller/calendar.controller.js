@@ -808,7 +808,10 @@
                 }
             };
             var addGreenMarker = function (location, title) {
-
+                //clear patient marker if already exist
+                if (patientMarker != null) {
+                    patientMarker.setMap(null);
+                }
                 patientMarker = new google.maps.Marker({
                     position: location,
                     map: map,
