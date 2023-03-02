@@ -18,16 +18,16 @@
                 <div class="table-responsive scroll" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
                     <script type="text/javascript">
-                  //                    jQuery(document).ready(function($)
-                  //                    {
-                  //                        $("#example-1").dataTable({
-                  //							aLengthMenu: [
-                  //								[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
-                  //							]
-                  //                        });
-                  //                    });
+                        //                    jQuery(document).ready(function($)
+                        //                    {
+                        //                        $("#example-1").dataTable({
+                        //							aLengthMenu: [
+                        //								[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+                        //							]
+                        //                        });
+                        //                    });
                     </script>
-                    <table id="example-1" ng-if="viewInsurer.insurerList.length>0" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                    <table id="example-1" ng-if="viewInsurer.insurerList.length > 0" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
                         <!--<thead>
                                 <tr>
                                         <th width="20%">Name</th>
@@ -39,12 +39,11 @@
                         </thead>-->
                         <thead>
                             <tr>
-                                <th width="21%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Insurance Provider</th>
-                                <th width="12%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Billing ID</th>
-                                <th width="32%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Contact Name</th>
-                                <th width="12%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Expires</th>
-
-                                <th width="23%" data-priority="6">Actions</th>
+                                <th width="25%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Insurance Provider</th>
+                                <th width="15%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Billing ID</th>
+                                <th width="22%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Contact Name</th>
+                                <th width="18%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Expires</th>
+                                <th width="20%" data-priority="6">Actions</th>
                             </tr>
                         </thead>
 
@@ -55,9 +54,12 @@
                                 <td>{{insurer.billingId}}</td>
                                 <td>{{insurer.contactName}}</td>
                                 <td>{{insurer.contractEndDate|date :dateFormat}}</td>
-                                <td><a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)"><span class="ed_b">Edit</span></a> 
-                                    <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')"><span class="ed_b">Dlt</span></a> 
-                                    <a class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}" tooltip="Download Contract"><span class="ed_b"></span></a> 
+                                <td>
+                                    <div class="center">
+                                        <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)" tooltip="Edit"><span class="ed_b"></span></a> 
+                                        <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                        <a ng-if="insurer.contractFile" class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}" tooltip="Download Contract"><span class="ed_b"></span></a> 
+                                    </div>
                                 </td>
                             </tr>
 
@@ -196,18 +198,18 @@
 </div>
 
 <script type="text/ng-template" id="modal-3">
-	<div class="modal-header">
-		<h4 class="modal-title">{{deleteInsurerModel.insurer.insuranceName}}</h4>
-	</div>
-	
-	<div class="modal-body">
-	
-		Are you sure you want to delete this Insurer?
-		
-	</div>
-	
-	<div class="modal-footer">
-                <button type="button" class="btn btn-success" ng-click="deleteInsurerModel.delete(deleteInsurerModel.insurer);">Yes</button>
-		<button type="button" class="btn btn-red" ng-click="deleteInsurerModel.dismiss();">No</button>
-	</div>
+    <div class="modal-header">
+    <h4 class="modal-title">{{deleteInsurerModel.insurer.insuranceName}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to delete this Insurer?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="deleteInsurerModel.delete(deleteInsurerModel.insurer);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="deleteInsurerModel.dismiss();">No</button>
+    </div>
 </script>
