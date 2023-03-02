@@ -23,7 +23,10 @@
                 transformResponse: function (res) {
                     return {count: res};
                 }
-            }
+            },
+            changestatus: {
+                method: 'GET'
+            }            
         });
         return {
             retrieveAll: function (params) {
@@ -43,6 +46,9 @@
             },
             getEmployeeCountForDispatch: function (data) {
                 return api.getEmployeeCountForDispatch(data).$promise;
+            },
+            changestatus: function (data) {
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             }
         };
     };

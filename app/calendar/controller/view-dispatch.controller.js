@@ -117,13 +117,16 @@
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
                 controller: 'ConfirmModalController as confirmModal',
-                size: 'med',
+                size: 'md',
                 resolve: {
                     message: function () {
                         return "Are you sure you want to delete this Dispatch?";
                     },
                     title: function () {
                         return dispatch.patientName;
+                    },
+                    subtitle:function () {
+                        return dispatch.careType;
                     }
                 }
             });
@@ -148,6 +151,47 @@
             });
 
         };
+
+        ctrl.openStatusModal = function (dispatch,status)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
+                controller: 'ConfirmModalController as confirmModal',
+                size: 'md',
+                resolve: {
+                    message: function () {
+                        return "Are you sure you want to " + (status ==="active" ? "activate":"deactivate") +" this Dispatch?";
+                    },
+                    title: function () {
+                        return dispatch.patientName;
+                    },
+                    subtitle:function () {
+                        return dispatch.careType;
+                    }
+                }
+            });
+            modalInstance.result.then(function (res) {
+                $rootScope.maskLoading();
+                DispatchDAO.changestatus({id: dispatch.id,status:status}).then(function () {
+                    var length = ctrl.dispatchList.length;
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.dispatchList[i].id === dispatch.id) {
+                            ctrl.dispatchList[i].status = status;
+                            break;
+                        }
+                    }
+                    toastr.success("Dispatch "+ (status ==="active"?"activated.":"deactivated."));
+                    ctrl.rerenderDataTable();
+                }).catch(function (data, status) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }, function () {
+            });
+
+        };
+
 
     }
     ;
