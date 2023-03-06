@@ -745,6 +745,31 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_USER'
                 }
             }).
+            // worksite creation page
+            state('admin.worksite', {
+                abstract: true,
+                url: '/worksite',
+                templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite'),
+                controller: 'AddWorksiteCtrl as addWorksite'
+            }).
+            // add_worksite_tab_1
+            state('admin.worksite.tab1', {
+                url: '/tab1/:id',
+                templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_1'),
+                data: {
+                    tabNo: 1,
+                    feature: 'CREATE_PATIENT'
+                }
+            }).
+            // add_worksite_tab_2
+            state('admin.worksite.tab2', {
+                url: '/tab2/:id',
+                templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_2'),
+                data: {
+                    tabNo: 2,
+                    feature: 'CREATE_PATIENT'
+                }
+            }).
             state('admin.manage_role', {
                 url: '/manage_role',
                 templateUrl: appHelper.viewTemplatePath('security', 'manage_role'),
@@ -780,8 +805,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'EDIT_DISPATCH'
                 }
-            }).
-            // Update Highlights
+            }).            
+    // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
 //                templateUrl: appHelper.templatePath('update-highlights'),
@@ -1440,19 +1465,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
 //                    },
 //                }
 //            }).
-            state('lockscreen', {
-                url: '/lockscreen',
-                templateUrl: appHelper.templatePath('lockscreen'),
-                controller: 'LockscreenCtrl',
-                resolve: {
-                    resources: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
-            });
+    state('lockscreen', {
+        url: '/lockscreen',
+        templateUrl: appHelper.templatePath('lockscreen'),
+        controller: 'LockscreenCtrl',
+        resolve: {
+            resources: function ($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    ASSETS.forms.jQueryValidate,
+                    ASSETS.extra.toastr,
+                ]);
+            },
+        }
+    });
     $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
             return {
                 request: function (config) {
