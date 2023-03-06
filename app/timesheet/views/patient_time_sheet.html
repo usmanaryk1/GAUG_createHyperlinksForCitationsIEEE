@@ -199,7 +199,7 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:120px;">
-                                                    <a ng-if="timesheet.isEdited == true && patTimesheet.selectedPatient.status != 'd' && hasAccess('EDIT_PATIENT_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=patient_time_sheet" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="(timesheet.isEdited == true && patTimesheet.selectedPatient.status != 'd' && hasAccess('EDIT_PATIENT_TIMESHEET')) || hasAccess('EDIT_ALL_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=patient_time_sheet" tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a ng-if="timesheet.isEdited == true && hasAccess('DELETE_PATIENT_TIMESHEET')" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 

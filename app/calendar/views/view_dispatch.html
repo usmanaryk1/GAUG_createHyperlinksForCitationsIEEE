@@ -108,10 +108,10 @@
                                                 <td style="text-transform: capitalize;">{{dispatch.status}}</td>
                                                 <td>
                                                     <div class="center">
-                                                        <a class="btn icon-left fa fa-edit deactivate_bt" ng-href="{{'#/app/dispatch-info/' + dispatch.id}}" tooltip="Edit"><span class="ed_b"></span></a>
-                                                        <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="dispatch.status === 'active'" ng-click="viewDispatch.openStatusModal(dispatch, 'inactive')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                                                        <a class="btn icon-left fa fa-check edit_button" href="" ng-if="dispatch.status === 'inactive'" ng-click="viewDispatch.openStatusModal(dispatch, 'active')" tooltip="Activate"><span class="ed_b"></span></a>
-                                                        <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewDispatch.openDeleteModal(dispatch)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
+                                                        <a class="btn icon-left fa fa-edit deactivate_bt" ng-if="hasAccess('EDIT_DISPATCH')" ng-href="{{'#/app/dispatch-info/' + dispatch.id}}" tooltip="Edit"><span class="ed_b"></span></a>
+                                                        <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('DEACTIVATE_DISPATCH') && dispatch.status === 'active'" ng-click="viewDispatch.openStatusModal(dispatch, 'inactive')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                                                        <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('DEACTIVATE_DISPATCH') && dispatch.status === 'inactive'" ng-click="viewDispatch.openStatusModal(dispatch, 'active')" tooltip="Activate"><span class="ed_b"></span></a>
+                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_DISPATCH')" href="" ng-click="viewDispatch.openDeleteModal(dispatch)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
                                                     </div>
                                                 </td>
                                             </tr>

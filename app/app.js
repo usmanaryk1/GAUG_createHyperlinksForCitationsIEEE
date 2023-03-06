@@ -761,23 +761,25 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('calendar', 'view_dispatch'),
                 controller: 'ViewDispatchCtrl as viewDispatch',
                 data: {
-                    feature: 'VIEW_EMPLOYEE_SCHEDULE'
+                    feature: 'VIEW_DISPATCH'
                 }
             }).
-           
             // Dispatch Calendar
             state('app.search-employee-calendar', {
                 url: '/search-employee-calendar/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'employee_calendar'),
                 controller: 'CalendarCtrl as calendar',
                 data: {
-                    feature: 'VIEW_EMPLOYEE_SCHEDULE'
+                    feature: 'SEARCH_EMPLOYEE'
                 }
             }).
             state('app.dispatch-info', {
                 url: '/dispatch-info/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'view_dispatch_info'),
-                controller: 'ViewDispatchInfoCtrl as viewDispatchInfo'
+                controller: 'ViewDispatchInfoCtrl as viewDispatchInfo',
+                data: {
+                    feature: 'EDIT_DISPATCH'
+                }
             }).
             // Update Highlights
 //            state('app.update-highlights', {

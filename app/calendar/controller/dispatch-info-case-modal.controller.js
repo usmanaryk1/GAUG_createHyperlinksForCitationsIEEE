@@ -97,14 +97,26 @@
                 });
             };
             ctrl.save = function () {
-                delete ctrl.response;
-                ctrl.validateForm();
-                $timeout(function () {
-                    if (ctrl.response) {
-                        ctrl.savePatientPopupChanges(ctrl.data);
-                    }
-                });
+                if ($("#employee").select2('data') != null) {
+                    ctrl.validEmployee = true;
+                    delete ctrl.response;
+                    ctrl.validateForm();
+                    $timeout(function () {
+                        if (ctrl.response) {
+                            ctrl.savePatientPopupChanges(ctrl.data);
+                        }
+                    });
+                } else {
+                    ctrl.validEmployee = false;
+                }
             };
+            ctrl.empChanged = function () {
+                if ($("#employee").select2('data') != null) {
+                    ctrl.validEmployee = true;
+                }else{
+                    ctrl.validEmployee = false;
+                }
+            }
             ctrl.repeatationChanged = function (event) {
                 if (event != 'repeat') {
                     var old = ctrl.data.eventType;
