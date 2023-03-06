@@ -877,6 +877,9 @@
                     resolve: {
                         patientId: function () {
                             return ctrl.searchParams.patientId;
+                        },
+                        searchParams: function () {
+                            return angular.copy(ctrl.searchParams);
                         }
                     }
                 });

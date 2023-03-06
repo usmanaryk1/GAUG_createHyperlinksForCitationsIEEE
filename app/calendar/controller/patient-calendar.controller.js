@@ -735,7 +735,12 @@
                     var dispatchObj = angular.copy($rootScope.patientPopup.searchParams);
                     DispatchDAO.save(dispatchObj).then(function (res) {
                         toastr.success("Dispatch message has been sent to all filtered employees.");
+                        ctrl.retrievePatients();
                         $rootScope.patientPopup.close();
+                    }).catch(function (data) {
+                        if (data.data != null) {
+                            toastr.error(data.data);
+                        }
                     });
                 };
             }

@@ -1,13 +1,28 @@
 (function () {
-    var dispatchConfirmModalController = function ($modalInstance, patientId, PatientDAO) {
+    var dispatchConfirmModalController = function ($modalInstance, patientId, PatientDAO, searchParams) {
         var ctrl = this;
+        ctrl.noFilters = true;
         ctrl.ok = function () {
             $modalInstance.close(ctrl.careType);
         };
         ctrl.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        if (searchParams != null) {
+            delete searchParams.skip;
+            delete searchParams.limit;
+            delete searchParams.patientId;
+            for (var key in searchParams) {
+                if (searchParams.hasOwnProperty(key)) {
+                    var val = searchParams[key];
+                    if (val != null) {
+                        ctrl.noFilters = false;
+                        break;
+                    }
 
+                }
+            }
+        }
         PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
             var patientObj = res[0];
             if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length > 0) {
@@ -26,5 +41,5 @@
             }
         });
     };
-    angular.module('xenon.controllers').controller('DispatchConfirmModalController', ['$modalInstance', 'patientId', 'PatientDAO', dispatchConfirmModalController]);
+    angular.module('xenon.controllers').controller('DispatchConfirmModalController', ['$modalInstance', 'patientId', 'PatientDAO', 'searchParams', dispatchConfirmModalController]);
 })();
