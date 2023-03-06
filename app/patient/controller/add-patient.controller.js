@@ -83,6 +83,12 @@
                 if (patientToSave.dateOfBirth) {
                     patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
                 }
+                if (patientToSave.authorizationStartDate) {
+                    patientToSave.authorizationStartDate = new Date(patientToSave.authorizationStartDate);
+                }
+                if (patientToSave.authorizationEndDate) {
+                    patientToSave.authorizationEndDate = new Date(patientToSave.authorizationEndDate);
+                }
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
