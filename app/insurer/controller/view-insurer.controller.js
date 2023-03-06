@@ -18,7 +18,9 @@
                     }
                 }); // showLoadingBar
                 ctrl.insurerList = res;
-
+                if (res.length === 0) {
+                    toastr.error("No data in the system.");
+                }
             }).catch(function(data, status) {
                 showLoadingBar({
                     delay: .5,
@@ -28,7 +30,7 @@
                     }
                 }); // showLoadingBar
                 toastr.error("Failed to retrieve insurance provider.");
-                ctrl.insurerList = ontimetest.insuranceProviders;
+//                ctrl.insurerList = ontimetest.insuranceProviders;
             });
         }
 
