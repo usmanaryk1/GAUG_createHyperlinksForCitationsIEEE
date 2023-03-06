@@ -683,6 +683,7 @@
             var patientMarker;
             var markers = [];
             var isAutoCompleteChanged = false;
+            var infowindow = new google.maps.InfoWindow();
             function addMarkersToMap(emplyeeList) {
                 if (map == null) {
                     googleMapFunctions();
@@ -707,27 +708,39 @@
                             map: map
                         });
                         marker.addListener('click', function (e) {
-                            var infowindow = new google.maps.InfoWindow();
-                            showInfo(this.position, infowindow, this.title);
+                            showInfo(this.position, infowindow, this.title, this.content);
                             infowindow.open(map, this);
                         });
                         marker.title = emplyeeList[i].lName + ", " + emplyeeList[i].fName;
+                        marker.content = emplyeeList[i].address1;
+                        if (emplyeeList[i].address2 != null) {
+                            marker.content += emplyeeList[i].address2;
+                        }
+                        marker.content += "<br/>" + emplyeeList[i].city + ", ";
+                        marker.content += emplyeeList[i].state + ", ";
+                        marker.content += emplyeeList[i].zipcode;
+                        if (emplyeeList[i].distance != null) {
+                            marker.content += "<br/>" + emplyeeList[i].distance + " Miles";
+                        }
                         markers.push(marker);
                     }
                 }
             }
-            function showInfo(latlng, infowindow, title) {
+            function showInfo(latlng, infowindow, title, content) {
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     'latLng': latlng
                 }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
+                        if (content == null) {
+                            content = results[1].formatted_address;
+                        }
                         if (results[1]) {
                             // here assign the data to asp lables
                             infowindow.setContent('<div id="content">' +
                                     '<div id="firstHeading" class="firstHeading">' + title + '</div>' +
-                                    '<div id="bodyContent">' + results[1].formatted_address +
-                                    '</div><div>10 Miles</div>' +
+                                    '<div id="bodyContent">' + content +
+                                    '</div>' +
                                     '</div>');
                         } else {
                             alert('No results found');
@@ -802,12 +815,20 @@
             var addPatientMarker = function () {
                 if (ctrl.selectedPatient != null && ctrl.selectedPatient.locationLatitude != null) {
                     var location = new google.maps.LatLng(ctrl.selectedPatient.locationLatitude, ctrl.selectedPatient.locationLongitude);
-                    addGreenMarker(location, ctrl.selectedPatient.lName + ', ' + ctrl.selectedPatient.fName);
+                    var title = ctrl.selectedPatient.lName + ', ' + ctrl.selectedPatient.fName;
+                    var content = ctrl.selectedPatient.patientAddress.address1;
+                    if (ctrl.selectedPatient.patientAddress.address2 != null) {
+                        content += ctrl.selectedPatient.patientAddress.address2;
+                    }
+                    content += "<br/>" + ctrl.selectedPatient.patientAddress.city + ", ";
+                    content += ctrl.selectedPatient.patientAddress.state + ", ";
+                    content += ctrl.selectedPatient.patientAddress.zipcode;
+                    addGreenMarker(location, title, content);
                 } else if (patientMarker != null) {
                     patientMarker.setVisible(false)
                 }
             };
-            var addGreenMarker = function (location, title) {
+            var addGreenMarker = function (location, title, content) {
                 //clear patient marker if already exist
                 if (patientMarker != null) {
                     patientMarker.setMap(null);
@@ -819,11 +840,11 @@
                 });
                 patientMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
                 patientMarker.addListener('click', function (e) {
-                    var infowindow = new google.maps.InfoWindow();
+
                     if (title == null) {
                         title = '';
                     }
-                    showInfo(this.position, infowindow, title);
+                    showInfo(this.position, infowindow, title, content);
                     infowindow.open(map, this);
                 });
                 map.setCenter(location);
