@@ -417,3 +417,19 @@
     </form>
 </script>
 
+<script type="text/ng-template" id="modal-3">
+    <div class="modal-header">
+    <h4 class="modal-title">Are you sure??</h4>
+    </div>
+
+    <div class="modal-body">
+
+    "All patients of this insurer will loose data for this caretype after saving the details."
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="unselectCareTypeModal.confirm();">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="unselectCareTypeModal.cancelDelete();">No</button>
+    </div>
+</script>

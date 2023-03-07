@@ -27,7 +27,7 @@
 
 
         ctrl.newSelectedType;
-
+        ctrl.newDeselectedType;
         function arr_diff(a1, a2)
         {
             var a = [], diff = [];
@@ -53,21 +53,26 @@
                 var reqParam;
                 if (ctrl.insurerObj.id && ctrl.insurerObj.id !== null) {
                     reqParam = 'update';
-//                    delete insurerToSave.careTypes;
-//                    if (ctrl.selectedCareTypes && ctrl.selectedCareTypes !== null) {
-//                        insurerToSave.insuranceCareTypeCollection = [];
-//                        for (var i = 0; i < ctrl.selectedCareTypes.length; i++) {
-//                            insurerToSave.insuranceCareTypeCollection.push(Number(ctrl.selectedCareTypes[i]));
-//                        }
-//                    }
+                    var length = ctrl.insurerObj.insuranceCareTypeCollection.length;
+                    var finalCareTypeCollection = [];
+                    for (var i = 0; i < length; i++) {
+                        for (var j = 0; j < ctrl.selectedCareTypes.length; j++) {
+                            if (ctrl.selectedCareTypes[j] === ctrl.insurerObj.insuranceCareTypeCollection[i].companyCaretypeId.id) {
+                                finalCareTypeCollection.push(angular.copy(ctrl.insurerObj.insuranceCareTypeCollection[i]));
+                                break;
+                            }
+                        }
+                    }
+//                    ctrl.insurerObj.insuranceCareTypeCollection = finalCareTypeCollection;
+                    insurerToSave.insuranceCareTypeCollection = finalCareTypeCollection;
                 } else {
                     reqParam = 'save';
                 }
-                if (insurerToSave.insuranceCareTypeCollection != null) {
-                    angular.forEach(insurerToSave.insuranceCareTypeCollection, function(obj) {
-                        delete obj.id;
-                    })
-                }
+//                if (insurerToSave.insuranceCareTypeCollection != null) {
+//                    angular.forEach(insurerToSave.insuranceCareTypeCollection, function(obj) {
+//                        delete obj.id;
+//                    })
+//                }
                 insurerToSave.orgCode = ctrl.companyCode;
                 if (insurerToSave.contractStartDate) {
                     insurerToSave.contractStartDate = new Date(insurerToSave.contractStartDate);
@@ -77,23 +82,16 @@
                 }
                 InsurerDAO.update({action: reqParam, data: insurerToSave})
                         .then(function(res) {
-                            console.log(res);
                             if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
                                 $state.go('^.insurer', {id: res.id});
                                 ctrl.editMode = true;
-                                ctrl.insurerObj.id = res.id;
                             }
+                            ctrl.insurerObj = res;
                             toastr.success("Insurance provider saved.");
                         })
                         .catch(function() {
                             //exception logic
                             toastr.error("Insurance provider cannot be saved.");
-                            console.log('Insurer Object : ' + JSON.stringify(insurerToSave));
-                            if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
-                                $state.go('^.insurer', {id: 1});
-                                ctrl.editMode = true;
-                                ctrl.insurerObj.id = 1;
-                            }
 
                         });
 
@@ -137,14 +135,7 @@
 
                         }
                     }); // showLoadingBar
-                    ctrl.insurerObj = ontimetest.insuranceProviders[($state.params.id - 1)];
-                    ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.insurerObj));
-                    if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
-                        ctrl.insurerObj.insuranceCareTypeCollection = [];
-                    } else {
-                        ctrl.selectedCareTypes = ctrl.insurerObj.insuranceCareTypeCollection;
-                    }
                 });
             }
         }
@@ -152,6 +143,7 @@
 // Open Simple Modal
         ctrl.openModal = function(modal_id, modal_size, modal_backdrop)
         {
+            ctrl.selecteModalOpen = true;
             $rootScope.careTypeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
@@ -164,14 +156,13 @@
                 $timeout(function() {
                     if ($('#care_type_form')[0].checkValidity()) {
                         $rootScope.careTypeModel.dismiss();
-//                        console.log(ctrl.selectedCareTypes);
                         $rootScope.careTypeModel.careTypeObj.companyCaretypeId = ctrl.careTypeIdMap[ctrl.newSelectedType];
                         ctrl.insurerObj.insuranceCareTypeCollection.push($rootScope.careTypeModel.careTypeObj);
                         if ($rootScope.careTypeModel.careTypeObj.modifiers != null) {
                             $rootScope.careTypeModel.careTypeObj.modifiers = JSON.stringify($rootScope.careTypeModel.careTypeObj.modifiers);
                         }
-                        console.log(ctrl.insurerObj.insuranceCareTypeCollection);
                     }
+                    ctrl.selecteModalOpen = false;
                 });
             };
 
@@ -184,6 +175,32 @@
             };
 
         };
+
+        ctrl.openUnselectCareTypeModal = function(modal_id, modal_size, modal_backdrop)
+        {
+            ctrl.unselecteModalOpen = true;
+            $rootScope.unselectCareTypeModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+            });
+
+            $rootScope.unselectCareTypeModal.confirm = function() {
+                $timeout(function() {
+                    ctrl.unselecteModalOpen = false;
+                    $rootScope.unselectCareTypeModal.dismiss();
+                });
+            };
+
+            $rootScope.unselectCareTypeModal.cancelDelete = function() {
+                ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
+                $timeout(function() {
+                    $("#multi-select").multiSelect('refresh');
+                });
+                $rootScope.unselectCareTypeModal.close();
+            };
+
+        };
         ctrl.pageInitCall();
 
         $scope.$watch(function() {
@@ -193,11 +210,22 @@
                 $("#multi-select").multiSelect('refresh');
             });
             if (ctrl.displayCareTypeModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
-                ctrl.openModal('modal-5', 'md', false);
-                if (oldValue == null) {
-                    ctrl.newSelectedType = newValue;
+                if (!ctrl.unselecteModalOpen) {
+                    ctrl.openModal('modal-5', 'md', 'static');
+                    if (oldValue == null) {
+                        ctrl.newSelectedType = newValue;
+                    } else {
+                        ctrl.newSelectedType = arr_diff(newValue, oldValue);
+                    }
                 } else {
-                    ctrl.newSelectedType = arr_diff(newValue, oldValue);
+                    ctrl.unselecteModalOpen = false;
+                }
+            } else if (oldValue !== null && newValue.length < oldValue.length) {
+                if (!ctrl.selecteModalOpen) {
+                    ctrl.newDeselectedType = arr_diff(oldValue, newValue);
+                    ctrl.openUnselectCareTypeModal('modal-3', 'md', 'static');
+                } else {
+                    ctrl.selecteModalOpen = false;
                 }
             }
         }, true);
