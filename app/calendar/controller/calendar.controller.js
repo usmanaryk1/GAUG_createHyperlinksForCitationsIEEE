@@ -888,6 +888,8 @@
                     dispatchObj.careTypeId = selectedCareType;
                     DispatchDAO.save(dispatchObj).then(function (res) {
                         toastr.success("Dispatch message has been sent to all filtered employees.");
+                    }).catch(function (data) {
+                        toastr.error(data);
                     });
                 }, function () {
                 });
