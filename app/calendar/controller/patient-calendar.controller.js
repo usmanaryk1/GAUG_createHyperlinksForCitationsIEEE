@@ -719,7 +719,7 @@
                     }
                     $rootScope.patientPopup.searchParamChanged();
                 };
-                $rootScope.patientPopup.searchParamChanged = function () {
+                function getJsonFromSearchParams(){
                     var searchJsonToSend = angular.copy($rootScope.patientPopup.searchParams);
                     if (searchJsonToSend != null && searchJsonToSend.languages != null) {
                         searchJsonToSend.languages = searchJsonToSend.languages.toString();
@@ -727,12 +727,15 @@
                     if (searchJsonToSend != null && searchJsonToSend.positionIds != null) {
                         searchJsonToSend.positionIds = searchJsonToSend.positionIds.toString();
                     }
-                    DispatchDAO.getEmployeeCountForDispatch(searchJsonToSend).then(function (res) {
+                    return searchJsonToSend;
+                }
+                $rootScope.patientPopup.searchParamChanged = function () {
+                    DispatchDAO.getEmployeeCountForDispatch(getJsonFromSearchParams()).then(function (res) {
                         $rootScope.patientPopup.employeeCount = res.count;
                     });
                 };
                 $rootScope.patientPopup.sendDispatch = function () {
-                    var dispatchObj = angular.copy($rootScope.patientPopup.searchParams);
+                    var dispatchObj = getJsonFromSearchParams();
                     DispatchDAO.save(dispatchObj).then(function (res) {
                         toastr.success("Dispatch message has been sent to all filtered employees.");
                         ctrl.retrievePatients();
