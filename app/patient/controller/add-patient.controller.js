@@ -230,7 +230,7 @@
                             $timeout(function() {
                                 $('#CareTypes').multiSelect('refresh');
                                 form_data = $('#add_patient_form').serialize();
-                            }, 200);
+                            }, 400);
                         }).catch(function() {
                             toastr.error("Failed to retrieve care types.");
                             form_data = $('#add_patient_form').serialize();
@@ -268,7 +268,8 @@
                             address.state = ctrl.patient.patientAddress.state;
                             address.zipcode = ctrl.patient.patientAddress.zipcode;
                         }
-                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
+                        ctrl.patient.subscriberInfo[0].subscriberAddressCollection.push(address);
                         $scope.$apply();
                         ctrl.isBillingAddressSameAsPatient = 'Yes';
                         $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');

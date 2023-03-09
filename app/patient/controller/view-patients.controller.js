@@ -1,4 +1,4 @@
-(function () {
+(function() {
     function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal) {
         var ctrl = this;
         $rootScope.selectPatientModel = {};
@@ -13,28 +13,28 @@
         ctrl.edit = edit;
 
         function retrievePatientsData() {
-            PatientDAO.retrieveAll({status: ctrl.viewType}).then(function (res) {
+            PatientDAO.retrieveAll({status: ctrl.viewType}).then(function(res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
 
                     }
 
                 }); // showLoadingBar
                 if (res) {
                     ctrl.patientList = res;
-                    if(res.length ===0){
+                    if (res.length === 0) {
                         toastr.error("No data in the system.");
                     }
                 }
 
-            }).catch(function (data, status) {
+            }).catch(function(data, status) {
                 toastr.error("Failed to retrieve patients.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
 
                     }
                 }); // showLoadingBar
@@ -47,7 +47,7 @@
         }
 
         ctrl.retrievePatients();
-        ctrl.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function(patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectPatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -58,7 +58,7 @@
 
         };
 
-        ctrl.openDeleteModal = function (patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function(patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deletePatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -67,8 +67,8 @@
             });
             $rootScope.deletePatientModel.patient = patient;
 
-            $rootScope.deletePatientModel.delete = function (patient) {
-                PatientDAO.delete({id: patient.id}).then(function (res) {
+            $rootScope.deletePatientModel.delete = function(patient) {
+                PatientDAO.delete({id: patient.id}).then(function(res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -79,14 +79,14 @@
                     }
                     toastr.success("Patient deleted.");
                     $rootScope.deletePatientModel.close();
-                }).catch(function (data, status) {
+                }).catch(function(data, status) {
                     toastr.error("Patient cannot be deleted.");
                     $rootScope.deletePatientModel.close();
                 });
             };
         };
 
-        ctrl.openDischargeModal = function (patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openDischargeModal = function(patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.dischargePatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -96,19 +96,21 @@
 
             $rootScope.dischargePatientModel.patient = patient;
 
-            $rootScope.dischargePatientModel.discharge = function (patient) {
-                PatientDAO.discharge({id: patient.id}).then(function (res) {
-                    var length = ctrl.patientList.length;
+            $rootScope.dischargePatientModel.discharge = function(patient) {
+                PatientDAO.discharge({id: patient.id}).then(function(res) {
+                    if (ctrl.viewType !== 'all') {
+                        var length = ctrl.patientList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.patientList[i].id === patient.id) {
-                            ctrl.patientList.splice(i, 1);
-                            break;
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.patientList[i].id === patient.id) {
+                                ctrl.patientList.splice(i, 1);
+                                break;
+                            }
                         }
                     }
                     toastr.success("Patient discharged.");
                     $rootScope.dischargePatientModel.close();
-                }).catch(function (data, status) {
+                }).catch(function(data, status) {
                     toastr.error("Patient cannot be discharged.");
                     $rootScope.dischargePatientModel.close();
                 });

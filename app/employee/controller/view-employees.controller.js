@@ -91,12 +91,14 @@
 
             $rootScope.deactivateEmployeeModel.deactivate = function(employee) {
                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function(res) {
-                    var length = ctrl.employeeList.length;
+                    if (ctrl.viewType !== 'all') {
+                        var length = ctrl.employeeList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            ctrl.employeeList.splice(i, 1);
-                            break;
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.employeeList[i].id === employee.id) {
+                                ctrl.employeeList.splice(i, 1);
+                                break;
+                            }
                         }
                     }
                     toastr.success("Employee deactivated.");
@@ -118,12 +120,14 @@
 
             $rootScope.activateEmployeeModel.activate = function(employee) {
                 EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function(res) {
-                    var length = ctrl.employeeList.length;
+                    if (ctrl.viewType !== 'all') {
+                        var length = ctrl.employeeList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            ctrl.employeeList.splice(i, 1);
-                            break;
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.employeeList[i].id === employee.id) {
+                                ctrl.employeeList.splice(i, 1);
+                                break;
+                            }
                         }
                     }
                     toastr.success("Employee activated.");
