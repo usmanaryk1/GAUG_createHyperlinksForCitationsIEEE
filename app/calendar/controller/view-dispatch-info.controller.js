@@ -180,7 +180,13 @@
             });
             modalInstance.result.then(function (employeeResponseUpdated) {
                 if (employeeResponseUpdated) {
-                    ctrl.employees[index] = employeeResponseUpdated;
+                    for(var i=0; i<ctrl.employees.length; i++){
+                        if(ctrl.employees[i].id===employeeResponseUpdated.id){
+                            ctrl.employees[i] = employeeResponseUpdated;
+                            ctrl.rerenderDataTable();
+                            break;
+                        }
+                    }
                 }
             });
         };
