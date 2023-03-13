@@ -203,7 +203,7 @@
                             $("#rate1").multiSelect('refresh');
                         }, 200);
                         ctrl.retrivalRunning = false;
-                    }).catch(function(){
+                    }).catch(function() {
                         toastr.error("Failed to retrieve employee care rates.");
                     });
                 }).catch(function(data, status) {
@@ -277,7 +277,7 @@
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
                     }
-                    if (!ctrl.employee.wages) {
+                    if (!ctrl.employee.wages || ctr.employee.wages === null) {
                         ctrl.employee.wages = 'H';
                     }
                     $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
