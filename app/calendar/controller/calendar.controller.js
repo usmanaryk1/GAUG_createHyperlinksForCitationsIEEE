@@ -14,7 +14,7 @@
 
         var timeFormat = 'HH:mm';
 
-        Page.setTitle("Employee Calendar");
+        Page.setTitle("Search Employee");
 
         ctrl.calendarView = 'week';
         setWeekDate();

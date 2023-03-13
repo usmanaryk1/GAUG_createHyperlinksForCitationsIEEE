@@ -3,7 +3,7 @@
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.datatableObj = {};
-        Page.setTitle("View Dispatch");
+        Page.setTitle("Dispatch Details");
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         $rootScope.positions = {};

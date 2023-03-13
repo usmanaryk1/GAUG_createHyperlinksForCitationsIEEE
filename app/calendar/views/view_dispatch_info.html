@@ -38,7 +38,7 @@
                                                 </th>
                                                 <th width="11%" style="word-break: break-word">Approx Distance</th>
                                                 <th width="25%">Response</th>
-                                                <th width="10%">Actions</th>
+                                                <th width="10%" ng-if="viewDispatchInfo.dispatchInfo.status === 'active'">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -70,7 +70,7 @@
                                                         {{emp.responseMessage?': '+emp.responseMessage:''}}
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td ng-if="viewDispatchInfo.dispatchInfo.status === 'active'">
                                                     <a class="btn icon-left fa fa-check edit_button" ng-click="viewDispatchInfo.assignCase(emp)" tooltip="Assign Case"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-pencil edit_button ng-scope" href="" ng-click="viewDispatchInfo.openDispatchResponseModel($index, emp, 'responseModal')" tooltip="Edit"><span class="ed_b"></span></a>
                                                 </td>
