@@ -683,11 +683,14 @@
                                         data.applyTo = "SINGLE";
                                         var a = moment(new Date(data.startDate));
                                         var diff = moment().diff(a, 'days');
+                                        $rootScope.patientPopup.isPastEvent = false;
                                         if (diff > 0) { // past date
                                             data.isEdited1 = true;
+                                            $rootScope.patientPopup.isPastEvent = true;
                                         }
                                         data.isEdited = true;
                                         $rootScope.patientPopup.data = angular.copy(data);
+//                                        alert($rootScope.patientPopup.data.startDate)
                                     }).catch(function (data) {
                                         toastr.error("Failed to retrieve data");
                                     }).then(function () {
@@ -719,7 +722,7 @@
                     }
                     $rootScope.patientPopup.searchParamChanged();
                 };
-                function getJsonFromSearchParams(){
+                function getJsonFromSearchParams() {
                     var searchJsonToSend = angular.copy($rootScope.patientPopup.searchParams);
                     if (searchJsonToSend != null && searchJsonToSend.languages != null) {
                         searchJsonToSend.languages = searchJsonToSend.languages.toString();

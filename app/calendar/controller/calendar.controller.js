@@ -720,7 +720,7 @@
                         marker.content += emplyeeList[i].state + ", ";
                         marker.content += emplyeeList[i].zipcode;
                         if (emplyeeList[i].distance != null) {
-                            marker.content += "<br/>" + emplyeeList[i].distance + " Miles";
+                            marker.content += "<br/>" + emplyeeList[i].distance.toFixed(2) + " Miles";
                         }
                         markers.push(marker);
                     }

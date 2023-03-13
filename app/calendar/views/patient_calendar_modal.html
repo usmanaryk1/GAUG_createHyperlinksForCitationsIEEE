@@ -5,7 +5,7 @@
         <h4 class="modal-title">
             <!--Display dispatch button for open cases-->
             <i ng-if="patientPopup.isOpenCase && patientPopup.data.dispatchStatus == 'active' && patientPopup.data.dispatchId != null" ui-sref="app.dispatch-info({id:patientPopup.data.dispatchId})" tooltip="Go To Dispatch" class="fa fa-info-circle pull-right pointer" style='margin-top:20px;margin-right:-12px'></i>
-            <button ng-if="patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
+            <button ng-if="!patientPopup.isPastEvent && patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
             <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
             <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
         </h4>
