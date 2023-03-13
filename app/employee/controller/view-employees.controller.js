@@ -91,19 +91,22 @@
 
             $rootScope.deactivateEmployeeModel.deactivate = function(employee) {
                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function(res) {
-                    if (ctrl.viewType !== 'all') {
-                        var length = ctrl.employeeList.length;
+                    var length = ctrl.employeeList.length;
 
-                        for (var i = 0; i < length; i++) {
-                            if (ctrl.employeeList[i].id === employee.id) {
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.employeeList[i].id === employee.id) {
+                            if (ctrl.viewType !== 'all') {
                                 ctrl.employeeList.splice(i, 1);
-                                break;
+                            } else {
+                                ctrl.employeeList[i].status = 'i';
                             }
+                            break;
                         }
                     }
                     toastr.success("Employee deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
-                }).catch(function(data, status) {
+                }
+                ).catch(function(data, status) {
                     toastr.error("Employee cannot be deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 });
@@ -120,14 +123,16 @@
 
             $rootScope.activateEmployeeModel.activate = function(employee) {
                 EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function(res) {
-                    if (ctrl.viewType !== 'all') {
-                        var length = ctrl.employeeList.length;
+                    var length = ctrl.employeeList.length;
 
-                        for (var i = 0; i < length; i++) {
-                            if (ctrl.employeeList[i].id === employee.id) {
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.employeeList[i].id === employee.id) {
+                            if (ctrl.viewType !== 'all') {
                                 ctrl.employeeList.splice(i, 1);
-                                break;
+                            } else {
+                                ctrl.employeeList[i].status = 'a';
                             }
+                            break;
                         }
                     }
                     toastr.success("Employee activated.");

@@ -98,14 +98,16 @@
 
             $rootScope.dischargePatientModel.discharge = function(patient) {
                 PatientDAO.discharge({id: patient.id}).then(function(res) {
-                    if (ctrl.viewType !== 'all') {
-                        var length = ctrl.patientList.length;
+                    var length = ctrl.patientList.length;
 
-                        for (var i = 0; i < length; i++) {
-                            if (ctrl.patientList[i].id === patient.id) {
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.patientList[i].id === patient.id) {
+                            if (ctrl.viewType !== 'all') {
                                 ctrl.patientList.splice(i, 1);
-                                break;
+                            }else{
+                                ctrl.patientList[i].status = 'd';
                             }
+                            break;
                         }
                     }
                     toastr.success("Patient discharged.");

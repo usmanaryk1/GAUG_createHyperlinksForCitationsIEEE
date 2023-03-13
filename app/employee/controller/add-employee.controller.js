@@ -277,7 +277,7 @@
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
                     }
-                    if (!ctrl.employee.wages || ctr.employee.wages === null) {
+                    if (!ctrl.employee.wages || ctrl.employee.wages === null) {
                         ctrl.employee.wages = 'H';
                     }
                     $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
