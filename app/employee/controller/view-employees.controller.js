@@ -1,5 +1,5 @@
 (function() {
-    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope) {
+    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope, $compile, $timeout) {
         var ctrl = this;
         $rootScope.selectEmployeeModel = {};
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
@@ -71,6 +71,7 @@
                             break;
                         }
                     }
+                    ctrl.rerenderDataTable();
                     toastr.success("Employee deleted.");
                     $rootScope.deleteEmployeeModel.close();
                 }).catch(function(data, status) {
@@ -79,6 +80,14 @@
                 });
             };
 
+        };
+        ctrl.rerenderDataTable = function() {
+            var employeeList = angular.copy(ctrl.employeeList);
+            ctrl.employeeList = [];
+            $("#example-1_wrapper").remove();
+            $timeout(function() {
+                ctrl.employeeList = employeeList;
+            });
         };
         ctrl.openDeactivateModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
@@ -103,6 +112,7 @@
                             break;
                         }
                     }
+                    ctrl.rerenderDataTable();
                     toastr.success("Employee deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 }
@@ -123,16 +133,18 @@
 
             $rootScope.activateEmployeeModel.activate = function(employee) {
                 EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function(res) {
-                    var length = ctrl.employeeList.length;
+                    if (ctrl.viewType !== 'all') {
+                        var length = ctrl.employeeList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
-                            if (ctrl.viewType !== 'all') {
-                                ctrl.employeeList.splice(i, 1);
-                            } else {
-                                ctrl.employeeList[i].status = 'a';
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.employeeList[i].id === employee.id) {
+                                if (ctrl.viewType !== 'all') {
+                                    ctrl.employeeList.splice(i, 1);
+                                } else {
+                                    ctrl.employeeList[i].status = 'a';
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                     toastr.success("Employee activated.");
@@ -152,5 +164,5 @@
 //        });
     }
     ;
-    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "$scope", ViewEmployeesCtrl]);
+    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "$scope", "$compile", "$timeout", ViewEmployeesCtrl]);
 })();
