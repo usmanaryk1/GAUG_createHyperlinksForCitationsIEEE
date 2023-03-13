@@ -1,5 +1,5 @@
 (function() {
-    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope) {
+    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope, $compile, $timeout) {
         var ctrl = this;
         $rootScope.selectEmployeeModel = {};
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
@@ -71,6 +71,7 @@
                             break;
                         }
                     }
+                    ctrl.rerenderDataTable();
                     toastr.success("Employee deleted.");
                     $rootScope.deleteEmployeeModel.close();
                 }).catch(function(data, status) {
@@ -79,6 +80,14 @@
                 });
             };
 
+        };
+        ctrl.rerenderDataTable = function() {
+            var employeeList = angular.copy(ctrl.employeeList);
+            ctrl.employeeList = [];
+            $("#example-1_wrapper").remove();
+            $timeout(function() {
+                ctrl.employeeList = employeeList;
+            });
         };
         ctrl.openDeactivateModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
@@ -103,6 +112,7 @@
                             break;
                         }
                     }
+                    ctrl.rerenderDataTable();
                     toastr.success("Employee deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 }
@@ -135,6 +145,7 @@
                             break;
                         }
                     }
+                    ctrl.rerenderDataTable();
                     toastr.success("Employee activated.");
                     $rootScope.activateEmployeeModel.close();
                 }).catch(function(data, status) {
@@ -152,5 +163,5 @@
 //        });
     }
     ;
-    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "$scope", ViewEmployeesCtrl]);
+    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "$scope", "$compile", "$timeout", ViewEmployeesCtrl]);
 })();

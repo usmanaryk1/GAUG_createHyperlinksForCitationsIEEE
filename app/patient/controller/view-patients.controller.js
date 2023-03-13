@@ -1,5 +1,5 @@
 (function() {
-    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal) {
+    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout) {
         var ctrl = this;
         $rootScope.selectPatientModel = {};
         ctrl.companyCode = ontimetest.company_code;
@@ -78,6 +78,7 @@
                         }
                     }
                     toastr.success("Patient deleted.");
+                    ctrl.rerenderDataTable();
                     $rootScope.deletePatientModel.close();
                 }).catch(function(data, status) {
                     toastr.error("Patient cannot be deleted.");
@@ -104,13 +105,14 @@
                         if (ctrl.patientList[i].id === patient.id) {
                             if (ctrl.viewType !== 'all') {
                                 ctrl.patientList.splice(i, 1);
-                            }else{
+                            } else {
                                 ctrl.patientList[i].status = 'd';
                             }
                             break;
                         }
                     }
                     toastr.success("Patient discharged.");
+                    ctrl.rerenderDataTable();
                     $rootScope.dischargePatientModel.close();
                 }).catch(function(data, status) {
                     toastr.error("Patient cannot be discharged.");
@@ -119,7 +121,16 @@
             };
         };
 
+        ctrl.rerenderDataTable = function() {
+            var patientList = angular.copy(ctrl.patientList);
+            ctrl.patientList = [];
+            $("#example-4_wrapper").remove();
+            $timeout(function() {
+                ctrl.patientList = patientList;
+            });
+        };
+
     }
     ;
-    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewPatientsCtrl]);
+    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", ViewPatientsCtrl]);
 })();
