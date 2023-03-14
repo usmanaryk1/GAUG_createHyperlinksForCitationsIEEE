@@ -296,7 +296,7 @@ ontimedata = {
 };
 
 ontimetest = {
-    'weburl': 'http://localhost:8080/ontime/api/',
+    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'login',
     'patients': ontimedata.patients,
     'employees': ontimedata.employees,
