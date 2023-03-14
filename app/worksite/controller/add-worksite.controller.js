@@ -1,5 +1,5 @@
 (function () {
-    function AddWorksiteCtrl($formService, $state, WorksiteDAO, $timeout, $scope, $rootScope, PositionDAO, EmployeeDAO, InsurerDAO, Page, $modal) {
+    function AddWorksiteCtrl($state, WorksiteDAO, $timeout, $scope, $rootScope, PositionDAO, Page) {
         var ctrl = this;
         ctrl.currentDate = new Date();
         ctrl.retrivalRunning = true;
@@ -55,12 +55,13 @@
         //function to save worksite data.
         function saveWorksiteData() {
             if ($('#add_worksite_form')[0].checkValidity()) {
-                var worksiteToSave = angular.copy(ctrl.worksite); 
-                console.log("ctrl.positions.indexOf(0)",ctrl.positions.indexOf(0))
-                if(ctrl.positions.indexOf(0) === -1){
-                    worksiteToSave.positions = ctrl.positions;
-                }else{
-                    worksiteToSave.positions = allPositionIds;
+                var worksiteToSave = angular.copy(ctrl.worksite);
+                if (ctrl.positions != null) {
+                    if (ctrl.positions.indexOf(0) === -1) {
+//                    worksiteToSave.positions = ctrl.positions;
+                    } else {
+//                    worksiteToSave.positions = allPositionIds;
+                    }
                 }
                 var reqParam;
                 if (ctrl.worksite.id && ctrl.worksite.id !== null) {
@@ -70,7 +71,7 @@
                     worksiteToSave.orgCode = ontime_data.company_code;
                     reqParam = 'save';
                 }
-                
+
                 $rootScope.maskLoading();
                 WorksiteDAO.update({action: reqParam, data: worksiteToSave})
                         .then(function (res, status) {
@@ -92,8 +93,6 @@
                         })
                         .catch(function (data) {
                             //exception logic
-                            //for testing
-                            $state.go('^.' + ctrl.nextTab, {id: 1});
                             toastr.error("Worksite cannot be saved.");
                         }).then(function () {
                     $rootScope.unmaskLoading();
@@ -105,17 +104,6 @@
         function pageInit() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
-                var defaultworksite = 
-                        {
-                            "phone":"3423432432",
-                            "supervisorPhone":"2131231232",
-                            "supervisorFax":"1331231231",
-                            "wName":"Demo",
-                            "supervisor":"super",
-                            "supervisorEmail":"asd@fsdfsd.df",
-                            "positions":[1,2,3,4,5,6,7,8],
-                            "orgCode":"AC1"
-                        };
                 WorksiteDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.worksite = res;
                     ctrl.positions = res.positions;
@@ -128,9 +116,6 @@
                         }
                     }); // showLoadingBar
                     ctrl.retrivalRunning = false;
-//                    for testing purpose remove once backend integrated
-                    ctrl.worksite = defaultworksite;
-                    ctrl.positions = defaultworksite.positions;
                     toastr.error("Failed to retrieve worksite");
                 }).then(function () {
                     setTimeout(function () {
@@ -170,15 +155,14 @@
                                 allPositionIds.push(position.id);
                             ctrl.positionIdMap[position.id] = position;
                         });
-                        if(arr_diff(allPositionIds,ctrl.positions).length === 0){
-                            ctrl.positions =[0];
+                        if (arr_diff(allPositionIds, ctrl.positions).length === 0) {
+                            ctrl.positions = [0];
                         }
                         $timeout(function () {
                             $('#Positions').multiSelect('refresh');
                             form_data = $('#add_worksite_form').serialize();
                         }, 400);
                     }).catch(function () {
-                        toastr.error("Failed to retrieve care types.");
                         form_data = $('#add_worksite_form').serialize();
                     });
                 } else {
@@ -198,21 +182,23 @@
                 }
             }, 100);
         }
-        
+
         ctrl.pageInitCall();
 
         function arr_diff(a1, a2)
         {
             var a = [], diff = [];
-            for (var i = 0; i < a1.length; i++)
-                a[a1[i]] = true;
-            for (var i = 0; i < a2.length; i++)
-                if (a[a2[i]])
-                    delete a[a2[i]];
-                else
-                    a[a2[i]] = true;
-            for (var k in a)
-                diff.push(k);
+            if (a1 != null && a2 != null) {
+                for (var i = 0; i < a1.length; i++)
+                    a[a1[i]] = true;
+                for (var i = 0; i < a2.length; i++)
+                    if (a[a2[i]])
+                        delete a[a2[i]];
+                    else
+                        a[a2[i]] = true;
+                for (var k in a)
+                    diff.push(k);
+            }
             return diff;
         }
 
@@ -324,5 +310,5 @@
             });
         }
     }
-    angular.module('xenon.controllers').controller('AddWorksiteCtrl', ["$formService", "$state", "WorksiteDAO", "$timeout", "$scope", "$rootScope", "PositionDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddWorksiteCtrl]);
+    angular.module('xenon.controllers').controller('AddWorksiteCtrl', ["$state", "WorksiteDAO", "$timeout", "$scope", "$rootScope", "PositionDAO", "Page", AddWorksiteCtrl]);
 })();

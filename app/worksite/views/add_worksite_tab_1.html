@@ -21,7 +21,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input class="form-control" charactersonly id="field-1" name="WorksiteName" type="text" maxlength="50"
-                                   ng-model="addWorksite.worksite.wName" data-validate="required" data-message-required="Please enter Worksite Name." />
+                                   ng-model="addWorksite.worksite.name" data-validate="required" data-message-required="Please enter Worksite Name." />
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -107,7 +107,7 @@
                                 });
                             </script>
                             <select class="form-control" id="Positions" multiple="multiple" name="Positions"
-                                    data-validate="required" data-message-required="Please select Position." ng-model="addWorksite.positions"  ng-change="addWorksite.displayPositionModal = true"
+                                    data-validate="required" data-message-required="Please select Position." ng-model="addWorksite.positions"
                                     ng-options="position.id as position.position for position in addWorksite.positionList">                                
                             </select>
                         </div>
