@@ -309,7 +309,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.dateOfBirth}} 
+    {{selectPatientModel.patient.dateOfBirth|date :dateFormat}} 
     </div>
     </div>	
 
