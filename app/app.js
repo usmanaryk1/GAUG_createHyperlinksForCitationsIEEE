@@ -168,7 +168,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                 }
             });
     var includedStatesForDirtyCheck = ['app.patient.tab1', 'app.patient.tab2', 'app.patient.tab3', 'app.patient.tab4', 'app.patient.tab5',
-        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4'];
+        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4','admin.worksite.tab1','admin.worksite.tab2'];
     $rootScope.$on('$stateChangeSuccess',
             function (event, currentState) {
                 if (currentState.data != null && currentState.data.feature != null && $rootScope.currentUser.allowedFeature != null) {
@@ -769,6 +769,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     tabNo: 2,
                     feature: 'CREATE_PATIENT'
                 }
+            }).
+            // view worksites page
+            state('admin.worksite-list', {
+                url: '/worksite-list/:status',
+                templateUrl: appHelper.viewTemplatePath('worksite', 'view_worksite'),
+                controller: 'ViewWorksitesCtrl as viewWorksite',                
             }).
             state('admin.manage_role', {
                 url: '/manage_role',

@@ -15,6 +15,9 @@
             },
             delete: {
                 method: 'GET'
+            },
+            changestatus: {
+                method: 'GET'
             }
         });
         return {
@@ -29,6 +32,9 @@
             },
             delete: function (data) {
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
+            },
+            changestatus: function (data) {
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             }
         };
     };

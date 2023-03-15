@@ -79,7 +79,7 @@
                                 ctrl.editMode = true;
                             }
                             if ($rootScope.tabNo === 2) {
-                                $state.go('app.worksite-list', {status: "active"});
+                                $state.go('admin.worksite-list', {status: "active"});
                             } else {
                                 $state.go('^.' + ctrl.nextTab, {id: res.id});
                             }
