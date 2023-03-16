@@ -64,7 +64,7 @@
                                                 <th> <div class="user_panel" ng-click="viewEmployee.openEditModal(emp, 'modal-5')" style="cursor: pointer">
                                             <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
                                             <div class="emp_user_hd">
-                                                <div class="emp_user_name">{{emp.lName}} {{emp.fName}} {{emp.middleInitial}}</div>
+                                                <div class="emp_user_name">{{emp.lName}}, {{emp.fName}} {{emp.middleInitial}}</div>
                                                 <p>{{positions[emp.position]}}</p>
                                             </div>
                                         </div>
@@ -78,7 +78,7 @@
                                                 <a class="btn icon-left fa fa-pencil edit_button" href="" ng-click="viewEmployee.edit(emp)" tooltip="Edit"><span class="ed_b"></span></a> 
                                                 <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewEmployee.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                 <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a'" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                                                <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'i'" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
+                                                <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i'" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
                                             </div>
                                         </td>
                                         </tr>
@@ -111,7 +111,7 @@
     <div class="user_panel col-md-12">
     <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
     <div class="emp_user_hd">
-    <div class="emp_user_name">{{selectEmployeeModel.employee.lName}} {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
+    <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
     <p>{{positions[selectEmployeeModel.employee.position]}}</p>
     </div>
     <button type="button" class="close" ng-click="selectEmployeeModel.close();" aria-hidden="true">&times;</button>
@@ -125,7 +125,7 @@
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Position</strong></label>
     <div class="col-md-8">
-    {{selectEmployeeModel.employee.position}} 
+    {{positions[selectEmployeeModel.employee.position]}} 
     </div>
     </div>	
 
@@ -161,7 +161,7 @@
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
     <div class="col-md-8">
-    {{selectEmployeeModel.employee.dateOfBirth}} 
+    {{selectEmployeeModel.employee.dateOfBirth|date :dateFormat}} 
     </div>
     </div>	
 
@@ -173,7 +173,7 @@
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Social Security Number</strong></label>
     <div class="col-md-8">
-    {{selectEmployeeModel.employee.socialSecurity | ssn}} 
+    {{selectEmployeeModel.employee.ssn | ssn}} 
     </div>
     </div>	
 
