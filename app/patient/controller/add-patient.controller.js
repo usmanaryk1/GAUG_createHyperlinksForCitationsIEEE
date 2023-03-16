@@ -254,6 +254,16 @@
                         ctrl.patient.subscriberInfo = [];
                         ctrl.patient.subscriberInfo[0] = {};
                     }
+                    if(!ctrl.patient.subscriberInfo[0].fName || ctrl.patient.subscriberInfo[0].fName===null){
+                        ctrl.patient.subscriberInfo[0].fName = ctrl.patient.fName;
+                        ctrl.patient.subscriberInfo[0].lName = ctrl.patient.lName;
+                        ctrl.patient.subscriberInfo[0].middleInitial = ctrl.patient.middleInitial;
+                        ctrl.patient.subscriberInfo[0].nameSuffix = ctrl.patient.nameSuffix;
+                        ctrl.patient.subscriberInfo[0].dateOfBirth = ctrl.patient.dateOfBirth;
+                        ctrl.patient.subscriberInfo[0].gender = ctrl.patient.gender;
+                        ctrl.patient.subscriberInfo[0].relationshipWithPatient = 'I';
+                        
+                    }
                     if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection) {
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = {};
@@ -294,13 +304,15 @@
             }, 100);
         }
 
-        function setBillingAddress() {
+        function setBillingAddress(sameAsPatientAddress) {
             var address = {};
-            address.address1 = ctrl.patient.patientAddress.address1;
-            address.address2 = ctrl.patient.patientAddress.address2;
-            address.city = ctrl.patient.patientAddress.city;
-            address.state = ctrl.patient.patientAddress.state;
-            address.zipcode = ctrl.patient.patientAddress.zipcode;
+            if (sameAsPatientAddress === true) {
+                address.address1 = ctrl.patient.patientAddress.address1;
+                address.address2 = ctrl.patient.patientAddress.address2;
+                address.city = ctrl.patient.patientAddress.city;
+                address.state = ctrl.patient.patientAddress.state;
+                address.zipcode = ctrl.patient.patientAddress.zipcode;
+            }
             ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
         }
 

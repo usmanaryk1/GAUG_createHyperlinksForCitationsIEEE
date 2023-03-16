@@ -75,7 +75,7 @@
                         <div class="col-sm-9">
                             <select class="form-control" id="RelationshipWithPatient" name="RelationshipWithPatient" ng-model="addPatient.patient.subscriberInfo[0].relationshipWithPatient"
                                     data-validate="required" data-message-required="Please enter Relationship With Patient.">
-                                <option value="">Select</option>
+                                <option value="I">Self</option>
                                 <option value="S">Spouse</option>
                                 <option value="P">Parents</option>
                                 <option value="O">Other</option>
@@ -87,10 +87,10 @@
                         <label class="col-sm-3 control-label">Is Billing Address Same As Patient?</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <label class="cbr-inline" ng-click="addPatient.setBillingAddress()">
+                                <label class="cbr-inline" ng-click="addPatient.setBillingAddress(true)">
                                     <input type="radio" class="cbr" name="IsBillingAddressSameAsPatient" value="Yes" ng-model="addPatient.isBillingAddressSameAsPatient">
                                     Yes </label>
-                                <label class="cbr-inline">
+                                <label class="cbr-inline" ng-click="addPatient.setBillingAddress(false)">
                                     <input type="radio" class="cbr" name="IsBillingAddressSameAsPatient" value="No" ng-model="addPatient.isBillingAddressSameAsPatient">
                                     No </label>
                             </div>
@@ -100,7 +100,7 @@
                     <div class="form-group">
                         <label for="field-54" class="col-sm-3 control-label">Address 1</label>
                         <div class="col-sm-9">
-                            <input id="field-54" class="form-control" name="Address1" maxlength="255"
+                            <input id="field-54" class="form-control" name="Address1" maxlength="255" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                    ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].address1" type="text"
                                    data-validate="required" data-message-required="Please enter Address 1."/>
                         </div>
@@ -109,14 +109,15 @@
                     <div class="form-group">
                         <label for="field-55" class="col-sm-3 control-label">Address 2</label>
                         <div class="col-sm-9">
-                            <input type="text" id="field-55" class="form-control" name="Address2" maxlength="255" ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].address2"/>
+                            <input type="text" id="field-55" class="form-control" name="Address2" maxlength="255" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
+                                   ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].address2"/>
                         </div>
                     </div>
                     <div class="form-group-separator"></div>
                     <div class="form-group">
                         <label for="field-56" class="col-sm-3 control-label">City</label>
                         <div class="col-sm-9">
-                            <input id="field-56" class="form-control" name="City" maxlength="50"
+                            <input id="field-56" class="form-control" name="City" maxlength="50" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                    ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].city" type="text"
                                    data-validate="required" data-message-required="Please enter City."/>
                         </div>
@@ -135,7 +136,8 @@
                                 // 	});
                                 // });
                             </script>
-                            <select class="form-control" id="sboxit-1" name="State" ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state"
+                            <select class="form-control" id="sboxit-1" name="State" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
+                                    ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state"
                                     data-validate="required" data-message-required="Please enter State."
                                     ng-options="state.abbreviation as state.abbreviation for state in states">
                                 <option value="">
@@ -149,7 +151,7 @@
                     <div class="form-group">
                         <label for="field-57" class="col-sm-3 control-label">Zip Code</label>
                         <div class="col-sm-9">
-                            <input id="field-57" class="form-control" name="ZipCode" numbers-only="true" maxlength="50"
+                            <input id="field-57" class="form-control" name="ZipCode" numbers-only="true" maxlength="50" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                    ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].zipcode" type="text"
                                    data-validate="required" data-message-required="Please enter Zip Code."/>
                         </div>

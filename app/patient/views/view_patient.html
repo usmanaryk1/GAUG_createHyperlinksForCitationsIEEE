@@ -62,9 +62,9 @@
                                             <tbody>
                                                 <tr ng-repeat="patient in viewPatient.patientList">
                                                     <td> <div class="user_panel" ng-click="viewPatient.openEditModal(patient, 'modal-5')" style="cursor: pointer">
-                                                            <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
+                                                            <!--<div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>-->
                                                             <div class="emp_user_hd">
-                                                                <div class="emp_user_name">{{patient.lName}} {{patient.fName}} {{patient.middleInitial}}</div>
+                                                                <div class="emp_user_name">{{patient.lName}}, {{patient.fName}} {{patient.middleInitial}}</div>
                                                                 <p>{{patient.insuranceProvider}}</p>
                                                             </div>
                                                         </div>
@@ -229,9 +229,9 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="modal-body">
     <div class="row">
     <div class="user_panel col-md-12">
-    <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
+//    <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
     <div class="emp_user_hd">
-    <div class="emp_user_name">{{selectPatientModel.patient.lName}} {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
+    <div class="emp_user_name">{{selectPatientModel.patient.lName}}, {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
     <p>{{selectPatientModel.patient.insuranceProvider}}</p>
     </div>
     <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
@@ -269,7 +269,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Insurance ID</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.insuraneId}} 
+    {{selectPatientModel.patient.insuranceId}} 
     </div>
     </div>	
 
