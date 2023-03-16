@@ -168,7 +168,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                 }
             });
     var includedStatesForDirtyCheck = ['app.patient.tab1', 'app.patient.tab2', 'app.patient.tab3', 'app.patient.tab4', 'app.patient.tab5',
-        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4','admin.worksite.tab1','admin.worksite.tab2'];
+        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4', 'admin.worksite.tab1', 'admin.worksite.tab2'];
     $rootScope.$on('$stateChangeSuccess',
             function (event, currentState) {
                 if (currentState.data != null && currentState.data.feature != null && $rootScope.currentUser.allowedFeature != null) {
@@ -758,7 +758,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_1'),
                 data: {
                     tabNo: 1,
-                    feature: 'CREATE_PATIENT'
+                    feature: 'CREATE_WORKSITE'
                 }
             }).
             // add_worksite_tab_2
@@ -766,15 +766,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_2'),
                 data: {
-                    tabNo: 2,
-                    feature: 'CREATE_PATIENT'
+                    tabNo: 1,
+                    feature: 'CREATE_WORKSITE'
                 }
             }).
             // view worksites page
             state('admin.worksite-list', {
                 url: '/worksite-list/:status',
                 templateUrl: appHelper.viewTemplatePath('worksite', 'view_worksite'),
-                controller: 'ViewWorksitesCtrl as viewWorksite',                
+                controller: 'ViewWorksitesCtrl as viewWorksite',
+                 data: {
+                    tabNo: 1,
+                    feature: 'VIEW_WORKSITE'
+                }
             }).
             state('admin.manage_role', {
                 url: '/manage_role',
@@ -811,8 +815,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'EDIT_DISPATCH'
                 }
-            }).            
-    // Update Highlights
+            }).
+            // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
 //                templateUrl: appHelper.templatePath('update-highlights'),
@@ -1471,19 +1475,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
 //                    },
 //                }
 //            }).
-    state('lockscreen', {
-        url: '/lockscreen',
-        templateUrl: appHelper.templatePath('lockscreen'),
-        controller: 'LockscreenCtrl',
-        resolve: {
-            resources: function ($ocLazyLoad) {
-                return $ocLazyLoad.load([
-                    ASSETS.forms.jQueryValidate,
-                    ASSETS.extra.toastr,
-                ]);
-            },
-        }
-    });
+            state('lockscreen', {
+                url: '/lockscreen',
+                templateUrl: appHelper.templatePath('lockscreen'),
+                controller: 'LockscreenCtrl',
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
+            });
     $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
             return {
                 request: function (config) {

@@ -194,6 +194,7 @@ angular.module('xenon.services', []).
             {
 //                var dashboard = this.addItem('Dashboard', '/admin/dashboard', 'fa-home');
                 var users = this.addItem('Users', '/admin', 'linecons-user', 'CREATE_USER,EDIT_USER,VIEW_USER');
+                var worksite = this.addItem('Worksites', '/admin', 'fa-building', 'CREATE_WORKSITE,EDIT_WORKSITE,VIEW_WORKSITE');
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
                 var languages = this.addItem('Languages', './admin/language-list', 'fa-language', 'UPDATE_LANGUAGE, VIEW_LANGUAGE');
@@ -204,6 +205,10 @@ angular.module('xenon.services', []).
                 // Subitems of users
                 users.addItem('Add User', './user/', 'CREATE_USER');
                 users.addItem('View Users', './user-list/active', 'VIEW_USER');
+                
+                // Subitems of worksites
+                worksite.addItem('Add Worksite', './worksite/tab1/', 'CREATE_WORKSITE');
+                worksite.addItem('View Worksite', './worksite-list/active', 'VIEW_WORKSITE');
                 // Subitems of company
 //                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 
