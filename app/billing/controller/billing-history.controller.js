@@ -53,17 +53,18 @@
                 ctrl.dataRetrieved = false;
                 BillingDAO.searchSessions(ctrl.searchParams).then(function (res) {
                     ctrl.dataRetrieved = true;
-                    ctrl.billingSessions = res;                    
-                    if (ctrl.onlyManualClaims) {
-                        ctrl.filterManualClaims();
-                    }
+                    ctrl.billingSessions = res;
                     angular.forEach(ctrl.billingSessions, function (billingObj) {
                         billingObj.processedOn = Date.parse(billingObj.processedOn);
                         billingObj.sessionStartDate = Date.parse(billingObj.sessionStartDate);
                         billingObj.sessionEndDate = Date.parse(billingObj.sessionEndDate);
                     });
                     billingSessionsCopy = ctrl.billingSessions;
-                    ctrl.rerenderDataTable();
+                    if (ctrl.onlyManualClaims) {
+                        ctrl.filterManualClaims();
+                    } else {
+                        ctrl.rerenderDataTable();
+                    }
                 }, function (e) {
                     toastr.error("Billing sessions cannot be retrieved.");
 
@@ -106,7 +107,7 @@
                         $(".dt-button").attr("class", "btn btn-info green_bt pull-right print-btn");
                     }
                 }, 50);
-                if (pageInfo != null) {
+                if (pageInfo != null && ctrl.datatableObj != null && ctrl.datatableObj.page != null) {
                     $timeout(function () {
                         var pageNo = Number(pageInfo.page);
                         if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
