@@ -1,8 +1,8 @@
 (function () {
     function DispatchInfoCaseModalCtrl($modalInstance, PatientDAO, dispatchInfo, EventTypeDAO, EmployeeDAO, $filter, $rootScope, $timeout, empId) {
         var ctrl = this;
-        ctrl.close = function () {
-            $modalInstance.close();
+        ctrl.close = function (saved) {
+            $modalInstance.close(saved);
         };
         var careTypes;
         var careEmployeeMap;
@@ -61,7 +61,8 @@
             }
             if (!angular.isDefined(ctrl.data)) {
                 ctrl.data = {patientId: dispatchInfo.patientId, eventType: "S", recurranceType: "N", forLiveIn: false,
-                    doNotBill: false, startTime: ctrl.currentStartTime, endTime: ctrl.currentEndTime, startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat), endDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat), employeeId: empId, companyCareTypeId: dispatchInfo.careTypeId};
+                    doNotBill: false, startTime: ctrl.currentStartTime, endTime: ctrl.currentEndTime, startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat), endDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat),
+                    employeeId: empId, companyCareTypeId: dispatchInfo.careTypeId, dispatchId: dispatchInfo.id};
             }
             if (scheduleData && scheduleData.eventType == null) {
                 var id;
@@ -71,7 +72,8 @@
                     id = ctrl.viewPatient.id;
                 }
                 ctrl.data = {eventType: "S", recurranceType: "N", forLiveIn: false,
-                    doNotBill: false, startTime: ctrl.currentStartTime, endTime: ctrl.currentEndTime, startDate: $filter('date')(scheduleData.startDate, $rootScope.dateFormat), endDate: $filter('date')(scheduleData.startDate, $rootScope.dateFormat), patientId: id, employeeId: empId, companyCareTypeId: dispatchInfo.careTypeId};
+                    doNotBill: false, startTime: ctrl.currentStartTime, endTime: ctrl.currentEndTime, startDate: $filter('date')(scheduleData.startDate, $rootScope.dateFormat), endDate: $filter('date')(scheduleData.startDate, $rootScope.dateFormat),
+                    patientId: id, employeeId: empId, companyCareTypeId: dispatchInfo.careTypeId, dispatchId: dispatchInfo.id};
             }
             ctrl.closePopup = function () {
                 $rootScope.paginationLoading = false;
@@ -252,7 +254,7 @@
             if (ctrl.isNew) {
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
-                    ctrl.close();
+                    ctrl.close(true);
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -266,7 +268,7 @@
                     obj.subAction = obj.data.unavailabilityId;
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
-                    ctrl.close();
+                    ctrl.close(true);
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {

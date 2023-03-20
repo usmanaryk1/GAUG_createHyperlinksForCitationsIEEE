@@ -180,8 +180,8 @@
             });
             modalInstance.result.then(function (employeeResponseUpdated) {
                 if (employeeResponseUpdated) {
-                    for(var i=0; i<ctrl.employees.length; i++){
-                        if(ctrl.employees[i].id===employeeResponseUpdated.id){
+                    for (var i = 0; i < ctrl.employees.length; i++) {
+                        if (ctrl.employees[i].id === employeeResponseUpdated.id) {
                             ctrl.employees[i] = employeeResponseUpdated;
                             ctrl.rerenderDataTable();
                             break;
@@ -192,7 +192,7 @@
         };
 
         ctrl.assignCase = function (emp) {
-            var patientObj;
+            var patientObj={};
             function open() {
                 $rootScope.unmaskLoading();
                 ctrl.patientPopup = $modal.open({
@@ -210,12 +210,19 @@
                         }
                     }
                 });
+
+                ctrl.patientPopup.result.then(function (saved) {
+                    if (saved) {
+                        DispatchDAO.get({id: $state.params.id}).then(function (res) {
+                            ctrl.dispatchInfo = angular.copy(res);
+                            ctrl.employees = angular.copy(res.employeeDispatchResponses);
+                            ctrl.rerenderDataTable();
+                        });
+                    }
+                });
             }
             ;
             $rootScope.maskLoading();
-            var careTypes;
-            var careEmployeeMap;
-            patientObj = {};
             open();
 
         };
