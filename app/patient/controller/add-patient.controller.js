@@ -25,19 +25,16 @@
             ctrl.nursingCareList = res;
         }).catch(function() {
             toastr.error("Failed to retrieve nursing care list.");
-            ctrl.nursingCareList.push({fNmae: "Test", lName: "Data", id: 1});
         });
         EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
             ctrl.staffCoordinatorList = res;
         }).catch(function() {
             toastr.error("Failed to retrieve staff coordinator list.");
-            ctrl.staffCoordinatorList.push({fNmae: "Test", lName: "Data", id: 1});
         });
         InsurerDAO.retrieveAll().then(function(res) {
             ctrl.insuranceProviderList = res;
         }).catch(function() {
             toastr.error("Failed to retrieve insurance provider list.");
-            ctrl.insuranceProviderList.push({insuranceNmae: "Test Data", id: 1});
         });
         //funcions
         ctrl.savePatient = savePatientData;

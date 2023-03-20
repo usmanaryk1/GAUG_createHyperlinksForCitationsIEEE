@@ -1,5 +1,5 @@
 (function() {
-    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout) {
+    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
         $rootScope.selectPatientModel = {};
         ctrl.companyCode = ontimetest.company_code;
@@ -11,7 +11,37 @@
         }
         ctrl.retrievePatients = retrievePatientsData;
         ctrl.edit = edit;
+        ctrl.nursingCareMap = {};
+        ctrl.staffCoordinatorMap = {};
+        ctrl.insuranceProviderMap = {};
 
+        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.nursingCareMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function() {
+            toastr.error("Failed to retrieve nursing care list.");
+        });
+        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function() {
+            toastr.error("Failed to retrieve staff coordinator list.");
+        });
+        InsurerDAO.retrieveAll().then(function(res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
+                }
+            }
+        }).catch(function() {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
         function retrievePatientsData() {
             PatientDAO.retrieveAll({status: ctrl.viewType}).then(function(res) {
                 showLoadingBar({
@@ -55,6 +85,9 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
             $rootScope.selectPatientModel.patient = patient;
+            $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
+            $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
+            $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
 
         };
 
@@ -132,5 +165,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", ViewPatientsCtrl]);
+    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", ViewPatientsCtrl]);
 })();

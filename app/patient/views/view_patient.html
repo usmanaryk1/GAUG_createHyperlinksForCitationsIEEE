@@ -65,7 +65,7 @@
                                                             <!--<div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>-->
                                                             <div class="emp_user_hd">
                                                                 <div class="emp_user_name">{{patient.lName}}, {{patient.fName}} {{patient.middleInitial}}</div>
-                                                                <p>{{patient.insuranceProvider}}</p>
+                                                                <p>{{viewPatient.insuranceProviderMap[patient.insuranceProviderId]}}</p>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -229,10 +229,9 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="modal-body">
     <div class="row">
     <div class="user_panel col-md-12">
-//    <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> </div>
     <div class="emp_user_hd">
     <div class="emp_user_name">{{selectPatientModel.patient.lName}}, {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
-    <p>{{selectPatientModel.patient.insuranceProvider}}</p>
+    <p>{{selectPatientModel.patient.insuranceProviderName}}</p>
     </div>
     <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
     </div>
@@ -257,7 +256,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Insurer</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.insuranceProvider}} 
+    {{selectPatientModel.patient.insuranceProviderName}} 
     </div>
     </div>	
 
@@ -321,7 +320,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Coordinator</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.careCordinatorId}} 
+    {{selectPatientModel.patient.staffingCordinatorName}} 
     </div>
     </div>	
 
@@ -333,7 +332,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Nurse Case Manager</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.nurseCaseManagerId}} 
+    {{selectPatientModel.patient.nurseCaseManagerName}} 
     </div>
     </div>	
 
