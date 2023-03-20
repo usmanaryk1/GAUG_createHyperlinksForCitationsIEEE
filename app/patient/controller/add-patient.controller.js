@@ -50,21 +50,34 @@
         ctrl.navigateToTab = navigateToTab;
         ctrl.setBillingAddress = setBillingAddress;
         ctrl.setBillingAddressRadioButton = setBillingAddressRadioButton;
+        ctrl.resetPatient = function() {
+            if (ctrl.patient.authorization != null) {
+                ctrl.patient.authorization = null;
+            }
+            if (ctrl.fileObj.flowObj != null) {
+                ctrl.fileObj.flowObj.cancel();
+            }
+        };
+        ctrl.isValidAutorization = function(formValidity) {
+            var validAuthorization = true;
+            if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && formValidity) {
+                ctrl.fileObj.errorMsg = "Please upload Authorization Document.";
+                validAuthorization = false;
+            } else {
+                ctrl.fileObj.errorMsg = "";
+            }
+            return validAuthorization;
+        };
 
         //ceck if form has been changed or not
         //If changed then it should be valid
         //function to navigate to different tab by state
         function navigateToTab(event, state) {
-            var validAuthorization = true;
-            if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && ctrl.formDirty) {
-                ctrl.fileObj.errorMsg = "Please upload Authorization Document.";
-                validAuthorization = false;
-            }
-
             // Don't propogate the event to the document
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
+            var validAuthorization = ctrl.isValidAutorization(ctrl.formDirty);
             if (($('#add_patient_form').valid() && validAuthorization) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
@@ -75,7 +88,8 @@
 
         //function to save patient data.
         function savePatientData() {
-            if ($('#add_patient_form')[0].checkValidity()) {
+            var validAuthorization = ctrl.isValidAutorization(true);
+            if ($('#add_patient_form')[0].checkValidity() && validAuthorization) {
                 var patientToSave = angular.copy(ctrl.patient);
                 if (patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth) {
                     patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
