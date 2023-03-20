@@ -119,6 +119,7 @@ angular.module('xenon.services', []).
                 billing.addItem('Billing Session', './billing_session', 'VIEW_BILLING_SESSION');
                 billing.addItem('Billing History', './biling_history', 'VIEW_BILLING_HISTORY');
                 billing.addItem('Billing Setting', './biling_setting', 'CREATE_BILLING_SETTING');
+                billing.addItem('Search Claim', './claim_search', 'VIEW_BILLING_HISTORY');
                 billing.addItem('Manual Claim', './manual_claim', 'CREATE_MANUAL_CLAIM');
 
                 // Subitems of payroll
@@ -180,6 +181,7 @@ angular.module('xenon.services', []).
                 // Subitems of billing
                 billing.addItem('Billing Session', './billing_tab_1');
                 billing.addItem('Billing History', './biling_history');
+                billing.addItem('Search Claim', './claim_search');
 
                 // Subitems of calendar
                 calendar.addItem('Employee', './employee_calendar');

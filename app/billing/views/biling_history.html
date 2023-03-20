@@ -67,11 +67,17 @@
                             </div>
                         </div>
                         <div class="col-sm-12 pad0">
-                            <div class="pull-right">
+
+                            <div class="col-md-4 pull-right pad0">
                                 <button type="button" class="btn btn-info green_bt pull-right"  ng-click="billingHistory.filterSessions()" style="width:auto; margin: 0px">Show</button>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="billingHistory.resetFilters()">
                                     Reset Filters
                                 </button>
+                            </div>
+                            <div class="col-md-3 pull-right" style="padding-left: 10px">
+                                <label style="color:#2c2e2f">
+                                    <input type="checkbox" name="onlyManualClaims" ng-model="billingHistory.onlyManualClaims" ng-change="billingHistory.filterManualClaims()">&nbsp;Only manual claims
+                                </label>    
                             </div>
                         </div>
                     </form>
@@ -85,8 +91,8 @@
                                     <tr>
                                         <th nowrap><span class="">Batch No.</span></th>
                                         <th nowrap><span class="">Date Processed</span></th>
-                                        <th nowrap><span class="">Total Claims</span></th>
-
+                                        <th width="20%" nowrap><span class="">Service Date</span></th>
+                                        <th nowrap><span class="">Total Claims</span></th>                                        
                                         <th nowrap><span class="">Total Charges</span></th>
                                         <th nowrap><span class="">Insurance Provider</span></th>
                                     </tr>
@@ -96,6 +102,7 @@
                                         <td><b>{{session.id}}</b></td>
                                         <!-- span with ng-hide for sorting in data table -->
                                         <td><span class="ng-hide">{{session.processedOn|date:'yyyyMMdd'}}</span>{{session.processedOn|date:dateFormat}}</td>
+                                        <td><span ng-if="session.sessionStartDate && session.sessionEndDate">{{session.sessionStartDate|date:dateFormat}} - {{session.sessionEndDate|date:dateFormat}}</span></td>
                                         <td>{{session.totalClaims ? session.totalClaims : 0}}</td>
                                         <td>${{session.totalCharges ? (session.totalCharges | number:2): 0}}</td>
                                         <td>{{session.insuranceProvider}}</td>

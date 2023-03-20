@@ -58,6 +58,13 @@
                     action: 'process',
                     paramId: 'manualclaim'
                 }
+            },
+            searchClaims:{
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'claims'
+                }
             }
         });
         return {
@@ -87,6 +94,9 @@
             },
             processManualClaim: function(param, data) {
                 return api.processManualClaim(param, data).$promise;
+            },
+            searchClaims: function(data) {
+                return api.searchClaims(data).$promise;
             }
 
         };

@@ -1,6 +1,7 @@
 (function () {
     function BillingHistoryCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, BillingDAO, InsurerDAO, $state, Page) {
         var ctrl = this;
+        var billingSessionsCopy;
         Page.setTitle("Billing History");
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -52,11 +53,16 @@
                 ctrl.dataRetrieved = false;
                 BillingDAO.searchSessions(ctrl.searchParams).then(function (res) {
                     ctrl.dataRetrieved = true;
-                    ctrl.billingSessions = res;
-//                    console.log(res);
+                    ctrl.billingSessions = res;                    
+                    if (ctrl.onlyManualClaims) {
+                        ctrl.filterManualClaims();
+                    }
                     angular.forEach(ctrl.billingSessions, function (billingObj) {
                         billingObj.processedOn = Date.parse(billingObj.processedOn);
+                        billingObj.sessionStartDate = Date.parse(billingObj.sessionStartDate);
+                        billingObj.sessionEndDate = Date.parse(billingObj.sessionEndDate);
                     });
+                    billingSessionsCopy = ctrl.billingSessions;
                     ctrl.rerenderDataTable();
                 }, function (e) {
                     toastr.error("Billing sessions cannot be retrieved.");
@@ -67,11 +73,20 @@
             }
         };
 
+        ctrl.filterManualClaims = function () {
+            if (ctrl.onlyManualClaims) {
+                ctrl.billingSessions = $filter("filter")(billingSessionsCopy, {manuallyProcessed: true});
+            } else {
+                ctrl.billingSessions = angular.copy(billingSessionsCopy);
+            }
+            ctrl.rerenderDataTable();
+        };
+
         ctrl.changeViewRecords = function () {
             ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
         };
         ctrl.reviewClaims = function (billingSessionId) {
-            $state.go('app.billing_batch',{id:billingSessionId});
+            $state.go('app.billing_batch', {id: billingSessionId});
         };
         ctrl.rerenderDataTable = function () {
             var pageInfo;

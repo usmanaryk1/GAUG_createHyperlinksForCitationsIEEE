@@ -595,6 +595,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'BillingSessionCtrl as billingSession',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_session'),
             }).
+            state('app.claim_search', {
+                url: '/claim_search',
+                controller: 'ClaimSearchCtrl as claimSearch',
+                templateUrl: appHelper.viewTemplatePath('billing', 'claim_search'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY'
+                }
+            }).
             state('app.location_lookup', {
                 url: '/location_lookup',
                 controller: 'LocationLookupCtrl as locationLookup',

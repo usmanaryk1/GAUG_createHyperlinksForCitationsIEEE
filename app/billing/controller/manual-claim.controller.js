@@ -90,11 +90,11 @@
                         totalCharges += parseFloat(item.serviceTotalBill);
                     }
                 });
-                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g,"");
+                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g, "");
             } else {
                 if (!ctrl.manualClaimObj)
                     ctrl.manualClaimObj = {};
-                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g,"");
+                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g, "");
             }
         };
         if ($state.params.id && $state.params.id !== '') {
@@ -198,6 +198,7 @@
         };
 
         ctrl.processManualClaim = function () {
+            var fromDate, toDate;
             if (!ctrl.patientId || ctrl.patientId === '') {
                 ctrl.showPatientError = true;
                 return;
@@ -213,6 +214,12 @@
                     ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
                     ctrl.billingClaimObj.authorizedCodes = [];
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        if (fromDate == null || new Date(serviceLine.serviceFromDate).getTime() <= new Date(fromDate).getTime()) {
+                            fromDate = serviceLine.serviceFromDate;
+                        }
+                        if (toDate == null || new Date(serviceLine.serviceToDate).getTime() >= new Date(toDate).getTime()) {
+                            toDate = serviceLine.serviceToDate;
+                        }
                         if (ctrl.billingClaimObj.authorizedCodes.indexOf(serviceLine.serviceProcedureCode) === -1) {
                             ctrl.billingClaimObj.authorizedCodes.push(serviceLine.serviceProcedureCode);
                         }
@@ -221,11 +228,11 @@
                     ctrl.billingClaimObj.authorizedCodes = ctrl.billingClaimObj.authorizedCodes.join(',');
                 }
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
-                BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat)}, ctrl.billingClaimObj)
+                BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
                             window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
-                            ctrl.manualClaimObj={};
+                            ctrl.manualClaimObj = {};
                             ctrl.manualClaimObj.serviceLines = [{}];
                             $("#sboxit-1").select2("val", null);
                         }).catch(function () {
