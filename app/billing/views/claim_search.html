@@ -84,7 +84,7 @@
                                         <th nowrap><span class="">Claim Number</span></th>
                                         <th nowrap><span class="">Patient Name</span></th>
                                         <th nowrap><span class="">Date Of Birth</span></th>
-                                        <th nowrap><span class="">Service Lines</span></th>
+                                        <th nowrap width="20%" ><span class="">Service Date Range</span></th>
                                         <th nowrap><span class="">Billed</span></th>
                                         <th nowrap class="text-center"><span class="">Authorized Codes</span></th>                                        
                                     </tr>
@@ -93,11 +93,11 @@
                                     <tr pagination-id="drinksPagination" dir-paginate="session in claimSearch.claims| itemsPerPage: claimSearch.searchParams.limit" 
                                         total-items="totalRecords"
                                         current-page="claimSearch.searchParams.pageNo" >
-                                        <td><b>{{session.billingSessionId}}</b></td>
+                                        <td style="cursor: pointer" ng-click="claimSearch.reviewClaims(session.billingSessionId)"><b>{{session.billingSessionId}}</b></td>
                                         <td style="cursor: pointer" ng-click="claimSearch.openClaim1500(session);"><b>{{session.id}}</b></td>
                                         <td>{{session.patientName}}</td>                                        
                                         <td>{{session.patientBirthDate|date:dateFormat}}</td>
-                                        <td>{{session.totalServiceLines ? session.totalServiceLines: 0}}</td>
+                                        <td><span ng-if="session.sessionStartDate && session.sessionEndDate">{{session.sessionStartDate|date:dateFormat}} - {{session.sessionEndDate|date:dateFormat}}</span></td>
                                         <td>${{session.totalCosts ? (session.totalCosts | number:2): 0}}</td>
                                         <td class="text-center">{{session.authorizedCodes}}</td>                                                                               
                                     </tr>

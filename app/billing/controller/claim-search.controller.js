@@ -16,6 +16,9 @@
             });
         }
         ;
+        ctrl.reviewClaims = function (billingSessionId) {
+            $state.go('app.billing_batch', {id: billingSessionId});
+        };
         ctrl.pageChanged = function (pagenumber) {
             ctrl.searchParams.pageNo = pagenumber;
             ctrl.retrieveSessions();
