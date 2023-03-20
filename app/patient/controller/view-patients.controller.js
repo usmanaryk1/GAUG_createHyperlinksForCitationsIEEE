@@ -131,7 +131,7 @@
             $rootScope.dischargePatientModel.patient = patient;
 
             $rootScope.dischargePatientModel.discharge = function(patient) {
-                PatientDAO.discharge({id: patient.id}).then(function(res) {
+                PatientDAO.changestatus({id: patient.id, status: 'discharged'}).then(function(res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -150,6 +150,40 @@
                 }).catch(function(data, status) {
                     toastr.error("Patient cannot be discharged.");
                     $rootScope.dischargePatientModel.close();
+                });
+            };
+        };
+        
+        ctrl.openReadmitModal = function(patient, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.readmitPatientModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+            });
+
+            $rootScope.readmitPatientModal.patient = patient;
+
+            $rootScope.readmitPatientModal.readmit = function(patient) {
+                PatientDAO.changestatus({id: patient.id, status: 'active'}).then(function(res) {
+                    var length = ctrl.patientList.length;
+
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.patientList[i].id === patient.id) {
+                            if (ctrl.viewType !== 'all') {
+                                ctrl.patientList.splice(i, 1);
+                            } else {
+                                ctrl.patientList[i].status = 'a';
+                            }
+                            break;
+                        }
+                    }
+                    toastr.success("Patient readmitted.");
+                    ctrl.rerenderDataTable();
+                    $rootScope.readmitPatientModal.close();
+                }).catch(function(data, status) {
+                    toastr.error("Patient cannot be readmitted.");
+                    $rootScope.readmitPatientModal.close();
                 });
             };
         };

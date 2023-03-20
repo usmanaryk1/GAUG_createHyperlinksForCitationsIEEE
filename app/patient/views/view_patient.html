@@ -83,6 +83,7 @@
                                                             <a class="btn icon-left fa fa-pencil edit_button" ng-click="viewPatient.edit(patient);" tooltip="Edit"><span class="ed_b"></span></a> 
                                                             <a class="btn icon-left fa fa-trash-o delete_button" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
                                                             <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status == 'a'" ng-click="viewPatient.openDischargeModal(patient, 'dischargeModel');" tooltip="Discharge"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-check edit_button" ng-if="patient.status == 'd'" ng-click="viewPatient.openReadmitModal(patient, 'readmitModal');" tooltip="Readmit"><span class="ed_b"></span></a>
                                                             <a ng-if="patient.authorization" class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}" tooltip="Download Authorization"><span class="ed_b"></span></a>
                                                         </div>
                                                     </td>
@@ -370,7 +371,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 </script>
 <script type="text/ng-template" id="deleteModel">
     <div class="modal-header">
-    <h4 class="modal-title">{{deletePatientModel.patient.lName}} {{deletePatientModel.patient.fName}} {{deletePatientModel.patient.middleInitial}}</h4>
+    <h4 class="modal-title">{{deletePatientModel.patient.lName}}, {{deletePatientModel.patient.fName}} {{deletePatientModel.patient.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
@@ -386,7 +387,7 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 </script>
 <script type="text/ng-template" id="dischargeModel">
     <div class="modal-header">
-    <h4 class="modal-title">{{dischargePatientModel.patient.lName}} {{dischargePatientModel.patient.fName}} {{dischargePatientModel.patient.middleInitial}}</h4>
+    <h4 class="modal-title">{{dischargePatientModel.patient.lName}}, {{dischargePatientModel.patient.fName}} {{dischargePatientModel.patient.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
@@ -400,3 +401,20 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <button type="button" class="btn btn-red" ng-click="dischargePatientModel.dismiss();">No</button>
     </div>
 </script>
+<script type="text/ng-template" id="readmitModal">
+    <div class="modal-header">
+    <h4 class="modal-title">{{readmitPatientModal.patient.lName}}, {{readmitPatientModal.patient.fName}} {{readmitPatientModal.patient.middleInitial}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to discharge this Patient?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="readmitPatientModal.readmit(readmitPatientModal.patient);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="readmitPatientModal.dismiss();">No</button>
+    </div>
+</script>
+
