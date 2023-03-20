@@ -9,6 +9,14 @@
         ctrl.initForm = function() {
             $("#add_inusrer_form input:text, #add_inusrer_form textarea").first().focus();
         };
+        ctrl.resetInsurer = function() {
+            if (ctrl.insurerObj.contractFile != null) {
+                ctrl.insurerObj.contractFile = null;
+            }
+            if (ctrl.fileObj.flowObj != null) {
+                ctrl.fileObj.flowObj.cancel();
+            }
+        };
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {

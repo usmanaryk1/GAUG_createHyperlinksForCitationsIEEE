@@ -11,6 +11,39 @@
         ctrl.w4FileObj = {};
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
+        ctrl.resetEmployee = function() {
+            if (ctrl.employee.employeeDocumentId.application != null) {
+                ctrl.employee.employeeDocumentId.application = null;
+            }
+            if (ctrl.employee.employeeDocumentId.i9 != null) {
+                ctrl.employee.employeeDocumentId.i9 = null;
+            }
+            if (ctrl.employee.employeeDocumentId.w4 != null) {
+                ctrl.employee.employeeDocumentId.w4 = null;
+            }
+            if (ctrl.employee.employeeDocumentId.references != null) {
+                ctrl.employee.employeeDocumentId.references = null;
+            }
+            if (ctrl.employee.employeeDocumentId.physical != null) {
+                ctrl.employee.employeeDocumentId.physical = null;
+            }
+
+            if (ctrl.applicationFileObj.flowObj != null) {
+                ctrl.applicationFileObj.flowObj.cancel();
+            }
+            if (ctrl.i9eligibilityFileObj.flowObj != null) {
+                ctrl.i9eligibilityFileObj.flowObj.cancel();
+            }
+            if (ctrl.w4FileObj.flowObj != null) {
+                ctrl.w4FileObj.flowObj.cancel();
+            }
+            if (ctrl.referencesFileObj.flowObj != null) {
+                ctrl.referencesFileObj.flowObj.cancel();
+            }
+            if (ctrl.physicalFileObj.flowObj != null) {
+                ctrl.physicalFileObj.flowObj.cancel();
+            }
+        };
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
