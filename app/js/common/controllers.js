@@ -36,7 +36,7 @@ angular.module('xenon.controllers', []).
                 'pc': 'Personal Care',
                 'nc': 'Nursing Care',
                 'pt': 'PT',
-                'ot':'OT',
+                'ot': 'OT',
                 'nut': 'NUT',
                 'a': 'Admin',
                 'mr': 'Market Rep.'
@@ -183,7 +183,10 @@ angular.module('xenon.controllers', []).
             // Watch changes to replace checkboxes
             $scope.$watch(function()
             {
-                cbr_replace();
+//                cbr_replace();
+                if (!$("input[type='radio']").parent().find("span").length) {
+                    $("input[type='radio']").parent().append("<span class='radio_overlay'></span>");
+                }
             });
 
             // Watch sidebar status to remove the psScrollbar

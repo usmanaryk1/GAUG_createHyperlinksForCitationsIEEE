@@ -7212,3 +7212,25 @@ pre {
         padding-bottom: 48px
     }
 }
+input[type=radio] {
+    opacity: 0;
+    z-index: 9999;
+    height: 0px;
+    width: 4px;
+}
+/* default radio button style: unchecked */
+.radio_overlay {
+    margin-top: 4px;
+    float: left;
+    height: 0.75em;
+    width: 0.7em;
+    background-color: white;
+    border-radius: 50%;
+    border: 1px solid #B0B0B0;
+
+
+}
+/* changed style when checked */
+input[type=radio]:checked + .radio_overlay {
+    background-color: black;
+}
