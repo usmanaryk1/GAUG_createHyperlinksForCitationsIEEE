@@ -1,5 +1,5 @@
 (function () {
-    function ViewWorksitesCtrl(WorksiteDAO, $rootScope, $stateParams, $state, $modal, $debounce, EmployeeDAO, InsurerDAO, Page, CareTypeDAO) {
+    function ViewWorksitesCtrl(WorksiteDAO, $rootScope, $stateParams, $state, $modal, $debounce, EmployeeDAO, InsurerDAO, Page, CareTypeDAO, PositionDAO) {
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.companyCode = ontime_data.company_code;
@@ -11,6 +11,7 @@
             ctrl.viewType = $stateParams.status;
         }
         ctrl.worksiteList = [];
+        var positionMap = {};
 
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'name', order: 'asc', name: ''};
         ctrl.retrieveWorksites = retrieveWorksitesData;
@@ -70,6 +71,8 @@
 //                        $("#paginationButtons").remove();
 //                        toastr.error("No data in the system.");
                     }
+                    if (angular.equals({}, positionMap))
+                        retrieveActivePositions();
                 }
 
             }).catch(function (data, status) {
@@ -97,6 +100,9 @@
                 resolve: {
                     worksiteId: function () {
                         return worksiteId;
+                    },
+                    positionMap: function () {
+                        return positionMap;
                     }
                 }
             });
@@ -131,7 +137,7 @@
                             if (ctrl.viewType !== 'all') {
                                 ctrl.worksiteList.splice(i, 1);
                             } else {
-                                ctrl.worksiteList[i].status = status === "active"?"a":"i";
+                                ctrl.worksiteList[i].status = status === "active" ? "a" : "i";
                             }
                             break;
                         }
@@ -148,6 +154,15 @@
 
         };
 
+        var retrieveActivePositions = function () {
+            PositionDAO.retrieveAll({status: 'active'}).then(function (res) {
+                var positions = angular.copy(res);
+                angular.forEach(positions, function (position) {
+                    positionMap[position.id] = position.position;
+                });
+            });
+        };
+
         ctrl.rerenderDataTable = function () {
             if (ctrl.worksiteList.length === 0) {
                 if (ctrl.searchParams.pageNo > 1) {
@@ -159,5 +174,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ViewWorksitesCtrl', ["WorksiteDAO", "$rootScope", "$stateParams", "$state", "$modal", "$debounce", "EmployeeDAO", "InsurerDAO", "Page", "CareTypeDAO", ViewWorksitesCtrl]);
+    angular.module('xenon.controllers').controller('ViewWorksitesCtrl', ["WorksiteDAO", "$rootScope", "$stateParams", "$state", "$modal", "$debounce", "EmployeeDAO", "InsurerDAO", "Page", "CareTypeDAO", "PositionDAO", ViewWorksitesCtrl]);
 })();

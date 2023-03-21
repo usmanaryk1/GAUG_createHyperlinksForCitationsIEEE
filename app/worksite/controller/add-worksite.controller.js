@@ -58,9 +58,9 @@
                 var worksiteToSave = angular.copy(ctrl.worksite);
                 if (ctrl.positions != null) {
                     if (ctrl.positions.indexOf(0) === -1) {
-//                    worksiteToSave.positions = ctrl.positions;
+                        worksiteToSave.positionIds = ctrl.positions;
                     } else {
-//                    worksiteToSave.positions = allPositionIds;
+                        worksiteToSave.positionIds = allPositionIds;
                     }
                 }
                 var reqParam;
@@ -106,7 +106,7 @@
                 $rootScope.maskLoading();
                 WorksiteDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.worksite = res;
-                    ctrl.positions = res.positions;
+                    ctrl.positions = res.positionIds;
                     ctrl.retrivalRunning = false;
                 }).catch(function (data, status) {
                     showLoadingBar({
@@ -143,7 +143,7 @@
             }
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-                    PositionDAO.retrieveAll({}).then(function (res) {
+                    PositionDAO.retrieveAll({status: 'active'}).then(function (res) {
                         ctrl.positionList = res;
                         ctrl.positionList.push({
                             "id": 0,
