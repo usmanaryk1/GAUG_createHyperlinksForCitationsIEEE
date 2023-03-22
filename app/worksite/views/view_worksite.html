@@ -51,7 +51,7 @@
                                                 </div>
                                             </div> 
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
-                                                <input type="search" class="form-control input-sm" ng-model="viewWorksite.searchParams.name" placeholder="Search by [Name,City,Phone number]" ng-change="viewWorksite.applySearch()">
+                                                <input type="search" class="form-control input-sm" ng-model="viewWorksite.searchParams.searchString" placeholder="Search by [Name,City,Phone number]" ng-change="viewWorksite.applySearch()">
                                             </div> 
 
                                         </div>
@@ -84,7 +84,7 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div>{{worksite.address1}}</div> <div ng-if="worksite.address2 != null">{{worksite.address2}}</div> {{worksite.city}}, {{worksite.state}}, {{worksite.zipcode}}
+                                                            <div>{{worksite.address1}}</div> <div ng-if="worksite.address2 != null">{{worksite.address2}}</div> <div ng-if="worksite.city">{{worksite.city}}, {{worksite.state}}, {{worksite.zipcode}}</div>
                                                         </td>
                                                         <td>{{worksite.supervisor}}</td>                                                      
                                                         <td>{{worksite.supervisorPhone| tel }}<br>{{worksite.supervisorEmail}}</td>

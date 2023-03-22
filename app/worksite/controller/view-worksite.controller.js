@@ -13,7 +13,7 @@
         ctrl.worksiteList = [];
         var positionMap = {};
 
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'name', order: 'asc', name: ''};
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'name', order: 'asc', searchString: ''};
         ctrl.retrieveWorksites = retrieveWorksitesData;
         ctrl.edit = edit;
 

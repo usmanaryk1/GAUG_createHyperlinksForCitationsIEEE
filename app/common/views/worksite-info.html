@@ -16,8 +16,8 @@
 
                 <div class="form-group">
                     <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
-                    <div class="col-md-8">
-                        {{worksiteInfo.worksite.address1}}<div ng-if="worksiteInfo.worksite.address2 != null">{{worksiteInfo.worksite.address2}}</div><div>  {{worksiteInfo.worksite.city}}, {{worksiteInfo.worksite.state}}, {{worksiteInfo.worksite.zipcode}}</div>
+                    <div class="col-md-8" >
+                        {{worksiteInfo.worksite.address1}}<div ng-if="worksiteInfo.worksite.address2 != null">{{worksiteInfo.worksite.address2}}</div><div ng-if="worksiteInfo.worksite.city">  {{worksiteInfo.worksite.city}}, {{worksiteInfo.worksite.state}}, {{worksiteInfo.worksite.zipcode}}</div>
                     </div>
                 </div>	
 
