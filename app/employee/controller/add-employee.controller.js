@@ -208,17 +208,6 @@
 
         //function called on page initialization.
         function pageInit() {
-            CareTypeDAO.retrieveAll().then(function(res) {
-                ctrl.careTypeList = res;
-                $timeout(function() {
-                    $('#rate1').multiSelect('refresh');
-                    $('#rate2').multiSelect('refresh');
-                    form_data = $('#add_employee_form').serialize();
-                }, 200);
-            }).catch(function() {
-                toastr.error("Failed to retrieve care types.");
-                form_data = $('#add_employee_form').serialize();
-            });
             if (ctrl.editMode) {
                 EmployeeDAO.get({id: $state.params.id}).then(function(res) {
                     showLoadingBar({
@@ -253,6 +242,11 @@
 
 //        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
         function setFormDynamicValidityMessages() {
+            $("#Salary-error").text('Please enter Salary.');
+            $("#rate1-error").text('Please select Care Types.');
+            $("#Rate1-error").text('Please enter Rate 1.');
+            $("#OTRate-error").text('Please enter OT Rate.');
+            $("#HDRate-error").text('Please enter HD Rate.');
             $("#TBTestingExpirationDate-error").text('Please enter TB Testing Expiration Date.');
             $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
         }
@@ -283,6 +277,28 @@
             }
         });
 
+        $scope.$watch(function() {
+            return ctrl.employee.wages;
+        }, function(newVal, oldValue) {
+            setValidationsForTab2(newVal);
+        });
+        
+        function setValidationsForTab2(wages){
+            if (wages && wages === 'S') {
+                $("input[name='Salary']").attr('required', true);
+                $("input[name='rate1']").attr('required', false);
+                $("input[name='Rate1']").attr('required', false);
+                $("input[name='OTRate']").attr('required', false);
+                $("input[name='HDRate']").attr('required', false);
+            } else {
+                $("input[name='Salary']").attr('required', false);
+                $("input[name='rate1']").attr('required', true);
+                $("input[name='Rate1']").attr('required', true);
+                $("input[name='OTRate']").attr('required', true);
+                $("input[name='HDRate']").attr('required', true);
+            }
+        }
+
         ctrl.tab3DataInit = function() {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
@@ -305,14 +321,24 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    $("#rate2").multiSelect('refresh');
-                    $("#rate1").multiSelect('refresh');
+                    CareTypeDAO.retrieveAll({position:ctrl.employee.position}).then(function(res) {
+                        ctrl.careTypeList = res;
+                        $timeout(function() {
+                            $('#rate1').multiSelect('refresh');
+                            $('#rate2').multiSelect('refresh');
+                            form_data = $('#add_employee_form').serialize();
+                        }, 200);
+                    }).catch(function() {
+                        toastr.error("Failed to retrieve care types.");
+                        form_data = $('#add_employee_form').serialize();
+                    });
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
                     }
                     if (!ctrl.employee.wages || ctrl.employee.wages === null) {
                         ctrl.employee.wages = 'H';
                     }
+                    setValidationsForTab2(ctrl.employee.wages);
                     $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
                     $formService.setRadioValues('Wages', ctrl.employee.wages);
                     form_data = $('#add_employee_form').serialize();
