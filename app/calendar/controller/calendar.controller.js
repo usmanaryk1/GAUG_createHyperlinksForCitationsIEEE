@@ -155,16 +155,18 @@
         };
 
         ctrl.getAllEvents = function (ids) {
-            var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
-            var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
-            ctrl.startRetrieved = a;
-            ctrl.endRetrieved = b;
-            EventTypeDAO.retrieveBySchedule({employeeIds: ids, fromDate: a, toDate: b}).then(function (res) {
-                delete res.$promise;
-                delete res.$resolved;
-                ctrl.events = res;
-                $rootScope.paginationLoading = false;
-            });
+            if (ids != null && ids != '') {
+                var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+                ctrl.startRetrieved = a;
+                ctrl.endRetrieved = b;
+                EventTypeDAO.retrieveBySchedule({employeeIds: ids, fromDate: a, toDate: b}).then(function (res) {
+                    delete res.$promise;
+                    delete res.$resolved;
+                    ctrl.events = res;
+                    $rootScope.paginationLoading = false;
+                });
+            }
         }
 
         ctrl.retrieveAllEmployees = function () {

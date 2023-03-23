@@ -43,7 +43,7 @@
 
             <div class='col-sm-12 col-md-6 text-right pad0 pull-right'>
                 <a ng-if='!calendar.isEmployeeSearchPage' href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
-                <a ng-if='calendar.isEmployeeSearchPage' href="" ng-disabled='calendar.searchParams.patientId==null' ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
+                <a ng-if='calendar.isEmployeeSearchPage' href="" ng-disabled='calendar.searchParams.patientId == null' ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
                 <div class="mwl-button-group">
                     <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
                             'mwl-state-active'
@@ -169,18 +169,28 @@
                 </div>
             </div>
             <div class="row" ng-if="calendar.calendarView == 'week'">
-                <div class="col-md-4">
+                <div ng-class='{"col-md-2":calendar.isEmployeeSearchPage,"col-md-4":!calendar.isEmployeeSearchPage}'>
                     <label>Available From</label>
                     <div class="input-group">
                         <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableStartDate" max-date="calendar.searchParams.availableEndDate">
-                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                        <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div ng-class='{"col-md-2":calendar.isEmployeeSearchPage,"col-md-4":!calendar.isEmployeeSearchPage}'>
                     <label>Available To</label>
                     <div class="input-group">
                         <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableEndDate" min-date="calendar.searchParams.availableStartDate">
-                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                        <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-if='calendar.isEmployeeSearchPage'>
+                    <label>Gender</label>
+                    <div>
+                        <select name ="languages" id="languages" class="form-control" ng-model="calendar.searchParams.sex">
+                            <option value="">Select Gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4 filter-checkbox row">
@@ -195,6 +205,23 @@
                         <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
                     </div>
                 </div>
+<!--                <div class="col-md-4 filter-checkbox row">
+                    <div class="col-md-6">
+                        <label>Live In</label>
+                        <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
+                    </div>
+
+                </div>
+                <div class="col-md-4 pull-right">
+                    <div class="col-md-6">                        
+                    </div>
+                    <div class="col-md-3" style="padding-top:20px;">
+                        <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="calendar.resetFilters()">Reset Filters</button>
+                    </div>
+                    <div class="col-md-3" style="padding-top:20px;">
+                        <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
+                    </div>
+                </div>-->
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
                     <div class="form-group col-sm-3">
                         <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
