@@ -8,6 +8,7 @@
         ctrl.baseUrl = ontimetest.weburl;
 
         function retrieveInsurersData() {
+            $rootScope.maskLoading();
             InsurerDAO.retrieveAll().then(function(res) {
                 showLoadingBar({
                     delay: .5,
@@ -31,6 +32,8 @@
                 }); // showLoadingBar
                 toastr.error("Failed to retrieve insurance provider.");
 //                ctrl.insurerList = ontimetest.insuranceProviders;
+            }).then(function() {
+                $rootScope.unmaskLoading();
             });
         }
 
@@ -48,6 +51,7 @@
             $rootScope.deleteInsurerModel.insurer = insurer;
 
             $rootScope.deleteInsurerModel.delete = function(insurer) {
+                $rootScope.maskLoading();
                 InsurerDAO.delete({id: insurer.id}).then(function(res) {
                     var length = ctrl.insurerList.length;
 
@@ -69,6 +73,8 @@
                         }
                     }
                     $rootScope.deleteInsurerModel.close();
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             };
 

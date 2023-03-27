@@ -88,20 +88,23 @@
                 if (insurerToSave.contractEndDate) {
                     insurerToSave.contractEndDate = new Date(insurerToSave.contractEndDate);
                 }
+                $rootScope.maskLoading();
                 InsurerDAO.update({action: reqParam, data: insurerToSave})
                         .then(function(res) {
-                            if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
-                                $state.go('^.insurer', {id: res.id});
-                                ctrl.editMode = true;
-                            }
+//                            if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
+//                                $state.go('^.insurer', {id: res.id});
+//                                ctrl.editMode = true;
+//                            }
+                            $state.go('app.insurer-list');
                             ctrl.insurerObj = res;
                             toastr.success("Insurance provider saved.");
-                        })
-                        .catch(function() {
-                            //exception logic
-                            toastr.error("Insurance provider cannot be saved.");
+                        }).catch(function() {
+                    //exception logic
+                    toastr.error("Insurance provider cannot be saved.");
 
-                        });
+                }).then(function() {
+                    $rootScope.unmaskLoading();
+                });
 
             }
         }
@@ -123,6 +126,7 @@
             });
             if (ctrl.editMode) {
                 ctrl.retrivalRunning = true;
+                $rootScope.maskLoading();
                 InsurerDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.insurerObj = res;
 
@@ -144,6 +148,8 @@
                         }
                     }); // showLoadingBar
                     console.log(JSON.stringify(ctrl.insurerObj));
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             }
         }

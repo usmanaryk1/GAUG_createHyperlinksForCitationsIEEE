@@ -43,6 +43,7 @@
             toastr.error("Failed to retrieve insurance provider list.");
         });
         function retrievePatientsData() {
+            $rootScope.maskLoading();
             PatientDAO.retrieveAll({status: ctrl.viewType}).then(function(res) {
                 showLoadingBar({
                     delay: .5,
@@ -69,6 +70,8 @@
                     }
                 }); // showLoadingBar
 //                ctrl.patientList = ontimetest.patients;
+            }).then(function() {
+                $rootScope.unmaskLoading();
             });
         }
 
@@ -101,6 +104,7 @@
             $rootScope.deletePatientModel.patient = patient;
 
             $rootScope.deletePatientModel.delete = function(patient) {
+                $rootScope.maskLoading();
                 PatientDAO.delete({id: patient.id}).then(function(res) {
                     var length = ctrl.patientList.length;
 
@@ -116,6 +120,8 @@
                 }).catch(function(data, status) {
                     toastr.error("Patient cannot be deleted.");
                     $rootScope.deletePatientModel.close();
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             };
         };
@@ -131,6 +137,7 @@
             $rootScope.dischargePatientModel.patient = patient;
 
             $rootScope.dischargePatientModel.discharge = function(patient) {
+                $rootScope.maskLoading();
                 PatientDAO.changestatus({id: patient.id, status: 'discharged'}).then(function(res) {
                     var length = ctrl.patientList.length;
 
@@ -150,10 +157,12 @@
                 }).catch(function(data, status) {
                     toastr.error("Patient cannot be discharged.");
                     $rootScope.dischargePatientModel.close();
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             };
         };
-        
+
         ctrl.openReadmitModal = function(patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.readmitPatientModal = $modal.open({
