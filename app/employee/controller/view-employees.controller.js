@@ -2,6 +2,9 @@
     function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope, $compile, $timeout) {
         var ctrl = this;
         $rootScope.selectEmployeeModel = {};
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
+
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
         } else {
@@ -11,6 +14,7 @@
         ctrl.edit = edit;
 
         function retrieveEmployeesData() {
+            $rootScope.maskLoading();
             EmployeeDAO.retrieveAll({subAction: ctrl.viewType}).then(function(res) {
                 showLoadingBar({
                     delay: .5,
@@ -33,6 +37,8 @@
                 }); // showLoadingBar
 //                ctrl.employeeList = ontimetest.employees;
                 console.log('Error in retrieving data')
+            }).then(function() {
+                $rootScope.unmaskLoading();
             });
         }
 
@@ -48,6 +54,8 @@
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
+            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
+            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
             $rootScope.selectEmployeeModel.employee = employee;
 
         };
@@ -62,6 +70,7 @@
             $rootScope.deleteEmployeeModel.employee = employee;
 
             $rootScope.deleteEmployeeModel.delete = function(employee) {
+                $rootScope.maskLoading();
                 EmployeeDAO.delete({id: employee.id}).then(function(res) {
                     var length = ctrl.employeeList.length;
 
@@ -77,6 +86,8 @@
                 }).catch(function(data, status) {
                     toastr.error("Failed to delete employee.");
                     $rootScope.deleteEmployeeModel.close();
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             };
 
@@ -99,6 +110,7 @@
             $rootScope.deactivateEmployeeModel.employee = employee;
 
             $rootScope.deactivateEmployeeModel.deactivate = function(employee) {
+                $rootScope.maskLoading();
                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function(res) {
                     var length = ctrl.employeeList.length;
 
@@ -119,6 +131,8 @@
                 ).catch(function(data, status) {
                     toastr.error("Employee cannot be deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             };
         };
@@ -132,6 +146,7 @@
             $rootScope.activateEmployeeModel.employee = employee;
 
             $rootScope.activateEmployeeModel.activate = function(employee) {
+                $rootScope.maskLoading();
                 EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function(res) {
                     var length = ctrl.employeeList.length;
 
@@ -151,6 +166,8 @@
                 }).catch(function(data, status) {
                     toastr.error("Employee cannot be activated.");
                     $rootScope.activateEmployeeModel.close();
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             };
         };
