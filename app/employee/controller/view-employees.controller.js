@@ -2,6 +2,9 @@
     function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope, $compile, $timeout) {
         var ctrl = this;
         $rootScope.selectEmployeeModel = {};
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
+
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
         } else {
@@ -48,6 +51,8 @@
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
+            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
+            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
             $rootScope.selectEmployeeModel.employee = employee;
 
         };

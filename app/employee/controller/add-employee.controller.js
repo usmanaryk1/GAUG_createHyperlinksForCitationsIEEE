@@ -11,6 +11,7 @@
         ctrl.w4FileObj = {};
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
+        ctrl.profileFileObj = {};
         ctrl.resetEmployee = function() {
             if (ctrl.employee.employeeDocumentId.application != null) {
                 ctrl.employee.employeeDocumentId.application = null;
@@ -216,6 +217,11 @@
                         finish: function() {
                         }
                     }); // showLoadingBar
+                    if (res.profileImage != null && res.profileImage != '') {
+                        ctrl.hideLoadingImage = false;
+                    } else {
+                        ctrl.hideLoadingImage = true;
+                    }
                     ctrl.employee = res;
                     ctrl.retrivalRunning = false;
                     EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
@@ -282,8 +288,8 @@
         }, function(newVal, oldValue) {
             setValidationsForTab2(newVal);
         });
-        
-        function setValidationsForTab2(wages){
+
+        function setValidationsForTab2(wages) {
             if (wages && wages === 'S') {
                 $("input[name='Salary']").attr('required', true);
                 $("input[name='rate1']").attr('required', false);
@@ -321,7 +327,7 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    CareTypeDAO.retrieveAll({position:ctrl.employee.position}).then(function(res) {
+                    CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function(res) {
                         ctrl.careTypeList = res;
                         $timeout(function() {
                             $('#rate1').multiSelect('refresh');
@@ -622,6 +628,58 @@
             ctrl.physicalFileObj.flow = flow;
             return true;
         };
+
+        ctrl.profileUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "a",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.profileFileSelected = function(file, flow) {
+            ctrl.profileFileObj.flowObj = flow;
+            ctrl.profileFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.profileFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.profileImage = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableProfileUploadButton = false;
+            ctrl.hideLoadingImage = false;
+        };
+        ctrl.profileFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableProfileUploadButton = false;
+            ctrl.employee.profileImage = null;
+            ctrl.profileFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.profileFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.profileImage = null;
+            if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.profileFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableProfileUploadButton = true;
+            ctrl.profileShowfileProgress = true;
+            ctrl.profileFileObj.errorMsg = null;
+            ctrl.profileFileObj.flow = flow;
+            return true;
+        };
+
 
 
 //        $scope.$watch(function() {

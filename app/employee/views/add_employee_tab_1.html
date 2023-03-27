@@ -3,12 +3,14 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+                    <div flow-init="addEmployee.profileUploadFile" flow-file-added="addEmployee.profileFileAdded($file, $flow)" flow-file-success="addEmployee.profileFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.profileFileSelected($file,$flow)" flow-file-error="addEmployee.profileFileError( $file, $message, $flow )"> 
                     <div class="row">
-                        <div class="col-sm-6">
+                            <div class="col-sm-6">
                             <div ng-if="addEmployee.editMode">
-                                <div class="user_p">
-                                    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"/>
-                                </div>
+                                    <div class="user_p">
+                                    <img alt="user" class="img-cirlce img-responsive" ng-show="addEmployee.hideLoadingImage && !addEmployee.disableProfileUploadButton" imageonload="addEmployee.hideLoadingImage" ng-src="{{(addEmployee.employee.profileImage!=null && addEmployee.employee.profileImage!='') ?(addEmployee.baseUrl+'file/download/'+addEmployee.companyCode+'/a/'+addEmployee.employee.profileImage):('assets/images/user-5.png')}}"/>
+                                    <img alt="user" class="img-cirlce img-responsive" ng-show="!addEmployee.hideLoadingImage || addEmployee.disableProfileUploadButton" src="assets/images/loading.gif"/>
+                                    </div>
                                 <div class="user_p_hd">
                                     <h1>
                                         {{addEmployee.employee.fName}}
@@ -19,15 +21,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 pull-right">
-                            <button class="btn btn-info green_bt pull-right" type="submit">
-                                Save Changes
-                            </button>
-                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
-                                Reset To Default
-                            </button>
+                            <div class="col-sm-6 pull-right">
+                                <button class="btn btn-info green_bt pull-right" type="submit">
+                                    Save Changes
+                                </button>
+                                <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                    Reset To Default
+                                </button>
+                            </div>
                         </div>
-                    </div>
                     <div class="form-group-separator">
                     </div>
                     <div class="form-group">
@@ -61,6 +63,38 @@
                         <div class="col-sm-9">
                             <input class="form-control" name="LastName" type="text" maxlength="100" ng-model="addEmployee.employee.lName"
                                    data-validate="required" data-message-required="Please enter Last Name."/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group" >
+                        <label class="col-sm-3 control-label">
+                            Profile Image
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <input type="file" id="ProfileImage" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" style="color:transparent" ng-disabled="addEmployee.disableProfileUploadButton" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
+                                </div>
+                            </div>
+                            <div>
+                                <div ng-show="addEmployee.profileFileObj.errorMsg != null && addEmployee.profileFileObj.errorMsg != ''">
+                                    <span class="red">{{addEmployee.profileFileObj.errorMsg}}</span>
+                                </div> 
+                            </div>
+                            <div flow-transfers class="col-md-12 form-control-static">
+                                <div ng-repeat="file in transfers">
+                                    <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.profileShowfileProgress">
+                                        <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                            <!--{{file.progress() * 100 | number : 0}} %-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -263,6 +297,7 @@
                             </button>
                         </div>
                     </div>
+            </div>
                 </form>
             </div>
         </div>
