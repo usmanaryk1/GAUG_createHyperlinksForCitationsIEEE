@@ -102,7 +102,7 @@
         };
 
         //function to save the employee data
-        function saveEmployeeData() {
+        function saveEmployeeData(tabNo) {
             ctrl.formSubmitted = true;
             setFormDynamicValidityMessages();
             var fileUploadValid = ctrl.checkFileUploadValidity();
@@ -157,12 +157,12 @@
                     employeeToSave.orgCode = ontimetest.company_code;
                     ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
-                    updateEmployee(reqParam, employeeToSave);
+                    updateEmployee(reqParam, employeeToSave, tabNo);
                 }
             }
         }
 
-        function updateEmployee(reqParam, employeeToSave) {
+        function updateEmployee(reqParam, employeeToSave, tabNo) {
 //            if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
 //                employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
 //            }
@@ -184,8 +184,13 @@
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
-                            $state.go('^.tab1', {id: res.id});
                             ctrl.editMode = true;
+                            if (tabNo) {
+                                $state.go('^.tab2', {id: res.id});
+                            } else {
+                                $state.go('^.tab1', {id: res.id});
+                                ctrl.editMode = true;
+                            }
                         }
                         toastr.success("Employee saved.");
                         ctrl.employee = res;
@@ -282,8 +287,8 @@
         }, function(newVal, oldValue) {
             setValidationsForTab2(newVal);
         });
-        
-        function setValidationsForTab2(wages){
+
+        function setValidationsForTab2(wages) {
             if (wages && wages === 'S') {
                 $("input[name='Salary']").attr('required', true);
                 $("input[name='rate1']").attr('required', false);
@@ -321,7 +326,7 @@
             //to set radio buttons on tab init..
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
-                    CareTypeDAO.retrieveAll({position:ctrl.employee.position}).then(function(res) {
+                    CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function(res) {
                         ctrl.careTypeList = res;
                         $timeout(function() {
                             $('#rate1').multiSelect('refresh');

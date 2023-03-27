@@ -84,7 +84,7 @@
         }
 
         //function to save patient data.
-        function savePatientData() {
+        function savePatientData(tabNo) {
             var validAuthorization = ctrl.isValidAutorization(true);
             if ($('#add_patient_form')[0].checkValidity() && validAuthorization) {
                 var patientToSave = angular.copy(ctrl.patient);
@@ -120,8 +120,13 @@
                 PatientDAO.update({action: reqParam, data: patientToSave})
                         .then(function(res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
-                                $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
+                                if (tabNo) {
+                                    $state.go('^.tab2', {id: res.id});
+                                } else {
+                                    $state.go('^.tab1', {id: res.id});
+                                    ctrl.editMode = true;
+                                }
                             }
                             ctrl.patient = res;
                             if (res.patientCareTypeCollection) {
@@ -265,7 +270,7 @@
                         ctrl.patient.subscriberInfo = [];
                         ctrl.patient.subscriberInfo[0] = {};
                     }
-                    if(!ctrl.patient.subscriberInfo[0].fName || ctrl.patient.subscriberInfo[0].fName===null){
+                    if (!ctrl.patient.subscriberInfo[0].fName || ctrl.patient.subscriberInfo[0].fName === null) {
                         ctrl.patient.subscriberInfo[0].fName = ctrl.patient.fName;
                         ctrl.patient.subscriberInfo[0].lName = ctrl.patient.lName;
                         ctrl.patient.subscriberInfo[0].middleInitial = ctrl.patient.middleInitial;
@@ -273,7 +278,7 @@
                         ctrl.patient.subscriberInfo[0].dateOfBirth = ctrl.patient.dateOfBirth;
                         ctrl.patient.subscriberInfo[0].gender = ctrl.patient.gender;
                         ctrl.patient.subscriberInfo[0].relationshipWithPatient = 'I';
-                        
+
                     }
                     if (!ctrl.patient.subscriberInfo[0].subscriberAddressCollection) {
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];

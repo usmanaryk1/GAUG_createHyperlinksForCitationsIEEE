@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form">
                     <div class="row">
                         <div class="col-sm-6">
                             <div ng-if="addEmployee.editMode">
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 pull-right">
-                            <button class="btn btn-info green_bt pull-right" type="submit">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.saveEmployee()">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -254,11 +254,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group-separator"  ng-if="addEmployee.editMode">
+                    <div class="form-group-separator" >
                     </div>
-                    <div class="row"  ng-if="addEmployee.editMode">
+                    <div class="row" >
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.navigateToTab($event, 'tab2')">
+                            <button ng-if="addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addEmployee.navigateToTab($event, 'tab2')">
+                                Next »
+                            </button>
+                            <button ng-if="!addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.saveEmployee('tab2')">
                                 Next »
                             </button>
                         </div>
