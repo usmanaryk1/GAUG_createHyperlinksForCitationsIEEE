@@ -5,8 +5,10 @@
     <!--PAGE TITLE START -->
     <div class="page-title">
         <div class="title-env">
-            <h1 class="title">Daily Attendance</h1>
-            <p class="description">Daily Attendance</p>
+            <h1 class="title" ng-if="!dAttendance.isWorksiteTimesheet">Daily Attendance</h1>
+            <h1 class="title" ng-if="dAttendance.isWorksiteTimesheet">Worksite Timesheet</h1>            
+            <p class="description" ng-if="!dAttendance.isWorksiteTimesheet">Daily Attendance</p>
+            <p class="description" ng-if="dAttendance.isWorksiteTimesheet">Worksite Timesheet</p>
         </div>
     </div>
     <!--PAGE TITLE END -->
@@ -21,7 +23,7 @@
                             <div class="col-sm-12">
 
                                 <div class="col-sm-8 pull-right pad0 wd_full">
-                                    <div class="form-group">
+                                    <div class="form-group" ng-if="!dAttendance.isWorksiteTimesheet">
                                         <label class="col-sm-3 control-label pad_lf0">Employee Name</label>
                                         <div class="col-sm-9"> 
                                             <!--                                            <script type="text/javascript">
@@ -35,20 +37,20 @@
                                             //                                                });
                                                                                         </script>-->
                                             <script type="text/javascript">
-                                                jQuery(document).ready(function ($)
+                                                        jQuery(document).ready(function ($)
                                                 {
-                                                    setTimeout(function () {
-                                                        $("#sboxit-2").select2({
+                                                setTimeout(function () {
+                                                $("#sboxit-2").select2({
 //                                                        minimumResultsForSearch: -1,
-                                                            placeholder: 'Select Coordinator...',
+                                                placeholder: 'Select Coordinator...',
 //                                                        minimumInputLength: 1,
 //                                                        placeholder: 'Search',
-                                                        }).on('select2-open', function ()
-                                                        {
-                                                            // Adding Custom Scrollbar
-                                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                                        });
-                                                    }, 200);
+                                                }).on('select2-open', function ()
+                                                {
+                                                // Adding Custom Scrollbar
+                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                });
+                                                }, 200);
                                                 });</script>
                                             <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="dAttendance.searchParams.staffingCordinatorId" ng-options='emp.id as (emp.label) for emp in dAttendance.employeeList track by emp.id'>
                                                 <option value="" selected hidden />
@@ -56,6 +58,14 @@
                                             <!--                                            <div ng-show='dAttendance.searchParams.staffingCordinatorId == null && dAttendance.formSubmitted'>
                                                                                             <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee Name.</span>
                                                                                         </div>-->
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-if="dAttendance.isWorksiteTimesheet">
+                                        <label class="col-sm-3 control-label pad_lf0">Worksite</label>
+                                        <div class="col-sm-9">                                                                                         
+                                            <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="dAttendance.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in dAttendance.workSiteList'>
+                                                <option value="" selected hidden />
+                                            </select>                                                                                          
                                         </div>
                                     </div>
                                 </div>
@@ -106,11 +116,12 @@
                                 <div class="col-sm-6 pull-right">
 
                                     <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="dAttendance.searchParams.pageNo = 1;
-                                        dAttendance.searchParams.sortBy = 'date';
-                                        dAttendance.searchParams.order = 'desc';
-                                        dAttendance.commonFilter();
-                                        dAttendance.formSubmitted = true">Review</button>
-                                    <a href="#/app/manual_punch{{dAttendance.searchParams.staffingCordinatorId==null?'':'/employee/'+dAttendance.searchParams.staffingCordinatorId+'?lastPage=daily_attendance'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                                dAttendance.searchParams.sortBy = 'date';
+                                                dAttendance.searchParams.order = 'desc';
+                                                dAttendance.commonFilter();
+                                                dAttendance.formSubmitted = true">Review</button>
+                                    <a ng-if="!dAttendance.isWorksiteTimesheet" href="#/app/manual_punch{{dAttendance.searchParams.staffingCordinatorId==null?'':'/employee/'+dAttendance.searchParams.staffingCordinatorId+'?lastPage='+dAttendance.lastPage}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                    <a ng-if="dAttendance.isWorksiteTimesheet" href="#/app/manual_punch{{dAttendance.searchParams.workSiteId==null?'':'/worksite/'+dAttendance.searchParams.workSiteId+'?lastPage='+dAttendance.lastPage}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="dAttendance.resetFilters()">
                                         Reset Filters
                                     </button>
@@ -143,7 +154,7 @@
                                         <th width="13%" nowrap ng-class="dAttendance.applySortingClass('punchIn')" ng-click="dAttendance.applySorting('punchIn')" >Date In</th>
                                         <th width="13%" nowrap ng-class="dAttendance.applySortingClass('punchOut')" ng-click="dAttendance.applySorting('punchOut')" >Date Out</th>
                                         <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')" >Employee Name</th>
-                                        <th width="15%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>
+                                        <th width="15%" ng-if="!dAttendance.isWorksiteTimesheet" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>                                        
                                         <th width="8%" nowrap >Time In</th>
                                         <th width="8%" nowrap >Time Out</th>
                                         <th width="8%" nowrap>UT</th>
@@ -167,7 +178,7 @@
                                         <td ng-click="dAttendance.openEmployeeModal(timesheet.employeeId, 'modal-5')" style="cursor: pointer;">
                                             {{timesheet.employeeId.lName + ", " + timesheet.employeeId.fName + " " + timesheet.employeeId.middleInitial}}
                                         </td>
-                                        <td ng-click="dAttendance.openPatientModal(timesheet.patientId, 'modal-6')" style="cursor: pointer;">
+                                        <td ng-if="!timesheet.isWorksiteTimesheet" ng-click="dAttendance.openPatientModal(timesheet.patientId, 'modal-6')" style="cursor: pointer;">
                                             {{timesheet.patientId.lName + ", " + timesheet.patientId.fName + " " + timesheet.patientId.middleInitial}}
                                         </td>
                                         <td>
@@ -219,7 +230,7 @@
                                         </td>
                                         <td class="action-td">
                                             <div class="action-btn">
-                                                <a ng-if="timesheet.isEdited == true || hasAccess('EDIT_ALL_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=daily_attendance" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                <a ng-if="timesheet.isEdited == true || hasAccess('EDIT_ALL_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage={{dAttendance.lastPage}}" tooltip="Edit"><span class="ed_b"></span></a> 
                                                 <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                 <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 
@@ -232,10 +243,20 @@
                                 </tbody>
                             </table>
                             <div ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
-                                No daily attendance available for selected coordinator.
+                                <div ng-if="!dAttendance.isWorksiteTimesheet">
+                                    No daily attendance available for selected coordinator.
+                                </div>
+                                <div ng-if="dAttendance.isWorksiteTimesheet">
+                                    No timesheet available for selected worksite.
+                                </div>
                             </div>
                             <div ng-if="dAttendance.criteriaSelected === false">
-                                Please select all filters to review daily attendance.
+                                <div ng-if="!dAttendance.isWorksiteTimesheet">
+                                    Please select all filters to review daily attendance.
+                                </div>
+                                <div ng-if="dAttendance.isWorksiteTimesheet">
+                                    Please select all filters to review worksite timesheet.
+                                </div>
                             </div>
                         </div>
                         <div ng-if="dAttendance.searchParams.isSchedule">
@@ -244,7 +265,7 @@
                                     <tr>
                                         <th width="13%" nowrap ng-class="dAttendance.applySortingClass('date')" ng-click="dAttendance.applySorting('date')" >Schedule Date</th>
                                         <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')">Employee Name</th>
-                                        <th width="15%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')">Patient Name</th>
+                                        <th width="15%" ng-if="!timesheet.isWorksiteTimesheet" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')">Patient Name</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')">Start Time</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >End Time</th>
                                         <th width="10%" nowrap >Time In</th>
@@ -262,7 +283,7 @@
                                         <td ng-click="dAttendance.openEmployeeModal(timesheet.employee, 'modal-5')" style="cursor: pointer;">
                                             <span ng-if="timesheet.employee">{{timesheet.employee.lName + ", " + timesheet.employee.fName + " " + timesheet.employee.middleInitial}}</span>
                                         </td>
-                                        <td ng-click="dAttendance.openPatientModal(timesheet.patient, 'modal-6')" style="cursor: pointer;">
+                                        <td ng-if="!timesheet.isWorksiteTimesheet" ng-click="dAttendance.openPatientModal(timesheet.patient, 'modal-6')" style="cursor: pointer;">
                                             <span ng-if="timesheet.patient">{{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}</span>
                                         </td>
                                         <th>
@@ -272,35 +293,36 @@
                                             {{timesheet.roundedEndTime|date :timeFormat}}
                                         </th>
                                         <th>
-                                            <div ng-click="hide(this);" onclick="hide(this);" style="cursor: pointer;">
-                                                <div ng-class="{
+                                <div ng-click="hide(this);" onclick="hide(this);" style="cursor: pointer;">
+                                    <div ng-class="{
                                                         'black_dot'
                                                                 :timesheet.timeSheet.punchInColorFlag== 'black', 'red_dot
                                                         ':timesheet.timeSheet.punchInColorFlag == 'red', 'green_dot':timesheet.timeSheet.punchInColorFlag == 'green'}"></div> 
-                                                {{timesheet.timeSheet.roundedPunchInTime|date :timeFormat}}
-                                            </div>
-                                            <div style="display: none;">{{timesheet.timeSheet.punchInTime|date:'MM/dd/yyyy hh:mm a'}}</div>
-                                        </th>
-                                        <th>
-                                            <div ng-if='validNumber(timesheet.timeSheet.roundedPunchOutTime)' style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);">
-                                                <div ng-class="{
+                                    {{timesheet.timeSheet.roundedPunchInTime|date :timeFormat}}
+                                </div>
+                                <div style="display: none;">{{timesheet.timeSheet.punchInTime|date:'MM/dd/yyyy hh:mm a'}}</div>
+                                </th>
+                                <th>
+                                <div ng-if='validNumber(timesheet.timeSheet.roundedPunchOutTime)' style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);">
+                                    <div ng-class="{
                                                             'black_dot'
                                                                     :timesheet.timeSheet.punchOutColorFlag == 'black', 'red_dot
                                                                     ':timesheet.timeSheet.punchOutColorFlag == '
-                                                            red', 'green_dot':timesheet.timeSheet.punchOutColorFlag == 'green'}"></div>
-                                                {{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}
-                                            </div>
-                                            <div style="display: none;">{{timesheet.timeSheet.punchOutTime|date:'MM/dd/yyyy hh:mm a'}}</div>
-                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.roundedPunchOutTime)'>Not Punched</span>
-                                        </th>
-                                        <th>
+                                                red
+                                                ', 'green_dot':timesheet.timeSheet.punchOutColorFlag == 'green'}"></div>
+                                    {{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}
+                                </div>
+                                <div style="display: none;">{{timesheet.timeSheet.punchOutTime|date:'MM/dd/yyyy hh:mm a'}}</div>
+                                <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.roundedPunchOutTime)'>Not Punched</span>
+                                </th>
+                                <th>
                                 <div class="action-btn" ng-if="timesheet.timeSheet">
-                                    <a ng-if="timesheet.timeSheet.isEdited == true || hasAccess('EDIT_ALL_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.timeSheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.timeSheet.id}}?lastPage=daily_attendance" tooltip="Edit"><span class="ed_b"></span></a> 
+                                    <a ng-if="timesheet.timeSheet.isEdited == true || hasAccess('EDIT_ALL_TIMESHEET')" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.timeSheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.timeSheet.id}}?lastPage={{dAttendance.lastPage}}" tooltip="Edit"><span class="ed_b"></span></a> 
                                     <!--<a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet.timeSheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>--> 
                                     <a class=" btn fa fa-search view_task_button" ng-click="dAttendance.openTaskListModal('modal-3', 'lg', 'static', timesheet.timeSheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                 </div>
                                 <div class="action-btn" ng-if="!timesheet.timeSheet">
-                                    <a href="#/app/manual_punch{{timesheet.scheduleId==null?'':'/schedule/'+timesheet.scheduleId+'?lastPage=daily_attendance'}}" ng-click="dAttendance.navigateToManualPunch(timesheet)">No Punch</a>
+                                    <a href="#/app/manual_punch{{timesheet.scheduleId==null?'':'/schedule/'+timesheet.scheduleId+'?lastPage='+dAttendance.lastPage}}" ng-click="dAttendance.navigateToManualPunch(timesheet)">No Punch</a>
                                 </div>
                                 </th>
                                 </tr>
@@ -774,11 +796,11 @@
     </div>
 </script>
 <script type="text/javascript">
-    function hide(obj) {
-        $(obj).next().popover('show');
-        $(obj).popover({
+            function hide(obj) {
+            $(obj).next().popover('show');
+                    $(obj).popover({
             content: $(obj).next().contents(),
-            html: true
-        })
-    }
+                    html: true
+            })
+            }
 </script>

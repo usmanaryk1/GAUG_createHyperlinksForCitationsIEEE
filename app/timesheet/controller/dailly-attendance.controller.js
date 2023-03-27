@@ -1,7 +1,37 @@
 (function () {
-    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO, PositionDAO, PatientDAO, InsurerDAO) {
+    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO, PositionDAO, PatientDAO, InsurerDAO, $state, WorksiteDAO) {
         var ctrl = this;
-        Page.setTitle("Daily Attendance");
+        ctrl.retrieveWorkSites = function () {
+            WorksiteDAO.retreveWorksiteNames().then(function (res) {
+                ctrl.workSiteList = res;
+                var params;
+                if (ctrl.isWorksiteTimesheet) {
+                    params = localStorage.getItem('worksiteSearchParams');
+                }
+                if (params !== null) {
+                    ctrl.searchParams = JSON.parse(params);
+                }
+                setTimeout(function () {
+                    $("#worksiteDropdown").select2({
+                        placeholder: 'Select Worksite...',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                }, 200);
+            });
+        };
+        if ($state.current.name.indexOf("worksite_time_sheet") >= 0) {
+            ctrl.isWorksiteTimesheet = true;
+            ctrl.lastPage = 'worksite_time_sheet';
+            Page.setTitle("Worksite Timesheet");
+            ctrl.retrieveWorkSites();
+        } else {
+            ctrl.lastPage = 'daily_attendance';
+            Page.setTitle("Daily Attendance");
+            ctrl.isWorksiteTimesheet = false;
+        }
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
@@ -83,9 +113,14 @@
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
+            $('#worksiteDropdown').select2('val', null);
             ctrl.searchParams.staffingCordinatorId = null;
-            localStorage.removeItem('dailyAttendanceSearchParams');
-            localStorage.removeItem('dailyAttendanceNoPunch');
+            if (ctrl.isWorksiteTimesheet) {
+                localStorage.removeItem('worksiteSearchParams');
+            } else {
+                localStorage.removeItem('dailyAttendanceSearchParams');
+                localStorage.removeItem('dailyAttendanceNoPunch');
+            }
             ctrl.attendanceList = [];
             ctrl.criteriaSelected = false;
         };
@@ -123,7 +158,12 @@
             $rootScope.maskLoading();
             EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR + "," + ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
                 ctrl.employeeList = res;
-                var params = localStorage.getItem('dailyAttendanceSearchParams');
+                var params;
+                if (ctrl.isWorksiteTimesheet) {
+                    params = localStorage.getItem('worksiteSearchParams');
+                } else {
+                    params = localStorage.getItem('dailyAttendanceSearchParams');
+                }
                 if (params !== null) {
                     ctrl.searchParams = JSON.parse(params);
                     $timeout(function () {
@@ -147,7 +187,11 @@
             TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
                 ctrl.totalRecords = Number(res.headers.count);
-                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                if (ctrl.isWorksiteTimesheet) {
+                    localStorage.setItem('worksiteSearchParams', JSON.stringify(ctrl.searchParams));
+                } else {
+                    localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                }
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
@@ -395,7 +439,12 @@
             params.dailyAttendance = true;
             EventTypeDAO.retrieveSchedules(params).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
-                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                if (ctrl.isWorksiteTimesheet) {
+                    localStorage.setItem('worksiteSearchParams', JSON.stringify(ctrl.searchParams));
+                } else {
+                    localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                }
+
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     delete obj.color;
                     if (!obj.timeSheet) {
@@ -473,12 +522,12 @@
                         //Green- UT time greater than 60minutes, when approved it goes back to
                         if (timesheetDuration != null && scheduleDuration != null) {
                             var t = timesheetDuration.split(":");
-                            var timeSheetInTime = (Number(t[0])*60) +Number(t[1]);
+                            var timeSheetInTime = (Number(t[0]) * 60) + Number(t[1]);
                             var s = scheduleDuration.split(":");
-                            var scheduleInTime = (Number(s[0])*60) + Number(s[1]);
-                            
+                            var scheduleInTime = (Number(s[0]) * 60) + Number(s[1]);
+
                             if (!obj.timeSheet.unauthorizedTime || obj.timeSheet.unauthorizedTime == null) {
-                                if (timeSheetInTime -  scheduleInTime> 60) {
+                                if (timeSheetInTime - scheduleInTime > 60) {
                                     obj.color = "#AEEBAF"; // Green color
                                 }
                             }
@@ -492,7 +541,11 @@
                     obj.roundedEndTime = Date.parse(obj.roundedEndTime);
                 });
                 ctrl.totalRecords = Number(res.headers.event_count);
-                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                if (ctrl.isWorksiteTimesheet) {
+                    localStorage.setItem('worksiteSearchParams', JSON.stringify(ctrl.searchParams));
+                } else {
+                    localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                }
                 ctrl.dataRetrieved = true;
             }).catch(function () {
                 showLoadingBar({
@@ -535,5 +588,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", "PositionDAO", "PatientDAO", "InsurerDAO", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", "PositionDAO", "PatientDAO", "InsurerDAO", "$state", "WorksiteDAO", DailyAttendanceCtrl]);
 })();

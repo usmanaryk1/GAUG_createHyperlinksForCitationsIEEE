@@ -88,7 +88,7 @@
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontime_data.defaultState);
             }
-            if ($state.current.name.indexOf('patient') > 0 || $state.current.name.indexOf('employee') > 0 || $state.current.name.indexOf('schedule') > 0) {
+            if ($state.current.name.indexOf('patient') > 0 || $state.current.name.indexOf('employee') > 0 || $state.current.name.indexOf('schedule') > 0 || $state.current.name.indexOf('worksite') > 0) {
                 //nothing to do
             } else {
                 ctrl.editTimesheet = true;
@@ -146,6 +146,9 @@
                     $timeout(function () {
                         $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
                     });
+                } else if ($state.current.name.indexOf('worksite') > 0) {
+                    ctrl.attendanceObj.isWorksitePunch = true;
+                    ctrl.attendanceObj.workSiteId = Number(id);
                 } else {
                     ctrl.editTimesheet = true;
                     if ($state.current.name.indexOf('edit_missed_punch') > 0) {
@@ -285,6 +288,8 @@
                     $state.go('app.patient_time_sheet');
                 } else if (searchParams.lastPage.indexOf("daily_attendance") >= 0) {
                     $state.go('app.daily_attendance');
+                } else if (searchParams.lastPage.indexOf("worksite_time_sheet") >= 0) {
+                    $state.go('app.worksite_time_sheet');
                 }
             }
 
@@ -487,6 +492,11 @@
         ctrl.retrieveWorkSites = function () {
             WorksiteDAO.retreveWorksiteNames().then(function (res) {
                 ctrl.workSiteList = res;
+                if (ctrl.attendanceObj.workSiteId != null) {
+                    $timeout(function () {
+                        $("#worksiteDropdown").select2("val", ctrl.attendanceObj.workSiteId);
+                    });
+                }
             });
         };
         ctrl.retrieveWorkSites();

@@ -119,6 +119,9 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     if (toParams.lastPage !== "daily_attendance") {
                         localStorage.removeItem('dailyAttendanceSearchParams');
                     }
+                    if (toParams.lastPage !== "worksite_time_sheet") {
+                        localStorage.removeItem('worksiteSearchParams');
+                    }
                     if (toParams.lastPage !== "employee_timesheet") {
                         localStorage.removeItem('employeeTimesheetSearchParams');
                     }
@@ -131,6 +134,9 @@ app.run(function ($rootScope, $modal, $state, Idle)
                 } else {
                     if (toState.url.indexOf("daily_attendance") < 0) {
                         localStorage.removeItem('dailyAttendanceSearchParams');
+                    }
+                    if (toState.url.indexOf("worksite_time_sheet") < 0) {
+                        localStorage.removeItem('worksiteSearchParams');
                     }
                     if (toState.url.indexOf("employee_timesheet") < 0) {
                         localStorage.removeItem('employeeTimesheetSearchParams');
@@ -446,6 +452,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
             }).
+            // manual_punch
+            state('app.manual_punch_worksite', {
+                url: '/manual_punch/worksite/:id?from&to&lastPage',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
+                data: {
+                    feature: 'CREATE_MANUAL_PUNCH'
+                }
+            }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
                 url: '/patient_time_sheet?id&from&to&lastPage',
@@ -458,6 +473,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             // daily_attendance
             state('app.daily_attendance', {
                 url: '/daily_attendance?id&from&to&lastPage',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
+                controller: 'DailyAttendanceCtrl as dAttendance',
+                data: {
+                    feature: 'VIEW_DAILY_ATTENDANCE'
+                }
+            }).
+            // daily_attendance
+            state('app.worksite_time_sheet', {
+                url: '/worksite_time_sheet?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
                 data: {
@@ -783,7 +807,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/worksite-list/:status',
                 templateUrl: appHelper.viewTemplatePath('worksite', 'view_worksite'),
                 controller: 'ViewWorksitesCtrl as viewWorksite',
-                 data: {
+                data: {
                     tabNo: 1,
                     feature: 'VIEW_WORKSITE'
                 }
@@ -815,7 +839,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'SEARCH_EMPLOYEE'
                 }
-            }).
+            }).           
             state('app.dispatch-info', {
                 url: '/dispatch-info/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'view_dispatch_info'),
