@@ -1,0 +1,1733 @@
+<style>
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arimo, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        line-height: 1.42857143;
+    }
+    form{
+        background-color: #eeeeee;
+    }
+    body, p{
+        color: #000;
+    }
+    html, body {
+        height: 100%;
+    }
+    td, th{
+        /*position: relative;*/
+    }
+    input, button, select, textarea{
+        padding: 2px;
+        font-size: 12px;
+        height: 30px;
+        border: none;
+    }
+    table {
+        width:100%;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        border-collapse: collapse;
+    }
+    td, th {
+        padding: 0px 0px;
+    }
+    .main {
+        margin:0 auto;}
+    /*body {font-size:10px;}*/
+    small {font-size:9.5px;}	
+    table th {text-align:center;}   
+    .border {border-top:black solid 1px;
+             border-left:black solid 1px;
+             padding:0px;}
+    .border_2 {border-top:black solid 1px;
+               border-left:black solid 1px;
+               border-right:black solid 1px;
+               padding:0px;}	
+    .border-top-0{
+        border-top: none!important;
+    }
+    .line-tr tr{
+        border-bottom: 1px solid black;
+        height: 30px;
+    }
+    .line-tr tr:last-child{
+        border-bottom: none;
+    }
+    .border-light tr{
+        border-color: #d9d9d9!important;
+    }
+    .shadow-tr > tbody > tr:nth-child(even) input{
+        background-color: #eeeeee;
+    }
+    .line-td tr td{
+        border-left: 1px solid black;
+    }
+    .line-td tr td:first-child{
+        border-left: none;
+    }
+    .numbers {float:left;
+              color:#333333;
+              padding-right:3px;
+              font-weight: 600;
+    }
+    .inline-numbers{
+        position: absolute;
+        margin-left: 3px;
+        margin-top: 0px;
+    }
+    .dark-night, .dark-night font{
+        background: #000;
+        color: #FFF!important;
+        background-clip: padding-box;
+    }
+    .dark-bg{
+        background: #eeeeee!important;
+        background-clip: padding-box;
+    }
+    .white-bg{
+        /*background: white;*/
+        background-clip: padding-box;
+        background-color: white;
+    }
+    .mile-stone{
+        width: 25px;
+        text-align: center;
+    }
+    .inline-block{
+        display: inline-block;
+        text-align: center;
+        float: left;
+        padding: 0px!important;
+    }
+    .display-inline{
+        display: inline-block;
+    }
+    .remove-top-border .border, .remove-top-border .border_2{
+        border-top: none;
+    }
+    .remove-top-border > tbody > tr:first-child .border, .remove-top-border > tbody > tr:first-child .border_2:last-child{
+        border-top:black solid 1px
+    }
+    .background-letter{
+        background-color: #fff;
+        position: relative;
+    }
+    .background-letter input{
+        background: transparent!important;
+        position: absolute;
+        z-index: 5;
+        bottom: -15px;
+    }
+    .background-letter::after {
+        color: #cccccc;
+        content: attr(data-bg-text);
+        font-size: 28px;
+        line-height: 1;
+        position: absolute;
+        left: 35%;
+        z-index: 1;
+        bottom: -15px;
+    }
+    .danger-input.ng-invalid{
+        border: 1px solid red;
+        outline-color: red;
+    }
+    .validate-has-error{
+        display: none!important;
+    }
+    .height_100{height: 100%;}
+    .width_100 {width:100%;}	
+    .width_90{width: 90%}
+    .width_80 {width:80%;}
+    .width_55 {width:55%;}
+    .width_50 {width:50%;}
+    .width_45 {width:45%;}
+    .width_40 {width:40%;}
+    .width_30 {width:30%;}	
+    .width_20 {width:20%;}
+    .width_10 {width:10%;}
+    .width_35 {width:35%;}	 
+    .width_66 {width:66.666666%;}
+    .width_65 {width:65%;}
+    .width_70 {width:70%;}
+    .width_27_5{width: 27.5%;}
+    .width_9{width: 9%;}
+    .width_5{width: 5%;}
+    .width_13{width: 13%;}
+    .width_8{width: 8%;}
+    .width_17{width: 17%;}
+    .width_14{width: 14%;}
+    .text_right {text-align: right}
+
+    .payor {width:100%;
+            padding:5px;
+            border:1px solid black;
+            margin-bottom:10px;}		 
+    .first_sec {
+        font-size:9px;}
+    .first_sec td{
+        font-size: 9px;
+    }
+    .radio {width:69px;
+            text-align:center;}	
+    input[type=radio] {
+        opacity: 1;
+        z-index: 9999;
+        height: 13px;
+        width: 13px;
+    }
+    .radio-label{
+        position: relative;
+        padding-left: 15px;
+    }
+    .radio-label input[type=radio]{
+        position: absolute;
+        left: 0px;
+        bottom: 1px;
+    }
+    .diagnosis input{
+        margin-right: 34%;float: right;
+    }
+    .padding {padding-top:12px;}		
+    .width_33{width:33.333333%;}
+    .width_85{width:85%;}			   
+    .width_15{width:15%;}
+    .width_25{width:25%;}
+    .border_bottom{
+        border-bottom:black solid 1px;}
+    ::-webkit-input-placeholder {
+        color:black;
+    }
+    :-moz-placeholder { 
+        color:black;  
+    }	
+    .display-print{
+        display: none;
+    }
+    .font-10-5{
+        font-size: 10.5px;
+    }
+    .static-label{
+        padding: 0px 1px;
+    }
+    .pull-left{
+        float: left;
+    }
+    .text-center{
+        text-align: center;
+    }
+</style>
+<!--<style type="text/css" media="print">
+
+    @page { 
+        size: portrait;
+        margin: 0mm 0mm 0mm 0mm;   }
+    body {
+        size: portrait;
+        margin: 5mm 5mm 5mm 5mm;
+        font-size: 8px;
+    }
+    input, button, select, textarea{
+        padding: 1px;
+        font-size: 8px!important;
+    }
+    small {font-size:8px;}
+    p{
+        margin: 0px 0 1px!important;;
+    }
+    .first_sec {
+        font-size:8.5px!important;}
+    .font-10-5{
+        font-size: 9px;
+    }
+    /*.width_15{width:8%;}*/
+    .print-width-25{
+        width: 25%!important;
+    }
+    .print-width-30{
+        width: 30%!important;
+    }
+    .print-width-55{
+        width: 55%!important;
+    }
+    .print-text-left{
+        float: left!important;
+        margin-left: 0px!important;
+    }
+    .remove-print{
+        display: none;
+    }
+    .display-print{
+        display: block;
+    }
+    .print-font-10{
+        font-size: 10px;
+    }
+    .print-no-margin{
+        margin: 0px!important;
+    }
+</style>
+<script type="text/javascript">
+    function print_page() {
+        var ButtonControl = document.getElementById("btnprint");
+        ButtonControl.style.display = "none";
+        window.print();
+        ButtonControl.style.display = "block";
+    }
+</script>-->
+<div class="page-body"> 
+
+
+    <!--PAGEsection  TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">Manual Claim UB04</h1>
+            <p class="description">Fill Form To Create A Manual Claim</p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+
+    <div class="clearfix"></div>
+    <div>&nbsp;</div>
+    <form class="form-horizontal validate" id="manual_claim_form" name="manual_claim_form" role="form">
+
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_27_5"> 
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr border-light">
+                            <tr>
+                                <td><font class="numbers inline-numbers">1</font><input type="text" class="width_100" style="padding-left: 15px;"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="width_100"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="width_100"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="width_100"></td>
+                            </tr>
+                        </table>
+                    </div>  
+                </td>
+                <td class="border_2 width_27_5"> 
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr border-light">
+                            <tr>
+                                <td><font class="numbers inline-numbers">2</font><input type="text" class="width_100" style="padding-left: 15px;"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="width_100"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="width_100"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="width_100"></td>
+                            </tr>
+                        </table>
+                    </div>  
+                </td>
+                <td class="border_2 width_45"> 
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_15"><div class="static-label"><font class="numbers">3a</font>PAT. <br/>CNTL #</div></td>
+                                <td class="width_65"><input type="text" class="width_100"></td>
+                                <td class="width_20 dark-night"><div class="static-label"><font class="numbers">4</font>TYPE <br/>&nbsp;OF BILL</div></td>
+                            </tr>
+                            <tr>
+                                <td class="width_15"><div class="static-label"><font class="numbers">b.</font>MED. <br/>REC. #</div></td>
+                                <td class="width_65"><input type="text" class="width_100 dark-bg"></td>
+                                <td class="width_20"><input type="text" class="width_100"></td>
+                            </tr>
+                            <tr>
+                                <td class="" colspan="3">
+                                    <table cellspacing="0">
+                                        <tr>
+                                            <td class="width_20 white-bg"><div class="static-label"><font class="numbers">5</font>&nbsp;FED. TAX NO.</div></td>
+                                            <td class="width_55"><div class="static-label"><font class="numbers">6</font>STATEMENT COVERS PERIOD<br/><span class="text-center display-inline pull-left width_50">FROM</span> <span class="text-center display-inline pull-left width_50">THROUGH</span></div></td>
+                                            <td class="width_25" rowspan="2"><font class="numbers inline-numbers">7</font><input type="text" class="width_100 height_100"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width_20"><input type="text" class="width_100"></td>
+                                            <td>
+                                                <div class="width_50 pull-left"><input type="text" class="width_100"></div>
+                                                <div class="width_50 pull-left" style="border-left: 1px solid black;"><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <!-- 2nd row --->
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_40">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_30">
+                                    <div class="static-label" style="padding-right: 5px;">
+                                        <font class="numbers">8</font>&nbsp;PATIENT NAME
+                                    </div>
+                                </td>
+                                <td class="mile-stone">
+                                    <div>a</div>
+                                </td>
+                                <td>
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_20">
+                                    <div class="static-label" style="padding-right: 5px;"><font class="numbers">9</font>&nbsp;PATIENT ADDRESS</div>
+                                </td>
+                                <td class="mile-stone">
+                                    <div>a</div>
+                                </td>
+                                <td>
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 3rd row -->
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_40">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="mile-stone">
+                                    <div>b</div>
+                                </td>
+                                <td>
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="mile-stone">
+                                    <div>b</div>
+                                </td>
+                                <td class="width_35">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="mile-stone">
+                                    <div>c</div>
+                                </td>
+                                <td>
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="mile-stone">
+                                    <div>d</div>
+                                </td>
+                                <td class="width_20">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="mile-stone">
+                                    <div>e</div>
+                                </td>
+                                <td>
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 4rd row -->
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_40">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_20">
+                                    <div class="static-label"><font class="numbers">10</font>&nbsp;BIRTH DATE</div>
+                                </td>
+                                <td class="width_10">
+                                    <div class="static-label"><font class="numbers">11</font>&nbsp;SEX</div>
+                                </td>
+                                <td class="width_50">
+                                    <span class="display-inline width_100 text-center">ADMISSION</span><br/>
+                                    <div class="static-label inline-block width_40"><font class="numbers" style="float: none;">12</font>DATE</div>
+                                    <div class="static-label inline-block width_20"><font class="numbers" style="float: none;">13</font>HR</div>
+                                    <div class="static-label inline-block width_20"><font class="numbers" style="float: none;">14</font>TYPE</div>
+                                    <div class="static-label inline-block width_20"><font class="numbers" style="float: none;">15</font>SRC</div>
+                                </td>
+                                <td class="width_10">
+                                    <div class="static-label"><font class="numbers">16</font>&nbsp;DHR</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_10 white-bg">
+                                    <div class="static-label"><font class="numbers">17</font>STAT</div>
+                                </td>
+                                <td class="width_60">
+                                    <span class="display-inline width_100 text-center">CONDITION CODES</span><br/>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">18</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">19</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">20</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">21</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">22</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">23</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">24</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">25</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">26</font></div>
+                                    <div class="static-label inline-block width_9"><font class="numbers no-padding" style="float: none;">27</font></div>
+                                    <div class="static-label inline-block width_10"><font class="numbers no-padding" style="float: none;">28</font></div>
+                                </td>
+                                <td class="width_10">
+                                    <div class="static-label"><font class="numbers">29</font>ACDT<br/>STATE</div>
+                                </td>
+                                <td class="width_20">
+                                    <div class="static-label"><font class="numbers">30</font></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 5th row -->
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_40">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_20 white-bg">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="width_10 white-bg">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="width_50">
+                                    <div class="display-inline width_40 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline width_20 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline width_20 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline width_20 pull-left no-padding"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_10 white-bg">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_10 white-bg">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="width_60">
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="inline-block width_10"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_10">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                                <td class="width_20">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 6th row -->
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_40">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_33">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">31</font>OCCURRENCE</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">DATE</div>
+                                </td>
+                                <td class="width_33 dark-night">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">32</font>OCCURRENCE</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">DATE</div>
+                                </td>
+                                <td class="width_33">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">33</font>OCCURRENCE</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">DATE</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_20 dark-night">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">34</font>OCCURRENCE</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">DATE</div>
+                                </td>
+                                <td class="width_35">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">35</font>OCCURRENCE</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_35">FROM</div>
+                                    <div class="static-label inline-block width_35">THROUGH</div>
+                                </td>
+                                <td class="width_35">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">36</font>OCCURRENCE</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_35">FROM</div>
+                                    <div class="static-label inline-block width_35">THROUGH</div>
+                                </td>
+                                <td class="width_10">
+                                    <div class="static-label"><font class="numbers">37</font></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 7th row -->
+        <table cellspacing="0" class="width_100 shadow-tr">
+            <tr>
+                <td class="border width_40">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_33">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_33">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_33">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_20">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_35">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_35">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_10">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_40 border-top-0">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_33">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_33">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_33">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="border_2 width_60 border-top-0">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_20">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_35">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_35">
+                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" class="width_100"></div></div>
+                                </td>
+                                <td class="width_10">
+                                    <div class=""><input type="text" class="width_100"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 8th row -->
+        <table cellspacing="0" class="width_100">
+            <tr>
+                <td class="border width_50 first_sec white-bg" rowspan="2">
+                    <font class="numbers inline-numbers">38</font>
+                    <textarea class="width_100 height_100" style="padding-top: 15px;"></textarea>
+                    <!--<input type="text" class="width_100 height_100">-->
+                </td>
+                <td class="border_2 width_50">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-tr line-td">
+                            <tr>
+                                <td class="width_33">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">39</font>VALUE CODES</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">AMOUNT</div>
+                                </td>
+                                <td class="width_33 dark-night">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">40</font>VALUE CODES</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">AMOUNT</div>
+                                </td>
+                                <td class="width_33">
+                                    <div class="static-label display-inline width_100 text-center"><font class="numbers">41</font>VALUE CODES</div><br/>
+                                    <div class="static-label inline-block width_30">CODE</div>
+                                    <div class="static-label inline-block width_70">AMOUNT</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="border_2 width_50">
+                    <div class="first_sec">
+                        <table cellspacing="0" class="width_100 line-td shadow-tr">
+                            <tr>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="width_33">
+                                    <table>
+                                        <tr>
+                                            <td class="width_30">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                            <td class="width_70">
+                                                <div class=""><input type="text" class="width_100"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!--9TH SECTION -->
+        <table cellspacing="0" class="width_100 first_sec">
+            <tr class="white-bg" style="height: 30px;">
+                <td class="border width_5">
+                    <div class="static-label"><font class="numbers">42</font>REV. CD.</div>
+                </td>
+                <td class="border width_33">
+                    <div class="static-label"><font class="numbers">43</font>DESCRIPTION</div>
+                </td>
+                <td class="border width_15">
+                    <div class="static-label"><font class="numbers">44</font>HCPCS/RATE/HIPPS CODE</div>
+                </td>
+                <td class="border width_8">
+                    <div class="static-label"><font class="numbers">45</font>SERV. DATE</div>
+                </td>
+                <td class="border width_8">
+                    <div class="static-label"><font class="numbers">46</font>SERV. UNITS</div>
+                </td>
+                <td class="border width_13">
+                    <div class="static-label"><font class="numbers">47</font>TOTAL CHARGES</div>
+                </td>
+                <td class="border width_13">
+                    <div class="static-label"><font class="numbers">46</font>NON-COVERED CHARGES</div>
+                </td>
+                <td class="border_2" style="width: 3%">
+                    <div class="static-label"><font class="numbers">49</font></div>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
+            <tr>
+                <td class="width_5 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_33 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_15 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_8 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_8 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_13 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_13 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class=" border_2" style="width: 3%">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="width_5 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_33 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_15 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_8 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_8 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_13 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_13 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class=" border_2" style="width: 3%">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="width_5 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_33 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_15 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_8 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_8 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_13 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="width_13 border">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class=" border_2" style="width: 3%">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+
+            <tr class="white-bg" style="height: 30px;">
+                <td class="border" style="border-top: 1px solid black;">
+
+                </td>
+                <td class="border" colspan="2" style="border-top: 1px solid black;">
+                    <div class="" style="font-size: 15px;font-weight: 600;">
+                        <i>&nbsp;PAGE_____OF_____<span class="pull-right">CREATION DATE&nbsp;</span></i>
+                    </div>
+                </td>
+                <td class="border" style="border-top: 1px solid black;">
+                    <div class=""></div>
+                </td>
+                <td class="border dark-night" style="border-top: 2px solid black;">
+                    <div class="" style="font-size: 15px;font-weight: 600;">&nbsp;TOTALS</div>
+                </td>
+                <td class="border" style="border-top: 2px solid black;">
+                    <div class=""></div>
+                </td>
+                <td class="border" style="border-top: 2px solid black;">
+                    <div class=""></div>
+                </td>
+                <td class=" border_2">
+                    <div class=""></div>
+                </td>
+            </tr>
+
+        </table>
+        <!-- 10th section -->
+        <table cellspacing="0" class="width_100 first_sec">
+            <tr>
+                <td class="border width_20">
+                    <div class="static-label"><font class="numbers">50</font>PAYER NAME</div>
+                </td>
+                <td class="border width_13">
+                    <div class="static-label"><font class="numbers">51</font>HEALTH PLAN ID</div>
+                </td>
+                <td class="border width_8">
+                    <div class="static-label"><font class="numbers">52</font>REL. INFO</div>
+                </td>
+                <td class="border" style="width: 1%;">
+                    &nbsp;
+                </td>
+                <td class="border width_8">
+                    <div class="static-label"><font class="numbers">53</font>ASG. BEN.</div>
+                </td>
+                <td class="border width_15">
+                    <div class="static-label"><font class="numbers">54</font>PRIOR PAYMENTS</div>
+                </td>
+                <td class="border width_15">
+                    <div class="static-label"><font class="numbers">55</font>EST. AMOUNT DUE</div>
+                </td>
+                <td class="border_2 width_20">
+                    <table cellspacing="0" class="width_100 line-td">
+                        <tr>
+                            <td class="width_20">
+                                <div class="static-label"><font class="numbers">56</font>NPI</div>
+                            </td>
+                            <td class="width_80">
+                                <div class=""><input type="text" class="width_100"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
+            <tr>
+                <td class="border width_20">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_13">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_8">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border" style="width: 1%;">
+                    &nbsp;
+                </td>
+                <td class="border width_8">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_20">
+                    <table cellspacing="0" class="width_100 line-td">
+                        <tr>
+                            <td class="width_20 white-bg">
+                                <div class="static-label"><font class="numbers">57</font></div>
+                            </td>
+                            <td class="width_80">
+                                <div class=""><input type="text" class="width_100"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_20">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_13">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_8">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border" style="width: 1%;">
+                    &nbsp;
+                </td>
+                <td class="border width_8">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_20">
+                    <table cellspacing="0" class="width_100 line-td">
+                        <tr>
+                            <td class="width_20 white-bg">
+                                <div class="static-label">OTHER</div>
+                            </td>
+                            <td class="width_80">
+                                <div class=""><input type="text" class="width_100"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_20">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_13">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_8">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border" style="width: 1%;">
+                    &nbsp;
+                </td>
+                <td class="border width_8">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_20">
+                    <table cellspacing="0" class="width_100 line-td">
+                        <tr>
+                            <td class="width_20 white-bg">
+                                <div class="static-label">PRV ID</div>
+                            </td>
+                            <td class="width_80">
+                                <div class=""><input type="text" class="width_100"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <!-- 11th section -->
+        <table cellspacing="0" class="width_100 first_sec">
+            <tr style="height: 30px;">
+                <td class="border width_30">
+                    <div class="static-label"><font class="numbers">58</font>INSURED'S NAME</div>
+                </td>
+                <td class="border width_5">
+                    <div class="static-label"><font class="numbers">59</font>P. REL</div>
+                </td>
+                <td class="border width_30">
+                    <div class="static-label"><font class="numbers">60</font>INSURED'S UNIQUE ID</div>
+                </td>
+                <td class="border width_15">
+                    <div class="static-label"><font class="numbers">61</font>GROUP NAME</div>
+                </td>
+                <td class="border_2 width_20">
+                    <div class="static-label"><font class="numbers">62</font>INSURANCE GROUP NO.</div>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
+            <tr>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_5">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_20">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_5">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_20">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_5">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_15">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_20">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+        </table>
+        <!-- 12th section -->
+        <table cellspacing="0" class="width_100 first_sec">
+            <tr style="height: 30px;">
+                <td class="border width_40">
+                    <div class="static-label"><font class="numbers">63</font>TREATMENT AUTHORIZATION CODES</div>
+                </td>
+                <td class="border width_30">
+                    <div class="static-label"><font class="numbers">64</font>DOCUMENT CONTROL NUMBER</div>
+                </td>
+                <td class="border_2 width_30">
+                    <div class="static-label"><font class="numbers">65</font>EMPLOYER NAME</div>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
+            <tr>
+                <td class="border width_40">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_40">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="border width_40">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2 width_30">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+            </tr>
+        </table>
+        <!-- 13th section -->
+        <table cellspacing="0" class="width_100 first_sec line-tr">
+            <tr>
+                <td class="border" style="width: 3%;">
+                    <div class="static-label"><font class="numbers">66</font>DX</div>
+                </td>
+                <td class="border_2" style="width: 97%;">
+                    <table cellspacing="0" class="width_100 line-td">
+                        <tr class="white-bg">
+                            <td class="width_10"><div class="background-letter" data-bg-text="67"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="A"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="B"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="C"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="D"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="E"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="F"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="G"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="H"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class=""><font class="numbers inline-numbers">68</font><input type="text" class="width_100" style="padding-left: 15px;"></div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="border" style="width: 3%;">
+                    <div class=""><input type="text" class="width_100"></div>
+                </td>
+                <td class="border_2" style="width: 97%;">
+                    <table cellspacing="0" class="width_100 line-td">
+                        <tr class="white-bg">
+                            <td class="width_10"><div class="background-letter" data-bg-text="I"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="J"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="K"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="L"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="M"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="N"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="O"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="P"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="Q"><input type="text" class="width_100"></div></td>
+                            <td class="width_10"><div class=""><input type="text" class="width_100"></div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <!-- 14th section -->
+        <table cellspacing="0" class="width_100 first_sec">
+            <tr>
+                <td class="border" style="width: 51.6%">
+                    <table cellspacing="0" class="width_100 first_sec line-td">
+                        <tr>
+                            <td class="width_14"><div class="static-label"><font class="numbers">69</font>ADMIT DX</div></td> 
+                            <td class="width_14"><div class=""><input type="text" class="width_100"></div></td> 
+                            <td class="width_14"><div class="static-label"><font class="numbers">70</font>PATIENT REASON DX</div></td> 
+                            <td class="width_14 white-bg"><div class="background-letter" data-bg-text="a"><input type="text" class="width_100"></div></td> 
+                            <td class="width_14 white-bg"><div class="background-letter" data-bg-text="b"><input type="text" class="width_100"></div></td> 
+                            <td class="width_14 white-bg"><div class="background-letter" data-bg-text="c"><input type="text" class="width_100"></div></td> 
+                            <td class="" style="width: 12px;"><div class="static-label"><font class="numbers">71</font>PPS CODE</div></td> 
+                        </tr>
+                    </table>
+                </td>
+                <td class="border_2" style="width: 48.4%">
+                    <table cellspacing="0" class="width_100 first_sec line-td">
+                        <tr>
+                            <td style="width: 13px;"><div class=""><input type="text" class="width_100"></div></td> 
+                            <td style="width: 7px;"><div class="static-label"><font class="numbers">72</font>ECI</div></td>
+                            <td class="width_20 white-bg"><div class="background-letter" data-bg-text="a"><input type="text" class="width_100"></div></td> 
+                            <td class="width_20 white-bg"><div class="background-letter" data-bg-text="b"><input type="text" class="width_100"></div></td> 
+                            <td class="width_20 white-bg"><div class="background-letter" data-bg-text="c"><input type="text" class="width_100"></div></td> 
+                            <td class="width_20"><div class=""><font class="numbers inline-numbers">73</font><input type="text" class="width_100" style="padding-left: 15px;"></div></td> 
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <!-- 15th section -->
+        <table cellspacing="0" class="width_100 first_sec">
+            <tr style="border-bottom: 1px solid black;">
+                <td class="border width_60">
+                    <table cellspacing="0" class="width_100 first_sec line-tr line-td">
+                        <tr>
+                            <td class="width_30">
+                                <div class="static-label display-inline width_100 text-center"><font class="numbers">74</font>PRINCIPAL PROCEDURE</div><br/>
+                                <div class="static-label inline-block width_50">CODE</div>
+                                <div class="static-label inline-block width_50">DATE</div>
+                            </td>
+                            <td class="width_30 dark-night">
+                                <div class="static-label display-inline width_100 text-center"><font class="numbers">a.</font>OTHER PROCEDURE</div><br/>
+                                <div class="static-label inline-block width_50">CODE</div>
+                                <div class="static-label inline-block width_50">DATE</div>
+                            </td>
+                            <td class="width_30">
+                                <div class="static-label display-inline width_100 text-center"><font class="numbers">b.</font>OTHER PROCEDURE</div><br/>
+                                <div class="static-label inline-block width_50">CODE</div>
+                                <div class="static-label inline-block width_50">DATE</div>
+                            </td>
+                            <td class="width_10" rowspan="4">
+                                <font class="inline-numbers numbers">75</font>
+                                <input type="text" class="width_100 height_100">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_30">
+                                <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" class="width_100"></div></div>
+                            </td>
+                            <td class="width_30">
+                                <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" class="width_100"></div></div>
+                            </td>
+                            <td class="width_30">
+                                <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" class="width_100"></div></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_30 dark-night">
+                                <div class="static-label display-inline width_100 text-center"><font class="numbers">c.</font>OTHER PROCEDURE</div><br/>
+                                <div class="static-label inline-block width_50">CODE</div>
+                                <div class="static-label inline-block width_50">DATE</div>
+                            </td>
+                            <td class="width_30">
+                                <div class="static-label display-inline width_100 text-center"><font class="numbers">d.</font>OTHER PROCEDURE</div><br/>
+                                <div class="static-label inline-block width_50">CODE</div>
+                                <div class="static-label inline-block width_50">DATE</div>
+                            </td>
+                            <td class="width_30 dark-night">
+                                <div class="static-label display-inline width_100 text-center"><font class="numbers">e.</font>OTHER PROCEDURE</div><br/>
+                                <div class="static-label inline-block width_50">CODE</div>
+                                <div class="static-label inline-block width_50">DATE</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_30">
+                                <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" class="width_100"></div></div>
+                            </td>
+                            <td class="width_30">
+                                <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" class="width_100"></div></div>
+                            </td>
+                            <td class="width_30">
+                                <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" class="width_100"></div></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="width_50" style="border-top: 1px solid black;"> 
+                                <div class="first_sec">
+                                    <table cellspacing="0" class="width_100 line-tr border-light">
+                                        <tr>
+                                            <td>
+                                                <table cellspacing="0" class="width_100">
+                                                    <tr>
+                                                        <td class="width_30">
+                                                            <div class="static-label"><font class="numbers">80</font>REMARKS</div>
+                                                        </td>
+                                                        <td class="width_70">
+                                                            <input type="text" class="width_100">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" class="width_100"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" class="width_100"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" class="width_100"></td>
+                                        </tr>
+                                    </table>
+                                </div>  
+                            </td>
+                            <td class="border width_50">
+                                <div class="first_sec">
+                                    <table cellspacing="0" class="width_100 line-tr line-td">
+                                        <tr>
+                                            <td class="width_10">
+                                                <div class="static-label"><font class="numbers">81</font>CC<br/><span style="float: right;margin-right: 5px;">a</span></div>
+                                            </td>
+                                            <td class="width_10">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width_10">
+                                                <div class="static-label" style="float: right;margin-right: 5px;">b</div>
+                                            </td>
+                                            <td class="width_10">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width_10">
+                                                <div class="static-label" style="float: right;margin-right: 5px;">c</div>
+                                            </td>
+                                            <td class="width_10">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="width_10">
+                                                <div class="static-label" style="float: right;margin-right: 5px;">d</div>
+                                            </td>
+                                            <td class="width_10">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                            <td class="width_40">
+                                                <input type="text" class="width_100">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="border_2 width_40" style="border-left: black solid 4px;border-left-style: double;">
+                    <table cellspacing="0" class="width_100 first_sec line-tr line-td">
+                        <tr>
+                            <td class="width_60">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_30">
+                                            <div class="static-label"><font class="numbers">76</font>ATTENDING</div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">NPI</span><input type="text" class="width_100" style="padding-left: 25px;"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="width_40">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_15">
+                                            <div class="static-label">QUAL</div>
+                                        </td>
+                                        <td class="width_15">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_55">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">LAST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                            <td class="width_45">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">FIRST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_60">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_30">
+                                            <div class="static-label"><font class="numbers">76</font>ATTENDING</div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">NPI</span><input type="text" class="width_100" style="padding-left: 25px;"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="width_40">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_15">
+                                            <div class="static-label">QUAL</div>
+                                        </td>
+                                        <td class="width_15">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_55">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">LAST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                            <td class="width_45">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">FIRST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_60">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_30">
+                                            <div class="static-label"><font class="numbers">76</font>ATTENDING</div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">NPI</span><input type="text" class="width_100" style="padding-left: 25px;"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="width_40">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_15">
+                                            <div class="static-label">QUAL</div>
+                                        </td>
+                                        <td class="width_15">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_55">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">LAST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                            <td class="width_45">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">FIRST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_60">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_30">
+                                            <div class="static-label"><font class="numbers">76</font>ATTENDING</div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">NPI</span><input type="text" class="width_100" style="padding-left: 25px;"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="width_40">
+                                <table cellspacing="0" class="width_100 first_sec line-td">
+                                    <tr>
+                                        <td class="width_15">
+                                            <div class="static-label">QUAL</div>
+                                        </td>
+                                        <td class="width_15">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                        <td class="width_70">
+                                            <div class=""><input type="text" class="width_100"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="width_55">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">LAST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                            <td class="width_45">
+                                <div class="" style="position: relative;"><span style="position: absolute;left: 2px; top: 10px;">FIRST</span><input type="text" class="width_100" style="padding-left: 35px;"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <!--form end -->
+</div>
