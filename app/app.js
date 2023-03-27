@@ -377,7 +377,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // payroll_history
             state('app.payroll_history', {
                 url: '/payroll_history',
-                templateUrl: appHelper.templatePath('payroll_history'),
+                controller: 'PayrollHistoryCtrl as payrollHist',
+                templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_history'),
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -403,7 +404,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // payroll_session
             state('app.payroll_session', {
                 url: '/payroll_session',
-                templateUrl: appHelper.templatePath('payroll_session'),
+                controller: 'PayrollSessionCtrl as payrollSession',
+                templateUrl: appHelper.viewTemplatePath('payroll','payroll_session'),
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([

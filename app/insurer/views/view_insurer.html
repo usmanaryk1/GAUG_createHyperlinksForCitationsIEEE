@@ -50,7 +50,7 @@
 
                         <tbody>
                             <tr ng-repeat="insurer in viewInsurer.insurerList">
-                                <th>{{insurer.insuranceName}}</th>
+                                <th ng-click="viewInsurer.openEditModal(insurer, 'modal-5')" style="cursor: pointer">{{insurer.insuranceName}}</th>
                                 <td>{{insurer.billingId}}</td>
                                 <td>{{insurer.contactName}}</td>
                                 <td>{{insurer.contractEndDate|date :dateFormat}}</td>
@@ -211,5 +211,97 @@
     <div class="modal-footer">
     <button type="button" class="btn btn-success" ng-click="deleteInsurerModel.delete(deleteInsurerModel.insurer);">Yes</button>
     <button type="button" class="btn btn-red" ng-click="deleteInsurerModel.dismiss();">No</button>
+    </div>
+</script>
+<script type="text/ng-template" id="modal-5">
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectInsurerModel.insurer.insuranceName}}</div>
+    </div>
+    <button type="button" class="close" ng-click="selectInsurerModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Billing Id</strong></label>
+    <div class="col-md-8">
+    {{selectInsurerModel.insurer.billingId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Contact Number</strong></label>
+    <div class="col-md-8">
+    {{selectInsurerModel.insurer.contactNumber |tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Contact Name</strong></label>
+    <div class="col-md-8">
+    {{selectInsurerModel.insurer.contactName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Expires</strong></label>
+    <div class="col-md-8">
+    {{selectInsurerModel.insurer.contractEndDate|date :dateFormat}}
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Plan Type</strong></label>
+    <div class="col-md-8">
+    {{selectInsurerModel.planTypeMap[selectInsurerModel.insurer.planType]}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectInsurerModel.close();">Close</button>
+    </div>
+</script>
+<script type="text/ng-template" id="deleteModel">
+    <div class="modal-header">		
+    <h4 class="modal-title">{{deleteEmployeeModel.employee.lName}} {{deleteEmployeeModel.employee.fName}} {{deleteEmployeeModel.employee.middleInitial}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to delete this Employee?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="deleteEmployeeModel.delete(deleteEmployeeModel.employee);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="deleteEmployeeModel.dismiss();">No</button>
     </div>
 </script>

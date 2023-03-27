@@ -710,7 +710,7 @@ angular.module('xenon.directives', []).
                                 {
                                     opts['rules'][name] = {};
                                     opts['messages'][name] = {};
-                                } 
+                                }
                                 //Date commented by jack to give input maask for datepicker
 //                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
                                 if ($.inArray(rule, ['required', 'url', 'email', 'number', 'creditcard']) != -1)
@@ -909,7 +909,6 @@ angular.module('xenon.directives', []).
                                 endDate: attrDefault($this, 'endDate', ''),
                                 daysOfWeekDisabled: attrDefault($this, 'disabledDays', ''),
                                 startView: attrDefault($this, 'startView', 0),
-                                
                                 //rtl: rtl()
                             },
                             $n = $this.next(),
@@ -1205,5 +1204,18 @@ angular.module('xenon.directives', []).
                         });
                     }
                 };
-            }]);
+            }])
+        .directive('imageonload', function() {
+            return {
+                restrict: 'A',
+                scope: {imageonload:'='},
+                link: function(scope, element, attrs) {
+                    element.bind('load', function() {
+                        scope.$apply(function() {
+                            scope.imageonload = true;
+                        });
+                    });
+                }
+            };
+        });
 

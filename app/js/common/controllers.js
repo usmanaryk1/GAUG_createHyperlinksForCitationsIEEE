@@ -30,7 +30,14 @@ angular.module('xenon.controllers', []).
             $rootScope.isMainPage = true;
             $rootScope.dateFormat = "MM/dd/yyyy";
             $rootScope.timeFormat = "hh:mm a";
-            $rootScope.validFileTypes = ["png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
+            $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
+            $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
+            $rootScope.maskLoading = function() {
+                $("#mainDiv").mask("");
+            };
+            $rootScope.unmaskLoading=function(){
+                $("#mainDiv").unmask();
+            };
 //            $rootScope.states = ['UT', 'TX', 'NY'];
             $rootScope.positions = {
                 'pc': 'Personal Care',

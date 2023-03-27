@@ -11,6 +11,7 @@
         ctrl.w4FileObj = {};
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
+        ctrl.profileFileObj = {};
         ctrl.resetEmployee = function() {
             if (ctrl.employee.employeeDocumentId.application != null) {
                 ctrl.employee.employeeDocumentId.application = null;
@@ -181,6 +182,7 @@
 //            if (employeeToSave.employeeDocumentId.endDate) {
 //                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
 //            }
+            $rootScope.maskLoading();
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
@@ -191,6 +193,9 @@
                                 $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
                             }
+                        }
+                        if ($rootScope.tabNo == 3){
+                            $state.go('app.employee-list',{status:"active"});
                         }
                         toastr.success("Employee saved.");
                         ctrl.employee = res;
@@ -208,12 +213,15 @@
                         ctrl.formSubmitted = false;
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
+                    }).then(function(){
+                         $rootScope.unmaskLoading();
                     });
         }
 
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
+                $rootScope.maskLoading();
                 EmployeeDAO.get({id: $state.params.id}).then(function(res) {
                     showLoadingBar({
                         delay: .5,
@@ -221,6 +229,11 @@
                         finish: function() {
                         }
                     }); // showLoadingBar
+                    if (res.profileImage != null && res.profileImage != '') {
+                        ctrl.hideLoadingImage = false;
+                    } else {
+                        ctrl.hideLoadingImage = true;
+                    }
                     ctrl.employee = res;
                     ctrl.retrivalRunning = false;
                     EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
@@ -237,6 +250,8 @@
                     toastr.error("Failed to retrieve employee.");
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             } else {
                 ctrl.retrivalRunning = false;
@@ -627,6 +642,58 @@
             ctrl.physicalFileObj.flow = flow;
             return true;
         };
+
+        ctrl.profileUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "a",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.profileFileSelected = function(file, flow) {
+            ctrl.profileFileObj.flowObj = flow;
+            ctrl.profileFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.profileFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.profileImage = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableProfileUploadButton = false;
+            ctrl.hideLoadingImage = false;
+        };
+        ctrl.profileFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableProfileUploadButton = false;
+            ctrl.employee.profileImage = null;
+            ctrl.profileFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.profileFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.profileImage = null;
+            if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.profileFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableProfileUploadButton = true;
+            ctrl.profileShowfileProgress = true;
+            ctrl.profileFileObj.errorMsg = null;
+            ctrl.profileFileObj.flow = flow;
+            return true;
+        };
+
 
 
 //        $scope.$watch(function() {

@@ -116,7 +116,7 @@
                     patientToSave.orgCode = ontimetest.company_code;
                     reqParam = 'save';
                 }
-
+                $rootScope.maskLoading();
                 PatientDAO.update({action: reqParam, data: patientToSave})
                         .then(function(res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
@@ -125,8 +125,10 @@
                                     $state.go('^.tab2', {id: res.id});
                                 } else {
                                     $state.go('^.tab1', {id: res.id});
-                                    ctrl.editMode = true;
                                 }
+                            }
+                            if ($rootScope.tabNo == 5) {
+                                $state.go('app.patient-list', {status: "active"});
                             }
                             ctrl.patient = res;
                             if (res.patientCareTypeCollection) {
@@ -144,7 +146,9 @@
                             //exception logic
                             toastr.error("Patient cannot be saved.");
                             console.log('Patient Object : ' + JSON.stringify(patientToSave));
-                        });
+                        }).then(function() {
+                    $rootScope.unmaskLoading();
+                });
 
             }
         }
@@ -152,6 +156,7 @@
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
+                $rootScope.maskLoading();
                 PatientDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.patient = res;
                     if (res.patientCareTypeCollection) {
@@ -176,6 +181,8 @@
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.patient));
                     toastr.error("Failed to retrieve patient");
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             } else {
                 ctrl.retrivalRunning = false;
