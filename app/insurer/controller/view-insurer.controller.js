@@ -1,7 +1,6 @@
 (function() {
     function ViewInsurersCtrl(InsurerDAO, $rootScope, $stateParams, $state, $modal) {
         var ctrl = this;
-        $rootScope.selectEmployeeModel = {};
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
         ctrl.companyCode = ontimetest.company_code;
@@ -79,19 +78,18 @@
             };
 
         };
+        ctrl.openEditModal = function(insurer, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.selectInsurerModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+            });
+            $rootScope.selectInsurerModel.planTypeMap = {"mcd": "Medicaid", "mcr": "Medicare", "tc": "Tricare Champus", "cva": "ChampVA", "gh": "Group Healthplan", "fbl": "Feca Black Lung", "bc": "Blue Cross", "bs": "Blue Shield", "bcb": "Blue Cross/Blue Sheild (BCBS)", "oth": "Other"};
+            $rootScope.selectInsurerModel.insurer = insurer;
 
+        };
         ctrl.retrieveInsurers();
-//        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
-//        {
-//            $rootScope.selectEmployeeModel = $modal.open({
-//                templateUrl: modal_id,
-//                size: modal_size,
-//                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
-//            });
-//            $rootScope.selectEmployeeModel.employee=employee;
-//
-//        };
-
     }
     ;
     angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewInsurersCtrl]);

@@ -76,11 +76,11 @@
                             </label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="sboxit-1" name="PlanType" ng-model="addInsurer.insurerObj.planType"
-                                        data-validate="required"  data-message-required="Please select Plan Type." >
+                                        data-validate="required"  data-message-required="Please select Plan Type." ng-options="planType.value as planType.label for planType in addInsurer.planTypes">
                                     <option value="">
                                         Select
                                     </option>
-                                    <option value="mcd">
+<!--                                    <option value="mcd">
                                         Medicaid
                                     </option>
                                     <option value="mcr">
@@ -109,7 +109,7 @@
                                     </option>
                                     <option value="oth">
                                         Other
-                                    </option>
+                                    </option>-->
                                 </select>
                             </div>
                         </div>

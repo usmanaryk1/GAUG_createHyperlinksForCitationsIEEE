@@ -6,6 +6,7 @@
         ctrl.fileObj = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.planTypes = [{label: "Medicaid", value: "mcd"}, {label: "Medicare", value: "mcr"}, {label: "Tricare Champus", value: "tc"}, {label: "ChampVA", value: "cva"}, {label: "Group Healthplan", value: "gh"}, {label: "Feca Black Lung", value: "fbl"}, {label: "Blue Cross", value: "bc"}, {label: "Blue Shield", value: "bs"}, {label: "Blue Cross/Blue Sheild (BCBS)", value: "bcb"}, {label: "Other", value: "oth"}];
         ctrl.initForm = function() {
             $("#add_inusrer_form input:text, #add_inusrer_form textarea").first().focus();
         };
