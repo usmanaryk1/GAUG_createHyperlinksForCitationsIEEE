@@ -1,5 +1,5 @@
 (function () {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page, PositionDAO) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page, PositionDAO, WorksiteDAO) {
         var ctrl = this;
         Page.setTitle("Manual Punch");
         ctrl.taskList = [];
@@ -202,7 +202,7 @@
                 $rootScope.paginationLoading = true;
                 delete ctrl.attendanceObj.careTypeId;
             }
-            
+
             PatientDAO.getPatientsForSchedule({patientIds: ctrl.attendanceObj.patientId}).then(function (res) {
                 var patientObj = res[0];
                 if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length > 0) {
@@ -309,7 +309,7 @@
                 ctrl.tasksErrorMsg = null;
             }
             if ($("#manual_punch_form")[0].checkValidity() &&
-                    (ctrl.attendanceObj.patientId != null || !ctrl.patientMandatory) &&
+                    (ctrl.attendanceObj.patientId != null || !ctrl.patientMandatory || ctrl.attendanceObj.isWorksitePunch) &&
                     ctrl.attendanceObj.employeeId != null && ctrl.tasksErrorMsg == null) {
                 $rootScope.maskLoading();
                 var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
@@ -476,6 +476,20 @@
 
             }
         }, true);
+        ctrl.worksiteSelected = function () {
+            if (ctrl.attendanceObj.isWorksitePunch) {
+                ctrl.attendanceObj.careTypeId = null;
+                ctrl.attendanceObj.patientId = null;
+            } else {
+                ctrl.attendanceObj.workSiteId = null;
+            }
+        };
+        ctrl.retrieveWorkSites = function () {
+            WorksiteDAO.retreveWorksiteNames().then(function (res) {
+                ctrl.workSiteList = res;
+            });
+        };
+        ctrl.retrieveWorkSites();
     }
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", "PositionDAO", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", "PositionDAO", "WorksiteDAO", ManualPunchCtrl]);
 })();

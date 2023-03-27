@@ -29,6 +29,10 @@
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="manualPunch.resetManualPunch()">
                                     Reset To Default
                                 </button>
+                                <div class="pull-right">
+                                    <input type="checkbox" name="isWorkSite" ng-model="manualPunch.attendanceObj.isWorksitePunch" ng-change='manualPunch.worksiteSelected()'>
+                                    <label>Is Work Site Punch?&nbsp;</label>                                    
+                                </div>
 
                             </div>
                         </div>
@@ -55,50 +59,80 @@
                         </div>
                         <div class="form-group-separator">
                         </div>
-                        <div class="form-group" ng-class="{ 'validate-has-error':manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted && manualPunch.patientMandatory}">
-                            <label class="col-sm-3 control-label">
-                                Patient Name
-                            </label>
-                            <div class="col-sm-9" >
-                                <script type="text/javascript">
-                                            jQuery(document).ready(function ($)
-                                    {
-                                        setTimeout(function () {
-                                            $("#sboxit-1").select2({
-//                                                        minimumResultsForSearch: -1,
-                                                placeholder: 'Select Patient...',
-//                                                        minimumInputLength: 1,
-//                                                        placeholder: 'Search',
-                                            }).on('select2-open', function ()
-                                            {
-                                                // Adding Custom Scrollbar
-                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                            });
-                                        }, 200);
+                        <div ng-if='manualPunch.attendanceObj.isWorksitePunch'>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    Worksite
+                                </label>
+                                <div class="col-sm-9">
 
-                                    });
-                                </script>
-                                <select class="form-control" id="sboxit-1" name="PatientName" 
-                                        ng-change="manualPunch.retrievePatient(true)" ng-model="manualPunch.attendanceObj.patientId" ng-options="pat.id as (pat.label) for pat in manualPunch.patientList track by pat.id" >
-                                    <option value="" selected hidden />
-                                </select>
-                                <div ng-show='manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted && manualPunch.patientMandatory'>
-                                    <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient Name.</span>
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function ($)
+                                        {
+                                            setTimeout(function () {
+                                                $("#worksiteDropdown").select2({
+                                                    placeholder: 'Select Worksite...',
+                                                }).on('select2-open', function ()
+                                                {
+                                                    // Adding Custom Scrollbar
+                                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                });
+                                            }, 200);
+                                        });</script>
+                                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="manualPunch.attendanceObj.workSiteId" ng-options='worksite.id as worksite.name for worksite in manualPunch.workSiteList'>
+                                        <option value="" selected hidden />
+                                    </select>               
                                 </div>
-                                <!--<div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.patientObj.fName+" "+manualPunch.patientObj.lName}}</div>-->
+                            </div>
+                            <div class="form-group-separator">
                             </div>
                         </div>
-                        <div class="form-group-separator"></div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Care Type</label>
+                        <div ng-if='!manualPunch.attendanceObj.isWorksitePunch'>
+                            <div class="form-group" ng-class="{ 'validate-has-error':manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted && manualPunch.patientMandatory}">
+                                <label class="col-sm-3 control-label">
+                                    Patient Name
+                                </label>
+                                <div class="col-sm-9" >
+                                    <script type="text/javascript">
+                                                jQuery(document).ready(function ($)
+                                        {
+                                            setTimeout(function () {
+                                                $("#sboxit-1").select2({
+                                                    //                                                        minimumResultsForSearch: -1,
+                                                    placeholder: 'Select Patient...',
+                                                    //                                                        minimumInputLength: 1,
+                                                    //                                                        placeholder: 'Search',
+                                                }).on('select2-open', function ()
+                                                {
+                                                    // Adding Custom Scrollbar
+                                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                });
+                                            }, 200);
 
-                            <div class="col-sm-9">
-                                <select class="form-control" id="care" name="care" ng-model="manualPunch.attendanceObj.careTypeId" ng-options="care.id as care.careTypeTitle for care in manualPunch.careTypes" data-validate="required" data-message-required="Please select care type.">
-                                    <option value="">Select the care type</option>
-                                </select>
+                                        });
+                                    </script>
+                                    <select class="form-control" id="sboxit-1" name="PatientName" 
+                                            ng-change="manualPunch.retrievePatient(true)" ng-model="manualPunch.attendanceObj.patientId" ng-options="pat.id as (pat.label) for pat in manualPunch.patientList track by pat.id" >
+                                        <option value="" selected hidden />
+                                    </select>
+                                    <div ng-show='manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted && manualPunch.patientMandatory'>
+                                        <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient Name.</span>
+                                    </div>
+                                    <!--<div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.patientObj.fName+" "+manualPunch.patientObj.lName}}</div>-->
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group-separator">
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Care Type</label>
+
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="care" name="care" ng-model="manualPunch.attendanceObj.careTypeId" ng-options="care.id as care.careTypeTitle for care in manualPunch.careTypes" data-validate="required" data-message-required="Please select care type.">
+                                        <option value="">Select the care type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
                         </div>
                         <div class="form-group" ng-class="{ 'validate-has-error':manualPunch.attendanceObj.employeeId == null && manualPunch.formSubmitted}">
                             <label class="col-sm-3 control-label">

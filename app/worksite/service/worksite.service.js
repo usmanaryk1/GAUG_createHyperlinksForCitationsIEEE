@@ -18,6 +18,10 @@
             },
             changestatus: {
                 method: 'GET'
+            },
+            retreveWorksiteNames: {
+                method: 'GET',
+                isArray: true
             }
         });
         return {
@@ -35,6 +39,9 @@
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
+            },
+            retreveWorksiteNames: function (data) {
+                return api.retreveWorksiteNames({action: 'select'}).$promise;
             }
         };
     };
