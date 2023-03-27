@@ -1211,7 +1211,6 @@ angular.module('xenon.directives', []).
                 scope: {imageonload:'='},
                 link: function(scope, element, attrs) {
                     element.bind('load', function() {
-                        console.log(attrs.imageonload);
                         scope.$apply(function() {
                             scope.imageonload = true;
                         });

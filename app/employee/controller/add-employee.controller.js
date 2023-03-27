@@ -182,11 +182,15 @@
 //            if (employeeToSave.employeeDocumentId.endDate) {
 //                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
 //            }
+            $rootScope.maskLoading();
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             $state.go('^.tab1', {id: res.id});
                             ctrl.editMode = true;
+                        }
+                        if ($rootScope.tabNo == 3){
+                            $state.go('app.employee-list',{status:"active"});
                         }
                         toastr.success("Employee saved.");
                         ctrl.employee = res;
@@ -204,12 +208,15 @@
                         ctrl.formSubmitted = false;
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
+                    }).then(function(){
+                         $rootScope.unmaskLoading();
                     });
         }
 
         //function called on page initialization.
         function pageInit() {
             if (ctrl.editMode) {
+                $rootScope.maskLoading();
                 EmployeeDAO.get({id: $state.params.id}).then(function(res) {
                     showLoadingBar({
                         delay: .5,
@@ -238,6 +245,8 @@
                     toastr.error("Failed to retrieve employee.");
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
+                }).then(function() {
+                    $rootScope.unmaskLoading();
                 });
             } else {
                 ctrl.retrivalRunning = false;
