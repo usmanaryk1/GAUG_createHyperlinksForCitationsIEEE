@@ -1,10 +1,22 @@
 (function () {
-    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO) {
+    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO) {
         var ctrl = this;
         ctrl.pageNo = 1;
+        ctrl.retrieveWorkSites = function () {
+            WorksiteDAO.retreveWorksiteNames().then(function (res) {
+                ctrl.workSiteList = res;
+            });
+        };
         if ($state.current.name.indexOf('search-employee-calendar') >= 0) {
+            Page.setTitle("Search Employee");
             ctrl.isEmployeeSearchPage = true;
+        } else if ($state.current.name.indexOf('worksite-schedule') >= 0) {
+            Page.setTitle("Worksite Calendar");
+            ctrl.isWorksiteSchedulePage = true;
+            ctrl.retrieveWorkSites();
         } else {
+            Page.setTitle("Employee Calendar");
+            ctrl.isWorksiteSchedulePage = false;
             ctrl.isEmployeeSearchPage = false;
         }
         ctrl.employee_list = [];
@@ -14,7 +26,6 @@
 
         var timeFormat = 'HH:mm';
 
-        Page.setTitle("Search Employee");
 
         ctrl.calendarView = 'week';
         setWeekDate();
@@ -160,7 +171,12 @@
                 var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
                 ctrl.startRetrieved = a;
                 ctrl.endRetrieved = b;
-                EventTypeDAO.retrieveBySchedule({employeeIds: ids, fromDate: a, toDate: b}).then(function (res) {
+                var eventParams = {employeeIds: ids, fromDate: a, toDate: b};
+                if (ctrl.isWorksiteSchedulePage) {
+                    eventParams.onlyWorkSites = true;
+                    eventParams.workSiteId = ctrl.searchParams.workSiteId;
+                }
+                EventTypeDAO.retrieveBySchedule(eventParams).then(function (res) {
                     delete res.$promise;
                     delete res.$resolved;
                     ctrl.events = res;
@@ -272,6 +288,15 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
+
+                    $("#worksiteModalDropdown").select2({
+                        placeholder: 'Select Worksite...',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+
                 }, 200);
                 $rootScope.employeePopup = $modal.open({
                     templateUrl: 'app/calendar/views/employee_calendar_modal.html',
@@ -279,6 +304,8 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.employeePopup.isWorksiteSchedulePage = ctrl.isWorksiteSchedulePage;
+                $rootScope.employeePopup.workSiteList = ctrl.workSiteList;
                 $rootScope.employeePopup.todayDate = new Date();
                 if (data != null && data.eventType == null) {
                     $rootScope.employeePopup.todayDate = data.startDate;
@@ -422,6 +449,13 @@
                                 placeholder: 'Select Patient...',
                                 // minimumInputLength: 1,
                                 // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            $("#worksiteModalDropdown").select2({
+                                placeholder: 'Select Worksite...',
                             }).on('select2-open', function ()
                             {
                                 // Adding Custom Scrollbar
@@ -900,5 +934,5 @@
         }
     }
 
-    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", CalendarCtrl]);
+    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", CalendarCtrl]);
 })();
