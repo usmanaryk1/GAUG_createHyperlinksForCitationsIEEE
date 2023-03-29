@@ -84,7 +84,7 @@
         }
 
         //function to save patient data.
-        function savePatientData() {
+        function savePatientData(tabNo) {
             var validAuthorization = ctrl.isValidAutorization(true);
             if ($('#add_patient_form')[0].checkValidity() && validAuthorization) {
                 var patientToSave = angular.copy(ctrl.patient);
@@ -120,8 +120,12 @@
                 PatientDAO.update({action: reqParam, data: patientToSave})
                         .then(function(res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
-                                $state.go('^.tab1', {id: res.id});
                                 ctrl.editMode = true;
+                                if (tabNo) {
+                                    $state.go('^.tab2', {id: res.id});
+                                } else {
+                                    $state.go('^.tab1', {id: res.id});
+                                }
                             }
                             if ($rootScope.tabNo == 5) {
                                 $state.go('app.patient-list', {status: "active"});
