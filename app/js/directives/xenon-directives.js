@@ -648,8 +648,9 @@ angular.module('xenon.directives', []).
                     if (!jQuery.isFunction(jQuery.fn.validate)) {
                         return false;
                     }
-
+                    var validator;
                     var validateForm = function() {
+
 
                         var $this = angular.element(el),
                                 opts = {
@@ -749,152 +750,157 @@ angular.module('xenon.directives', []).
                             }
                         });
 //                        scope.form = $this;
-                        $this.validate(opts);
+                        validator = $this.validate(opts);
                     }
                     validateForm();
-                    //Added for dynamic form validation by Jack
-
-//                    scope.$watch("refreshForm", function(value) {
-//                        if (value != null) {
-//                            validateForm();
-//                        }
-//                    }, true);
+                    //this is added to remove validation messages when resetForm is set true
+                    scope.$watch("resetForm", function(value) {
+                        if (value !== null && value === true) {
+                            validator.resetForm();
+                            var $this = angular.element(el);
+                            var $fields = $this.find('.validate-has-error');
+                            $fields.each(function(j, el2)
+                            {
+                                $(el2).removeClass('validate-has-error');
+                            });
+                        }
+                    }, true);
                 }
             }
         }).
-        directive('inputmask', function() {
-            return {
-                restrict: 'AC',
-                link: function(scope, el, attr)
-                {
-                    if (!jQuery.isFunction(jQuery.fn.inputmask))
-                        return false;
+                directive('inputmask', function() {
+                    return {
+                        restrict: 'AC',
+                        link: function(scope, el, attr)
+                        {
+                            if (!jQuery.isFunction(jQuery.fn.inputmask))
+                                return false;
 
-                    var $this = angular.element(el),
-                            mask = $this.data('mask').toString(),
-                            opts = {
-                                numericInput: attrDefault($this, 'numeric', false),
-                                radixPoint: attrDefault($this, 'radixPoint', ''),
-                                rightAlign: attrDefault($this, 'numericAlign', 'left') == 'right'
-                            },
-                    placeholder = attrDefault($this, 'placeholder', ''),
-                            is_regex = attrDefault($this, 'isRegex', '');
+                            var $this = angular.element(el),
+                                    mask = $this.data('mask').toString(),
+                                    opts = {
+                                        numericInput: attrDefault($this, 'numeric', false),
+                                        radixPoint: attrDefault($this, 'radixPoint', ''),
+                                        rightAlign: attrDefault($this, 'numericAlign', 'left') == 'right'
+                                    },
+                            placeholder = attrDefault($this, 'placeholder', ''),
+                                    is_regex = attrDefault($this, 'isRegex', '');
 
-                    if (placeholder.length)
-                    {
-                        opts[placeholder] = placeholder;
-                    }
-
-                    switch (mask.toLowerCase())
-                    {
-                        case "phone":
-                            mask = "(999) 999-9999";
-                            break;
-
-                        case "currency":
-                        case "rcurrency":
-
-                            var sign = attrDefault($this, 'sign', '$');
-                            ;
-
-                            mask = "999,999,999.99";
-
-                            if ($this.data('mask').toLowerCase() == 'rcurrency')
+                            if (placeholder.length)
                             {
-                                mask += ' ' + sign;
-                            }
-                            else
-                            {
-                                mask = sign + ' ' + mask;
+                                opts[placeholder] = placeholder;
                             }
 
-                            opts.numericInput = true;
-                            opts.rightAlignNumerics = false;
-                            opts.radixPoint = '.';
-                            break;
+                            switch (mask.toLowerCase())
+                            {
+                                case "phone":
+                                    mask = "(999) 999-9999";
+                                    break;
 
-                        case "email":
-                            mask = 'Regex';
-                            opts.regex = "[a-zA-Z0-9._%-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,4}";
-                            break;
-                        case "zip":
-                            mask = '99999 9999';
+                                case "currency":
+                                case "rcurrency":
+
+                                    var sign = attrDefault($this, 'sign', '$');
+                                    ;
+
+                                    mask = "999,999,999.99";
+
+                                    if ($this.data('mask').toLowerCase() == 'rcurrency')
+                                    {
+                                        mask += ' ' + sign;
+                                    }
+                                    else
+                                    {
+                                        mask = sign + ' ' + mask;
+                                    }
+
+                                    opts.numericInput = true;
+                                    opts.rightAlignNumerics = false;
+                                    opts.radixPoint = '.';
+                                    break;
+
+                                case "email":
+                                    mask = 'Regex';
+                                    opts.regex = "[a-zA-Z0-9._%-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,4}";
+                                    break;
+                                case "zip":
+                                    mask = '99999 9999';
 //                            opts.greedy = false;
 //                            opts.removeMaskOnSubmit = true;
-                            break;
-                        case "fdecimal":
-                            mask = 'decimal';
-                            $.extend(opts, {
-                                autoGroup: true,
-                                groupSize: 3,
-                                radixPoint: attrDefault($this, 'rad', '.'),
-                                groupSeparator: attrDefault($this, 'dec', ',')
-                            });
+                                    break;
+                                case "fdecimal":
+                                    mask = 'decimal';
+                                    $.extend(opts, {
+                                        autoGroup: true,
+                                        groupSize: 3,
+                                        radixPoint: attrDefault($this, 'rad', '.'),
+                                        groupSeparator: attrDefault($this, 'dec', ',')
+                                    });
+                            }
+
+                            if (is_regex)
+                            {
+                                opts.regex = mask;
+                                mask = 'Regex';
+                            }
+
+                            $this.inputmask(mask, opts);
+                        }
                     }
-
-                    if (is_regex)
-                    {
-                        opts.regex = mask;
-                        mask = 'Regex';
-                    }
-
-                    $this.inputmask(mask, opts);
-                }
-            }
-        }).
-        directive('timepicker', function() {
-            return {
-                restrict: 'AC',
-                link: function(scope, el, attr)
-                {
-                    if (!jQuery.isFunction(jQuery.fn.timepicker))
-                        return false;
-
-                    var $this = angular.element(el),
-                            opts = {
-                                template: attrDefault($this, 'template', false),
-                                showSeconds: attrDefault($this, 'showSeconds', false),
-                                defaultTime: attrDefault($this, 'defaultTime', 'current'),
-                                showMeridian: attrDefault($this, 'showMeridian', true),
-                                minuteStep: attrDefault($this, 'minuteStep', 15),
-                                secondStep: attrDefault($this, 'secondStep', 15)
-                            },
-                    $n = $this.next(),
-                            $p = $this.prev();
-
-                    $this.timepicker(opts);
-
-                    if ($n.is('.input-group-addon') && $n.has('a'))
-                    {
-                        $n.on('click', function(ev)
+                }).
+                directive('timepicker', function() {
+                    return {
+                        restrict: 'AC',
+                        link: function(scope, el, attr)
                         {
-                            ev.preventDefault();
+                            if (!jQuery.isFunction(jQuery.fn.timepicker))
+                                return false;
 
-                            $this.timepicker('showWidget');
-                        });
+                            var $this = angular.element(el),
+                                    opts = {
+                                        template: attrDefault($this, 'template', false),
+                                        showSeconds: attrDefault($this, 'showSeconds', false),
+                                        defaultTime: attrDefault($this, 'defaultTime', 'current'),
+                                        showMeridian: attrDefault($this, 'showMeridian', true),
+                                        minuteStep: attrDefault($this, 'minuteStep', 15),
+                                        secondStep: attrDefault($this, 'secondStep', 15)
+                                    },
+                            $n = $this.next(),
+                                    $p = $this.prev();
+
+                            $this.timepicker(opts);
+
+                            if ($n.is('.input-group-addon') && $n.has('a'))
+                            {
+                                $n.on('click', function(ev)
+                                {
+                                    ev.preventDefault();
+
+                                    $this.timepicker('showWidget');
+                                });
+                            }
+
+                            if ($p.is('.input-group-addon') && $p.has('a'))
+                            {
+                                $p.on('click', function(ev)
+                                {
+                                    ev.preventDefault();
+
+                                    $this.timepicker('showWidget');
+                                });
+                            }
+                        }
                     }
-
-                    if ($p.is('.input-group-addon') && $p.has('a'))
-                    {
-                        $p.on('click', function(ev)
+                }).
+                directive('datepicker', function($timeout) {
+                    return {
+                        restrict: 'AC',
+                        scope: {minDate: "=", maxDate: "=", ngModel: "="},
+                        link: function(scope, el, attr)
                         {
-                            ev.preventDefault();
-
-                            $this.timepicker('showWidget');
-                        });
-                    }
-                }
-            }
-        }).
-        directive('datepicker', function($timeout) {
-            return {
-                restrict: 'AC',
-                scope: {minDate: "=", maxDate: "=", ngModel: "="},
-                link: function(scope, el, attr)
-                {
-                    $(el).mask("99/99/9999");
-                    if (!jQuery.isFunction(jQuery.fn.datepicker))
-                        return false;
+                            $(el).mask("99/99/9999");
+                            if (!jQuery.isFunction(jQuery.fn.datepicker))
+                                return false;
 //                    $(el).keydown(function(e) {
 //                        if (e.keyCode !== 9) {
 //                            return false;
@@ -902,40 +908,40 @@ angular.module('xenon.directives', []).
 //                            return true;
 //                        }
 //                    });
-                    var $this = angular.element(el),
-                            opts = {
-                                format: attrDefault($this, 'format', 'mm/dd/yyyy'),
-                                startDate: attrDefault($this, 'startDate', ''),
-                                endDate: attrDefault($this, 'endDate', ''),
-                                daysOfWeekDisabled: attrDefault($this, 'disabledDays', ''),
-                                startView: attrDefault($this, 'startView', 0),
-                                //rtl: rtl()
-                            },
-                            $n = $this.next(),
-                            $p = $this.prev();
+                            var $this = angular.element(el),
+                                    opts = {
+                                        format: attrDefault($this, 'format', 'mm/dd/yyyy'),
+                                        startDate: attrDefault($this, 'startDate', ''),
+                                        endDate: attrDefault($this, 'endDate', ''),
+                                        daysOfWeekDisabled: attrDefault($this, 'disabledDays', ''),
+                                        startView: attrDefault($this, 'startView', 0),
+                                        //rtl: rtl()
+                                    },
+                                    $n = $this.next(),
+                                    $p = $this.prev();
 
-                    $this.datepicker(opts);
-                    scope.$watch("minDate", function(value) {
-                        if (value == null || value == "") {
-                            $this.datepicker("setStartDate", null);
-                        } else {
-                            $this.datepicker("setStartDate", new Date(value));
-                        }
-                    });
-                    scope.$watch("maxDate", function(value) {
-                        if (value == null || value == "") {
-                            $this.datepicker("setEndDate", null);
-                        } else {
-                            $this.datepicker("setEndDate", new Date(value));
-                        }
+                            $this.datepicker(opts);
+                            scope.$watch("minDate", function(value) {
+                                if (value == null || value == "") {
+                                    $this.datepicker("setStartDate", null);
+                                } else {
+                                    $this.datepicker("setStartDate", new Date(value));
+                                }
+                            });
+                            scope.$watch("maxDate", function(value) {
+                                if (value == null || value == "") {
+                                    $this.datepicker("setEndDate", null);
+                                } else {
+                                    $this.datepicker("setEndDate", new Date(value));
+                                }
 
-                    });
+                            });
 
-                    scope.$watch("ngModel", function(value) {
-                        if (value != null) {
-                            $this.datepicker("setDate", new Date(value));
-                        }
-                    })
+                            scope.$watch("ngModel", function(value) {
+                                if (value != null) {
+                                    $this.datepicker("setDate", new Date(value));
+                                }
+                            })
 
 
 //$("#StartDate").datepicker({}).on('changeDate', function(selected) {
@@ -944,278 +950,278 @@ angular.module('xenon.directives', []).
 //        }).on('clearDate', function(selected) {
 //            $('#EndDate').datepicker('setStartDate', null);
 //        });
-                    if ($n.is('.input-group-addon') && $n.has('a'))
-                    {
-                        $n.on('click', function(ev)
-                        {
-                            ev.preventDefault();
+                            if ($n.is('.input-group-addon') && $n.has('a'))
+                            {
+                                $n.on('click', function(ev)
+                                {
+                                    ev.preventDefault();
 
-                            $this.datepicker('show');
-                        });
+                                    $this.datepicker('show');
+                                });
+                            }
+
+                            if ($p.is('.input-group-addon') && $p.has('a'))
+                            {
+                                $p.on('click', function(ev)
+                                {
+                                    ev.preventDefault();
+
+                                    $this.datepicker('show');
+                                });
+                            }
+                        }
                     }
-
-                    if ($p.is('.input-group-addon') && $p.has('a'))
-                    {
-                        $p.on('click', function(ev)
-                        {
-                            ev.preventDefault();
-
-                            $this.datepicker('show');
-                        });
-                    }
-                }
-            }
-        }).
-        directive('daterange', function() {
-            return {
-                restrict: 'AC',
-                //Added by 'K' for date range assignement to scope value
-                scope: {startDate: "=", endDate: "="},
-                link: function(scope, el, attr)
-                {
-                    $(el).keydown(function(e) {
-                        return;
-                    });
-                    if (!jQuery.isFunction(jQuery.fn.daterangepicker))
-                        return false;
-
-                    var $this = angular.element(el);
-
-                    // Change the range as you desire
-                    var ranges = {
-                        'Today': [moment(), moment()],
-                        'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                        'Last 7 Days': [moment().subtract('days', 6), moment()],
-                        'Last 30 Days': [moment().subtract('days', 29), moment()],
-                        'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                    };
-
-                    var opts = {
-                        format: attrDefault($this, 'format', 'MM/DD/YYYY'),
-                        timePicker: attrDefault($this, 'timePicker', false),
-                        timePickerIncrement: attrDefault($this, 'timePickerIncrement', false),
-                        separator: attrDefault($this, 'separator', ' - '),
-                    },
-                            min_date = attrDefault($this, 'minDate', ''),
-                            max_date = attrDefault($this, 'maxDate', ''),
-                            start_date = attrDefault($this, 'startDate', ''),
-                            end_date = attrDefault($this, 'endDate', '');
-
-                    if ($this.hasClass('add-ranges'))
-                    {
-                        opts['ranges'] = ranges;
-                    }
-
-                    if (min_date.length)
-                    {
-                        opts['minDate'] = min_date;
-                    }
-
-                    if (max_date.length)
-                    {
-                        opts['maxDate'] = max_date;
-                    }
-
-                    if (start_date.length)
-                    {
-                        opts['startDate'] = start_date;
-                    }
-
-                    if (end_date.length)
-                    {
-                        opts['endDate'] = end_date;
-                    }
-
-
-                    $this.daterangepicker(opts, function(start, end)
-                    {
+                }).
+                directive('daterange', function() {
+                    return {
+                        restrict: 'AC',
                         //Added by 'K' for date range assignement to scope value
-                        scope.startDate = start;
-                        scope.endDate = end;
-                        scope.$apply();
-                        var drp = $this.data('daterangepicker');
-
-                        if ($this.is('[data-callback]'))
+                        scope: {startDate: "=", endDate: "="},
+                        link: function(scope, el, attr)
                         {
-                            //daterange_callback(start, end);
-                            callback_test(start, end);
-                        }
+                            $(el).keydown(function(e) {
+                                return;
+                            });
+                            if (!jQuery.isFunction(jQuery.fn.daterangepicker))
+                                return false;
 
-                        if ($this.hasClass('daterange-inline'))
-                        {
-                            $this.find('span').html(start.format(drp.format) + drp.separator + end.format(drp.format));
-                        }
-                    });
+                            var $this = angular.element(el);
 
-                    if (typeof opts['ranges'] == 'object')
-                    {
-                        $this.data('daterangepicker').container.removeClass('show-calendar');
-                    }
-                }
-            }
-        }).
-        directive('spinner', function() {
-            return {
-                restrict: 'AC',
-                link: function(scope, el, attr)
-                {
-                    var $ig = angular.element(el),
-                            $dec = $ig.find('[data-type="decrement"]'),
-                            $inc = $ig.find('[data-type="increment"]'),
-                            $inp = $ig.find('.form-control'),
-                            step = attrDefault($ig, 'step', 1),
-                            min = attrDefault($ig, 'min', 0),
-                            max = attrDefault($ig, 'max', 0),
-                            umm = min < max;
+                            // Change the range as you desire
+                            var ranges = {
+                                'Today': [moment(), moment()],
+                                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                            };
 
+                            var opts = {
+                                format: attrDefault($this, 'format', 'MM/DD/YYYY'),
+                                timePicker: attrDefault($this, 'timePicker', false),
+                                timePickerIncrement: attrDefault($this, 'timePickerIncrement', false),
+                                separator: attrDefault($this, 'separator', ' - '),
+                            },
+                                    min_date = attrDefault($this, 'minDate', ''),
+                                    max_date = attrDefault($this, 'maxDate', ''),
+                                    start_date = attrDefault($this, 'startDate', ''),
+                                    end_date = attrDefault($this, 'endDate', '');
 
-                    $dec.on('click', function(ev)
-                    {
-                        ev.preventDefault();
-
-                        var num = new Number($inp.val()) - step;
-
-                        if (umm && num <= min)
-                        {
-                            num = min;
-                        }
-
-                        $inp.val(num);
-                    });
-
-                    $inc.on('click', function(ev)
-                    {
-                        ev.preventDefault();
-
-                        var num = new Number($inp.val()) + step;
-
-                        if (umm && num >= max)
-                        {
-                            num = max;
-                        }
-
-                        $inp.val(num);
-                    });
-                }
-            }
-        }).
-        // Other Directives
-        directive('loginForm', function() {
-            return {
-                restrict: 'AC',
-                link: function(scope, el) {
-
-                    jQuery(el).find(".form-group:has(label)").each(function(i, el)
-                    {
-                        var $this = angular.element(el),
-                                $label = $this.find('label'),
-                                $input = $this.find('.form-control');
-
-                        $input.on('focus', function()
-                        {
-                            $this.addClass('is-focused');
-                        });
-
-                        $input.on('keydown', function()
-                        {
-                            $this.addClass('is-focused');
-                        });
-
-                        $input.on('blur', function()
-                        {
-                            $this.removeClass('is-focused');
-
-                            if ($input.val().trim().length > 0)
+                            if ($this.hasClass('add-ranges'))
                             {
-                                $this.addClass('is-focused');
+                                opts['ranges'] = ranges;
                             }
-                        });
 
-                        $label.on('click', function()
-                        {
-                            $input.focus();
-                        });
-
-                        if ($input.val().trim().length > 0)
-                        {
-                            $this.addClass('is-focused');
-                        }
-                    });
-                }
-            };
-        })
-        .directive('numbersOnly', ['$parse', function($parse) {
-                return {
-                    require: ['^form', 'ngModel'],
-                    link: function(scope, element, attrs, ctrls) {
-                        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-                            var mdlctrl = ctrls[1];
-                            var model = $parse(attrs.ngModel);
-                            var arr = String(newValue).split("");
-                            if (arr.length === 0) {
-                                return;
-                            }
-                            if (arr.length === 1 && (((arr[0] === '-') &&
-                                    (attrs.negativeallowed !== undefined &&
-                                            attrs.negativeallowed.toString() === "true")) || ((arr[0] === '.') &&
-                                    (attrs.decimalallowed !== undefined && attrs.decimalallowed.toString()
-                                            === "true"))))
+                            if (min_date.length)
                             {
-                                return;
+                                opts['minDate'] = min_date;
                             }
-                            if ((arr.length === 2 && newValue === '-.') &&
-                                    ((attrs.decimalallowed !== undefined &&
-                                            attrs.decimalallowed.toString() === "true"))) {
-                                return;
+
+                            if (max_date.length)
+                            {
+                                opts['maxDate'] = max_date;
                             }
-                            if (attrs.negativeallowed === undefined ||
-                                    attrs.negativeallowed.toString() === "false") {
-                                if ((newValue != null)) {
-                                    transformedNewValue =
-                                            newValue.toString().replace('-', '');
-                                    if (newValue !== transformedNewValue) {
-                                        model.assign(scope,
-                                                transformedNewValue);
-                                    }
-                                }
+
+                            if (start_date.length)
+                            {
+                                opts['startDate'] = start_date;
                             }
-                            if (attrs.decimalallowed === undefined ||
-                                    attrs.decimalallowed.toString() === "false") {
-                                if ((newValue != undefined)) {
-                                    transformedNewValue =
-                                            newValue.toString().replace('.', '');
-                                    if (newValue !== transformedNewValue) {
-                                        model.assign(scope,
-                                                transformedNewValue);
-                                    }
-                                }
+
+                            if (end_date.length)
+                            {
+                                opts['endDate'] = end_date;
                             }
-                            if (isNaN(newValue)) {
-                                if ((newValue === undefined)) {
-                                    model.assign(scope, newValue);
-                                }
-                                else {
-                                    model.assign(scope, oldValue);
-                                    mdlctrl.$setPristine();
+
+
+                            $this.daterangepicker(opts, function(start, end)
+                            {
+                                //Added by 'K' for date range assignement to scope value
+                                scope.startDate = start;
+                                scope.endDate = end;
+                                scope.$apply();
+                                var drp = $this.data('daterangepicker');
+
+                                if ($this.is('[data-callback]'))
+                                {
+                                    //daterange_callback(start, end);
+                                    callback_test(start, end);
                                 }
 
+                                if ($this.hasClass('daterange-inline'))
+                                {
+                                    $this.find('span').html(start.format(drp.format) + drp.separator + end.format(drp.format));
+                                }
+                            });
+
+                            if (typeof opts['ranges'] == 'object')
+                            {
+                                $this.data('daterangepicker').container.removeClass('show-calendar');
                             }
-                        });
+                        }
                     }
-                };
-            }])
-        .directive('imageonload', function() {
-            return {
-                restrict: 'A',
-                scope: {imageonload:'='},
-                link: function(scope, element, attrs) {
-                    element.bind('load', function() {
-                        scope.$apply(function() {
-                            scope.imageonload = true;
-                        });
-                    });
-                }
-            };
-        });
+                }).
+                directive('spinner', function() {
+                    return {
+                        restrict: 'AC',
+                        link: function(scope, el, attr)
+                        {
+                            var $ig = angular.element(el),
+                                    $dec = $ig.find('[data-type="decrement"]'),
+                                    $inc = $ig.find('[data-type="increment"]'),
+                                    $inp = $ig.find('.form-control'),
+                                    step = attrDefault($ig, 'step', 1),
+                                    min = attrDefault($ig, 'min', 0),
+                                    max = attrDefault($ig, 'max', 0),
+                                    umm = min < max;
+
+
+                            $dec.on('click', function(ev)
+                            {
+                                ev.preventDefault();
+
+                                var num = new Number($inp.val()) - step;
+
+                                if (umm && num <= min)
+                                {
+                                    num = min;
+                                }
+
+                                $inp.val(num);
+                            });
+
+                            $inc.on('click', function(ev)
+                            {
+                                ev.preventDefault();
+
+                                var num = new Number($inp.val()) + step;
+
+                                if (umm && num >= max)
+                                {
+                                    num = max;
+                                }
+
+                                $inp.val(num);
+                            });
+                        }
+                    }
+                }).
+                // Other Directives
+                directive('loginForm', function() {
+                    return {
+                        restrict: 'AC',
+                        link: function(scope, el) {
+
+                            jQuery(el).find(".form-group:has(label)").each(function(i, el)
+                            {
+                                var $this = angular.element(el),
+                                        $label = $this.find('label'),
+                                        $input = $this.find('.form-control');
+
+                                $input.on('focus', function()
+                                {
+                                    $this.addClass('is-focused');
+                                });
+
+                                $input.on('keydown', function()
+                                {
+                                    $this.addClass('is-focused');
+                                });
+
+                                $input.on('blur', function()
+                                {
+                                    $this.removeClass('is-focused');
+
+                                    if ($input.val().trim().length > 0)
+                                    {
+                                        $this.addClass('is-focused');
+                                    }
+                                });
+
+                                $label.on('click', function()
+                                {
+                                    $input.focus();
+                                });
+
+                                if ($input.val().trim().length > 0)
+                                {
+                                    $this.addClass('is-focused');
+                                }
+                            });
+                        }
+                    };
+                })
+                .directive('numbersOnly', ['$parse', function($parse) {
+                        return {
+                            require: ['^form', 'ngModel'],
+                            link: function(scope, element, attrs, ctrls) {
+                                scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+                                    var mdlctrl = ctrls[1];
+                                    var model = $parse(attrs.ngModel);
+                                    var arr = String(newValue).split("");
+                                    if (arr.length === 0) {
+                                        return;
+                                    }
+                                    if (arr.length === 1 && (((arr[0] === '-') &&
+                                            (attrs.negativeallowed !== undefined &&
+                                                    attrs.negativeallowed.toString() === "true")) || ((arr[0] === '.') &&
+                                            (attrs.decimalallowed !== undefined && attrs.decimalallowed.toString()
+                                                    === "true"))))
+                                    {
+                                        return;
+                                    }
+                                    if ((arr.length === 2 && newValue === '-.') &&
+                                            ((attrs.decimalallowed !== undefined &&
+                                                    attrs.decimalallowed.toString() === "true"))) {
+                                        return;
+                                    }
+                                    if (attrs.negativeallowed === undefined ||
+                                            attrs.negativeallowed.toString() === "false") {
+                                        if ((newValue != null)) {
+                                            transformedNewValue =
+                                                    newValue.toString().replace('-', '');
+                                            if (newValue !== transformedNewValue) {
+                                                model.assign(scope,
+                                                        transformedNewValue);
+                                            }
+                                        }
+                                    }
+                                    if (attrs.decimalallowed === undefined ||
+                                            attrs.decimalallowed.toString() === "false") {
+                                        if ((newValue != undefined)) {
+                                            transformedNewValue =
+                                                    newValue.toString().replace('.', '');
+                                            if (newValue !== transformedNewValue) {
+                                                model.assign(scope,
+                                                        transformedNewValue);
+                                            }
+                                        }
+                                    }
+                                    if (isNaN(newValue)) {
+                                        if ((newValue === undefined)) {
+                                            model.assign(scope, newValue);
+                                        }
+                                        else {
+                                            model.assign(scope, oldValue);
+                                            mdlctrl.$setPristine();
+                                        }
+
+                                    }
+                                });
+                            }
+                        };
+                    }])
+                .directive('imageonload', function() {
+                    return {
+                        restrict: 'A',
+                        scope: {imageonload: '='},
+                        link: function(scope, element, attrs) {
+                            element.bind('load', function() {
+                                scope.$apply(function() {
+                                    scope.imageonload = true;
+                                });
+                            });
+                        }
+                    };
+                });
 

@@ -6,7 +6,7 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.fromNext = false;
-        ctrl.setFromNext = function(fromNext){
+        ctrl.setFromNext = function(fromNext) {
             ctrl.fromNext = fromNext;
         }
         ctrl.careTypeList = [];
@@ -16,7 +16,10 @@
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
         ctrl.profileFileObj = {};
-        ctrl.resetEmployee = function() {
+        ctrl.resetEmployeeTab3 = function() {
+            ctrl.applicationFileObj.errorMsg = null;
+            ctrl.i9eligibilityFileObj.errorMsg = null;
+            ctrl.w4FileObj.errorMsg = null;
             if (ctrl.employee.employeeDocumentId.application != null) {
                 ctrl.employee.employeeDocumentId.application = null;
             }
@@ -48,7 +51,32 @@
             if (ctrl.physicalFileObj.flowObj != null) {
                 ctrl.physicalFileObj.flowObj.cancel();
             }
+            $scope.resetForm = true;
         };
+
+        ctrl.resetEmployeeTab1 = function() {
+            ctrl.profileFileObj.errorMsg = null;
+            if (ctrl.employee.profileImage !== null) {
+                ctrl.employee.profileImage = null;
+            }
+            if (ctrl.profileFileObj.flowObj && ctrl.profileFileObj.flowObj !== null) {
+                ctrl.profileFileObj.flowObj.cancel();
+            }
+            $scope.resetForm = true;
+        };
+
+        ctrl.resetEmployeeTab2 = function() {
+            ctrl.employee.taxStatus = 'W';
+            ctrl.employee.wages = 'H';
+            ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
+
+            $timeout(function() {
+                $("#rate2").multiSelect('refresh');
+                $("#rate1").multiSelect('refresh');
+            }, 100);
+            $scope.resetForm = true;
+        };
+
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -94,6 +122,7 @@
         //ceck if form has been changed or not
         //If changed then it should be valid
         ctrl.navigateToTab = function(event, state) {
+            $scope.resetForm = false;
             if ($('#add_employee_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
@@ -108,6 +137,7 @@
 
         //function to save the employee data
         function saveEmployeeData() {
+            $scope.resetForm = false;
             ctrl.formSubmitted = true;
             setFormDynamicValidityMessages();
             var fileUploadValid = ctrl.checkFileUploadValidity();
@@ -198,8 +228,8 @@
                                 ctrl.editMode = true;
                             }
                         }
-                        if ($rootScope.tabNo == 3){
-                            $state.go('app.employee-list',{status:"active"});
+                        if ($rootScope.tabNo == 3) {
+                            $state.go('app.employee-list', {status: "active"});
                         }
                         toastr.success("Employee saved.");
                         ctrl.employee = res;
@@ -217,9 +247,9 @@
                         ctrl.formSubmitted = false;
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
-                    }).then(function(){
-                         $rootScope.unmaskLoading();
-                    });
+                    }).then(function() {
+                $rootScope.unmaskLoading();
+            });
         }
 
         //function called on page initialization.
