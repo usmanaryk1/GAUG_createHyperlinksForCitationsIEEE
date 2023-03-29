@@ -624,6 +624,13 @@
                 } else if (ctrl.calendarView == 'month') {
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
+                $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
+                    EmployeeDAO.retrieveByPosition({workSiteId: workSiteId}).then(function (res) {
+                        if (res.length !== 0) {
+                            $rootScope.employeePopup.workSiteEmployeeList = res;
+                        }
+                    });
+                };
             }
             $rootScope.maskLoading();
             var careTypes;
