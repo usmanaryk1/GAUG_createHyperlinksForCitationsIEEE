@@ -120,7 +120,8 @@ angular.module('xenon.services', []).
                 billing.addItem('Billing History', './biling_history', 'VIEW_BILLING_HISTORY');
                 billing.addItem('Billing Setting', './biling_setting', 'CREATE_BILLING_SETTING');
                 billing.addItem('Search Claim', './claim_search', 'VIEW_BILLING_HISTORY');
-                billing.addItem('Manual Claim', './manual_claim', 'CREATE_MANUAL_CLAIM');
+                billing.addItem('Manual Claim 1500', './manual_claim', 'CREATE_MANUAL_CLAIM');
+                billing.addItem('Manual Claim UB04', './manual_claim_ub04', 'CREATE_MANUAL_CLAIM');
 
                 // Subitems of payroll
                 // payroll.addItem('Pay Rates', 			'./pay_rates');

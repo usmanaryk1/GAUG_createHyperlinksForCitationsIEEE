@@ -577,6 +577,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
                 controller: 'ManualClaimCtrl as manualClaim'
             }).
+            state('app.manual_claim_ub04', {
+                url: '/manual_claim_ub04',
+                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
+                controller: 'ManualClaimUB04Ctrl as manualClaim',
+                data: {
+                    feature: 'CREATE_MANUAL_CLAIM'
+                }
+            }).
 //            state('app.billing_tab_1', {
 //                url: '/billing_tab_1',
 //                templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_1'),
