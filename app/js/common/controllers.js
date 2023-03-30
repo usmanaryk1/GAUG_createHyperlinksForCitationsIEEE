@@ -33,7 +33,7 @@ angular.module('xenon.controllers', []).
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
             $rootScope.maskLoading = function() {
-                $("#mainDiv").mask("");
+                $("#mainDiv").loadmask("");
             };
             $rootScope.unmaskLoading=function(){
                 $("#mainDiv").unmask();
