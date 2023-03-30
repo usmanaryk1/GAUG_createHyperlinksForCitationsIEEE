@@ -47,7 +47,7 @@
                         <label for="field-52" class="col-sm-3 control-label">Date of Birth</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input type="text" id="field-52" class="form-control datepicker" data-format="mm/dd/yyyy" name="DateofBirth" ng-model="addPatient.patient.subscriberInfo[0].dateOfBirth" 
+                                <input type="text" id="field-52" class="form-control datepicker" max-date="addPatient.currentDate" data-format="mm/dd/yyyy" name="DateofBirth" ng-model="addPatient.patient.subscriberInfo[0].dateOfBirth" 
                                        data-validate="required,date" data-message-required="Please enter Date of Birth."/>
                                 <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                             </div>

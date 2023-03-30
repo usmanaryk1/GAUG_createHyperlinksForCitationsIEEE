@@ -116,7 +116,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" name="DateOfBirth" type="text" ng-model="addEmployee.employee.dateOfBirth"
+                                    <input class="form-control datepicker" max-date="addEmployee.currentDate" data-format="mm/dd/yyyy" name="DateOfBirth" type="text" ng-model="addEmployee.employee.dateOfBirth"
                                            data-validate="required,date" data-message-required="Please enter Date of Birth."/>
                                     <div class="input-group-addon">
                                         <a href="#">
