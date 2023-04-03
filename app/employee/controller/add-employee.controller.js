@@ -2,6 +2,7 @@
     function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
+        ctrl.currentDate = new Date();
         ctrl.employee = {employeeDocumentId: {}};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
