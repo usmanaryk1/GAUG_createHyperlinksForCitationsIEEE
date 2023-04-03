@@ -2,10 +2,10 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form">
+                <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton"  ng-click="addPatient.savePatient()">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton" ng-click="addPatient.setFromNext(false)">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -191,7 +191,7 @@
                             <button ng-if="addPatient.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addPatient.navigateToTab($event, 'tab2')">
                                 Next »
                             </button>
-                            <button ng-if="!addPatient.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.savePatient('tab2')">
+                            <button ng-if="!addPatient.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext(true)">
                                 Next »
                             </button>
                         </div>

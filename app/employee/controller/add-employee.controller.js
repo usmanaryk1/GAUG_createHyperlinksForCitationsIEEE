@@ -5,6 +5,10 @@
         ctrl.employee = {employeeDocumentId: {}};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.fromNext = false;
+        ctrl.setFromNext = function(fromNext){
+            ctrl.fromNext = fromNext;
+        }
         ctrl.careTypeList = [];
         ctrl.applicationFileObj = {};
         ctrl.i9eligibilityFileObj = {};
@@ -103,7 +107,7 @@
         };
 
         //function to save the employee data
-        function saveEmployeeData(tabNo) {
+        function saveEmployeeData() {
             ctrl.formSubmitted = true;
             setFormDynamicValidityMessages();
             var fileUploadValid = ctrl.checkFileUploadValidity();
@@ -158,12 +162,12 @@
                     employeeToSave.orgCode = ontimetest.company_code;
                     ctrl.employee.orgCode = ontimetest.company_code;
                     reqParam = 'saveemployee';
-                    updateEmployee(reqParam, employeeToSave, tabNo);
+                    updateEmployee(reqParam, employeeToSave);
                 }
             }
         }
 
-        function updateEmployee(reqParam, employeeToSave, tabNo) {
+        function updateEmployee(reqParam, employeeToSave) {
 //            if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
 //                employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
 //            }
@@ -187,7 +191,7 @@
                     .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
-                            if (tabNo) {
+                            if (ctrl.fromNext) {
                                 $state.go('^.tab2', {id: res.id});
                             } else {
                                 $state.go('^.tab1', {id: res.id});

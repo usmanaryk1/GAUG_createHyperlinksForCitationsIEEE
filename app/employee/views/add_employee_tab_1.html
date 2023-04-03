@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form">
+                <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form"  ng-submit="addEmployee.saveEmployee()">
                     <div flow-init="addEmployee.profileUploadFile" flow-file-added="addEmployee.profileFileAdded($file, $flow)" flow-file-success="addEmployee.profileFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.profileFileSelected($file,$flow)" flow-file-error="addEmployee.profileFileError( $file, $message, $flow )"> 
                     <div class="row">
                             <div class="col-sm-6">
@@ -22,7 +22,7 @@
                             </div>
                             </div>
                             <div class="col-sm-6 pull-right">
-                                <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.saveEmployee()">
+                                <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.setFromNext(false)">
                                     Save Changes
                                 </button>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -295,7 +295,7 @@
                                 <button ng-if="addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addEmployee.navigateToTab($event, 'tab2')">
                                     Next »
                                 </button>
-                                <button ng-if="!addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.saveEmployee('tab2')">
+                                <button ng-if="!addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext(true)">
                                     Next »
                                 </button>
                             </div>

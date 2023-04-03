@@ -4,6 +4,7 @@
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.fromNext = false;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
@@ -55,6 +56,9 @@
                 ctrl.fileObj.flowObj.cancel();
             }
         };
+        ctrl.setFromNext = function(fromNext){
+            ctrl.fromNext = fromNext;
+        }
         ctrl.isValidAutorization = function(formValidity) {
             var validAuthorization = true;
             if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && formValidity) {
@@ -84,7 +88,7 @@
         }
 
         //function to save patient data.
-        function savePatientData(tabNo) {
+        function savePatientData() {
             var validAuthorization = ctrl.isValidAutorization(true);
             if ($('#add_patient_form')[0].checkValidity() && validAuthorization) {
                 var patientToSave = angular.copy(ctrl.patient);
@@ -121,7 +125,7 @@
                         .then(function(res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
-                                if (tabNo) {
+                                if (ctrl.fromNext) {
                                     $state.go('^.tab2', {id: res.id});
                                 } else {
                                     $state.go('^.tab1', {id: res.id});
