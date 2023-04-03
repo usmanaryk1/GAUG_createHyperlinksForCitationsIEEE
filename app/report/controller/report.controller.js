@@ -12,7 +12,7 @@
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
-                if (ctrl.reportType == 'employeeworkedhoursbycounty'||ctrl.reportType == 'workedhours' || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
+                if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours' || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
@@ -50,7 +50,10 @@
         ctrl.verifyDates = function () {
             if (new Date(ctrl.searchParams.fromDate).getDay() != 0 || new Date(ctrl.searchParams.toDate).getDay() != 6) {
                 ctrl.dateMessage = "From date must be Sunday & To date must be Saturday.";
-            } else {
+            } else if (ctrl.reportType == 'workedhours' && moment(new Date(ctrl.searchParams.toDate)).diff(moment(new Date(ctrl.searchParams.fromDate)), 'days')>6) {
+                ctrl.dateMessage = "Only one week should be selected.";
+            }
+            else {
                 ctrl.dateMessage = null;
             }
         };
