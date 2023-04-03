@@ -21,7 +21,10 @@
             },
             retreveWorksiteNames: {
                 method: 'GET',
-                isArray: true
+                isArray: true,
+                params: {
+                    action: 'select'
+                }
             }
         });
         return {
@@ -41,7 +44,7 @@
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             },
             retreveWorksiteNames: function (data) {
-                return api.retreveWorksiteNames({action: 'select'}).$promise;
+                return api.retreveWorksiteNames(data).$promise;
             }
         };
     };

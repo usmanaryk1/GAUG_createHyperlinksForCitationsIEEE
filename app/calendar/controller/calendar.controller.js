@@ -1,5 +1,5 @@
 (function () {
-    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO) {
+    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope) {
         var ctrl = this;
         ctrl.pageNo = 1;
         ctrl.retrieveWorkSites = function () {
@@ -305,7 +305,6 @@
                     keyboard: false
                 });
                 $rootScope.employeePopup.isWorksiteSchedulePage = ctrl.isWorksiteSchedulePage;
-                $rootScope.employeePopup.workSiteList = ctrl.workSiteList;
                 $rootScope.employeePopup.todayDate = new Date();
                 if (data != null && data.eventType == null) {
                     $rootScope.employeePopup.todayDate = data.startDate;
@@ -343,10 +342,30 @@
                 setTimeout(function () {
                     cbr_replace();
                 }, 100);
-
+                var setWorkSiteData = function () {
+                    if (ctrl.searchParams.workSiteId != null) {
+                        $rootScope.employeePopup.data.workSiteId = ctrl.searchParams.workSiteId;
+                        $rootScope.employeePopup.workSiteChanged($rootScope.employeePopup.data.workSiteId);
+                    }
+                    $timeout(function () {
+                        $scope.$apply(function () {
+                            if ($rootScope.employeePopup.isWorksiteSchedulePage) {
+                                $rootScope.employeePopup.data.worksiteSchedule = true;
+                            }
+                        });
+                    });
+                };
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
+                    EmployeeDAO.retrieveByPosition({workSiteId: workSiteId}).then(function (res) {
+                        if (res.length !== 0) {
+                            $rootScope.employeePopup.workSiteEmployeeList = res;
+                        }
+                    });
+                };
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
                     $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                    setWorkSiteData();
                 }
                 if (data && data.eventType == null) {
                     var id;
@@ -411,6 +430,7 @@
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
                         $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                        setWorkSiteData();
                         if (old == 'S') {
                             if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
                                 $rootScope.employeePopup.data.forLiveIn = false;
@@ -617,6 +637,13 @@
                         });
                     }
                 };
+                if (!$rootScope.employeePopup.showEmployee) {
+                    WorksiteDAO.retreveWorksiteNames({employeeId: $rootScope.employeePopup.data.employeeId}).then(function (res) {
+                        $rootScope.employeePopup.workSiteList = res;
+                    });
+                } else {
+                    $rootScope.employeePopup.workSiteList = ctrl.workSiteList;
+                }
                 if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true);
                 } else if ($rootScope.employeePopup.employee && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
@@ -624,13 +651,6 @@
                 } else if (ctrl.calendarView == 'month') {
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
-                $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
-                    EmployeeDAO.retrieveByPosition({workSiteId: workSiteId}).then(function (res) {
-                        if (res.length !== 0) {
-                            $rootScope.employeePopup.workSiteEmployeeList = res;
-                        }
-                    });
-                };
             }
             $rootScope.maskLoading();
             var careTypes;
@@ -651,6 +671,7 @@
             if (data1.eventType != 'S') {
                 delete data1.isEdited;
             }
+
             delete data1.isEdited1;
             var obj = {action: data1.eventType, data: data1, isPast: false};
             if (isPast) {
@@ -658,6 +679,9 @@
             }
             console.log("employee data :: " + JSON.stringify(data1));
             if ($rootScope.employeePopup.isNew) {
+                if ($rootScope.employeePopup.isWorksiteSchedulePage) {
+                    obj.data.worksiteSchedule = true;
+                }
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.employeePopup.close();
@@ -692,8 +716,7 @@
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
+                keyboard: false});
             $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
             $rootScope.selectEmployeeModel.employee = angular.copy(employee);
@@ -735,7 +758,7 @@
 
                 }
                 if (!isAutoCompleteChanged) {
-//                    clear patient marker is marker is not created through location filter
+                    //                    clear patient marker is marker is not created through location filter
                     if (patientMarker != null) {
                         patientMarker.setMap(null);
                     }
@@ -802,8 +825,7 @@
                     {
                         var mapOptions = {
                             zoom: 12,
-                            center: newyork
-                        };
+                            center: newyork};
                         // Calculate Height
                         var el = document.getElementById('map-1'),
                                 doc_height = $('#map-1').height();
@@ -828,7 +850,7 @@
                                 } catch (e) {
                                     return;
                                 }
-//                                window.alert("Autocomplete's returned place contains no geometry");
+                                //                                window.alert("Autocomplete's returned place contains no geometry");
                             }
                             // If the place has a geometry, then present it on a map.
                             if (place.geometry != null) {
@@ -941,5 +963,5 @@
         }
     }
 
-    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", CalendarCtrl]);
+    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", CalendarCtrl]);
 })();
