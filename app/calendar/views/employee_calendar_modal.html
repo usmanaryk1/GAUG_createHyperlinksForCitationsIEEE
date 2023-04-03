@@ -202,8 +202,8 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Worksite</label>
 
-                    <div class="col-sm-10">                        
-                        <select class="form-control" name ="worksiteModalDropdown" id="worksiteModalDropdown" ng-model="employeePopup.data.workSiteId" ng-options='worksite.id as worksite.name for worksite in employeePopup.workSiteList' ng-change="employeePopup.workSiteChanged(employeePopup.data.workSiteId)">
+                    <div class="col-sm-10">                                                
+                        <select class="form-control" name ="worksiteModalDropdown" id="worksiteModalDropdown" ng-model="employeePopup.data.workSiteId" ng-options='worksite.id as worksite.name for worksite in employeePopup.workSiteList' ng-change="employeePopup.workSiteChanged(employeePopup.data.workSiteId)" data-validate="required" data-message-required="Please select worksite." required="true">
                             <option value="" selected hidden />
                         </select> 
                     </div>

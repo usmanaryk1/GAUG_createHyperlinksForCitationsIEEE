@@ -852,9 +852,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/worksite-schedule/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'employee_calendar'),
                 controller: 'CalendarCtrl as calendar',
-//                data: {
-//                    feature: 'SEARCH_EMPLOYEE'
-//                }
+                data: {
+                    feature: 'WORKSITE_SCHEDULE'
+                }
             }).
             state('app.dispatch-info', {
                 url: '/dispatch-info/:id',

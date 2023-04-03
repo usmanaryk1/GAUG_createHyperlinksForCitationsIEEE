@@ -134,9 +134,10 @@ angular.module('xenon.services', []).
                 // Subitems of calendar
                 calendar.addItem('Employee', './employee-calendar/', 'VIEW_EMPLOYEE_SCHEDULE');
                 calendar.addItem('Patient', './patient-calendar/', 'VIEW_PATIENT_SCHEDULE');
+                calendar.addItem('Worsite', './worksite-schedule/', 'WORKSITE_SCHEDULE');
                 calendar.addItem('Search Employee', './search-employee-calendar/', 'SEARCH_EMPLOYEE');
                 calendar.addItem('View Dispatch', './dispatch-list', 'VIEW_DISPATCH');
-
+                
                 return this;
             };
 

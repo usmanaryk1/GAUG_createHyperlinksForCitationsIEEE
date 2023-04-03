@@ -23,25 +23,6 @@
                             :calendar.isOpen, 'hide':!calendar.isOpen}"></datepicker>
         </div>
         <div class="mwl-right col-md-7 col-sm-12 no-padding">
-            <div class='col-md-6 col-sm-12' ng-if='calendar.isWorksiteSchedulePage'>    
-                <script type="text/javascript">
-                            jQuery(document).ready(function ($)
-                    {
-                    setTimeout(function () {
-                    $("#worksiteDropdown").select2({
-                    placeholder: 'Select Worksite...',
-                            allowClear: true
-                    }).on('select2-open', function ()
-                    {
-                    // Adding Custom Scrollbar
-                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                    });
-                    }, 200);
-                    });</script>
-                <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="calendar.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in calendar.workSiteList'>                
-                    <option value="" selected hidden />
-                </select>               
-            </div>
             <div class='col-md-6 col-sm-12' ng-if='calendar.isEmployeeSearchPage'>    
                 <script type="text/javascript">
                             jQuery(document).ready(function ($)
@@ -248,44 +229,32 @@
             </div>
         </div>
     </div>
-    <div ng-if='calendar.isWorksiteSchedulePage' class="mwl-panel-filter" style='background-color: transparent' ng-click="calendar.showDatepicker($event)">
-        <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
-            <div class="row">
-                <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
-                    <div class="col-md-7">
-                        <h2 ng-if="calendar.viewEmployee" style="margin:0;">{{calendar.viewEmployee.lName}}, {{calendar.viewEmployee.fName}} <small>{{calendar.positionMap[calendar.viewEmployee.companyPositionId]}}</small></h2>
-                    </div>
-                    <div class="col-md-5" style="padding-right:0px;">
-                        <div class="pull-right col-md-12" style="padding:0;">
-                            <script type="text/javascript">
-                                        jQuery(document).ready(function ($)
-                                {
-                                setTimeout(function () {
-                                $("#employeedropdownIds").select2({
-                                // minimumResultsForSearch: -1,
-                                placeholder: 'Search Employee...',
-                                        // minimumInputLength: 1,
-                                        // placeholder: 'Search',
-                                }).on('select2-open', function ()
-                                {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                });
-                                }, 200);
-                                });</script>
-                            <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="calendar.monthEmployee" ng-options='emp as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList' ng-change="navigateToMonthPage(calendar.monthEmployee)">
-                                <option value="" selected hidden />
-                            </select>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
+    <div ng-if='calendar.isWorksiteSchedulePage' class="mwl-panel-filter" style='background-color: transparent' ng-click="calendar.showDatepicker($event)">        
         <div class="mwl-panel-filter row" style='background-color: transparent;padding-left: 23px' ng-if="calendar.calendarView == 'week'" ng-form="filterForm">
             <div class="row">
 
             </div>
-            <div class="row">                
+            <div class="row">          
+                <div class="col-md-4">
+                    <label>Worksite</label>
+                    <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                        {
+                        setTimeout(function () {
+                        $("#worksiteDropdown").select2({
+                        placeholder: 'Select Worksite...',
+                                allowClear: true
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
+                        });</script>
+                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="calendar.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in calendar.workSiteList'>                
+                        <option value="" selected hidden />
+                    </select>
+                </div>
                 <div class="col-md-4">
                     <label>Employees</label>
                     <script type="text/javascript">
@@ -307,29 +276,7 @@
                     <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
                         <option value="" selected hidden />
                     </select>
-                </div>
-                <div class="col-md-4">
-                    <label>Supervisor</label>
-                    <script type="text/javascript">
-                                jQuery(document).ready(function ($)
-                        {
-                        setTimeout(function () {
-                        $("#superVisor").select2({
-                        //                                                        minimumResultsForSearch: -1,
-                        placeholder: 'Select Supervisor...',
-                                //                                                        minimumInputLength: 1,
-                                //                                                        placeholder: 'Search',
-                        }).on('select2-open', function ()
-                        {
-                        // Adding Custom Scrollbar
-                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                        }, 200);
-                        });</script>
-                    <select class="form-control" name ="superVisor" id="superVisor" ng-model="patientcalendar.searchParams.coordinatorIds" ng-options='emp.id as (emp.label) for emp in patientcalendar.employeeCoordinateList track by emp.id'>
-                        <option value="" selected hidden />
-                    </select>
-                </div>
+                </div>                
                 <div class="col-md-4">
                     <label>Languages</label>
                     <script type="text/javascript">
