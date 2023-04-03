@@ -40,7 +40,7 @@
 
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
-            setMonthDate();
+            setMonthDate();            
             $rootScope.refreshCalendarView();
         }
 
@@ -99,6 +99,7 @@
         $rootScope.refreshCalendarView = function () {
             $rootScope.paginationLoading = true;
             ctrl.retrieveEmployees();
+            ctrl.retrieveAllEmployees();
         };
 
         ctrl.retrieveEmployees = function () {
@@ -186,8 +187,12 @@
         }
 
         ctrl.retrieveAllEmployees = function () {
-            EmployeeDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
-                ctrl.employeeList = res;
+            EmployeeDAO.retrieveByPosition({workSiteId: ctrl.searchParams.workSiteId}).then(function (res) {
+                ctrl.searchParams.employeeIds = null;
+                $('#employeeIds').select2('val', null);
+                if (res.length !== 0) {
+                    ctrl.employeeList = res;
+                }
             });
         };
 

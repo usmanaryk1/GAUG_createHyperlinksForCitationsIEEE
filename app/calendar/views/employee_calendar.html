@@ -95,7 +95,7 @@
                                 });
                                 }, 200);
                                 });</script>
-                            <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="calendar.monthEmployee" ng-options='emp as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList' ng-change="navigateToMonthPage(calendar.monthEmployee)">
+                            <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="calendar.monthEmployee" ng-options='emp as emp.label for emp in calendar.employeeList' ng-change="navigateToMonthPage(calendar.monthEmployee)">
                                 <option value="" selected hidden />
                             </select>
                         </div>
@@ -131,7 +131,7 @@
                         });
                         }, 200);
                         });</script>
-                    <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
+                    <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as emp.label for emp in calendar.employeeList'>
                         <option value="" selected hidden />
                     </select>
                 </div>
@@ -251,7 +251,7 @@
                         });
                         }, 200);
                         });</script>
-                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="calendar.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in calendar.workSiteList'>                
+                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="calendar.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in calendar.workSiteList' ng-change="calendar.retrieveAllEmployees()">                
                         <option value="" selected hidden />
                     </select>
                 </div>
@@ -273,7 +273,7 @@
                         });
                         }, 200);
                         });</script>
-                    <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
+                    <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as emp.label for emp in calendar.employeeList'>
                         <option value="" selected hidden />
                     </select>
                 </div>                
