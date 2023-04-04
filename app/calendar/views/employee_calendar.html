@@ -48,7 +48,7 @@
             <div class='col-sm-12 col-md-6 text-right pad0 pull-right'>
                 <a ng-if='!calendar.isEmployeeSearchPage' href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
                 <a ng-if='calendar.isEmployeeSearchPage' href="" ng-disabled='calendar.searchParams.patientId == null' ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
-                <div class="mwl-button-group">
+                <div class="mwl-button-group" ng-if='!calendar.isWorksiteSchedulePage'>
                     <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
                             'mwl-state-active'
                                     : calendar.calendarView == 'month'}">month</button>

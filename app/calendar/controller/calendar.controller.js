@@ -93,6 +93,7 @@
             $('#employeeIds').select2('val', null);
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
+            $('#worksiteDropdown').select2('val', null);
             ctrl.applySearch();
         };
 
