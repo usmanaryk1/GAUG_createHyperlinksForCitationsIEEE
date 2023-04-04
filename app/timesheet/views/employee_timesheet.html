@@ -62,7 +62,7 @@
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.fromDate" ng-change="empTimesheet.filterTimesheet()" max-date="empTimesheet.toDate">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" ng-change="empTimesheet.filterTimesheet()" max-date="empTimesheet.searchParams.endDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -73,7 +73,7 @@
                                             <label for="field-69" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9 pad_lf0">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.toDate" ng-change="empTimesheet.filterTimesheet()" min-date="empTimesheet.fromDate">
+                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" ng-change="empTimesheet.filterTimesheet()" min-date="empTimesheet.searchParams.startDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -86,7 +86,10 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
                                     <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;">Review</button>
-                                    <button type="button" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</button>
+                                    <a href="#/app/manual_punch/employee/{{empTimesheet.emp.id}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                    <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
+                                        Reset Filters
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -107,27 +110,31 @@
                                     <tbody>
                                         <tr ng-repeat="timesheet in empTimesheet.timesheetList">
                                             <th>
-                                                {{timesheet.punchInTime|date :dateFormat}}
+                                                {{timesheet.punchInTime|timesheetformat}} - {{timesheet.punchInTime|date :dateFormat}}
                                             </th>
                                             <td>
-                                                <div class="green_dot"></div>
+                                                <!--Display green dot for matched GPS location-->
+                                                <!--<div class="green_dot"></div>-->
+                                                <!--Display red dot for not matched GPS location-->
+                                                <!--<div class="red_dot"></div>-->
+                                                <div class="black_dot"></div>
                                                 {{timesheet.punchInTime|date :timeFormat}}
                                             </td>
                                             <td>
-                                                <div class="green_dot"></div>
+                                                <div class="black_dot"></div>
                                                 {{timesheet.punchOutTime|date :timeFormat}}
                                             </td>
                                             <td>
                                                 {{timesheet.punchInTime|duration:timesheet.punchOutTime}}
                                             </td>
                                             <td>
-                                                {{timesheet.patientId.FName + " " + timesheet.patientId.LName}}
+                                                {{timesheet.patientId.fName + " " + timesheet.patientId.lName}}
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                    <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
+                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b"></span></a> 
+                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')"><span class="ed_b"></span></a> 
+                                                    <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static');"><span class="ed_b">Tasks </span></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -191,7 +198,7 @@
                                     <tbody>
                                         <tr style="border:0px !important;">
                                             <td width="25%"  class="border0 total" align="right">Total</td>
-                                            <td width="25%"  class="border0 total" align="left">00:00 HRS</td>
+                                            <td width="25%"  class="border0 total" align="left"><span ng-bind="empTimesheet.timesheetList | durationtotal"></span> HRS</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -225,3 +232,42 @@
         </div>
     </div>
 </div>
+<script type="text/ng-template" id="modal-3">
+    <div class="modal-header">
+    <h4 class="modal-title">Task List</h4>
+    </div>
+
+    <div class="modal-body">
+    <div class="row">
+
+    <div class="col-sm-12" ng-repeat="task in taskListModal.taskList">
+    <div class="checkbox">
+    <label>
+    <input type="checkbox" ng-disabled="true"id="task{{$index}}" name="task{{$index}}" type="checkbox" ng-model="task.value" >							{{task.label}}
+    </label>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="taskListModal.close();">Close</button>
+    </div>
+</script>
+<script type="text/ng-template" id="deleteModel">
+    <div class="modal-header">		
+    <h4 class="modal-title">{{deletePunchModal.punchObj.punchInTime|timesheetformat}} - {{deletePunchModal.punchObj.punchInTime|date :dateFormat}} - {{deletePunchModal.punchObj.punchInTime|date :timeFormat}} to {{deletePunchModal.punchObj.punchOutTime|date :timeFormat}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to delete this Punch record?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="deletePunchModal.delete(deletePunchModal.punchObj);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="deletePunchModal.dismiss();">No</button>
+    </div>
+</script>
+

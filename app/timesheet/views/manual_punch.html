@@ -22,7 +22,7 @@
                                 <button class="btn btn-info green_bt pull-right" type="submit">
                                     Save Changes
                                 </button>
-                                <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                                <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="manualPunch.resetManualPunch()">
                                     Reset To Default
                                 </button>
                             </div>
@@ -34,7 +34,7 @@
                                 Patient Name
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="employee.id as (employee.fName +' '+employee.lName  ) for employee in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Patient Name.">
+                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="patient.id as (patient.fName +' '+patient.lName  ) for patient in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
                                     <option value="">
                                         Select
                                     </option>
@@ -63,7 +63,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-minimal">
-                                    <input class="form-control timepicker" data-default-time="11:25 AM" ng-model='manualPunch.attendanceObj.punchInTime' data-minute-step="5" data-second-step="5" data-show-meridian="true" data-show-seconds="true" data-template="dropdown" id="field-65" name="PunchInTime" type="text" data-validate='required' data-message-required='Please enter Punch In Time.'/>
+                                    <input class="form-control timepicker"  ng-model='manualPunch.attendanceObj.punchInTime' data-minute-step="5" data-second-step="5" data-show-meridian="true" data-show-seconds="true" data-template="dropdown" id="field-65" name="PunchInTime" type="text" data-validate='required' data-message-required='Please enter Punch In Time.'/>
                                     <div class="input-group-addon">
                                         <a href="#">
                                             <i class="linecons-clock">
@@ -81,7 +81,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-minimal">
-                                    <input class="form-control timepicker" data-default-time="11:25 AM" ng-model='manualPunch.attendanceObj.punchOutTime' data-minute-step="5" data-second-step="5" data-show-meridian="true" data-show-seconds="true" data-template="dropdown" id="field-66" name="PunchOutTime" type="text" data-validate='required' data-message-required='Please enter Punch Out Time.'/>
+                                    <input class="form-control timepicker"  ng-model='manualPunch.attendanceObj.punchOutTime' data-minute-step="5" data-second-step="5" data-show-meridian="true" data-show-seconds="true" data-template="dropdown" id="field-66" name="PunchOutTime" type="text" data-validate='required' data-message-required='Please enter Punch Out Time.'/>
                                     <div class="input-group-addon">
                                         <a href="#">
                                             <i class="linecons-clock">
@@ -99,7 +99,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-67" ng-model='manualPunch.attendanceObj.punchInDate' name="Date" type="text" data-validate="required"  data-message-required="Please enter Date.">
+                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-67" ng-model='manualPunch.attendanceObj.punchInDate' name="Date" type="text" data-validate="required"  data-message-required="Please enter Date." max-date="manualPunch.todaysDate">
                                     <div class="input-group-addon">
                                         <a href="#">
                                             <i class="linecons-calendar">

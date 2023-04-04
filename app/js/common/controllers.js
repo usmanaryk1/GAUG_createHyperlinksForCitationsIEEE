@@ -29,6 +29,7 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = false;
             $rootScope.isMainPage = true;
             $rootScope.dateFormat = "MM/dd/yyyy";
+            $rootScope.dateFormatForDay="EEE";
             $rootScope.timeFormat = "hh:mm a";
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];

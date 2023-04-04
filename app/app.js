@@ -303,6 +303,34 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
+            // manual_punch
+            state('app.manual_punch_employee', {
+                url: '/manual_punch/employee/:id',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
+            }).
+            // manual_punch
+            state('app.manual_punch_patient', {
+                url: '/manual_punch/patient/:id',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
+            }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
                 url: '/patient_time_sheet',
@@ -405,7 +433,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.payroll_session', {
                 url: '/payroll_session',
                 controller: 'PayrollSessionCtrl as payrollSession',
-                templateUrl: appHelper.viewTemplatePath('payroll','payroll_session'),
+                templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_session'),
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([

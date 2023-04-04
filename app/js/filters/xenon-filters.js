@@ -83,9 +83,43 @@ angular.module('xenon.filter', [])
                 if (minutesDifference.toString().length == 1) {
                     minutesDifference = "0" + minutesDifference;
                 }
-                
+
                 var secondsDifference = Math.floor(difference / 1000);
                 return hoursDifference + ":" + minutesDifference;
             };
-        });
+        })
+        .filter('timesheetformat', function() {
+            return function(input) {
+                var weekDays = ['Sn', 'Mn', 'Tu', 'Wd', 'Th', 'Fr', 'St'];
+                return weekDays[new Date(input).getDay()];
+            };
+        })
+        .filter('durationtotal', ['$filter', function($filter) {
+                return function(objList) {
+                    var durationSum = 0;
+                    angular.forEach(objList, function(obj) {
+                        var earlierdate = new Date(obj.punchInTime);
+                        var laterdate = new Date(obj.punchOutTime);
+                        durationSum += laterdate.getTime() - earlierdate.getTime();
+                    });
+
+                    var daysDifference = Math.floor(durationSum / 1000 / 60 / 60 / 24);
+                    durationSum -= daysDifference * 1000 * 60 * 60 * 24
+
+                    var hoursDifference = Math.floor(durationSum / 1000 / 60 / 60);
+                    if (hoursDifference.toString().length == 1) {
+                        hoursDifference = "0" + hoursDifference;
+                    }
+                    durationSum -= hoursDifference * 1000 * 60 * 60
+
+                    var minutesDifference = Math.floor(durationSum / 1000 / 60);
+                    durationSum -= minutesDifference * 1000 * 60
+                    if (minutesDifference.toString().length == 1) {
+                        minutesDifference = "0" + minutesDifference;
+                    }
+                    var secondsDifference = Math.floor(durationSum / 1000);
+                    return hoursDifference + ":" + minutesDifference;
+                }
+            }]);
+
 

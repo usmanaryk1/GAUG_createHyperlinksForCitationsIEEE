@@ -860,7 +860,7 @@ angular.module('xenon.directives', []).
                             opts = {
                                 template: attrDefault($this, 'template', false),
                                 showSeconds: attrDefault($this, 'showSeconds', false),
-                                defaultTime: attrDefault($this, 'defaultTime', 'current'),
+                                defaultTime: attrDefault($this, 'defaultTime', new Date()),
                                 showMeridian: attrDefault($this, 'showMeridian', true),
                                 minuteStep: attrDefault($this, 'minuteStep', 15),
                                 secondStep: attrDefault($this, 'secondStep', 15)
