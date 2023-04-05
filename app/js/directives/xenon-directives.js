@@ -898,7 +898,7 @@ angular.module('xenon.directives', []).
                 scope: {minDate: "=", maxDate: "=", ngModel: "="},
                 link: function(scope, el, attr)
                 {
-                    $(el).mask("99/99/9999");
+//                    $(el).mask("99/99/9999");
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
 //                    $(el).keydown(function(e) {
@@ -952,7 +952,7 @@ angular.module('xenon.directives', []).
                                 validDate = false;
                             }
                             if (validDate) {
-                                $this.datepicker("setDate", new Date(el.val()));
+                                $this.datepicker("setDate", new Date(scope.ngModel));
                             }
                         }
                     });
@@ -1238,4 +1238,3 @@ angular.module('xenon.directives', []).
                 }
             };
         });
-
