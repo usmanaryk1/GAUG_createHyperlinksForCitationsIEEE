@@ -398,7 +398,7 @@
                     $rootScope.patientPopup.isNew = true;
                     $rootScope.patientPopup.showPatient = true;
                 } else {
-                    $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn, careTypeId: data.companyCareTypeId};
+                    $rootScope.patientPopup.searchParams = {scheduleId: data.scheduleId, forLiveIn: data.forLiveIn, careTypeId: data.companyCareTypeId, distance: ontime_data.defaultDistance};
                     if (data.eventType == null) {
                         $rootScope.patientPopup.isNew = true;
                         $rootScope.patientPopup.showPatient = false;
@@ -730,9 +730,17 @@
                     if (searchJsonToSend != null && searchJsonToSend.positionIds != null) {
                         searchJsonToSend.positionIds = searchJsonToSend.positionIds.toString();
                     }
+                    angular.forEach($rootScope.patientPopup.searchParams,function(paramValue,key){
+                        if(paramValue==''){                            
+                            delete searchJsonToSend[key];
+                        }
+                    });
                     return searchJsonToSend;
                 }
                 $rootScope.patientPopup.searchParamChanged = function () {
+                    if ($rootScope.patientPopup.searchParams.distance == null || $rootScope.patientPopup.searchParams.distance.trim() == '') {
+                        $rootScope.patientPopup.searchParams.distance = ontime_data.defaultDistance;
+                    }
                     DispatchDAO.getEmployeeCountForDispatch(getJsonFromSearchParams()).then(function (res) {
                         $rootScope.patientPopup.employeeCount = res.count;
                     });

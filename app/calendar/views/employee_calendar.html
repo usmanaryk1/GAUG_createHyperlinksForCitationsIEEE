@@ -111,7 +111,7 @@
                 <div class="col-md-4" ng-if='calendar.isEmployeeSearchPage'>
                     <label>Distance in Miles</label>
                     <input class="form-control" placeholder="Distance" name="Distance" type="text" maxlength="20" 
-                           ng-model="calendar.searchParams.distance" numbers-only negativeallowed="false" decimalallowed="true"/>
+                           ng-model="calendar.searchParams.distance" numbers-only negativeallowed="false" decimalallowed="true" ng-blur="calendar.distanceChanged()"/>
                 </div>
                 <div class="col-md-4" ng-if='!calendar.isEmployeeSearchPage'>
                     <label>Employees</label>
@@ -197,16 +197,16 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4 filter-checkbox row">
-                    <div class="col-md-6">
+                <div class="col-md-4 filter-checkbox row" style="padding-top:20px;">
+                    <div class="col-md-4" >
                         <label>Live In</label>
                         <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
                     </div>
-                    <div class="col-md-3" style="padding-top:20px;">
-                        <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="calendar.resetFilters()">Reset Filters</button>
-                    </div>
-                    <div class="col-md-3" style="padding-top:20px;">
-                        <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
+                    <div class="col-md-8 pad_lf0 pad_rg0">
+                        <button type="button" class="btn btn-info green_bt pull-right" ng-click="calendar.applySearch()" style="width:75px !important; margin: 0px">Submit</button>
+                        <button class="btn btn-info btn-single gray_bt pull-right" type="button" style="width:95px !important;" ng-click="calendar.resetFilters()">
+                            Reset Filters
+                        </button>                        
                     </div>
                 </div>
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
