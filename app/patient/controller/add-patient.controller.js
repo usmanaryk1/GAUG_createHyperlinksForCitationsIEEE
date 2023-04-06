@@ -340,6 +340,11 @@
                 address.city = ctrl.patient.patientAddress.city;
                 address.state = ctrl.patient.patientAddress.state;
                 address.zipcode = ctrl.patient.patientAddress.zipcode;
+                $("#Address1").blur();
+                $("#Address2").blur();
+                $("#City").blur();
+                $("#State").blur();
+                $("#ZipCode").blur();
             }
             ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
         }
@@ -418,12 +423,14 @@
 
                     google.maps.event.addListener(marker, 'drag', function(event) {
                         $('#GPSLocation').val(event.latLng);
+                        $('#GPSLocation').blur();
                         ctrl.patient.locationLatitude = event.latLng.lat();
                         ctrl.patient.locationLongitude = event.latLng.lng();
                     });
 
                     google.maps.event.addListener(marker, 'dragend', function(event) {
                         $('#GPSLocation').val(event.latLng);
+                        $('#GPSLocation').blur();
                         ctrl.patient.locationLatitude = event.latLng.lat();
                         ctrl.patient.locationLongitude = event.latLng.lng();
                     });
@@ -454,6 +461,7 @@
                             if (status == google.maps.GeocoderStatus.OK)
                             {
                                 $('#GPSLocation').val(results[0].geometry.location);
+                                $('#GPSLocation').blur();
                                 ctrl.patient.locationLatitude = results[0].geometry.location.lat();
                                 ctrl.patient.locationLongitude = results[0].geometry.location.lng()
                                 map.setCenter(results[0].geometry.location);
