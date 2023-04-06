@@ -62,7 +62,7 @@
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" ng-change="empTimesheet.filterTimesheet()" max-date="empTimesheet.searchParams.endDate">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" max-date="empTimesheet.searchParams.endDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -73,7 +73,7 @@
                                             <label for="field-69" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9 pad_lf0">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" ng-change="empTimesheet.filterTimesheet()" min-date="empTimesheet.searchParams.startDate">
+                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" min-date="empTimesheet.searchParams.startDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -85,7 +85,7 @@
                         <div class="row">
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
-                                    <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;">Review</button>
+                                    <button type="button" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.filterTimesheet()" style="width:auto;">Review</button>
                                     <a href="#/app/manual_punch/employee/{{empTimesheet.emp.id}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
                                         Reset Filters
@@ -194,7 +194,11 @@
                                                                                 </tr>-->
                                     </tbody>
                                 </table>
-                                <table width="100%"  class="table table-small-font table-bordered table-striped" cellspacing="0">
+                                <div ng-if="(empTimesheet.timesheetList == null || empTimesheet.timesheetList.length == 0) && empTimesheet.dataRetrieved">
+                                    No timesheet available for selected employee.
+                                </div>
+                                
+                                <table width="100%"  class="table table-small-font table-bordered table-striped" cellspacing="0" ng-if="(empTimesheet.timesheetList.length > 0) && empTimesheet.dataRetrieved">
                                     <tbody>
                                         <tr style="border:0px !important;">
                                             <td width="25%"  class="border0 total" align="right">Total</td>

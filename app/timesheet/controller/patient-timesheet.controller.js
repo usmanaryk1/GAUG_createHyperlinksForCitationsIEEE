@@ -11,6 +11,7 @@
         ctrl.resetFilters = function() {
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
+            ctrl.selectPatient(ctrl.patientList[0]);
             ctrl.filterTimesheet();
         };
         ctrl.rerenderDataTable = function() {
@@ -91,7 +92,6 @@
             ctrl.selectedPatient = patObj;
             ctrl.pat = patObj;
             ctrl.searchParams.patientId = patObj.id;
-            ctrl.filterTimesheet();
         };
 
         retrievePatientsData();
@@ -99,6 +99,7 @@
             PatientDAO.retrieveAll({status: 'active'}).then(function(res) {
                 ctrl.patientList = res;
                 ctrl.selectPatient(ctrl.patientList[0]);
+                ctrl.filterTimesheet();
             }).catch(function(data, status) {
                 ctrl.patientList = ontimetest.patients;
                 ctrl.selectPatient(ctrl.patientList[0]);
