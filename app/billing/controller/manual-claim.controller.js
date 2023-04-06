@@ -146,7 +146,7 @@
             }
         } else {
             $rootScope.maskLoading();
-            PatientDAO.retrieveForSelect({}).then(function (res) {
+            PatientDAO.retrieveForSelect({'billingType': 'MD Online'}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
 //                ctrl.patientList = ontime_data.patients;
@@ -164,7 +164,7 @@
 
         ctrl.getPatientDetail = function (patientId) {
             $rootScope.paginationLoading = true;
-            BillingDAO.getPatientDetails({patientId: patientId}).then(function (res) {
+            BillingDAO.getPatientDetails({patientId: patientId, paramId: '1500'}).then(function (res) {
                 if (res && res.claim1500Data) {
                     ctrl.billingClaimObj = res;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);

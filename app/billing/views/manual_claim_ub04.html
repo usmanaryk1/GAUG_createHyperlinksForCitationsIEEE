@@ -943,8 +943,9 @@
                 <td class="border width_13">
                     <div class="static-label"><font class="numbers">46</font>NON-COVERED CHARGES</div>
                 </td>
-                <td class="border_2" style="width: 3%">
+                <td class="border_2" style="width: 3%;position: relative;">
                     <div class="static-label"><font class="numbers">49</font></div>
+                    <span class="glyphicon glyphicon-plus-sign" ng-if="!manualClaim.reviewMode" style="color: green; position: absolute;top: 10px;font-size: 13px;right: -20px;cursor: pointer;" ng-click="manualClaim.addServiceLine();" title="Add service line"></span>
                 </td>
             </tr>
         </table>
@@ -966,13 +967,14 @@
                     <div class=""><input type="text" ng-model="serviceLine.serviceUnits" class="width_100"></div>
                 </td>
                 <td class="width_13 border">
-                    <div class=""><input type="text" ng-model="serviceLine.totalCharges" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100"></div>
                 </td>
                 <td class="width_13 border">
                     <div class=""><input type="text" ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
                 </td>
-                <td class=" border_2" style="width: 3%">
+                <td class=" border_2" style="width: 3%;position: relative;">
                     <div class=""><input type="text" ng-model="serviceLine.field49" class="width_100"></div>
+                    <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-minus-sign" style="color: red; position: absolute;top: 10px;font-size: 13px;right: -20px;cursor: pointer;" ng-click="manualClaim.removeServiceLine($index);" title="Remove service line"></span>
                 </td>
             </tr>
 
@@ -992,7 +994,7 @@
                     <div class="" style="font-size: 15px;font-weight: 600;">&nbsp;TOTALS</div>
                 </td>
                 <td class="border" style="border-top: 2px solid black;">
-                    <div class=""></div>
+                    <div class=""><span style="font-size: 14px;">{{manualClaim.manualClaimObj.totalCharges}}</span></div>
                 </td>
                 <td class="border" style="border-top: 2px solid black;">
                     <div class=""></div>

@@ -65,6 +65,30 @@
                                     <option value="MD Online">
                                         MD Online
                                     </option>
+                                    <option value="Emdeon">
+                                        Emdeon – Change
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Claim Form Type 
+                            </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="sboxit-1" name="ediProcessor" ng-model="addInsurer.insurerObj.claimFormType"
+                                        data-validate="required"  data-message-required="Please select EDI Processor." maxlength="100">
+                                    <option value="">
+                                        Select
+                                    </option>
+                                    <option value="1500">
+                                        Claim 1500
+                                    </option>
+                                    <option value="UB04">
+                                        Claim UB04
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -138,13 +162,84 @@
                         </div>
                         <div class="form-group-separator">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="addInsurer.insurerObj.claimFormType !== 'UB04'">
                             <label class="col-sm-3 control-label" for="field-16" >
                                 Contact Address
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="field-16" name="ContactAddress" type="text" ng-model="addInsurer.insurerObj.contactAddress"
                                        data-validate="required"  data-message-required="Please enter Contact Address." maxlength="255">
+                            </div>
+                        </div>
+                        <!-- Detailed Address for UB04 -->
+                        <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-37">
+                                    Address 1
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" id="field-37" name="Address1"  maxlength="255"
+                                           ng-model="addInsurer.insurerObj.address1" type="text"
+                                           data-validate="required" data-message-required="Please enter Address 1."/>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-38">
+                                    Address 2
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" id="field-38" name="Address2" maxlength="255"
+                                           ng-model="addInsurer.insurerObj.address2" type="text"/>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-39">
+                                    City
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" id="field-39" name="City" maxlength="50"
+                                           ng-model="addInsurer.insurerObj.city" type="text"
+                                           data-validate="required" data-message-required="Please enter City."/>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    State
+                                </label>
+                                <div class="col-sm-9">
+                                    <script type="text/javascript">
+                                        // jQuery(document).ready(function($) {
+                                        //             $("#sboxit-1").selectBoxIt().on('open', function() {
+                                        //               // Adding Custom Scrollbar
+                                        //               $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                        //             });
+                                        //           });
+                                    </script>
+                                    <select class="form-control" id="sboxit-1" name="State" ng-model="addInsurer.insurerObj.state"
+                                            data-validate="required" data-message-required="Please select the state."
+                                            ng-options="state.abbreviation as state.name for state in states">
+                                        <option value="">
+                                            Select the state
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-40">
+                                    Zip Code
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" numbers-only="true" id="field-40" name="ZipCode" ng-model="addInsurer.insurerObj.zipcode" type="text" maxlength="10"
+                                           data-validate="required" data-message-required="Please enter Zip Code."/>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -346,14 +441,14 @@
     </div>
     </div>
     </div>
-<div class="row" ng-if="careTypeModel.careTypeObj.unit=='unit'">
+    <div class="row" ng-if="careTypeModel.careTypeObj.unit=='unit'">
     <div class="form-group">
     <label class="col-sm-3 control-label add-padding-modal" for="unitEq">
     1 Unit =  
     </label>
     <div class="col-sm-3 add-padding-modal">
     <select class="form-control" id="unitEq" ng-model='careTypeModel.careTypeObj.unitValue' name="unitEq"
-                                                    ng-options='value.value as (value.label) for value in careTypeModel.unitValues'>
+    ng-options='value.value as (value.label) for value in careTypeModel.unitValues'>
     </select>
     </div>
     </div>
@@ -378,19 +473,19 @@
     </label>
     <div class="col-sm-9">
     <div class="row">
-    
+
     <div class="col-sm-6 input-group input-group-sm input-group-minimal custom-input-group-modal add-padding-modal">
-        <span class="input-group-addon">
-            1
-        </span>
-        <input class="form-control" id="modifires1" name="modifires1" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier1"/>
+    <span class="input-group-addon">
+    1
+    </span>
+    <input class="form-control" id="modifires1" name="modifires1" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier1"/>
     </div>
 
     <div class="col-sm-6 input-group input-group-sm input-group-minimal custom-input-group-modal add-padding-modal">
-        <span class="input-group-addon">
-            2
-        </span>
-        <input class="form-control" id="modifires2" name="modifires2" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier2"/>
+    <span class="input-group-addon">
+    2
+    </span>
+    <input class="form-control" id="modifires2" name="modifires2" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier2"/>
     </div>
     </div>
     </div>
@@ -402,19 +497,19 @@
     </label>
     <div class="col-sm-9">
     <div class="row">
-    
+
     <div class="col-sm-6 input-group input-group-sm input-group-minimal custom-input-group-modal add-padding-modal">
-        <span class="input-group-addon">
-            3
-        </span>
-        <input class="form-control" id="modifires3" name="modifires3" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier3"/>
+    <span class="input-group-addon">
+    3
+    </span>
+    <input class="form-control" id="modifires3" name="modifires3" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier3"/>
     </div>
 
     <div class="col-sm-6 input-group input-group-sm input-group-minimal custom-input-group-modal add-padding-modal">
-        <span class="input-group-addon">
-            4
-        </span>
-        <input class="form-control" id="modifires4" name="modifires4" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier4"/>
+    <span class="input-group-addon">
+    4
+    </span>
+    <input class="form-control" id="modifires4" name="modifires4" type="text" ng-model="careTypeModel.careTypeObj.modifiers.modifier4"/>
     </div>
     </div>
 
