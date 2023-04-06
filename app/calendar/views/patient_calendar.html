@@ -144,7 +144,7 @@
                         <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div class="col-md-3 filter-checkbox row">
+                <div class="col-md-3 filter-checkbox ">
                     <div class="col-md-6" style="padding-left:0;">
                         <label>Live In Care</label>
                         <input type="checkbox" name="livein" ng-model="patientcalendar.searchParams.forLiveIn">
@@ -154,14 +154,22 @@
                         <input type="checkbox" name="opencase" ng-model="patientcalendar.searchParams.openCase" ng-change="patientcalendar.checkOpenCase()">
                     </div>
                 </div>
-                <div class="col-md-3 filter-checkbox row pull-right">
+                <div class="col-md-3 filter-checkbox" style="padding-top:20px;padding-right: 15px">                    
+                    <!--<div class="col-md-12 pad_lf0 pad_rg0">-->
+                        <button type="button" class="btn btn-info green_bt pull-right" ng-click="patientcalendar.applySearch()" style="width:75px !important; margin: 0px">Submit</button>
+                        <button class="btn btn-info btn-single gray_bt pull-right" type="button" style="width:95px !important;" ng-click="patientcalendar.resetFilters()">
+                            Reset Filters
+                        </button>                        
+                    <!--</div>-->
+                </div>
+<!--                <div class="col-md-3 filter-checkbox row pull-right">
                     <div class="col-md-4 col-md-offset-2" style="padding-top:25px;">
                         <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="patientcalendar.resetFilters()">Reset Filters</button>
                     </div>
                     <div class="col-md-4" style="padding-top:25px;">
                         <button type="button" class="btn btn-success pull-right" ng-click="patientcalendar.applySearch()">Submit</button>
                     </div>
-                </div>
+                </div>-->
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
                     <div class="form-group col-sm-3">
                         <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>

@@ -74,7 +74,9 @@
         }
 
         ctrl.searchParams = {skip: 0, limit: 10};
-
+        if (ctrl.isEmployeeSearchPage) {
+            ctrl.searchParams.distance = ontime_data.defaultDistance;
+        }
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrieveEmployees();
@@ -88,12 +90,16 @@
 
         ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, skip: 0};
+            if (ctrl.isEmployeeSearchPage) {
+                ctrl.searchParams.distance = ontime_data.defaultDistance;
+            }
             ctrl.searchParams.availableStartDate = null;
             ctrl.searchParams.availableStartDate = null;
             $('#employeeIds').select2('val', null);
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
             $('#worksiteDropdown').select2('val', null);
+            $('#patientDropdown').select2('val', null);
             ctrl.applySearch();
         };
 
@@ -101,6 +107,11 @@
             $rootScope.paginationLoading = true;
             ctrl.retrieveEmployees();
             ctrl.retrieveAllEmployees();
+        };
+        ctrl.distanceChanged = function () {
+            if (ctrl.searchParams.distance==null || ctrl.searchParams.distance.trim()=='' ) {
+                ctrl.searchParams.distance = ontime_data.defaultDistance;
+            }
         };
 
         ctrl.retrieveEmployees = function () {
@@ -754,7 +765,6 @@
             var map;
             var patientMarker;
             var markers = [];
-            var isAutoCompleteChanged = false;
             var infowindow = new google.maps.InfoWindow();
             function addMarkersToMap(emplyeeList) {
                 if (map == null) {
@@ -763,14 +773,12 @@
                     clearMarkers();
 
                 }
-                if (!isAutoCompleteChanged) {
-                    //                    clear patient marker is marker is not created through location filter
+                if (ctrl.selectedPatient != null) {
+//                    clear patient marker is marker is not created through location filter
                     if (patientMarker != null) {
                         patientMarker.setMap(null);
                     }
                     addPatientMarker();
-                } else {
-                    isAutoCompleteChanged = false;
                 }
                 for (var i = 0; i < emplyeeList.length; i++) {
                     if (emplyeeList[i].locationLatitude != null) {
@@ -791,6 +799,9 @@
                         marker.content += "<br/>" + emplyeeList[i].city + ", ";
                         marker.content += emplyeeList[i].state + ", ";
                         marker.content += emplyeeList[i].zipcode;
+                        if (emplyeeList[i].phone != null) {
+                            marker.content += "<br/>Ph.: " + $filter("tel")(emplyeeList[i].phone);
+                        }
                         if (emplyeeList[i].distance != null) {
                             marker.content += "<br/>" + emplyeeList[i].distance.toFixed(2) + " Miles";
                         }
@@ -867,12 +878,12 @@
                                     map.setZoom(12);
                                 }
                             }
-                            isAutoCompleteChanged = true;
                             ctrl.applySearch();
                             var location = place.geometry.location;
                             ctrl.searchParams.patientId = null;
                             ctrl.patientObj = null;
                             $('#patientDropdown').select2('val', null);
+                            ctrl.selectedPatient = null;
                             var locationJson = JSON.parse(JSON.stringify(location));
                             ctrl.searchParams.longitude = locationJson.lng;
                             ctrl.searchParams.latitude = locationJson.lat;
@@ -894,6 +905,9 @@
                     content += "<br/>" + ctrl.selectedPatient.patientAddress.city + ", ";
                     content += ctrl.selectedPatient.patientAddress.state + ", ";
                     content += ctrl.selectedPatient.patientAddress.zipcode;
+                    if (ctrl.selectedPatient.phone != null) {
+                        content += "<br/>Ph.: " + $filter("tel")(ctrl.selectedPatient.phone);
+                    }
                     addGreenMarker(location, title, content);
                 } else if (patientMarker != null) {
                     patientMarker.setVisible(false)
@@ -909,7 +923,12 @@
                     map: map,
                     draggable: false,
                 });
-                patientMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                var image = {
+                    url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                    // This marker is 55 pixels wide by 55 pixels high.
+                    scaledSize: new google.maps.Size(55, 55),
+                };
+                patientMarker.setIcon(image);
                 patientMarker.addListener('click', function (e) {
 
                     if (title == null) {

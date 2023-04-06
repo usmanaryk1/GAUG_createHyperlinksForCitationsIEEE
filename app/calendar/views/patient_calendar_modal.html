@@ -314,7 +314,7 @@
             <div class="col-md-4">
                 <label>Distance in Miles</label>
                 <input class="form-control" placeholder="Distance" name="Distance" type="text" maxlength="20" 
-                       ng-model="patientPopup.searchParams.distance" numbers-only negativeallowed="false" decimalallowed="true" ng-change="patientPopup.searchParamChanged()"/>
+                       ng-model="patientPopup.searchParams.distance" numbers-only negativeallowed="false" decimalallowed="true" ng-blur="patientPopup.searchParamChanged()"/>
             </div>
             <div class="col-md-4">
                 <label>Position</label>
@@ -380,30 +380,23 @@
         <div class='row'>
             <div class="col-md-4">
                 <label>Sex</label>
-                <div class="input-group">
-                    <label class="cbr-inline">
-                        <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.searchParams.sex" value="M" ng-change="patientPopup.searchParamChanged()">
-                        Male
-                    </label>
-                    <label class="cbr-inline">
-                        <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.searchParams.sex" value="F" ng-change="patientPopup.searchParamChanged()">
-                        Female
-                    </label>
+                <div>
+                    <select class="form-control" ng-model="patientPopup.searchParams.sex" ng-change="patientPopup.searchParamChanged()">
+                        <option value="">Select</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>                    
                 </div>
             </div>
             <div class="col-md-4">
                 <label>Drives</label>
-                <div class="input-group">
-
-                    <label class="cbr-inline">
-                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="patientPopup.searchParams.drives" ng-value="true" ng-change="patientPopup.searchParamChanged()">
-                        Yes
-                    </label>
-                    <label class="cbr-inline">
-                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="patientPopup.searchParams.drives" ng-value="false" ng-change="patientPopup.searchParamChanged()">
-                        No
-                    </label>
-                </div>
+                <div>
+                    <select class="form-control" ng-model="patientPopup.searchParams.drives" ng-change="patientPopup.searchParamChanged()">
+                        <option value="">Select</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>                    
+                </div>                
             </div>
         </div>
         <br/>
