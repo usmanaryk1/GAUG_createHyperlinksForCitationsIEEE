@@ -78,6 +78,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
+                                    <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.profileImage != null" ng-click="addEmployee.clearProfileImage()"></i></a>
                                 </div>
                             </div>
                             <div>

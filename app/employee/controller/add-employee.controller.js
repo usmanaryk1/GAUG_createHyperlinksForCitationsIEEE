@@ -65,7 +65,30 @@
             }
             $scope.resetForm = true;
         };
-
+        ctrl.clearRefereces = function() {
+            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.references != null) {
+                ctrl.employee.employeeDocumentId.references = null;
+            }
+            if (ctrl.referencesFileObj.flowObj != null) {
+                ctrl.referencesFileObj.flowObj.cancel();
+            }
+        };
+        ctrl.clearPhysical = function() {
+            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.physical != null) {
+                ctrl.employee.employeeDocumentId.physical = null;
+            }
+            if (ctrl.physicalFileObj.flowObj != null) {
+                ctrl.physicalFileObj.flowObj.cancel();
+            }
+        };
+        ctrl.clearProfileImage = function() {
+            if (ctrl.employee.profileImage != null) {
+                ctrl.employee.profileImage = null;
+            }
+            if (ctrl.profileFileObj.flowObj != null) {
+                ctrl.profileFileObj.flowObj.cancel();
+            }
+        }
         ctrl.resetEmployeeTab2 = function() {
             ctrl.employee.taxStatus = 'W';
             ctrl.employee.wages = 'H';

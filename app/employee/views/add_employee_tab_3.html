@@ -177,6 +177,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/r/{{addEmployee.employee.employeeDocumentId.references}}">{{addEmployee.employee.employeeDocumentId.references}}</a>
+                                        <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.references != null" ng-click="addEmployee.clearRefereces()"></i></a>
                                     </div>
                                 </div>
                                 <div>
@@ -203,15 +204,16 @@
                             Physical
                         </label>
                         <div class="col-sm-9">
-<!--                            <input class="form-control" name="Physical" type="file" fileread="addEmployee.employee.employeeDocumentId.physical"
-                                   data-message-required="Please upload Physical."/>-->
-                                   <div flow-init="addEmployee.physicalUploadFile" flow-file-added="addEmployee.physicalFileAdded($file, $flow)" flow-file-success="addEmployee.physicalFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.physicalFileSelected($file,$flow)" flow-file-error="addEmployee.physicalFileError( $file, $message, $flow )">
+                            <!--                            <input class="form-control" name="Physical" type="file" fileread="addEmployee.employee.employeeDocumentId.physical"
+                                                               data-message-required="Please upload Physical."/>-->
+                            <div flow-init="addEmployee.physicalUploadFile" flow-file-added="addEmployee.physicalFileAdded($file, $flow)" flow-file-success="addEmployee.physicalFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.physicalFileSelected($file,$flow)" flow-file-error="addEmployee.physicalFileError( $file, $message, $flow )">
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <input type="file" id="Physical" ng-model="addEmployee.employee.employeeDocumentId.physical" flow-btn name="Physical" style="color:transparent" ng-disabled="addEmployee.disablePhysicalUploadButton" />
                                     </div>
                                     <div class="col-sm-9">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/z/{{addEmployee.employee.employeeDocumentId.physical}}">{{addEmployee.employee.employeeDocumentId.physical}}</a>
+                                        <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.physical != null" ng-click="addEmployee.clearPhysical()"></i></a>
                                     </div>
                                 </div>
                                 <div>

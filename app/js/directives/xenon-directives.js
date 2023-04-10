@@ -937,11 +937,12 @@ angular.module('xenon.directives', []).
 
                     });
                     //changes to edit the date as currently editing the date is not working properly and we can not make it blank again.
-//                    scope.$watch("ngModel", function(value) {
-//                        if (value != null) {
-//                            $this.datepicker("setDate", new Date(value));
-//                        }
-//                    })
+                    var dateWatch=scope.$watch("ngModel", function(value) {
+                        if (value != null) {
+                            $this.datepicker("setDate", new Date(value));
+                            dateWatch();
+                        }
+                    });
                     $(el).blur(function(e) {
                             if (new Date(scope.ngModel).toString() !== "Invalid Date") {
                                 var validDate = true;
