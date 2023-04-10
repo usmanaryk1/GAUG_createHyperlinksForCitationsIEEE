@@ -1,5 +1,5 @@
 (function () {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page, PositionDAO, WorksiteDAO) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page, WorksiteDAO) {
         var ctrl = this;
         Page.setTitle("Manual Punch");
         ctrl.taskList = [];
@@ -11,13 +11,13 @@
         ctrl.patientMandatory = true;
         ctrl.tasksErrorMsg = null;
         ctrl.officeStaffIds = [];
-        PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
-            if (res && res.length > 0) {
-                angular.forEach(res, function (position) {
-                    ctrl.officeStaffIds.push(position.id)
-                });
-            }
-        });
+//        PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
+//            if (res && res.length > 0) {
+//                angular.forEach(res, function (position) {
+//                    ctrl.officeStaffIds.push(position.id)
+//                });
+//            }
+//        });
         ctrl.resetManualPunch = function () {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
             if (ctrl.editTimesheet) {
@@ -194,9 +194,9 @@
                 $timeout(function () {
                     $('#tasks').multiSelect('refresh');
                 }, 100);
-                if (res.companyPositionId && ctrl.officeStaffIds.indexOf(res.companyPositionId) > -1) {
-                    ctrl.patientMandatory = false;
-                }
+//                if (res.companyPositionId && ctrl.officeStaffIds.indexOf(res.companyPositionId) > -1) {
+//                    ctrl.patientMandatory = false;
+//                }
             });
         }
 
@@ -501,5 +501,5 @@
         };
         ctrl.retrieveWorkSites();
     }
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", "PositionDAO", "WorksiteDAO", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", "WorksiteDAO", ManualPunchCtrl]);
 })();

@@ -790,7 +790,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 abstract: true,
                 url: '/worksite',
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite'),
-                controller: 'AddWorksiteCtrl as addWorksite'
+                controller: 'AddWorksiteCtrl as addWorksite'                  
             }).
             // add_worksite_tab_1
             state('admin.worksite.tab1', {
@@ -806,7 +806,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_2'),
                 data: {
-                    tabNo: 1,
+                    tabNo: 2,
                     feature: 'CREATE_WORKSITE'
                 }
             }).
