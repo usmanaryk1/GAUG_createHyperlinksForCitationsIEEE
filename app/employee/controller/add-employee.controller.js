@@ -412,6 +412,7 @@
             $("#Rate1-error").text('Please enter Rate 1.');
             $("#OTRate-error").text('Please enter OT Rate.');
             $("#HDRate-error").text('Please enter HD Rate.');
+            $("#WHRate-error").text('Please enter Worksite Hours Rate.');
             $("#TBTestingExpirationDate-error").text('Please enter TB Testing Expiration Date.');
             $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
         }
@@ -488,12 +489,14 @@
                 $("input[name='Rate1']").attr('required', false);
                 $("input[name='OTRate']").attr('required', false);
                 $("input[name='HDRate']").attr('required', false);
+                $("input[name='WHRate']").attr('required', false);
             } else {
                 $("input[name='Salary']").attr('required', false);
                 $("select[name='rate1']").attr('required', true);
                 $("input[name='Rate1']").attr('required', true);
                 $("input[name='OTRate']").attr('required', true);
                 $("input[name='HDRate']").attr('required', true);
+                $("input[name='WHRate']").attr('required', true);
             }
         }
         
