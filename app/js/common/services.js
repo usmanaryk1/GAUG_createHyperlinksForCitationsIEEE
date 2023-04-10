@@ -136,8 +136,8 @@ angular.module('xenon.services', []).
                 calendar.addItem('Patient', './patient-calendar/', 'VIEW_PATIENT_SCHEDULE');
                 calendar.addItem('Worksite', './worksite-schedule/', 'WORKSITE_SCHEDULE');
                 calendar.addItem('Search Employee', './search-employee-calendar/', 'SEARCH_EMPLOYEE');
-                calendar.addItem('View Dispatch', './dispatch-list', 'VIEW_DISPATCH');
-                
+                calendar.addItem('View Dispatch', './dispatch-list/active', 'VIEW_DISPATCH');
+
                 return this;
             };
 

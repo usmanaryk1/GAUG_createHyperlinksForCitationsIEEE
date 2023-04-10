@@ -832,7 +832,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             //view dispatch page
             state('app.dispatch-list', {
-                url: '/dispatch-list',
+                url: '/dispatch-list/:status',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'view_dispatch'),
                 controller: 'ViewDispatchCtrl as viewDispatch',
                 data: {

@@ -7,12 +7,22 @@
         Page.setTitle("View Dispatch");
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc'};
 
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc', status: 'active'};
+        if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
+            $state.transitionTo(ontime_data.defaultState);
+        } else {
+            ctrl.viewType = $stateParams.status;
+            if (ctrl.viewType == 'inactive') {
+                ctrl.searchParams.status = 'inactive';
+            }else if (ctrl.viewType == 'all') {
+                ctrl.searchParams.status = "";
+            }
+        }
+
 
         ctrl.dispatchList = [];
 
-        ctrl.viewType = 'active';
         ctrl.retrieveDispatchList = retrieveDispatchListData;
 
         ctrl.pageChanged = function (pagenumber) {
@@ -53,7 +63,9 @@
 
         function retrieveDispatchListData() {
             $rootScope.paginationLoading = true;
-//            ctrl.searchParams.subAction = ctrl.viewType;
+            if (ctrl.viewType == 'active') {
+                ctrl.searchParams.status = 'active';
+            }
             DispatchDAO.retrieveAll(ctrl.searchParams).then(function (res) {
                 showLoadingBar({
                     delay: .5,
@@ -125,7 +137,7 @@
                     title: function () {
                         return dispatch.patientName;
                     },
-                    subtitle:function () {
+                    subtitle: function () {
                         return dispatch.careType;
                     }
                 }
@@ -152,7 +164,7 @@
 
         };
 
-        ctrl.openStatusModal = function (dispatch,status)
+        ctrl.openStatusModal = function (dispatch, status)
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
@@ -160,19 +172,19 @@
                 size: 'md',
                 resolve: {
                     message: function () {
-                        return "Are you sure you want to " + (status ==="active" ? "activate":"deactivate") +" this Dispatch?";
+                        return "Are you sure you want to " + (status === "active" ? "activate" : "deactivate") + " this Dispatch?";
                     },
                     title: function () {
                         return dispatch.patientName;
                     },
-                    subtitle:function () {
+                    subtitle: function () {
                         return dispatch.careType;
                     }
                 }
             });
             modalInstance.result.then(function (res) {
                 $rootScope.maskLoading();
-                DispatchDAO.changestatus({id: dispatch.id,status:status}).then(function () {
+                DispatchDAO.changestatus({id: dispatch.id, status: status}).then(function () {
                     var length = ctrl.dispatchList.length;
                     for (var i = 0; i < length; i++) {
                         if (ctrl.dispatchList[i].id === dispatch.id) {
@@ -180,7 +192,7 @@
                             break;
                         }
                     }
-                    toastr.success("Dispatch "+ (status ==="active"?"activated.":"deactivated."));
+                    toastr.success("Dispatch " + (status === "active" ? "activated." : "deactivated."));
                     ctrl.rerenderDataTable();
                 }).catch(function (data, status) {
                     toastr.error(data.data);

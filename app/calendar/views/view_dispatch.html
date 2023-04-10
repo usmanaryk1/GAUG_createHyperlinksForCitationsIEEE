@@ -11,9 +11,26 @@
     <!--PAGE TITLE END -->
 
     <div class="row">
-        <div class="col-md-12">            
-            <div class="panel panel-default">
-                <div>
+        <div class="col-md-12">  
+            <ul class="nav nav-tabs">
+                <li ui-sref="app.dispatch-list({status:'active'})" class="{{viewDispatch.viewType=='active'?'active':''}}">
+                    <a href="" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa fa-cube">+</i></span> <span class="hidden-xs">Active Dispatches</span> 
+                    </a>
+                </li>
+                <li ui-sref="app.dispatch-list({status:'inactive'})" class="{{viewDispatch.viewType=='inactive'?'active':''}}">
+                    <a href="" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa-cube">x</i></span> <span class="hidden-xs">Inactive Dispatches</span> 
+                    </a>
+                </li>
+                <li ui-sref="app.dispatch-list({status:'all'})" class="{{viewDispatch.viewType=='all'?'active':''}}">
+                    <a href="" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa fa-cubes"></i></span> <span class="hidden-xs">All Dispatches</span> 
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" style="padding-bottom:0px;">
+                <div id="home" class="tab-pane active">
                     <form class="form-horizontal">                                            
                         <div class="panel-body pad_top0 pad0">
                             <div class="row">                            
@@ -29,45 +46,45 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4 col-sm-12 col-xs-12 pad0" style="padding-right: 30px!important">
-                                        <div class="col-md-5 col-xs-6  pad0  pull-right" >
-                                            <div class="form-group" >
-                                                <label for='toDate' class="col-md-1 col-xs-2 control-label form-control-static"><i class="linecons-calendar"></i></label>
-                                                <div class="col-md-7 col-xs-8 pad_rg0 pad_lf0">
-                                                    <input readonly style="border:none;pointer-events: none;width:100px" type="text" placeholder='End Date' id="toDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.toDate" max-date="viewDispatch.searchParams.endDate" name='toDate' ng-change="viewDispatch.applySearch()">
-                                                </div>
-                                                <span class="col-md-1 col-xs-2 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.toDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.toDate = undefined;viewDispatch.applySearch()"></i></span>
-                                            </div>
-                                        </div>    
-                                        <div class="col-md-1 col-xs-1 center pad0  pull-right">
-                                            <label class="control-label form-control-static" style="color:#7F7B77">
-                                                To
-                                            </label>
-                                        </div>
-                                        <div class="col-md-5 col-xs-5 pad0  pull-right">
-                                            <div class="form-group" >
-                                                <label for='fromDate' class="col-md-1 col-xs-2 control-label form-control-static"><i class="linecons-calendar"></i></label>
-                                                <div class="col-md-7 col-xs-8  pad_rg0 pad_lf0">
-                                                    <input readonly style="border:none;pointer-events: none;width:100px;" type="text" placeholder='Start Date' id="fromDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.fromDate" max-date="viewDispatch.searchParams.endDate" name='fromDate' ng-change="viewDispatch.applySearch()">
-                                                </div>
-                                                <span class="col-md-1 col-xs-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.fromDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.fromDate = undefined;viewDispatch.applySearch()"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!--                                    <div class="form-group col-md-4 col-sm-12 col-xs-12 pad0" style="padding-right: 30px!important">
+                                                                            <div class="col-md-5 col-xs-6  pad0  pull-right" >
+                                                                                <div class="form-group" >
+                                                                                    <label for='toDate' class="col-md-1 col-xs-2 control-label form-control-static"><i class="linecons-calendar"></i></label>
+                                                                                    <div class="col-md-7 col-xs-8 pad_rg0 pad_lf0">
+                                                                                        <input readonly style="border:none;pointer-events: none;width:100px" type="text" placeholder='End Date' id="toDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.toDate" max-date="viewDispatch.searchParams.endDate" name='toDate' ng-change="viewDispatch.applySearch()">
+                                                                                    </div>
+                                                                                    <span class="col-md-1 col-xs-2 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.toDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.toDate = undefined;viewDispatch.applySearch()"></i></span>
+                                                                                </div>
+                                                                            </div>    
+                                                                            <div class="col-md-1 col-xs-1 center pad0  pull-right">
+                                                                                <label class="control-label form-control-static" style="color:#7F7B77">
+                                                                                    To
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="col-md-5 col-xs-5 pad0  pull-right">
+                                                                                <div class="form-group" >
+                                                                                    <label for='fromDate' class="col-md-1 col-xs-2 control-label form-control-static"><i class="linecons-calendar"></i></label>
+                                                                                    <div class="col-md-7 col-xs-8  pad_rg0 pad_lf0">
+                                                                                        <input readonly style="border:none;pointer-events: none;width:100px;" type="text" placeholder='Start Date' id="fromDate" class="form-control datepicker readonly-datepicker" data-format="mm/dd/yyyy" ng-model="viewDispatch.searchParams.fromDate" max-date="viewDispatch.searchParams.endDate" name='fromDate' ng-change="viewDispatch.applySearch()">
+                                                                                    </div>
+                                                                                    <span class="col-md-1 col-xs-1 form-control-static pad_rg0 pad_lf0" ng-show="viewDispatch.searchParams.fromDate" ><i class="fa fa-remove" ng-click="viewDispatch.searchParams.fromDate = undefined;viewDispatch.applySearch()"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>-->
 
                                     <div class="form-group col-md-5 col-sm-12 pad0 pull-right">
-                                        
-                                        <div class='form-group col-md-4 col-sm-12 col-xs-12 pad_rg0'>
+
+                                        <div class='form-group col-md-4 col-sm-12 col-xs-12 pad_rg0' ng-if='viewDispatch.viewType != "active"'>
                                             <select class="form-control input-sm" ng-model="viewDispatch.searchParams.status"  ng-change="viewDispatch.applySearch()">
-                                                <option value="">ALL</option>
-                                                <option value="active">Active</option>
+                                                <option ng-if='viewDispatch.viewType != "inactive"' value="">ALL</option>
+                                                <option ng-if='viewDispatch.viewType != "inactive"' value="active">Active</option>
                                                 <option value="inactive">Inactive</option>
                                                 <option value="expired">Expired</option>
                                                 <option value="completed">Completed</option>
                                             </select>                                            
                                         </div>
                                         <div class="col-md-1 col-sm-12 col-xs-12"></div>
-                                         <div class="col-md-7 col-sm-12 col-xs-12 pad_lf0 pull-right">
+                                        <div class="col-md-7 col-sm-12 col-xs-12 pad_lf0 pull-right">
                                             <input type="search" class="form-control input-sm" ng-model="viewDispatch.searchParams.searchString" placeholder="Search by Patient Name" ng-change="viewDispatch.applySearch()">
                                         </div>
                                     </div>                                     
@@ -111,6 +128,7 @@
                                                         <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('DEACTIVATE_DISPATCH') && dispatch.status === 'active'" ng-click="viewDispatch.openStatusModal(dispatch, 'inactive')" tooltip="Deactivate"><span class="ed_b"></span></a>
                                                         <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('DEACTIVATE_DISPATCH') && dispatch.status === 'inactive'" ng-click="viewDispatch.openStatusModal(dispatch, 'active')" tooltip="Activate"><span class="ed_b"></span></a>
                                                         <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_DISPATCH')" href="" ng-click="viewDispatch.openDeleteModal(dispatch)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
+                                                        <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref='app.patient-calendar({id:dispatch.patientId})' ng-if="hasAccess('VIEW_PATIENT_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -141,7 +159,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div>           
         </div>
     </div>
 </div>
