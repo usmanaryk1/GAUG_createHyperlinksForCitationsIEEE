@@ -70,7 +70,7 @@
                placeholder="Enter a location" ng-model='calendar.location'> 
         <div id="map-1" class="map_panel"></div>
     </div>
-    <div class="mwl-panel-filter" style='background-color: transparent' ng-click="calendar.showDatepicker($event)">
+    <div class="mwl-panel-filter" ng-if='!calendar.isWorksiteSchedulePage' style='background-color: transparent' ng-click="calendar.showDatepicker($event)">
         <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
             <div class="row">
                 <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div ng-if='!calendar.isWorksiteSchedulePage' class="mwl-panel-filter row" style='background-color: transparent;padding-left: 23px' ng-if="calendar.calendarView == 'week'" ng-form="filterForm">
+        <div  class="mwl-panel-filter row" style='background-color: transparent;padding-left: 23px' ng-if="calendar.calendarView == 'week'" ng-form="filterForm">
             <div class="row">
 
             </div>
