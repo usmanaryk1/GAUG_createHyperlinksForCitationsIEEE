@@ -40,7 +40,7 @@
 
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
-            setMonthDate();            
+            setMonthDate();
             $rootScope.refreshCalendarView();
         }
 
@@ -109,7 +109,7 @@
             ctrl.retrieveAllEmployees();
         };
         ctrl.distanceChanged = function () {
-            if (ctrl.searchParams.distance==null || ctrl.searchParams.distance.trim()=='' ) {
+            if (ctrl.searchParams.distance == null || ctrl.searchParams.distance.trim() == '') {
                 ctrl.searchParams.distance = ontime_data.defaultDistance;
             }
         };
@@ -192,9 +192,11 @@
                 EventTypeDAO.retrieveBySchedule(eventParams).then(function (res) {
                     delete res.$promise;
                     delete res.$resolved;
-                    ctrl.events = res;
+                    ctrl.events = res;  
                     $rootScope.paginationLoading = false;
                 });
+            }else{
+                $rootScope.paginationLoading = false;
             }
         }
 
@@ -202,9 +204,7 @@
             EmployeeDAO.retrieveByPosition({workSiteId: ctrl.searchParams.workSiteId}).then(function (res) {
                 ctrl.searchParams.employeeIds = null;
                 $('#employeeIds').select2('val', null);
-                if (res.length !== 0) {
-                    ctrl.employeeList = res;
-                }
+                ctrl.employeeList = res;
             });
         };
 
@@ -375,9 +375,7 @@
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
                     EmployeeDAO.retrieveByPosition({workSiteId: workSiteId}).then(function (res) {
-                        if (res.length !== 0) {
-                            $rootScope.employeePopup.workSiteEmployeeList = res;
-                        }
+                        $rootScope.employeePopup.workSiteEmployeeList = res;
                     });
                 };
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
