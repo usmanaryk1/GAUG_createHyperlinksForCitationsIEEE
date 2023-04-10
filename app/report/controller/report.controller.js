@@ -1,5 +1,5 @@
 (function () {
-    function ReportCtrl(Page, $rootScope, EmployeeDAO, PatientDAO) {
+    function ReportCtrl(Page, $rootScope, EmployeeDAO, PatientDAO, $http) {
         var ctrl = this;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
@@ -21,14 +21,28 @@
                 }
                 if (valid) {
                     $rootScope.maskLoading();
-                    var path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontime_data.company_code;
+                    var path;
+                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet')) {
+                        path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/email?format=' + format + "&companyCode=" + ontime_data.company_code;
+                        if (ctrl.searchParams.id) {
+                            path = path + "&id=" + ctrl.searchParams.id;
+                        }
+                    } else {
+                        path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontime_data.company_code;
+                    }
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }
-                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') && ctrl.searchParams.id) {
-                        path = path + "&id=" + ctrl.searchParams.id;
+                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet')) {
+                        $http.get(path).success(function(data){
+//                            toastr.success('Generated report will be mailed to your email id');
+                        }).error(function(data){
+                            toastr.error(data);
+                        });
+                        toastr.success('Generated report will be mailed to your email id');
+                    } else {
+                        window.location.href = path;
                     }
-                    window.location.href = path;
                     $rootScope.unmaskLoading();
                 }
             }
@@ -50,7 +64,7 @@
         ctrl.verifyDates = function () {
             if (new Date(ctrl.searchParams.fromDate).getDay() != 0 || new Date(ctrl.searchParams.toDate).getDay() != 6) {
                 ctrl.dateMessage = "From date must be Sunday & To date must be Saturday.";
-            } else if (ctrl.reportType == 'workedhours' && moment(new Date(ctrl.searchParams.toDate)).diff(moment(new Date(ctrl.searchParams.fromDate)), 'days')>6) {
+            } else if (ctrl.reportType == 'workedhours' && moment(new Date(ctrl.searchParams.toDate)).diff(moment(new Date(ctrl.searchParams.fromDate)), 'days') > 6) {
                 ctrl.dateMessage = "Only one week should be selected.";
             }
             else {
@@ -70,5 +84,5 @@
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPatients();
     }
-    angular.module('xenon.controllers').controller('ReportCtrl', ["Page", "$rootScope", "EmployeeDAO", "PatientDAO", ReportCtrl]);
+    angular.module('xenon.controllers').controller('ReportCtrl', ["Page", "$rootScope", "EmployeeDAO", "PatientDAO", "$http", ReportCtrl]);
 })();

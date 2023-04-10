@@ -178,7 +178,7 @@
                                         <td ng-click="dAttendance.openEmployeeModal(timesheet.employeeId, 'modal-5')" style="cursor: pointer;">
                                             {{timesheet.employeeId.lName + ", " + timesheet.employeeId.fName + " " + timesheet.employeeId.middleInitial}}
                                         </td>
-                                        <td ng-if="!timesheet.isWorksiteTimesheet" ng-click="dAttendance.openPatientModal(timesheet.patientId, 'modal-6')" style="cursor: pointer;">
+                                        <td ng-if="!dAttendance.isWorksiteTimesheet" ng-click="dAttendance.openPatientModal(timesheet.patientId, 'modal-6')" style="cursor: pointer;">
                                             {{timesheet.patientId.lName + ", " + timesheet.patientId.fName + " " + timesheet.patientId.middleInitial}}
                                         </td>
                                         <td>
@@ -265,7 +265,7 @@
                                     <tr>
                                         <th width="13%" nowrap ng-class="dAttendance.applySortingClass('date')" ng-click="dAttendance.applySorting('date')" >Schedule Date</th>
                                         <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')">Employee Name</th>
-                                        <th width="15%" ng-if="!timesheet.isWorksiteTimesheet" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')">Patient Name</th>
+                                        <th width="15%" ng-if="!dAttendance.isWorksiteTimesheet" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')">Patient Name</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')">Start Time</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >End Time</th>
                                         <th width="10%" nowrap >Time In</th>
@@ -283,7 +283,7 @@
                                         <td ng-click="dAttendance.openEmployeeModal(timesheet.employee, 'modal-5')" style="cursor: pointer;">
                                             <span ng-if="timesheet.employee">{{timesheet.employee.lName + ", " + timesheet.employee.fName + " " + timesheet.employee.middleInitial}}</span>
                                         </td>
-                                        <td ng-if="!timesheet.isWorksiteTimesheet" ng-click="dAttendance.openPatientModal(timesheet.patient, 'modal-6')" style="cursor: pointer;">
+                                        <td ng-if="!dAttendance.isWorksiteTimesheet" ng-click="dAttendance.openPatientModal(timesheet.patient, 'modal-6')" style="cursor: pointer;">
                                             <span ng-if="timesheet.patient">{{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}</span>
                                         </td>
                                         <th>
