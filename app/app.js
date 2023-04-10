@@ -264,8 +264,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // edit_timesheet
             state('app.edit_timesheet', {
-                url: '/edit_timesheet',
-                templateUrl: appHelper.templatePath('edit_timesheet'),
+                url: '/edit_timesheet/:id',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
