@@ -11,6 +11,7 @@
         ctrl.resetFilters = function() {
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
+            ctrl.selectEmployee(ctrl.employeeList[0]);
             ctrl.filterTimesheet();
         };
         ctrl.rerenderDataTable = function() {
@@ -59,8 +60,9 @@
 //        );
         ctrl.retrieveTimesheet = function() {
             $rootScope.maskLoading();
-            console.log(ctrl.searchParams);
+            ctrl.dataRetrieved = false;
             TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function(res) {
+                ctrl.dataRetrieved = true;
 //                showLoadingBar({
 //                    delay: .5,
 //                    pct: 100,
@@ -91,7 +93,6 @@
             ctrl.selectedEmployee = empObj;
             ctrl.emp = empObj;
             ctrl.searchParams.employeeId = empObj.id;
-            ctrl.filterTimesheet();
         };
 
         retrieveEmployeesData();
@@ -99,6 +100,7 @@
             EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
                 ctrl.employeeList = res;
                 ctrl.selectEmployee(ctrl.employeeList[0]);
+                ctrl.filterTimesheet();
             }).catch(function(data, status) {
                 ctrl.employeeList = ontimetest.employees;
                 ctrl.selectEmployee(ctrl.employeeList[0]);

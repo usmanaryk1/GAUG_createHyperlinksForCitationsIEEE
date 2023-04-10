@@ -943,18 +943,18 @@ angular.module('xenon.directives', []).
 //                        }
 //                    })
                     $(el).blur(function(e) {
-                        if (new Date(scope.ngModel).toString() !== "Invalid Date") {
-                            var validDate = true;
-                            if (scope.maxDate && scope.maxDate < new Date(scope.ngModel)) {
-                                validDate = false;
+                            if (new Date(scope.ngModel).toString() !== "Invalid Date") {
+                                var validDate = true;
+                                if (scope.maxDate && scope.maxDate < new Date(scope.ngModel)) {
+                                    validDate = false;
+                                }
+                                if (scope.minDate && scope.minDate > new Date(scope.ngModel)) {
+                                    validDate = false;
+                                }
+                                if (validDate) {
+                                    $this.datepicker("setDate", new Date(scope.ngModel));
+                                }
                             }
-                            if (scope.minDate && scope.minDate > new Date(scope.ngModel)) {
-                                validDate = false;
-                            }
-                            if (validDate) {
-                                $this.datepicker("setDate", new Date(scope.ngModel));
-                            }
-                        }
                     });
 
 
