@@ -41,7 +41,7 @@
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
+            EmployeeDAO.retrieveByPosition({}).then(function(res) {
                 ctrl.employeeList = res;
             }).catch(function(data, status) {
                 ctrl.employeeList = ontimetest.employees;
@@ -50,7 +50,7 @@
         ;
         retrievePatientsData();
         function retrievePatientsData() {
-            PatientDAO.retrieveAll({status: 'active'}).then(function(res) {
+            PatientDAO.retrieveForSelect({}).then(function(res) {
                 ctrl.patientList = res;
             }).catch(function(data, status) {
                 ctrl.patientList = ontimetest.patients;

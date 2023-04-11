@@ -9,6 +9,13 @@
                     action: 'view'
                 }
             },
+            retrieveForSelect: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'select'
+                }
+            },
             //this method will be used for patient save or update based on the action passed
             update: {
                 method: 'POST'
@@ -23,6 +30,9 @@
         return {
             retrieveAll: function (data) {
                 return api.retrieveAll({subAction: data.status}).$promise;
+            },
+            retrieveForSelect: function(filter) {
+                return api.retrieveForSelect(filter).$promise;
             },
             get: function (params) {
                 return api.get({action: params.id}).$promise;

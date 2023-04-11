@@ -34,7 +34,7 @@
                                 Patient Name
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="patient.id as (patient.fName +' '+patient.lName  ) for patient in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
+                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="emp.id as (emp.label) for emp in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
                                     <option value="">
                                         Select
                                     </option>
@@ -48,7 +48,7 @@
                                 Employee Name
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="employee.id as (employee.fName +' '+employee.lName  ) for employee in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
+                                <select class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
                                     <option value="">
                                         Select
                                     </option>
