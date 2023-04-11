@@ -664,50 +664,47 @@ angular.module('xenon.directives', []).
                         return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
                     })
                     var validator;
-                    var validateForm = function () {
+                    var $this = $(el);
+                    var validateForm = function (replaceOpts) {
 
 
-                        var $this = angular.element(el),
-                                opts = {
-                                    rules: {},
-                                    messages: {},
-                                    errorElement: 'span',
-                                    errorClass: 'validate-has-error',
-                                    highlight: function (element) {
-                                        $(element).closest('.form-group').addClass('validate-has-error');
-                                    },
-                                    unhighlight: function (element) {
-                                        //remove custom invalidity of component when it has valid value - by hardik
-                                        element.setCustomValidity('');
-                                        $(element).closest('.form-group').removeClass('validate-has-error');
-                                    },
-                                    errorPlacement: function (error, element)
-                                    {                                    //setting custom validity of for component so we cn check form-validity in controller. - by hardik
-                                        element['0'].setCustomValidity(error);
-                                        if (element.closest('.has-switch').length)
-                                        {
-                                            error.insertAfter(element.closest('.has-switch'));
-                                        }
-                                        else
-                                        if (element.parent('.checkbox, .radio').length || element.parent('.input-group').length)
-                                        {
-                                            error.insertAfter(element.parent());
-                                        }
-                                        //added by Hardik. for multiple
-                                        else if (element.attr('multiple') === 'multiple') {
-                                            error.insertAfter(element.next());
-                                        }
-                                        else
-                                        {
-                                            error.insertAfter(element);
-                                        }
-                                        // for dynaic validation we can not use data-validate, so For required field validations 
-                                        // For such elements set itemid attribute with Element name. - by hardik
-                                        if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
-                                            error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
-                                        }
-                                    }
-                                },
+                        var opts = {
+                            rules: {},
+                            messages: {},
+                            errorElement: 'span',
+                            errorClass: 'validate-has-error',
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('validate-has-error');
+                            },
+                            unhighlight: function (element) {
+                                //remove custom invalidity of component when it has valid value - by hardik
+                                element.setCustomValidity('');
+                                $(element).closest('.form-group').removeClass('validate-has-error');
+                            },
+                            errorPlacement: function (error, element)
+                            {                                    //setting custom validity of for component so we cn check form-validity in controller. - by hardik
+                                element['0'].setCustomValidity(error);
+                                if (element.closest('.has-switch').length)
+                                {
+                                    error.insertAfter(element.closest('.has-switch'));
+                                } else if (element.parent('.checkbox, .radio').length || element.parent('.input-group').length)
+                                {
+                                    error.insertAfter(element.parent());
+                                }
+                                //added by Hardik. for multiple
+                                else if (element.attr('multiple') === 'multiple') {
+                                    error.insertAfter(element.next());
+                                } else
+                                {
+                                    error.insertAfter(element);
+                                }
+                                // for dynaic validation we can not use data-validate, so For required field validations 
+                                // For such elements set itemid attribute with Element name. - by hardik
+                                if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
+                                    error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
+                                }
+                            }
+                        },
                         $fields = $this.find('[data-validate]');
 
                         $fields.each(function (j, el2)
@@ -764,9 +761,16 @@ angular.module('xenon.directives', []).
                             }
                         });
                         //                        scope.form = $this;
-                        validator = $this.validate(opts);
+                        if (replaceOpts) {
+                            validator.settings.rules = opts.rules;
+                            validator.settings.messages = opts.messages;
+                        } else
+                            validator = $this.validate(opts);
                     }
                     validateForm();
+                    $this.on('resetValidation', function (e) {
+                        validateForm(true);
+                    });
                     //this is added to remove validation messages when resetForm is set true
                     scope.$watch("resetForm", function (value) {
                         if (value !== null && value === true) {
@@ -821,8 +825,7 @@ angular.module('xenon.directives', []).
                             if ($this.data('mask').toLowerCase() == 'rcurrency')
                             {
                                 mask += ' ' + sign;
-                            }
-                            else
+                            } else
                             {
                                 mask = sign + ' ' + mask;
                             }
@@ -1288,8 +1291,7 @@ angular.module('xenon.directives', []).
                             if (isNaN(newValue)) {
                                 if ((newValue === undefined)) {
                                     model.assign(scope, newValue);
-                                }
-                                else {
+                                } else {
                                     model.assign(scope, oldValue);
                                     mdlctrl.$setPristine();
                                 }

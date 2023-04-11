@@ -162,27 +162,18 @@
                         </div>
                         <div class="form-group-separator">
                         </div>
-                        <div class="form-group" ng-if="addInsurer.insurerObj.claimFormType !== 'UB04'">
-                            <label class="col-sm-3 control-label" for="field-16" >
-                                Contact Address
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-37">
+                                Address 1
                             </label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="field-16" name="ContactAddress" type="text" ng-model="addInsurer.insurerObj.contactAddress"
-                                       data-validate="required"  data-message-required="Please enter Contact Address." maxlength="255">
+                                <input class="form-control" id="field-37" name="Address1"  maxlength="255"
+                                       ng-model="addInsurer.insurerObj.address1" type="text"
+                                       data-validate="required" data-message-required="Please enter Address 1."/>
                             </div>
                         </div>
                         <!-- Detailed Address for UB04 -->
                         <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04'">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="field-37">
-                                    Address 1
-                                </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" id="field-37" name="Address1"  maxlength="255"
-                                           ng-model="addInsurer.insurerObj.address1" type="text"
-                                           data-validate="required" data-message-required="Please enter Address 1."/>
-                                </div>
-                            </div>
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">

@@ -54,7 +54,10 @@
                 diff.push(k);
             return diff;
         }
-
+        $("#add_inusrer_form").submit(function (event) {
+            $('#add_inusrer_form').trigger('resetValidation');
+            event.preventDefault();
+        });
         //function to save insurer data.
         function saveInsurerData() {
             if (ctrl.insurerObj.contractFile == null) {
