@@ -730,8 +730,8 @@
                     if (searchJsonToSend != null && searchJsonToSend.positionIds != null) {
                         searchJsonToSend.positionIds = searchJsonToSend.positionIds.toString();
                     }
-                    angular.forEach($rootScope.patientPopup.searchParams,function(paramValue,key){
-                        if(paramValue==''){                            
+                    angular.forEach($rootScope.patientPopup.searchParams, function (paramValue, key) {
+                        if (paramValue == '') {
                             delete searchJsonToSend[key];
                         }
                     });
@@ -852,7 +852,7 @@
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$startTime", $rootScope.patientPopup.data.startTime);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$endTime", $rootScope.patientPopup.data.endTime);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$liveIn", ($rootScope.patientPopup.data.forLiveIn == true ? ' - live in' : ''));
-            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$patientCoordinator", $rootScope.patientPopup.patient.careCordinator);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$patientCoordinator", $rootScope.patientPopup.patient.staffingCordinatorId != null ? ctrl.staffCoordinatorMap[$rootScope.patientPopup.patient.staffingCordinatorId] : '');
             return dispatchMessageToDisplay;
         }
     }
