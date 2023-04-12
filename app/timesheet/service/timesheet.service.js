@@ -26,23 +26,28 @@
                 method: 'GET',
                 isArray: true,
                 params: {
-                    action: 'getpatienttimesheetswithindate'
+                    action: 'withindate'
                 }
             },
             retrieveEmployeeTimeSheet: {
                 method: 'GET',
                 isArray: true,
                 params: {
-                    action: 'getemployeetimesheetswithindate'
+                    action: 'withindate'
                 }
             },
             delete: {
                 method: 'GET'
             },
+            get: {
+                params: {
+                    action: 'get'
+                }
+            },
             update: {
                 method: 'POST',
                 params: {
-                    action: 'editemployeepunchrecord'
+                    action: 'update'
                 }
             }
         });

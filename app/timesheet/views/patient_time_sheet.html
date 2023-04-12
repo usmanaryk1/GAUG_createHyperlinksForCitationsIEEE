@@ -16,8 +16,7 @@
                     <form class="form-horizontal" role="form">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">
-                                    <div class="user_p mar_bt0"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
+                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">                                    
                                     <div class="user_av_hd">
                                         <h1>{{patTimesheet.selectedPatient.fName + ' ' + patTimesheet.selectedPatient.lName}}</h1>
                                         <!--<p>{{patTimesheet.selectedPatient.position}}</p>-->
@@ -29,7 +28,7 @@
                                         <label class="col-sm-3 control-label">Patient Name</label>
                                         <div class="col-sm-9">
                                             <!--<input type="text" class="form-control" ng-model="patTimesheet.searchValue" ng-change="patTimesheet.filterTimesheet()">-->
-                                            <select class="form-control" id="sboxit-2" ng-model="patTimesheet.pat" ng-options='pat as (pat.fName+" "+pat.lName) for pat in patTimesheet.patientList' ng-change="patTimesheet.selectPatient(patTimesheet.pat)">
+                                            <select class="form-control" id="sboxit-2" ng-model="patTimesheet.pat" ng-options='pat as (pat.fName+" "+pat.lName) for pat in patTimesheet.patientList'>
                                             </select>
                                         </div>
                                     </div>
@@ -81,7 +80,7 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
 
-                                    <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.filterTimesheet()">Review</button>
+                                    <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);patTimesheet.filterTimesheet()">Review</button>
                                     <a href="#/app/manual_punch/patient/{{patTimesheet.pat.id}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters

@@ -1,6 +1,8 @@
 (function() {
     function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout) {
         var ctrl = this;
+        ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
@@ -90,7 +92,11 @@
         };
 
         ctrl.selectEmployee = function(empObj) {
+            $scope.hideDefaultImage = false;
             ctrl.selectedEmployee = empObj;
+            if (ctrl.selectedEmployee.profileImage == null || ctrl.selectedEmployee.profileImage == '') {
+                $scope.hideDefaultImage = true;
+            }
             ctrl.emp = empObj;
             ctrl.searchParams.employeeId = empObj.id;
         };

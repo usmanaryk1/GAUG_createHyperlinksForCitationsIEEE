@@ -60,13 +60,17 @@
         ctrl.saveManualAttendance = function() {
             if ($("#manual_punch_form")[0].checkValidity()) {
                 $rootScope.maskLoading();
-                console.log(JSON.stringify(ctrl.attendanceObj));
                 if (ctrl.attendanceObj.id == null) {
+                    console.log(JSON.stringify(ctrl.attendanceObj));
                     TimesheetDAO.addPunchRecord(ctrl.attendanceObj).then(function() {
                         toastr.success("Manual punch saved.");
                         ctrl.resetManualPunch();
-                    }).catch(function() {
-                        toastr.error("Manual punch cannot be saved.");
+                    }).catch(function(e) {
+                        if (e.data != null) {
+                            toastr.error(e.data);
+                        } else {
+                            toastr.error("Manual punch cannot be saved.");
+                        }
                     }).then(function() {
                         $rootScope.unmaskLoading();
                     });
@@ -75,7 +79,11 @@
                         toastr.success("Manual punch saved.");
 //                        ctrl.resetManualPunch();
                     }).catch(function() {
-                        toastr.error("Manual punch cannot be saved.");
+                        if (e.data != null) {
+                            toastr.error(e.data);
+                        } else {
+                            toastr.error("Manual punch cannot be saved.");
+                        }
                     }).then(function() {
                         $rootScope.unmaskLoading();
                     });

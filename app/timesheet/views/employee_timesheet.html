@@ -15,10 +15,13 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">
-                                    <div class="user_p mar_bt0"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
+                                    <div class="user_p mar_bt0">
+                                        <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (empTimesheet.baseUrl + 'file/download/' + empTimesheet.companyCode + '/a/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
+                                        <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
+                                    </div>
                                     <div class="user_av_hd">
                                         <h1>{{empTimesheet.selectedEmployee.fName + ' ' + empTimesheet.selectedEmployee.lName}}</h1>
-                                        <p>{{empTimesheet.selectedEmployee.position}}</p>
+                                        <p>{{positions[empTimesheet.selectedEmployee.position]}}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 pull-right pad0 wd_full">
@@ -35,7 +38,7 @@
                                                                                                 });
                                                                                             });
                                                                                         </script>-->
-                                            <select class="form-control" id="sboxit-2" ng-model="empTimesheet.emp" ng-options='emp as (emp.fName+" "+emp.lName) for emp in empTimesheet.employeeList' ng-change="empTimesheet.selectEmployee(empTimesheet.emp)">
+                                            <select class="form-control" id="sboxit-2" ng-model="empTimesheet.emp" ng-options='emp as (emp.fName+" "+emp.lName) for emp in empTimesheet.employeeList'>
                                             </select>
                                             <!--<input type="text" class="form-control" ng-model="empTimesheet.searchValue" ng-change="empTimesheet.filterTimesheet()">-->
                                         </div>
@@ -85,7 +88,7 @@
                         <div class="row">
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
-                                    <button type="button" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.filterTimesheet()" style="width:auto;">Review</button>
+                                    <button type="button" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.selectEmployee(empTimesheet.emp);empTimesheet.filterTimesheet()" style="width:auto;">Review</button>
                                     <a href="#/app/manual_punch/employee/{{empTimesheet.emp.id}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
                                         Reset Filters
@@ -197,7 +200,7 @@
                                 <div ng-if="(empTimesheet.timesheetList == null || empTimesheet.timesheetList.length == 0) && empTimesheet.dataRetrieved">
                                     No timesheet available for selected employee.
                                 </div>
-                                
+
                                 <table width="100%"  class="table table-small-font table-bordered table-striped" cellspacing="0" ng-if="(empTimesheet.timesheetList.length > 0) && empTimesheet.dataRetrieved">
                                     <tbody>
                                         <tr style="border:0px !important;">
