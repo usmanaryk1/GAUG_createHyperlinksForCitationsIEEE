@@ -1,5 +1,5 @@
 (function () {
-    function AddWorksiteCtrl($state, WorksiteDAO, $timeout, $scope, $rootScope, PositionDAO, Page) {
+    function AddWorksiteCtrl($state, WorksiteDAO, $timeout, $scope, $rootScope, PositionDAO, Page, $formService, EmployeeDAO) {
         var ctrl = this;
         ctrl.currentDate = new Date();
         ctrl.retrivalRunning = true;
@@ -31,6 +31,13 @@
         ctrl.tab2DataInit = tab2DataInit;
         ctrl.navigateToTab = navigateToTab;
         ctrl.resetWorksite = function () {
+            ctrl.worksite.allPositions = null;
+            ctrl.positions = [];
+            $formService.uncheckCheckboxValue('allPositions');
+            $("#employeeDropdown").select2("val", null);
+            $timeout(function () {                
+                $('#Positions').multiSelect('deselect_all');
+            }, 400);
         };
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
@@ -54,7 +61,8 @@
 
         //function to save worksite data.
         function saveWorksiteData() {
-            if ($('#add_worksite_form')[0].checkValidity()) {
+            ctrl.formSubmitted = true;
+            if ($('#add_worksite_form')[0].checkValidity() && ctrl.worksite.supervisorId != null) {
                 var worksiteToSave = angular.copy(ctrl.worksite);
                 if (ctrl.positions != null) {
                     if (ctrl.positions.indexOf(0) === -1) {
@@ -106,6 +114,10 @@
                 $rootScope.maskLoading();
                 WorksiteDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.worksite = res;
+                    $timeout(function () {
+                        $("#employeeDropdown").select2("val", ctrl.worksite.supervisorId);
+                    });
+                    $formService.resetRadios();
                     ctrl.positions = res.positionIds;
                     ctrl.retrivalRunning = false;
                 }).catch(function (data, status) {
@@ -127,10 +139,20 @@
                     $rootScope.unmaskLoading();
                 });
             } else {
+                $formService.resetRadios();
                 ctrl.retrivalRunning = false;
             }
         }
-
+        ctrl.retrieveAllEmployees = function () {
+            EmployeeDAO.retrieveByPosition().then(function (res) {
+                ctrl.employeeList = res;
+                if (ctrl.worksite.supervisorId != null) {
+                    $timeout(function () {
+                        $("#employeeDropdown").select2("val", ctrl.worksite.supervisorId);
+                    });
+                }
+            });
+        };
         function tab1DataInit() {
             ctrl.formDirty = false;
             $("#add_worksite_form input:text, #add_worksite_form textarea, #add_worksite_form select").first().focus();
@@ -145,10 +167,6 @@
                 if (!ctrl.retrivalRunning) {
                     PositionDAO.retrieveAll({status: 'active'}).then(function (res) {
                         ctrl.positionList = res;
-                        ctrl.positionList.push({
-                            "id": 0,
-                            "position": "All"
-                        });
                         allPositionIds = [];
                         angular.forEach(ctrl.positionList, function (position) {
                             if (position.id)
@@ -182,7 +200,7 @@
                 }
             }, 100);
         }
-
+        ctrl.retrieveAllEmployees();
         ctrl.pageInitCall();
 
         function arr_diff(a1, a2)
@@ -213,7 +231,11 @@
             });
 
         }, true);
-
+        ctrl.allpositionsChanged = function () {
+            $timeout(function () {
+                $("#Positions").multiSelect('refresh');
+            });
+        };
         function googleMapFunctions(latitude, longitude) {
 
             loadGoogleMaps(3).done(function ()
@@ -310,5 +332,5 @@
             });
         }
     }
-    angular.module('xenon.controllers').controller('AddWorksiteCtrl', ["$state", "WorksiteDAO", "$timeout", "$scope", "$rootScope", "PositionDAO", "Page", AddWorksiteCtrl]);
+    angular.module('xenon.controllers').controller('AddWorksiteCtrl', ["$state", "WorksiteDAO", "$timeout", "$scope", "$rootScope", "PositionDAO", "Page", "$formService", "EmployeeDAO", AddWorksiteCtrl]);
 })();

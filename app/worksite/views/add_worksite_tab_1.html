@@ -8,7 +8,7 @@
                             <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addWorksite.disableSaveButton" ng-click="addWorksite.setFromNext('tab1')">
                                 Save Changes
                             </button>
-                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
+                            <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click='addWorksite.resetWorksite()'>
                                 Reset To Default
                             </button>
                         </div>
@@ -43,8 +43,28 @@
                             Supervisor
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" charactersonly id="field-3" name="supervisor" type="text" maxlength="50"
-                                   ng-model="addWorksite.worksite.supervisor" data-validate="required" data-message-required="Please enter Supervisor Name." />
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                                {
+                                    setTimeout(function () {
+                                        $("#employeeDropdown").select2({
+                                            //                                                        minimumResultsForSearch: -1,
+                                            placeholder: 'Select Supervisor...',
+                                            //                                                        minimumInputLength: 1,
+                                            //                                                        placeholder: 'Search',
+                                        }).on('select2-open', function ()
+                                        {
+                                            // Adding Custom Scrollbar
+                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                        });
+                                    }, 200);
+                                });</script>
+                            <select class="form-control" name ="employeeDropdown" id="employeeDropdown" ng-model="addWorksite.worksite.supervisorId" ng-options='emp.id as emp.label for emp in addWorksite.employeeList track by emp.id'>
+                                <option value="" selected hidden />
+                            </select>     
+                            <div ng-show='addWorksite.worksite.supervisorId == null && addWorksite.formSubmitted'>
+                                <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Supervisor.</span>
+                            </div>                            
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -89,27 +109,35 @@
                             Position
                         </label>
                         <div class="col-sm-9">
-                            <script type="text/javascript">
-                                jQuery(document).ready(function ($)
-                                {
-                                    $("#multi-select").multiSelect({
-                                        afterInit: function ()
-                                        {
-                                            // Add alternative scrollbar to list
-                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                                        },
-                                        afterSelect: function ()
-                                        {
-                                            // Update scrollbar size
-                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-                                        }
+                            <div class='col-sm-12 pad_rg0'>
+                                <label class='pull-right'>
+                                    <input class="cbr" id="allPositions" name="allPositions" type="checkbox" ng-change='addWorksite.allpositionsChanged()' ng-model="addWorksite.worksite.allPositions"/>
+                                    Allow to all positions
+                                </label>
+                            </div>
+                            <div>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function ($)
+                                    {
+                                        $("#multi-select").multiSelect({
+                                            afterInit: function ()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function ()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
                                     });
-                                });
-                            </script>
-                            <select class="form-control" id="Positions" multiple="multiple" name="Positions"
-                                    data-validate="required" data-message-required="Please select Position." ng-model="addWorksite.positions"
-                                    ng-options="position.id as position.position for position in addWorksite.positionList">                                
-                            </select>
+                                </script>
+                                <select class="form-control" id="Positions" multiple="multiple" name="Positions"
+                                        data-validate="required" data-message-required="Please select Position." ng-disabled='addWorksite.worksite.allPositions' ng-model="addWorksite.positions"
+                                        ng-options="position.id as position.position for position in addWorksite.positionList">                                
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group-separator">

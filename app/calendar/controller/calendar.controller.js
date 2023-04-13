@@ -3,8 +3,16 @@
         var ctrl = this;
         ctrl.pageNo = 1;
         ctrl.retrieveWorkSites = function () {
-            WorksiteDAO.retreveWorksiteNames().then(function (res) {
+            WorksiteDAO.retreveWorksiteNames({sortBy: 'name', order: 'asc'}).then(function (res) {
                 ctrl.workSiteList = res;
+                if (res != null && res.length > 0) {
+                    ctrl.searchParams.workSiteId = res[0].id;
+                    $timeout(function () {
+                        $("#worksiteDropdown").select2("val", res[0].id);
+                    }, 100);
+                    ctrl.retrieveEmployees();
+                    ctrl.retrieveAllEmployees();
+                }
             });
         };
         if ($state.current.name.indexOf('search-employee-calendar') >= 0) {
@@ -192,10 +200,10 @@
                 EventTypeDAO.retrieveBySchedule(eventParams).then(function (res) {
                     delete res.$promise;
                     delete res.$resolved;
-                    ctrl.events = res;  
+                    ctrl.events = res;
                     $rootScope.paginationLoading = false;
                 });
-            }else{
+            } else {
                 $rootScope.paginationLoading = false;
             }
         }
@@ -756,8 +764,11 @@
             $state.go('app.employee-calendar', {id: employee.id});
         };
 
-        ctrl.retrieveEmployees();
-        ctrl.retrieveAllEmployees();
+        if (!ctrl.isWorksiteSchedulePage) {
+            ctrl.retrieveEmployees();
+            ctrl.retrieveAllEmployees();
+        }
+
         ctrl.retrieveAllPositions();
         if (ctrl.isEmployeeSearchPage) {
             var map;

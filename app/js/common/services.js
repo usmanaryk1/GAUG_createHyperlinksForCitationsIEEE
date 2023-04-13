@@ -286,6 +286,10 @@ angular.module('xenon.services', []).
                 $("input[name='" + name + "'][value='" + newVal + "']").removeAttr('checked');
                 $("input[name='" + name + "'][value='" + newVal + "']").parent().parent().removeClass('cbr-checked');
             };
+            this.uncheckCheckboxValue = function (name) {
+                $("input[name='" + name + "']").removeAttr('checked');
+                $("input[name='" + name + "']").parent().parent().removeClass('cbr-checked');
+            };
 
             this.resetRadios = function () {
                 setTimeout(function () {

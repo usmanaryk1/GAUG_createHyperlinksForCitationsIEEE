@@ -242,8 +242,7 @@
                         {
                         setTimeout(function () {
                         $("#worksiteDropdown").select2({
-                        placeholder: 'Select Worksite...',
-                                allowClear: true
+                        placeholder: 'Select Worksite...'                                
                         }).on('select2-open', function ()
                         {
                         // Adding Custom Scrollbar
@@ -251,7 +250,7 @@
                         });
                         }, 200);
                         });</script>
-                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="calendar.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in calendar.workSiteList' ng-change="calendar.retrieveAllEmployees()">                
+                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="calendar.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in calendar.workSiteList track by worksite.id' ng-change="calendar.retrieveAllEmployees()">                
                         <option value="" selected hidden />
                     </select>
                 </div>

@@ -226,8 +226,16 @@
         function retrieveEmployeesData() {
             ctrl.employeeListLoaded = false;
             $rootScope.maskLoading();
-            EmployeeDAO.retrieveByPosition({}).then(function (res) {
-                ctrl.employeeList = res;
+            var param = {};
+            if (ctrl.attendanceObj.isWorksitePunch) {
+                param = {workSiteId: ctrl.attendanceObj.workSiteId};
+            }
+            EmployeeDAO.retrieveByPosition(param).then(function (res) {
+                if (ctrl.attendanceObj.isWorksitePunch && ctrl.attendanceObj.workSiteId == null) {
+                    ctrl.employeeList = [];
+                } else {
+                    ctrl.employeeList = res;
+                }
             }).catch(function (data, status) {
 //                ctrl.employeeList = ontime_data.employees;
             }).then(function () {
@@ -488,6 +496,12 @@
             } else {
                 ctrl.attendanceObj.workSiteId = null;
             }
+            retrieveEmployeesData();
+        };
+        ctrl.worksiteChanged = function () {
+            retrieveEmployeesData();
+            ctrl.attendanceObj.employeeId = null;
+            $("#sboxit-2").select2("val", null);
         };
         ctrl.retrieveWorkSites = function () {
             WorksiteDAO.retreveWorksiteNames().then(function (res) {

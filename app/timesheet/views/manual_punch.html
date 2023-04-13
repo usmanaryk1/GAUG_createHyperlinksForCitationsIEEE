@@ -79,7 +79,7 @@
                                                 });
                                             }, 200);
                                         });</script>
-                                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="manualPunch.attendanceObj.workSiteId" ng-options='worksite.id as worksite.name for worksite in manualPunch.workSiteList'>
+                                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="manualPunch.attendanceObj.workSiteId" ng-options='worksite.id as worksite.name for worksite in manualPunch.workSiteList' ng-change="manualPunch.worksiteChanged()">
                                         <option value="" selected hidden />
                                     </select>               
                                 </div>
