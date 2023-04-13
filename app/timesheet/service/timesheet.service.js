@@ -19,7 +19,7 @@
             addPunchRecord: {
                 method: 'POST',
                 params: {
-                    action: 'addemployeepunchrecord'
+                    action: 'addpunch'
                 }
             },
             retrievePatientTimeSheet: {
