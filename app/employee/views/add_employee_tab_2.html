@@ -151,10 +151,14 @@
                             Worksite Hours Rate
                         </label>
                         <div class="col-sm-10">
-                            <input class="form-control" name="WHRate" type="password" ng-model="addEmployee.employee.workSiteRate"
-                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="Worksite Rate">
-                            </input>
-                        </div>
+
+                                <select class="form-control" id="WHRate" ng-model="addEmployee.employee.workSiteRate" ng-options="rate.key as rate.value for rate in payrollRates"
+                                        name="PersonalRate" onblur="setSelectValidationMessage(this)" itemid="Worksite Rate">
+                                    <option value="">
+                                        Select
+                                    </option>
+                                </select>
+                            </div>
                     </div>
                     <div class="form-group-separator" ng-show="addEmployee.employee.wages !== 'S'">
                     </div>
