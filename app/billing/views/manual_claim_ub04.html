@@ -279,13 +279,13 @@
             </div>
         </div>
     </div>
-    <!--    <div  id="btnprint" class="row" ng-if="manualClaim.reviewMode">
-            <div class="col-sm-12">
-                <div class="pull-right">
-                    <button type="button" class="btn btn-info btn-single  pull-right" onclick="print_page()">Print</button>
-                </div>
+    <div  id="btnprint" class="row" ng-if="manualClaim.reviewMode">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <button type="button" class="btn btn-info btn-single pull-right" ng-click="manualClaim.printPdf()">Print</button>
             </div>
-        </div>-->
+        </div>
+    </div>
     <div>&nbsp;</div>
     <form class="form-horizontal validate" id="manual_claim_form" name="manual_claim_form" role="form">
 

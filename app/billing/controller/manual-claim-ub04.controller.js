@@ -193,6 +193,9 @@
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
+        ctrl.printPdf = function () {
+            window.location.href = ontime_data.weburl + 'billing/download/claim/' + $state.params.id;
+        }
 
     }
     angular.module('xenon.controllers').controller('ManualClaimUB04Ctrl', ["$rootScope", "$http", "$state", "$timeout", "$filter", "InsurerDAO", "BillingDAO", "PatientDAO", "Page", ManualClaimUB04Ctrl]);
