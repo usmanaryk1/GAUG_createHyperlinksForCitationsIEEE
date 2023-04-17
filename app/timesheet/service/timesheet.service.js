@@ -37,7 +37,7 @@
                 }
             },
             delete: {
-                method: 'GET'
+                method: 'DELETE'
             },
             get: {
                 params: {
@@ -45,7 +45,7 @@
                 }
             },
             update: {
-                method: 'POST',
+                method: 'PUT',
                 params: {
                     action: 'update'
                 }
