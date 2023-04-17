@@ -15,8 +15,29 @@ var app = angular.module('xenon-app', [
     'FBAngular',
     'flow'
 ]);
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ')
+            c = c.substring(1);
+        if (c.indexOf(name) == 0)
+            return c.substring(name.length, c.length);
+    }
+    return "";
+}
+function delete_cookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
 
-app.run(function($rootScope, $modal)
+app.run(function($rootScope, $modal, $state)
 {
     // Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
@@ -26,9 +47,23 @@ app.run(function($rootScope, $modal)
         public_vars.$pageLoadingOverlay.addClass('loaded');
     })
 
+    $rootScope.logout = function() {
+        delete_cookie("cc");
+        delete_cookie("token");
+        delete_cookie("un");
+        $state.transitionTo(ontimetest.defaultState);
+    };
+
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
             function(event, toState, toParams, fromState, fromParams) {
+                if (toState.url.indexOf("login") < 0) {
+                    var token = getCookie("token");
+                    if (token == null || token == '') {
+                        event.preventDefault();
+                        $state.transitionTo(ontimetest.defaultState);
+                    }
+                }
                 //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
                 if (toState.data && toState.data.tabNo) {
                     $rootScope.tabNo = toState.data.tabNo;
@@ -525,7 +560,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             // Dashboards
             state('app.dashboard', {
                 url: '/dashboard',
-                templateUrl: appHelper.templatePath('dashboards/dashboard'),
+                templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard'),
+                controller: 'DashboardCtrl as dashboard',
                 resolve: {
                     resources: function($ocLazyLoad) {
                         return $ocLazyLoad.load([
@@ -1231,7 +1267,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             return {
                 request: function(config) {
                     config.headers = config.headers || {};
-                    $httpProvider.defaults.headers.common['company_code'] = ontimetest.company_code;
+                    ontimetest.company_code = getCookie("cc");
+                    if (ontimetest.company_code != null) {
+                        $httpProvider.defaults.headers.common['company_code'] = ontimetest.company_code;
+                    }
+                    var token = getCookie("token");
+                    if (token != null) {
+                        $httpProvider.defaults.headers.common['requestToken'] = token;
+                    }
+                    var userName = getCookie("un");
+                    if (userName != null) {
+                        $httpProvider.defaults.headers.common['userName'] = userName;
+                    }
                     return config;
                 }
             };

@@ -24,19 +24,23 @@ angular.module('xenon.controllers', []).
         }).
         controller('MainCtrl', function($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen)
         {
+            var userName = getCookie("un");
+            if (userName != null) {
+                $rootScope.currentUser = {userName: userName};
+            }
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;
             $rootScope.isLockscreenPage = false;
             $rootScope.isMainPage = true;
             $rootScope.dateFormat = "MM/dd/yyyy";
-            $rootScope.dateFormatForDay="EEE";
+            $rootScope.dateFormatForDay = "EEE";
             $rootScope.timeFormat = "hh:mm a";
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
             $rootScope.maskLoading = function() {
                 $("#mainDiv").loadmask("");
             };
-            $rootScope.unmaskLoading=function(){
+            $rootScope.unmaskLoading = function() {
                 $("#mainDiv").unmask();
             };
 //            $rootScope.states = ['UT', 'TX', 'NY'];
