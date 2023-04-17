@@ -11,6 +11,7 @@
             ctrl.fromNext = fromNext;
         }
         ctrl.careTypeList = [];
+        ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
         ctrl.applicationFileObj = {};
         ctrl.i9eligibilityFileObj = {};
         ctrl.w4FileObj = {};
@@ -361,6 +362,45 @@
             setValidationsForTab2(newVal);
         });
 
+        $scope.$watch(function() {
+            if (!ctrl.employee.careRatesList) {
+                ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
+            }
+            return ctrl.employee.careRatesList.rate1.careTypes;
+        }, function(newVal, oldValue) {
+            if (ctrl.careTypeList2) {
+                var newCareTypes2 = [];
+                angular.forEach(ctrl.careTypeList, function(obj) {
+                    if (newVal.indexOf(obj.id) < 0) {
+                        newCareTypes2.push(obj);
+                    }
+                });
+                ctrl.careTypeList2 = newCareTypes2;
+                $timeout(function() {
+                    $('#rate2').multiSelect('refresh');
+                }, 100);
+            }
+        });
+        $scope.$watch(function() {
+            if (!ctrl.employee.careRatesList) {
+                ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
+            }
+            return ctrl.employee.careRatesList.rate2.careTypes;
+        }, function(newVal, oldValue) {
+            if (ctrl.careTypeList1) {
+                var newCareTypes1 = [];
+                angular.forEach(ctrl.careTypeList, function(obj) {
+                    if (newVal.indexOf(obj.id) < 0) {
+                        newCareTypes1.push(obj);
+                    }
+                });
+                ctrl.careTypeList1 = newCareTypes1;
+                $timeout(function() {
+                    $('#rate1').multiSelect('refresh');
+                }, 100);
+            }
+        });
+
         function setValidationsForTab2(wages) {
             if (wages && wages === 'S') {
                 $("input[name='Salary']").attr('required', true);
@@ -400,7 +440,25 @@
             $timeout(function() {
                 if (!ctrl.retrivalRunning) {
                     CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function(res) {
+                        ctrl.careTypeList2 = [];
+                        ctrl.careTypeList1 = [];
                         ctrl.careTypeList = res;
+                        var selectedCareTypes1 = [];
+                        angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function(obj) {
+                            selectedCareTypes1.push(obj);
+                        });
+                        var selectedCareTypes2 = [];
+                        angular.forEach(ctrl.employee.careRatesList.rate2.careTypes, function(obj) {
+                            selectedCareTypes2.push(obj);
+                        });
+                        angular.forEach(res, function(obj) {
+                            if (selectedCareTypes1.indexOf(obj.id) < 0) {
+                                ctrl.careTypeList2.push(obj);
+                            }
+                            if (selectedCareTypes2.indexOf(obj.id) < 0) {
+                                ctrl.careTypeList1.push(obj);
+                            }
+                        });
                         $timeout(function() {
                             $('#rate1').multiSelect('refresh');
                             $('#rate2').multiSelect('refresh');
