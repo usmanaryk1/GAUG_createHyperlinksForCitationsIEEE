@@ -3,7 +3,7 @@
         var ctrl = this;
         Page.setTitle("Manual Claim UB04");
         //Constants i.e. we need to fill the form
-        ctrl.manualClaimObj = {serviceLines: [{}]};
+        ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
         ctrl.reviewMode = false;
         ctrl.showPatientError = false;
         ctrl.claimId = undefined;
@@ -22,6 +22,7 @@
                     ctrl.manualClaimObj = {};
                 ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2).replace(/,/g, "");
             }
+            ctrl.manualClaimObj.amountInDueA = ctrl.manualClaimObj.totalCharges;
         };
 
         if ($state.params.id && $state.params.id !== '') {
@@ -34,7 +35,6 @@
                 ctrl.calculateTotalCharges();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                        ctrl.parseModifiers(serviceLine);
                         if (serviceLine.serviceDate)
                             serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
                     });
@@ -51,7 +51,6 @@
                     ctrl.calculateTotalCharges();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                            ctrl.parseModifiers(serviceLine);
                             if (serviceLine.serviceDate)
                                 serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
                         });
@@ -67,7 +66,7 @@
             }
         } else {
             $rootScope.maskLoading();
-            PatientDAO.retrieveForSelect({'billingType': 'Emdeon'}).then(function (res) {
+            PatientDAO.retrieveForSelect({'billingType': 'UB04'}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
 //                ctrl.patientList = ontime_data.patients;
@@ -80,6 +79,7 @@
         ctrl.checkReviewMode = function () {
             if (ctrl.reviewMode)
                 $("#manual_claim_form :input").prop("disabled", true);
+            $("#manual_claim_form :input").css('background-color', '#fff');
         };
 
         ctrl.getPatientDetail = function (patientId) {
@@ -94,7 +94,10 @@
                             if (serviceLine.serviceDate)
                                 serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
                         });
+                    } else {
+                        ctrl.manualClaimObj.serviceLines = [{}];
                     }
+                    ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
                 }
             }).catch(function () {
                 toastr.error("Failed to retrieve patient details.");
@@ -148,9 +151,9 @@
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
-                            window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
-                            ctrl.manualClaimObj = {};
-                            ctrl.manualClaimObj.serviceLines = [{}];
+//                            window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                            ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
+                            $('input,textarea,select').filter('[required]:visible').removeClass('danger-input');
                             $("#sboxit-1").select2("val", null);
                         }).catch(function () {
                     toastr.error("Can not process manual claim.");

@@ -146,7 +146,7 @@
             }
         } else {
             $rootScope.maskLoading();
-            PatientDAO.retrieveForSelect({'billingType': 'MD Online'}).then(function (res) {
+            PatientDAO.retrieveForSelect({'billingType': '1500'}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
 //                ctrl.patientList = ontime_data.patients;

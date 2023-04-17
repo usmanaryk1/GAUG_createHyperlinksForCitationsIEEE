@@ -137,11 +137,16 @@
                 return;
             var claim1500 = {};
             claim1500[claim.uniqueId] = JSON.parse(claim.claim1500Data);
-            localStorage.setItem('claim1500', JSON.stringify(claim1500));
+            if (claim.claimType === '1500')
+                localStorage.setItem('claim1500', JSON.stringify(claim1500));
+            else
+                localStorage.setItem('claimUB04', JSON.stringify(claim1500));
         };
         ctrl.openClaim1500 = function (claim) {
             _setClaim1500InLocalStorage(claim);
             var url = $state.href('app.manual_claim_review', {id: claim.uniqueId ? claim.uniqueId : claim.id});
+            if (claim.claimType === 'UB04')
+                url = $state.href('app.manual_claim_ub04_review', {id: claim.uniqueId ? claim.uniqueId : claim.id});
             var params = [
                 'height=' + screen.height,
                 'width=' + screen.width,
