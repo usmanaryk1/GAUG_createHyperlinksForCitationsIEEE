@@ -898,9 +898,22 @@ angular.module('xenon.directives', []).
                 scope: {minDate: "=", maxDate: "=", ngModel: "="},
                 link: function(scope, el, attr)
                 {
+                    $(el).attr('maxlength', '10');
 //                    $(el).mask("99/99/9999");
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
+                    $(el).keydown(function(e) {
+                        var key = e.keyCode || e.which;
+                        
+                        if (key == 37 || key == 38 || key == 39 || key == 40 || key == 8 || key == 46 || key == 191 || key == 9) { // Left / Up / Right / Down Arrow, Backspace, Delete keys
+                            return;
+                        }
+                        key = String.fromCharCode(key);
+                        var regex = /[0-9|/]/;
+                        if (!regex.test(key)) {
+                            return false;
+                        }
+                    });
 //                    $(el).keydown(function(e) {
 //                        if (e.keyCode !== 9) {
 //                            return false;
@@ -937,25 +950,25 @@ angular.module('xenon.directives', []).
 
                     });
                     //changes to edit the date as currently editing the date is not working properly and we can not make it blank again.
-                    var dateWatch=scope.$watch("ngModel", function(value) {
-                        if (value != null) {
+                    var dateWatch = scope.$watch("ngModel", function(value) {
+                        if (value != null && value.length >= 10) {
                             $this.datepicker("setDate", new Date(value));
                             dateWatch();
                         }
                     });
                     $(el).blur(function(e) {
-                            if (new Date(scope.ngModel).toString() !== "Invalid Date") {
-                                var validDate = true;
-                                if (scope.maxDate && scope.maxDate < new Date(scope.ngModel)) {
-                                    validDate = false;
-                                }
-                                if (scope.minDate && scope.minDate > new Date(scope.ngModel)) {
-                                    validDate = false;
-                                }
-                                if (validDate) {
-                                    $this.datepicker("setDate", new Date(scope.ngModel));
-                                }
+                        if (new Date(scope.ngModel).toString() !== "Invalid Date") {
+                            var validDate = true;
+                            if (scope.maxDate && scope.maxDate < new Date(scope.ngModel)) {
+                                validDate = false;
                             }
+                            if (scope.minDate && scope.minDate > new Date(scope.ngModel)) {
+                                validDate = false;
+                            }
+                            if (validDate) {
+                                $this.datepicker("setDate", new Date(scope.ngModel));
+                            }
+                        }
                     });
 
 
