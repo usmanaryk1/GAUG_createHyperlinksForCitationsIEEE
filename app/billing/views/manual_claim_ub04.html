@@ -279,13 +279,13 @@
             </div>
         </div>
     </div>
-    <div  id="btnprint" class="row" ng-if="manualClaim.reviewMode">
-        <div class="col-sm-12">
-            <div class="pull-right">
-                <button type="button" class="btn btn-info btn-single  pull-right" onclick="print_page()">Print</button>
+    <!--    <div  id="btnprint" class="row" ng-if="manualClaim.reviewMode">
+            <div class="col-sm-12">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-info btn-single  pull-right" onclick="print_page()">Print</button>
+                </div>
             </div>
-        </div>
-    </div>
+        </div>-->
     <div>&nbsp;</div>
     <form class="form-horizontal validate" id="manual_claim_form" name="manual_claim_form" role="form">
 
@@ -295,16 +295,16 @@
                     <div class="first_sec">
                         <table cellspacing="0" class="width_100 line-tr border-light">
                             <tr>
-                                <td><font class="numbers inline-numbers">1</font><input type="text" ng-model="manualClaim.manualClaimObj.providerName" class="width_100" style="padding-left: 15px;"></td>
+                                <td><font class="numbers inline-numbers">1</font><input type="text" ng-model="manualClaim.manualClaimObj.providerName" class="width_100" style="padding-left: 15px;" required></td>
                             </tr>
                             <tr>
-                                <td><input type="text" ng-model="manualClaim.manualClaimObj.companyAddress1" class="width_100"></td>
+                                <td><input type="text" ng-model="manualClaim.manualClaimObj.companyAddress1" class="width_100" required></td>
                             </tr>
                             <tr>
-                                <td><input type="text" ng-model="manualClaim.manualClaimObj.companyAddress2" class="width_100"></td>
+                                <td><input type="text" ng-model="manualClaim.manualClaimObj.companyAddress2" class="width_100" required></td>
                             </tr>
                             <tr>
-                                <td><input type="text" ng-model="manualClaim.manualClaimObj.companyAddress3" class="width_100"></td>
+                                <td><input type="text" ng-model="manualClaim.manualClaimObj.companyAddress3" class="width_100" required></td>
                             </tr>
                         </table>
                     </div>  
@@ -332,13 +332,13 @@
                         <table cellspacing="0" class="width_100 line-tr line-td">
                             <tr>
                                 <td class="width_15"><div class="static-label"><font class="numbers">3a</font>PAT. <br/>CNTL #</div></td>
-                                <td class="width_65"><input type="text" ng-model="manualClaim.manualClaimObj.patientMRN" class="width_100"></td>
+                                <td class="width_65"><input type="text" ng-model="manualClaim.manualClaimObj.patientMRN" class="width_100" required></td>
                                 <td class="width_20 dark-night"><div class="static-label"><font class="numbers">4</font>TYPE <br/>&nbsp;OF BILL</div></td>
                             </tr>
                             <tr>
                                 <td class="width_15"><div class="static-label"><font class="numbers">b.</font>MED. <br/>REC. #</div></td>
                                 <td class="width_65"><input type="text" ng-model="manualClaim.manualClaimObj.field3B" class="width_100 dark-bg"></td>
-                                <td class="width_20"><input type="text" ng-model="manualClaim.manualClaimObj.typeOfBill" class="width_100"></td>
+                                <td class="width_20"><input type="text" ng-model="manualClaim.manualClaimObj.typeOfBill" class="width_100" required></td>
                             </tr>
                             <tr>
                                 <td class="" colspan="3">
@@ -349,10 +349,10 @@
                                             <td class="width_25" rowspan="2"><font class="numbers inline-numbers">7</font><input type="text" ng-model="manualClaim.manualClaimObj.field7" class="width_100 height_100"></td>
                                         </tr>
                                         <tr>
-                                            <td class="width_20"><input type="text" ng-model="manualClaim.manualClaimObj.providerTaxID" class="width_100"></td>
+                                            <td class="width_20"><input type="text" ng-model="manualClaim.manualClaimObj.providerTaxID" class="width_100" required></td>
                                             <td>
-                                                <div class="width_50 pull-left"><input type="text" ng-model="manualClaim.manualClaimObj.billingPeriodFrom" class="width_100"></div>
-                                                <div class="width_50 pull-left" style="border-left: 1px solid black;"><input type="text" ng-model="manualClaim.manualClaimObj.billingPeriodTo" class="width_100"></div>
+                                                <div class="width_50 pull-left"><input type="text" ng-model="manualClaim.manualClaimObj.billingPeriodFrom" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="manualClaim.manualClaimObj.billingPeriodTo" required></div>
+                                                <div class="width_50 pull-left" style="border-left: 1px solid black;"><input type="text" ng-model="manualClaim.manualClaimObj.billingPeriodTo" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" min-date="manualClaim.manualClaimObj.billingPeriodFrom" required></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -379,7 +379,7 @@
                                     <div>a</div>
                                 </td>
                                 <td>
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientLastName" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientLastName" class="width_100" required></div>
                                 </td>
                             </tr>
                         </table>
@@ -396,7 +396,7 @@
                                     <div>a</div>
                                 </td>
                                 <td>
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientStreet" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientStreet" class="width_100" required></div>
                                 </td>
                             </tr>
                         </table>
@@ -415,7 +415,7 @@
                                     <div>b</div>
                                 </td>
                                 <td>
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientFirstName" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientFirstName" class="width_100" required></div>
                                 </td>
                             </tr>
                         </table>
@@ -429,19 +429,19 @@
                                     <div>b</div>
                                 </td>
                                 <td class="width_35">
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientCity" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientCity" class="width_100" required></div>
                                 </td>
                                 <td class="mile-stone">
                                     <div>c</div>
                                 </td>
                                 <td>
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientState" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientState" class="width_100" required></div>
                                 </td>
                                 <td class="mile-stone">
                                     <div>d</div>
                                 </td>
                                 <td class="width_20">
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientZipcode" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientZipcode" class="width_100" required></div>
                                 </td>
                                 <td class="mile-stone">
                                     <div>e</div>
@@ -523,16 +523,16 @@
                         <table cellspacing="0" class="width_100 line-tr line-td">
                             <tr>
                                 <td class="width_20 white-bg">
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientDOB" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientDOB" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" required></div>
                                 </td>
                                 <td class="width_10 white-bg">
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientGender" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientGender" class="width_100" required></div>
                                 </td>
                                 <td class="width_50">
-                                    <div class="display-inline width_40 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionDate" class="width_100"></div></div>
-                                    <div class="display-inline width_20 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionHour" class="width_100"></div></div>
-                                    <div class="display-inline width_20 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionType" class="width_100"></div></div>
-                                    <div class="display-inline width_20 pull-left no-padding"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionSource" class="width_100"></div></div>
+                                    <div class="display-inline width_40 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionDate" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" required></div></div>
+                                    <div class="display-inline width_20 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionHour" class="width_100" required></div></div>
+                                    <div class="display-inline width_20 pull-left no-padding" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionType" class="width_100" required></div></div>
+                                    <div class="display-inline width_20 pull-left no-padding"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patientAdmissionSource" class="width_100" required></div></div>
                                 </td>
                                 <td class="width_10 white-bg">
                                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.dhr" class="width_100"></div>
@@ -546,7 +546,7 @@
                         <table cellspacing="0" class="width_100 line-tr line-td">
                             <tr>
                                 <td class="width_10 white-bg">
-                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.status" class="width_100"></div>
+                                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.status" class="width_100" required></div>
                                 </td>
                                 <td class="width_60">
                                     <div class="inline-block width_9" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.conditionCodes18" class="width_100"></div></div>
@@ -610,15 +610,15 @@
                                 </td>
                                 <td class="width_35">
                                     <div class="static-label display-inline width_100 text-center"><font class="numbers">35</font>OCCURRENCE</div><br/>
-                                    <div class="static-label inline-block width_30">CODE</div>
-                                    <div class="static-label inline-block width_35">FROM</div>
-                                    <div class="static-label inline-block width_35">THROUGH</div>
+                                    <div class="static-label inline-block width_20">CODE</div>
+                                    <div class="static-label inline-block width_40">FROM</div>
+                                    <div class="static-label inline-block width_40">THROUGH</div>
                                 </td>
                                 <td class="width_35">
                                     <div class="static-label display-inline width_100 text-center"><font class="numbers">36</font>OCCURRENCE</div><br/>
-                                    <div class="static-label inline-block width_30">CODE</div>
-                                    <div class="static-label inline-block width_35">FROM</div>
-                                    <div class="static-label inline-block width_35">THROUGH</div>
+                                    <div class="static-label inline-block width_20">CODE</div>
+                                    <div class="static-label inline-block width_40">FROM</div>
+                                    <div class="static-label inline-block width_40">THROUGH</div>
                                 </td>
                                 <td class="width_10">
                                     <div class="static-label"><font class="numbers">37</font></div>
@@ -638,15 +638,15 @@
                             <tr>
                                 <td class="width_33">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode31A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate31A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate31A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_33">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode32A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate32A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate32A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_33">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode33A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate33A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate33A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                             </tr>
                         </table>
@@ -658,17 +658,17 @@
                             <tr>
                                 <td class="width_20">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode34A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate34A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate34A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_35">
-                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode35A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom35A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough35A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_20" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode35A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_40" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom35A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
+                                    <div class="display-inline pull-left width_40"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough35A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_35">
-                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode36A" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payorId" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough36A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_20" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode36A" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_40" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom36A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
+                                    <div class="display-inline pull-left width_40"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough36A" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_10">
                                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.field37A" class="width_100"></div>
@@ -685,15 +685,15 @@
                             <tr>
                                 <td class="width_33">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode31B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate31B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate31B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_33">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode32B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate32B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate32B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_33">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode33B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate33B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate33B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                             </tr>
                         </table>
@@ -705,17 +705,17 @@
                             <tr>
                                 <td class="width_20">
                                     <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode34B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate34B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_70"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceDate34B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_35">
-                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode35B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom35B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough35B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_20" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode35B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_40" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom35B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
+                                    <div class="display-inline pull-left width_40"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough35B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_35">
-                                    <div class="display-inline pull-left width_30" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode36B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom36B" class="width_100"></div></div>
-                                    <div class="display-inline pull-left width_35"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough36B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_20" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceCode36B" class="width_100"></div></div>
+                                    <div class="display-inline pull-left width_40" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceFrom36B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
+                                    <div class="display-inline pull-left width_40"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.occurrenceThrough36B" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                                 </td>
                                 <td class="width_10">
                                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.field37B" class="width_100"></div>
@@ -950,24 +950,24 @@
             </tr>
         </table>
         <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
-            <tr ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines">
+            <tr ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines" on-repeat-end="manualClaim.checkReviewMode()">
                 <td class="width_5 border">
-                    <div class=""><input type="text" ng-model="serviceLine.revenueCode" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.revenueCode" class="width_100" required></div>
                 </td>
                 <td class="width_33 border">
-                    <div class=""><input type="text" ng-model="serviceLine.serviceDescription" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.serviceDescription" class="width_100" required></div>
                 </td>
                 <td class="width_15 border">
-                    <div class=""><input type="text" ng-model="serviceLine.CPTCode" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.CPTCode" class="width_100" required></div>
                 </td>
                 <td class="width_8 border">
-                    <div class=""><input type="text" ng-model="serviceLine.serviceDate" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.serviceDate" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" required></div>
                 </td>
                 <td class="width_8 border">
-                    <div class=""><input type="text" ng-model="serviceLine.serviceUnits" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.serviceUnits" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
-                    <div class=""><input type="text" ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
                     <div class=""><input type="text" ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
@@ -988,7 +988,7 @@
                     </div>
                 </td>
                 <td class="border" style="border-top: 1px solid black;">
-                    <div class=""></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.billingCreationDate" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" required></div>
                 </td>
                 <td class="border dark-night" style="border-top: 2px solid black;">
                     <div class="" style="font-size: 15px;font-weight: 600;">&nbsp;TOTALS</div>
@@ -1036,7 +1036,7 @@
                                 <div class="static-label"><font class="numbers">56</font>NPI</div>
                             </td>
                             <td class="width_80">
-                                <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.companyNPI" class="width_100"></div>
+                                <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.companyNPI" class="width_100" required></div>
                             </td>
                         </tr>
                     </table>
@@ -1046,25 +1046,25 @@
         <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
             <tr>
                 <td class="border width_20">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payerNameA" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payerNameA" class="width_100" required></div>
                 </td>
                 <td class="border width_13">
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.healthPlanIdA" class="width_100"></div>
                 </td>
                 <td class="border width_8">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.isInformationReleasedA" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.isInformationReleasedA" class="width_100" required></div>
                 </td>
                 <td class="border" style="width: 1%;">
                     &nbsp;
                 </td>
                 <td class="border width_8">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.isBenefitAssignedA" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.isBenefitAssignedA" class="width_100" required></div>
                 </td>
                 <td class="border width_15">
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.priorPaymentA" class="width_100"></div>
                 </td>
                 <td class="border width_15">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.amountInDueA" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.amountInDueA" class="width_100" required></div>
                 </td>
                 <td class="border_2 width_20">
                     <table cellspacing="0" class="width_100 line-td">
@@ -1081,7 +1081,7 @@
             </tr>
             <tr>
                 <td class="border width_20">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payerNameB" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payerNameB" class="width_100" required></div>
                 </td>
                 <td class="border width_13">
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.healthPlanIdB" class="width_100"></div>
@@ -1116,7 +1116,7 @@
             </tr>
             <tr>
                 <td class="border width_20">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payerNameC" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.payerNameC" class="width_100" required></div>
                 </td>
                 <td class="border width_13">
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.healthPlanIdC" class="width_100"></div>
@@ -1173,13 +1173,13 @@
         <table cellspacing="0" class="width_100 first_sec shadow-tr remove-top-border">
             <tr>
                 <td class="border width_30">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.insuredNameA" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.insuredNameA" class="width_100" required></div>
                 </td>
                 <td class="border width_5">
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.patinetRelationshipA" class="width_100"></div>
                 </td>
                 <td class="border width_30">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.insuredUniqueIdA" class="width_100"></div>
+                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.insuredUniqueIdA" class="width_100" required></div>
                 </td>
                 <td class="border width_15">
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.insuranceGroupNameA" class="width_100"></div>
@@ -1281,7 +1281,7 @@
                 <td class="border_2" style="width: 97%;">
                     <table cellspacing="0" class="width_100 line-td">
                         <tr class="white-bg">
-                            <td class="width_10"><div class="background-letter" data-bg-text="67"><input type="text" ng-model="manualClaim.manualClaimObj.diagnosisCode" class="width_100"></div></td>
+                            <td class="width_10"><div class="background-letter" data-bg-text="67"><input type="text" ng-model="manualClaim.manualClaimObj.diagnosisCode" class="width_100" required></div></td>
                             <td class="width_10"><div class="background-letter" data-bg-text="A"><input type="text" ng-model="manualClaim.manualClaimObj.field67A" class="width_100"></div></td>
                             <td class="width_10"><div class="background-letter" data-bg-text="B"><input type="text" ng-model="manualClaim.manualClaimObj.field67B" class="width_100"></div></td>
                             <td class="width_10"><div class="background-letter" data-bg-text="C"><input type="text" ng-model="manualClaim.manualClaimObj.field67C" class="width_100"></div></td>
@@ -1376,15 +1376,15 @@
                         <tr>
                             <td class="width_30">
                                 <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.principalProcCode" class="width_100"></div></div>
-                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.principalProcDate" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.principalProcDate" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                             </td>
                             <td class="width_30">
                                 <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcCodeA" class="width_100"></div></div>
-                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateA" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateA" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                             </td>
                             <td class="width_30">
                                 <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcCodeB" class="width_100"></div></div>
-                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateB" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateB" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                             </td>
                         </tr>
                         <tr>
@@ -1407,15 +1407,15 @@
                         <tr>
                             <td class="width_30">
                                 <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcCodeC" class="width_100"></div></div>
-                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateC" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateC" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                             </td>
                             <td class="width_30">
                                 <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcCodeD" class="width_100"></div></div>
-                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateD" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateD" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                             </td>
                             <td class="width_30">
                                 <div class="display-inline pull-left width_50" style="border-right: 1px solid black;"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcCodeE" class="width_100"></div></div>
-                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateE" class="width_100"></div></div>
+                                <div class="display-inline pull-left width_50"><div class=""><input type="text" ng-model="manualClaim.manualClaimObj.otherProcDateE" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate"></div></div>
                             </td>
                         </tr>
                     </table>

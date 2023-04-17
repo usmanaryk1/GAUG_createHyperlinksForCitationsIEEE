@@ -585,6 +585,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'CREATE_MANUAL_CLAIM'
                 }
             }).
+            state('app.manual_claim_ub04_review', {
+                url: '/manual_claim_ub04/:id',
+                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
+                controller: 'ManualClaimUB04Ctrl as manualClaim'
+            }).
 //            state('app.billing_tab_1', {
 //                url: '/billing_tab_1',
 //                templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_1'),
@@ -790,7 +795,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 abstract: true,
                 url: '/worksite',
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite'),
-                controller: 'AddWorksiteCtrl as addWorksite'                  
+                controller: 'AddWorksiteCtrl as addWorksite'
             }).
             // add_worksite_tab_1
             state('admin.worksite.tab1', {
