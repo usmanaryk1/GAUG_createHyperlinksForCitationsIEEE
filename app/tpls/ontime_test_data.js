@@ -298,6 +298,7 @@ ontimedata = {
 ontimetest = {
     'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'login',
+    'homepage': 'app.dashboard',
     'patients': ontimedata.patients,
     'employees': ontimedata.employees,
     'dailyAttendance': ontimedata.dailyAttendance,
