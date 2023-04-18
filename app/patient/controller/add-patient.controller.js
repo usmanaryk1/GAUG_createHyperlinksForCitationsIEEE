@@ -138,7 +138,7 @@
                     angular.forEach(ctrl.authorizationDocuments, function (doc) {
                         if (doc.id) {
                             authDocIds.push(doc.id);
-                        }
+                        }                        
                         var docEntity = {
                             id: doc.id,
                             patientId: patientToSave.id,
@@ -149,7 +149,9 @@
                             expiryDate: doc.expiryDate,
                             previousExpiryDate: doc.previousExpiryDate,
                             changeSchedule: doc.changeSchedule,
-                            dateInserted: doc.dateInserted
+                            dateInserted: doc.dateInserted,
+                            authorizationNumber: doc.authorizationNumber,
+                            startDate: doc.startDate
                         };
                         patientToSave.patientAuthorizationDocuments.push(docEntity);
                     });
@@ -801,7 +803,9 @@
                             name: $scope.fileName,
                             expiryDate: $scope.careObj.expiryDate,
                             previousExpiryDate: $scope.careObj.previousExpiryDate,
-                            changeSchedule: $scope.careObj.changeSchedule
+                            changeSchedule: $scope.careObj.changeSchedule,
+                            startDate: $scope.careObj.startDate,
+                            authorizationNumber: $scope.careObj.authorizationNumber,
                         };
                         if ($scope.addPatient.currentAuthorizationDocument) {
                             if ($scope.addPatient.currentAuthorizationDocument.id) {
@@ -845,6 +849,8 @@
                         $scope.careObj.careType = addPatient.careTypeIdMap[$scope.addPatient.currentAuthorizationDocument.careType];
                         $scope.careObj.authorizedHours = $scope.addPatient.currentAuthorizationDocument.authorizedHours;
                         $scope.careObj.expiryDate = $scope.addPatient.currentAuthorizationDocument.expiryDate;
+                        $scope.careObj.startDate = $scope.addPatient.currentAuthorizationDocument.startDate;
+                        $scope.careObj.authorizationNumber = $scope.addPatient.currentAuthorizationDocument.authorizationNumber;
                         $scope.careObj.previousExpiryDate = $scope.addPatient.currentAuthorizationDocument.previousExpiryDate;
                         $scope.careObj.filePath = $scope.addPatient.currentAuthorizationDocument.filePath;
                         $scope.fileName = $scope.addPatient.currentAuthorizationDocument.name;
@@ -1162,6 +1168,23 @@
             $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
             $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
             $formService.resetRadios();
+        };
+
+        ctrl.openPasswordModal = function (index)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'password_modal'),
+                size: 'md',
+                backdrop: true,
+                keyboard: false,
+                controller: 'PasswordModalCtrl as passwordModal'
+            });
+            modalInstance.result.then(function (data) {
+                if (data != null) {
+                    ctrl.editAuthorizationDocument(index);
+                }
+            }).catch(function () {
+            });
         };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);

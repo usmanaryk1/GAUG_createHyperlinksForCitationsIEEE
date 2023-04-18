@@ -161,8 +161,8 @@
                                                 <th class="hidden-xs text-center">ID</th>
                                                 <th class="text-center">Care Type</th>
                                                 <th class="text-center">Authorization Hours</th>
-                                                <th class="text-center">File Name</th>
-                                                <th class="text-center">Expiration Date</th>
+                                                <th class="text-center">Authorization Number</th>
+                                                <th class="text-center">Authorization Date</th>
                                                 <th class="text-center"><em class="fa fa-cog"></em></th>
 
                                             </tr> 
@@ -170,18 +170,22 @@
                                         <tbody>
                                             <tr ng-repeat="authDocument in addPatient.authorizationDocuments">
                                                 <td class="hidden-xs text-center">{{$index + 1}}</td>
-                                                <td align="center">{{authDocument.careTypeTitle}}</td>
+                                                <td align="center" tooltip="{{addPatient.careTypeIdMap[authDocument.careType].billingCode!=null?'Billing Code: '+addPatient.careTypeIdMap[authDocument.careType].billingCode:''}}" tooltip-append-to-body="true">{{authDocument.careTypeTitle}}</td>
                                                 <td align="center">{{authDocument.authorizedHours}}</td>
                                                 <td align="center">
-                                                    <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}?userFileName={{authDocument.name}}">
-                                                        {{authDocument.name}}.{{authDocument.filePath.substring(authDocument.filePath.lastIndexOf('.') + 1)}}
-                                                    </a>
+                                                    {{authDocument.authorizationNumber}}                                                    
                                                 </td> 
-                                                <td align="center">{{authDocument.expiryDate|date:dateFormat}}</td> 
+                                                <td align="center"><span ng-if="authDocument.startDate != null">{{authDocument.startDate|date:dateFormat}} -</span> {{authDocument.expiryDate|date:dateFormat}}</td> 
                                                 <td align="center">
-                                                    <a class="btn btn-warning btn-sm" ng-click="addPatient.editAuthorizationDocument($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
-                                                    &nbsp;&nbsp;
-                                                    <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);" ng-if="authDocument.id === null || authDocument.id === undefined"><em class="fa fa-trash"></em></a>
+                                                    <a class="btn btn-warning btn-sm" ng-click="addPatient.openPasswordModal($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
+                                                    <span ng-if="authDocument.id === null || authDocument.id === undefined">
+                                                        &nbsp;&nbsp;
+                                                        <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);" ><em class="fa fa-trash"></em></a>
+                                                    </span>
+                                                    <span>
+                                                        &nbsp;&nbsp;
+                                                        <a class="btn btn-success btn-sm"  ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}?userFileName={{authDocument.name}}" tooltip="{{authDocument.name}}.{{authDocument.filePath.substring(authDocument.filePath.lastIndexOf('.') + 1)}}"><em class="fa fa-download "></em></a>
+                                                    </span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -394,6 +398,15 @@
     </div>
     <div class="form-group-separator"></div>
     <div class="form-group">
+    <label class="col-sm-4 control-label add-padding-modal" for="authNumber">
+        Authorization Number
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <input class="form-control" name="authNumber" maxlength="50" type="text" ng-model="careObj.authorizationNumber"> 
+    </div>
+    </div>
+    <div class="form-group-separator"></div>
+    <div class="form-group">
     <label class="col-sm-4 control-label" for="field-2">Authorization</label>
     <div class="col-sm-8">
     <div flow-init="uploadFile" flow-file-added="fileAdded($file, $flow)" flow-file-success="fileUploaded($message,$file,$flow)" flow-files-submitted="fileSelected($file,$flow)" flow-file-error="fileError( $file, $message, $flow )">
@@ -439,10 +452,23 @@
     </div>
     <div class="form-group-separator"></div>
     <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-2">Start Date</label>
+    <div class="col-sm-8">
+    <div class="input-group" style="z-index:1060">
+    <input type="text" class="form-control datepicker" name="authStartDate" data-format="mm/dd/yyyy" ng-model="careObj.startDate" max-date="careObj.expiryDate">
+
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-calendar"></i></a>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="form-group-separator"></div>
+    <div class="form-group">
     <label class="col-sm-4 control-label" for="field-2">Expiration Date</label>
     <div class="col-sm-8">
     <div class="input-group" style="z-index:1060">
-    <input type="text" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-model="careObj.expiryDate" min-date="addPatient.patient.authorizationStartDate" ng-change="authorizationEndDateChanged();" data-validate="required,date"  data-message-required="Please select Expiration Date." required>
+    <input type="text" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-model="careObj.expiryDate" min-date="careObj.startDate" ng-change="authorizationEndDateChanged();" data-validate="required,date"  data-message-required="Please select Expiration Date." required>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-calendar"></i></a>

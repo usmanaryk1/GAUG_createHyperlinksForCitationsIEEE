@@ -120,7 +120,9 @@
             ctrl.reviewedFilters.processedOn = $filter('date')(new Date(), $rootScope.dateFormat);
             $rootScope.maskLoading();
             BillingDAO.processSessions(ctrl.reviewedFilters, payload).then(function (res) {
-                window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                if (ctrl.billingSessions != null && ctrl.billingSessions.length > 0 && ctrl.billingSessions[0].claimType != 'UB04') {
+                    window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                }
                 $state.go('app.billing_batch', {id: res.id});
             }).catch(function (e) {
                 toastr.error("Billing sessions cannot be processed.");
