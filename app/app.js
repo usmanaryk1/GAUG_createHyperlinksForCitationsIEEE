@@ -1263,7 +1263,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             });
-    $httpProvider.interceptors.push([function() {
+    $httpProvider.interceptors.push(['$q',function($q) {
             return {
                 request: function(config) {
                     config.headers = config.headers || {};
@@ -1280,7 +1280,26 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         $httpProvider.defaults.headers.common['userName'] = userName;
                     }
                     return config;
+                }, // optional method
+                'response':function(response){
+                    return response;
+                },
+                'responseError': function(response) {
+                    var deferred=$q.defer();
+                    if (response.status == 401) {
+                        delete_cookie("cc");
+                        delete_cookie("token");
+                        delete_cookie("un");
+                        window.location.hash = '#/app/login';
+                        toastr.clear();
+                        return deferred.promise;
+                     
+//                        return $q.when(response);
+                    }
+                    // do something on success
+                    return $q.reject(response);
                 }
+
             };
         }]);
 });
