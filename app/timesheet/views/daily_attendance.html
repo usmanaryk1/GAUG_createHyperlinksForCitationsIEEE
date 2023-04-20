@@ -45,7 +45,7 @@
 //                                                    });
 //                                                });
                                             </script>
-                                            <select class="form-control" id="sboxit-2" ng-model="dAttendance.empName" ng-change="dAttendance.filterTimesheet()" ng-options='(emp.fName+" "+emp.lName) as (emp.fName+" "+emp.lName) for emp in dAttendance.employeeList'>
+                                            <select class="form-control" id="sboxit-2" ng-model="dAttendance.searchParams.staffingCordinatorId" ng-change="dAttendance.filterTimesheet()" ng-options='emp.id as (emp.label) for emp in dAttendance.employeeList'>
                                                 <option value="">Select Coordinator</option>
                                             </select>
                                         </div>
@@ -63,7 +63,7 @@
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="dAttendance.fromDate" ng-change="dAttendance.filterTimesheet()" max-date="dAttendance.toDate">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="dAttendance.searchParams.startDate" ng-change="dAttendance.filterTimesheet()" max-date="dAttendance.searchParams.endDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -74,7 +74,7 @@
                                             <label for="field-69" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9 pad_lf0">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="dAttendance.toDate" ng-change="dAttendance.filterTimesheet()" min-date="dAttendance.fromDate">
+                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="dAttendance.searchParams.endDate" ng-change="dAttendance.filterTimesheet()" min-date="dAttendance.searchParams.startDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -89,7 +89,7 @@
                             <div class=" col-sm-8 pull-right" style="padding-right:0px;">
 
                                 <button type="button" class="btn btn-info green_bt  pull-right">Review</button>
-                                <button style="width:auto; margin-right:5px;" class="btn btn-info edit_bt pull-right" type="button">Edit</button>
+                                <!--<button style="width:auto; margin-right:5px;" class="btn btn-info edit_bt pull-right" type="button">Edit</button>-->
 
 
                             </div>
@@ -126,7 +126,7 @@
                                             {{attendance.punchInTime|date :dateFormat}}
                                         </th>
                                         <td>{{attendance.employeeId.fName + " " + attendance.employeeId.lName}}</td>
-                                        <td>{{attendance.patientId.FName + " " + attendance.patientId.LName}}</td>
+                                        <td>{{attendance.patientId.fName + " " + attendance.patientId.lName}}</td>
                                         <td>{{attendance.punchInTime| date:timeFormat}}</td>
                                         <td>{{attendance.punchOutTime|date:timeFormat }}</td>
                                     </tr>

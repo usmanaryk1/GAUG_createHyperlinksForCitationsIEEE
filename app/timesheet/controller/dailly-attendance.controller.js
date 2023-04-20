@@ -1,89 +1,71 @@
 (function() {
-    function DailyAttendanceCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO) {
+    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
-        ctrl.filterTimesheet = function() {
-            if (ctrl.searchValue == "") {
-                ctrl.searchVallue = null;
-            }
-            if (ctrl.fromDate == "") {
-                ctrl.fromDate = null;
-            }
-            if (ctrl.toDate == "") {
-                ctrl.toDate = null;
-            }
-            if (ctrl.empName == "") {
-                ctrl.empName = null;
-            }
-            ctrl.datatableObj.fnDraw();
-        };
-        $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    if (ctrl.searchValue != null) {
-                        var dataToCompare = data.toString().toLowerCase();
-                        if (dataToCompare.indexOf(ctrl.searchValue.toLowerCase()) < 0) {
-                            return false;
-                        }
-                    }
-                    if (ctrl.empName != null) {
-                        if (data[1].toLowerCase() != ctrl.empName.toLowerCase()) {
-                            return false;
-                        }
-                    }
-                    if (ctrl.fromDate == null && ctrl.toDate == null) {
-                        return true;
-                    }
-                    var date = new Date(data[0]);
-                    if (ctrl.fromDate != null) {
-                        if (date.getTime() < new Date(ctrl.fromDate).getTime()) {
-                            return false;
-                        }
-                    }
-                    if (ctrl.toDate != null) {
-                        if (date.getTime() > new Date(ctrl.toDate).getTime()) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-        );
+        ctrl.searchParams = {};
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
         };
-        TimesheetDAO.retrieveAllDailyAttendance().then(function(res) {
-            showLoadingBar({
-                delay: .5,
-                pct: 100,
-                finish: function() {
-                    if (res) {
-                        ctrl.attendanceList = res;
-                    }
-                }
-            }); // showLoadingBar
-        }).catch(function() {
-            showLoadingBar({
-                delay: .5,
-                pct: 100,
-                finish: function() {
-
-                }
-            }); // showLoadingBar
-            ctrl.attendanceList = ontimetest.dailyAttendance;
-        });
+        ctrl.resetFilters = function() {
+            ctrl.searchParams.startDate = null;
+            ctrl.searchParams.endDate = null;
+            ctrl.selectEmployee(ctrl.employeeList[0]);
+            ctrl.filterTimesheet();
+        };
+        ctrl.rerenderDataTable = function() {
+//            ctrl.datatableObj = {};
+//            var attendanceList = angular.copy(ctrl.attendanceList);
+//            ctrl.attendanceList = [];
+//            $("#example-1_wrapper").remove();
+//            $timeout(function() {
+//                ctrl.attendanceList = attendanceList;
+//            });
+        };
+        ctrl.filterTimesheet = function() {
+            if (ctrl.searchParams.startDate === "") {
+                ctrl.searchParams.startDate = null;
+            }
+            if (ctrl.searchParams.endDate === "") {
+                ctrl.searchParams.endDate = null;
+            }
+            ctrl.retrieveTimesheet();
+            ctrl.datatableObj.fnDraw();
+        }
         retrieveEmployeesData();
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveAll().then(function(res) {
+            EmployeeDAO.retrieveByPosition({'position':'a'}).then(function(res) {
                 ctrl.employeeList = res;
             }).catch(function(data, status) {
-                ctrl.employeeList = ontimetest.employees;
+                toastr.error("Could not load Coordinators");
+//                ctrl.employeeList = ontimetest.employees;
             });
         }
-        ;
+        
+        ctrl.retrieveTimesheet = function() {
+            $rootScope.maskLoading();
+            ctrl.dataRetrieved = false;
+            TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function(res) {
+                ctrl.attendanceList = res;
+                ctrl.rerenderDataTable();
+            }).catch(function() {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function() {
+
+                    }
+                }); // showLoadingBar
+                toastr.error("Could not load Daily Attendance");
+            }).then(function() {
+                $rootScope.unmaskLoading();
+            });
+
+        };
 
 
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", DailyAttendanceCtrl]);
 })();
