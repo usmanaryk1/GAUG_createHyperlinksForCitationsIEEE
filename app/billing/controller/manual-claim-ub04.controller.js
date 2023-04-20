@@ -147,11 +147,12 @@
                     });
                 }
                 ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
-                            window.location.href = $rootScope.serverPath + 'billing/download/batch/' + res.id+"?attachment=true";
+                            window.location.href = $rootScope.serverPath + 'billing/download/batch/' + res.id + "?attachment=true";
                             ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
                             $('input,textarea,select').filter('[required]:visible').removeClass('danger-input');
                             $("#sboxit-1").select2("val", null);

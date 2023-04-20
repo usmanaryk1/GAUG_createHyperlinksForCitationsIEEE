@@ -24,6 +24,13 @@ angular.module('xenon.controllers', []).
         }).
         controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state, $document, UserDAO, $timeout)
         {
+            $rootScope.removeNullKeys = function (obj) {
+                for (var propName in obj) {
+                    if (obj[propName] === null || obj[propName] === undefined) {
+                        delete obj[propName];
+                    }
+                }
+            }
             var userName = getCookie("un");
             if (userName != null) {
                 $rootScope.currentUser = {userName: userName};
@@ -103,7 +110,7 @@ angular.module('xenon.controllers', []).
                                 } else {
                                     toastr.error("Password cannot be changed.");
                                     $rootScope.resetPasswordModal.close();
-                                }                                
+                                }
                             }).then(function () {
                                 $rootScope.unmaskLoading();
                             });

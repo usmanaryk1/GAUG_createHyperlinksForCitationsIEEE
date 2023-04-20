@@ -227,6 +227,7 @@
                     });
                     ctrl.billingClaimObj.authorizedCodes = ctrl.billingClaimObj.authorizedCodes.join(',');
                 }
+                $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
