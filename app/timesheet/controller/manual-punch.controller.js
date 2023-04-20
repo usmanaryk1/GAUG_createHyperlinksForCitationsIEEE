@@ -3,9 +3,16 @@
         var ctrl = this;
         ctrl.todaysDate = new Date();
         var timeFormat = 'hh:mm:ss a';
+        ctrl.editTimesheet = null;
         ctrl.resetManualPunch = function() {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
-            ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime};
+            if (ctrl.editTimesheet) {
+                ctrl.attendanceObj.punchInTime = ctrl.currentTime;
+                ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
+                ctrl.attendanceObj.punchInDate = null;
+            } else {
+                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime};
+            }
         };
         ctrl.resetManualPunch();
         ctrl.retrieveEmployees = retrieveEmployeesData;
@@ -19,8 +26,12 @@
             } else if ($state.current.name.indexOf('employee') > 0) {
                 ctrl.attendanceObj.employeeId = Number(id);
             } else {
+                ctrl.editTimesheet = true;
                 TimesheetDAO.get({id: id}).then(function(res) {
                     ctrl.attendanceObj = res;
+                    ctrl.empObj = angular.copy(ctrl.attendanceObj.employeeId);
+                    ctrl.patientObj = angular.copy(ctrl.attendanceObj.patientId);
+
                     if (ctrl.attendanceObj.employeeId != null) {
                         ctrl.attendanceObj.employeeId = ctrl.attendanceObj.employeeId.id;
                     }
@@ -37,6 +48,8 @@
 
                 });
             }
+        }else{
+            ctrl.editTimesheet = false;
         }
 
         retrieveEmployeesData();
@@ -57,7 +70,30 @@
             });
         }
         ;
+        
+        var mergeDateAndTime=function(date,time){
+            date=new Date(date);
+            var hours = Number(time.match(/^(\d+)/)[1]);
+            var minutes = Number(time.match(/:(\d+)/)[1]);
+            var seconds = time.substr(time.lastIndexOf(":")+1,2);
+            var AMPM = time.match(/\s(.*)$/)[1];
+            if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
+                hours = hours + 12;
+            if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
+                hours = hours - 12;
+            date.setHours(hours,minutes,seconds);
+            return date;
+        };
+        
+//        var verifyTimeValidation=function(){
+//            var punchInTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchInTime);
+//            var punchOutTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchOutTime);
+//            if(punchInTime.getTime()<)
+//            
+//        };
+        
         ctrl.saveManualAttendance = function() {
+          
             if ($("#manual_punch_form")[0].checkValidity()) {
                 $rootScope.maskLoading();
                 if (ctrl.attendanceObj.id == null) {
@@ -75,10 +111,19 @@
                         $rootScope.unmaskLoading();
                     });
                 } else {
-                    TimesheetDAO.update(ctrl.attendanceObj).then(function() {
+                    var timesheetObj = angular.copy(ctrl.attendanceObj);
+                    timesheetObj.punchInTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchInTime);
+                    timesheetObj.punchOutTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchOutTime);
+                    if (timesheetObj.employeeId != null) {
+                        timesheetObj.employeeId = {id: ctrl.attendanceObj.employeeId};
+                    }
+                    if (timesheetObj.patientId != null) {
+                        timesheetObj.patientId = {id: ctrl.attendanceObj.patientId};
+                    }
+                    TimesheetDAO.update(timesheetObj).then(function() {
                         toastr.success("Manual punch saved.");
 //                        ctrl.resetManualPunch();
-                    }).catch(function() {
+                    }).catch(function(e) {
                         if (e.data != null) {
                             toastr.error(e.data);
                         } else {

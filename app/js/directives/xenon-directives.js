@@ -851,6 +851,7 @@ angular.module('xenon.directives', []).
         directive('timepicker', function() {
             return {
                 restrict: 'AC',
+                scope: {ngModel: "="},
                 link: function(scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.timepicker))
@@ -869,6 +870,9 @@ angular.module('xenon.directives', []).
                             $p = $this.prev();
 
                     $this.timepicker(opts);
+                    scope.$watch("ngModel",function(value){
+                        $(el).timepicker('setTime', value);
+                    });
 
                     if ($n.is('.input-group-addon') && $n.has('a'))
                     {
@@ -953,7 +957,7 @@ angular.module('xenon.directives', []).
                     var dateWatch = scope.$watch("ngModel", function(value) {
                         if (value != null && value.length >= 10) {
                             $this.datepicker("setDate", new Date(value));
-                            dateWatch();
+//                            dateWatch();
                         }
                     });
                     $(el).blur(function(e) {

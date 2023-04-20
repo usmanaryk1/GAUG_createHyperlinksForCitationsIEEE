@@ -17,7 +17,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
-
+            $rootScope.maskLoading();
             $http({
                 url: ontimetest.weburl + "login",
                 method: 'POST',
@@ -56,7 +56,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                         }
                     }
                 });
-
+                $rootScope.unmaskLoading();
                 // Remove any alert
                 $(".errors-container .alert").slideUp('fast');
 
