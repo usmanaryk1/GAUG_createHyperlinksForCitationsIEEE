@@ -3,10 +3,10 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <span ng-if="manualPunch.editTimesheet==false">Manual Punch</span>
+                <span ng-if="!manualPunch.editTimesheet">Manual Punch</span>
                 <span ng-if="manualPunch.editTimesheet">Update Timesheet</span>
             </h1>
-            <p class="description"  ng-if="manualPunch.editTimesheet==false">
+            <p class="description"  ng-if="!manualPunch.editTimesheet">
                 Make A Manual Punch Record In Case Of Missed Punches
             </p>
             <p class="description"  ng-if="manualPunch.editTimesheet">
@@ -39,7 +39,7 @@
                                 Patient Name
                             </label>
                             <div class="col-sm-9">
-                                <select ng-show="manualPunch.editTimesheet==false" class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="emp.id as (emp.label) for emp in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
+                                <select ng-show="!manualPunch.editTimesheet" class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="emp.id as (emp.label) for emp in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
                                     <option value="">
                                         Select
                                     </option>
@@ -54,7 +54,7 @@
                                 Employee Name
                             </label>
                             <div class="col-sm-9">
-                                <select ng-show="manualPunch.editTimesheet==false" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
+                                <select ng-show="!manualPunch.editTimesheet" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
                                     <option value="">
                                         Select
                                     </option>
