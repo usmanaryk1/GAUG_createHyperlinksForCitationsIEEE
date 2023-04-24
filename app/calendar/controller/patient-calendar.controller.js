@@ -730,6 +730,12 @@
                     if (searchJsonToSend != null && searchJsonToSend.positionIds != null) {
                         searchJsonToSend.positionIds = searchJsonToSend.positionIds.toString();
                     }
+                    if (searchJsonToSend.availableForFullShift) {
+                        var scheduleStartTime = moment($rootScope.patientPopup.data.startDate + ' ' + $rootScope.patientPopup.data.startTime, $rootScope.momentDateFormat + ' ' + $rootScope.timeFormatWithoutAmPm);
+                        var scheduleEndTime = moment($rootScope.patientPopup.data.endDate + ' ' + $rootScope.patientPopup.data.endTime, $rootScope.momentDateFormat + ' ' + $rootScope.timeFormatWithoutAmPm);
+                        searchJsonToSend.scheduleStartTime = scheduleStartTime.format($rootScope.timestampFormat);
+                        searchJsonToSend.scheduleEndTime = scheduleEndTime.format($rootScope.timestampFormat);
+                    }
                     angular.forEach($rootScope.patientPopup.searchParams, function (paramValue, key) {
                         if (paramValue == '') {
                             delete searchJsonToSend[key];
