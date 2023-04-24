@@ -93,14 +93,14 @@
                                 <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" ng-if="patTimesheet.timesheetList.length" datatable-setup cellspacing="0" datatable-obj="patTimesheet.datatableObj">
                                     <thead>
                                         <tr>
-                                            <th width="12%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Date</th>
+                                            <th width="15%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Date</th>
                                             <th width="12%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Time In</th>
                                             <th width="12%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Time Out</th>
-                                            <th width="12%" colspan="1" rowspan="1" aria-controls="example-1" aria-label="Name: activate to sort column ascending"  aria-sort="ascending" tabindex="0" nowrap>Hours</th>
+                                            <th width="11%" colspan="1" rowspan="1" aria-controls="example-1" aria-label="Name: activate to sort column ascending"  aria-sort="ascending" tabindex="0" nowrap>Hours</th>
 
-                                            <th width="19%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Employees Name</th>
-                                            <th width="20%" data-priority="6" nowrap>Actions</th>
-                                            <th width="25%" data-priority="6" nowrap>Signature</th>
+                                            <th width="20%" colspan="1" rowspan="1" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0" nowrap>Employees Name</th>
+                                            <th width="10%" data-priority="6" nowrap>Actions</th>
+                                            <th width="20%" data-priority="6" nowrap>Signature</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -128,12 +128,12 @@
                                                 {{timesheet.employeeId.fName + " " + timesheet.employeeId.lName}}
                                             </td>
                                             <td>
-                                                <div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#/app/edit_timesheet/{{timesheet.id}}"><span class="ed_b"></span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')"><span class="ed_b"></span></a> 
+                                                <div style="float:left; min-width:120px;">
+                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#/app/edit_timesheet/{{timesheet.id}}" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 
-                                                    <a class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static',timesheet.tasks);" href="javascript:;"><span class="ed_b">Tasks </span></a>
+                                                    <a class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static',timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
                                             <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
