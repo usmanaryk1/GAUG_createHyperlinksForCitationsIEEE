@@ -138,7 +138,7 @@
                     angular.forEach(ctrl.authorizationDocuments, function (doc) {
                         if (doc.id) {
                             authDocIds.push(doc.id);
-                        }                        
+                        }
                         var docEntity = {
                             id: doc.id,
                             patientId: patientToSave.id,
@@ -887,7 +887,7 @@
 
                 var map;
                 var geocoder = new google.maps.Geocoder();
-
+                var infowindow = new google.maps.InfoWindow();
 
 
                 var newyork;
@@ -897,18 +897,38 @@
                     newyork = new google.maps.LatLng(40.7127837, -74.00594);
                 }
 
-                var marker
+                var marker, secondaryMarker;
 
 // Add a marker to the map and push to the array.
                 function addMarker(location) {
-//                    clearMarkers();
-//                    marker = new google.maps.Marker({
-//                        position: location,
-//                        map: map,
-//                        draggable: true,
-////                        animation: google.maps.Animation.DROP
-//                    });
                     marker.setPosition(location);
+                }
+
+                function addSecondaryMarker(location) {
+                    if (secondaryMarker == null) {
+                        secondaryMarker = new google.maps.Marker({
+                            position: location,
+                            map: map,
+                            draggable: true
+                        });
+                        google.maps.event.addListener(secondaryMarker, 'drag', function (event) {
+                            $('#GPSLocationSecondary').val(event.latLng);
+                            $('#GPSLocationSecondary').blur();
+                            ctrl.patient.secondLocationLatitude = event.latLng.lat();
+                            ctrl.patient.secondLocationLongitude = event.latLng.lng();
+                        });
+                        google.maps.event.addListener(secondaryMarker, 'dragend', function (event) {
+                            $('#GPSLocationSecondary').val(event.latLng);
+                            $('#GPSLocationSecondary').blur();
+                            ctrl.patient.secondLocationLatitude = event.latLng.lat();
+                            ctrl.patient.secondLocationLongitude = event.latLng.lng();
+                        });
+                        secondaryMarker.addListener('click', function (e) {
+                            showInfo(this.position, infowindow, "Secondary Location", this.content);
+                            infowindow.open(map, this);
+                        });
+                    }
+                    secondaryMarker.setPosition(location);
                 }
                 function initialize()
                 {
@@ -925,21 +945,16 @@
                     el.style.height = doc_height + 'px';
 
                     map = new google.maps.Map(el, mapOptions);
-
-                    // This event listener will call addMarker() when the map is clicked.
-//                    google.maps.event.addListener(map, 'click', function(event) {
-//                        addMarker(event.latLng);
-//                        $('#GPSLocation').val(event.latLng);
-//                        ctrl.patient.locationLatitude = event.latLng.lat();
-//                        ctrl.patient.locationLongitude = event.latLng.lng();
-//
-//                    });
                     marker = new google.maps.Marker({
                         position: newyork,
                         map: map,
-                        draggable: true,
-//                        animation: google.maps.Animation.DROP
+                        draggable: true
                     });
+                    if (ctrl.patient.secondLocationLatitude != null) {
+                        var location = new google.maps.LatLng(ctrl.patient.secondLocationLatitude, ctrl.patient.secondLocationLongitude);
+                        addSecondaryMarker(location);
+                        $('#GPSLocationSecondary').val(location);
+                    }
 
                     google.maps.event.addListener(marker, 'drag', function (event) {
                         $('#GPSLocation').val(event.latLng);
@@ -954,7 +969,17 @@
                         ctrl.patient.locationLatitude = event.latLng.lat();
                         ctrl.patient.locationLongitude = event.latLng.lng();
                     });
-
+                    marker.addListener('click', function (e) {
+                        var content = ctrl.patient.patientAddress.address1;
+                        if (ctrl.patient.patientAddress.address2 != null) {
+                            content += ctrl.patient.patientAddress.address2;
+                        }
+                        content += "<br/>" + ctrl.patient.patientAddress.city + ", ";
+                        content += ctrl.patient.patientAddress.state + ", ";
+                        content += ctrl.patient.patientAddress.zipcode;
+                        showInfo(this.position, infowindow, 'Primary Location', content);
+                        infowindow.open(map, this);
+                    });
                     // Adds a marker at the center of the map.
 //                    addMarker(newyork);
 
@@ -998,6 +1023,53 @@
                         });
                     }
                 });
+                $("#address-search-secondary").click(function (ev)
+                {
+                    ev.preventDefault();
+                    var address = $('#SearchSecondary').val().trim();
+                    if (address.length != 0)
+                    {
+                        geocoder.geocode({'address': address}, function (results, status)
+                        {
+                            if (status == google.maps.GeocoderStatus.OK)
+                            {
+                                $('#GPSLocationSecondary').val(results[0].geometry.location);
+                                $('#GPSLocationSecondary').blur();
+                                ctrl.patient.secondLocationLatitude = results[0].geometry.location.lat();
+                                ctrl.patient.secondLocationLongitude = results[0].geometry.location.lng()
+                                map.setCenter(results[0].geometry.location);
+                                addSecondaryMarker(results[0].geometry.location);
+                            } else {
+                                alert('Geocode was not successful for the following reason: ' + status);
+                            }
+                        });
+                    }
+                });
+
+                function showInfo(latlng, infowindow, title, content) {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'latLng': latlng
+                    }, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (content == null) {
+                                content = results[1].formatted_address;
+                            }
+                            if (results[1]) {
+                                // here assign the data to asp lables
+                                infowindow.setContent('<div id="content">' +
+                                        '<div id="firstHeading" class="firstHeading">' + title + '</div>' +
+                                        '<div id="bodyContent">' + content +
+                                        '</div>' +
+                                        '</div>');
+                            } else {
+                                alert('No results found');
+                            }
+                        } else {
+                            alert('Geocoder failed due to: ' + status);
+                        }
+                    });
+                }
             });
         }
 //        ctrl.uploadFile = {

@@ -44,11 +44,38 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="field-36">
-                            GPS Location
+                            Primary GPS Location
                         </label>
                         <div class="col-sm-9">
-                            <input class="form-control" readonly id="GPSLocation" name="GPSLocation" placeholder="GPS Location" type="text"
+                            <input class="form-control" readonly id="GPSLocation" name="GPSLocation" placeholder="Primary GPS Location" type="text"
                                    data-validate="required" data-message-required="Please search patient's address to establish GPS coordinates."/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-35">
+                            Search
+                        </label>
+                        <div class="col-sm-9" >
+                            <div class="input-group">
+                                <input class="form-control width100 no-right-border form-focus-info" id="SearchSecondary" name="Search" type="text"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button" id="address-search-secondary">
+                                        Go!
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="field-36">
+                            Secondary GPS Location
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly id="GPSLocationSecondary" name="GPSLocation" placeholder="Secondary GPS Location" type="text"/>
                         </div>
                     </div>
                     <div class="form-group-separator">
