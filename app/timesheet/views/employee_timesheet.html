@@ -88,7 +88,8 @@
                         <div class="row">
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
-                                    <button type="button" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.selectEmployee(empTimesheet.emp);empTimesheet.filterTimesheet()" style="width:auto;">Review</button>
+                                    <button type="button" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.selectEmployee(empTimesheet.emp);
+                                        empTimesheet.filterTimesheet()" style="width:auto;">Review</button>
                                     <a href="#/app/manual_punch/employee/{{empTimesheet.emp.id}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
                                         Reset Filters
@@ -137,7 +138,7 @@
                                                 <div style="float:left; min-width:170px;">
                                                     <a class="btn icon-left fa fa-pencil edit_button" href="#/app/edit_timesheet/{{timesheet.id}}"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')"><span class="ed_b"></span></a> 
-                                                    <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static');"><span class="ed_b">Tasks </span></a>
+                                                    <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);"><span class="ed_b">Tasks </span></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -247,13 +248,17 @@
     <div class="modal-body">
     <div class="row">
 
-    <div class="col-sm-12" ng-repeat="task in taskListModal.taskList">
-    <div class="checkbox">
-    <label>
-    <input type="checkbox" ng-disabled="true"id="task{{$index}}" name="task{{$index}}" type="checkbox" ng-model="task.value" >							{{task.label}}
-    </label>
+    <div class="col-sm-12" ng-repeat="task in taskListModal.taskList" ng-if="taskListModal.taskList!=null && taskListModal.taskList.length>0">
+    <div>
+    
+//    <input type="checkbox" ng-disabled="true"id="task{{$index}}" name="task{{$index}}" type="checkbox" ng-model="task.value" >							
+    {{task.companyTasksId.task}}
     </div>
     </div>
+    <div class="col-sm-12" ng-if="taskListModal.taskList==null || taskListModal.taskList.length==0">
+    No tasks are available.
+    
+            </div>
     </div>
     </div>
 

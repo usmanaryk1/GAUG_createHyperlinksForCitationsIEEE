@@ -113,7 +113,7 @@
             });
         }
         ;
-        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop)
+        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop,tasks)
         {
             ctrl.taskListModalOpen = true;
             $rootScope.taskListModal = $modal.open({
@@ -121,7 +121,8 @@
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
-            $rootScope.taskListModal.taskList = [{label: "Slicing", value: false}, {label: "WooCommerce", value: true}, {label: "Programming", value: false}, {label: "SEO Optimize", value: true}];
+//            $rootScope.taskListModal.taskList = [{label: "Slicing", value: false}, {label: "WooCommerce", value: true}, {label: "Programming", value: false}, {label: "SEO Optimize", value: true}];
+            $rootScope.taskListModal.taskList = tasks;
 
         };
 
