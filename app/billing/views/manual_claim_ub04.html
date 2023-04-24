@@ -955,7 +955,11 @@
                     <div class=""><input type="text" ng-model="serviceLine.revenueCode" class="width_100" required></div>
                 </td>
                 <td class="width_33 border">
-                    <div class=""><input type="text" ng-model="serviceLine.serviceDescription" class="width_100" required></div>
+                    <div class="">
+                        <select ng-if="!manualClaim.reviewMode" ng-model="serviceLine.selectedServiceCareType" ng-options="careType as careType.serviceDescription for careType in manualClaim.insurerObj.insuranceCareTypeCollection" class="width_100" required 
+                                ng-change="manualClaim.updateServiceLine(serviceLine);"></select>
+                        <input ng-if="manualClaim.reviewMode" type="text" ng-model="serviceLine.serviceDescription" class="width_100" required disabled>
+                    </div>
                 </td>
                 <td class="width_15 border">
                     <div class=""><input type="text" ng-model="serviceLine.CPTCode" class="width_100" required></div>
@@ -984,7 +988,9 @@
                 </td>
                 <td class="border" colspan="2" style="border-top: 1px solid black;">
                     <div class="" style="font-size: 15px;font-weight: 600;">
-                        <i>&nbsp;PAGE_____OF_____<span class="pull-right">CREATION DATE&nbsp;</span></i>
+                        <i style="position: relative;">&nbsp;PAGE_____OF_____<span class="pull-right">CREATION DATE&nbsp;</span>
+                            <span style="position: absolute;top: -4px;left: 60px;">1</span>
+                            <span style="position: absolute;top: -4px;left: 125px;">1</span></i>
                     </div>
                 </td>
                 <td class="border" style="border-top: 1px solid black;">

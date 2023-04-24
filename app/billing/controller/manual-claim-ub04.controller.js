@@ -98,12 +98,30 @@
                         ctrl.manualClaimObj.serviceLines = [{}];
                     }
                     ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                    $rootScope.paginationLoading = true;
+                    InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
+                        ctrl.insurerObj = res;
+
+                        if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
+                            ctrl.insurerObj.insuranceCareTypeCollection = [];
+                        }
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to retrieve insurance provider.");
+                    }).then(function () {
+                        $rootScope.paginationLoading = false;
+                    });
                 }
             }).catch(function () {
                 toastr.error("Failed to retrieve patient details.");
             }).then(function () {
                 $rootScope.paginationLoading = false;
             });
+        };
+
+        ctrl.updateServiceLine = function (serviceLine) {
+            serviceLine.serviceDescription = serviceLine.selectedServiceCareType.serviceDescription;
+            serviceLine.revenueCode = serviceLine.selectedServiceCareType.revenueCode;
+            serviceLine.CPTCode = serviceLine.selectedServiceCareType.billingCode;
         };
 
         ctrl.addServiceLine = function () {
@@ -148,12 +166,18 @@
                 }
                 ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
-                ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
+                var claimCopy = angular.copy(ctrl.manualClaimObj);
+                //delete composite care type object
+                angular.forEach(claimCopy.serviceLines, function (serviceLine) {
+                    delete serviceLine.selectedServiceCareType;
+                });
+                ctrl.billingClaimObj.claim1500Data = JSON.stringify(claimCopy);
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
                             window.location.href = $rootScope.serverPath + 'billing/download/batch/' + res.id + "?attachment=true";
                             ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
+                            ctrl.insurerObj = undefined;
                             $('input,textarea,select').filter('[required]:visible').removeClass('danger-input');
                             $("#sboxit-1").select2("val", null);
                         }).catch(function () {

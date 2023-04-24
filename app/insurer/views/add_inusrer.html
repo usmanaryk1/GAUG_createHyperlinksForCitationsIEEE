@@ -92,6 +92,20 @@
                                 </select>
                             </div>
                         </div>
+                        <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04'">
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="billingTypeCode">
+                                    Billing Type Code
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" id="billingTypeCode" name="billingTypeCode" maxlength="255"
+                                           ng-model="addInsurer.insurerObj.billingTypeCode" type="text" 
+                                           data-validate="required" data-message-required="Please enter Billing Type Code."/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group-separator">
                         </div>
                         <div class="form-group">
@@ -454,6 +468,31 @@
     </div>
     <div class="col-sm-4">
 
+    </div>
+    </div>
+    </div>
+    <div ng-show="careTypeModel.claimFormType === 'UB04'">
+    <div class="row">
+    <div class="form-group">
+    <label class="col-sm-3 control-label add-padding-modal" for="revenueCode">
+    Revenue Code 
+    </label>
+    <div class="col-sm-5 add-padding-modal">
+    <input class="form-control" id="revenueCode" name="revenueCode" type="text" ng-model="careTypeModel.careTypeObj.revenueCode">
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <label class="col-sm-3 control-label add-padding-modal" for="serviceDescription">
+    Service Description 
+    </label>
+    <div class="col-sm-9 add-padding-modal">
+    <textarea class="form-control" id="serviceDescription" name="serviceDescription" type="text" ng-model="careTypeModel.careTypeObj.serviceDescription" data-validate="required"  data-message-required="Please enter Service Description."></textarea>
+    </div>
     </div>
     </div>
     </div>
