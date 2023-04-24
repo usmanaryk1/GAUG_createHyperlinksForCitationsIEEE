@@ -355,29 +355,24 @@
         </div>
         <br/>
         <div class="row">
-            <div class="col-md-4">
-                <label>Available From</label>
-                <div class="input-group" style="z-index:1060">
-                    <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientPopup.searchParams.availableStartDate" max-date="patientPopup.searchParams.availableEndDate" ng-change="patientPopup.searchParamChanged()">
-                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label>Available To</label>
-                <div class="input-group" style="z-index:1060">
-                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientPopup.searchParams.availableEndDate" min-date="patientPopup.searchParams.availableStartDate" ng-change="patientPopup.searchParamChanged()">
-                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                </div>
-            </div>
-            <div class="col-md-4 filter-checkbox row">
-                <div class="col-md-6">
-                    <label>Live In</label>
-                    <input type="checkbox" id="liveincb" name="liveincb" ng-model="patientPopup.searchParams.forLiveIn" ng-change="patientPopup.searchParamChanged()">
-                </div>
-            </div>
-        </div>
-        <br/>
-        <div class='row'>
+            <!--            <div class="col-md-4">
+                            <label>Available From</label>
+                            <div class="input-group" style="z-index:1060">
+                                <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientPopup.searchParams.availableStartDate" max-date="patientPopup.searchParams.availableEndDate" ng-change="patientPopup.searchParamChanged()">
+                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Available To</label>
+                            <div class="input-group" style="z-index:1060">
+                                <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientPopup.searchParams.availableEndDate" min-date="patientPopup.searchParams.availableStartDate" ng-change="patientPopup.searchParamChanged()">
+                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                            </div>
+                        </div>-->
+
+            <!--            <div class="col-md-4 filter-checkbox pad_lf0">
+            
+                        </div>-->
             <div class="col-md-4">
                 <label>Sex</label>
                 <div>
@@ -398,7 +393,17 @@
                     </select>                    
                 </div>                
             </div>
-        </div>
+            <div class="col-md-4 filter-checkbox pad_lf0" style="padding-top: 20px">
+                <div class="col-md-8">
+                    <label>Available For Full Shift</label>
+                    <input class="cbr" type="checkbox" id="availableForFullShift" name="availableForFullShift" ng-model="patientPopup.searchParams.availableForFullShift" ng-change="patientPopup.searchParamChanged()">
+                </div>
+                <div class="col-md-4">
+                    <label>Live In</label>
+                    <input class="cbr" type="checkbox" id="liveincb" name="liveincb" ng-model="patientPopup.searchParams.forLiveIn" ng-change="patientPopup.searchParamChanged()">
+                </div>
+            </div>
+        </div>               
         <br/>
         <div class='form-group-separator'></div>
         <div class='row'>
