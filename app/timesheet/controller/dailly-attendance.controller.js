@@ -31,7 +31,7 @@
                 ctrl.searchParams.endDate = null;
             }
             ctrl.retrieveTimesheet();
-            ctrl.datatableObj.fnDraw();
+//            ctrl.datatableObj.fnDraw();
         }
         retrieveEmployeesData();
         function retrieveEmployeesData() {
