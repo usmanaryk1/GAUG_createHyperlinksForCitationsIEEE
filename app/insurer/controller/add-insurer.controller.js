@@ -74,7 +74,11 @@
                         //to get the latest one
                         for (var i = length; i > 0; i--) {
                             if (ctrl.selectedCareTypes[j] === ctrl.insurerObj.insuranceCareTypeCollection[i - 1].companyCaretypeId.id) {
-                                finalCareTypeCollection.push(angular.copy(ctrl.insurerObj.insuranceCareTypeCollection[i - 1]));
+                                var careType = angular.copy(ctrl.insurerObj.insuranceCareTypeCollection[i - 1]);
+                                if(insurerToSave.claimFormType === 'UB04' && (!careType.serviceDescription || careType.serviceDescription === '')){
+                                    careType.serviceDescription = careType.companyCaretypeId.careTypeTitle;
+                                }
+                                finalCareTypeCollection.push(careType);
                                 break;
                             }
                         }
@@ -176,6 +180,7 @@
                 keyboard: false
             });
             $rootScope.careTypeModel.unitValues = ontime_data.unitValues;
+            $rootScope.careTypeModel.claimFormType = ctrl.insurerObj.claimFormType;
             //to not open the popup for changes done in this modals
             if (selection) {
                 ctrl.selecteModalOpen = true;
@@ -222,6 +227,8 @@
                                     }
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].modifiers = $rootScope.careTypeModel.careTypeObj.modifiers;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].billingCode = $rootScope.careTypeModel.careTypeObj.billingCode;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].revenueCode = $rootScope.careTypeModel.careTypeObj.revenueCode;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].serviceDescription = $rootScope.careTypeModel.careTypeObj.serviceDescription;
                                 }
                             }
                             if (!pushed) {
@@ -239,6 +246,8 @@
                                     }
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].modifiers = $rootScope.careTypeModel.careTypeObj.modifiers;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].billingCode = $rootScope.careTypeModel.careTypeObj.billingCode;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].revenueCode = $rootScope.careTypeModel.careTypeObj.revenueCode;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].serviceDescription = $rootScope.careTypeModel.careTypeObj.serviceDescription;
                                 }
                             }
                             ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
