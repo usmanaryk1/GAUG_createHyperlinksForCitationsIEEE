@@ -399,6 +399,7 @@
                         id = ctrl.viewEmployee.id;
                     }
                     $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
+                    setWorkSiteData();
                 }
                 $rootScope.employeePopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
