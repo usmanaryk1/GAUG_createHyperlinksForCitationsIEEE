@@ -1,6 +1,6 @@
-(function() {
+(function () {
     'use strict';
-    var PositionDAO = function(resource) {
+    var PositionDAO = function (resource) {
         var api = resource(ontime_data.weburl + 'positions/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
@@ -16,7 +16,6 @@
                 },
                 isArray: true
             },
-
             //this method will be used for user save or update based on the action passed
             update: {
                 method: 'POST'
@@ -33,7 +32,9 @@
                 return api.view(filter).$promise;
             },
             update: function (data) {
-                return api.update({action: data.action}, data).$promise;
+                var action = data.action;
+                delete data.action;
+                return api.update({action: action}, data).$promise;
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
