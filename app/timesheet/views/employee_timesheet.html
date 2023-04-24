@@ -14,7 +14,7 @@
                     <form class="form-horizontal" role="form">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">
+                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px; cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')">
                                     <div class="user_p mar_bt0">
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (empTimesheet.baseUrl + 'file/download/' + empTimesheet.companyCode + '/a/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
                                         <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
@@ -281,3 +281,82 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="modal-5">
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(selectEmployeeModel.baseUrl+'file/download/'+selectEmployeeModel.companyCode+'/a/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
+    <p>{{positions[selectEmployeeModel.employee.position]}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectEmployeeModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Position</strong></label>
+    <div class="col-md-8">
+    {{positions[selectEmployeeModel.employee.position]}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
+    <div class="col-md-8">
+    {{selectEmployeeModel.employee.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
+    <div class="col-md-8">
+    {{selectEmployeeModel.employee.address1}}<div ng-if="selectEmployeeModel.employee.address2 != null">{{selectEmployeeModel.employee.address2}}</div><div>  {{selectEmployeeModel.employee.city}}, {{selectEmployeeModel.employee.state}}, {{selectEmployeeModel.employee.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
+    <div class="col-md-8">
+    {{selectEmployeeModel.employee.dateOfBirth|date :dateFormat}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Social Security Number</strong></label>
+    <div class="col-md-8">
+    {{selectEmployeeModel.employee.ssn | ssn}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectEmployeeModel.close();">Close</button>
+    </div>
+</script>

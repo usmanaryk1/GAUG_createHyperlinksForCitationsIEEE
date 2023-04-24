@@ -159,6 +159,19 @@
             };
 
         };
+        
+        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.selectEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+            });
+            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
+            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
+            $rootScope.selectEmployeeModel.employee = employee;
+
+        };
     }
     ;
     angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", EmployeeTimeSheetCtrl]);
