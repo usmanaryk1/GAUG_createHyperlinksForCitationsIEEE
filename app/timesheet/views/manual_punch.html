@@ -3,10 +3,14 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                Manual Punch
+                <span ng-if="!manualPunch.editTimesheet">Manual Punch</span>
+                <span ng-if="manualPunch.editTimesheet">Update Timesheet</span>
             </h1>
-            <p class="description">
+            <p class="description"  ng-if="!manualPunch.editTimesheet">
                 Make A Manual Punch Record In Case Of Missed Punches
+            </p>
+            <p class="description"  ng-if="manualPunch.editTimesheet">
+                Edit A Timesheet Record By Following Information
             </p>
         </div>
     </div>
@@ -25,6 +29,7 @@
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="manualPunch.resetManualPunch()">
                                     Reset To Default
                                 </button>
+                                
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -34,11 +39,12 @@
                                 Patient Name
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="emp.id as (emp.label) for emp in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
+                                <select ng-show="!manualPunch.editTimesheet" class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="emp.id as (emp.label) for emp in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
                                     <option value="">
                                         Select
                                     </option>
                                 </select>
+                                <div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.patientObj.fName+" "+manualPunch.patientObj.lName}}</div>
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -48,11 +54,12 @@
                                 Employee Name
                             </label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
+                                <select ng-show="!manualPunch.editTimesheet" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
                                     <option value="">
                                         Select
                                     </option>
                                 </select>
+                                <div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.empObj.fName+" "+manualPunch.empObj.lName}}</div>
                             </div>
                         </div>
                         <div class="form-group-separator">
