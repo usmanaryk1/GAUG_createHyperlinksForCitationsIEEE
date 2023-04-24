@@ -35,6 +35,8 @@
                 ctrl.calculateTotalCharges();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        if (!isNaN(serviceLine.totalCharges))
+                            serviceLine.totalCharges = $filter('number')(serviceLine.totalCharges, 2);
                         if (serviceLine.serviceDate)
                             serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
                     });
@@ -51,6 +53,8 @@
                     ctrl.calculateTotalCharges();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                            if (!isNaN(serviceLine.totalCharges))
+                                serviceLine.totalCharges = $filter('number')(serviceLine.totalCharges, 2);
                             if (serviceLine.serviceDate)
                                 serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
                         });
@@ -138,6 +142,10 @@
                 ctrl.manualClaimObj.serviceLines.splice(index, 1);
             }
             ctrl.calculateTotalCharges();
+        };
+        
+        ctrl.formatNumber = function(index, model){
+            ctrl.manualClaimObj.serviceLines[index][model] = $filter('number')(ctrl.manualClaimObj.serviceLines[index][model], 2);
         };
 
         ctrl.processManualClaim = function () {
