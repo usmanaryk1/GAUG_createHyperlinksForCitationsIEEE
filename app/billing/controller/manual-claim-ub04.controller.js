@@ -183,7 +183,7 @@
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
-                            window.location.href = $rootScope.serverPath + 'billing/download/batch/' + res.id + "?attachment=true";
+                            window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
                             ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
                             ctrl.insurerObj = undefined;
                             $('input,textarea,select').filter('[required]:visible').removeClass('danger-input');

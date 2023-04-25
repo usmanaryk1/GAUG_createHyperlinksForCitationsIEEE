@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="panel-body pad_top0">
-                    <div class="form-group col-sm-5 pull-left" ng-if="billingSession.billingSessions.length && billingSession.processdMode">
+                    <div class="form-group col-sm-3 pull-left" ng-if="billingSession.billingSessions.length && billingSession.processdMode">
                         <label class="control-label pull-left" style="min-width:110px;margin-top: 7px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left">
                             <select class="form-control input-sm" ng-model="billingSession.viewRecords" ng-change="billingSession.changeViewRecords()">
@@ -98,9 +98,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="pull-right col-sm-7 pad0" ng-if="billingSession.processdMode">
+                    <div class="pull-right col-sm-9 pad0" ng-if="billingSession.processdMode">
                         <div>
-                            <a ng-if="billingSession.billingSessions[0].claimType!='UB04'" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                            <a style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download">Download EDI</a>
                             <a ng-if="billingSession.billingSessions[0].claimType=='UB04'" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/download/batch/{{billingSession.sessionId}}" download>Download UB04</a>
