@@ -404,13 +404,13 @@
         function setValidationsForTab2(wages) {
             if (wages && wages === 'S') {
                 $("input[name='Salary']").attr('required', true);
-                $("input[name='rate1']").attr('required', false);
+                $("select[name='rate1']").attr('required', false);
                 $("input[name='Rate1']").attr('required', false);
                 $("input[name='OTRate']").attr('required', false);
                 $("input[name='HDRate']").attr('required', false);
             } else {
                 $("input[name='Salary']").attr('required', false);
-                $("input[name='rate1']").attr('required', true);
+                $("select[name='rate1']").attr('required', true);
                 $("input[name='Rate1']").attr('required', true);
                 $("input[name='OTRate']").attr('required', true);
                 $("input[name='HDRate']").attr('required', true);
