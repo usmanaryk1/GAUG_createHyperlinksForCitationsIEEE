@@ -4,22 +4,22 @@
             <div class="panel-body">
                 <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form"  ng-submit="addEmployee.saveEmployee()">
                     <div flow-init="addEmployee.profileUploadFile" flow-file-added="addEmployee.profileFileAdded($file, $flow)" flow-file-success="addEmployee.profileFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.profileFileSelected($file,$flow)" flow-file-error="addEmployee.profileFileError( $file, $message, $flow )"> 
-                    <div class="row">
+                        <div class="row">
                             <div class="col-sm-6">
-                            <div ng-if="addEmployee.editMode">
+                                <div ng-if="addEmployee.editMode">
                                     <div class="user_p">
-                                        <img alt="user" class="img-cirlce img-responsive" ng-show="addEmployee.hideLoadingImage && !addEmployee.disableProfileUploadButton" imageonload="addEmployee.hideLoadingImage" ng-src="{{(addEmployee.employee.profileImage != null && addEmployee.employee.profileImage != '') ? (addEmployee.baseUrl + 'file/download/' + addEmployee.companyCode + '/a/' + addEmployee.employee.profileImage) : ('assets/images/user-5.png')}}"/>
-                                    <img alt="user" class="img-cirlce img-responsive" ng-show="!addEmployee.hideLoadingImage || addEmployee.disableProfileUploadButton" src="assets/images/loading.gif"/>
+                                        <img alt="user" class="img-cirlce img-responsive" ng-show="addEmployee.hideLoadingImage && !addEmployee.disableProfileUploadButton" imageonload="addEmployee.hideLoadingImage" ng-src="{{(addEmployee.employee.profileImage != null && addEmployee.employee.profileImage != '') ? (addEmployee.baseUrl + 'file/download/' + addEmployee.companyCode + '/c/' + addEmployee.employee.profileImage) : ('assets/images/user-5.png')}}"/>
+                                        <img alt="user" class="img-cirlce img-responsive" ng-show="!addEmployee.hideLoadingImage || addEmployee.disableProfileUploadButton" src="assets/images/loading.gif"/>
                                     </div>
-                                <div class="user_p_hd">
-                                    <h1>
-                                        {{addEmployee.employee.fName}}
-                                    </h1>
-                                    <p>
-                                        {{addEmployee.employee.lName}}
-                                    </p>
+                                    <div class="user_p_hd">
+                                        <h1>
+                                            {{addEmployee.employee.fName}}
+                                        </h1>
+                                        <p>
+                                            {{addEmployee.employee.lName}}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="col-sm-6 pull-right">
                                 <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.setFromNext(false)">
@@ -53,50 +53,101 @@
                                 <input class="form-control" id="field-29" name="MiddleInitial" maxlength="50" 
                                        type="text" ng-model="addEmployee.employee.middleInitial"/>
                             </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Last Name
-                        </label>
-                        <div class="col-sm-9">
-                            <input class="form-control" name="LastName" type="text" maxlength="100" ng-model="addEmployee.employee.lName"
-                                   data-validate="required" data-message-required="Please enter Last Name."/>
                         </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group" >
-                        <label class="col-sm-3 control-label">
-                            Profile Image
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <input type="file" id="ProfileImage" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" style="color:transparent" ng-disabled="addEmployee.disableProfileUploadButton" />
-                                </div>
-                                <div class="col-sm-9">
-                                    <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
-                                    <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.profileImage != null" ng-click="addEmployee.clearProfileImage()"></i></a>
-                                </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Last Name
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" name="LastName" type="text" maxlength="100" ng-model="addEmployee.employee.lName"
+                                       data-validate="required" data-message-required="Please enter Last Name."/>
                             </div>
-                            <div>
-                                <div ng-show="addEmployee.profileFileObj.errorMsg != null && addEmployee.profileFileObj.errorMsg != ''">
-                                    <span class="red">{{addEmployee.profileFileObj.errorMsg}}</span>
-                                </div> 
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="modal fade" id="cropper-example-2-modal">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Crop Image</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-8" id="cropper-example-2">
+                                                <img flow-img="$flow.files[0]" style="height: 403px;left: 0px;top: 0px;width: 537px;"/>
+                                                <!--<img src="img/picture.jpg" alt="Picture">-->
+
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div>
+                                                    Preview:
+                                                </div>
+                                                <div class="img-preview preview-lg">
+                                                    <img flow-img="$flow.files[0]" style="height: 201px;left: 0px;top: 0px;width: 268px;"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="vertical-top  pull-right">
+                                                    <button class="btn btn-icon btn-primary" data-method="zoom" data-option="0.1" type="button" tooltip="Zoom In" ng-click="addEmployee.zoomIn()" >
+                                                        <span class="docs-tooltip" >
+                                                            <i class="fa fa-search-plus"></i>
+                                                        </span>
+                                                    </button> 
+                                                    <button class="btn btn-icon btn-primary" data-method="zoom" data-option="-0.1" type="button" tooltip="Zoom Out" ng-click="addEmployee.zoomOut()">
+                                                        <span class="docs-tooltip" >
+                                                            <i class="fa fa-search-minus"></i>
+                                                        </span>
+                                                    </button> 
+                                                    <button class="btn btn-icon btn-primary" data-method="zoom" data-option="-0.1" type="button" tooltip="Reset" ng-click="addEmployee.reset()">
+                                                        <span class="docs-tooltip" >
+                                                            <i class="fa fa-refresh"></i>
+                                                        </span>
+                                                    </button> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-info" ng-click="addEmployee.crop();">Crop</button>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div flow-transfers class="col-md-12 form-control-static">
-                                <div ng-repeat="file in transfers">
-                                    <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.profileShowfileProgress">
-                                        <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-                                            <!--{{file.progress() * 100 | number : 0}} %-->
+                        </div>
+                        <div class="form-group" >
+                            <label class="col-sm-3 control-label">
+                                Profile Image
+                            </label>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="ProfileImage" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" style="color:transparent" ng-disabled="addEmployee.disableProfileUploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/c/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
+                                        <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.profileImage != null" ng-click="addEmployee.clearProfileImage()"></i></a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.profileFileObj.errorMsg != null && addEmployee.profileFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.profileFileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.profileShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                        </div>
+                            </div>
                         </div>
                         <div class="form-group-separator">
                         </div>
