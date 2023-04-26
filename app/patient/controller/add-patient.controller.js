@@ -312,7 +312,7 @@
                         ctrl.isBillingAddressSameAsPatient = 'Yes';
                         $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
                     } else {
-                        if (ctrl.patient.patientAddress && ctrl.patient.patientAddress.toString() === ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0].toString()) {
+                        if (ctrl.patient.patientAddress && JSON.stringify(ctrl.patient.patientAddress) === JSON.stringify(ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0])) {
                             ctrl.isBillingAddressSameAsPatient = 'Yes';
                             $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
                         } else {
