@@ -812,11 +812,11 @@
 
         ctrl.crop = function() {
             ctrl.profileUploadFile.query = $image.cropper("getData");
-            var cropObj=$image.cropper("getData");
-            ctrl.profileUploadFile.headers.x =parseInt(cropObj.x);
-            ctrl.profileUploadFile.headers.y =parseInt(cropObj.y);
-            ctrl.profileUploadFile.headers.height =parseInt(cropObj.height);
-            ctrl.profileUploadFile.headers.width =parseInt(cropObj.width);
+            var cropObj = $image.cropper("getData");
+            ctrl.profileUploadFile.headers.x = parseInt(cropObj.x);
+            ctrl.profileUploadFile.headers.y = parseInt(cropObj.y);
+            ctrl.profileUploadFile.headers.height = parseInt(cropObj.height);
+            ctrl.profileUploadFile.headers.width = parseInt(cropObj.width);
             console.log($image.cropper("getData"));
             ctrl.profileFileObj.flowObj.upload();
             $("#cropper-example-2-modal").modal('hide');
@@ -824,7 +824,9 @@
             ctrl.disableProfileUploadButton = true;
             ctrl.profileShowfileProgress = true;
         }
-
+        ctrl.closeCropModal = function() {
+            $("#cropper-example-2-modal").modal('hide');
+        };
         var $image = $('#cropper-example-2 > img'),
                 cropBoxData,
                 canvasData;

@@ -6,12 +6,12 @@
                     <div flow-init="addEmployee.profileUploadFile" flow-file-added="addEmployee.profileFileAdded($file, $flow)" flow-file-success="addEmployee.profileFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.profileFileSelected($file,$flow)" flow-file-error="addEmployee.profileFileError( $file, $message, $flow )"> 
                         <div class="row">
                             <div class="col-sm-6">
-                                <div ng-if="addEmployee.editMode">
+                                <div >
                                     <div class="user_p">
-                                        <img alt="user" class="img-cirlce img-responsive" ng-show="addEmployee.hideLoadingImage && !addEmployee.disableProfileUploadButton" imageonload="addEmployee.hideLoadingImage" ng-src="{{(addEmployee.employee.profileImage != null && addEmployee.employee.profileImage != '') ? (addEmployee.baseUrl + 'file/download/' + addEmployee.companyCode + '/c/' + addEmployee.employee.profileImage) : ('assets/images/user-5.png')}}"/>
+                                        <img alt="user" class="img-cirlce img-responsive" ng-show="addEmployee.hideLoadingImage && !addEmployee.disableProfileUploadButton" imageonload="addEmployee.hideLoadingImage" ng-src="{{(addEmployee.employee.profileImage != null && addEmployee.employee.profileImage != '') ? (amazonPublicUrl + addEmployee.companyCode + '/' + addEmployee.employee.profileImage) : ('assets/images/user-5.png')}}"/>
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="!addEmployee.hideLoadingImage || addEmployee.disableProfileUploadButton" src="assets/images/loading.gif"/>
                                     </div>
-                                    <div class="user_p_hd">
+                                    <div class="user_p_hd" ng-if="addEmployee.editMode">
                                         <h1>
                                             {{addEmployee.employee.fName}}
                                         </h1>
@@ -113,6 +113,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-info" ng-click="addEmployee.crop();">Crop</button>
+                                        <button type="button" class="btn btn-white" ng-click="addEmployee.closeCropModal();">Close</button>
                                     </div>
                                 </div>
 
@@ -128,7 +129,7 @@
                                         <input type="file" id="ProfileImage" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" style="color:transparent" ng-disabled="addEmployee.disableProfileUploadButton" />
                                     </div>
                                     <div class="col-sm-9">
-                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/c/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{amazonPublicUrl+addEmployee.companyCode}}/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
                                         <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.profileImage != null" ng-click="addEmployee.clearProfileImage()"></i></a>
                                     </div>
                                 </div>
