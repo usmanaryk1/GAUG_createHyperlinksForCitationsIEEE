@@ -126,6 +126,12 @@
             serviceLine.serviceDescription = serviceLine.selectedServiceCareType.serviceDescription;
             serviceLine.revenueCode = serviceLine.selectedServiceCareType.revenueCode;
             serviceLine.CPTCode = serviceLine.selectedServiceCareType.billingCode;
+            serviceLine.modifiers = serviceLine.selectedServiceCareType.modifiers;
+            if (serviceLine.selectedServiceCareType.unitType === 'unit') {
+                serviceLine.unitType = 'UN';
+            } else {
+                serviceLine.unitType = 'DA';
+            }
         };
 
         ctrl.addServiceLine = function () {
@@ -143,8 +149,8 @@
             }
             ctrl.calculateTotalCharges();
         };
-        
-        ctrl.formatNumber = function(index, model){
+
+        ctrl.formatNumber = function (index, model) {
             ctrl.manualClaimObj.serviceLines[index][model] = $filter('number')(ctrl.manualClaimObj.serviceLines[index][model], 2);
         };
 
