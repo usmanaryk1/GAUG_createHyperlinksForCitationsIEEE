@@ -8,7 +8,7 @@
                 <label class="col-sm-2 control-label">Care</label>
 
                 <div class="col-sm-6">
-                    <select class='form-control' ng-model='dispatchConfirm.careType' ng-options="care.id as care.careTypeTitle for care in dispatchConfirm.careTypes">
+                    <select class='form-control' ng-model='dispatchConfirm.careType' ng-change="dispatchConfirm.careTypeChange()" ng-options="care.id as care.careTypeTitle for care in dispatchConfirm.careTypes">
                     </select> 
                 </div>
             </div>

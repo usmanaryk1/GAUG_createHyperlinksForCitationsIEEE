@@ -1,5 +1,5 @@
 (function () {
-    var dispatchConfirmModalController = function ($modalInstance, patientId, PatientDAO, searchParams) {
+    var dispatchConfirmModalController = function ($modalInstance, patientId, PatientDAO, searchParams, DispatchDAO) {
         var ctrl = this;
         ctrl.noFilters = true;
         ctrl.totalRecords = 0;
@@ -11,16 +11,24 @@
         };
         if (searchParams != null) {
             for (var key in searchParams) {
-                if (key!='skip' && key!='limit' && key!='patientId' && searchParams.hasOwnProperty(key)) {
+                if (key != 'skip' && key != 'limit' && key != 'patientId' && searchParams.hasOwnProperty(key)) {
                     var val = searchParams[key];
                     if (val != null) {
                         ctrl.noFilters = false;
                         break;
                     }
-
                 }
             }
         }
+        ctrl.careTypeChange = function () {
+            var paramsToSend = angular.copy(searchParams);
+            if (ctrl.careType != null) {
+                paramsToSend.careTypeId = ctrl.careType;
+            }
+            DispatchDAO.getEmployeeCountForDispatch(paramsToSend).then(function (res) {
+                ctrl.totalRecords = res.count;
+            });
+        };
         PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
             var patientObj = res[0];
             if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length > 0) {
@@ -36,8 +44,9 @@
                 }
                 ctrl.careTypes = careTypesSelected;
                 ctrl.careType = ctrl.careTypes[0].id;
+                ctrl.careTypeChange();
             }
         });
     };
-    angular.module('xenon.controllers').controller('DispatchConfirmModalController', ['$modalInstance', 'patientId', 'PatientDAO', 'searchParams', dispatchConfirmModalController]);
+    angular.module('xenon.controllers').controller('DispatchConfirmModalController', ['$modalInstance', 'patientId', 'PatientDAO', 'searchParams', 'DispatchDAO', dispatchConfirmModalController]);
 })();
