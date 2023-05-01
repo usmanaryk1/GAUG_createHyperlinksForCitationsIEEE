@@ -122,7 +122,7 @@
             }
         };
 
-        ctrl.retrieveEmployees = function () {
+        ctrl.prepareSearchCriteria = function(){
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = (ctrl.pageNo - 1) * ctrl.searchParams.limit;
             } else {
@@ -138,6 +138,11 @@
             if (searchParams.languages != null) {
                 searchParams.languages = searchParams.languages.toString();
             }
+            return searchParams;
+        }
+
+        ctrl.retrieveEmployees = function () {
+            var searchParams = ctrl.prepareSearchCriteria();
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
                 if (ctrl.isEmployeeSearchPage) {
@@ -979,7 +984,7 @@
                             return ctrl.searchParams.patientId;
                         },
                         searchParams: function () {
-                            return angular.copy(ctrl.searchParams);
+                            return ctrl.prepareSearchCriteria();
                         }
                     }
                 });

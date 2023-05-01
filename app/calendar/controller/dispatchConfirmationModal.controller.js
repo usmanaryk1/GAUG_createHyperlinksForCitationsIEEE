@@ -2,6 +2,7 @@
     var dispatchConfirmModalController = function ($modalInstance, patientId, PatientDAO, searchParams) {
         var ctrl = this;
         ctrl.noFilters = true;
+        ctrl.totalRecords = 0;
         ctrl.ok = function () {
             $modalInstance.close(ctrl.careType);
         };
@@ -9,11 +10,8 @@
             $modalInstance.dismiss('cancel');
         };
         if (searchParams != null) {
-            delete searchParams.skip;
-            delete searchParams.limit;
-            delete searchParams.patientId;
             for (var key in searchParams) {
-                if (searchParams.hasOwnProperty(key)) {
+                if (key!='skip' && key!='limit' && key!='patientId' && searchParams.hasOwnProperty(key)) {
                     var val = searchParams[key];
                     if (val != null) {
                         ctrl.noFilters = false;
