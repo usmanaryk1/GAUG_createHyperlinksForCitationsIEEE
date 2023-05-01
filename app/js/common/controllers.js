@@ -28,6 +28,7 @@ angular.module('xenon.controllers', []).
             if (userName != null) {
                 $rootScope.currentUser = {userName: userName};
             }
+            $rootScope.amazonPublicUrl = "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/";
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;
             $rootScope.isLockscreenPage = false;

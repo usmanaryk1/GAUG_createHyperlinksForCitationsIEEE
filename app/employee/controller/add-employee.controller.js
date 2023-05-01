@@ -1,5 +1,5 @@
 (function() {
-    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope) {
+    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, $modal) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
@@ -240,7 +240,7 @@
 //            }
 //            if (employeeToSave.employeeDocumentId.endDate) {
 //                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-//            }
+            //            }
             $rootScope.maskLoading();
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(res) {
@@ -319,7 +319,7 @@
         ;
 
 
-//        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
+        //        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
         function setFormDynamicValidityMessages() {
             $("#Salary-error").text('Please enter Salary.');
             $("#rate1-error").text('Please select Care Types.');
@@ -766,14 +766,14 @@
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
-                type: "a",
+                type: "c",
                 company_code: ontimetest.company_code
             }
         };
         //When file is selected from browser file picker
         ctrl.profileFileSelected = function(file, flow) {
             ctrl.profileFileObj.flowObj = flow;
-            ctrl.profileFileObj.flowObj.upload();
+
         };
         //When file is uploaded this method will be called.
         ctrl.profileFileUploaded = function(response, file, flow) {
@@ -797,20 +797,67 @@
         //When file is added in file upload
         ctrl.profileFileAdded = function(file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
+            ctrl.profileUploadFile.headers.fileExt = file.getExtension();
             ctrl.employee.profileImage = null;
+            $("#cropper-example-2-modal").modal('show');
             if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.profileFileObj.errorMsg = "Please upload a valid file.";
                 return false;
             }
-            ctrl.disableSaveButton = true;
-            ctrl.disableProfileUploadButton = true;
-            ctrl.profileShowfileProgress = true;
+
             ctrl.profileFileObj.errorMsg = null;
             ctrl.profileFileObj.flow = flow;
             return true;
         };
 
-
+        ctrl.crop = function() {
+            ctrl.profileUploadFile.query = $image.cropper("getData");
+            var cropObj = $image.cropper("getData");
+            ctrl.profileUploadFile.headers.x = parseInt(cropObj.x);
+            ctrl.profileUploadFile.headers.y = parseInt(cropObj.y);
+            ctrl.profileUploadFile.headers.height = parseInt(cropObj.height);
+            ctrl.profileUploadFile.headers.width = parseInt(cropObj.width);
+            console.log($image.cropper("getData"));
+            ctrl.profileFileObj.flowObj.upload();
+            $("#cropper-example-2-modal").modal('hide');
+            ctrl.disableSaveButton = true;
+            ctrl.disableProfileUploadButton = true;
+            ctrl.profileShowfileProgress = true;
+        }
+        ctrl.closeCropModal = function() {
+            $("#cropper-example-2-modal").modal('hide');
+        };
+        var $image = $('#cropper-example-2 > img'),
+                cropBoxData,
+                canvasData;
+        $('body').on('shown.bs.modal', "#cropper-example-2-modal", function() {
+            $image = $('#cropper-example-2 > img'),
+                    cropBoxData,
+                    canvasData;
+            $image.cropper({
+                autoCropArea: 0.5,
+                aspectRatio: 1 / 1,
+                preview: ".img-preview",
+                built: function() {
+                    // Strict mode: set crop box data first
+                    $image.cropper('setCropBoxData', cropBoxData);
+                    $image.cropper('setCanvasData', canvasData);
+                }
+            });
+        }).on('hidden.bs.modal', function() {
+            cropBoxData = $image.cropper('getCropBoxData');
+            canvasData = $image.cropper('getCanvasData');
+            $image.cropper('destroy');
+        });
+        ctrl.zoomIn = function() {
+            $image.cropper('zoom', 0.1);
+        };
+        ctrl.zoomOut = function() {
+            $image.cropper('zoom', -0.1);
+        };
+        ctrl.reset = function() {
+            $image.cropper('reset');
+        };
 
 //        $scope.$watch(function() {
 //            return ctrl.employee.position;
@@ -831,5 +878,5 @@
 //        ctrl.pageInitCall();
     }
     ;
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "$modal", AddEmployeeCtrl]);
 })();
