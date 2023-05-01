@@ -826,6 +826,7 @@
         }
         ctrl.closeCropModal = function() {
             $("#cropper-example-2-modal").modal('hide');
+             ctrl.profileFileObj.flowObj.cancel();
         };
         var $image = $('#cropper-example-2 > img'),
                 cropBoxData,
