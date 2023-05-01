@@ -122,7 +122,7 @@
             }
         };
 
-        ctrl.prepareSearchCriteria = function(){
+        ctrl.prepareSearchCriteria = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = (ctrl.pageNo - 1) * ctrl.searchParams.limit;
             } else {
@@ -991,9 +991,12 @@
                 modalInstance.result.then(function (selectedCareType) {
                     var dispatchObj = angular.copy(ctrl.searchParams);
                     dispatchObj.careTypeId = selectedCareType;
+                    toastr.success("Dispatch creation is in progress...", null, {timeOut: 100000});
                     DispatchDAO.save(dispatchObj).then(function (res) {
+                        toastr.clear();
                         toastr.success("Dispatch message has been sent to all filtered employees.");
                     }).catch(function (data) {
+                        toastr.clear();
                         toastr.error(data.data);
                     });
                 }, function () {
