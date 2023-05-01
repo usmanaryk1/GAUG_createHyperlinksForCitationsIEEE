@@ -95,7 +95,7 @@
                             <div class="dataTables_wrapper form-inline dt-bootstrap">
                                 <div class="table-responsive scroll row">
 
-                                    <table id="example-1" ng-if="viewDispatch.dispatchList.length" class="table table-striped table-bordered  table table-small-font" cellspacing="0">
+                                    <table id="example-1" ng-if="viewDispatch.dispatchList.length" class="table table-bordered table-hover table table-small-font" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th width="25%" ng-class="viewDispatch.applySortingClass('patientName')" ng-click="viewDispatch.applySorting('patientName')" >Patient
@@ -112,19 +112,19 @@
                                             <tr pagination-id="drinksPagination" dir-paginate="dispatch in viewDispatch.dispatchList| itemsPerPage: viewDispatch.searchParams.limit" 
                                                 total-items="totalRecords"
                                                 current-page="viewDispatch.searchParams.pageNo">
-                                                <td> 
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer"> 
 
                                                     <b>{{dispatch.patientName}}</b>{{dispatch.careType?" - "+dispatch.careType:""}}
                                                 </td>
-                                                <td>{{dispatch.dispatchCreatedOn}}</td>
-                                                <td>
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer">{{dispatch.dispatchCreatedOn}}</td>
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer">
                                                     {{dispatch.totalRecipient}}
                                                 </td>
-                                                <td>{{dispatch.assignedEmployeeName}}</td>
-                                                <td style="text-transform: capitalize;">{{dispatch.status}}</td>
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer">{{dispatch.assignedEmployeeName}}</td>
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer; text-transform: capitalize;">{{dispatch.status}}</td>
                                                 <td>
                                                     <div class="center">
-                                                        <a class="btn icon-left fa fa-edit deactivate_bt" ng-if="hasAccess('EDIT_DISPATCH')" ng-href="{{'#/app/dispatch-info/' + dispatch.id}}" tooltip="Edit"><span class="ed_b"></span></a>
+                                                        <!--<a class="btn icon-left fa fa-edit deactivate_bt" ng-if="hasAccess('EDIT_DISPATCH')" ng-href="{{'#/app/dispatch-info/' + dispatch.id}}" tooltip="Edit"><span class="ed_b"></span></a>-->
                                                         <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('DEACTIVATE_DISPATCH') && dispatch.status === 'active'" ng-click="viewDispatch.openStatusModal(dispatch, 'inactive')" tooltip="Deactivate"><span class="ed_b"></span></a>
                                                         <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('DEACTIVATE_DISPATCH') && dispatch.status === 'inactive'" ng-click="viewDispatch.openStatusModal(dispatch, 'active')" tooltip="Activate"><span class="ed_b"></span></a>
                                                         <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_DISPATCH')" href="" ng-click="viewDispatch.openDeleteModal(dispatch)" tooltip="Delete"><span class="ed_b"></span></a>                                                    

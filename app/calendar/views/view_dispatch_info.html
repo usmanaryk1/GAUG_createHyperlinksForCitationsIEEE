@@ -72,7 +72,7 @@
                                                 </td>
                                                 <td ng-if="viewDispatchInfo.dispatchInfo.status === 'active'">
                                                     <a class="btn icon-left fa fa-check edit_button" ng-click="viewDispatchInfo.assignCase(emp)" tooltip="Assign Case"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-pencil edit_button ng-scope" href="" ng-click="viewDispatchInfo.openDispatchResponseModel($index, emp, 'responseModal')" tooltip="Edit"><span class="ed_b"></span></a>
+                                                    <a class="btn icon-left fa fa-reply edit_button ng-scope" href="" ng-click="viewDispatchInfo.openDispatchResponseModel($index, emp, 'responseModal')" tooltip="Response"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref='app.employee-calendar({id:emp.employeeId})' ng-if="hasAccess('VIEW_EMPLOYEE_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a>
                                                 </td>
                                             </tr>
