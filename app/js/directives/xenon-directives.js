@@ -906,6 +906,8 @@ angular.module('xenon.directives', []).
 //                    $(el).mask("99/99/9999");
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
+                    
+                    
                     $(el).keydown(function(e) {
                         var key = e.keyCode || e.which;
                         
@@ -937,7 +939,9 @@ angular.module('xenon.directives', []).
                             $n = $this.next(),
                             $p = $this.prev();
 
-                    $this.datepicker(opts);
+                    $this.datepicker(opts).on('changeDate', function(ev) {
+                        $this.datepicker('hide');
+                    });
                     scope.$watch("minDate", function(value) {
                         if (value == null || value == "") {
                             $this.datepicker("setStartDate", null);
