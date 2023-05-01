@@ -6,6 +6,8 @@
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
+        ctrl.employeeIdMap = {};
+        ctrl.employeeList = [];
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
@@ -13,8 +15,10 @@
         ctrl.resetFilters = function() {
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
-            ctrl.selectEmployee(ctrl.employeeList[0]);
-            ctrl.filterTimesheet();
+            $('#sboxit-2').select2('val', null);
+            ctrl.selectedEmployee = null;
+            ctrl.timesheetList = [];
+            ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
             ctrl.datatableObj = {};
@@ -26,54 +30,32 @@
             });
         };
         ctrl.filterTimesheet = function() {
-            if (ctrl.searchParams.startDate == "") {
-                ctrl.searchParams.startDate = null;
+            if (ctrl.searchParams.employeeId && ctrl.searchParams.employeeId !== null) {
+                if (ctrl.searchParams.startDate == "") {
+                    ctrl.searchParams.startDate = null;
+                }
+                if (ctrl.searchParams.endDate == "") {
+                    ctrl.searchParams.endDate = null;
+                }
+                ctrl.retrieveTimesheet();
+            } else {
+                ctrl.timesheetList = [];
+                ctrl.rerenderDataTable();
             }
-            if (ctrl.searchParams.endDate == "") {
-                ctrl.searchParams.endDate = null;
-            }
-            ctrl.retrieveTimesheet();
 //            ctrl.datatableObj.fnDraw();
         };
-//        $.fn.dataTable.ext.search.push(
-//                function(settings, data, dataIndex) {
-//                    if (ctrl.searchValue != null) {
-//                        var dataToCompare = data.toString().toLowerCase();
-//                        if (dataToCompare.indexOf(ctrl.searchValue.toLowerCase()) < 0) {
-//                            return false;
-//                        }
-//                    }
-//                    if (ctrl.searchParams.startDate == null && ctrl.searchParams.endDate == null) {
-//                        return true;
-//                    }
-//                    var date = new Date(data[0]);
-//                    if (ctrl.searchParams.startDate != null) {
-//                        if (date.getTime() < new Date(ctrl.searchParams.startDate).getTime()) {
-//                            return false;
-//                        }
-//                    }
-//                    if (ctrl.searchParams.endDate != null) {
-//                        if (date.getTime() > new Date(ctrl.searchParams.endDate).getTime()) {
-//                            return false;
-//                        }
-//                    }
-//                    return true;
-//                }
-//        );
         ctrl.retrieveTimesheet = function() {
+            $scope.hideDefaultImage = false;
+            if (ctrl.searchParams.employeeId !== null) {
+                ctrl.selectedEmployee = ctrl.employeeIdMap[ctrl.searchParams.employeeId];
+                if (ctrl.selectedEmployee.profileImage == null || ctrl.selectedEmployee.profileImage == '') {
+                    $scope.hideDefaultImage = true;
+                }
+            }
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
             TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
-//                showLoadingBar({
-//                    delay: .5,
-//                    pct: 100,
-//                    finish: function() {
-//                        if (res) {
-//                            
-//                        }
-//                    }
-//                }); // showLoadingBar
                 ctrl.timesheetList = res;
                 ctrl.rerenderDataTable();
             }).catch(function() {
@@ -91,29 +73,30 @@
 
         };
 
-        ctrl.selectEmployee = function(empObj) {
-            $scope.hideDefaultImage = false;
-            ctrl.selectedEmployee = empObj;
-            if (ctrl.selectedEmployee.profileImage == null || ctrl.selectedEmployee.profileImage == '') {
-                $scope.hideDefaultImage = true;
-            }
-            ctrl.emp = empObj;
-            ctrl.searchParams.employeeId = empObj.id;
-        };
-
         retrieveEmployeesData();
         function retrieveEmployeesData() {
             EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
                 ctrl.employeeList = res;
-                ctrl.selectEmployee(ctrl.employeeList[0]);
-                ctrl.filterTimesheet();
+                ctrl.employeeIdMap = {};
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.employeeIdMap[res[i].id] = res[i];
+                }
+//                $('#sboxit-2').select2('destroy');
+//                $("#sboxit-2").select2({
+//                    placeholder: 'Select your country...',
+////                                                        minimumInputLength: 1,
+//                }).on('select2-open', function()
+//                {
+//                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+//                });
+//                $('#sboxit-2').select2();
+//                ctrl.filterTimesheet();
             }).catch(function(data, status) {
-                ctrl.employeeList = ontimetest.employees;
-                ctrl.selectEmployee(ctrl.employeeList[0]);
+//                ctrl.employeeList = ontimetest.employees;
             });
         }
         ;
-        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop,tasks)
+        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop, tasks)
         {
             ctrl.taskListModalOpen = true;
             $rootScope.taskListModal = $modal.open({
@@ -159,7 +142,7 @@
             };
 
         };
-        
+
         ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectEmployeeModel = $modal.open({

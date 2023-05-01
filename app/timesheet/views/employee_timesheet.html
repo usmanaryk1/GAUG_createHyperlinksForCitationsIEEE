@@ -14,7 +14,7 @@
                     <form class="form-horizontal" role="form">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px; cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')">
+                                <div class="col-sm-4 pad_lf0" ng-show="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null" style="margin-top:-15px; cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')">
                                     <div class="user_p mar_bt0">
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (empTimesheet.baseUrl + 'file/download/' + empTimesheet.companyCode + '/a/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
                                         <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
@@ -38,7 +38,26 @@
                                                                                                 });
                                                                                             });
                                                                                         </script>-->
-                                            <select class="form-control" id="sboxit-2" ng-model="empTimesheet.emp" ng-options='emp as (emp.fName+" "+emp.lName) for emp in empTimesheet.employeeList'>
+                                            <script type="text/javascript">
+                                                jQuery(document).ready(function($)
+                                                {
+                                                    setTimeout(function() {
+                                                        $("#sboxit-2").select2({
+//                                                        minimumResultsForSearch: -1,
+                                                            placeholder: 'Select Employee...',
+//                                                        minimumInputLength: 1,
+//                                                        placeholder: 'Search',
+                                                        }).on('select2-open', function()
+                                                        {
+                                                            // Adding Custom Scrollbar
+                                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                        });
+                                                    }, 200);
+
+                                                });
+                                            </script>
+                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="empTimesheet.searchParams.employeeId" ng-options='emp.id as (emp.fName+" "+emp.lName) for emp in empTimesheet.employeeList'>
+                                            <option value="" selected hidden />
                                             </select>
                                             <!--<input type="text" class="form-control" ng-model="empTimesheet.searchValue" ng-change="empTimesheet.filterTimesheet()">-->
                                         </div>
@@ -255,8 +274,8 @@
     </div>
     <div class="col-sm-12" ng-if="taskListModal.taskList==null || taskListModal.taskList.length==0">
     No tasks are available.
-    
-            </div>
+
+    </div>
     </div>
     </div>
 
