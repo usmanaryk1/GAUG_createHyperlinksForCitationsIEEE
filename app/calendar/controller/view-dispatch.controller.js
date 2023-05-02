@@ -10,7 +10,7 @@
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dispatchCreatedOn', order: 'desc'};
 
         ctrl.navigateToDispatchDetails = function(id){
-            $state.go('aap.dispatch-info', {'id': id})
+            $state.go('app.dispatch-info', {'id': id})
         }
         
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
