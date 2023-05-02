@@ -40,9 +40,9 @@
                             <select class="form-control" id="CareTypes" multiple="multiple" name="CareTypes"
                                     data-validate="required" data-message-required="Please select Care Type." ng-model="addPatient.patient.careTypes"
                                     ng-options='ct.id as ct.companyCaretypeId.careTypeTitle for ct in addPatient.careTypeList'>
-<!--                                <option ng-repeat="ct in addPatient.careTypeList" ng-value="{{ct.id}}">
-                                    {{ct.careTypeTitle}}
-                                </option>-->
+                                <!--                                <option ng-repeat="ct in addPatient.careTypeList" ng-value="{{ct.id}}">
+                                                                    {{ct.careTypeTitle}}
+                                                                </option>-->
                                 <!--                                <option value="1">
                                     Silky Door
                                 </option>
@@ -113,30 +113,30 @@
                             Authorization
                         </label>
                         <div class="col-sm-9">
-                         <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <input type="file" id="contract_file" ng-model="addPatient.patient.authorization" flow-btn name="contract_file" style="color:transparent" ng-disabled="addPatient.disableUploadButton"/>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.patient.authorization}}">{{addPatient.patient.authorization}}</a>
-                                        </div>
+                            <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="contract_file" ng-model="addPatient.patient.authorization" flow-btn name="contract_file" style="color:transparent" ng-disabled="addPatient.disableUploadButton"/>
                                     </div>
-                                    <div>
-                                        <div ng-show="addPatient.fileObj.errorMsg != null && addPatient.fileObj.errorMsg != ''">
-                                            <span class="red">{{addPatient.fileObj.errorMsg}}</span>
-                                        </div> 
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.patient.authorization}}">{{addPatient.patient.authorization}}</a>
                                     </div>
-                                    <div flow-transfers class="col-md-12 form-control-static">
-                                        <div ng-repeat="file in transfers">
-                                            <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addPatient.showfileProgress">
-                                                <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-                                                    <!--{{file.progress() * 100 | number : 0}} %-->
-                                                </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addPatient.fileObj.errorMsg != null && addPatient.fileObj.errorMsg != ''">
+                                        <span class="red">{{addPatient.fileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addPatient.showfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
                         </div>
                     </div>
@@ -207,7 +207,8 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button"  ng-click="addPatient.navigateToTab($event, 'tab5')">
+                            <button style="width:auto;" class="btn btn-info green_bt pull-right" ng-show="addPatient.patient.isSubscriber==false" type="submit">Submit</button>
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-show="addPatient.patient.isSubscriber == true || addPatient.patient.isSubscriber == null" ng-click="addPatient.navigateToTab($event, 'tab5')">
                                 Next »
                             </button>
                             <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button"  ng-click="addPatient.navigateToTab($event, 'tab3')">
