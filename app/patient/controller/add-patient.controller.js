@@ -132,7 +132,7 @@
                                     $state.go('^.tab1', {id: res.id});
                                 }
                             }
-                            if ($rootScope.tabNo == 5) {
+                            if ($rootScope.tabNo == 5 || ($rootScope.tabNo == 4 && ctrl.patient.isSubscriber==false)) {
                                 $state.go('app.patient-list', {status: "active"});
                             }
                             ctrl.patient = res;
