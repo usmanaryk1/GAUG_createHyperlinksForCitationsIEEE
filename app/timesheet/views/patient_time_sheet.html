@@ -399,7 +399,7 @@
 
     <div class="col-sm-12" ng-repeat="task in taskListModal.taskList" ng-if="taskListModal.taskList!=null && taskListModal.taskList.length>0">
     <div>
-    {{task.companyTasksId.task}} <span ng-show="task.value!=null">- {{task.value}}</span>
+    {{task.companyTasksId.task}} <span ng-show="task.value!=null && task.value!='true'">- {{task.value}}</span>
     </div>
     </div>
     <div class="col-sm-12" ng-if="taskListModal.taskList==null || taskListModal.taskList.length==0">

@@ -242,7 +242,7 @@
                         {
                         setTimeout(function () {
                         $("#worksiteDropdown").select2({
-                        placeholder: 'Select Worksite...'                                
+                        placeholder: 'Select Worksite...'
                         }).on('select2-open', function ()
                         {
                         // Adding Custom Scrollbar
@@ -334,9 +334,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3" style="padding-top: 7px;">
+                    <div class="col-md-2" style="padding-top: 7px;">
                         <label>Show Time</label>
                         <input type="checkbox" name="livein" ng-model="calendar.forShowTime">
+                    </div>
+                    <div class="col-md-3" style="padding-top: 7px;" ng-if='calendar.isWorksiteSchedulePage'>
+                        <label>Scheduled Only</label> 
+                        <input type="checkbox" name="schduledOnly" ng-model="calendar.searchParams.scheduledOnly" ng-change="calendar.applySearch()">
                     </div>
                 </div>
             </div>                       

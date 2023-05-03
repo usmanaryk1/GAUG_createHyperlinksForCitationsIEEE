@@ -1374,4 +1374,45 @@ angular.module('xenon.directives', []).
                     }
                 }
             };
+        })
+         .directive('select2', function ($timeout) {
+            return {
+                restrict: 'AC',
+                scope: {select2: "=", ngModel: "="},
+                link: function (scope, el, attr)
+                {
+                    var placeholder = "Select";
+                    if (attr.placeholder != null) {
+                        placeholder = attr.placeholder;
+                    }
+                    $(el).select2({
+                        placeholder: placeholder,
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    scope.$watch("select2", function (value) {
+                        if (value != null) {
+                            $(el).select2({
+                                placeholder: placeholder,
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        }
+                    }, true);
+                    scope.$watch("ngModel", function (value) {
+                        $(el).select2({
+                            placeholder: placeholder,
+                        }).on('select2-open', function ()
+                        {
+                            // Adding Custom Scrollbar
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+
+                    });
+                }
+            }
         });

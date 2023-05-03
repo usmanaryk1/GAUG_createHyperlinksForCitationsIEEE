@@ -12,6 +12,10 @@
                     }, 100);
                     ctrl.retrieveEmployees();
                     ctrl.retrieveAllEmployees();
+                    if ($rootScope.employeePopup != null) {
+                        $rootScope.employeePopup.workSiteList = ctrl.workSiteList;
+                        setWorkSiteData();
+                    }
                 }
             });
         };
@@ -280,6 +284,19 @@
                 $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
             }
         };
+        var setWorkSiteData = function () {
+            if (ctrl.searchParams.workSiteId != null) {
+                $rootScope.employeePopup.data.workSiteId = ctrl.searchParams.workSiteId;
+                $rootScope.employeePopup.workSiteChanged($rootScope.employeePopup.data.workSiteId);
+            }
+            $timeout(function () {
+                $scope.$apply(function () {
+                    if ($rootScope.employeePopup.isWorksiteSchedulePage) {
+                        $rootScope.employeePopup.data.worksiteSchedule = true;
+                    }
+                });
+            });
+        };
         $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
         {
             var data;
@@ -318,15 +335,6 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-
-                    $("#worksiteModalDropdown").select2({
-                        placeholder: 'Select Worksite...',
-                    }).on('select2-open', function ()
-                    {
-                        // Adding Custom Scrollbar
-                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                    });
-
                 }, 200);
                 $rootScope.employeePopup = $modal.open({
                     templateUrl: 'app/calendar/views/employee_calendar_modal.html',
@@ -372,19 +380,7 @@
                 setTimeout(function () {
                     cbr_replace();
                 }, 100);
-                var setWorkSiteData = function () {
-                    if (ctrl.searchParams.workSiteId != null) {
-                        $rootScope.employeePopup.data.workSiteId = ctrl.searchParams.workSiteId;
-                        $rootScope.employeePopup.workSiteChanged($rootScope.employeePopup.data.workSiteId);
-                    }
-                    $timeout(function () {
-                        $scope.$apply(function () {
-                            if ($rootScope.employeePopup.isWorksiteSchedulePage) {
-                                $rootScope.employeePopup.data.worksiteSchedule = true;
-                            }
-                        });
-                    });
-                };
+
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
                     EmployeeDAO.retrieveByPosition({workSiteId: workSiteId}).then(function (res) {
@@ -498,13 +494,6 @@
                                 placeholder: 'Select Patient...',
                                 // minimumInputLength: 1,
                                 // placeholder: 'Search',
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                            $("#worksiteModalDropdown").select2({
-                                placeholder: 'Select Worksite...',
                             }).on('select2-open', function ()
                             {
                                 // Adding Custom Scrollbar
