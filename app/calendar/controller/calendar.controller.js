@@ -142,6 +142,10 @@
             if (searchParams.languages != null) {
                 searchParams.languages = searchParams.languages.toString();
             }
+            if (searchParams.scheduledOnly != null && searchParams.scheduledOnly) {
+                searchParams.scheduleStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                searchParams.scheduleEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+            }
             return searchParams;
         }
 
