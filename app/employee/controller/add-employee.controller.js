@@ -138,7 +138,7 @@
                 validI9Eligibility = false;
             }
             if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.w4FileObj.errorMsg = "Please upload W-4 or I9.";
+                ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
                 validW4 = false;
             }
             return (validApplication && validI9Eligibility && validW4);

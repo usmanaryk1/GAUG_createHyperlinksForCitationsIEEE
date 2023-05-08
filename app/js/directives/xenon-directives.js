@@ -870,7 +870,7 @@ angular.module('xenon.directives', []).
                             $p = $this.prev();
 
                     $this.timepicker(opts);
-                    scope.$watch("ngModel",function(value){
+                    scope.$watch("ngModel", function(value) {
                         $(el).timepicker('setTime', value);
                     });
 
@@ -906,17 +906,22 @@ angular.module('xenon.directives', []).
 //                    $(el).mask("99/99/9999");
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
-                    
-                    
+
+
                     $(el).keydown(function(e) {
                         var key = e.keyCode || e.which;
-                        
+
                         if (key == 37 || key == 38 || key == 39 || key == 40 || key == 8 || key == 46 || key == 191 || key == 9) { // Left / Up / Right / Down Arrow, Backspace, Delete keys
                             return;
                         }
-                        key = String.fromCharCode(key);
-                        var regex = /[0-9|/]/;
-                        if (!regex.test(key)) {
+//                        key = String.fromCharCode(key);
+//                        var regex = /[0-9|/]/;
+//                        if (!regex.test(key)) {
+//                            return false;
+//                        }
+                        if ((key >= 48 && key <= 57) || key === 191 || (key >= 96 && key <= 105) || key === 111) {
+                            return;
+                        } else {
                             return false;
                         }
                     });
