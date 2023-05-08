@@ -16,7 +16,7 @@
                     <form class="form-horizontal" role="form">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px;">                                    
+                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px;" ng-show="patTimesheet.selectedPatient && patTimesheet.selectedPatient !== null" >                                    
                                     <div class="user_av_hd">
                                         <h1><a href="" ng-click="patTimesheet.viewPatient(patTimesheet.selectedPatient.id)">{{patTimesheet.selectedPatient.fName + ' ' + patTimesheet.selectedPatient.lName}}</a></h1>
                                         <!--<p>{{patTimesheet.selectedPatient.position}}</p>-->
@@ -28,7 +28,26 @@
                                         <label class="col-sm-3 control-label">Patient Name</label>
                                         <div class="col-sm-9">
                                             <!--<input type="text" class="form-control" ng-model="patTimesheet.searchValue" ng-change="patTimesheet.filterTimesheet()">-->
-                                            <select class="form-control" id="sboxit-2" ng-model="patTimesheet.pat" ng-options='pat as (pat.fName+" "+pat.lName) for pat in patTimesheet.patientList'>
+                                            <script type="text/javascript">
+                                                jQuery(document).ready(function($)
+                                                {
+                                                    setTimeout(function() {
+                                                        $("#sboxit-2").select2({
+//                                                        minimumResultsForSearch: -1,
+                                                            placeholder: 'Select Patient...',
+//                                                        minimumInputLength: 1,
+//                                                        placeholder: 'Search',
+                                                        }).on('select2-open', function()
+                                                        {
+                                                            // Adding Custom Scrollbar
+                                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                        });
+                                                    }, 200);
+
+                                                });
+                                            </script>
+                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.fName+" "+pat.lName) for pat in patTimesheet.patientList'>
+                                            <option value="" selected hidden />
                                             </select>
                                         </div>
                                     </div>
@@ -81,7 +100,7 @@
                                 <div class="col-sm-6 pull-right">
 
                                     <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);patTimesheet.filterTimesheet()">Review</button>
-                                    <a href="#/app/manual_punch/patient/{{patTimesheet.pat.id}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                    <a href="#/app/manual_punch/patient/{{patTimesheet.searchParams.patientId}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
                                     </button>

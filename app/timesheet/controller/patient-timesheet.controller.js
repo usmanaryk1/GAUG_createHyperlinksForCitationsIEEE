@@ -7,6 +7,8 @@
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
+        ctrl.patientList = [];
+        ctrl.patientIdMap = {};
 
         EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
             if (res.length !== 0) {
@@ -42,8 +44,10 @@
         ctrl.resetFilters = function() {
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
-            ctrl.selectPatient(ctrl.patientList[0]);
-            ctrl.filterTimesheet();
+            $('#sboxit-2').select2('val', null);
+            ctrl.selectedPatient = null;
+            ctrl.timesheetList = [];
+            ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
             ctrl.datatableObj = {};
@@ -55,42 +59,26 @@
             });
         };
         ctrl.filterTimesheet = function() {
-            if (ctrl.searchParams.startDate == "") {
-                ctrl.searchParams.startDate = null;
-            }
-            if (ctrl.searchParams.endDate == "") {
-                ctrl.searchParams.endDate = null;
+            if (ctrl.searchParams.patientId && ctrl.searchParams.patientId !== null) {
+                if (ctrl.searchParams.startDate === "") {
+                    ctrl.searchParams.startDate = null;
+                }
+                if (ctrl.searchParams.endDate === "") {
+                    ctrl.searchParams.endDate = null;
+                }
+                ctrl.retrieveTimesheet();
+            } else {
+                ctrl.timesheetList = [];
+                ctrl.rerenderDataTable();
             }
 //            ctrl.datatableObj.fnDraw();
-            ctrl.retrieveTimesheet();
+
         };
-//        $.fn.dataTable.ext.search.push(
-//                function(settings, data, dataIndex) {
-//                    if (ctrl.searchValue != null) {
-//                        var dataToCompare = data.toString().toLowerCase();
-//                        if (dataToCompare.indexOf(ctrl.searchValue.toLowerCase()) < 0) {
-//                            return false;
-//                        }
-//                    }
-//                    if (ctrl.searchParams.startDate == null && ctrl.searchParams.endDate == null) {
-//                        return true;
-//                    }
-//                    var date = new Date(data[0]);
-//                    if (ctrl.searchParams.startDate != null) {
-//                        if (date.getTime() < new Date(ctrl.searchParams.startDate).getTime()) {
-//                            return false;
-//                        }
-//                    }
-//                    if (ctrl.searchParams.endDate != null) {
-//                        if (date.getTime() > new Date(ctrl.searchParams.endDate).getTime()) {
-//                            return false;
-//                        }
-//                    }
-//                    return true;
-//                }
-//        );
         ctrl.retrieveTimesheet = function() {
             $rootScope.maskLoading();
+            if (ctrl.searchParams.patientId !== null) {
+                ctrl.selectedPatient = ctrl.patientIdMap[ctrl.searchParams.patientId];
+            }
             ctrl.dataRetrieved = false;
             TimesheetDAO.retrievePatientTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
@@ -119,21 +107,16 @@
             });
         };
 
-        ctrl.selectPatient = function(patObj) {
-            ctrl.selectedPatient = patObj;
-            ctrl.pat = patObj;
-            ctrl.searchParams.patientId = patObj.id;
-        };
-
         retrievePatientsData();
         function retrievePatientsData() {
             PatientDAO.retrieveAll({status: 'active'}).then(function(res) {
                 ctrl.patientList = res;
-                ctrl.selectPatient(ctrl.patientList[0]);
-                ctrl.filterTimesheet();
+                ctrl.patientIdMap = {};
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.patientIdMap[res[i].id] = res[i];
+                }
             }).catch(function(data, status) {
-                ctrl.patientList = ontimetest.patients;
-                ctrl.selectPatient(ctrl.patientList[0]);
+//                ctrl.patientList = ontimetest.patients;
             });
         }
         ;
