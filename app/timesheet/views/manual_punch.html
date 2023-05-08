@@ -29,7 +29,7 @@
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="manualPunch.resetManualPunch()">
                                     Reset To Default
                                 </button>
-                                <div class="pull-right" ng-if='!manualPunch.editTimesheet'>
+                                <div class="pull-right" ng-if='hasAccess("WORKSITE_SCHEDULE") && !manualPunch.editTimesheet'>
                                     <input type="checkbox" name="isWorkSite" ng-model="manualPunch.attendanceObj.isWorksitePunch" ng-change='manualPunch.worksiteSelected()'>
                                     <label>Is Work Site Punch?&nbsp;</label>                                    
                                 </div>
