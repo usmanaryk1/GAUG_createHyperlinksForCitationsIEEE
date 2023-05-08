@@ -54,6 +54,41 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
+                            License Or Certificate
+                        </label>
+                        <div class="col-sm-9">
+                            <div flow-init="addEmployee.licenceUploadFile" flow-file-added="addEmployee.licenceFileAdded($file, $flow)" flow-file-success="addEmployee.licenceFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.licenceFileSelected($file,$flow)" flow-file-error="addEmployee.licenceFileError( $file, $message, $flow )">
+                                <!--<input class="form-control" name="Application" type="file" data-message-required="Please upload Application."/>-->
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <input type="file" id="Licence" ng-model="addEmployee.employee.employeeDocumentId.licence" flow-btn name="Licence" style="color:transparent" ng-disabled="addEmployee.disableLicenceUploadButton" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/l/{{addEmployee.employee.employeeDocumentId.licence}}">{{addEmployee.employee.employeeDocumentId.licence}}</a>
+                                        <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.licence != null" ng-click="addEmployee.clearLicence()"></i></a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-show="addEmployee.licenceFileObj.errorMsg != null && addEmployee.licenceFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.licenceFileObj.errorMsg}}</span>
+                                    </div> 
+                                </div>
+                                <div flow-transfers class="col-md-12 form-control-static">
+                                    <div ng-repeat="file in transfers">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.licenceShowfileProgress">
+                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                <!--{{file.progress() * 100 | number : 0}} %-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
                             License Or Certificate Expiration Date
                         </label>
                         <div class="col-sm-9">
@@ -334,6 +369,45 @@
                                         </i>
                                     </a>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Background Check Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="BackgroundCheckDate" type="text"
+                                       ng-model='addEmployee.employee.employeeDocumentId.bgCheckDate'/>
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Background Check Status
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input value="P" name="BGStatus" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.bgCheckStatus"/>
+                                    Passed
+                                </label>
+                                <label class="cbr-inline">
+                                    <input name="BGStatus" value="F" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.bgCheckStatus"/>
+                                    Failed
+                                </label>
                             </div>
                         </div>
                     </div>

@@ -13,6 +13,7 @@
         ctrl.careTypeList = [];
         ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
         ctrl.applicationFileObj = {};
+        ctrl.licenceFileObj = {};
         ctrl.i9eligibilityFileObj = {};
         ctrl.w4FileObj = {};
         ctrl.referencesFileObj = {};
@@ -20,10 +21,14 @@
         ctrl.profileFileObj = {};
         ctrl.resetEmployeeTab3 = function() {
             ctrl.applicationFileObj.errorMsg = null;
+            ctrl.licenceFileObj.errorMsg = null;
             ctrl.i9eligibilityFileObj.errorMsg = null;
             ctrl.w4FileObj.errorMsg = null;
             if (ctrl.employee.employeeDocumentId.application != null) {
                 ctrl.employee.employeeDocumentId.application = null;
+            }
+            if (ctrl.employee.employeeDocumentId.licence != null) {
+                ctrl.employee.employeeDocumentId.licence = null;
             }
             if (ctrl.employee.employeeDocumentId.i9 != null) {
                 ctrl.employee.employeeDocumentId.i9 = null;
@@ -38,6 +43,9 @@
                 ctrl.employee.employeeDocumentId.physical = null;
             }
 
+            if (ctrl.licenceFileObj.flowObj != null) {
+                ctrl.licenceFileObj.flowObj.cancel();
+            }
             if (ctrl.applicationFileObj.flowObj != null) {
                 ctrl.applicationFileObj.flowObj.cancel();
             }
@@ -65,6 +73,14 @@
                 ctrl.profileFileObj.flowObj.cancel();
             }
             $scope.resetForm = true;
+        };
+        ctrl.clearLicence = function() {
+            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.licence != null) {
+                ctrl.employee.employeeDocumentId.licence = null;
+            }
+            if (ctrl.licenceFileObj.flowObj != null) {
+                ctrl.licenceFileObj.flowObj.cancel();
+            }
         };
         ctrl.clearRefereces = function() {
             if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.references != null) {
@@ -188,6 +204,9 @@
                 }
                 if (employeeToSave.employeeDocumentId.endDate) {
                     employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
+                }
+                if (employeeToSave.employeeDocumentId.bgCheckDate) {
+                    employeeToSave.employeeDocumentId.bgCheckDate = new Date(employeeToSave.employeeDocumentId.bgCheckDate);
                 }
             }
             delete employeeToSave.careRatesList;
@@ -556,6 +575,56 @@
             ctrl.applicationShowfileProgress = true;
             ctrl.applicationFileObj.errorMsg = null;
             ctrl.applicationFileObj.flow = flow;
+            return true;
+        };
+        
+        ctrl.licenceUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "l",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.licenceFileSelected = function(file, flow) {
+            ctrl.licenceFileObj.flowObj = flow;
+            ctrl.licenceFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.licenceFileUploaded = function(response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.licence = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableLicenceUploadButton = false;
+        };
+        ctrl.licenceFileError = function($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableLicenceUploadButton = false;
+            ctrl.employee.employeeDocumentId.licence = null;
+            ctrl.licenceFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.licenceFileAdded = function(file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.licence = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.licenceFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableLicenceUploadButton = true;
+            ctrl.licenceShowfileProgress = true;
+            ctrl.licenceFileObj.errorMsg = null;
+            ctrl.licenceFileObj.flow = flow;
             return true;
         };
 
