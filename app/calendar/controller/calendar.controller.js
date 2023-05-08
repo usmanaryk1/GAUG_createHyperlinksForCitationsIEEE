@@ -101,7 +101,15 @@
         };
 
         ctrl.resetFilters = function () {
+            var workSiteId;
+            if (ctrl.isWorksiteSchedulePage && ctrl.searchParams.workSiteId != null) {
+                workSiteId = ctrl.searchParams.workSiteId;
+            }
             ctrl.searchParams = {limit: 10, skip: 0};
+            if (workSiteId != null) {                
+                ctrl.searchParams.workSiteId = workSiteId;
+                $("#worksiteDropdown").select2("val", workSiteId);
+            }
             if (ctrl.isEmployeeSearchPage) {
                 ctrl.searchParams.distance = ontime_data.defaultDistance;
             }
@@ -110,7 +118,7 @@
             $('#employeeIds').select2('val', null);
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
-            $('#worksiteDropdown').select2('val', null);
+//            $('#worksiteDropdown').select2('val', null);
             $('#patientDropdown').select2('val', null);
             ctrl.applySearch();
         };
