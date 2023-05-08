@@ -109,7 +109,7 @@ angular.module('xenon.services', []).
                 timeSheet.addItem('Manual Punch', './manual_punch', 'CREATE_MANUAL_PUNCH');
                 timeSheet.addItem('Daily Attendance', './daily_attendance', 'VIEW_DAILY_ATTENDANCE');
                 timeSheet.addItem('Patient Timesheet', './patient_time_sheet', 'VIEW_PATIENT_TIMESHEET');
-                timeSheet.addItem('Worksite Timesheet', './worksite_time_sheet', 'VIEW_DAILY_ATTENDANCE');
+                timeSheet.addItem('Worksite Timesheet', './worksite_time_sheet', 'WORKSITE_SCHEDULE');
 
                 // Subitems of insuranceProvider
                 insuranceProvider.addItem('Add Insurance Provider', './insurer/', 'CREATE_INSURANCE_PROVIDER');
