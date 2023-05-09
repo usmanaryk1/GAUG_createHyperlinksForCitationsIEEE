@@ -22,11 +22,12 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen)
+        controller('MainCtrl', function($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state)
         {
             var userName = getCookie("un");
             if (userName != null) {
                 $rootScope.currentUser = {userName: userName};
+                $rootScope.startIdle();
             }
             $rootScope.amazonPublicUrl = "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/";
             $rootScope.isLoginPage = false;
@@ -38,6 +39,7 @@ angular.module('xenon.controllers', []).
             $rootScope.timeFormat = "hh:mm a";
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
+
             $rootScope.maskLoading = function() {
                 $("#mainDiv").loadmask("");
             };

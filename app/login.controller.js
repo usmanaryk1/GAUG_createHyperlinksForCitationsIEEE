@@ -1,8 +1,9 @@
 function loginCtrlr($scope, $rootScope, $http, $state) {
+    $rootScope.stopIdle();
     $scope.submitHandler = function() {
         if ($("form#login").valid()) {
             showLoadingBar(70); // Fill progress bar to 70% (just a given value)
-
+            
             var opts = {
                 "closeButton": true,
                 "debug": false,
@@ -52,6 +53,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                             }
 //                            window.location.hash = '#/app/dashboard';
                             $state.transitionTo(ontimetest.homepage);
+                            $rootScope.startIdle();
                             // window.location.hash = '#/app/add_patient_tab_1';
                         }
                     }

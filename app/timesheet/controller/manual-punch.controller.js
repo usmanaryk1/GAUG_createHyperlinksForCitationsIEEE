@@ -1,6 +1,7 @@
 (function() {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location) {
         var ctrl = this;
+        var searchParams = $location.search();
         ctrl.todaysDate = new Date();
         var timeFormat = 'hh:mm:ss a';
         ctrl.editTimesheet = null;
@@ -48,7 +49,7 @@
 
                 });
             }
-        }else{
+        } else {
             ctrl.editTimesheet = false;
         }
 
@@ -70,30 +71,30 @@
             });
         }
         ;
-        
-        var mergeDateAndTime=function(date,time){
-            date=new Date(date);
+
+        var mergeDateAndTime = function(date, time) {
+            date = new Date(date);
             var hours = Number(time.match(/^(\d+)/)[1]);
             var minutes = Number(time.match(/:(\d+)/)[1]);
-            var seconds = time.substr(time.lastIndexOf(":")+1,2);
+            var seconds = time.substr(time.lastIndexOf(":") + 1, 2);
             var AMPM = time.match(/\s(.*)$/)[1];
             if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
                 hours = hours + 12;
             if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
                 hours = hours - 12;
-            date.setHours(hours,minutes,seconds);
+            date.setHours(hours, minutes, seconds);
             return date;
         };
-        
+
 //        var verifyTimeValidation=function(){
 //            var punchInTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchInTime);
 //            var punchOutTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchOutTime);
 //            if(punchInTime.getTime()<)
 //            
 //        };
-        
+
         ctrl.saveManualAttendance = function() {
-          
+
             if ($("#manual_punch_form")[0].checkValidity()) {
                 $rootScope.maskLoading();
                 if (ctrl.attendanceObj.id == null) {
@@ -112,8 +113,8 @@
                     });
                 } else {
                     var timesheetObj = angular.copy(ctrl.attendanceObj);
-                    timesheetObj.punchInTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchInTime);
-                    timesheetObj.punchOutTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchOutTime);
+                    timesheetObj.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
+                    timesheetObj.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchOutTime);
                     if (timesheetObj.employeeId != null) {
                         timesheetObj.employeeId = {id: ctrl.attendanceObj.employeeId};
                     }
@@ -121,13 +122,21 @@
                         timesheetObj.patientId = {id: ctrl.attendanceObj.patientId};
                     }
                     TimesheetDAO.update(timesheetObj).then(function() {
-                        toastr.success("Manual punch saved.");
+                        toastr.success("Timesheet saved.");
+                        if (searchParams != null) {
+                            if (searchParams.empId != null) {
+                                $state.go('app.employee_timesheet', {id: searchParams.empId});
+                            } else if (searchParams.patId != null) {
+                                $state.go('app.patient_time_sheet', {id: searchParams.patId});
+                            }
+                        }
+
 //                        ctrl.resetManualPunch();
                     }).catch(function(e) {
                         if (e.data != null) {
                             toastr.error(e.data);
                         } else {
-                            toastr.error("Manual punch cannot be saved.");
+                            toastr.error("Timesheet cannot be saved.");
                         }
                     }).then(function() {
                         $rootScope.unmaskLoading();
@@ -137,5 +146,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", ManualPunchCtrl]);
 })();

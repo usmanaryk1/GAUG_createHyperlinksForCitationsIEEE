@@ -1,5 +1,5 @@
 (function() {
-    function PatientTimeSheetCtrl($scope, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO) {
+    function PatientTimeSheetCtrl($scope, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.searchParams = {};
@@ -9,7 +9,7 @@
         ctrl.insuranceProviderMap = {};
         ctrl.patientList = [];
         ctrl.patientIdMap = {};
-
+//        var params = $location.search();
         EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
@@ -115,6 +115,11 @@
                 for (var i = 0; i < res.length; i++) {
                     ctrl.patientIdMap[res[i].id] = res[i];
                 }
+//                if (params != null && params.id != null) {
+//                    ctrl.searchParams.patientId = Number(params.id);
+//                    $("#sboxit-2").select2("val", params.id);
+//                }
+
             }).catch(function(data, status) {
 //                ctrl.patientList = ontimetest.patients;
             });
@@ -191,5 +196,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "PatientDAO", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", PatientTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "PatientDAO", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", "$location", PatientTimeSheetCtrl]);
 })();
