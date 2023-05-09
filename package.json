@@ -1,0 +1,14 @@
+{
+  "name": "ontime",
+  "version": "0.0.0",
+  "description": "ontime",
+  "repository": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-string-replace": "1.3.1",
+    "load-grunt-tasks": "3.1.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
