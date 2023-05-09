@@ -6,9 +6,9 @@
         ctrl.employee = {employeeDocumentId: {}};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-        ctrl.fromNext = false;
-        ctrl.setFromNext = function(fromNext) {
-            ctrl.fromNext = fromNext;
+        ctrl.nextTab;
+        ctrl.setFromNext = function(tab) {
+            ctrl.nextTab = tab;
         }
         ctrl.careTypeList = [];
         ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
@@ -265,15 +265,11 @@
                     .then(function(res) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
-                            if (ctrl.fromNext) {
-                                $state.go('^.tab2', {id: res.id});
-                            } else {
-                                $state.go('^.tab1', {id: res.id});
-                                ctrl.editMode = true;
-                            }
                         }
                         if ($rootScope.tabNo == 3) {
                             $state.go('app.employee-list', {status: "active"});
+                        }else{
+                            $state.go('^.' + ctrl.nextTab, {id: res.id});
                         }
                         toastr.success("Employee saved.");
                         ctrl.employee = res;
@@ -577,7 +573,7 @@
             ctrl.applicationFileObj.flow = flow;
             return true;
         };
-        
+
         ctrl.licenceUploadFile = {
             target: ontimetest.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
@@ -895,7 +891,7 @@
         }
         ctrl.closeCropModal = function() {
             $("#cropper-example-2-modal").modal('hide');
-             ctrl.profileFileObj.flowObj.cancel();
+            ctrl.profileFileObj.flowObj.cancel();
         };
         var $image = $('#cropper-example-2 > img'),
                 cropBoxData,

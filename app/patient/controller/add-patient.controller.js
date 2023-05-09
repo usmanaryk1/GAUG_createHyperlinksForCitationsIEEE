@@ -5,7 +5,7 @@
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-        ctrl.fromNext = false;
+        ctrl.nextTab;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
@@ -57,8 +57,8 @@
                 ctrl.fileObj.flowObj.cancel();
             }
         };
-        ctrl.setFromNext = function(fromNext){
-            ctrl.fromNext = fromNext;
+        ctrl.setFromNext = function(tab) {
+            ctrl.nextTab = tab;
         }
         ctrl.isValidAutorization = function(formValidity) {
             var validAuthorization = true;
@@ -126,14 +126,12 @@
                         .then(function(res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
-                                if (ctrl.fromNext) {
-                                    $state.go('^.tab2', {id: res.id});
-                                } else {
-                                    $state.go('^.tab1', {id: res.id});
-                                }
+
                             }
-                            if ($rootScope.tabNo == 5 || ($rootScope.tabNo == 4 && ctrl.patient.isSubscriber==false)) {
+                            if ($rootScope.tabNo == 5 || ($rootScope.tabNo == 4 && ctrl.patient.isSubscriber == false) && ctrl.nextTab!=='tab3') {
                                 $state.go('app.patient-list', {status: "active"});
+                            } else {
+                                $state.go('^.' + ctrl.nextTab, {id: res.id});
                             }
                             ctrl.patient = res;
                             if (res.patientCareTypeCollection) {

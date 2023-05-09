@@ -5,7 +5,7 @@
                 <form class="form-horizontal validate" id="add_employee_form" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
                     <div class="row">
                         <div class="col-sm-12 pull-right">
-                            <button class="btn btn-info green_bt pull-right" type="submit">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.setFromNext('tab2')">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click="addEmployee.resetEmployeeTab2()">
@@ -154,7 +154,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.navigateToTab($event, 'tab3')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab3')">
                                 Next »
                             </button>
                         </div>

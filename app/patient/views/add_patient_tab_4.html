@@ -5,7 +5,7 @@
                 <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton" ng-click="addPatient.setFromNext('tab4')">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click="addPatient.resetPatient()">
@@ -208,10 +208,10 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <button style="width:auto;" class="btn btn-info green_bt pull-right" ng-show="addPatient.patient.isSubscriber==false" type="submit">Submit</button>
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-show="addPatient.patient.isSubscriber == true || addPatient.patient.isSubscriber == null" ng-click="addPatient.navigateToTab($event, 'tab5')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-show="addPatient.patient.isSubscriber == true || addPatient.patient.isSubscriber == null" ng-click="addPatient.setFromNext('tab5')">
                                 Next »
                             </button>
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button"  ng-click="addPatient.navigateToTab($event, 'tab3')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext('tab3')">
                                 « Previous
                             </button>
                         </div>

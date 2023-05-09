@@ -5,7 +5,7 @@
                 <form class="form-horizontal validate" id="add_patient_form" novalidate="" name="add_patient_form" role="form" ng-submit="addPatient.savePatient()">
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton">
+                            <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="addPatient.disableSaveButton" ng-click="addPatient.setFromNext('tab2')">
                                 Save Changes
                             </button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -125,12 +125,12 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addPatient.navigateToTab($event, 'tab3')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext('tab3')">
                                 Next »
                             </button>
-                            <a class="btn btn-info green_bt pull-right" href="" style="width:auto;"ng-click="addPatient.navigateToTab($event, 'tab1')" >
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext('tab1')">
                                 « Previous
-                            </a>
+                            </button>
                         </div>
                     </div>
 <!--                    <input name="patientId" type="hidden" value="{{addPatient.patient.id}}">
