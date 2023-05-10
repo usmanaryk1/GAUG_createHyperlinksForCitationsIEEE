@@ -13,7 +13,8 @@ var app = angular.module('xenon-app', [
     'xenon.filter',
     // Added in v1.3
     'FBAngular',
-    'flow'
+    'flow',
+    'ngIdle'
 ]);
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -37,7 +38,7 @@ function delete_cookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-app.run(function($rootScope, $modal, $state)
+app.run(function($rootScope, $modal, $state, Idle)
 {
     // Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
@@ -47,10 +48,48 @@ app.run(function($rootScope, $modal, $state)
         public_vars.$pageLoadingOverlay.addClass('loaded');
     })
 
+    $rootScope.started = false;
+    function closeModals() {
+        if ($rootScope.warning) {
+            $rootScope.warning.close();
+            $rootScope.warning = null;
+        }
+    }
+
+    $rootScope.$on('IdleStart', function() {
+        closeModals();
+        $rootScope.warning = $modal.open({
+            templateUrl: 'warning-dialog.html',
+            windowClass: 'modal-danger'
+        });
+    });
+
+    $rootScope.$on('IdleTimeout', function() {
+        closeModals();
+        $rootScope.logout();
+        Idle.unwatch();
+    });
+    $rootScope.startIdle = function() {
+        closeModals();
+        Idle.watch();
+        $rootScope.started = true;
+    };
+
+    $rootScope.stopIdle = function() {
+        closeModals();
+        Idle.unwatch();
+        $rootScope.started = false;
+
+    };
+    $rootScope.$on('IdleEnd', function() {
+        closeModals();
+    });
+
     $rootScope.logout = function() {
         delete_cookie("cc");
         delete_cookie("token");
         delete_cookie("un");
+        $rootScope.stopIdle();
         $state.transitionTo(ontimetest.defaultState);
     };
 
@@ -75,7 +114,10 @@ app.run(function($rootScope, $modal, $state)
 });
 
 
-app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
+    IdleProvider.idle(900);
+    IdleProvider.timeout(30);
+    KeepaliveProvider.interval(10);
 
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
@@ -299,7 +341,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // edit_timesheet
             state('app.edit_timesheet', {
-                url: '/edit_timesheet/:id',
+                url: '/edit_timesheet/:id?empId&patId',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
                 resolve: {
@@ -313,7 +355,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // timesheet
             state('app.employee_timesheet', {
-                url: '/employee_timesheet',
+                url: '/employee_timesheet?id',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
                 controller: 'EmployeeTimeSheetCtrl as empTimesheet',
                 resolve: {
@@ -370,7 +412,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
-                url: '/patient_time_sheet',
+                url: '/patient_time_sheet?id',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
                 controller: 'PatientTimeSheetCtrl as patTimesheet',
                 resolve: {
@@ -1266,7 +1308,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             });
-    $httpProvider.interceptors.push(['$q',function($q) {
+    $httpProvider.interceptors.push(['$q', function($q) {
             return {
                 request: function(config) {
                     config.headers = config.headers || {};
@@ -1284,11 +1326,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     }
                     return config;
                 }, // optional method
-                'response':function(response){
+                'response': function(response) {
                     return response;
                 },
                 'responseError': function(response) {
-                    var deferred=$q.defer();
+                    var deferred = $q.defer();
                     if (response.status == 401) {
                         delete_cookie("cc");
                         delete_cookie("token");
@@ -1296,7 +1338,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         window.location.hash = '#/app/login';
                         toastr.clear();
                         return deferred.promise;
-                     
+
 //                        return $q.when(response);
                     }
                     // do something on success

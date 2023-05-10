@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="assets/css/custom.css">
         <link rel="stylesheet" href="assets/css/jquery.loadmask.css">
         <link rel="stylesheet" href="assets/js/cropper/cropper.min.css">
-        
+
         <script src="assets/js/jquery-1.11.1.min.js"></script>
 
         <script>
@@ -64,6 +64,15 @@
 
         <horizontal-menu ng-if="layoutOptions.horizontalMenu.isVisible"></horizontal-menu>
         -->
+        <script type="text/ng-template" id="warning-dialog.html">
+            <div class="modal-header">
+            <h3>Your system is idle from last 15 minutes!</h3>
+            </div>
+            <div idle-countdown="countdown" ng-init="countdown=30" class="modal-body">
+            You'll be logged out in {{countdown}} second(s).
+            </div>
+
+        </script>
         <div id="mainDiv" class="page-container" ui-view></div>
 
         <!-- Remove this code if you want to disable Loading Overlay in the beginning of document loading -->
@@ -118,13 +127,13 @@
         <script src="app/payroll/controller/payroll-settings.controller.js"></script>
         <script src="app/payroll/controller/payroll-history.controller.js"></script>
         <script src="app/payroll/controller/payroll-session.controller.js"></script>
-        
+
         <script src="app/company/controller/add-company.controller.js"></script>
         <script src="app/timesheet/controller/dailly-attendance.controller.js"></script>
         <script src="app/timesheet/controller/employee-timesheet.controller.js"></script>
         <script src="app/timesheet/controller/patient-timesheet.controller.js"></script>
         <script src="app/timesheet/controller/manual-punch.controller.js"></script>
-        
+
         <!-- JavaScripts initializations and stuff -->
         <script src="app/xenon-custom.js"></script>
         <script src="assets/js/xenon-custom.js"></script>
@@ -150,6 +159,7 @@
         <script src="assets/js/timepicker/bootstrap-timepicker.min.js"></script>
         <script src="assets/js/jquery.serializeObject.min.js"></script>
         <script src="assets/js/cropper/cropper.min.js"></script>
+        <script src="assets/js/angular-idle.min.js"></script>
 
         <script src="assets/js/custom.js"></script> 
         <!-- google map -->

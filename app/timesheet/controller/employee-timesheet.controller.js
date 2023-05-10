@@ -1,5 +1,5 @@
 (function() {
-    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout) {
+    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, $location) {
         var ctrl = this;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
@@ -8,6 +8,10 @@
         ctrl.searchParams = {};
         ctrl.employeeIdMap = {};
         ctrl.employeeList = [];
+//        var params = $location.search();
+//        if (params != null && params.id != null) {
+//            ctrl.searchParams.employeeId = params.id;
+//        }
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
@@ -42,7 +46,7 @@
                 ctrl.timesheetList = [];
                 ctrl.rerenderDataTable();
             }
-//            ctrl.datatableObj.fnDraw();
+            //            ctrl.datatableObj.fnDraw();
         };
         ctrl.retrieveTimesheet = function() {
             $scope.hideDefaultImage = false;
@@ -66,11 +70,10 @@
 
                     }
                 }); // showLoadingBar
-//                ctrl.timesheetList = ontimetest.employeeTimesheet;
+                //                ctrl.timesheetList = ontimetest.employeeTimesheet;
             }).then(function() {
                 $rootScope.unmaskLoading();
             });
-
         };
 
         retrieveEmployeesData();
@@ -87,24 +90,23 @@
 ////                                                        minimumInputLength: 1,
 //                }).on('select2-open', function()
 //                {
-//                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                //                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
 //                });
-//                $('#sboxit-2').select2();
-//                ctrl.filterTimesheet();
+                //                $('#sboxit-2').select2();
+                //                ctrl.filterTimesheet();
             }).catch(function(data, status) {
-//                ctrl.employeeList = ontimetest.employees;
+                //                ctrl.employeeList = ontimetest.employees;
             });
         }
         ;
-        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop, tasks)
-        {
+        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop, tasks) {
             ctrl.taskListModalOpen = true;
             $rootScope.taskListModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
-//            $rootScope.taskListModal.taskList = [{label: "Slicing", value: false}, {label: "WooCommerce", value: true}, {label: "Programming", value: false}, {label: "SEO Optimize", value: true}];
+            //            $rootScope.taskListModal.taskList = [{label: "Slicing", value: false}, {label: "WooCommerce", value: true}, {label: "Programming", value: false}, {label: "SEO Optimize", value: true}];
             $rootScope.taskListModal.taskList = tasks;
 
         };
@@ -157,5 +159,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", EmployeeTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", "$location", EmployeeTimeSheetCtrl]);
 })();

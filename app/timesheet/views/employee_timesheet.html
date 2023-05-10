@@ -155,7 +155,7 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#/app/edit_timesheet/{{timesheet.id}}"  tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#/app/edit_timesheet/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}"  tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
