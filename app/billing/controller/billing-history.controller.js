@@ -118,6 +118,39 @@
                 }
             });
         };
+
+        ctrl.openDeleteModal = function (session,e) {
+            e.stopPropagation();
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
+                controller: 'ConfirmModalController as confirmModal',
+                size: 'md',
+                resolve: {
+                    message: function () {
+                        return "Are you sure you want to delete this Billing Batch?";
+                    },
+                    title: function () {
+                        return "Delete Billing Batch";
+                    },
+                    subtitle: function () {
+                        return "";
+                    }
+                }
+            });
+            modalInstance.result.then(function (res) {
+                $rootScope.maskLoading();
+                BillingDAO.deleteBatch({paramId: session.id}).then(function () {
+                    toastr.success("Billing batch deleted.");
+                    ctrl.filterSessions();                    
+                }).catch(function (data, status) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }, function () {
+            });
+
+        };
     }
     angular.module('xenon.controllers').controller('BillingHistoryCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "BillingDAO", "InsurerDAO", "$state", "Page", BillingHistoryCtrl]);
 })();

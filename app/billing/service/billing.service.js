@@ -65,6 +65,9 @@
                 params: {
                     action: 'claims'
                 }
+            },
+            deleteBatch:{
+                method: 'DELETE'             
             }
         });
         return {
@@ -97,6 +100,9 @@
             },
             searchClaims: function(data) {
                 return api.searchClaims(data).$promise;
+            },
+            deleteBatch: function(data) {
+                return api.deleteBatch(data).$promise;
             }
 
         };
