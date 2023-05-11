@@ -54,8 +54,9 @@
                                             <tr>
                                                 <th width="30%" colspan="1" rowspan="1" tabindex="0">Name & Role</th>
                                                 <th width="20%" colspan="1" rowspan="1" tabindex="0">Phone</th>
-                                                <th width="30%" colspan="1" rowspan="1" tabindex="0">Address</th>
-                                                <th width="20%" data-priority="6">Actions</th>
+                                                <th width="20%" colspan="1" rowspan="1" tabindex="0">Address</th>
+                                                <th width="15%" colspan="1" rowspan="1" tabindex="0">Languages Known</th>
+                                                <th width="15%" data-priority="6">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -63,7 +64,7 @@
                                                 {{emp}}
                                                 <th> <div class="user_panel" ng-click="viewEmployee.openEditModal(emp, 'modal-5')" style="cursor: pointer">
                                             <div class="user_img"> 
-                                                <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.profileImage != null && emp.profileImage != '')? (amazonPublicUrl + viewEmployee.companyCode + '/' + emp.profileImage) : ('assets/images/user-5.png')}}"> 
+                                                <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.profileImage != null && emp.profileImage != '') ? (amazonPublicUrl + viewEmployee.companyCode + '/' + emp.profileImage) : ('assets/images/user-5.png')}}"> 
                                                 <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
                                             </div>
                                             <div class="emp_user_hd">
@@ -76,6 +77,7 @@
                                         <td>
                                             <div>{{emp.address1}}</div> <div ng-if="emp.address2 != null">{{emp.address2}}</div> {{emp.city}}, {{emp.state}}, {{emp.zipcode}}
                                         </td>
+                                        <td>{{viewEmployee.getLanguagesFromCode(emp.languageSpoken)}}</td>
                                         <td>
                                             <div class="center">
                                                 <a class="btn icon-left fa fa-pencil edit_button" href="" ng-click="viewEmployee.edit(emp)" tooltip="Edit"><span class="ed_b"></span></a> 
@@ -178,6 +180,18 @@
     <label for="field-1" class="control-label col-md-4"><strong>Social Security Number</strong></label>
     <div class="col-md-8">
     {{selectEmployeeModel.employee.ssn | ssn}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
+    <div class="col-md-8">
+    <span ng-if="selectEmployeeModel.employee.languageSpoken== null || selectEmployeeModel.employee.languageSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectEmployeeModel.employee.languageSpoken">{{languages[language]}}
+    <label ng-if="$index<selectEmployeeModel.employee.languageSpoken.length-1">, </label>
+    </span>
     </div>
     </div>	
 

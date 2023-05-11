@@ -57,6 +57,9 @@
             $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
             $rootScope.selectEmployeeModel.employee = employee;
+            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
+                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
+            }
 
         };
 
@@ -170,6 +173,21 @@
                     $rootScope.unmaskLoading();
                 });
             };
+        };
+        ctrl.getLanguagesFromCode = function(languageCodes) {
+            if (languageCodes != null && languageCodes.length > 0) {
+                languageCodes = languageCodes.split(",");
+                var languageToDisplay = "";
+                angular.forEach(languageCodes, function(code, index) {
+                    languageToDisplay += $rootScope.languages[code];
+                    if (index < languageCodes.length - 1) {
+                        languageToDisplay += ", ";
+                    }
+                });
+                return languageToDisplay;
+            } else {
+                return "N/A";
+            }
         };
 //        
 //        $scope.$watch(function() {

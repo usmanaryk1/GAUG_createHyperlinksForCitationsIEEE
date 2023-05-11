@@ -5,6 +5,7 @@
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
         ctrl.nextTab;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
@@ -105,6 +106,14 @@
                 if (patientToSave.authorizationEndDate) {
                     patientToSave.authorizationEndDate = new Date(patientToSave.authorizationEndDate);
                 }
+                patientToSave.languagesSpoken = [];
+                angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                    if (obj.value == true) {
+                        patientToSave.languagesSpoken.push(obj.key);
+                    }
+                });
+                patientToSave.languagesSpoken = patientToSave.languagesSpoken.toString();
+                
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
@@ -122,13 +131,14 @@
                     reqParam = 'save';
                 }
                 $rootScope.maskLoading();
+                console.log(patientToSave);
                 PatientDAO.update({action: reqParam, data: patientToSave})
                         .then(function(res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
 
                             }
-                            if ($rootScope.tabNo == 5 || ($rootScope.tabNo == 4 && ctrl.patient.isSubscriber == false) && ctrl.nextTab!=='tab3') {
+                            if ($rootScope.tabNo == 5 || ($rootScope.tabNo == 4 && ctrl.patient.isSubscriber == false) && ctrl.nextTab !== 'tab3') {
                                 $state.go('app.patient-list', {status: "active"});
                             } else {
                                 $state.go('^.' + ctrl.nextTab, {id: res.id});
@@ -162,6 +172,14 @@
                 $rootScope.maskLoading();
                 PatientDAO.get({id: $state.params.id}).then(function(res) {
                     ctrl.patient = res;
+                    if (res.languagesSpoken != null) {
+                        var languages = res.languagesSpoken;
+                        angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                            if (languages.indexOf(obj.key) >= 0) {
+                                obj.value = true;
+                            }
+                        });
+                    }
                     if (res.patientCareTypeCollection) {
                         var careTypesSelected = [];
                         var length = res.patientCareTypeCollection.length;

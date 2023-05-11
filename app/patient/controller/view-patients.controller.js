@@ -91,6 +91,10 @@
             $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
             $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
             $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
+            if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
+                $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+            }
+
 
         };
 
@@ -206,6 +210,21 @@
             });
         };
 
+        ctrl.getLanguagesFromCode = function(languageCodes) {
+            if (languageCodes != null && languageCodes.length > 0) {
+                languageCodes = languageCodes.split(",");
+                var languageToDisplay = "";
+                angular.forEach(languageCodes, function(code,index) {
+                    languageToDisplay+=$rootScope.languages[code];
+                    if(index<languageCodes.length-1){
+                        languageToDisplay+=", ";
+                    }
+                });
+                return languageToDisplay;
+            } else {
+                return "N/A";
+            }
+        };
     }
     ;
     angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", ViewPatientsCtrl]);

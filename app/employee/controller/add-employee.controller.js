@@ -7,6 +7,7 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
+        ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
         ctrl.setFromNext = function(tab) {
             ctrl.nextTab = tab;
         }
@@ -184,6 +185,13 @@
             var fileUploadValid = ctrl.checkFileUploadValidity();
             var employeeToSave = angular.copy(ctrl.employee);
             employeeToSave.phone = employeeToSave.phone.toString();
+            employeeToSave.languageSpoken = [];
+            angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                if (obj.value == true) {
+                    employeeToSave.languageSpoken.push(obj.key);
+                }
+            });
+            employeeToSave.languageSpoken=employeeToSave.languageSpoken.toString();
             if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
                 delete employeeToSave.employeeDocumentId;
             } else {
@@ -268,7 +276,7 @@
                         }
                         if ($rootScope.tabNo == 3) {
                             $state.go('app.employee-list', {status: "active"});
-                        }else{
+                        } else {
                             $state.go('^.' + ctrl.nextTab, {id: res.id});
                         }
                         toastr.success("Employee saved.");
@@ -309,6 +317,14 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
+                    if(res.languageSpoken!=null){
+                        var languages=res.languageSpoken;
+                        angular.forEach(ctrl.languagesKeyValue,function(obj){
+                            if(languages.indexOf(obj.key)>=0){
+                                obj.value=true;
+                            }
+                        });
+                    }
                     ctrl.retrivalRunning = false;
                     EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
                         ctrl.employee.careRatesList = res;
