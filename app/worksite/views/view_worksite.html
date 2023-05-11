@@ -90,7 +90,7 @@
                                                         <td>{{worksite.supervisorPhone| tel }}<br>{{worksite.supervisorEmail}}</td>
                                                         <td>
                                                             <div class="center">
-                                                                <a class="btn icon-left fa fa-pencil edit_button" ng-click="viewWorksite.edit(worksite);" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                                <a class="btn icon-left fa fa-pencil edit_button" ui-sref="admin.worksite.tab1({id:worksite.id})" tooltip="Edit"><span class="ed_b"></span></a> 
                                                                 <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="hasAccess('ACTIVATE_WORKSITE') && worksite.status == 'a'" ng-click="viewWorksite.openStatusChangeModal(worksite, 'inactive');" tooltip="Disable"><span class="ed_b"></span></a>
                                                                 <a class="btn icon-left fa fa-check edit_button" ng-if="hasAccess('ACTIVATE_WORKSITE') && worksite.status == 'i'" ng-click="viewWorksite.openStatusChangeModal(worksite, 'active');" tooltip="Enable"><span class="ed_b"></span></a>
                                                             </div>

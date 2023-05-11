@@ -15,7 +15,6 @@
 
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'name', order: 'asc', searchString: ''};
         ctrl.retrieveWorksites = retrieveWorksitesData;
-        ctrl.edit = edit;
 
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -82,11 +81,7 @@
                 $rootScope.paginationLoading = false;
             });
         }
-
-        function edit(worksite) {
-            $state.go('admin.worksite.tab1', {id: worksite.id});
-        }
-
+        
         ctrl.retrieveWorksites();
 
         ctrl.openEditModal = function (worksiteId, modal_id, modal_size, modal_backdrop)

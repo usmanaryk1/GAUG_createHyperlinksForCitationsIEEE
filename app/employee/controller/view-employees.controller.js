@@ -24,7 +24,6 @@
             ctrl.viewType = $stateParams.status;
         }
         ctrl.retrieveEmployees = retrieveEmployeesData;
-        ctrl.edit = edit;
 
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -93,10 +92,6 @@
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
-        }
-
-        function edit(employee) {
-            $state.go('app.employee.tab1', {id: employee.id});
         }
 
         ctrl.retrieveEmployees();
@@ -260,10 +255,6 @@
             } else {
                 return "N/A";
             }
-        };
-
-        ctrl.navigateToCalendar = function (employee) {
-            $state.go('app.employee-calendar', {id: employee.id});
         };
 //        
 //        $scope.$watch(function() {

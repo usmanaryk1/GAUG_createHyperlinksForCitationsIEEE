@@ -3,7 +3,6 @@
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.retrieveInsurers = retrieveInsurersData;
-        ctrl.edit = edit;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         Page.setTitle("View Insurance Providers");
@@ -80,11 +79,7 @@
                 $rootScope.paginationLoading = false;
             });
         }
-
-        function edit(insurer) {
-            $state.go('app.insurer', {id: insurer.id});
-        }
-
+        
         ctrl.openModal = function(insurer, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deleteInsurerModel = $modal.open({

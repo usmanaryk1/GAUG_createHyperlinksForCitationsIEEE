@@ -14,7 +14,6 @@
 
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.retrievePatients = retrievePatientsData;
-        ctrl.edit = edit;
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
@@ -127,10 +126,6 @@
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
-        }
-
-        function edit(patient) {
-            $state.go('app.patient.tab1', {id: patient.id});
         }
 
         ctrl.retrievePatients();
@@ -288,10 +283,7 @@
                 return "N/A";
             }
         };
-
-        ctrl.navigateToCalendar = function (patient) {
-            $state.go('app.patient-calendar', {id: patient.id});
-        };
+        
     }
     ;
     angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$debounce", "EmployeeDAO", "InsurerDAO", "Page", "CareTypeDAO", ViewPatientsCtrl]);

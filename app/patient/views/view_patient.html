@@ -97,12 +97,12 @@
                                                         <td>{{viewPatient.getLanguagesFromCode(patient.languagesSpoken)}}</td>
                                                         <td>
                                                             <div class="center">
-                                                                <a class="btn icon-left fa fa-pencil edit_button" ng-if="hasAccess('EDIT_PATIENT')" ng-click="viewPatient.edit(patient);" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                                <a class="btn icon-left fa fa-pencil edit_button" href="" ui-sref="app.patient.tab1({id:patient.id})" ng-if="hasAccess('EDIT_PATIENT')" tooltip="Edit"><span class="ed_b"></span></a> 
                                                                 <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_PATIENT')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
                                                                 <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status == 'a' && hasAccess('DISCHARGE_PATIENT')" ng-click="viewPatient.openDischargeModal(patient, 'dischargeModel');" tooltip="Discharge"><span class="ed_b"></span></a>
                                                                 <a class="btn icon-left fa fa-check edit_button" ng-if="patient.status == 'd' && hasAccess('READMIT_PATIENT')" ng-click="viewPatient.openReadmitModal(patient, 'readmitModal');" tooltip="Readmit"><span class="ed_b"></span></a>
                                                                 <a ng-if="patient.authorization" class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}?viewDownload=true" target="_blank" tooltip="Download Authorization"><span class="ed_b"></span></a>
-                                                                <a ng-if="viewPatient.validAuthorizationDate(patient.authorizationEndDate) && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ng-click="viewPatient.navigateToCalendar(patient)" tooltip="Calendar"><span class="ed_b"></span></a> 
+                                                                <a ng-if="viewPatient.validAuthorizationDate(patient.authorizationEndDate) && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id:patient.id})" tooltip="Calendar"><span class="ed_b"></span></a> 
                                                             </div>
                                                         </td>
                                                     </tr>

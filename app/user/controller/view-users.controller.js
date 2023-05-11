@@ -24,7 +24,6 @@
             ctrl.viewType = $stateParams.status;
         }
         ctrl.retrieveUsers = retrieveUsersData;
-        ctrl.edit = edit;
 
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -93,10 +92,6 @@
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
-        }
-
-        function edit(employee) {
-            $state.go('admin.user', {id: employee.id});
         }
 
         ctrl.retrieveUsers();
