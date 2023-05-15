@@ -1247,7 +1247,7 @@
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'password_modal'),
                 size: 'md',
-                backdrop: true,
+                backdrop: 'static',
                 keyboard: false,
                 controller: 'PasswordModalCtrl as passwordModal',
                 resolve: {
