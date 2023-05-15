@@ -1549,7 +1549,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         if (!config.params) {
                             config.params = {};
                         }
-                        config.params['version'] = '@$0.1$@';
+                        config.params['version'] = '@$3.5.1$@';
                     }
                     ontime_data.company_code = getCookie("cc");
                     if (ontime_data.company_code != null) {
