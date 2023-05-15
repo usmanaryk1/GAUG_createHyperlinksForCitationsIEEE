@@ -304,7 +304,8 @@
     <div class="modal-body">
     <div class="row">
     <div class="user_panel col-md-12">
-    <div class="user_img"> <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
+    <div class="user_img"> 
+        <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
     <div class="emp_user_hd">
     <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
     <p>{{positions[selectEmployeeModel.employee.position]}}</p>
@@ -369,6 +370,18 @@
     <label for="field-1" class="control-label col-md-4"><strong>Social Security Number</strong></label>
     <div class="col-md-8">
     {{selectEmployeeModel.employee.ssn | ssn}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
+    <div class="col-md-8">
+    <span ng-if="selectEmployeeModel.employee.languageSpoken== null || selectEmployeeModel.employee.languageSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectEmployeeModel.employee.languageSpoken">{{languages[language]}}
+    <label ng-if="$index<selectEmployeeModel.employee.languageSpoken.length-1">, </label>
+    </span>
     </div>
     </div>	
 

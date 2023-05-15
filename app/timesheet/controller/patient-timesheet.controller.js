@@ -191,7 +191,9 @@
             $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
             $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
             $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
-
+            if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
+                $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+            }
         };
 
     }

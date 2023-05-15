@@ -155,7 +155,9 @@
             $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
             $rootScope.selectEmployeeModel.employee = employee;
-
+            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
+                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
+            }
         };
     }
     ;

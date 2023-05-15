@@ -58,7 +58,7 @@
                                                     <th width="20%" colspan="1" rowspan="1" tabindex="0">Address</th>
                                                     <th width="15%" colspan="1" rowspan="1" tabindex="0">Languages Spoken</th>
                                                     <th width="22%" data-priority="6">Actions</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -73,7 +73,7 @@
                                                     </td>
                                                     <td>{{patient.dateOfBirth|date :dateFormat}}</td>
                                                     <td>{{patient.phone| tel }}</td>
-                                                    
+
                                                     <td>
                                                         <div ng-show="patient.patientAddress">
                                                             <div>{{patient.patientAddress.address1}}</div>
@@ -291,13 +291,14 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
 
     </div>
     </div>
+    <div class="row">
+    <div class="col-md-12">
 
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
     <div class="col-md-8">
     <span ng-if="selectPatientModel.patient.languagesSpoken== null || selectPatientModel.patient.languagesSpoken.length==0">N/A</span>
-    <span ng-repeat="language in selectPatientModel.patient.languagesSpoken">{{languages[language]}}
-    <label ng-if="$index<selectPatientModel.patient.languagesSpoken.length-1">, </label>
+    <span ng-repeat="language in selectPatientModel.patient.languagesSpoken">{{languages[language]}}<label ng-if="$index<selectPatientModel.patient.languagesSpoken.length-1">, </label>
     </span>
     </div>
     </div>	
@@ -373,9 +374,33 @@ function viewPatientTab1Ctrl($scope, $rootScope, $http) {
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Care Coordinator Contact</strong></label>
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Phone</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.careCordinatorContact}} 
+    {{selectPatientModel.patient.careCordinatorContact | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+    
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Email</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorEmail}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+    
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Fax</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorFax | tel}} 
     </div>
     </div>	
 
