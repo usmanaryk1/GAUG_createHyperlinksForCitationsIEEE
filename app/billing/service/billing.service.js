@@ -67,7 +67,10 @@
                 }
             },
             deleteBatch:{
-                method: 'DELETE'             
+                method: 'DELETE',
+                params: {
+                    action: 'sessions'
+                }             
             }
         });
         return {
