@@ -122,7 +122,7 @@
                     ctrl.rerenderDataTable();
                     $rootScope.deletePatientModel.close();
                 }).catch(function(data, status) {
-                    toastr.error("Patient cannot be deleted.");
+                    toastr.error(data.data);
                     $rootScope.deletePatientModel.close();
                 }).then(function() {
                     $rootScope.unmaskLoading();
@@ -214,10 +214,10 @@
             if (languageCodes != null && languageCodes.length > 0) {
                 languageCodes = languageCodes.split(",");
                 var languageToDisplay = "";
-                angular.forEach(languageCodes, function(code,index) {
-                    languageToDisplay+=$rootScope.languages[code];
-                    if(index<languageCodes.length-1){
-                        languageToDisplay+=", ";
+                angular.forEach(languageCodes, function(code, index) {
+                    languageToDisplay += $rootScope.languages[code];
+                    if (index < languageCodes.length - 1) {
+                        languageToDisplay += ", ";
                     }
                 });
                 return languageToDisplay;

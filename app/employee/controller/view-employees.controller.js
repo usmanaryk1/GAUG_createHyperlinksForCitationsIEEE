@@ -87,7 +87,7 @@
                     toastr.success("Employee deleted.");
                     $rootScope.deleteEmployeeModel.close();
                 }).catch(function(data, status) {
-                    toastr.error("Failed to delete employee.");
+                    toastr.error(data.data);
                     $rootScope.deleteEmployeeModel.close();
                 }).then(function() {
                     $rootScope.unmaskLoading();
