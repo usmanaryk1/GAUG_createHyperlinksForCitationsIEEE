@@ -1,12 +1,11 @@
 (function () {
-    function PasswordModalCtrl($modalInstance) {
+    function PasswordModalCtrl($modalInstance, password) {
         var ctrl = this;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.save = function () {
             if ($('#popuppassword')[0].checkValidity()) {
-                if (ctrl.password != ontime_data.pastEventAuthorizationPassword) {
+                if (ctrl.password != password) {
                     toastr.error('Authorization Failed');
-                    $modalInstance.dismiss();
                 } else {
                     $modalInstance.close({password: 'correct'});
                 }
@@ -17,5 +16,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('PasswordModalCtrl', ["$modalInstance", PasswordModalCtrl]);
+    angular.module('xenon.controllers').controller('PasswordModalCtrl', ["$modalInstance", "password", PasswordModalCtrl]);
 })();

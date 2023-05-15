@@ -1249,7 +1249,12 @@
                 size: 'md',
                 backdrop: true,
                 keyboard: false,
-                controller: 'PasswordModalCtrl as passwordModal'
+                controller: 'PasswordModalCtrl as passwordModal',
+                resolve: {
+                    password: function () {
+                        return ontime_data.pastEventAuthorizationPassword;
+                    }
+                }
             });
             modalInstance.result.then(function (data) {
                 if (data != null) {

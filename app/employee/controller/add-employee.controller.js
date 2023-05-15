@@ -120,21 +120,6 @@
             $scope.resetForm = true;
         };
 
-        if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontime_data.defaultState);
-            }
-            ctrl.editMode = true;
-            Page.setTitle("Update Employee");
-        } else if ($state.current.name.indexOf('tab1') > -1) {
-            ctrl.employee = {}
-            ctrl.editMode = false;
-            Page.setTitle("Add Employee");
-        } else {
-            $state.transitionTo(ontime_data.defaultState);
-        }
-
-
         ctrl.saveEmployee = saveEmployeeData;
         ctrl.pageInitCall = pageInit;
         var form_data;
@@ -499,8 +484,8 @@
                 $("input[name='WHRate']").attr('required', true);
             }
         }
-        
-        ctrl.tab3DataInit = function() {
+
+        ctrl.tab3DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea, #add_employee_form select").first().focus();
             $timeout(function () {
@@ -615,7 +600,9 @@
                     ctrl.tab1DataInit();
                 }
             }, 100);
-
+            if (!$state.params.id || $state.params.id == '') {
+                ctrl.openPasswordModal();
+            }
         };
 
         ctrl.applicationUploadFile = {
@@ -1200,6 +1187,42 @@
                 ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
             }
         };
+        ctrl.openPasswordModal = function (index)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'password_modal'),
+                size: 'md',
+                backdrop: true,
+                keyboard: false,
+                controller: 'PasswordModalCtrl as passwordModal',
+                resolve: {
+                    password: function () {
+                        return ontime_data.hrPassword;
+                    }
+                }
+            });
+            modalInstance.result.then(function (data) {
+                if (data == null) {
+                    $state.go('app.employee-list', {'status':'all'});
+                }
+            }).catch(function () {
+            });
+        };
+
+        if ($state.params.id && $state.params.id !== '') {
+            if (isNaN(parseFloat($state.params.id))) {
+                $state.transitionTo(ontime_data.defaultState);
+            }
+            ctrl.editMode = true;
+            Page.setTitle("Update Employee");
+        } else if ($state.current.name.indexOf('tab1') > -1) {
+            ctrl.employee = {}
+            ctrl.editMode = false;
+            Page.setTitle("Add Employee");
+            
+        } else {
+            $state.transitionTo(ontime_data.defaultState);
+        }
         function googleMapFunctions(latitude, longitude) {
             loadGoogleMaps(3).done(function ()
             {
