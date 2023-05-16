@@ -47,7 +47,7 @@
                                                 });
                                             </script>
                                             <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.fName+" "+pat.lName) for pat in patTimesheet.patientList'>
-                                            <option value="" selected hidden />
+                                                <option value="" selected hidden />
                                             </select>
                                         </div>
                                     </div>
@@ -99,7 +99,8 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
 
-                                    <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);patTimesheet.filterTimesheet()">Review</button>
+                                    <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);
+                                        patTimesheet.filterTimesheet()">Review</button>
                                     <a href="#/app/manual_punch/patient/{{patTimesheet.searchParams.patientId}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
@@ -148,14 +149,14 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:120px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" href="#/app/edit_timesheet/{{timesheet.id}}?patId={{patTimesheet.selectedPatient.id}}" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?patId={{patTimesheet.selectedPatient.id}}" tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 
-                                                    <a class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static',timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
+                                                    <a class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
-                                            <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
+                                            <td><div ng-if="timesheet.isManualPunch === true">Admin Verified</div><img ng-if="!timesheet.isManualPunch || timesheet.isManualPunch === false" width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
                                         </tr>
 
                                         <!--                                        <tr>
@@ -401,8 +402,8 @@
     </div>
     <div class="col-sm-12" ng-if="taskListModal.taskList==null || taskListModal.taskList.length==0">
     No tasks are available.
-    
-            </div>
+
+    </div>
     </div>
     </div>
 
@@ -585,7 +586,7 @@
     </div>
     <div class="row">
     <div class="col-md-12">
-    
+
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>C.C. Email</strong></label>
     <div class="col-md-8">
@@ -597,7 +598,7 @@
     </div>
     <div class="row">
     <div class="col-md-12">
-    
+
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>C.C. Fax</strong></label>
     <div class="col-md-8">

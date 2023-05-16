@@ -353,6 +353,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             }).
+                    // edit_missed_punch
+            state('app.edit_missed_punch', {
+                url: '/edit_missed_punch/:id?empId&patId',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
+            }).
             // timesheet
             state('app.employee_timesheet', {
                 url: '/employee_timesheet?id',
@@ -427,7 +441,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // daily_attendance
             state('app.daily_attendance', {
-                url: '/daily_attendance',
+                url: '/daily_attendance?id',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
                 resolve: {

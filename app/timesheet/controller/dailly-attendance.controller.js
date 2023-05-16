@@ -34,6 +34,7 @@
         };
         ctrl.filterTimesheet = function() {
             if (ctrl.searchParams.staffingCordinatorId && ctrl.searchParams.staffingCordinatorId !== null) {
+                ctrl.cordinatorId = ctrl.searchParams.staffingCordinatorId;
                 if (ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
                 }
@@ -42,6 +43,7 @@
                 }
                 ctrl.retrieveTimesheet();
             } else {
+                ctrl.cordinatorId = undefined;
                 ctrl.attendanceList = [];
                 ctrl.rerenderDataTable();
             }

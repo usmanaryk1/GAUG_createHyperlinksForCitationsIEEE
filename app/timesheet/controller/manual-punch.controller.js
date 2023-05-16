@@ -8,15 +8,37 @@
         ctrl.resetManualPunch = function() {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
             if (ctrl.editTimesheet) {
+                ctrl.attendanceObj.isMissedPunch = false;
                 ctrl.attendanceObj.punchInTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchInDate = null;
             } else {
-                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime};
+                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false};
             }
         };
         ctrl.resetManualPunch();
         ctrl.retrieveEmployees = retrieveEmployeesData;
+
+        //once you retrieve data for edit
+        function setAttendanceForEdit() {
+            ctrl.empObj = angular.copy(ctrl.attendanceObj.employeeId);
+            ctrl.patientObj = angular.copy(ctrl.attendanceObj.patientId);
+
+            if (ctrl.attendanceObj.employeeId != null) {
+                ctrl.attendanceObj.employeeId = ctrl.attendanceObj.employeeId.id;
+            }
+            if (ctrl.attendanceObj.patientId != null) {
+                ctrl.attendanceObj.patientId = ctrl.attendanceObj.patientId.id;
+            }
+            ctrl.attendanceObj.punchInDate = angular.copy(ctrl.attendanceObj.punchInTime);
+            if (ctrl.attendanceObj.punchInTime != null) {
+                ctrl.attendanceObj.punchInTime = $filter('date')(new Date(ctrl.attendanceObj.punchInTime).getTime(), timeFormat).toString();
+            }
+            if (ctrl.attendanceObj.punchOutTime != null) {
+                ctrl.attendanceObj.punchOutTime = $filter('date')(new Date(ctrl.attendanceObj.punchOutTime).getTime(), timeFormat).toString();
+            }
+        }
+        
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -28,30 +50,25 @@
                 ctrl.attendanceObj.employeeId = Number(id);
             } else {
                 ctrl.editTimesheet = true;
-                TimesheetDAO.get({id: id}).then(function(res) {
-                    ctrl.attendanceObj = res;
-                    ctrl.empObj = angular.copy(ctrl.attendanceObj.employeeId);
-                    ctrl.patientObj = angular.copy(ctrl.attendanceObj.patientId);
-
-                    if (ctrl.attendanceObj.employeeId != null) {
-                        ctrl.attendanceObj.employeeId = ctrl.attendanceObj.employeeId.id;
-                    }
-                    if (ctrl.attendanceObj.patientId != null) {
-                        ctrl.attendanceObj.patientId = ctrl.attendanceObj.patientId.id;
-                    }
-                    ctrl.attendanceObj.punchInDate = angular.copy(ctrl.attendanceObj.punchInTime);
-                    if (ctrl.attendanceObj.punchInTime != null) {
-                        ctrl.attendanceObj.punchInTime = $filter('date')(new Date(ctrl.attendanceObj.punchInTime).getTime(), timeFormat).toString();
-                    }
-                    if (ctrl.attendanceObj.punchOutTime != null) {
-                        ctrl.attendanceObj.punchOutTime = $filter('date')(new Date(ctrl.attendanceObj.punchOutTime).getTime(), timeFormat).toString();
-                    }
-
-                });
+                if ($state.current.name.indexOf('edit_missed_punch') > 0) {
+                    console.log('1111')
+                    TimesheetDAO.getMissedPunch({id: id}).then(function(res) {
+                        ctrl.attendanceObj = res;
+                        ctrl.attendanceObj.isMissedPunch = true;
+                        setAttendanceForEdit();
+                    });
+                } else if ($state.current.name.indexOf('edit_timesheet') > 0) {
+                    TimesheetDAO.get({id: id}).then(function(res) {
+                        ctrl.attendanceObj = res;
+                        ctrl.attendanceObj.isMissedPunch = false;
+                        setAttendanceForEdit();
+                    });
+                }
             }
         } else {
             ctrl.editTimesheet = false;
         }
+
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
@@ -97,50 +114,105 @@
 
             if ($("#manual_punch_form")[0].checkValidity()) {
                 $rootScope.maskLoading();
-                if (ctrl.attendanceObj.id == null) {
-                    console.log(JSON.stringify(ctrl.attendanceObj));
-                    TimesheetDAO.addPunchRecord(ctrl.attendanceObj).then(function() {
-                        toastr.success("Manual punch saved.");
-                        ctrl.resetManualPunch();
-                    }).catch(function(e) {
-                        if (e.data != null) {
-                            toastr.error(e.data);
-                        } else {
-                            toastr.error("Manual punch cannot be saved.");
-                        }
-                    }).then(function() {
-                        $rootScope.unmaskLoading();
-                    });
-                } else {
-                    var timesheetObj = angular.copy(ctrl.attendanceObj);
-                    timesheetObj.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                    timesheetObj.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchOutTime);
-                    if (timesheetObj.employeeId != null) {
-                        timesheetObj.employeeId = {id: ctrl.attendanceObj.employeeId};
-                    }
-                    if (timesheetObj.patientId != null) {
-                        timesheetObj.patientId = {id: ctrl.attendanceObj.patientId};
-                    }
-                    TimesheetDAO.update(timesheetObj).then(function() {
-                        toastr.success("Timesheet saved.");
-                        if (searchParams != null) {
-                            if (searchParams.empId != null) {
-                                $state.go('app.employee_timesheet', {id: searchParams.empId});
-                            } else if (searchParams.patId != null) {
-                                $state.go('app.patient_time_sheet', {id: searchParams.patId});
+                var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
+                if (attendanceObjToSave.isMissedPunch === false) {
+                    delete attendanceObjToSave.isMissedPunch;
+                    if (attendanceObjToSave.id == null) {
+                        console.log(JSON.stringify(attendanceObjToSave));
+                        TimesheetDAO.addPunchRecord(attendanceObjToSave).then(function() {
+                            toastr.success("Manual punch saved.");
+                            ctrl.resetManualPunch();
+                        }).catch(function(e) {
+                            if (e.data != null) {
+                                toastr.error(e.data);
+                            } else {
+                                toastr.error("Manual punch cannot be saved.");
                             }
+                        }).then(function() {
+                            $rootScope.unmaskLoading();
+                        });
+                    } else {
+                        delete attendanceObjToSave.isMissedPunch;
+                        attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
+                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchOutTime);
+                        if (attendanceObjToSave.employeeId != null) {
+                            attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }
+                        if (attendanceObjToSave.patientId != null) {
+                            attendanceObjToSave.patientId = {id: ctrl.attendanceObj.patientId};
+                        }
+                        TimesheetDAO.update(attendanceObjToSave).then(function() {
+                            toastr.success("Timesheet saved.");
+                            if (searchParams != null) {
+                                if (searchParams.empId != null) {
+                                    $state.go('app.employee_timesheet', {id: searchParams.empId});
+                                } else if (searchParams.patId != null) {
+                                    $state.go('app.patient_time_sheet', {id: searchParams.patId});
+                                } else if (searchParams.coordinatorId != null) {
+                                    $state.go('app.daily_attendance', {id: searchParams.patId});
+                                }
+                            }
 
 //                        ctrl.resetManualPunch();
-                    }).catch(function(e) {
-                        if (e.data != null) {
-                            toastr.error(e.data);
-                        } else {
-                            toastr.error("Timesheet cannot be saved.");
+                        }).catch(function(e) {
+                            if (e.data != null) {
+                                toastr.error(e.data);
+                            } else {
+                                toastr.error("Timesheet cannot be saved.");
+                            }
+                        }).then(function() {
+                            $rootScope.unmaskLoading();
+                        });
+                    }
+                } else {
+                    if (attendanceObjToSave.id == null) {
+                        delete attendanceObjToSave.isMissedPunch;
+                        console.log(JSON.stringify(attendanceObjToSave));
+                        TimesheetDAO.addMissedPunchRecord(attendanceObjToSave).then(function() {
+                            toastr.success("Manual punch saved.");
+                            ctrl.resetManualPunch();
+                        }).catch(function(e) {
+                            if (e.data != null) {
+                                toastr.error(e.data);
+                            } else {
+                                toastr.error("Manual punch cannot be saved.");
+                            }
+                        }).then(function() {
+                            $rootScope.unmaskLoading();
+                        });
+                    } else {
+                        delete attendanceObjToSave.isMissedPunch;
+                        attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
+                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchOutTime);
+                        if (attendanceObjToSave.employeeId != null) {
+                            attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }
-                    }).then(function() {
-                        $rootScope.unmaskLoading();
-                    });
+                        if (attendanceObjToSave.patientId != null) {
+                            attendanceObjToSave.patientId = {id: ctrl.attendanceObj.patientId};
+                        }
+                        TimesheetDAO.updateMissedPunch(attendanceObjToSave).then(function() {
+                            toastr.success("Timesheet saved.");
+                            if (searchParams != null) {
+                                if (searchParams.empId != null) {
+                                    $state.go('app.employee_timesheet', {id: searchParams.empId});
+                                } else if (searchParams.patId != null) {
+                                    $state.go('app.patient_time_sheet', {id: searchParams.patId});
+                                } else if (searchParams.cordinatorId != null) {
+                                    $state.go('app.daily_attendance', {id: searchParams.cordinatorId});
+                                }
+                            }
+
+//                        ctrl.resetManualPunch();
+                        }).catch(function(e) {
+                            if (e.data != null) {
+                                toastr.error(e.data);
+                            } else {
+                                toastr.error("Timesheet cannot be saved.");
+                            }
+                        }).then(function() {
+                            $rootScope.unmaskLoading();
+                        });
+                    }
                 }
             }
         };

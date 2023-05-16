@@ -22,6 +22,12 @@
                     action: 'addpunch'
                 }
             },
+            addMissedPunchRecord: {
+                method: 'POST',
+                params: {
+                    action: 'missedpunch'
+                }
+            },
             retrievePatientTimeSheet: {
                 method: 'GET',
                 isArray: true,
@@ -44,10 +50,21 @@
                     action: 'get'
                 }
             },
+            getMissedPunch: {
+                params: {
+                    action: 'missedpunch'
+                }
+            },
             update: {
                 method: 'PUT',
                 params: {
                     action: 'update'
+                }
+            },
+            updateMissedPunch: {
+                method: 'PUT',
+                params: {
+                    action: 'missedpunch'
                 }
             }
         });
@@ -67,14 +84,23 @@
             addPunchRecord: function(data) {
                 return api.addPunchRecord(data).$promise;
             },
+            addMissedPunchRecord: function(data) {
+                return api.addMissedPunchRecord(data).$promise;
+            },
             delete: function(data) {
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             get: function(data) {
                 return api.get(data).$promise;
             },
+            getMissedPunch: function(data) {
+                return api.getMissedPunch(data).$promise;
+            },
             update: function(data) {
                 return api.update(data).$promise;
+            },
+            updateMissedPunch: function(data) {
+                return api.updateMissedPunch(data).$promise;
             }
         };
     };
