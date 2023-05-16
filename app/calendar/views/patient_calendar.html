@@ -372,7 +372,8 @@
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>C.C. Phone</strong></label>
     <div class="col-md-8">
-    {{selectPatientModel.patient.careCordinatorContact | tel}} 
+    {{selectPatientModel.patient.careCordinatorContact | tel}}
+    <span ng-if="selectPatientModel.patient.careCordinatorExtension"> ext. {{selectPatientModel.patient.careCordinatorExtension}}</span>
     </div>
     </div>	
 
