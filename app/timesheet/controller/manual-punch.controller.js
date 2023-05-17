@@ -148,8 +148,8 @@
                                     $state.go('app.employee_timesheet', {id: searchParams.empId});
                                 } else if (searchParams.patId != null) {
                                     $state.go('app.patient_time_sheet', {id: searchParams.patId});
-                                } else if (searchParams.coordinatorId != null) {
-                                    $state.go('app.daily_attendance', {id: searchParams.patId});
+                                } else if (searchParams.cordinatorId != null) {
+                                    $state.go('app.daily_attendance', {id: searchParams.cordinatorId});
                                 }
                             }
 
