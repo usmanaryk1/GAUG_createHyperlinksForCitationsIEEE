@@ -98,14 +98,15 @@
                                     <table id="example-1" ng-if="viewDispatch.dispatchList.length" class="table table-bordered table-hover table table-small-font" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="25%" ng-class="viewDispatch.applySortingClass('patientName')" ng-click="viewDispatch.applySorting('patientName')" >Patient
+                                                <th width="23%" ng-class="viewDispatch.applySortingClass('patientName')" ng-click="viewDispatch.applySorting('patientName')" >Patient
                                                 </th>
-                                                <th width="15%" ng-class="viewDispatch.applySortingClass('dispatchCreatedOn')" ng-click="viewDispatch.applySorting('dispatchCreatedOn')" >Date
+                                                <th width="10%" ng-class="viewDispatch.applySortingClass('dispatchCreatedOn')" ng-click="viewDispatch.applySorting('dispatchCreatedOn')" >Date
                                                 </th>
                                                 <th width="10%">Total Recipients</th>
-                                                <th width="25%">Assigned employee</th>
+                                                <th width="23%">Assigned employee</th>
                                                 <th width="10%">Status</th>
-                                                <th width="20%">Actions</th>
+                                                <th width="12%">Responses</th>
+                                                <th width="12%">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -117,11 +118,15 @@
                                                     <b>{{dispatch.patientName}}</b>{{dispatch.careType?" - "+dispatch.careType:""}}
                                                 </td>
                                                 <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer">{{dispatch.dispatchCreatedOn}}</td>
-                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer">
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer; text-align: center">
                                                     {{dispatch.totalRecipient}}
                                                 </td>
                                                 <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer">{{dispatch.assignedEmployeeName}}</td>
                                                 <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer; text-transform: capitalize;">{{dispatch.status}}</td>
+                                                <td ng-click="viewDispatch.navigateToDispatchDetails(dispatch.id)" style="cursor: pointer; text-align: center">      
+                                                    <span ng-show="dispatch.interestedCount" tooltip="Interested" class="badge badge-green">{{dispatch.interestedCount}}</span>
+                                                    <span ng-show="dispatch.notInterestedCount" tooltip="Not Interested" class="badge badge-red">{{dispatch.notInterestedCount}}</span>
+                                                </td>
                                                 <td>
                                                     <div class="center">
                                                         <!--<a class="btn icon-left fa fa-edit deactivate_bt" ng-if="hasAccess('EDIT_DISPATCH')" ng-href="{{'#/app/dispatch-info/' + dispatch.id}}" tooltip="Edit"><span class="ed_b"></span></a>-->

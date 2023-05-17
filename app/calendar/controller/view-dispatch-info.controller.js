@@ -25,13 +25,45 @@
 
         ctrl.employeeList = [];
 
-        if ($state.params.id && $state.params.id !== '') {
-            ctrl.processdMode = true;
+        ctrl.retrieveDispatch = function(){
             DispatchDAO.get({id: $state.params.id}).then(function (res) {
                 ctrl.dispatchInfo = angular.copy(res);
-                ctrl.employees = angular.copy(res.employeeDispatchResponses);
+                var employeeList = [];
+
+                var noResponseEmployeeList = [];
+                var interestedEmployeeList = [];
+                var notInterestedEmployeeList = [];
+                for (var i = 0; i < res.employeeDispatchResponses.length; i++) {
+                    if (res.employeeDispatchResponses[i].responseStatus == 'Interested') {
+                        interestedEmployeeList.push(res.employeeDispatchResponses[i]);
+                    } else if (res.employeeDispatchResponses[i].responseStatus == 'Not Interested') {
+                        notInterestedEmployeeList.push(res.employeeDispatchResponses[i]);
+                    } else {
+                        noResponseEmployeeList.push(res.employeeDispatchResponses[i]);
+                    }
+                }
+                console.log(interestedEmployeeList.length +'====' + notInterestedEmployeeList.length + "======" + noResponseEmployeeList.length);
+                var sortedNoResponseEmployeeList = _(noResponseEmployeeList).chain()
+                        .sortBy('employeeName')
+                        .value();
+                var sortedInterestedEmployeeList = _(interestedEmployeeList).chain()
+                        .sortBy('dateUpdated')
+                        .value();
+                var sortedNotInterestedEmployeeList = _(notInterestedEmployeeList).chain()
+                        .sortBy('dateUpdated')
+                        .value();
+                employeeList = employeeList.concat(sortedInterestedEmployeeList);
+                employeeList= employeeList.concat(sortedNotInterestedEmployeeList);
+                employeeList=employeeList.concat(sortedNoResponseEmployeeList);
+                console.log(employeeList.length)
+                ctrl.employees = employeeList;
+//                $rootScope.unmaskLoading();
                 ctrl.rerenderDataTable();
             });
+        };
+        if ($state.params.id && $state.params.id !== '') {
+            ctrl.processdMode = true;
+            ctrl.retrieveDispatch();
         } else {
             ctrl.processdMode = false;
         }
@@ -192,7 +224,7 @@
         };
 
         ctrl.assignCase = function (emp) {
-            var patientObj={};
+            var patientObj = {};
             function open() {
                 $rootScope.unmaskLoading();
                 ctrl.patientPopup = $modal.open({
@@ -213,11 +245,7 @@
 
                 ctrl.patientPopup.result.then(function (saved) {
                     if (saved) {
-                        DispatchDAO.get({id: $state.params.id}).then(function (res) {
-                            ctrl.dispatchInfo = angular.copy(res);
-                            ctrl.employees = angular.copy(res.employeeDispatchResponses);
-                            ctrl.rerenderDataTable();
-                        });
+                        ctrl.retrieveDispatch();
                     }
                 });
             }
