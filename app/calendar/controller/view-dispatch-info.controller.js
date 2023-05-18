@@ -4,6 +4,7 @@
         $rootScope.maskLoading();
         ctrl.datatableObj = {};
         Page.setTitle("Dispatch Details");
+        ctrl.employeeDispatchResponses = ontime_data.employee_dispatch_responses;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         $rootScope.positions = {};
@@ -34,15 +35,14 @@
                 var interestedEmployeeList = [];
                 var notInterestedEmployeeList = [];
                 for (var i = 0; i < res.employeeDispatchResponses.length; i++) {
-                    if (res.employeeDispatchResponses[i].responseStatus == 'Interested') {
+                    if (ctrl.employeeDispatchResponses[res.employeeDispatchResponses[i].responseStatus] == 'Interested') {
                         interestedEmployeeList.push(res.employeeDispatchResponses[i]);
-                    } else if (res.employeeDispatchResponses[i].responseStatus == 'Not Interested') {
+                    } else if (ctrl.employeeDispatchResponses[res.employeeDispatchResponses[i].responseStatus] == 'Not Interested') {
                         notInterestedEmployeeList.push(res.employeeDispatchResponses[i]);
                     } else {
                         noResponseEmployeeList.push(res.employeeDispatchResponses[i]);
                     }
                 }
-                console.log(interestedEmployeeList.length +'====' + notInterestedEmployeeList.length + "======" + noResponseEmployeeList.length);
                 var sortedNoResponseEmployeeList = _(noResponseEmployeeList).chain()
                         .sortBy('employeeName')
                         .value();

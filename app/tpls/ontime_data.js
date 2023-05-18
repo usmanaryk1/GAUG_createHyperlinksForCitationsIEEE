@@ -13,6 +13,11 @@ ontime_data = {
     'recurranceTypes': {D: "Daily", W: "Weekly", N: "No Repeat"},
     'eventTypes': {S: "Schedule", A: "Available", U: "Unavailable"},
     'company_code': "TRT",
+    employee_dispatch_responses : {
+        '1': 'Interested',
+        '0': 'Not Interested',
+        '2': 'Not Sure'
+    },
     positionGroups: {
         'NURSING_CARE_COORDINATOR': "NCC",
         'STAFFING_COORDINATOR': "SC",

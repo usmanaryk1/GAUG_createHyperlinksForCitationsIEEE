@@ -1,6 +1,7 @@
 (function () {
     function DispatchResponseCtrl(responseObj, $rootScope, $modalInstance, DispatchDAO) {
         var ctrl = this;
+        ctrl.employeeDispatchResponses = ontime_data.employee_dispatch_responses;
         ctrl.employeeDispatchResponse = responseObj;
         ctrl.save = function () {
             ctrl.DispatchResponseForm.$submitted = true;
