@@ -134,7 +134,7 @@
                             <tbody>
                                 <tr ng-repeat="timesheet in dAttendance.attendanceList">
                                     <th>
-                                        {{timesheet.punchInTime|timesheetformat}} - {{timesheet.punchInTime|date :dateFormat}}
+                                        {{timesheet.roundedPunchInTime|timesheetformat}} - {{timesheet.roundedPunchInTime|date :dateFormat}}
                                     </th>
                                     <td>{{timesheet.employeeId.fName + " " + timesheet.employeeId.lName}}</td>
                                     <td>{{timesheet.patientId.fName + " " + timesheet.patientId.lName}}</td>
@@ -144,11 +144,11 @@
                                         <!--Display red dot for not matched GPS location-->
                                         <!--<div class="red_dot"></div>-->
                                         <div class="black_dot"></div>
-                                        {{timesheet.punchInTime|date :timeFormat}}
+                                        {{timesheet.roundedPunchInTime|date :timeFormat}}
                                     </td>
                                     <td>
                                         <div class="black_dot"></div>
-                                        {{timesheet.punchOutTime|date :timeFormat}}
+                                        {{timesheet.roundedPunchOutTime|date :timeFormat}}
                                     </td>
                                     <td>
                                         <div style="float:left; min-width:100px;">

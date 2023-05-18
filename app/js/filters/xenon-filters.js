@@ -98,8 +98,8 @@ angular.module('xenon.filter', [])
                 return function(objList) {
                     var durationSum = 0;
                     angular.forEach(objList, function(obj) {
-                        var earlierdate = new Date(obj.punchInTime);
-                        var laterdate = new Date(obj.punchOutTime);
+                        var earlierdate = new Date(obj.roundedPunchInTime);
+                        var laterdate = new Date(obj.roundedPunchOutTime);
                         durationSum += laterdate.getTime() - earlierdate.getTime();
                     });
 

@@ -133,7 +133,7 @@
                                     <tbody>
                                         <tr ng-repeat="timesheet in empTimesheet.timesheetList">
                                             <th>
-                                                {{timesheet.punchInTime|timesheetformat}} - {{timesheet.punchInTime|date :dateFormat}}
+                                                {{timesheet.roundedPunchInTime|timesheetformat}} - {{timesheet.roundedPunchInTime|date :dateFormat}}
                                             </th>
                                             <td>
                                                 <!--Display green dot for matched GPS location-->
@@ -141,14 +141,14 @@
                                                 <!--Display red dot for not matched GPS location-->
                                                 <!--<div class="red_dot"></div>-->
                                                 <div class="black_dot"></div>
-                                                {{timesheet.punchInTime|date :timeFormat}}
+                                                {{timesheet.roundedPunchInTime|date :timeFormat}}
                                             </td>
                                             <td>
                                                 <div class="black_dot"></div>
-                                                {{timesheet.punchOutTime|date :timeFormat}}
+                                                {{timesheet.roundedPunchOutTime|date :timeFormat}}
                                             </td>
                                             <td>
-                                                {{timesheet.punchInTime|duration:timesheet.punchOutTime}}
+                                                {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
                                             </td>
                                             <td>
                                                 {{timesheet.patientId.fName + " " + timesheet.patientId.lName}}
