@@ -22,46 +22,51 @@
                     'show'
                             :calendar.isOpen, 'hide':!calendar.isOpen}"></datepicker>
         </div>
-        <div class="mwl-right col-md-7 col-sm-12 no-padding">
-            <div class='col-md-6 col-sm-12' ng-if='calendar.isEmployeeSearchPage'>    
-                <script type="text/javascript">
-                            jQuery(document).ready(function ($)
-                    {
-                    setTimeout(function () {
-                    $("#patientDropdown").select2({
-                    //                                                        minimumResultsForSearch: -1,
-                    placeholder: 'Select Patient...',
-                            //                                                        minimumInputLength: 1,
-                            //                                                        placeholder: 'Search',
-                    }).on('select2-open', function ()
-                    {
-                    // Adding Custom Scrollbar
-                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                    });
-                    }, 200);
-                    });</script>
-                <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.patientObj" ng-options='pat as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.patientChanged(calendar.patientObj)">
-                    <option value="" selected hidden />
-                </select>               
-            </div>
+        <form>
+            <div class="mwl-right col-md-7 col-sm-12 no-padding">
+                <div class='col-md-6 col-sm-12 form-group' ng-if='calendar.isEmployeeSearchPage' ng-class="{ 'validate-has-error':calendar.searchParams.patientId == null && calendar.dispatchClicked}">    
+                    <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                        {
+                        setTimeout(function () {
+                        $("#patientDropdown").select2({
+                        //                                                        minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                                //                                                        minimumInputLength: 1,
+                                //                                                        placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
+                        });</script>
+                    <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.patientObj" ng-options='pat as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.patientChanged(calendar.patientObj)">
+                        <option value="" selected hidden />
+                    </select>       
+                    <div ng-show='calendar.searchParams.patientId == null && calendar.dispatchClicked'>
+                        <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient to issue dispatch.</span>
+                    </div>
+                </div>
 
-            <div class='col-sm-12 col-md-6 text-right pad0 pull-right'>
-                <a ng-if='!calendar.isEmployeeSearchPage' href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
-                <a ng-if='calendar.isEmployeeSearchPage' href="" ng-disabled='calendar.searchParams.patientId == null' ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
-                <div class="mwl-button-group" ng-if='!calendar.isWorksiteSchedulePage'>
-                    <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
+                <div class='col-sm-12 col-md-6 text-right pad0 pull-right'>
+                    <a ng-if='!calendar.isEmployeeSearchPage' href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
+                    <a ng-if='calendar.isEmployeeSearchPage' href="" ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
+                    <div class="mwl-button-group" ng-if='!calendar.isWorksiteSchedulePage'>
+                        <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
                             'mwl-state-active'
                                     : calendar.calendarView == 'month'}">month</button>
-                    <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{
+                        <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{
                             'mwl-state-active'
                                     : calendar.calendarView == 'week'}">week</button>
-                </div>
-                <div class="mwl-button-group">
-                    <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"><span class="mwl-icon mwl-icon-prev fa-angle-left" ></span></button>
-                    <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right" mwl-date-modifier date="calendar.calendarDay" increment="calendar.calendarView"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
+                    </div>
+                    <div class="mwl-button-group">
+                        <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"><span class="mwl-icon mwl-icon-prev fa-angle-left" ></span></button>
+                        <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right" mwl-date-modifier date="calendar.calendarDay" increment="calendar.calendarView"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="mwl-center"></div>
         <div class="mwl-clear"></div>
     </div>

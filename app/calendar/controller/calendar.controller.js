@@ -106,7 +106,7 @@
                 workSiteId = ctrl.searchParams.workSiteId;
             }
             ctrl.searchParams = {limit: 10, skip: 0};
-            if (workSiteId != null) {                
+            if (workSiteId != null) {
                 ctrl.searchParams.workSiteId = workSiteId;
                 $("#worksiteDropdown").select2("val", workSiteId);
             }
@@ -976,6 +976,10 @@
                 });
             };
             ctrl.dispatchConfirmModal = function () {
+                ctrl.dispatchClicked = true;
+                if(ctrl.searchParams.patientId == null){
+                    return;
+                }
                 var modalInstance = $modal.open({
                     templateUrl: 'app/calendar/views/dispatch_confirmation_modal.html',
                     controller: 'DispatchConfirmModalController as dispatchConfirm',

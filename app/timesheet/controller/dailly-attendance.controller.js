@@ -569,6 +569,11 @@
             ctrl.formSubmitted = true;
         };
         ctrl.commonFilter = function () {
+            if(ctrl.isWorksiteTimesheet && ctrl.searchParams.workSiteId==null){
+                $rootScope.unmaskLoading();
+                return;
+            }
+            
             if (ctrl.searchParams.isSchedule) {
                 ctrl.searchParams.order = 'asc';
                 ctrl.filterSchedule();

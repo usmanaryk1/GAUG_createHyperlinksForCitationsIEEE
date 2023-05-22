@@ -2,7 +2,7 @@
     function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService, DispatchDAO) {
 
         var ctrl = this;
-        var dispatchMessage = "Open Case, $age $sex in $city, $state - $date from $startTime to $endTime $liveIn. Accept case now using OnTime or contact $patientCoordinator for more information.";
+        var dispatchMessage = "Open Case. $age year old $sex located in $city, $state $zip. To accept case now mark interested below or contact $patientCoordinator for more information.";
 
         ctrl.patient_list = [];
 
@@ -854,6 +854,7 @@
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$sex", ($rootScope.patientPopup.patient.gender === 'M' ? 'Male' : 'Female'));
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$city", $rootScope.patientPopup.patient.patientAddress.city);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$state", $rootScope.patientPopup.patient.patientAddress.state);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$zip", $rootScope.patientPopup.patient.patientAddress.zipcode);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$date", moment($rootScope.patientPopup.data.startDate).format("dddd, MMMM Do YYYY"));
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$startTime", $rootScope.patientPopup.data.startTime);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$endTime", $rootScope.patientPopup.data.endTime);

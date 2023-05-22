@@ -60,12 +60,15 @@
                                                                                         </div>-->
                                         </div>
                                     </div>
-                                    <div class="form-group" ng-if="dAttendance.isWorksiteTimesheet">
+                                    <div class="form-group" ng-if="dAttendance.isWorksiteTimesheet" ng-class="{ 'validate-has-error':dAttendance.searchParams.workSiteId == null && dAttendance.formSubmitted}">
                                         <label class="col-sm-3 control-label pad_lf0">Worksite</label>
                                         <div class="col-sm-9">                                                                                         
                                             <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="dAttendance.searchParams.workSiteId" ng-options='worksite.id as worksite.name for worksite in dAttendance.workSiteList'>
                                                 <option value="" selected hidden />
                                             </select>                                                                                          
+                                            <div ng-show='dAttendance.searchParams.workSiteId == null && dAttendance.formSubmitted'>
+                                                <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Worksite.</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
