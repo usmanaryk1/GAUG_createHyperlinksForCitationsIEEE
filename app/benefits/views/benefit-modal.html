@@ -1,20 +1,20 @@
 <div class="">
 
-    <form class="validate form-horizontal" name="careTypeForm" id="care_type_form" >
+    <form class="validate form-horizontal" name="benefitModelForm" id="benefit_model_form" >
         <div class="modal-header">
-            <button type="button" class="close" ng-click="benefitModal.close();" aria-hidden="true">&times;</button>
+            <button type="button" class="close" ng-click="benefitModal.cancel();" aria-hidden="true">&times;</button>
             <h4 class="modal-title">{{benefitModal.modalTitle}} Parameters</h4>
         </div>
 
         <div class="modal-body">
-            <div ng-if="benefitModal.selectedBenefitObj == 's' || benefitModal.selectedBenefitObj == 'p' || benefitModal.selectedBenefitObj == 'v'">
+            <div ng-if="benefitModal.parameters.lineType == 'SIT' || benefitModal.parameters.lineType == 'PRT' || benefitModal.parameters.lineType == 'VCT'">
                 <div class="row">
                     <div class="form-group">
                         <label class="col-sm-4 control-label add-padding-modal" >
                             Vesting period
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" type="text" ng-model="benefitModal.parameters.vestingPeriod">                         
+                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" type="text" ng-model="benefitModal.parameters.vestingPeriodInDays">                         
                         </div>                   
                         <div class="col-sm-1 form-control-static">days</div>
                     </div>
@@ -25,7 +25,7 @@
                             Accrual rate
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.accrualRate"> 
+                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.accuralRatePerHour"> 
                         </div>                   
                     </div>
                 </div>
@@ -33,39 +33,51 @@
                 <div class="row">
                     <div class="form-group">
                         <label class="col-sm-4 control-label add-padding-modal" >
-                            Expiration required
+                            Expiration required{{benefitModal.parameters.expirationRequired}}
                         </label>
                         <div class="col-sm-5 add-padding-modal">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input class="cbr cbr-primary" name="expirationRequired" value="visit" type="radio" ng-model="benefitModal.parameters.expirationRequired">
+                                    <input class="cbr cbr-primary" name="expirationRequired" value="true" type="radio" ng-model="benefitModal.parameters.expirationRequired">
                                     Yes
                                 </label>
                                 <label class="cbr-inline">
-                                    <input name="expirationRequired" class="cbr cbr-primary" value="day" type="radio" ng-model="benefitModal.parameters.expirationRequired">
+                                    <input name="expirationRequired" class="cbr cbr-primary" value="false" type="radio" ng-model="benefitModal.parameters.expirationRequired">
                                     No
                                 </label>
                             </div>
                         </div>                    
                     </div>
                 </div>
-                <div class="row" ng-if="benefitModal.parameters.expirationRequired">
+                <div class="row" ng-if="benefitModal.parameters.expirationRequired === 'true'">
                     <div class="form-group">
                         <label class="col-sm-4 control-label add-padding-modal" >
-                            Expiration 
+                            Expiration
                         </label>
                         <div class="col-sm-2 pad_rg0">
-                            <select class="form-control">
+                            <select class="form-control" ng-model="benefitModal.parameters.expirationMonth">
                                 <option value="" class="">Month</option>
-                                <option value="" class="">Jan</option>
-                                <option value="" class="">Feb</option>
+                                <option value="1" class="">JAN</option>
+                                <option value="2" class="">FEB</option>
+                                <option value="3" class="">MAR</option>
+                                <option value="4" class="">APR</option>
+                                <option value="5" class="">MAY</option>
+                                <option value="6" class="">JUN</option>
+                                <option value="7" class="">JUL</option>
+                                <option value="8" class="">AUG</option>
+                                <option value="9" class="">SEP</option>
+                                <option value="10" class="">OCT</option>
+                                <option value="11" class="">NOV</option>
+                                <option value="12" class="">DEC</option>
                             </select>
                         </div>
                         <div class="col-sm-2 add-padding-modal">
-                            <select class="form-control">
+                            <select class="form-control" ng-model="benefitModal.parameters.expirationDay">
                                 <option value="" class="">Day</option>                            
-                                <option value="" class="">1</option>                            
-                                <option value="" class="">2</option>                            
+                                <option value="{{day}}" ng-repeat="day in benefitModal.days">{{day}}</option>
+                                <option value="30" ng-if="benefitModal.parameters.expirationMonth && benefitModal.parameters.expirationMonth != 2">30</option>
+                                <option value="31"  ng-if="benefitModal.parameters.expirationMonth && benefitModal.parameters.expirationMonth != 2
+                                        && ['1','3','5','7','8','10','12'].indexOf(benefitModal.parameters.expirationMonth) > -1">31</option>
                             </select>
                         </div>
                     </div>
@@ -76,20 +88,20 @@
                             Accrual days for salaried employees 
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.accrualDays"> 
+                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.accuralDaysForSalaried"> 
                         </div>      
                         <div class="col-sm-1 form-control-static">days</div>
                     </div>
                 </div>
             </div>
-            <div ng-if="benefitModal.selectedBenefitObj == 'h'">
+            <div ng-if="benefitModal.parameters.lineType == 'HEC'">
                 <div class="row">
                     <div class="form-group">
                         <label class="col-sm-4 control-label add-padding-modal" >
                             Plan Name
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="planName" maxlength="50" numbers-only="true" type="text" ng-model="benefitModal.parameters.planName">                         
+                            <input class="form-control" name="planName" maxlength="50" type="text" ng-model="benefitModal.parameters.planName">                         
                         </div>                   
                     </div>
                 </div>
@@ -103,26 +115,15 @@
                         </div>                   
                     </div>
                 </div> 
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label add-padding-modal" >
-                            Employee Contribution
-                        </label>
-                        <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="employeeContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employeeContribution"> 
-                        </div>                   
-                    </div>
-                </div> 
-
             </div>
-            <div ng-if="benefitModal.selectedBenefitObj == 'w'">
+            <div ng-if="benefitModal.parameters.lineType == 'WFC'">
                 <div class="row">
                     <div class="form-group">
                         <label class="col-sm-4 control-label add-padding-modal" >
                             NYC Accrual Rate
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="nycAccrualRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.nycAccrualRate"> 
+                            <input class="form-control" name="nycAccrualRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.nycAccuralRate"> 
                         </div>                   
                     </div>
                 </div>
@@ -132,17 +133,7 @@
                             NYS Accrual Rate
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="nysAccrualRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.nysAccrualRate"> 
-                        </div>                   
-                    </div>
-                </div> 
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label add-padding-modal" >
-                            Fixed Employee Contribution
-                        </label>
-                        <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="fixedEmployeeContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.fixedEmployeeContribution"> 
+                            <input class="form-control" name="nysAccrualRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.nysAccuralRate"> 
                         </div>                   
                     </div>
                 </div> 
@@ -152,13 +143,13 @@
                             Fixed Employer Contribution
                         </label>
                         <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="fixedEmployerContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.fixedEmployerContribution"> 
+                            <input class="form-control" name="fixedEmployerContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employerContribution"> 
                         </div>                   
                     </div>
                 </div> 
 
             </div>
-            <div ng-if="benefitModal.selectedBenefitObj == 'k'">
+            <div ng-if="benefitModal.parameters.lineType == '401'">
                 <div class="row">
                     <div class="form-group">
                         <label class="col-sm-4 control-label add-padding-modal" >
@@ -169,23 +160,12 @@
                         </div>                   
                     </div>
                 </div> 
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label add-padding-modal" >
-                            Employee Contribution
-                        </label>
-                        <div class="col-sm-4 add-padding-modal">
-                            <input class="form-control" name="employeeContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employeeContribution"> 
-                        </div>                   
-                    </div>
-                </div> 
-
             </div>
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-white" ng-click="benefitModal.close();">Close</button>
-            <button type="button" class="btn btn-red" ng-show="benefitModal.showRemove" ng-click="benefitModal.remove();">Remove</button>
+            <button type="button" class="btn btn-white" ng-click="benefitModal.cancel();">Close</button>
+            <button type="button" class="btn btn-red" ng-show="benefitModal.editMode" ng-click="benefitModal.remove();">Remove</button>
             <button type="submit" class="btn btn-success" ng-click="benefitModal.save();">Save changes</button>
         </div>
     </form>
