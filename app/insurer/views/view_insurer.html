@@ -58,7 +58,7 @@
                                     <div class="center">
                                         <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)" tooltip="Edit"><span class="ed_b"></span></a> 
                                         <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')" tooltip="Delete"><span class="ed_b"></span></a> 
-                                        <a ng-if="insurer.contractFile" class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}" tooltip="Download Contract"><span class="ed_b"></span></a> 
+                                        <a ng-if="insurer.contractFile" class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}?viewDownload=true" target="_blank" tooltip="Download Contract"><span class="ed_b"></span></a> 
                                     </div>
                                 </td>
                             </tr>
