@@ -1,4 +1,4 @@
-(function () {
+(function() {
     function ViewTasksCtrl($scope, TasksDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService, PositionDAO, LanguageDAO) {
         var ctrl = this;
 
@@ -21,14 +21,14 @@
         }
 
         function initMultiSelect() {
-            setTimeout(function () {
+            setTimeout(function() {
                 $("#companyPositionId").multiSelect({
-                    afterInit: function ()
+                    afterInit: function()
                     {
                         // Add alternative scrollbar to list
                         this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
                     },
-                    afterSelect: function ()
+                    afterSelect: function()
                     {
                         // Update scrollbar size
                         this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
@@ -37,7 +37,7 @@
                 $("#options").select2({
                     placeholder: 'Choose Options',
                     allowClear: true
-                }).on('select2-open', function ()
+                }).on('select2-open', function()
                 {
                     // Adding Custom Scrollbar
                     $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
@@ -46,38 +46,38 @@
         }
 
         function getPositions() {
-            PositionDAO.view({subAction: 'active'}).then(function (res) {
+            PositionDAO.view({subAction: 'active'}).then(function(res) {
                 ctrl.positions = res;
             });
         }
         ;
 
         function getLanguages() {
-            LanguageDAO.view({subAction: 'active'}).then(function (res) {
+            LanguageDAO.view({subAction: 'active'}).then(function(res) {
                 $rootScope.taskModel.languages = res;
             });
         }
 
         function retrieveTasksData() {
 
-            TasksDAO.view({subAction: 'all'}).then(function (res) {
+            TasksDAO.view({subAction: 'all'}).then(function(res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
                     }
                 }); // showLoadingBar
                 ctrl.taskList = res;
-            }).catch(function (data, status) {
+            }).catch(function(data, status) {
                 toastr.error("Failed to retrieve tasks.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
 
                     }
                 }); // showLoadingBar
-            }).then(function () {
+            }).then(function() {
                 $rootScope.unmaskLoading();
             });
         }
@@ -89,9 +89,9 @@
                 controllerAs: 'task'
             });
 
-            modalInstance.result.then(function (selectedItem) {
+            modalInstance.result.then(function(selectedItem) {
                 initMultiSelect();
-            }, function () {
+            }, function() {
 
             });
         }
@@ -106,15 +106,15 @@
                 controller: 'EditTaskCtrl',
                 controllerAs: 'task',
                 resolve: {
-                    task_detail: function () {
+                    task_detail: function() {
                         return taskCopy;
                     }
                 }
             });
 
-            modalInstance.result.then(function (selectedItem) {
+            modalInstance.result.then(function(selectedItem) {
                 initMultiSelect();
-            }, function () {
+            }, function() {
 
             });
         }
@@ -170,23 +170,23 @@
             }
 
 
-            $rootScope.taskActivateModal.confirm = function (task) {
+            $rootScope.taskActivateModal.confirm = function(task) {
                 ctrl.activateDeactivateTask(task, action);
             };
 
-            $rootScope.taskActivateModal.dismiss = function () {
+            $rootScope.taskActivateModal.dismiss = function() {
                 $rootScope.taskActivateModal.close();
             }
 
         }
 
         function activateDeactivateTask(task, action) {
-            TasksDAO.changestatus({id: task.id, status: action}).then(function (res) {
+            TasksDAO.changestatus({id: task.id, status: action}).then(function(res) {
                 toastr.success("Task " + action + "d.");
                 ctrl.retrieveTasks();
-            }).catch(function (data, status) {
+            }).catch(function(data, status) {
                 toastr.error("Task cannot be " + action + "d.");
-            }).then(function () {
+            }).then(function() {
                 $rootScope.taskActivateModal.close();
                 $rootScope.unmaskLoading();
             });
@@ -195,7 +195,7 @@
         initialize();
     }
 
-    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO,$state) {
+    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO, $state) {
         var vm = this;
 
         vm.closePopup = closePopup;
@@ -210,13 +210,13 @@
 
         function activate() {
             var promises = [getPositions(), getLanguages()];
-            $q.all(promises).then(function (response) {
+            $q.all(promises).then(function(response) {
 
             })
         }
 
         function getPositions() {
-            PositionDAO.view({subAction: 'active'}).then(function (res) {
+            PositionDAO.view({subAction: 'active'}).then(function(res) {
                 vm.positions = res;
                 delete vm.positions["$promise"];
                 delete vm.positions["$resolved"];
@@ -224,16 +224,16 @@
         }
 
         function getLanguages() {
-            LanguageDAO.view({subAction: 'active'}).then(function (res) {
+            LanguageDAO.view({subAction: 'active'}).then(function(res) {
                 vm.languages = res;
             });
         }
 
-        $scope.$watch(function () {
+        $scope.$watch(function() {
             return vm.positions;
-        }, function (newVal, oldValue) {
+        }, function(newVal, oldValue) {
             if (vm.positions) {
-                $timeout(function () {
+                $timeout(function() {
                     $('#companyPositionId').multiSelect('refresh');
                 }, 100);
             }
@@ -246,11 +246,11 @@
         function save(action) {
             vm.task.positionTasks = [];
 
-            if(vm.companyPositionId.length == 0 ){
+            if (vm.companyPositionId.length == 0) {
                 toastr.error('Please select atleast one company position');
                 return;
             }
-            angular.forEach(vm.companyPositionId, function (value) {
+            angular.forEach(vm.companyPositionId, function(value) {
                 vm.task.positionTasks.push({
                     positionTaskPK: {'companyPositionId': value},
                     status: 'a'
@@ -259,8 +259,8 @@
 
             vm.task.taskLanguageSet = [];
             var flag = 0;
-            angular.forEach(vm.languages, function (value) {
-                
+            angular.forEach(vm.languages, function(value) {
+
                 if (!angular.isUndefined(value.options) && value.options.length > 0) {
                     vm.task.taskLanguageSet.push({
                         languageId: {'id': value.id},
@@ -269,15 +269,11 @@
                         companyPositionId: {id: 1}
                     });
                     if (value.languageCode == "EN-US") {
-                       //vm.task.languageId = {'id': value.id};
-                            if(value.task == null){
-                                toastr.error('Please enter title in English');
-                                flag = 1;
-                            }
-                           if(value.options == null || value.options.length == 0 ){
-                               toastr.error('Please enter atleast one option in English');
-                               flag = 1;
-                           }
+                        //vm.task.languageId = {'id': value.id};
+                        if (value.task == null) {
+                            toastr.error('Please enter title in English');
+                            flag = 1;
+                        }
                         vm.task.task = value.task;
                         vm.task.options = value.options.join("|")
                     }
@@ -290,12 +286,8 @@
                     });
                     if (value.languageCode == "EN-US") {
                         //vm.task.languageId = {'id': value.id};
-                        if(value.task == null){
+                        if (value.task == null) {
                             toastr.error('Please enter title in English');
-                            flag = 1;
-                        }
-                        if(value.options == null || value.options.length == 0 ){
-                            toastr.error('Please enter atleast one option in English');
                             flag = 1;
                         }
                         vm.task.task = value.task;
@@ -304,15 +296,15 @@
                 }
             });
 
-            if(flag == 1) {
+            if (flag == 1) {
                 return;
             }
 
-            TasksDAO.save(vm.task).then(function () {
+            TasksDAO.save(vm.task).then(function() {
                 $modalInstance.close();
                 toastr.success("Task saved successfully.");
-               $state.go("admin.task-list", {status: 'all'}, {reload: true});
-            }, function () {
+                $state.go("admin.task-list", {status: 'all'}, {reload: true});
+            }, function() {
                 toastr.error("Something went wrong!");
             });
         }
@@ -334,25 +326,25 @@
 
         function activate() {
             var promises = [getPositions()];
-            $q.all(promises).then(function (response) {
+            $q.all(promises).then(function(response) {
                 uiDataBind();
             })
         }
 
         function uiDataBind() {
             console.log(task_detail);
-            angular.forEach(task_detail.positionTasks, function (value) {
+            angular.forEach(task_detail.positionTasks, function(value) {
                 vm.companyPositionId.push(value.companyPositionId);
             })
 
-            angular.forEach(task_detail.taskLanguageSet, function (value) {
+            angular.forEach(task_detail.taskLanguageSet, function(value) {
                 if (value.options == null) {
                     vm.languages.push({
                         id: value.languageId.id,
                         language: value.languageId.language,
                         options: [],
                         task: value.task,
-                        languageCode : value.languageId.languageCode
+                        languageCode: value.languageId.languageCode
                     })
                 } else {
                     vm.languages.push({
@@ -360,26 +352,26 @@
                         language: value.languageId.language,
                         options: value.options.split("|"),
                         task: value.task,
-                        languageCode : value.languageId.languageCode
-                        
+                        languageCode: value.languageId.languageCode
+
                     })
                 }
             })
         }
 
         function getPositions() {
-            PositionDAO.view({subAction: 'active'}).then(function (res) {
+            PositionDAO.view({subAction: 'active'}).then(function(res) {
                 vm.positions = res;
                 delete vm.positions["$promise"];
                 delete vm.positions["$resolved"];
             });
         }
 
-        $scope.$watch(function () {
+        $scope.$watch(function() {
             return vm.positions;
-        }, function (newVal, oldValue) {
+        }, function(newVal, oldValue) {
             if (vm.positions) {
-                $timeout(function () {
+                $timeout(function() {
                     $('#companyPositionId').multiSelect('refresh');
                 }, 100);
             }
@@ -397,11 +389,11 @@
 
             vm.task.positionTasks = [];
 
-            if(vm.companyPositionId.length == 0 ){
+            if (vm.companyPositionId.length == 0) {
                 toastr.error('Please select atleast one company position');
                 return;
             }
-            angular.forEach(vm.companyPositionId, function (value) {
+            angular.forEach(vm.companyPositionId, function(value) {
                 vm.task.positionTasks.push({
                     positionTaskPK: {'companyPositionId': value},
                     status: 'a'
@@ -410,8 +402,8 @@
 
             vm.task.taskLanguageSet = [];
             var flag = 0;
-            angular.forEach(vm.languages, function (value) {
-                
+            angular.forEach(vm.languages, function(value) {
+
                 if (!angular.isUndefined(value.options) && value.options.length > 0) {
                     vm.task.taskLanguageSet.push({
                         languageId: {'id': value.id},
@@ -420,15 +412,11 @@
                         companyPositionId: {id: 1}
                     });
                     if (value.languageCode == "EN-US") {
-                       //vm.task.languageId = {'id': value.id};
-                            if(value.task == null){
-                                toastr.error('Please enter title in English');
-                                flag = 1;
-                            }
-                           if(value.options == null || value.options.length == 0 ){
-                               toastr.error('Please enter atleast one option in English');
-                               flag = 1;
-                           }
+                        //vm.task.languageId = {'id': value.id};
+                        if (value.task == null) {
+                            toastr.error('Please enter title in English');
+                            flag = 1;
+                        }
                         vm.task.task = value.task;
                         vm.task.options = value.options.join("|")
                     }
@@ -441,12 +429,8 @@
                     });
                     if (value.languageCode == "EN-US") {
                         //vm.task.languageId = {'id': value.id};
-                        if(value.task == null){
+                        if (value.task == null) {
                             toastr.error('Please enter title in English');
-                            flag = 1;
-                        }
-                        if(value.options == null || value.options.length == 0 ){
-                            toastr.error('Please enter atleast one option in English');
                             flag = 1;
                         }
                         vm.task.task = value.task;
@@ -455,15 +439,15 @@
                 }
             });
 
-            if(flag == 1) {
+            if (flag == 1) {
                 return;
             }
 
-            TasksDAO.update(vm.task).then(function () {
+            TasksDAO.update(vm.task).then(function() {
                 $modalInstance.close();
                 toastr.success("Task updated");
-                 $state.go("admin.task-list", {status: 'all'}, {reload: true});
-            }, function () {
+                $state.go("admin.task-list", {status: 'all'}, {reload: true});
+            }, function() {
                 toastr.error("Something went wrong!");
             });
         }
