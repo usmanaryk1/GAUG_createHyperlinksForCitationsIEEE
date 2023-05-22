@@ -1,0 +1,192 @@
+<div class="">
+
+    <form class="validate form-horizontal" name="careTypeForm" id="care_type_form" >
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="benefitModal.close();" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{benefitModal.modalTitle}} Parameters</h4>
+        </div>
+
+        <div class="modal-body">
+            <div ng-if="benefitModal.selectedBenefitObj == 's' || benefitModal.selectedBenefitObj == 'p' || benefitModal.selectedBenefitObj == 'v'">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Vesting period
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" type="text" ng-model="benefitModal.parameters.vestingPeriod">                         
+                        </div>                   
+                        <div class="col-sm-1 form-control-static">days</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Accrual rate
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.accrualRate"> 
+                        </div>                   
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Expiration required
+                        </label>
+                        <div class="col-sm-5 add-padding-modal">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input class="cbr cbr-primary" name="expirationRequired" value="visit" type="radio" ng-model="benefitModal.parameters.expirationRequired">
+                                    Yes
+                                </label>
+                                <label class="cbr-inline">
+                                    <input name="expirationRequired" class="cbr cbr-primary" value="day" type="radio" ng-model="benefitModal.parameters.expirationRequired">
+                                    No
+                                </label>
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+                <div class="row" ng-if="benefitModal.parameters.expirationRequired">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Expiration 
+                        </label>
+                        <div class="col-sm-2 pad_rg0">
+                            <select class="form-control">
+                                <option value="" class="">Month</option>
+                                <option value="" class="">Jan</option>
+                                <option value="" class="">Feb</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2 add-padding-modal">
+                            <select class="form-control">
+                                <option value="" class="">Day</option>                            
+                                <option value="" class="">1</option>                            
+                                <option value="" class="">2</option>                            
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Accrual days for salaried employees 
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.accrualDays"> 
+                        </div>      
+                        <div class="col-sm-1 form-control-static">days</div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="benefitModal.selectedBenefitObj == 'h'">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Plan Name
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="planName" maxlength="50" numbers-only="true" type="text" ng-model="benefitModal.parameters.planName">                         
+                        </div>                   
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Employer Contribution
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="employerContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employerContribution"> 
+                        </div>                   
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Employee Contribution
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="employeeContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employeeContribution"> 
+                        </div>                   
+                    </div>
+                </div> 
+
+            </div>
+            <div ng-if="benefitModal.selectedBenefitObj == 'w'">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            NYC Accrual Rate
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="nycAccrualRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.nycAccrualRate"> 
+                        </div>                   
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            NYS Accrual Rate
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="nysAccrualRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.nysAccrualRate"> 
+                        </div>                   
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Fixed Employee Contribution
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="fixedEmployeeContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.fixedEmployeeContribution"> 
+                        </div>                   
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Fixed Employer Contribution
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="fixedEmployerContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.fixedEmployerContribution"> 
+                        </div>                   
+                    </div>
+                </div> 
+
+            </div>
+            <div ng-if="benefitModal.selectedBenefitObj == 'k'">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Employer Contribution
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="employerContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employerContribution"> 
+                        </div>                   
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label add-padding-modal" >
+                            Employee Contribution
+                        </label>
+                        <div class="col-sm-4 add-padding-modal">
+                            <input class="form-control" name="employeeContribution" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="benefitModal.parameters.employeeContribution"> 
+                        </div>                   
+                    </div>
+                </div> 
+
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" ng-click="benefitModal.close();">Close</button>
+            <button type="button" class="btn btn-red" ng-show="benefitModal.showRemove" ng-click="benefitModal.remove();">Remove</button>
+            <button type="submit" class="btn btn-success" ng-click="benefitModal.save();">Save changes</button>
+        </div>
+    </form>
+</div>

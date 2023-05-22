@@ -869,6 +869,16 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'EDIT_DISPATCH'
                 }
             }).
+            state('admin.benefits', {
+                url: '/benefits',
+                templateUrl: appHelper.viewTemplatePath('benefits', 'view_benefit'),
+                controller: 'ViewBenefitsCtrl as benefit',
+            }).
+            state('admin.managebenefits', {
+                url: '/benefits/:id',
+                templateUrl: appHelper.viewTemplatePath('benefits', 'add_benefit'),
+                controller: 'ManageBenefitCtrl as manageBenefit',
+            }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
