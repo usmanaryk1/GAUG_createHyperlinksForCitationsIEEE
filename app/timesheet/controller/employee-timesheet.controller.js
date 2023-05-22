@@ -6,6 +6,7 @@
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
+        ctrl.criteriaSelected = false;
         ctrl.employeeIdMap = {};
         ctrl.employeeList = [];
 //        var params = $location.search();
@@ -22,6 +23,7 @@
             $('#sboxit-2').select2('val', null);
             ctrl.selectedEmployee = null;
             ctrl.timesheetList = [];
+            ctrl.criteriaSelected = false;
             ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
@@ -35,15 +37,23 @@
         };
         ctrl.filterTimesheet = function() {
             if (ctrl.searchParams.employeeId && ctrl.searchParams.employeeId !== null) {
-                if (ctrl.searchParams.startDate == "") {
+                if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
                 }
-                if (ctrl.searchParams.endDate == "") {
+                if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
                     ctrl.searchParams.endDate = null;
                 }
-                ctrl.retrieveTimesheet();
+                if (ctrl.searchParams.startDate !== null && ctrl.searchParams.endDate !== null) {
+                    ctrl.criteriaSelected = true;
+                    ctrl.retrieveTimesheet();
+                } else {
+                    ctrl.criteriaSelected = false;
+                    ctrl.timesheetList = [];
+                    ctrl.rerenderDataTable();
+                }
             } else {
                 ctrl.timesheetList = [];
+                ctrl.criteriaSelected = false;
                 ctrl.rerenderDataTable();
             }
             //            ctrl.datatableObj.fnDraw();

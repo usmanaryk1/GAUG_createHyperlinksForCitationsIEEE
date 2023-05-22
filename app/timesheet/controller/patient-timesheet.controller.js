@@ -3,6 +3,7 @@
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.searchParams = {};
+        ctrl.criteriaSelected = false;
         ctrl.viewRecords = 10;
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
@@ -46,6 +47,7 @@
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.selectedPatient = null;
+            ctrl.criteriaSelected = false;
             ctrl.timesheetList = [];
             ctrl.rerenderDataTable();
         };
@@ -60,15 +62,23 @@
         };
         ctrl.filterTimesheet = function() {
             if (ctrl.searchParams.patientId && ctrl.searchParams.patientId !== null) {
-                if (ctrl.searchParams.startDate === "") {
+                if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
                 }
-                if (ctrl.searchParams.endDate === "") {
+                if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
                     ctrl.searchParams.endDate = null;
                 }
-                ctrl.retrieveTimesheet();
+                if (ctrl.searchParams.startDate !== null && ctrl.searchParams.endDate !== null) {
+                    ctrl.criteriaSelected = true;
+                    ctrl.retrieveTimesheet();
+                } else {
+                    ctrl.criteriaSelected = false;
+                    ctrl.timesheetList = [];
+                    ctrl.rerenderDataTable();
+                }
             } else {
                 ctrl.timesheetList = [];
+                ctrl.criteriaSelected = false;
                 ctrl.rerenderDataTable();
             }
 //            ctrl.datatableObj.fnDraw();

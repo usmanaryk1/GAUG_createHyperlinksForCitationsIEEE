@@ -220,8 +220,11 @@
                                                                                 </tr>-->
                                     </tbody>
                                 </table>
-                                <div ng-if="(patTimesheet.timesheetList == null || patTimesheet.timesheetList.length == 0) && patTimesheet.dataRetrieved">
+                                <div ng-if="(patTimesheet.timesheetList == null || patTimesheet.timesheetList.length == 0) && patTimesheet.dataRetrieved && patTimesheet.criteriaSelected === true">
                                     No timesheet available for selected patient.
+                                </div>
+                                <div ng-if="patTimesheet.criteriaSelected === false">
+                                    Please select all filters to review timesheets.
                                 </div>
                                 <table width="100%"  class="table table-small-font table-bordered table-striped" cellspacing="0" ng-if="(patTimesheet.timesheetList.length > 0) && patTimesheet.dataRetrieved">
                                     <tbody>

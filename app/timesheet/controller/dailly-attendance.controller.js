@@ -4,6 +4,7 @@
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
+        ctrl.criteriaSelected = false;
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
@@ -14,6 +15,7 @@
             $('#sboxit-2').select2('val', null);
             ctrl.selectedEmployee = null;
             ctrl.attendanceList = [];
+            ctrl.criteriaSelected = false;
             ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
@@ -35,19 +37,28 @@
         ctrl.filterTimesheet = function() {
             if (ctrl.searchParams.staffingCordinatorId && ctrl.searchParams.staffingCordinatorId !== null) {
                 ctrl.cordinatorId = ctrl.searchParams.staffingCordinatorId;
-                if (ctrl.searchParams.startDate == "") {
+                if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
                 }
-                if (ctrl.searchParams.endDate == "") {
+                if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
                     ctrl.searchParams.endDate = null;
                 }
-                ctrl.retrieveTimesheet();
+                if (ctrl.searchParams.startDate !== null && ctrl.searchParams.endDate !== null) {
+                    ctrl.criteriaSelected = true;
+                    ctrl.retrieveTimesheet();
+                } else {
+                    ctrl.criteriaSelected = false;
+                    ctrl.attendanceList = [];
+                    ctrl.rerenderDataTable();
+                }
+
             } else {
                 ctrl.cordinatorId = undefined;
                 ctrl.attendanceList = [];
+                ctrl.criteriaSelected = false;
                 ctrl.rerenderDataTable();
             }
-            
+
 //            if (ctrl.searchParams.startDate === "") {
 //                ctrl.searchParams.startDate = null;
 //            }
@@ -59,14 +70,14 @@
         }
         retrieveEmployeesData();
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveByPosition({'position':'a,nc'}).then(function(res) {
+            EmployeeDAO.retrieveByPosition({'position': 'a,nc'}).then(function(res) {
                 ctrl.employeeList = res;
             }).catch(function(data, status) {
                 toastr.error("Could not load Coordinators");
 //                ctrl.employeeList = ontimetest.employees;
             });
         }
-        
+
         ctrl.retrieveTimesheet = function() {
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;

@@ -166,6 +166,9 @@
                         <div ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
                                     No daily attendance available for selected coordinator.
                                 </div>
+                        <div ng-if="dAttendance.criteriaSelected===false">
+                                    Please select all filters to review daily attendance.
+                                </div>
                     </div>
                     <div class="panel-body pad_top0">
                         <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><script type="text/javascript">
