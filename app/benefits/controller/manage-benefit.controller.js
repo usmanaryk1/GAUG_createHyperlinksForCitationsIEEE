@@ -6,7 +6,7 @@
         ctrl.selectedBenefits = [];
         ctrl.benifitObj = {};
         ctrl.benifitObj.benefitPackageLineSet = [];
-        
+
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontime_data.defaultState);
@@ -14,7 +14,7 @@
             Page.setTitle("Update Benefit");
         } else {
             Page.setTitle("Add Benefit");
-        }        
+        }
 
         //function called on page initialization.
         function pageInit() {
@@ -25,7 +25,7 @@
                     console.log("ctrl.benifitObj----", ctrl.benifitObj);
                     if (ctrl.benifitObj.benefitPackageLineSet == null) {
                         ctrl.benifitObj.benefitPackageLineSet = [];
-                    } else {                        
+                    } else {
                         angular.forEach(ctrl.benifitObj.benefitPackageLineSet, function (obj) {
                             if (ctrl.benefitList.indexOf(obj.lineType)) {
                                 avoidWatch = true;
@@ -49,7 +49,7 @@
                         $('#multi-select').multiSelect('refresh');
                     });
                 });
-            }            
+            }
         }
         pageInit();
 
@@ -120,30 +120,31 @@
                 });
             }
         }, true);
-        
-        ctrl.saveBenifits = function(){
+
+        ctrl.saveBenifits = function () {
             if ($('#add_benifit_form')[0].checkValidity()) {
                 console.log("ctrl.benifitObj", ctrl.benifitObj);
                 var benifitObjToSave = angular.copy(ctrl.benifitObj);
                 console.log('Benifit Package Object : ' + JSON.stringify(benifitObjToSave));
                 $rootScope.maskLoading();
-                if($state.params.id && $state.params.id !== ''){
+                console.log("$state.params.id", $state.params.id);
+                if ($state.params.id && $state.params.id !== '') {
+                    BenefitDAO.update({data: benifitObjToSave, id: $state.params.id}).then(function () {
+                        toastr.success("Benifit Package Information updated.");
+                        $state.go('admin.benefits');
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                } else {                                        
                     BenefitDAO.save(benifitObjToSave).then(function () {
                         toastr.success("Benifit Package Information saved.");
                         $state.go('admin.benefits');
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     });
-                }else{
-                    BenefitDAO.update(benifitObjToSave).then(function () {
-                        toastr.success("Benifit Package Information updated.");
-                        $state.go('admin.benefits');
-                    }).then(function () {
-                        $rootScope.unmaskLoading();
-                    });
                 }
 
-            }          
+            }
         };
     }
     ;

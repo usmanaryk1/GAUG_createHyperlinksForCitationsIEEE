@@ -37,7 +37,7 @@
                 return api.save(data).$promise;
             },
             update: function (data) {
-                return api.update({action:data.id}, data).$promise;
+                return api.update({action:data.id}, data.data).$promise;
             },
             delete: function (data) {
                 return api.delete({action:'delete', subAction:data.id}).$promise;
