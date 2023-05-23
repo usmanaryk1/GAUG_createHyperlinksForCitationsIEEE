@@ -12,8 +12,9 @@ ontime_data = {
     ],
     'recurranceTypes': {D: "Daily", W: "Weekly", N: "No Repeat"},
     'eventTypes': {S: "Schedule", A: "Available", U: "Unavailable"},
-    benefitList: [{key: 's', value: 'Sick Time'}, {key: 'p', value: 'Personal Time'}, {key: 'v', value: 'Vacation Time'}, {key: 'h', value: 'Healthcare'}, {key: 'w', value: 'WPP Flex Cards'}, {key: 'k', value: '401K'}],
-    benefitMap: {'s': 'Sick Time', 'p': 'Personal Time', 'v': 'Vacation Time', 'h': 'Healthcare', 'w': 'WPP Flex Cards', 'k': '401K'},    
+    benefitList: [{key: 'SIT', value: 'Sick Time'}, {key: 'PRT', value: 'Personal Time'}, {key: 'VCT', value: 'Vacation Time'}, {key: 'HEC', value: 'Healthcare'},
+        {key: 'WFC', value: 'WPP Flex Cards'}, {key: '401', value: '401K'}],
+    benefitMap: {'SIT': 'Sick Time', 'PRT': 'Personal Time', 'VCT': 'Vacation Time', 'HEC': 'Healthcare', 'WFC': 'WPP Flex Cards', '401': '401K'},    
     'company_code': "TRT",
     employee_dispatch_responses : {
         '1': 'Interested',
