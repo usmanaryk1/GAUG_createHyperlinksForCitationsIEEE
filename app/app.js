@@ -369,7 +369,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // timesheet
             state('app.employee_timesheet', {
-                url: '/employee_timesheet?id',
+                url: '/employee_timesheet?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
                 controller: 'EmployeeTimeSheetCtrl as empTimesheet',
                 resolve: {
@@ -398,7 +398,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // manual_punch
             state('app.manual_punch_employee', {
-                url: '/manual_punch/employee/:id',
+                url: '/manual_punch/employee/:id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
                 resolve: {
@@ -426,7 +426,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
-                url: '/patient_time_sheet?id',
+                url: '/patient_time_sheet?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
                 controller: 'PatientTimeSheetCtrl as patTimesheet',
                 resolve: {
@@ -441,7 +441,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // daily_attendance
             state('app.daily_attendance', {
-                url: '/daily_attendance?id',
+                url: '/daily_attendance?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
                 resolve: {

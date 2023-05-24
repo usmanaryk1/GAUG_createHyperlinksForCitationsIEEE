@@ -38,7 +38,7 @@
                 ctrl.attendanceObj.punchOutTime = $filter('date')(new Date(ctrl.attendanceObj.punchOutTime).getTime(), timeFormat).toString();
             }
         }
-        
+
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
@@ -51,7 +51,6 @@
             } else {
                 ctrl.editTimesheet = true;
                 if ($state.current.name.indexOf('edit_missed_punch') > 0) {
-                    console.log('1111')
                     TimesheetDAO.getMissedPunch({id: id}).then(function(res) {
                         ctrl.attendanceObj = res;
                         ctrl.attendanceObj.isMissedPunch = true;
@@ -110,6 +109,22 @@
 //            
 //        };
 
+        ctrl.navigateToState = function() {
+            var params = angular.copy(searchParams);
+            if (searchParams != null) {
+                if (searchParams.empId != null) {
+                    params.id = params.empId;
+                    $state.go('app.employee_timesheet', params);
+                } else if (searchParams.patId != null) {
+                    params.id = params.patId;
+                    $state.go('app.patient_time_sheet', params);
+                } else if (searchParams.cordinatorId != null) {
+                    params.id = params.cordinatorId;
+                    $state.go('app.daily_attendance', params);
+                }
+            }
+
+        };
         ctrl.saveManualAttendance = function() {
 
             if ($("#manual_punch_form")[0].checkValidity()) {
@@ -143,15 +158,7 @@
                         }
                         TimesheetDAO.update(attendanceObjToSave).then(function() {
                             toastr.success("Timesheet saved.");
-                            if (searchParams != null) {
-                                if (searchParams.empId != null) {
-                                    $state.go('app.employee_timesheet', {id: searchParams.empId});
-                                } else if (searchParams.patId != null) {
-                                    $state.go('app.patient_time_sheet', {id: searchParams.patId});
-                                } else if (searchParams.cordinatorId != null) {
-                                    $state.go('app.daily_attendance', {id: searchParams.cordinatorId});
-                                }
-                            }
+                            ctrl.navigateToState();
 
 //                        ctrl.resetManualPunch();
                         }).catch(function(e) {
@@ -192,15 +199,7 @@
                         }
                         TimesheetDAO.updateMissedPunch(attendanceObjToSave).then(function() {
                             toastr.success("Timesheet saved.");
-                            if (searchParams != null) {
-                                if (searchParams.empId != null) {
-                                    $state.go('app.employee_timesheet', {id: searchParams.empId});
-                                } else if (searchParams.patId != null) {
-                                    $state.go('app.patient_time_sheet', {id: searchParams.patId});
-                                } else if (searchParams.cordinatorId != null) {
-                                    $state.go('app.daily_attendance', {id: searchParams.cordinatorId});
-                                }
-                            }
+                            ctrl.navigateToState();
 
 //                        ctrl.resetManualPunch();
                         }).catch(function(e) {
