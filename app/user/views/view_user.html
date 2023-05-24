@@ -77,7 +77,7 @@
                                                     total-items="totalRecords"
                                                     current-page="viewUser.searchParams.pageNo">
                                                     <th> 
-                                            <div class="user_panel" ng-click="viewUser.openEditModal(emp, 'modal-5')" style="cursor: pointer">
+                                            <div class="user_panel" ng-click="viewUser.openEditModal(emp.employee.id)" style="cursor: pointer">
                                                 <div ng-if="emp.employee.profileImage != null && emp.employee.profileImage != ''" class="user_img"> 
                                                     <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.employee.profileImage != null && emp.employee.profileImage != '') ? (amazonPublicUrl + viewUser.companyCode + '/' + emp.employee.profileImage) : ('assets/images/user-5.png')}}"> 
                                                     <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
@@ -139,134 +139,6 @@
         </div>
     </div>
 </div>
-<script type="text/ng-template" id="modal-5">
-    <div class="modal-body">
-    <div class="row">
-    <div class="user_panel col-md-12">
-    <div class="user_img"> 
-    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectUserModel.user.employee.profileImage!=null && selectUserModel.user.employee.profileImage!='') ?(amazonPublicUrl+selectUserModel.companyCode+'/'+selectUserModel.user.employee.profileImage):('assets/images/user-5.png')}}"> </div>
-    <div class="emp_user_hd">
-    <div class="emp_user_name">{{selectUserModel.user.employee.lName}}, {{selectUserModel.user.employee.fName}} {{selectUserModel.user.employee.middleInitial}}</div>
-    <p>{{positions[selectUserModel.user.employee.companyPositionId]}}</p>
-    </div>
-    <button type="button" class="close" ng-click="selectUserModel.close();" aria-hidden="true">&times;</button>
-    </div>
-
-    </div>
-    <hr/>
-    <div class="row">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Position</strong></label>
-    <div class="col-md-7">
-    {{positions[selectUserModel.user.employee.companyPositionId]}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Phone Number</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.phone | tel}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row" ng-if="selectUserModel.user.employee.phone2!=null">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Phone 2</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.phone2 | tel}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row" ng-if="selectUserModel.user.employee.emergencyContactName!=null">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Name</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.emergencyContactName}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row" ng-if="selectUserModel.user.employee.emergencyContactNumber!=null">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Number</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.emergencyContactNumber | tel}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Address</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.address1}}<div ng-if="selectUserModel.user.employee.address2 != null">{{selectUserModel.user.employee.address2}}</div><div>  {{selectUserModel.user.employee.city}}, {{selectUserModel.user.employee.state}}, {{selectUserModel.user.employee.zipcode}}</div>
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Date Of Birth</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.dateOfBirth|date :dateFormat}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-md-12">
-
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Social Security Number</strong></label>
-    <div class="col-md-7">
-    {{selectUserModel.user.employee.ssn | ssn}} 
-    </div>
-    </div>	
-
-    </div>
-    </div>
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-5"><strong>Languages Spoken</strong></label>
-    <div class="col-md-7">
-    <span ng-if="selectUserModel.user.employee.languageSpoken== null || selectUserModel.user.employee.languageSpoken.length==0">N/A</span>
-    <span ng-repeat="language in selectUserModel.user.employee.languageSpoken">{{languages[language]}}
-    <label ng-if="$index<selectUserModel.user.employee.languageSpoken.length-1">, </label>
-    </span>
-    </div>
-    </div>	
-
-    </div>
-    </div>
-
-    <div class="modal-footer">
-    <button type="button" class="btn btn-white" ng-click="selectUserModel.close();">Close</button>
-    </div>
-</script>
 <script type="text/ng-template" id="deleteModel">
     <div class="modal-header">		
     <h4 class="modal-title">{{deleteUserModel.user.employee.lName}} {{deleteUserModel.user.employee.fName}} {{deleteUserModel.user.employee.middleInitial}}</h4>

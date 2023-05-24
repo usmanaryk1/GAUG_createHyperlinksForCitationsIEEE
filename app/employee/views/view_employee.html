@@ -113,6 +113,7 @@
                                                     <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('DEACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')" tooltip="Deactivate"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.employee-calendar({id: emp.id})" ng-if="hasAccess('VIEW_EMPLOYEE_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
+                                                    <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="viewEmployee.openNotes(emp, 'EmployeeNotes')" tooltip="Notes"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
                                             </tr>
@@ -231,5 +232,20 @@
     <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Activate</button>
     <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">Cancel</button>
     </div>
+    </form>
+</script>
+<script type="text/ng-template" id="EmployeeNotes">
+    <form  class="validate form-horizontal" role="form" name="EmployeeNotesData" id="EmployeeNotesData">
+        <div class="modal-header">		
+            <h4 class="modal-title">Notes</h4>
+        </div>
+        <div class="modal-body">
+            <textarea ng-model="employeeNotesModel.note" class="form-control" name="note" placeholder="Write new note..." required rows="5"
+                     data-validate="required" data-message-required="Please enter Notes." ng-required='true'></textarea>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-click="employeeNotesModel.addNote();">Add Notes</button>
+            <button type="button" class="btn btn-white" ng-click="employeeNotesModel.dismiss();">Cancel</button>
+        </div>
     </form>
 </script>
