@@ -6,15 +6,30 @@
         ctrl.selectedBenefits = [];
         ctrl.benifitObj = {};
         ctrl.benifitObj.benefitPackageLineSet = [];
+        var avoidWatch = true;
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             Page.setTitle("Update Benefit");
+            ctrl.editMode = true;
         } else {
             Page.setTitle("Add Benefit");
         }
+        
+        ctrl.resetBenifits = function(){                        
+            avoidWatch = true;
+            ctrl.selectedBenefits = [];
+            delete ctrl.benifitObj.packageName;
+            ctrl.benifitObj.benefitPackageLineSet = _.remove(ctrl.benifitObj.benefitPackageLineSet,function(benefitPackageLine){
+                return typeof benefitPackageLine.id !== 'undefined';
+            });
+            
+            _.each(ctrl.benifitObj.benefitPackageLineSet,function(benefitPackageLine){
+                benefitPackageLine.isDeleted = true;
+            });
+        };
 
         //function called on page initialization.
         function pageInit() {
@@ -22,7 +37,6 @@
             if ($state.params.id && $state.params.id !== '') {
                 BenefitDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.benifitObj = res;
-                    console.log("ctrl.benifitObj----", ctrl.benifitObj);
                     if (ctrl.benifitObj.benefitPackageLineSet == null) {
                         ctrl.benifitObj.benefitPackageLineSet = [];
                     } else {
@@ -42,18 +56,15 @@
 
                         }
                     }); // showLoadingBar
-                    console.log(JSON.stringify(ctrl.benifitObj));
-                }).then(function () {
+                }).then(function () {                    
                     $rootScope.unmaskLoading();
                     $timeout(function () {
                         $('#multi-select').multiSelect('refresh');
-                    });
+                    });                    
                 });
             }
         }
-        pageInit();
-
-        var avoidWatch = true;
+        pageInit();        
 
         // Open Simple Modal
         ctrl.openModal = function (modal_id, modal_size, modal_backdrop, editMode) {
@@ -77,7 +88,6 @@
                 }
             });
             modalInstance.result.then(function (result) {
-                console.log("result.reverse", result.reverse, "result.benefitPackageLineSet", result.benefitPackageLineSet);
                 if (result.reverse) {
                     avoidWatch = true;
                     if (!editMode)
@@ -88,7 +98,6 @@
                 if (result.benefitPackageLineSet) {
                     ctrl.benifitObj.benefitPackageLineSet = angular.copy(result.benefitPackageLineSet);
                 }
-                console.log("popup closed", ctrl.benifitObj, result.benefitPackageLineSet);
             });
         };
 
@@ -97,7 +106,6 @@
         $scope.$watch(function () {
             return ctrl.selectedBenefits;
         }, function (newValue, oldValue) {
-            console.log("newValue", newValue, "oldValue", oldValue, "avoidWatch", avoidWatch);
             if (avoidWatch === false) {
                 $timeout(function () {
                     $("#multi-select").multiSelect('refresh');
@@ -123,11 +131,8 @@
 
         ctrl.saveBenifits = function () {
             if ($('#add_benifit_form')[0].checkValidity()) {
-                console.log("ctrl.benifitObj", ctrl.benifitObj);
                 var benifitObjToSave = angular.copy(ctrl.benifitObj);
-                console.log('Benifit Package Object : ' + JSON.stringify(benifitObjToSave));
                 $rootScope.maskLoading();
-                console.log("$state.params.id", $state.params.id);
                 if ($state.params.id && $state.params.id !== '') {
                     BenefitDAO.update({data: benifitObjToSave, id: $state.params.id}).then(function () {
                         toastr.success("Benifit Package Information updated.");
@@ -150,3 +155,4 @@
     ;
     angular.module('xenon.controllers').controller('ManageBenefitCtrl', ["$scope", "$rootScope", "$state", "$modal", "$timeout", "BenefitDAO", "Page", ManageBenefitCtrl]);
 })();
+

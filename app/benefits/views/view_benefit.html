@@ -20,9 +20,9 @@
                     <td>{{benefitObj.packageName}}</td>
                     <td>
                         <div class="center">
-                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_POSITION')" ng-href="#/admin/benefits/{{benefitObj.id}}" tooltip="Edit"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="benefitObj.status === 'a'" ng-click="benefit.openStatusModal(benefitObj, 'i')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="benefitObj.status === 'i'" ng-click="benefit.openStatusModal(benefitObj, 'a')" tooltip="Activate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('EDIT_BENEFIT')" ng-href="#/admin/benefits/{{benefitObj.id}}" tooltip="Edit"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('ACTIVATE_BENEFIT') && benefitObj.status === 'a'" ng-click="benefit.openStatusModal(benefitObj, 'i')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('ACTIVATE_BENEFIT') && benefitObj.status === 'i'" ng-click="benefit.openStatusModal(benefitObj, 'a')" tooltip="Activate"><span class="ed_b"></span></a>
                         </div>
                     </td>
                 </tr>

@@ -873,11 +873,17 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/benefits',
                 templateUrl: appHelper.viewTemplatePath('benefits', 'view_benefit'),
                 controller: 'ViewBenefitsCtrl as benefit',
+                data: {
+                    feature: 'VIEW_BENEFIT'
+                }
             }).
             state('admin.managebenefits', {
                 url: '/benefits/:id',
                 templateUrl: appHelper.viewTemplatePath('benefits', 'add_benefit'),
                 controller: 'ManageBenefitCtrl as manageBenefit',
+                data: {
+                    feature: 'EDIT_BENEFIT'
+                }
             }).
             // Update Highlights
 //            state('app.update-highlights', {
