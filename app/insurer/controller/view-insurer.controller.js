@@ -1,5 +1,5 @@
 (function() {
-    function ViewInsurersCtrl(InsurerDAO, $rootScope, $stateParams, $state, $modal) {
+    function ViewInsurersCtrl(InsurerDAO, $rootScope, $timeout, $state, $modal) {
         var ctrl = this;
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
@@ -60,23 +60,25 @@
                             break;
                         }
                     }
+                    ctrl.rerenderDataTable();
+                    toastr.success("Insurer deleted.");
                     $rootScope.deleteInsurerModel.close();
                 }).catch(function(data, status) {
-
-                    var length = ctrl.insurerList.length;
-
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.insurerList[i].id === insurer.id) {
-                            ctrl.insurerList.splice(i, 1);
-                            break;
-                        }
-                    }
+                    toastr.error(data.data);
                     $rootScope.deleteInsurerModel.close();
                 }).then(function() {
                     $rootScope.unmaskLoading();
                 });
             };
 
+        };
+        ctrl.rerenderDataTable = function() {
+            var insurerList = angular.copy(ctrl.insurerList);
+            ctrl.insurerList = [];
+            $("#example-1_wrapper").remove();
+            $timeout(function() {
+                ctrl.insurerList = insurerList;
+            });
         };
         ctrl.openEditModal = function(insurer, modal_id, modal_size, modal_backdrop)
         {
@@ -92,5 +94,5 @@
         ctrl.retrieveInsurers();
     }
     ;
-    angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$stateParams", "$state", "$modal", ViewInsurersCtrl]);
+    angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$timeout", "$state", "$modal", ViewInsurersCtrl]);
 })();
