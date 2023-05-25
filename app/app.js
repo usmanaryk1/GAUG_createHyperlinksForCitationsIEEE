@@ -398,7 +398,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // manual_punch
             state('app.manual_punch_employee', {
-                url: '/manual_punch/employee/:id&from&to',
+                url: '/manual_punch/employee/:id?from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
                 resolve: {

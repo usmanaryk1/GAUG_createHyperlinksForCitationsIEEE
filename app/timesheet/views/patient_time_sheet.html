@@ -101,7 +101,7 @@
 
                                     <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);
                                         patTimesheet.filterTimesheet()">Review</button>
-                                    <a href="#/app/manual_punch/patient/{{patTimesheet.searchParams.patientId}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                    <a href="#/app/manual_punch{{patTimesheet.searchParams.patientId==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?from='+patTimesheet.searchParams.startDate+'&to='+patTimesheet.searchParams.endDate}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
                                     </button>
