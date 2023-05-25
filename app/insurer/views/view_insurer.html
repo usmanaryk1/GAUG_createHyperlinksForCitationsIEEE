@@ -103,89 +103,112 @@
 <script type="text/ng-template" id="modal-5">
     <div class="modal-body">
     <div class="row">
-    <div class="user_panel col-md-12">
-    <div class="emp_user_hd">
-    <div class="emp_user_name">{{selectInsurerModel.insurer.insuranceName}}</div>
-    </div>
-    <button type="button" class="close" ng-click="selectInsurerModel.close();" aria-hidden="true">&times;</button>
-    </div>
+        <div class="user_panel col-md-12">
+            <div class="emp_user_hd">
+                <div class="emp_user_name">{{selectInsurerModel.insurer.insuranceName}}</div>
+            </div>
+            <button type="button" class="close" ng-click="selectInsurerModel.close();" aria-hidden="true">&times;</button>
+        </div>
 
     </div>
     <hr/>
     <div class="row">
-    <div class="col-md-12">
+        <div class="col-md-12">
 
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Billing Id</strong></label>
-    <div class="col-md-8">
-    {{selectInsurerModel.insurer.billingId}} 
-    </div>
-    </div>	
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Billing Id</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.billingId}} 
+                </div>
+            </div>	
 
-    </div>
+        </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
+        <div class="col-md-12">
 
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Contact Number</strong></label>
-    <div class="col-md-8">
-    {{selectInsurerModel.insurer.contactNumber |tel}} 
-    </div>
-    </div>	
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Contact Number</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.contactNumber|tel}} 
+                </div>
+            </div>	
 
-    </div>
+        </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
+        <div class="col-md-12">
 
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Contact Name</strong></label>
-    <div class="col-md-8">
-    {{selectInsurerModel.insurer.contactName}} 
-    </div>
-    </div>	
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Contact Name</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.contactName}} 
+                </div>
+            </div>	
 
-    </div>
+        </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
+        <div class="col-md-12">
 
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
-    <div class="col-md-8">
-    {{selectInsurerModel.insurer.address1}}<div ng-if="selectInsurerModel.insurer.address2 != null">{{selectInsurerModel.insurer.address2}}</div><div ng-if="selectInsurerModel.insurer.city || selectInsurerModel.insurer.state || selectInsurerModel.insurer.zipcode">  {{selectInsurerModel.insurer.city}}, {{selectInsurerModel.insurer.state}}, {{selectInsurerModel.insurer.zipcode}}</div>
-    </div>
-    </div>	
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.address1}}<div ng-if="selectInsurerModel.insurer.address2 != null">{{selectInsurerModel.insurer.address2}}</div><div ng-if="selectInsurerModel.insurer.city || selectInsurerModel.insurer.state || selectInsurerModel.insurer.zipcode">  {{selectInsurerModel.insurer.city}}, {{selectInsurerModel.insurer.state}}, {{selectInsurerModel.insurer.zipcode}}</div>
+                </div>
+            </div>	
 
-    </div>
+        </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
+        <div class="col-md-12">
 
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Expires</strong></label>
-    <div class="col-md-8">
-    {{selectInsurerModel.insurer.contractEndDate|date :dateFormat}}
-    </div>
-    </div>	
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Expires</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.contractEndDate|date :dateFormat}}
+                </div>
+            </div>	
 
-    </div>
+        </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
+        <div class="col-md-12">
 
-    <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Plan Type</strong></label>
-    <div class="col-md-8">
-    {{selectInsurerModel.planTypeMap[selectInsurerModel.insurer.planType]}} 
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Plan Type</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.planTypeMap[selectInsurerModel.insurer.planType]}} 
+                </div>
+            </div>
+        </div>
     </div>
-    </div>	
+    <div class="row" ng-if="selectInsurerModel.insurer.mdol">
+        <div class="col-md-12">
 
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>EDI Processor</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.mdol === 'MD Online' ?'MD Online':'Emdeon – Change'}} 
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="row" ng-if="selectInsurerModel.insurer.mdol && selectInsurerModel.insurer.mdol === 'MD Online' && selectInsurerModel.insurer.mdolAccountNumber">
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>MDOL Acct #</strong></label>
+                <div class="col-md-8">
+                    {{selectInsurerModel.insurer.mdolAccountNumber}} 
+                </div>
+            </div>
+
+        </div>
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-white" ng-click="selectInsurerModel.close();">Close</button>
+        <button type="button" class="btn btn-white" ng-click="selectInsurerModel.close();">Close</button>
     </div>
 </script>
 <script type="text/ng-template" id="deleteModel">
