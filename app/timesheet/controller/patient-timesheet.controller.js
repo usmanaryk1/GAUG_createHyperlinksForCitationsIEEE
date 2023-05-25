@@ -10,7 +10,6 @@
         ctrl.insuranceProviderMap = {};
         ctrl.patientList = [];
         ctrl.patientIdMap = {};
-//        var params = $location.search();
         EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
@@ -90,6 +89,9 @@
                 ctrl.selectedPatient = ctrl.patientIdMap[ctrl.searchParams.patientId];
             }
             ctrl.dataRetrieved = false;
+            if (ctrl.searchParams.patientId != null && ctrl.searchParams.startDate != null && ctrl.searchParams.endDate != null) {
+                $location.search({id: ctrl.searchParams.patientId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
+            }
             TimesheetDAO.retrievePatientTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
 //                showLoadingBar({
@@ -125,10 +127,20 @@
                 for (var i = 0; i < res.length; i++) {
                     ctrl.patientIdMap[res[i].id] = res[i];
                 }
-//                if (params != null && params.id != null) {
-//                    ctrl.searchParams.patientId = Number(params.id);
-//                    $("#sboxit-2").select2("val", params.id);
-//                }
+                var params = $location.search();
+                if (params != null && params.id != null) {
+                    ctrl.searchParams.patientId = Number(params.id);
+                    $timeout(function() {
+                        $("#sboxit-2").select2("val", params.id);
+                    }, 300);
+                    if (params.from != null) {
+                        ctrl.searchParams.startDate = params.from;
+                    }
+                    if (params.to != null) {
+                        ctrl.searchParams.endDate = params.to;
+                    }
+                    ctrl.filterTimesheet();
+                }
 
             }).catch(function(data, status) {
 //                ctrl.patientList = ontimetest.patients;

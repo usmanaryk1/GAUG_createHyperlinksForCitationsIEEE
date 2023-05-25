@@ -9,10 +9,7 @@
         ctrl.criteriaSelected = false;
         ctrl.employeeIdMap = {};
         ctrl.employeeList = [];
-//        var params = $location.search();
-//        if (params != null && params.id != null) {
-//            ctrl.searchParams.employeeId = params.id;
-//        }
+
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
@@ -68,6 +65,9 @@
             }
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
+            if (ctrl.searchParams.employeeId != null && ctrl.searchParams.startDate != null && ctrl.searchParams.endDate != null) {
+                $location.search({id: ctrl.searchParams.employeeId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
+            }
             TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
                 ctrl.timesheetList = res;
@@ -94,6 +94,21 @@
                 for (var i = 0; i < res.length; i++) {
                     ctrl.employeeIdMap[res[i].id] = res[i];
                 }
+                var params = $location.search();
+                if (params != null && params.id != null) {
+                    ctrl.searchParams.employeeId = Number(params.id);
+                    $timeout(function() {
+                        $("#sboxit-2").select2("val", params.id);
+                    }, 300);
+                    if (params.from != null) {
+                        ctrl.searchParams.startDate = params.from;
+                    }
+                    if (params.to != null) {
+                        ctrl.searchParams.endDate = params.to;
+                    }
+                    ctrl.filterTimesheet();
+                }
+
 //                $('#sboxit-2').select2('destroy');
 //                $("#sboxit-2").select2({
 //                    placeholder: 'Select your country...',

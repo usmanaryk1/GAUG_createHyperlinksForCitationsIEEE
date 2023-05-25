@@ -1,5 +1,5 @@
 (function() {
-    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal) {
+    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -72,6 +72,21 @@
         function retrieveEmployeesData() {
             EmployeeDAO.retrieveByPosition({'position': 'a,nc'}).then(function(res) {
                 ctrl.employeeList = res;
+                var params = $location.search();
+                if (params != null && params.id != null) {
+                    ctrl.searchParams.staffingCordinatorId = Number(params.id);
+                    $timeout(function() {
+                        $("#sboxit-2").select2("val", params.id);
+                    }, 300);
+                    if (params.from != null) {
+                        ctrl.searchParams.startDate = params.from;
+                    }
+                    if (params.to != null) {
+                        ctrl.searchParams.endDate = params.to;
+                    }
+                    ctrl.filterTimesheet();
+                }
+
             }).catch(function(data, status) {
                 toastr.error("Could not load Coordinators");
 //                ctrl.employeeList = ontimetest.employees;
@@ -81,6 +96,9 @@
         ctrl.retrieveTimesheet = function() {
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
+            if (ctrl.searchParams.staffingCordinatorId != null && ctrl.searchParams.startDate != null && ctrl.searchParams.endDate != null) {
+                $location.search({id: ctrl.searchParams.staffingCordinatorId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
+            }
             TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function(res) {
                 ctrl.attendanceList = res;
                 ctrl.rerenderDataTable();
@@ -147,5 +165,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", DailyAttendanceCtrl]);
 })();

@@ -1,5 +1,5 @@
 (function() {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout) {
         var ctrl = this;
         var searchParams = $location.search();
         ctrl.todaysDate = new Date();
@@ -13,7 +13,9 @@
                 ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchInDate = null;
             } else {
-                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false};
+                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false, isManualPunch : true};
+                 $("#sboxit-2").select2("val", null);
+                 $("#sboxit-1").select2("val", null);
             }
         };
         ctrl.resetManualPunch();
@@ -26,9 +28,16 @@
 
             if (ctrl.attendanceObj.employeeId != null) {
                 ctrl.attendanceObj.employeeId = ctrl.attendanceObj.employeeId.id;
+                $timeout(function() {
+                    $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
+                });
             }
             if (ctrl.attendanceObj.patientId != null) {
                 ctrl.attendanceObj.patientId = ctrl.attendanceObj.patientId.id;
+                $timeout(function() {
+                    $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
+                });
+
             }
             ctrl.attendanceObj.punchInDate = angular.copy(ctrl.attendanceObj.punchInTime);
             if (ctrl.attendanceObj.punchInTime != null) {
@@ -38,53 +47,62 @@
                 ctrl.attendanceObj.punchOutTime = $filter('date')(new Date(ctrl.attendanceObj.punchOutTime).getTime(), timeFormat).toString();
             }
         }
-        
-        if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontimetest.defaultState);
-            }
-            var id = $state.params.id;
-            if ($state.current.name.indexOf('patient') > 0) {
-                ctrl.attendanceObj.patientId = Number(id);
-            } else if ($state.current.name.indexOf('employee') > 0) {
-                ctrl.attendanceObj.employeeId = Number(id);
-            } else {
-                ctrl.editTimesheet = true;
-                if ($state.current.name.indexOf('edit_missed_punch') > 0) {
-                    console.log('1111')
-                    TimesheetDAO.getMissedPunch({id: id}).then(function(res) {
-                        ctrl.attendanceObj = res;
-                        ctrl.attendanceObj.isMissedPunch = true;
-                        setAttendanceForEdit();
-                    });
-                } else if ($state.current.name.indexOf('edit_timesheet') > 0) {
-                    TimesheetDAO.get({id: id}).then(function(res) {
-                        ctrl.attendanceObj = res;
-                        ctrl.attendanceObj.isMissedPunch = false;
-                        setAttendanceForEdit();
-                    });
-                }
-            }
-        } else {
-            ctrl.editTimesheet = false;
-        }
 
+        var initPage = function() {
+            if ($state.params.id && $state.params.id !== '') {
+                if (isNaN(parseFloat($state.params.id))) {
+                    $state.transitionTo(ontimetest.defaultState);
+                }
+                var id = $state.params.id;
+                if ($state.current.name.indexOf('patient') > 0) {
+                    ctrl.attendanceObj.patientId = Number(id);
+                } else if ($state.current.name.indexOf('employee') > 0) {
+                    ctrl.attendanceObj.employeeId = Number(id);
+                } else {
+                    ctrl.editTimesheet = true;
+                    if ($state.current.name.indexOf('edit_missed_punch') > 0) {
+                        TimesheetDAO.getMissedPunch({id: id}).then(function(res) {
+                            ctrl.attendanceObj = res;
+                            ctrl.attendanceObj.isMissedPunch = true;
+                            setAttendanceForEdit();
+                        });
+                    } else if ($state.current.name.indexOf('edit_timesheet') > 0) {
+                        TimesheetDAO.get({id: id}).then(function(res) {
+                            ctrl.attendanceObj = res;
+                            ctrl.attendanceObj.isMissedPunch = false;
+                            setAttendanceForEdit();
+                        });
+                    }
+                }
+            } else {
+                ctrl.editTimesheet = false;
+                ctrl.attendanceObj.isManualPunch = true;
+            }
+        };
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
+            $rootScope.maskLoading();
             EmployeeDAO.retrieveByPosition({}).then(function(res) {
                 ctrl.employeeList = res;
             }).catch(function(data, status) {
                 ctrl.employeeList = ontimetest.employees;
+            }).then(function() {
+                $rootScope.unmaskLoading();
+                retrievePatientsData();
             });
         }
         ;
-        retrievePatientsData();
+
         function retrievePatientsData() {
+            $rootScope.maskLoading();
             PatientDAO.retrieveForSelect({}).then(function(res) {
                 ctrl.patientList = res;
             }).catch(function(data, status) {
                 ctrl.patientList = ontimetest.patients;
+            }).then(function() {
+                $rootScope.unmaskLoading();
+                initPage();
             });
         }
         ;
@@ -110,9 +128,25 @@
 //            
 //        };
 
-        ctrl.saveManualAttendance = function() {
+        ctrl.navigateToState = function() {
+            var params = angular.copy(searchParams);
+            if (searchParams != null) {
+                if (searchParams.empId != null) {
+                    params.id = params.empId;
+                    $state.go('app.employee_timesheet', params);
+                } else if (searchParams.patId != null) {
+                    params.id = params.patId;
+                    $state.go('app.patient_time_sheet', params);
+                } else if (searchParams.cordinatorId != null) {
+                    params.id = params.cordinatorId;
+                    $state.go('app.daily_attendance', params);
+                }
+            }
 
-            if ($("#manual_punch_form")[0].checkValidity()) {
+        };
+        ctrl.saveManualAttendance = function() {
+            ctrl.formSubmitted = true;
+            if ($("#manual_punch_form")[0].checkValidity() && ctrl.attendanceObj.patientId!=null && ctrl.attendanceObj.employeeId!=null) {
                 $rootScope.maskLoading();
                 var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
                 if (attendanceObjToSave.isMissedPunch === false) {
@@ -122,6 +156,7 @@
                         TimesheetDAO.addPunchRecord(attendanceObjToSave).then(function() {
                             toastr.success("Manual punch saved.");
                             ctrl.resetManualPunch();
+                            ctrl.formSubmitted = false;
                         }).catch(function(e) {
                             if (e.data != null) {
                                 toastr.error(e.data);
@@ -143,16 +178,8 @@
                         }
                         TimesheetDAO.update(attendanceObjToSave).then(function() {
                             toastr.success("Timesheet saved.");
-                            if (searchParams != null) {
-                                if (searchParams.empId != null) {
-                                    $state.go('app.employee_timesheet', {id: searchParams.empId});
-                                } else if (searchParams.patId != null) {
-                                    $state.go('app.patient_time_sheet', {id: searchParams.patId});
-                                } else if (searchParams.cordinatorId != null) {
-                                    $state.go('app.daily_attendance', {id: searchParams.cordinatorId});
-                                }
-                            }
-
+                            ctrl.navigateToState();
+                            ctrl.formSubmitted = false;
 //                        ctrl.resetManualPunch();
                         }).catch(function(e) {
                             if (e.data != null) {
@@ -171,6 +198,7 @@
                         TimesheetDAO.addMissedPunchRecord(attendanceObjToSave).then(function() {
                             toastr.success("Manual punch saved.");
                             ctrl.resetManualPunch();
+                            ctrl.formSubmitted = false;
                         }).catch(function(e) {
                             if (e.data != null) {
                                 toastr.error(e.data);
@@ -192,16 +220,8 @@
                         }
                         TimesheetDAO.updateMissedPunch(attendanceObjToSave).then(function() {
                             toastr.success("Timesheet saved.");
-                            if (searchParams != null) {
-                                if (searchParams.empId != null) {
-                                    $state.go('app.employee_timesheet', {id: searchParams.empId});
-                                } else if (searchParams.patId != null) {
-                                    $state.go('app.patient_time_sheet', {id: searchParams.patId});
-                                } else if (searchParams.cordinatorId != null) {
-                                    $state.go('app.daily_attendance', {id: searchParams.cordinatorId});
-                                }
-                            }
-
+                            ctrl.navigateToState();
+                            ctrl.formSubmitted = false;
 //                        ctrl.resetManualPunch();
                         }).catch(function(e) {
                             if (e.data != null) {
@@ -218,5 +238,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", ManualPunchCtrl]);
 })();

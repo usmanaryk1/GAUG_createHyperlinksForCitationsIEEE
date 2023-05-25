@@ -349,11 +349,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
             }).
-                    // edit_missed_punch
+            // edit_missed_punch
             state('app.edit_missed_punch', {
                 url: '/edit_missed_punch/:id?empId&patId',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
@@ -363,13 +364,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
             }).
             // timesheet
             state('app.employee_timesheet', {
-                url: '/employee_timesheet?id',
+                url: '/employee_timesheet?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
                 controller: 'EmployeeTimeSheetCtrl as empTimesheet',
                 resolve: {
@@ -392,13 +394,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
             }).
             // manual_punch
             state('app.manual_punch_employee', {
-                url: '/manual_punch/employee/:id',
+                url: '/manual_punch/employee/:id?from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
                 resolve: {
@@ -406,6 +409,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
@@ -420,13 +424,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
             }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
-                url: '/patient_time_sheet?id',
+                url: '/patient_time_sheet?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
                 controller: 'PatientTimeSheetCtrl as patTimesheet',
                 resolve: {
@@ -441,7 +446,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             }).
             // daily_attendance
             state('app.daily_attendance', {
-                url: '/daily_attendance?id',
+                url: '/daily_attendance?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
                 resolve: {
