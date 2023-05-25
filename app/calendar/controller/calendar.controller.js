@@ -740,7 +740,7 @@
                 });
             }
         };
-        $rootScope.openEditModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        $rootScope.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
@@ -750,7 +750,7 @@
                 controller: 'EmployeeInfoCtrl as employeeinfo',
                 resolve: {
                     employeeId: function () {
-                        return employeeId;
+                        return employee.id;
                     }
                 }
             });
