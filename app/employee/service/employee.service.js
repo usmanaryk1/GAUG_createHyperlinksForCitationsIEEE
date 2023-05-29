@@ -61,7 +61,10 @@
                 params: {
                     action: 'selectexceptruser'
                 }
-            }
+            },
+            getTimeAvailability: {
+                method: 'GET'
+             }
         });
         return {
             retrieveAll: function (filter) {
@@ -99,6 +102,9 @@
             },
             getEmployeeExceptUser: function () {
                 return api.getEmployeeExceptUser().$promise;
+            },
+            getTimeAvailability: function (params) {
+                return api.getTimeAvailability({action: params.employeeId,subAction: 'timeavailability'}).$promise;
             }
         };
     };

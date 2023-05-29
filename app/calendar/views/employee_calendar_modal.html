@@ -397,7 +397,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group-separator"></div>
+            <div class="form-group-separator"></div>            
             <div class="form-group">
                 <label class="col-sm-2 control-label">Reason</label>
 
@@ -415,13 +415,19 @@
 
                 <div class="col-sm-2" style="width:10%;padding-right:0;">
                     <label class="no-padding-left checkbox" >
-                        <input type="checkbox" class="cbr" id="paid" name="paid" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.isPaid">
+                        <input type="checkbox" class="cbr" id="paid" name="paid" ng-disabled="(!employeePopup.isNew && !employeePopup.data.isEdited) || employeePopup.data.isPaidDisabled" ng-model="employeePopup.data.isPaid">
                         Paid
                     </label>
                 </div>
                 <div class="col-sm-2" style="margin-top:0px;" ng-show="employeePopup.data.isPaid">
                     <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." ng-required="employeePopup.data.eventType == 'U' && employeePopup.data.isPaid" ng-change="employeePopup.setHoursError()" ng-blur="employeePopup.setHoursError()">
                 </div>
+                <div class="col-sm-10 col-sm-push-2" style="margin-top:5px;">
+                    <span class="text-warning" ng-if="employeePopup.validStart === false">No paid leave in vesting period.</span>                                    
+                </div>                
+                <div class="col-sm-10 col-sm-push-2" style="margin-top:5px;">
+                    <span class="text-warning" ng-if="employeePopup.validHours === false">You have only {{employeePopup.validationHours[employeePopup.types[employeePopup.data.reason]]}} hours in {{employeePopup.data.reason}} account.</span>                                    
+                </div>                
             </div>
 
             <div class="form-group-separator"></div>
@@ -462,7 +468,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
             <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-            <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
+            <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-disabled="employeePopup.validHours === false" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
         </div>
 
     </form>
