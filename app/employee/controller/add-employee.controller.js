@@ -219,10 +219,6 @@
             }
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
-            if (employeeToSave.dateOfBirth) {
-                employeeToSave.dateOfBirth = new Date(employeeToSave.dateOfBirth);
-            }
-
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 var reqParam;
                 if (ctrl.employee.id && ctrl.employee.id !== null) {
