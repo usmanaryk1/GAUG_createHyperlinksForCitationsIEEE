@@ -30,6 +30,12 @@
                     
         if (selectedType !== null) {
             ctrl.selectedBenefitObj = selectedType[0];
+            if(ctrl.selectedBenefitObj=='SIT' || ctrl.selectedBenefitObj=='PRT' || ctrl.selectedBenefitObj == 'VCT'){
+                ctrl.parameters['expirationRequired'] = 'false';
+            }
+            if(ctrl.selectedBenefitObj=='HEC' || ctrl.selectedBenefitObj=='WFC' || ctrl.selectedBenefitObj == '401'){
+                ctrl.parameters['employerContributionType'] = 'F';
+            }
             ctrl.modalTitle = ontime_data.benefitMap[ctrl.selectedBenefitObj];
             if (_.find(benefitPackageLineSet, {lineType: ctrl.selectedBenefitObj})) {
                 ctrl.parameters = angular.copy(_.find(benefitPackageLineSet, {lineType: ctrl.selectedBenefitObj}));
@@ -96,6 +102,11 @@
             //reverse the action.
             $modalInstance.close({reverse: true});
         };
+        
+        //to make the radio buttons selected, theme bug
+            setTimeout(function () {
+                cbr_replace();
+            }, 100);
     };
     
     angular.module('xenon.controllers').controller('BenefitModalCtrl', ["selectedType", "benefitPackageLineSet", "editMode", "$modalInstance", "$timeout", BenefitModalCtrl]);

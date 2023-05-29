@@ -8,11 +8,17 @@
         ctrl.searchParams = {};
         ctrl.maxDate = angular.copy($rootScope.todayDate);
         Page.setTitle("Report");
+        ctrl.yearList = [];
+        for (var currentYear = new Date().getFullYear(); currentYear >= 2015; currentYear--) {
+            ctrl.yearList.push(currentYear);
+        }
 
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
-                if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours' || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
+                if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours'
+                        || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
+                        || ctrl.reportType == 'wppreport') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
@@ -33,10 +39,13 @@
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }
+                    if (ctrl.searchParams.year) {
+                        path = path + "&year=" + ctrl.searchParams.year;
+                    }
                     if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet')) {
-                        $http.get(path).success(function(data){
+                        $http.get(path).success(function (data) {
 //                            toastr.success('Generated report will be mailed to your email id');
-                        }).error(function(data){
+                        }).error(function (data) {
                             toastr.error(data);
                         });
                         toastr.success('Generated report will be mailed to your email id');
@@ -56,6 +65,9 @@
         };
         ctrl.typeChange = function () {
             ctrl.searchParams = {};
+            if (ctrl.reportType === 'ptoreport') {
+                ctrl.searchParams.year = ctrl.yearList[0];
+            }
         };
         ctrl.resetFilters = function () {
             delete ctrl.reportType;
@@ -66,8 +78,7 @@
                 ctrl.dateMessage = "From date must be Sunday & To date must be Saturday.";
             } else if (ctrl.reportType == 'workedhours' && moment(new Date(ctrl.searchParams.toDate)).diff(moment(new Date(ctrl.searchParams.fromDate)), 'days') > 6) {
                 ctrl.dateMessage = "Only one week should be selected.";
-            }
-            else {
+            } else {
                 ctrl.dateMessage = null;
             }
         };

@@ -71,6 +71,9 @@
             getNotes: {
                 method: 'GET',
                 isArray: true
+            },
+            getTimeAvailability: {
+                method: 'GET'
             }
         });
         return {
@@ -115,6 +118,9 @@
             },
             getEmployeeExceptUser: function () {
                 return api.getEmployeeExceptUser().$promise;
+            },
+            getTimeAvailability: function (params) {
+                return api.getTimeAvailability({action: params.employeeId,subAction: 'timeavailability'}).$promise;
             }
         };
     };

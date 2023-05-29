@@ -1,5 +1,5 @@
 ontime_data = {
-    'weburl': 'http://localhost:8080/ontime/api/',
+    'weburl': 'http://localhost:8084/webapplication/api/',
 //    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'login',
     'homepage': 'app.dashboard',
@@ -37,7 +37,11 @@ ontime_data = {
         {id: 'patientcensus', label: "Patient Census"},
         {id: 'patienttimesheet', label: "Patient Time Sheet"},
         {id: 'workedhours', label: "Worked Hours"},
-        {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"}
+        {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
+        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
+        {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
+        {id: 'ptoreport', label: "Employee PTO Report"},
+        {id: 'wppreport', label: "Employee WPP Report"}
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
     defaultDistance: 5

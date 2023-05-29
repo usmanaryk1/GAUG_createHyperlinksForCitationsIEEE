@@ -12,7 +12,7 @@
 
         function retrieveBenefitList() {
             $rootScope.paginationLoading = true;
-            BenefitDAO.retrieveAll().then(function (res) {
+            BenefitDAO.retrieveAll({subAction:"all"}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,

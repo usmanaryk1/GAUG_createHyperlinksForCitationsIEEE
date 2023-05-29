@@ -1,5 +1,7 @@
+/* global moment */
+
 (function () {
-    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope) {
+    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope, $formService) {
         var ctrl = this;
         ctrl.pageNo = 1;
         ctrl.retrieveWorkSites = function () {
@@ -198,6 +200,8 @@
                 }
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
+            }).catch(function (data, status) {
+                console.log("error--------", data, status);
             });
         };
 
@@ -354,6 +358,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.employeePopup.retrievingAvailabiltiy = false;
                 $rootScope.employeePopup.isWorksiteSchedulePage = ctrl.isWorksiteSchedulePage;
                 $rootScope.employeePopup.todayDate = new Date();
                 if (data != null && data.eventType == null) {
@@ -416,6 +421,7 @@
                 }
                 $rootScope.employeePopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
+                    delete $rootScope.employeePopup.availablityDetails;
                     $rootScope.employeePopup.close();
                 };
                 $rootScope.employeePopup.save1 = function () {
@@ -525,6 +531,7 @@
                         }
                     } else {
                         function open() {
+                            delete $rootScope.employeePopup.availablityDetails;
                             $rootScope.employeePopup.close();
                             ctrl.passwordModalLogic(action);
                         }
@@ -554,14 +561,93 @@
                     EventTypeDAO.delete({subAction: id, action: ontime_data.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: true}).then(function (res) {
                         ctrl.retrieveEmployees();
                         toastr.success("Event deleted.");
+                        delete $rootScope.employeePopup.availablityDetails;
                         $rootScope.employeePopup.close();
                     }).catch(function (data, status) {
                         toastr.error(data.data);
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     });
-                }
+                };
+
+                $rootScope.employeePopup.types = {
+                    'Sick': 'SIT',
+                    'Personal Day': 'PRT',
+                    'Vacation': 'VCT'
+                };
+
+                $rootScope.employeePopup.validateDetails = function () {
+                    var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
+                    if ($rootScope.employeePopup.validationStartDate && $rootScope.employeePopup.validationStartDate[type]) {
+                        if (moment($rootScope.employeePopup.validationStartDate[type]).toDate() > moment(new Date($rootScope.employeePopup.data.startDate)).toDate()) {
+                            $rootScope.employeePopup.validStart = false;
+                            $rootScope.employeePopup.data.isPaidDisabled = true;
+                            $rootScope.employeePopup.data.isPaid = false;
+                            $formService.uncheckCheckboxValue('paid');
+                            delete $rootScope.employeePopup.data.noOfHours;
+                        } else {
+                            $rootScope.employeePopup.validStart = true;
+                            $rootScope.employeePopup.data.isPaidDisabled = false;
+                        }
+                    } else {
+                        $rootScope.employeePopup.validStart = true;
+                        $rootScope.employeePopup.data.isPaidDisabled = false;
+                    }
+                    if ($rootScope.employeePopup.validationHours && $rootScope.employeePopup.validationHours[type]) {
+                        if ($rootScope.employeePopup.validationHours[type] < $rootScope.employeePopup.data.noOfHours) {
+                            $rootScope.employeePopup.validHours = false;
+                        } else {
+                            $rootScope.employeePopup.validHours = true;
+                        }
+                    } else {
+                        $rootScope.employeePopup.validHours = true;
+                    }
+                };
+                $rootScope.employeePopup.setAvailability = function (empId, validateDetails) {
+                    $rootScope.employeePopup.retrievingAvailabiltiy = true;
+                    $rootScope.employeePopup.validationStartDate = {};
+                    $rootScope.employeePopup.validationHours = {};                    
+                    EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
+                        if (res) {
+                            $rootScope.employeePopup.availablityDetails = angular.copy(res);
+                            if (res.hiringDate && $rootScope.employeePopup.availablityDetails.vestingPeriodMap) {
+                                angular.forEach($rootScope.employeePopup.availablityDetails.vestingPeriodMap, function (val, key) {
+                                    $rootScope.employeePopup.validationStartDate[key] = moment(new Date(res.hiringDate)).add(val, 'Days').toDate();
+                                });
+                            }
+                            if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
+                                $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
+                            }
+                            if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited
+                                    && $rootScope.employeePopup.data.isPaid==true) {
+                                var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
+                                $rootScope.employeePopup.validationHours[type] =
+                                        $rootScope.employeePopup.validationHours[type] + parseFloat($rootScope.employeePopup.data.noOfHours);
+                            }
+                        } else {
+                            $rootScope.employeePopup.availablityDetails = {};
+                        }
+                        $rootScope.employeePopup.retrievingAvailabiltiy = false;
+                        if (validateDetails) {
+                            $rootScope.employeePopup.validateDetails();
+                        }
+
+                    }).catch(function (data, status) {
+                        $rootScope.employeePopup.availablityDetails = {};
+                    }).then(function (data, status) {
+                        if (empId && $rootScope.employeePopup.data.eventType == 'U' && $rootScope.employeePopup.data.reason) {
+                            $rootScope.employeePopup.validateDetails();
+                        } else {
+                            $rootScope.employeePopup.validHours = true;
+                            $rootScope.employeePopup.validStart = true;
+                        }
+                    });
+                };
+
                 $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
+                    if ($rootScope.employeePopup.data.eventType == 'U' || (editMode === false)) {
+                        $rootScope.employeePopup.setAvailability(empId, false);
+                    }
                     if ($rootScope.employeePopup.data.eventType == 'S' && !editMode) {
                         setTimeout(function () {
                             $("#patient").select2('data', null);
@@ -682,6 +768,27 @@
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
             }
+
+            $rootScope.$watch('employeePopup.data.reason + employeePopup.data.startDate + employeePopup.data.eventType + employeePopup.data.noOfHours + $rootScope.employeePopup.data.eventType', function (newVal, oldValue) {
+                if (($rootScope.employeePopup.data.employeeId || (ctrl.viewEmployee && ctrl.viewEmployee.id)) && $rootScope.employeePopup.data.eventType == 'U'
+                        && $rootScope.employeePopup.data.reason && oldValue && oldValue !== '' && newVal && newVal !== '') {
+                    if ($rootScope.employeePopup.availablityDetails) {
+                        $rootScope.employeePopup.validateDetails();
+                    } else if($rootScope.employeePopup.retrievingAvailabiltiy === false){
+                        if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
+                            $rootScope.employeePopup.setAvailability($rootScope.employeePopup.data.employeeId, true);
+                        } else if (ctrl.calendarView == 'month') {
+                            $rootScope.employeePopup.setAvailability(ctrl.viewEmployee.id, true);
+                        } else if($rootScope.employeePopup.employee){
+                            $rootScope.employeePopup.setAvailability($rootScope.employeePopup.employee.id, true);
+                        }                      
+                    }
+                } else {
+                    $rootScope.employeePopup.validHours = true;
+                    $rootScope.employeePopup.validStart = true;
+                }
+            });
+
             $rootScope.maskLoading();
             var careTypes;
             var carePatientMap;
@@ -691,6 +798,8 @@
 
         ctrl.saveEmployeePopupChanges = function (data, isPast) {
             $rootScope.maskLoading();
+            if (!data.isPaid)
+                delete data.noOfHours;
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
                 data1.employeeId = ctrl.viewEmployee.id;
@@ -714,6 +823,7 @@
                 }
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
+                    delete $rootScope.employeePopup.availablityDetails;
                     $rootScope.employeePopup.close();
                     ctrl.retrieveEmployees();
                 }).catch(function (data) {
@@ -731,6 +841,7 @@
                     obj.subAction = obj.data.unavailabilityId;
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Updated successfully.");
+                    delete $rootScope.employeePopup.availablityDetails;
                     $rootScope.employeePopup.close();
                     ctrl.retrieveEmployees();
                 }).catch(function (data) {
@@ -981,7 +1092,7 @@
             };
             ctrl.dispatchConfirmModal = function () {
                 ctrl.dispatchClicked = true;
-                if(ctrl.searchParams.patientId == null){
+                if (ctrl.searchParams.patientId == null) {
                     return;
                 }
                 var modalInstance = $modal.open({
@@ -1015,5 +1126,5 @@
         }
     }
 
-    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", CalendarCtrl]);
+    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", "$formService", CalendarCtrl]);
 })();

@@ -14,7 +14,9 @@
             <datepicker ng-model="patientcalendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-click="patientcalendar.selectDate($event)" ng-class="{'show':patientcalendar.isOpen,'hide':!patientcalendar.isOpen}"></datepicker>
         </div>
         <div class="mwl-right">
-            <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
+            <span ng-if="patientcalendar.viewPatient.status != 'd'">
+                <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add New Event</a>
+            </span>
             <div class="mwl-button-group">
                 <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="patientcalendar.changeToMonth()" ng-class="{'mwl-state-active': patientcalendar.calendarView == 'month'}">month</button>
                 <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="patientcalendar.changeToWeek()" ng-class="{'mwl-state-active': patientcalendar.calendarView == 'week'}">week</button>
@@ -54,7 +56,7 @@
                                         });
                                     }, 200);
                                 });</script>
-                            <select class="form-control" name="patientdropdownIds" ng-model="patientcalendar.monthPatient" id="patientdropdownIds" ng-options='data as (data.lName+", "+data.fName+" "+data.middleInitial) for data in patientcalendar.patientList' ng-change="navigateToMonthPage(patientcalendar.monthPatient)">
+                            <select class="form-control" name="patientdropdownIds" ng-model="patientcalendar.monthPatient" id="patientdropdownIds" ng-options='data as (data.lName + ", " + data.fName + " " + data.middleInitial) for data in patientcalendar.patientList' ng-change="navigateToMonthPage(patientcalendar.monthPatient)">
                                 <option value="" selected hidden />
                             </select>
                         </div>
@@ -82,7 +84,7 @@
                                 });
                             }, 200);
                         });</script>
-                    <select multiple class="form-control" name ="patientIds" id="patientIds" ng-model="patientcalendar.searchParams.patientIds" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientcalendar.patientList'>
+                    <select multiple class="form-control" name ="patientIds" id="patientIds" ng-model="patientcalendar.searchParams.patientIds" ng-options='patient.id as (patient.lName + ", " + patient.fName + " " + patient.middleInitial) for patient in patientcalendar.patientList'>
                         <option value="" selected hidden />
                     </select>
                 </div>
@@ -156,20 +158,20 @@
                 </div>
                 <div class="col-md-3 filter-checkbox" style="padding-top:20px;padding-right: 15px">                    
                     <!--<div class="col-md-12 pad_lf0 pad_rg0">-->
-                        <button type="button" class="btn btn-info green_bt pull-right" ng-click="patientcalendar.applySearch()" style="width:75px !important; margin: 0px">Submit</button>
-                        <button class="btn btn-info btn-single gray_bt pull-right" type="button" style="width:95px !important;" ng-click="patientcalendar.resetFilters()">
-                            Reset Filters
-                        </button>                        
+                    <button type="button" class="btn btn-info green_bt pull-right" ng-click="patientcalendar.applySearch()" style="width:75px !important; margin: 0px">Submit</button>
+                    <button class="btn btn-info btn-single gray_bt pull-right" type="button" style="width:95px !important;" ng-click="patientcalendar.resetFilters()">
+                        Reset Filters
+                    </button>                        
                     <!--</div>-->
                 </div>
-<!--                <div class="col-md-3 filter-checkbox row pull-right">
-                    <div class="col-md-4 col-md-offset-2" style="padding-top:25px;">
-                        <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="patientcalendar.resetFilters()">Reset Filters</button>
-                    </div>
-                    <div class="col-md-4" style="padding-top:25px;">
-                        <button type="button" class="btn btn-success pull-right" ng-click="patientcalendar.applySearch()">Submit</button>
-                    </div>
-                </div>-->
+                <!--                <div class="col-md-3 filter-checkbox row pull-right">
+                                    <div class="col-md-4 col-md-offset-2" style="padding-top:25px;">
+                                        <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="patientcalendar.resetFilters()">Reset Filters</button>
+                                    </div>
+                                    <div class="col-md-4" style="padding-top:25px;">
+                                        <button type="button" class="btn btn-success pull-right" ng-click="patientcalendar.applySearch()">Submit</button>
+                                    </div>
+                                </div>-->
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
                     <div class="form-group col-sm-3">
                         <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
