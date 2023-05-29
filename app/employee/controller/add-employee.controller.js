@@ -1,5 +1,5 @@
 (function () {
-    function AddEmployeeCtrl($scope, CareTypeDAO, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
+    function AddEmployeeCtrl($scope, CareTypeDAO, BenefitDAO, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
         var ctrl = this;
         ctrl.staticPosition;
         ctrl.retrivalRunning = true;
@@ -201,7 +201,26 @@
                     employeeToSave.languageSpoken.push(obj.key);
                 }
             });
-            employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
+            employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();     
+            
+            if(ctrl.benefitPackages && (ctrl.benefitPackages.length > 0) && employeeToSave.employeeBenefitDetails){
+                if (employeeToSave.employeeBenefitDetails.benefitPackageId) {
+                    var lineTypes = ctrl.benefitPackageWiseLineTypes[employeeToSave.employeeBenefitDetails.benefitPackageId];
+                    if (lineTypes.indexOf('HEC') === -1) {
+                        employeeToSave.employeeBenefitDetails.employeeContributionHealthcare = null;
+                    }
+                    if (lineTypes.indexOf('401') === -1) {
+                        employeeToSave.employeeBenefitDetails.employeeContribution401k = null;
+                    }
+                    if (lineTypes.indexOf('WFC') === -1) {
+                        employeeToSave.employeeBenefitDetails.employeeContributionWpp = null;
+                    }
+                } else {
+                    employeeToSave.employeeBenefitDetails.employeeContributionHealthcare = null;
+                    employeeToSave.employeeBenefitDetails.employeeContribution401k = null;
+                    employeeToSave.employeeBenefitDetails.employeeContributionWpp = null;
+                }
+            }
 //            if (!ctrl.employee.application || ctrl.employee.application === null) {
 //                delete employeeToSave.employeeDocumentId;
 //            } else {
@@ -259,7 +278,8 @@
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
-                            ctrl.editMode = true;
+                            ctrl.editMode = true;         
+                            ctrl.employee.employeeBenefitDetails = employeeRes.employeeBenefitDetails;
                             //to set the default data in employee with position 'pc'
                             if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
                                 var rate1CareTypes = ['Personal Care HHA Hourly', 'Personal Care HHA Live In', 'PCA/HHA - One Client', 'PCA/HHA - Live In One Client', "CDPAP - One Client", "CDPAP - Live In One Client"];
@@ -551,6 +571,18 @@
                         toastr.error("Failed to retrieve care types.");
                         form_data = $('#add_employee_form').serialize();
                     });
+                    
+                    BenefitDAO.retrieveAll({subAction: "active", linesRequired: true}).then(function (benefitPackages) {
+                        ctrl.benefitPackages = [];
+                        ctrl.benefitPackageWiseLineTypes = {};
+                        _.each(benefitPackages, function (benefitPackage) {
+                            ctrl.benefitPackages.push({id: benefitPackage.id, packageName:benefitPackage.packageName});
+                            ctrl.benefitPackageWiseLineTypes[benefitPackage.id] = _.map(benefitPackage.benefitPackageLineSet, "lineType");                            
+                        });
+                    }).catch(function () {
+                        toastr.error("Failed to benefits packages.");
+                    });
+                    
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
                     }
@@ -1303,5 +1335,5 @@
             });
         }
     }
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "BenefitDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddEmployeeCtrl]);
 })();

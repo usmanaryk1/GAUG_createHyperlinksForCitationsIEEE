@@ -184,7 +184,71 @@
                             </input>
                         </div>
                     </div>
-                    <div class="form-group-separator" ng-show="addEmployee.employee.wages !== 'S'">
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            Benefit Package
+                        </label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="BenefitPackage" ng-model="addEmployee.employee.employeeBenefitDetails.benefitPackageId" 
+                                    ng-options="package.id as package.packageName for package in addEmployee.benefitPackages"
+                                    name="BenefitPackage" onblur="setSelectValidationMessage(this)" itemid="Benefit Package">
+                                <option value="">
+                                    Select
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-if="addEmployee.employee.employeeBenefitDetails.benefitPackageId
+                        && addEmployee.benefitPackageWiseLineTypes
+                        && (addEmployee.benefitPackageWiseLineTypes[addEmployee.employee.employeeBenefitDetails.benefitPackageId].indexOf('WFC') >-1)">
+                    </div>
+                    <div class="form-group" ng-if="addEmployee.employee.employeeBenefitDetails.benefitPackageId
+                        && addEmployee.benefitPackageWiseLineTypes
+                        && (addEmployee.benefitPackageWiseLineTypes[addEmployee.employee.employeeBenefitDetails.benefitPackageId].indexOf('WFC') >-1)">
+                        <label class="col-sm-2 control-label">
+                            WPP Flex Employee Contribution
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="WPPFlex" type="password" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContributionWpp"
+                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="WPP Flex Rate">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-if="addEmployee.employee.employeeBenefitDetails.benefitPackageId
+                        && addEmployee.benefitPackageWiseLineTypes
+                        && (addEmployee.benefitPackageWiseLineTypes[addEmployee.employee.employeeBenefitDetails.benefitPackageId].indexOf('HEC') >-1)">
+                    </div>
+                    <div class="form-group" ng-if="addEmployee.employee.employeeBenefitDetails.benefitPackageId
+                        && addEmployee.benefitPackageWiseLineTypes
+                        && (addEmployee.benefitPackageWiseLineTypes[addEmployee.employee.employeeBenefitDetails.benefitPackageId].indexOf('HEC') >-1)">
+                        <label class="col-sm-2 control-label">
+                            Healthcare Employee Contribution
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="Healthcare" type="password" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContributionHealthcare"
+                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="Healthcare Rate">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-if="addEmployee.employee.employeeBenefitDetails.benefitPackageId
+                        && addEmployee.benefitPackageWiseLineTypes
+                        && (addEmployee.benefitPackageWiseLineTypes[addEmployee.employee.employeeBenefitDetails.benefitPackageId].indexOf('401') >-1)">
+                    </div>
+                    <div class="form-group" ng-if="addEmployee.employee.employeeBenefitDetails.benefitPackageId
+                        && addEmployee.benefitPackageWiseLineTypes
+                        && (addEmployee.benefitPackageWiseLineTypes[addEmployee.employee.employeeBenefitDetails.benefitPackageId].indexOf('401') >-1)">
+                        <label class="col-sm-2 control-label">
+                            401K Employee Contribution
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="401K" type="password" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401k"
+                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="401K Rate">
+                            </input>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
                     </div>
                     <div class="row">
                         <div class="col-sm-12">

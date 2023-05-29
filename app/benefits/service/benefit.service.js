@@ -6,8 +6,7 @@
                 method: 'GET',
                 isArray: true,
                 params: {
-                    action: 'view',
-                    subAction: 'All'
+                    action: 'view'
                 }
             },
             save: {
