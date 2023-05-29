@@ -73,17 +73,6 @@
                         </div>
                         <div class="form-group-separator">
                         </div>                        
-                        <div class="form-group" ng-if="addInsurer.insurerObj.mdol === 'MD Online'">
-                            <label class="col-sm-3 control-label">
-                                MDOL Acct #
-                            </label>
-                            <div class="col-sm-9">
-                                <input class="form-control" id="MdolAccountNumber" name="MdolAccountNumber" type="text"  ng-model="addInsurer.insurerObj.mdolAccountNumber"
-                                       data-validate="required"  data-message-required="Please enter MDOL Acct #." maxlength="100">
-                            </div>
-                        </div>
-                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.mdol==='MD Online'">
-                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">
                                 Claim Form Type 
@@ -102,6 +91,17 @@
                                     </option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="form-group" ng-if="addInsurer.insurerObj.mdol === 'MD Online' && addInsurer.insurerObj.claimFormType === 'UB04'">
+                            <label class="col-sm-3 control-label">
+                                MDOL Acct #
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="MdolAccountNumber" name="MdolAccountNumber" type="text"  ng-model="addInsurer.insurerObj.mdolAccountNumber"
+                                       data-validate="required"  data-message-required="Please enter MDOL Acct #." maxlength="100">
+                            </div>
+                        </div>
+                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.mdol==='MD Online' && addInsurer.insurerObj.claimFormType === 'UB04'">
                         </div>
                         <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04'">
                             <div class="form-group-separator">
