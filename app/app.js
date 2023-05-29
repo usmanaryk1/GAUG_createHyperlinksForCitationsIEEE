@@ -349,11 +349,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
             }).
-                    // edit_missed_punch
+            // edit_missed_punch
             state('app.edit_missed_punch', {
                 url: '/edit_missed_punch/:id?empId&patId',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
@@ -363,6 +364,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
@@ -392,6 +394,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
@@ -406,6 +409,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }
@@ -420,6 +424,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }

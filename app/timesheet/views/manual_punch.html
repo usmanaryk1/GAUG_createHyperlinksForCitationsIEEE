@@ -55,32 +55,71 @@
                         </div>
                         <div class="form-group-separator">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'validate-has-error':manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted}">
                             <label class="col-sm-3 control-label">
                                 Patient Name
                             </label>
-                            <div class="col-sm-9">
-                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="emp.id as (emp.label) for emp in manualPunch.patientList" data-validate="required"  data-message-required="Please select Patient Name.">
-                                    <option value="">
-                                        Select
-                                    </option>
+                            <div class="col-sm-9" >
+                                <script type="text/javascript">
+                                            jQuery(document).ready(function($)
+                                    {
+                                        setTimeout(function() {
+                                            $("#sboxit-1").select2({
+//                                                        minimumResultsForSearch: -1,
+                                                placeholder: 'Select Patient...',
+//                                                        minimumInputLength: 1,
+//                                                        placeholder: 'Search',
+                                            }).on('select2-open', function()
+                                            {
+                                                // Adding Custom Scrollbar
+                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                            });
+                                        }, 200);
+
+                                    });
+                                </script>
+                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="pat.id as (pat.label) for pat in manualPunch.patientList track by pat.id" >
+                                    <option value="" selected hidden />
                                 </select>
+                                <div ng-show='manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted'>
+                                    <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient Name.</span>
+                                </div>
                                 <!--<div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.patientObj.fName+" "+manualPunch.patientObj.lName}}</div>-->
                             </div>
                         </div>
                         <div class="form-group-separator">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'validate-has-error':manualPunch.attendanceObj.employeeId == null && manualPunch.formSubmitted}">
                             <label class="col-sm-3 control-label">
                                 Employee Name
                             </label>
                             <div class="col-sm-9">
-                                <select ng-show="!manualPunch.editTimesheet" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList" data-validate="required"  data-message-required="Please select Employee Name.">
-                                    <option value="">
-                                        Select
-                                    </option>
+                                <script type="text/javascript" ng-if="manualPunch.attendanceObj.isManualPunch">
+                                    jQuery(document).ready(function($)
+                                    {
+                                        setTimeout(function() {
+                                            $("#sboxit-2").select2({
+//                                                        minimumResultsForSearch: -1,
+                                                placeholder: 'Select Patient...',
+//                                                        minimumInputLength: 1,
+//                                                        placeholder: 'Search',
+                                            }).on('select2-open', function()
+                                            {
+                                                // Adding Custom Scrollbar
+                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                            });
+                                        }, 200);
+
+                                    });
+                                </script>
+                                <select ng-show="manualPunch.attendanceObj.isManualPunch" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList track by emp.id">
+                                    <option value="" selected hidden />
                                 </select>
-                                <div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.empObj.fName + " " + manualPunch.empObj.lName}}</div>
+                                
+                                 <div ng-show='manualPunch.attendanceObj.employeeId == null && manualPunch.formSubmitted'>
+                                    <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee Name.</span>
+                                </div>
+                                <div class="form-control-static" ng-if="manualPunch.attendanceObj.isManualPunch == null || manualPunch.attendanceObj.isManualPunch == false">{{manualPunch.empObj.fName + " " + manualPunch.empObj.lName}}</div>
                             </div>
                         </div>
                         <div class="form-group-separator">

@@ -191,7 +191,7 @@
                     employeeToSave.languageSpoken.push(obj.key);
                 }
             });
-            employeeToSave.languageSpoken=employeeToSave.languageSpoken.toString();
+            employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
             if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
                 delete employeeToSave.employeeDocumentId;
             } else {
@@ -317,11 +317,11 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
-                    if(res.languageSpoken!=null){
-                        var languages=res.languageSpoken;
-                        angular.forEach(ctrl.languagesKeyValue,function(obj){
-                            if(languages.indexOf(obj.key)>=0){
-                                obj.value=true;
+                    if (res.languageSpoken != null) {
+                        var languages = res.languageSpoken;
+                        angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                            if (languages.indexOf(obj.key) >= 0) {
+                                obj.value = true;
                             }
                         });
                     }
@@ -913,6 +913,15 @@
                 cropBoxData,
                 canvasData;
         $('body').on('shown.bs.modal', "#cropper-example-2-modal", function() {
+              $image = $('#cropper-example-2 > img'),
+                    cropBoxData,
+                    canvasData;
+                    $image.cropper("destroy");
+            if (cropBoxData != null) {
+                canvasData=null;
+                cropBoxData=null;
+            }
+
             $image = $('#cropper-example-2 > img'),
                     cropBoxData,
                     canvasData;
