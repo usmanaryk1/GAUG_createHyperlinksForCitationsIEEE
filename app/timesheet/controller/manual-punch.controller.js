@@ -13,9 +13,9 @@
                 ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchInDate = null;
             } else {
-                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false, isManualPunch : true};
-                 $("#sboxit-2").select2("val", null);
-                 $("#sboxit-1").select2("val", null);
+                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false, isManualPunch: true};
+                $("#sboxit-2").select2("val", null);
+                $("#sboxit-1").select2("val", null);
             }
         };
         ctrl.resetManualPunch();
@@ -56,8 +56,14 @@
                 var id = $state.params.id;
                 if ($state.current.name.indexOf('patient') > 0) {
                     ctrl.attendanceObj.patientId = Number(id);
+                    $timeout(function() {
+                        $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
+                    });
                 } else if ($state.current.name.indexOf('employee') > 0) {
                     ctrl.attendanceObj.employeeId = Number(id);
+                    $timeout(function() {
+                        $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
+                    });
                 } else {
                     ctrl.editTimesheet = true;
                     if ($state.current.name.indexOf('edit_missed_punch') > 0) {
@@ -146,7 +152,7 @@
         };
         ctrl.saveManualAttendance = function() {
             ctrl.formSubmitted = true;
-            if ($("#manual_punch_form")[0].checkValidity() && ctrl.attendanceObj.patientId!=null && ctrl.attendanceObj.employeeId!=null) {
+            if ($("#manual_punch_form")[0].checkValidity() && ctrl.attendanceObj.patientId != null && ctrl.attendanceObj.employeeId != null) {
                 $rootScope.maskLoading();
                 var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
                 if (attendanceObjToSave.isMissedPunch === false) {

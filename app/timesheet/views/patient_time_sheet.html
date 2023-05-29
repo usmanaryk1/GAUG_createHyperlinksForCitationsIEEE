@@ -18,7 +18,7 @@
                             <div class="col-sm-12">
                                 <div class="col-sm-4 pad_lf0" style="margin-top:-15px;" ng-show="patTimesheet.selectedPatient && patTimesheet.selectedPatient !== null" >                                    
                                     <div class="user_av_hd">
-                                        <h1><a href="" ng-click="patTimesheet.viewPatient(patTimesheet.selectedPatient.id)">{{patTimesheet.selectedPatient.fName + ' ' + patTimesheet.selectedPatient.lName}}</a></h1>
+                                        <h1><a href="" ng-click="patTimesheet.viewPatient(patTimesheet.selectedPatient.id)">{{patTimesheet.selectedPatient.lName + ", " + patTimesheet.selectedPatient.fName + " " + patTimesheet.selectedPatient.middleInitial}}</a></h1>
                                         <!--<p>{{patTimesheet.selectedPatient.position}}</p>-->
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
 
                                                 });
                                             </script>
-                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.fName+" "+pat.lName) for pat in patTimesheet.patientList track by pat.id'>
+                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in patTimesheet.patientList track by pat.id'>
                                                 <option value="" selected hidden />
                                             </select>
                                         </div>
@@ -157,7 +157,7 @@
                                                 </div>
                                             </td>
                                             <td><div ng-if="timesheet.isManualPunch === true">Admin Verified</div>
-                                                <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature!==null" width="58" height="34" alt="Signature" ng-src="{{timesheet.signature}}"></td>
+                                                <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{timesheet.signature}}"></td>
                                         </tr>
 
                                         <!--                                        <tr>

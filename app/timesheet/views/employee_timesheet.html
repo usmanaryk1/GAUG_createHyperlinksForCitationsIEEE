@@ -20,7 +20,7 @@
                                         <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
                                     </div>
                                     <div class="user_av_hd">
-                                        <h1>{{empTimesheet.selectedEmployee.fName + ' ' + empTimesheet.selectedEmployee.lName}}</h1>
+                                        <h1>{{empTimesheet.selectedEmployee.lName+", "+empTimesheet.selectedEmployee.fName+" "+empTimesheet.selectedEmployee.middleInitial}}</h1>
                                         <p>{{positions[empTimesheet.selectedEmployee.position]}}</p>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
 
                                                 });
                                             </script>
-                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="empTimesheet.searchParams.employeeId" ng-options='emp.id as (emp.fName+" "+emp.lName) for emp in empTimesheet.employeeList track by emp.id'>
+                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="empTimesheet.searchParams.employeeId" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in empTimesheet.employeeList track by emp.id'>
                                                 <option value="" selected hidden />
                                             </select>
                                             <!--<input type="text" class="form-control" ng-model="empTimesheet.searchValue" ng-change="empTimesheet.filterTimesheet()">-->

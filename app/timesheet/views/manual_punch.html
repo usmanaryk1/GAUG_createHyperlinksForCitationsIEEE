@@ -100,7 +100,7 @@
                                         setTimeout(function() {
                                             $("#sboxit-2").select2({
 //                                                        minimumResultsForSearch: -1,
-                                                placeholder: 'Select Patient...',
+                                                placeholder: 'Select Employee...',
 //                                                        minimumInputLength: 1,
 //                                                        placeholder: 'Search',
                                             }).on('select2-open', function()
@@ -115,8 +115,8 @@
                                 <select ng-show="manualPunch.attendanceObj.isManualPunch" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList track by emp.id">
                                     <option value="" selected hidden />
                                 </select>
-                                
-                                 <div ng-show='manualPunch.attendanceObj.employeeId == null && manualPunch.formSubmitted'>
+
+                                <div ng-show='manualPunch.attendanceObj.employeeId == null && manualPunch.formSubmitted'>
                                     <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee Name.</span>
                                 </div>
                                 <div class="form-control-static" ng-if="manualPunch.attendanceObj.isManualPunch == null || manualPunch.attendanceObj.isManualPunch == false">{{manualPunch.empObj.fName + " " + manualPunch.empObj.lName}}</div>
@@ -130,12 +130,10 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-minimal">
-                                    <input class="form-control timepicker"  ng-model='manualPunch.attendanceObj.punchInTime' data-minute-step="5" data-second-step="5" data-show-meridian="true" data-show-seconds="true" data-template="dropdown" id="field-65" name="PunchInTime" type="text" data-validate='required' data-message-required='Please enter Punch In Time.'/>
+                                    <input class="form-control"  ng-model='manualPunch.attendanceObj.punchInTime' id="field-65" name="PunchInTime" type="text" data-validate='required,time' data-message-required='Please enter Punch In Time.'/>
                                     <div class="input-group-addon">
-                                        <a href="#">
-                                            <i class="linecons-clock">
-                                            </i>
-                                        </a>
+                                        <i class="linecons-clock">
+                                        </i>
                                     </div>
                                 </div>
                             </div>
@@ -148,12 +146,10 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-minimal">
-                                    <input class="form-control timepicker"  ng-model='manualPunch.attendanceObj.punchOutTime' data-minute-step="5" data-second-step="5" data-show-meridian="true" data-show-seconds="true" data-template="dropdown" id="field-66" name="PunchOutTime" type="text" data-validate='required' data-message-required='Please enter Punch Out Time.'/>
+                                    <input class="form-control timepicker"  ng-model='manualPunch.attendanceObj.punchOutTime' id="field-66" name="PunchOutTime" type="text" data-validate='required,time' data-message-required='Please enter Punch Out Time.'/>
                                     <div class="input-group-addon">
-                                        <a href="#">
-                                            <i class="linecons-clock">
-                                            </i>
-                                        </a>
+                                        <i class="linecons-clock">
+                                        </i>
                                     </div>
                                 </div>
                             </div>

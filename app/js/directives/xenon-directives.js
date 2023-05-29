@@ -714,7 +714,7 @@ angular.module('xenon.directives', []).
                                 }
                                 //Date commented by jack to give input maask for datepicker
 //                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
-                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'creditcard']) != -1)
+                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'creditcard','time']) != -1)
                                 {
                                     opts['rules'][name][rule] = true;
 
@@ -854,45 +854,47 @@ angular.module('xenon.directives', []).
                 scope: {ngModel: "="},
                 link: function(scope, el, attr)
                 {
-                    if (!jQuery.isFunction(jQuery.fn.timepicker))
-                        return false;
-
-                    var $this = angular.element(el),
-                            opts = {
-                                template: attrDefault($this, 'template', false),
-                                showSeconds: attrDefault($this, 'showSeconds', false),
-                                defaultTime: attrDefault($this, 'defaultTime', new Date()),
-                                showMeridian: attrDefault($this, 'showMeridian', true),
-                                minuteStep: attrDefault($this, 'minuteStep', 15),
-                                secondStep: attrDefault($this, 'secondStep', 15)
-                            },
-                    $n = $this.next(),
-                            $p = $this.prev();
-
-                    $this.timepicker(opts);
-                    scope.$watch("ngModel", function(value) {
-                        $(el).timepicker('setTime', value);
-                    });
-
-                    if ($n.is('.input-group-addon') && $n.has('a'))
-                    {
-                        $n.on('click', function(ev)
-                        {
-                            ev.preventDefault();
-
-                            $this.timepicker('showWidget');
-                        });
-                    }
-
-                    if ($p.is('.input-group-addon') && $p.has('a'))
-                    {
-                        $p.on('click', function(ev)
-                        {
-                            ev.preventDefault();
-
-                            $this.timepicker('showWidget');
-                        });
-                    }
+                    
+//                     $(el).mask("99:99 aa");
+//                    if (!jQuery.isFunction(jQuery.fn.timepicker))
+//                        return false;
+//
+//                    var $this = angular.element(el),
+//                            opts = {
+//                                template: attrDefault($this, 'template', false),
+//                                showSeconds: attrDefault($this, 'showSeconds', false),
+//                                defaultTime: attrDefault($this, 'defaultTime', new Date()),
+//                                showMeridian: attrDefault($this, 'showMeridian', true),
+//                                minuteStep: attrDefault($this, 'minuteStep', 15),
+//                                secondStep: attrDefault($this, 'secondStep', 15)
+//                            },
+//                    $n = $this.next(),
+//                            $p = $this.prev();
+//
+//                    $this.timepicker(opts);
+//                    scope.$watch("ngModel", function(value) {
+//                        $(el).timepicker('setTime', value);
+//                    });
+//
+//                    if ($n.is('.input-group-addon') && $n.has('a'))
+//                    {
+//                        $n.on('click', function(ev)
+//                        {
+//                            ev.preventDefault();
+//
+//                            $this.timepicker('showWidget');
+//                        });
+//                    }
+//
+//                    if ($p.is('.input-group-addon') && $p.has('a'))
+//                    {
+//                        $p.on('click', function(ev)
+//                        {
+//                            ev.preventDefault();
+//
+//                            $this.timepicker('showWidget');
+//                        });
+//                    }
                 }
             }
         }).
