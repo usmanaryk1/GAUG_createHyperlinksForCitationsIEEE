@@ -143,11 +143,13 @@
                                         <!--<div class="green_dot"></div>-->
                                         <!--Display red dot for not matched GPS location-->
                                         <!--<div class="red_dot"></div>-->
-                                        <div class="black_dot"></div>
+                                        <div ng-class="{'black_dot':timesheet.colorFlag=='black','red_dot':timesheet.colorFlag=='red','green_dot':timesheet.colorFlag=='green'}"></div> 
+                                        <!--<div ng-class="{'black_dot':timesheet.punchInColorFlag=='black','red_dot':timesheet.punchInColorFlag=='red','green_dot':timesheet.punchInColorFlag=='green'}"></div>-->
                                         {{timesheet.roundedPunchInTime|date :timeFormat}}
                                     </td>
                                     <td>
-                                        <div class="black_dot"></div>
+                                        <div ng-class="{'black_dot':timesheet.colorFlag=='black','red_dot':timesheet.colorFlag=='red','green_dot':timesheet.colorFlag=='green'}"></div>
+                                        <!--<div ng-class="{'black_dot':timesheet.punchOutColorFlag=='black','red_dot':timesheet.punchOutColorFlag=='red','green_dot':timesheet.punchOutColorFlag=='green'}"></div>-->
                                         {{timesheet.roundedPunchOutTime|date :timeFormat}}
                                     </td>
                                     <td>
