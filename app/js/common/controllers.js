@@ -47,6 +47,7 @@ angular.module('xenon.controllers', []).
             $rootScope.unmaskLoading = function() {
                 $("#mainDiv").unmask();
             };
+            $rootScope.payrollRates = [{key: 'R1', value: "Rate 1"}, {key: 'R2', value: "Rate 2"}, {key: 'RT', value: "Rate"}, {key: 'OT', value: "Rate OT/HD"}];
 //            $rootScope.states = ['UT', 'TX', 'NY'];
             $rootScope.positions = {
                 'pc': 'Personal Care',

@@ -18,7 +18,7 @@
                     <form class="form-horizontal validate" id="payroll_settings_form" name="payroll_settings_form" role="form">
                         <div class="row">
                             <div class="col-sm-12 pull-right">
-                                <button class="btn btn-info green_bt pull-right" type="submit">
+                                <button class="btn btn-info green_bt pull-right" type="submit" ng-click="payrollSet.saveSettings()">
                                     Save Changes
                                 </button>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="reset">
@@ -34,7 +34,7 @@
                             </label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <input class="form-control" id="field-95" name="OvertimeThresholdPerWeek" type="text" data-validate="required"  data-message-required="Please enter Overtime Threshold (Per Week).">
+                                    <input class="form-control" ng-model="payrollSet.payrollObj.overtimeThreshhold" id="field-95" name="OvertimeThresholdPerWeek" type="text" data-validate="required"  data-message-required="Please enter Overtime Threshold (Per Week)." maxlength="5" numbers-only="true" decimalallowed>
                                     <span class="input-group-addon">
                                         <i>
                                             Hours
@@ -51,11 +51,11 @@
                                 Vacation Rate
                             </label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="sboxit-1" name="VacationRate" data-validate="required"  data-message-required="Please select Vacation Rate.">
+                                <select class="form-control" ng-model="payrollSet.payrollObj.vaccationRate" ng-options="rate.key as rate.value for rate in payrollRates" id="sboxit-1" name="VacationRate" data-validate="required"  data-message-required="Please select Vacation Rate.">
                                     <option value="">
                                         Select
                                     </option>
-                                    <option>
+<!--                                    <option>
                                         Rate 1
                                     </option>
                                     <option>
@@ -66,7 +66,7 @@
                                     </option>
                                     <option>
                                         Rate OT/HD
-                                    </option>
+                                    </option>-->
                                 </select>
                             </div>
                         </div>
@@ -77,11 +77,11 @@
                                 Sick Rate
                             </label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="sboxit-2" name="SickRate" data-validate="required"  data-message-required="Please select Sick Rate.">
+                                <select class="form-control" id="sboxit-2" ng-model="payrollSet.payrollObj.sickRate" ng-options="rate.key as rate.value for rate in payrollRates" name="SickRate" data-validate="required"  data-message-required="Please select Sick Rate.">
                                     <option value="">
                                         Select
                                     </option>
-                                    <option>
+<!--                                    <option>
                                         Rate 1
                                     </option>
                                     <option>
@@ -92,7 +92,7 @@
                                     </option>
                                     <option>
                                         Rate OT/HD
-                                    </option>
+                                    </option>-->
                                 </select>
                             </div>
                         </div>
@@ -104,11 +104,11 @@
                             </label>
                             <div class="col-sm-8">
 
-                                <select class="form-control" id="sboxit-3" name="PersonalRate" data-validate="required"  data-message-required="Please select Personal Rate.">
+                                <select class="form-control" id="sboxit-3" ng-model="payrollSet.payrollObj.personalRate" ng-options="rate.key as rate.value for rate in payrollRates" name="PersonalRate" data-validate="required"  data-message-required="Please select Personal Rate.">
                                     <option value="">
                                         Select
                                     </option>
-                                    <option>
+<!--                                    <option>
                                         Rate 1
                                     </option>
                                     <option>
@@ -119,7 +119,7 @@
                                     </option>
                                     <option>
                                         Rate OT/HD
-                                    </option>
+                                    </option>-->
                                 </select>
                             </div>
                         </div>
