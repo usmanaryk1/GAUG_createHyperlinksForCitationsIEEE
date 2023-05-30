@@ -71,6 +71,10 @@
             TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
                 ctrl.timesheetList = res;
+                angular.forEach(ctrl.timesheetList, function(obj) {
+                    obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
+                    obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                });
                 ctrl.rerenderDataTable();
             }).catch(function() {
                 showLoadingBar({

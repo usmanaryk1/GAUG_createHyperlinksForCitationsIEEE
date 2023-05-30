@@ -101,6 +101,10 @@
             }
             TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function(res) {
                 ctrl.attendanceList = res;
+                angular.forEach(ctrl.attendanceList, function(obj) {
+                    obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
+                    obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                });
                 ctrl.rerenderDataTable();
             }).catch(function() {
                 showLoadingBar({
