@@ -74,6 +74,12 @@
             },
             getTimeAvailability: {
                 method: 'GET'
+            },
+            updateNotes: {
+                method: 'PUT'
+            },
+            deleteNotes:{
+                method: 'DELETE'
             }
         });
         return {
@@ -104,8 +110,14 @@
             addNotes: function (data) {
                 return api.addNotes({action: data.employeeId}, data.note).$promise;
             },
+            updateNotes: function (data) {
+                return api.updateNotes({action: data.employeeId, subAction: 'notes',subAction1:data.noteId}, data.note).$promise;
+            },
+            deleteNotes: function (data) {
+                return api.deleteNotes({action: data.employeeId, subAction: 'notes',subAction1:data.noteId}, {}).$promise;
+            },
             getNotes: function (params) {
-                return api.getNotes({action: params.employeeId,subAction: 'notes'}).$promise;
+                return api.getNotes({action: params.employeeId, subAction: 'notes'}).$promise;
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, terminationDate: data.terminationDate}).$promise;
@@ -120,7 +132,7 @@
                 return api.getEmployeeExceptUser().$promise;
             },
             getTimeAvailability: function (params) {
-                return api.getTimeAvailability({action: params.employeeId,subAction: 'timeavailability'}).$promise;
+                return api.getTimeAvailability({action: params.employeeId, subAction: 'timeavailability'}).$promise;
             }
         };
     };

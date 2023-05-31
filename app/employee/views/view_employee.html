@@ -87,36 +87,36 @@
                                                     total-items="totalRecords"
                                                     current-page="viewEmployee.searchParams.pageNo">
                                                     <th> 
-                                            <div class="user_panel" ng-click="viewEmployee.openEditModal(emp.id)" style="cursor: pointer">
-                                                <div ng-if="emp.profileImage != null && emp.profileImage != ''" class="user_img"> 
-                                                    <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.profileImage != null && emp.profileImage != '') ? (amazonPublicUrl + viewEmployee.companyCode + '/' + emp.profileImage) : ('assets/images/user-5.png')}}"> 
-                                                    <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
-                                                </div>
-                                                <div ng-if="emp.profileImage == null || emp.profileImage == ''" class="user_img"> 
-                                                    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> 
-                                                </div>
-                                                <div class="emp_user_hd">
-                                                    <div class="emp_user_name">{{emp.lName}}, {{emp.fName}} {{emp.middleInitial}}</div>
-                                                    <p>{{positions[emp.companyPositionId]}}</p>
-                                                </div>
-                                            </div>
-                                            </th>
-                                            <td>{{emp.phone| tel}}</td>
-                                            <td>
-                                                <div>{{emp.address1}}</div> <div ng-if="emp.address2 != null">{{emp.address2}}</div> {{emp.city}}, {{emp.state}}, {{emp.zipcode}}
-                                            </td>
-                                            <td>{{viewEmployee.getLanguagesFromCode(emp.languageSpoken)}}</td>
-                                            <td>
-                                                <div class="center">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" ng-if="hasAccess('EDIT_EMPLOYEE')" ui-sref="app.employee.tab1({id: emp.id})" tooltip="Edit"><span class="ed_b"></span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_EMPLOYEE')" href="" ng-click="viewEmployee.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('DEACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.employee-calendar({id: emp.id})" ng-if="hasAccess('VIEW_EMPLOYEE_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                    <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="viewEmployee.openNotes(emp, 'EmployeeNotes')" tooltip="Notes"><span class="ed_b"></span></a>
-                                                </div>
-                                            </td>
-                                            </tr>
+                                                        <div class="user_panel" ng-click="viewEmployee.openEditModal(emp.id)" style="cursor: pointer">
+                                                            <div ng-if="emp.profileImage != null && emp.profileImage != ''" class="user_img"> 
+                                                                <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.profileImage != null && emp.profileImage != '') ? (amazonPublicUrl + viewEmployee.companyCode + '/' + emp.profileImage) : ('assets/images/user-5.png')}}"> 
+                                                                <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
+                                                            </div>
+                                                            <div ng-if="emp.profileImage == null || emp.profileImage == ''" class="user_img"> 
+                                                                <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> 
+                                                            </div>
+                                                            <div class="emp_user_hd">
+                                                                <div class="emp_user_name">{{emp.lName}}, {{emp.fName}} {{emp.middleInitial}}</div>
+                                                                <p>{{positions[emp.companyPositionId]}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <td>{{emp.phone| tel}}</td>
+                                                    <td>
+                                                        <div>{{emp.address1}}</div> <div ng-if="emp.address2 != null">{{emp.address2}}</div> {{emp.city}}, {{emp.state}}, {{emp.zipcode}}
+                                                    </td>
+                                                    <td>{{viewEmployee.getLanguagesFromCode(emp.languageSpoken)}}</td>
+                                                    <td>
+                                                        <div class="center">
+                                                            <a class="btn icon-left fa fa-pencil edit_button" ng-if="hasAccess('EDIT_EMPLOYEE')" ui-sref="app.employee.tab1({id: emp.id})" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                            <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_EMPLOYEE')" href="" ng-click="viewEmployee.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('DEACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.employee-calendar({id: emp.id})" ng-if="hasAccess('VIEW_EMPLOYEE_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
+                                                            <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="viewEmployee.openNotesModal(emp.id)" tooltip="Notes"><span class="ed_b"></span></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -172,37 +172,37 @@
     </div>
 
     <div class="modal-body">
-       
-       <div class="form-group">
-            <label class="col-sm-3 control-label">Deactivate Reason</label>
-            <div class="col-sm-8">
-            <select class="form-control" name ="reason" id="daReason" ng-model="deactivateEmployeeModel.reason" data-validate="required" required data-message-required="Please select Discharge Reason." ng-init="deactivateEmployeeModel.reason='loa'" >
-                <option value="Leave of Absence" selected>Leave of Absence</option>
-                <option value="Out of Compliance">Out of Compliance</option>
-                <option value="Terminated">Terminated</option>
-            </select>
-            </div>
-        </div>
-        <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'terminated'"></div>
-        <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'terminated'">
-            <label class="col-sm-3 control-label">Termination Date</label>
-            <div class="col-sm-8">
-            <div class="input-group" style="z-index:1060">
-            <input class="datepicker form-control" data-format="mm/dd/yyyy" id="terDate" name="terminationDateDate" type="text" ng-model="deactivateEmployeeModel.terminationDate" 
-                                       data-validate="required,date" data-message-required="Please enter Date of Termination." required/>
-            <div class="input-group-addon">
-            <a href="">
-            <i class="linecons-calendar">
-            </i>
-            </a>
-            </div>
-            </div>
-            </div>
-        </div>
-       
+
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Deactivate Reason</label>
+    <div class="col-sm-8">
+    <select class="form-control" name ="reason" id="daReason" ng-model="deactivateEmployeeModel.reason" data-validate="required" required data-message-required="Please select Discharge Reason." ng-init="deactivateEmployeeModel.reason='loa'" >
+    <option value="Leave of Absence" selected>Leave of Absence</option>
+    <option value="Out of Compliance">Out of Compliance</option>
+    <option value="Terminated">Terminated</option>
+    </select>
+    </div>
+    </div>
+    <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'terminated'"></div>
+    <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'terminated'">
+    <label class="col-sm-3 control-label">Termination Date</label>
+    <div class="col-sm-8">
+    <div class="input-group" style="z-index:1060">
+    <input class="datepicker form-control" data-format="mm/dd/yyyy" id="terDate" name="terminationDateDate" type="text" ng-model="deactivateEmployeeModel.terminationDate" 
+    data-validate="required,date" data-message-required="Please enter Date of Termination." required/>
+    <div class="input-group-addon">
+    <a href="">
+    <i class="linecons-calendar">
+    </i>
+    </a>
+    </div>
+    </div>
+    </div>
+    </div>
+
 
     </div>
-    
+
     <div class="modal-footer">
     <button type="submit" class="btn btn-success" ng-click="deactivateEmployeeModel.deactivate(deactivateEmployeeModel.employee);">Deactivate</button>
     <button type="button" class="btn btn-red" ng-click="deactivateEmployeeModel.dismiss();">Cancel</button>
@@ -217,35 +217,20 @@
 
     <div class="modal-body">
 
-    
-        <div class="form-group">
-            <label class="col-sm-7 control-label">To activate employee please enter password:</label>
-            <div class="col-sm-4">
-            <input class="form-control" id="actPass" name="actPass" type="password" ng-model="activateEmployeeModel.password" 
-                                       data-validate="required" required/>
-            </div>
-            
-        </div>
+
+    <div class="form-group">
+    <label class="col-sm-7 control-label">To activate employee please enter password:</label>
+    <div class="col-sm-4">
+    <input class="form-control" id="actPass" name="actPass" type="password" ng-model="activateEmployeeModel.password" 
+    data-validate="required" required/>
+    </div>
+
+    </div>
     </div>
 
     <div class="modal-footer">
     <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Activate</button>
     <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">Cancel</button>
     </div>
-    </form>
-</script>
-<script type="text/ng-template" id="EmployeeNotes">
-    <form  class="validate form-horizontal" role="form" name="EmployeeNotesData" id="EmployeeNotesData">
-        <div class="modal-header">		
-            <h4 class="modal-title">Notes</h4>
-        </div>
-        <div class="modal-body">
-            <textarea ng-model="employeeNotesModel.note" class="form-control" name="note" placeholder="Write new note..." required rows="5"
-                     data-validate="required" data-message-required="Please enter Notes." ng-required='true'></textarea>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-success" ng-click="employeeNotesModel.addNote();">Add Notes</button>
-            <button type="button" class="btn btn-white" ng-click="employeeNotesModel.dismiss();">Cancel</button>
-        </div>
     </form>
 </script>

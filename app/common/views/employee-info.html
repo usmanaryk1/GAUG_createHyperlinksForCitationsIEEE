@@ -23,7 +23,7 @@
             <div class="user_panel col-md-12">
                 <div class="user_img"> 
                     <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(employeeinfo.employee.profileImage != null && employeeinfo.employee.profileImage != '') ? (amazonPublicUrl + employeeinfo.companyCode + '/' + employeeinfo.employee.profileImage) : ('assets/images/user-5.png')}}"> </div>
-                    <div class="emp_user_hd" style="width: 60%;">
+                    <div class="emp_user_hd" style="width: 77%;">
                     <div class="emp_user_name">{{employeeinfo.employee.lName}}, {{employeeinfo.employee.fName}} {{employeeinfo.employee.middleInitial}}</div>
                     <p>{{positions[employeeinfo.employee.companyPositionId]}}</p>
                 </div>
@@ -39,31 +39,8 @@
         </div>
         <hr/>
         <div ng-show="!isProfile">
-            <div class="row" >
-                <div class="col-md-12" ng-if="employeeinfo.notes && employeeinfo.notes.length>0">
-                    <table class="table table-striped responsive" style="margin-top: -10px;margin-bottom: 0px">
-                        <thead>
-                            <tr>
-                                <th width="20%">Created By</th>
-                                <th width="20%" >Created On</th>
-                                <th width="50%">Notes</th>
-                            </tr>
-                        </thead>
-                    </table>
-                    <table class="table table-striped responsive" style="margin-top: 0px;display: block;max-height: 400px;overflow-y: auto;">
-                        <tbody>
-                            <tr ng-repeat="note in employeeinfo.notes">                                                   
-                                <td width="20%" style="padding-left: 13px;">{{note.createdByName}}</td>
-                                <td width="20%" style="padding-left: 13px;">{{note.dateInserted|date:dateFormat}}</td>
-                                <td width="50%" style="padding-left: 13px;">{{note.note}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-12" ng-if="!(employeeinfo.notes && employeeinfo.notes.length>0)">
-                    No Notes Found
-                </div>
-            </div>
+            <notes-directive employee-id="employeeinfo.employeeId" has-create="true" has-retrieve="true" can-edit="true"
+                     can-delete="true"></notes-directive>
         </div>
         <div ng-show="isProfile">
             <div class="row">

@@ -99,10 +99,29 @@
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
-                size: modal_size,
+                size: "lg",
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false,
                 controller: 'EmployeeInfoCtrl as employeeinfo',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+
+        ctrl.openNotesModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'notes-modal'),
+                size: "lg",
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'EmployeeNotesCtrl as employeeNotes',
                 resolve: {
                     employeeId: function () {
                         return employeeId;
