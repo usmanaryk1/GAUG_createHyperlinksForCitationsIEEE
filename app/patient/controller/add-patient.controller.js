@@ -97,15 +97,15 @@
                 if (patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth) {
                     patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
                 }
-                if (patientToSave.dateOfBirth) {
-                    patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
-                }
-                if (patientToSave.authorizationStartDate) {
-                    patientToSave.authorizationStartDate = new Date(patientToSave.authorizationStartDate);
-                }
-                if (patientToSave.authorizationEndDate) {
-                    patientToSave.authorizationEndDate = new Date(patientToSave.authorizationEndDate);
-                }
+//                if (patientToSave.dateOfBirth) {
+//                    patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
+//                }
+//                if (patientToSave.authorizationStartDate) {
+//                    patientToSave.authorizationStartDate = new Date(patientToSave.authorizationStartDate);
+//                }
+//                if (patientToSave.authorizationEndDate) {
+//                    patientToSave.authorizationEndDate = new Date(patientToSave.authorizationEndDate);
+//                }
                 patientToSave.languagesSpoken = [];
                 angular.forEach(ctrl.languagesKeyValue, function(obj) {
                     if (obj.value == true) {

@@ -195,27 +195,27 @@
             if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
                 delete employeeToSave.employeeDocumentId;
             } else {
-                if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
-                    employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
-                }
-                if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
-                    employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
-                }
-                if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
-                    employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
-                }
-                if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
-                    employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
-                }
-                if (employeeToSave.employeeDocumentId.startDate) {
-                    employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
-                }
-                if (employeeToSave.employeeDocumentId.endDate) {
-                    employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-                }
-                if (employeeToSave.employeeDocumentId.bgCheckDate) {
-                    employeeToSave.employeeDocumentId.bgCheckDate = new Date(employeeToSave.employeeDocumentId.bgCheckDate);
-                }
+//                if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
+//                    employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
+//                }
+//                if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
+//                    employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
+//                }
+//                if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
+//                    employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
+//                }
+//                if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
+//                    employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
+//                }
+//                if (employeeToSave.employeeDocumentId.startDate) {
+//                    employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
+//                }
+//                if (employeeToSave.employeeDocumentId.endDate) {
+//                    employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
+//                }
+//                if (employeeToSave.employeeDocumentId.bgCheckDate) {
+//                    employeeToSave.employeeDocumentId.bgCheckDate = new Date(employeeToSave.employeeDocumentId.bgCheckDate);
+//                }
             }
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
@@ -246,24 +246,6 @@
         }
 
         function updateEmployee(reqParam, employeeToSave) {
-//            if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
-//                employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
-//            }
-//            if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
-//                employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
-//            }
-//            if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
-//                employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
-//            }
-//            if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
-//                employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
-//            }
-//            if (employeeToSave.employeeDocumentId.startDate) {
-//                employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
-//            }
-//            if (employeeToSave.employeeDocumentId.endDate) {
-//                employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-            //            }
             $rootScope.maskLoading();
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(res) {

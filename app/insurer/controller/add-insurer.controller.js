@@ -83,12 +83,12 @@
 //                    })
 //                }
                 insurerToSave.orgCode = ctrl.companyCode;
-                if (insurerToSave.contractStartDate) {
-                    insurerToSave.contractStartDate = new Date(insurerToSave.contractStartDate);
-                }
-                if (insurerToSave.contractEndDate) {
-                    insurerToSave.contractEndDate = new Date(insurerToSave.contractEndDate);
-                }
+//                if (insurerToSave.contractStartDate) {
+//                    insurerToSave.contractStartDate = new Date(insurerToSave.contractStartDate);
+//                }
+//                if (insurerToSave.contractEndDate) {
+//                    insurerToSave.contractEndDate = new Date(insurerToSave.contractEndDate);
+//                }
                 $rootScope.maskLoading();
                 InsurerDAO.update({action: reqParam, data: insurerToSave})
                         .then(function(res) {
