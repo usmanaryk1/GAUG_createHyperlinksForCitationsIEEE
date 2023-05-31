@@ -3,7 +3,7 @@
 (function () {
     function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope, $formService) {
         var ctrl = this;
-        ctrl.pageNo = 1;        
+        ctrl.pageNo = 1;
         ctrl.retrieveWorkSites = function () {
             WorksiteDAO.retreveWorksiteNames({sortBy: 'name', order: 'asc'}).then(function (res) {
                 ctrl.workSiteList = res;
@@ -32,7 +32,7 @@
             Page.setTitle("Employee Calendar");
             ctrl.isWorksiteSchedulePage = false;
             ctrl.isEmployeeSearchPage = false;
-        }        
+        }
         ctrl.employee_list = [];
         $rootScope.selectEmployeeModel = {};
         ctrl.viewEmployee;
@@ -355,7 +355,7 @@
                     size: modal_size,
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
-                });                                                
+                });
                 $rootScope.employeePopup.isWorksiteSchedulePage = ctrl.isWorksiteSchedulePage;
                 $rootScope.employeePopup.todayDate = new Date();
                 if (data != null && data.eventType == null) {
@@ -562,20 +562,20 @@
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     });
-                };             
-                
+                };
+
                 $rootScope.employeePopup.types = {
                     'Sick': 'SIT',
                     'Personal Day': 'PRT',
                     'Vacation': 'VCT'
                 };
-                
-                $rootScope.employeePopup.validateDetails = function(){
+
+                $rootScope.employeePopup.validateDetails = function () {
                     var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
                     if ($rootScope.employeePopup.validationStartDate[type]) {
                         if (moment($rootScope.employeePopup.validationStartDate[type]).toDate() > moment(new Date($rootScope.employeePopup.data.startDate)).toDate()) {
                             $rootScope.employeePopup.validStart = false;
-                            $rootScope.employeePopup.data.isPaidDisabled = true;                            
+                            $rootScope.employeePopup.data.isPaidDisabled = true;
                             $rootScope.employeePopup.data.isPaid = false;
                             $formService.uncheckCheckboxValue('paid');
                             delete $rootScope.employeePopup.data.noOfHours;
@@ -586,42 +586,42 @@
                     } else {
                         $rootScope.employeePopup.validStart = true;
                         $rootScope.employeePopup.data.isPaidDisabled = false;
-                    }      
+                    }
                     if ($rootScope.employeePopup.validationHours[type]) {
-                        if($rootScope.employeePopup.validationHours[type] < $rootScope.employeePopup.data.noOfHours){
+                        if ($rootScope.employeePopup.validationHours[type] < $rootScope.employeePopup.data.noOfHours) {
                             $rootScope.employeePopup.validHours = false;
-                        }else{
+                        } else {
                             $rootScope.employeePopup.validHours = true;
                         }
                     } else {
                         $rootScope.employeePopup.validHours = true;
-                    }      
+                    }
                 };
                 $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
-                    if($rootScope.employeePopup.data.eventType == 'U' || (editMode === false)){
+                    if ($rootScope.employeePopup.data.eventType == 'U' || (editMode === false)) {
                         $rootScope.employeePopup.validationStartDate = {};
                         $rootScope.employeePopup.validationHours = {};
-                        EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {                                                                                        
-                            if(res && res.hiringDate){
+                        EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
+                            if (res && res.hiringDate) {
                                 $rootScope.employeePopup.availablityDetails = angular.copy(res);
-                                if($rootScope.employeePopup.availablityDetails.vestingPeriodMap){
-                                    angular.forEach($rootScope.employeePopup.availablityDetails.vestingPeriodMap,function(val,key){
-                                        $rootScope.employeePopup.validationStartDate[key] = moment().add(val, 'Days').toDate();                                        
+                                if ($rootScope.employeePopup.availablityDetails.vestingPeriodMap) {
+                                    angular.forEach($rootScope.employeePopup.availablityDetails.vestingPeriodMap, function (val, key) {
+                                        $rootScope.employeePopup.validationStartDate[key] = moment(new Date(res.hiringDate)).add(val, 'Days').toDate();
                                     });
                                 }
-                                if($rootScope.employeePopup.availablityDetails.timeAvailabilityMap){
+                                if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
                                     $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
-                                }                                
-                            }else{
+                                }
+                            } else {
                                 $rootScope.employeePopup.availablityDetails = {};
                             }
-                            
+
                         }).catch(function (data, status) {
                             $rootScope.employeePopup.availablityDetails = {};
                         }).then(function (data, status) {
                             if (empId && $rootScope.employeePopup.data.eventType == 'U' && $rootScope.employeePopup.data.reason) {
                                 $rootScope.employeePopup.validateDetails();
-                            }else{
+                            } else {
                                 $rootScope.employeePopup.validHours = true;
                                 $rootScope.employeePopup.validStart = true;
                             }
@@ -747,7 +747,7 @@
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
             }
-            
+
             $rootScope.$watch('employeePopup.data.reason + employeePopup.data.startDate + employeePopup.data.eventType + employeePopup.data.noOfHours', function (newVal, oldValue) {
                 if (($rootScope.employeePopup.data.employeeId || ctrl.viewEmployee.id) && $rootScope.employeePopup.data.eventType == 'U'
                         && $rootScope.employeePopup.data.reason && oldValue && oldValue !== '' && newVal && newVal !== '') {
@@ -756,8 +756,8 @@
                     $rootScope.employeePopup.validHours = true;
                     $rootScope.employeePopup.validStart = true;
                 }
-            });                        
-            
+            });
+
             $rootScope.maskLoading();
             var careTypes;
             var carePatientMap;
@@ -1053,7 +1053,7 @@
             };
             ctrl.dispatchConfirmModal = function () {
                 ctrl.dispatchClicked = true;
-                if(ctrl.searchParams.patientId == null){
+                if (ctrl.searchParams.patientId == null) {
                     return;
                 }
                 var modalInstance = $modal.open({
