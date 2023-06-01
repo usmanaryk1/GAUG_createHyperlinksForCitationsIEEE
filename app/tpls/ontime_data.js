@@ -41,7 +41,8 @@ ontime_data = {
         {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
         {id: 'ptoreport', label: "Employee PTO Report"},
-        {id: 'wppreport', label: "Employee WPP Report"}
+        {id: 'wppreport', label: "Employee WPP Report"},
+        {id: 'loginactivityreport', label: "Login Activity Report"}
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
     defaultDistance: 5
