@@ -117,7 +117,7 @@
                 return api.deleteNotes({action: data.employeeId, subAction: 'notes',subAction1:data.noteId}, {}).$promise;
             },
             getNotes: function (params) {
-                return api.getNotes({action: params.employeeId, subAction: 'notes'}).$promise;
+                return api.getNotes(params).$promise;
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, terminationDate: data.terminationDate}).$promise;

@@ -1,3 +1,11 @@
+<style>
+    .has-scroll{
+        width: 98%;
+    }
+    .no-scroll{
+        width: 99%;
+    }
+</style>
 <div class="row" ng-if="hasRetrieve">
     <form role="form" name="EmployeeNotesData" id="EmployeeNotesData"  novalidate>
         <div class="col-sm-10" >
@@ -10,34 +18,43 @@
     </form>                
 </div>    
 <div class="row" ng-if="hasCreate">                        
-    <div class="col-md-12" ng-if="notes && notes.length > 0">
+    <div class="col-md-12" ng-show="notes && notes.length > 0">
         <hr>
-        <table class="table table-striped responsive" style="margin-top: -10px;margin-bottom: 0px">
+        <table class="table table-striped responsive" ng-class="{'has-scroll':hasScroll,'no-scroll':!hasScroll}" style="margin-top: -10px;margin-bottom: 0px">
             <thead>
                 <tr>
-                    <th width="15%">Created By</th>
-                    <th width="15%" >Created On</th>
-                    <th width="60%">Notes</th>
-                    <th width="10%">Actions</th>
-                    
+                    <th style="width: 15%">Created By</th>
+                    <th style="width: 15%" >Created On</th>
+                    <th style="width: 60%">Notes</th>
+                    <th style="width: 10%">Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="note in notes|orderBy: 'id':true">                                                   
-                    <td width="15%">{{note.createdByName}}</td>
-                    <td width="15%">{{note.dateInserted|date:dateFormat}}</td>
-                    <td width="60%">{{note.note}}</td>
-                    <td width="10%">
-                        <a class="btn icon-left fa fa-pencil edit_button" ng-if="canEdit"  
-                           href="" ng-click="editNote(note)" tooltip="Edit"><span class="ed_b"></span></a> 
-                        <a class="btn icon-left fa fa-trash-o delete_button" ng-if="canEdit"
-                           href="" ng-click="deleteNote(note.id)" tooltip="Delete"><span class="ed_b"></span></a>   
-                    </td>
-                </tr>
-            </tbody>
         </table>
+        <div id="my_div1" class="table-responsive" style="margin-top: 0px;display: block;max-height: 400px;overflow-y: auto;word-break: break-all;">
+            <table class="table table-striped responsive">
+                <tbody>
+                    <tr ng-repeat="note in notes|orderBy: 'id':true">                                                   
+                        <td width="15%">{{note.createdByName}}</td>
+                        <td width="15%">{{note.dateInserted|date:dateFormat}}</td>
+                        <td width="60%">{{note.note}}</td>
+                        <td width="10%">
+                            <a class="btn icon-left fa fa-pencil edit_button" ng-if="canEdit"  
+                               href="" ng-click="editNote(note)" tooltip="Edit"><span class="ed_b"></span></a> 
+                            <a class="btn icon-left fa fa-trash-o delete_button" ng-if="canEdit"
+                               href="" ng-click="deleteNote(note.id)" tooltip="Delete"><span class="ed_b"></span></a>   
+                        </td>
+                    </tr>     
+                    <tr ng-if="!loading && !allLoaded">
+                        <td colspan="4"><center><a href='' ng-click="loadMoreNotes()">Load More</a></center></td>
+                    </tr>
+                    <tr ng-if="loading && !allLoaded">
+                        <td colspan="4"><center>Loading...</center></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>        
     </div>                
-    <div class="col-md-12" ng-if="!(notes && notes.length > 0)">
+    <div class="col-md-12" ng-show="!(notes && notes.length > 0)">
         <hr>
         No Notes Found
     </div>
