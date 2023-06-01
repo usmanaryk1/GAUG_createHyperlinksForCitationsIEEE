@@ -55,18 +55,6 @@
                                     <option value="">
                                         Select
                                     </option>
-<!--                                    <option>
-                                        Rate 1
-                                    </option>
-                                    <option>
-                                        Rate 2
-                                    </option>
-                                    <option>
-                                        Rate
-                                    </option>
-                                    <option>
-                                        Rate OT/HD
-                                    </option>-->
                                 </select>
                             </div>
                         </div>
@@ -81,18 +69,6 @@
                                     <option value="">
                                         Select
                                     </option>
-<!--                                    <option>
-                                        Rate 1
-                                    </option>
-                                    <option>
-                                        Rate 2
-                                    </option>
-                                    <option>
-                                        Rate
-                                    </option>
-                                    <option>
-                                        Rate OT/HD
-                                    </option>-->
                                 </select>
                             </div>
                         </div>
@@ -108,18 +84,6 @@
                                     <option value="">
                                         Select
                                     </option>
-<!--                                    <option>
-                                        Rate 1
-                                    </option>
-                                    <option>
-                                        Rate 2
-                                    </option>
-                                    <option>
-                                        Rate
-                                    </option>
-                                    <option>
-                                        Rate OT/HD
-                                    </option>-->
                                 </select>
                             </div>
                         </div>
@@ -147,8 +111,8 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" id="multi-select" ng-model="payrollSet.payrollObj.holidayRate" multiple="multiple" name="HolidayRate" data-validate="required"  data-message-required="Please select Holiday Rate.">
-                                    <option value="Christmas">
+                                <select class="form-control" id="multi-select" ng-model="payrollSet.payrollObj.holidays" ng-options="holiday.name for holiday in payrollSet.holidays track by holiday.name" multiple="multiple" name="HolidayRate" data-validate="required"  data-message-required="Please select Holiday Rate." ng-change="payrollSet.displayHolidayModal = true">
+<!--                                    <option value="Christmas">
                                         Christmas
                                     </option>
                                     <option value="Columbus Day">
@@ -177,7 +141,7 @@
                                     </option>
                                     <option value="Washington’s Birthday">
                                         Washington’s Birthday
-                                    </option>
+                                    </option>-->
                                 </select>
                             </div>
                         </div>

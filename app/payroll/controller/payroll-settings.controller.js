@@ -2,13 +2,18 @@
     function PayrollSettingsCtrl($rootScope, $scope, $http, $modal, $timeout, PayrollDAO) {
         var ctrl = this;
         ctrl.payrollObj = {companyCode: ontimetest.company_code};
+        ctrl.holidays = [{name: 'Christmas'}, {name: 'Columbus Day'}, {name: 'Independence Day'}, {name: 'Labor'}, {name: 'Memorial Day'}, {name: 'MLK Birthday'}, {name: 'New Year\'s Day'}, {name: 'Thanks giving Day'}, {name: 'Veterans Day'}, {name: 'Washington\'s Birthday'}];
         ctrl.initSettings = function() {
             $rootScope.maskLoading();
+            ctrl.displayHolidayModal = false;
             PayrollDAO.getSettings().then(function(res) {
                 if (res != null) {
                     ctrl.payrollObj = res;
                     ctrl.payrollObj.companyCode = ontimetest.company_code;
                 }
+                $timeout(function() {
+                    $('#multi-select').multiSelect('refresh');
+                });
             }).catch(function() {
                 toastr.error("Payroll settings cannot be retrieved.");
             }).then(function() {
@@ -18,24 +23,30 @@
         function arr_diff(a1, a2)
         {
             var a = [], diff = [];
+            var diffArray = [];
             for (var i = 0; i < a1.length; i++)
-                a[a1[i]] = true;
+                a[a1[i].name] = true;
             for (var i = 0; i < a2.length; i++)
-                if (a[a2[i]])
-                    delete a[a2[i]];
+                if (a[a2[i].name])
+                    delete a[a2[i].name];
                 else
-                    a[a2[i]] = true;
+                    a[a2[i].name] = true;
             for (var k in a)
                 diff.push(k);
-            return diff;
+            for (var i = 0; i < a1.length; i++)
+                if (diff.indexOf(a1[i].name) >= 0) {
+                    diffArray.push(a1[i]);
+                }
+            return diffArray;
         }
         ;
         ctrl.saveSettings = saveSettings;
         //function to save the payroll settings
         function saveSettings() {
             if ($('#payroll_settings_form')[0].checkValidity()) {
-                console.log(JSON.stringify(ctrl.payrollObj));
                 $rootScope.maskLoading();
+                ctrl.payrollObj.holidays = angular.copy(ctrl.payrollObj.holidays);
+                console.log(JSON.stringify(ctrl.payrollObj));
                 PayrollDAO.updateSettings(ctrl.payrollObj).then(function(res) {
                     console.log(res);
                     toastr.success("Payroll settings saved.");
@@ -70,7 +81,7 @@
             };
 
             $rootScope.holidayRateModal.cancel = function() {
-                ctrl.payrollObj.holidayRate.splice(ctrl.payrollObj.holidayRate.indexOf(ctrl.newSelectedRate), 1);
+                ctrl.payrollObj.holidays.splice(indexOfHoliday(ctrl.newSelectedRate[0]), 1);
                 $timeout(function() {
                     $("#multi-select").multiSelect('refresh');
                 })
@@ -79,10 +90,18 @@
 
         };
 
+        var indexOfHoliday = function(holiday) {
+            for (var i = 0; i < ctrl.payrollObj.holidays.length; i++) {
+                if (ctrl.payrollObj.holidays[i].name == holiday.name) {
+                    return i;
+                }
+            }
+        };
+
         $scope.$watch(function() {
-            return ctrl.payrollObj.holidayRate;
+            return ctrl.payrollObj.holidays;
         }, function(newValue, oldValue) {
-            if (newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
+            if (ctrl.displayHolidayModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
                 ctrl.openModal('modal-5', 'md', false);
                 if (oldValue == null) {
                     ctrl.newSelectedRate = newValue;
