@@ -771,7 +771,13 @@
                     if ($rootScope.employeePopup.availablityDetails) {
                         $rootScope.employeePopup.validateDetails();
                     } else {
-                        $rootScope.employeePopup.setAvailability($rootScope.employeePopup.data.employeeId || (ctrl.viewEmployee && ctrl.viewEmployee.id), true);
+                        if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
+                            $rootScope.employeePopup.setAvailability($rootScope.employeePopup.data.employeeId, true);
+                        } else if (ctrl.calendarView == 'month') {
+                            $rootScope.employeePopup.setAvailability(ctrl.viewEmployee.id, true);
+                        } else if($rootScope.employeePopup.employee){
+                            $rootScope.employeePopup.setAvailability($rootScope.employeePopup.employee.id, true);
+                        }                      
                     }
                 } else {
                     $rootScope.employeePopup.validHours = true;
