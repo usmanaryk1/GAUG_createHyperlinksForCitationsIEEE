@@ -22,13 +22,19 @@
                     action: 'sessions'
                 }
             },
-            getSessions: {
+            reviewSessions: {
                 method: 'GET',
                 isArray: true,
                 params: {
-                    action: 'sessions'
+                    action: 'review'
                 }
-            }
+            },
+            processSessions: {
+                method: 'POST',
+                params: {
+                    action: 'process'
+                }
+            }            
         });
         return {
             updateSettings: function(data) {
@@ -40,9 +46,13 @@
             getHistory: function(data) {
                 return api.getHistory(data).$promise;
             },
-            getSessions: function(data) {
-                return api.getSessions(data).$promise;
+            reviewSessions: function(data) {
+                return api.reviewSessions(data).$promise;
+            },
+            processSessions: function(data) {
+                return api.processSessions(data).$promise;
             }
+            
         };
     };
     angular.module("xenon.factory").factory('PayrollDAO', ['$resource', PayrollDAO]);

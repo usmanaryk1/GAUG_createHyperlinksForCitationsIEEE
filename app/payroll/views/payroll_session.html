@@ -61,30 +61,18 @@
                         </div>
                         <div class="col-sm-12 pad0">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-info btn-single process_bt pull-right">Process</button>
+                                <button type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
-                                <a href="javascript:;" onClick="showAjaxModal();" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                <a href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
 
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="panel-body pad_top0">
-                    <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                        <div class="table-responsive border0 timesheet_pg search_hide" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
-
-                            <script type="text/javascript">
-                                jQuery(document).ready(function($)
-                                {
-                                    $("#example-1").dataTable({
-                                        aLengthMenu: [
-                                            [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
-                                        ]
-                                    });
-                                });
-                            </script>
-
-                            <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                    <div>
+                        <div class="table-responsive border0 timesheet_pg search_hide">
+                            <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="payrollSession.payrollSessions.length" datatable-setup datatable-obj="payrollSession.datatableObj">
                                 <thead>
                                     <tr>
                                         <th nowrap><span class="wd80">Last Name</span></th>
@@ -96,10 +84,13 @@
                                         <th nowrap><span class="wd60">Rate 2</span></th>
 
                                         <th nowrap><span class="tb_width">Hours 2</span></th>
-                                        <th nowrap><span class="tb_width">OT / HD</span></th>
-                                        <th nowrap><span class="wd60">Hours</span></th>
-
-                                        <th nowrap><span class="wd98">1099 Earnings</span></th>
+                                        <th nowrap><span class="tb_width">OT Rate</span></th>
+                                        <th nowrap><span class="tb_width">OT Hours</span></th>
+                                        <th nowrap><span class="tb_width">HD Rate</span></th>
+                                        <th nowrap><span class="tb_width">HD Hours</span></th>
+                                        <!--                                        <th nowrap><span class="wd60">Hours</span></th>
+                                        
+                                                                                <th nowrap><span class="wd98">1099 Earnings</span></th>-->
                                         <!--                                        <th nowrap><span class="tb_width">Vacation</span></th>
                                                                                 <th nowrap><span class="wd50">Sick</span></th>
                                         
@@ -123,16 +114,19 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="session in payrollSession.payrollSessions">
-                                        <th>{{session.lastName}}</th>
-                                        <td>{{session.firstName}}</td>
+                                        <th>{{payrollSession.empMap[session.employeeId].lName}}</th>
+                                        <td>{{payrollSession.empMap[session.employeeId].fName}}</td>
                                         <td> ${{session.grossPay}}</td>
                                         <td>${{session.rate1}}</td>
                                         <td>{{session.hour1}}</td>
                                         <td>${{session.rate2}}</td>
                                         <td>{{session.hour2}}</td>
                                         <td>{{session.otRate}}</td>
-                                        <td>{{session.totalHours}}</td>
-                                        <td>{{session.1Earnings}}</td>
+                                        <td>{{session.otHours}}</td>
+                                        <td>{{session.hdRate}}</td>
+                                        <td>{{session.hdHours}}</td>
+                                        <!--                                        <td>{{session.totalHours}}</td>
+                                                                                <td>{{session.1Earnings}}</td>-->
                                         <!--                                        <td>37</td>
                                                                                 <td>87</td>
                                                                                 <td>21</td>
@@ -144,21 +138,24 @@
                                                                                 <td>21</td>
                                                                                 <td>21</td>
                                                                                 <td>21</td>-->
-                                        <td><a href="javascript:;" onClick="createNotes();
-                                               " class="fa fa-file-text-o file btn" ></a> 
+                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session.notes)" class="fa fa-file-text-o file btn" ></a> 
                                         </td>
                                         <td>
                                             <div class="center">
-                                                <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(payroll, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
+                                                <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
                                             </div>
                                         </td>
 
                                     </tr>
                                 </tbody>
                             </table>
+                            <div ng-if="(payrollSession.payrollSessions == null || payrollSession.payrollSessions.length == 0) && payrollSession.dataRetrieved && payrollSession.criteriaSelected === true">
+                                No payrolls are available for selected date range.
+                            </div>
+                            <div ng-if="payrollSession.criteriaSelected == false">
+                                Please select all filters to review payrolls.
+                            </div>
                         </div>
-
-                        <div class="row"><div class="col-xs-6"><div class="dataTables_info" id="example-1_info" role="status" aria-live="polite">Showing 1 to 4 of 4 entries</div></div><div class="col-xs-6"><div class="dataTables_paginate paging_simple_numbers" id="example-1_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="example-1" tabindex="0" id="example-1_previous"><a href="#">Previous</a></li><li class="paginate_button active" aria-controls="example-1" tabindex="0"><a href="#">1</a></li><li class="paginate_button next disabled" aria-controls="example-1" tabindex="0" id="example-1_next"><a href="#">Next</a></li></ul></div></div></div>
                         <script type="text/javascript">
                             // This JavaScript Will Replace Checkboxes in dropdown toggles
                             jQuery(document).ready(function($)
@@ -172,6 +169,7 @@
                         </script>
 
                     </div>
+
                 </div>
             </div>
         </div>
@@ -193,37 +191,29 @@
             <div class="modal-body">
 
                 <form class="form-horizontal" role="form">
-                    <!--                    <div class="row">
-                                            <div class="col-sm-5">
-                                                <div class="user_p"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
-                                                <div class="user_p_hd">
-                                                    <h1>Jack Gates</h1>
-                                                    <p>Administrator</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-7 pull-right">
-                                                <button class="btn btn-info green_bt pull-right" type="button">Save Changes</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group-separator"></div>-->
-
-
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Employee</label>
                         <div class="col-sm-9"> 
                             <script type="text/javascript">
-                                jQuery(document).ready(function($)
-                                {
-                                    $("#sboxit-1").selectBoxIt().on('open', function()
-                                    {
-                                        // Adding Custom Scrollbar
-                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                    });
-                                });
+//                                jQuery(document).ready(function($)
+//                                {
+//                                    setTimeout(function() {
+//                                        $("#sboxit-1").select2({
+////                                                        minimumResultsForSearch: -1,
+//                                            placeholder: 'Select Employee...',
+////                                                        minimumInputLength: 1,
+////                                                        placeholder: 'Search',
+//                                        }).on('select2-open', function()
+//                                        {
+//                                            // Adding Custom Scrollbar
+//                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+//                                        });
+//                                    }, 200);
+//
+//                                });
                             </script>
-                            <select class="form-control" id="sboxit-1">
-                                <option value="al">Select Employee</option>
-                                <option value="au">Employee Name</option>
+                            <select class="form-control" id="sboxit-1" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in payrollSession.employeeList track by emp.id'>
+                                <option value="" selected hidden />
                             </select>
                         </div>
                     </div>
@@ -308,62 +298,24 @@
             </div>
 
             <div class="modal-body">
-                <textarea class="form-control" rows="10">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                <textarea class="form-control" rows="10" ng-model="payrollSession.notes">
                 </textarea>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <!--<button type="button" class="btn btn-info">Save changes</button>-->
+                <button type="button" class="btn btn-info">Save Notes</button>
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    function createNotes()
-    {
-        jQuery('#modal-8').modal('show', {backdrop: 'static'});
-
-        setTimeout(function()
-        {
-            jQuery.ajax({
-                url: "data/ajax-content.txt",
-                success: function(response)
-                {
-                    jQuery('#modal-8 .modal-body').html(response);
-                }
-            });
-        }, 800); // just an example
-    }
-</script>
-
-
-
-<script type="text/javascript">
-    function showAjaxModal()
-    {
-        jQuery('#modal-7').modal('show', {backdrop: 'static'});
-
-        setTimeout(function()
-        {
-            jQuery.ajax({
-                url: "data/ajax-content.txt",
-                success: function(response)
-                {
-                    jQuery('#modal-7 .modal-body').html(response);
-                }
-            });
-        }, 800); // just an example
-    }
-</script>
 
 <script type="text/ng-template" id="payrollModal">
     <form class="validate form-horizontal" name="payrollForm" id="payroll_form" >
     <div class="modal-header">
     <button type="button" class="close" ng-click="payrollModal.cancel();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
-    Satou Airi - Payroll Information
+    {{payrollModal.empMap[payrollModal.payrollObj.employeeId].lName +' '+payrollSession.empMap[payrollModal.payrollObj.employeeId].fName}} - Payroll Information
     </h4>
     </div>
 
@@ -390,56 +342,48 @@
     <div class="col-sm-3">
     <input class="form-control" id="personal" name="personal" type="text" ng-model="payrollModal.payrollObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
-    <label class="col-sm-3 control-label" for="holiday">
-    Holiday
-    </label>
-    <div class="col-sm-3">
-    <input class="form-control" id="holiday" name="holiday" type="text" ng-model="payrollModal.payrollObj.holiday" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-    </div>
-    </div>
-    <div class="form-group">
     <label class="col-sm-3 control-label" for="bonusEarnings">
     Bonus Earnings
     </label>
     <div class="col-sm-3">
     <input class="form-control" id="bonusEarnings" name="bonusEarnings" type="text" ng-model="payrollModal.payrollObj.bonusEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
+    </div>
+    <div class="form-group">
     <label class="col-sm-3 control-label" for="miscEarnings">
     Misc Earnings
     </label>
     <div class="col-sm-3">
     <input class="form-control" id="miscEarnings" name="miscEarnings" type="text" ng-model="payrollModal.payrollObj.miscEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
-    </div>
-    <div class="form-group">
     <label class="col-sm-3 control-label" for="miscDeduction">
     Misc Deduction
     </label>
     <div class="col-sm-3">
     <input class="form-control" id="miscDeduction" name="miscDeduction" type="text" ng-model="payrollModal.payrollObj.miscDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
+    </div>
+    <div class="form-group">
     <label class="col-sm-3 control-label" for="loan">
     Loan
     </label>
     <div class="col-sm-3">
     <input class="form-control" id="loan" name="loan" type="text" ng-model="payrollModal.payrollObj.loan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
-    </div>
-    <div class="form-group">
     <label class="col-sm-3 control-label" for="adpLoan">
     401k Loan
     </label>
     <div class="col-sm-3">
     <input class="form-control" id="adpLoan" name="adpLoan" type="text" ng-model="payrollModal.payrollObj.adp401kLoan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
+    </div>
+    <div class="form-group">
     <label class="col-sm-3 control-label" for="adpDeduction">
     401k Deduction
     </label>
     <div class="col-sm-3">
     <input class="form-control" id="adpDeduction" name="adpDeduction" type="text" ng-model="payrollModal.payrollObj.adp401kDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
-    </div>
-    <div class="form-group">
     <label class="col-sm-3 control-label" for="advanceDeduction">
     Advance Deduction
     </label>
@@ -447,7 +391,6 @@
     <input class="form-control" id="advanceDeduction" name="advanceDeduction" type="text" ng-model="payrollModal.payrollObj.advanceDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
-
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="payrollModal.cancel();">Close</button>
