@@ -468,7 +468,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
             <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-            <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-disabled="employeePopup.validHours === false" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
+            <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-disabled="employeePopup.validHours === false && employeePopup.data.isPaid" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
         </div>
 
     </form>
