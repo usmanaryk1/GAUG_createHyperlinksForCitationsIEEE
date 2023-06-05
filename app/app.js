@@ -42,7 +42,7 @@ function delete_cookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-app.run(function ($rootScope, $modal, $state, Idle)
+app.run(function ($rootScope, $modal, $state, Idle, $http)
 {
     // Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
@@ -91,11 +91,13 @@ app.run(function ($rootScope, $modal, $state, Idle)
     });
 
     $rootScope.logout = function () {
-        delete_cookie("cc");
-        delete_cookie("token");
-        delete_cookie("un");
-        $rootScope.stopIdle();
-        window.location.hash = '#/app/login';
+        $http.get(ontime_data.weburl + 'logout').success(function (response) {
+            delete_cookie("cc");
+            delete_cookie("token");
+            delete_cookie("un");
+            $rootScope.stopIdle();
+            window.location.hash = '#/app/login';
+        });
     };
 
 
