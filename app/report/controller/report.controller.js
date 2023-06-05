@@ -16,14 +16,19 @@
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
+                ctrl.dateMessage = null;
                 if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours'
                         || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
-                        || ctrl.reportType == 'wppreport') {
+                        || ctrl.reportType == 'wppreport' || ctrl.reportType == 'wppreport') {
                     ctrl.verifyDates();
-                    if (ctrl.dateMessage != null) {
-                        valid = false;
-                        toastr.error(ctrl.dateMessage);
-                    }
+
+                }
+                if (ctrl.reportType == 'lossofhoursreport' || ctrl.reportType == 'loginactivityreport') {
+                    ctrl.verifyDatesRequired();
+                }
+                if (ctrl.dateMessage != null) {
+                    valid = false;
+                    toastr.error(ctrl.dateMessage);
                 }
                 if (valid) {
                     $rootScope.maskLoading();
@@ -78,6 +83,13 @@
                 ctrl.dateMessage = "From date must be Sunday & To date must be Saturday.";
             } else if (ctrl.reportType == 'workedhours' && moment(new Date(ctrl.searchParams.toDate)).diff(moment(new Date(ctrl.searchParams.fromDate)), 'days') > 6) {
                 ctrl.dateMessage = "Only one week should be selected.";
+            } else {
+                ctrl.dateMessage = null;
+            }
+        };
+        ctrl.verifyDatesRequired = function () {
+            if (ctrl.searchParams.fromDate == null || ctrl.searchParams.toDate == null) {
+                ctrl.dateMessage = "Please select from date and to date.";
             } else {
                 ctrl.dateMessage = null;
             }
