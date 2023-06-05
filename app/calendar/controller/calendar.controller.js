@@ -225,6 +225,10 @@
                 EventTypeDAO.retrieveBySchedule(eventParams).then(function (res) {
                     delete res.$promise;
                     delete res.$resolved;
+                    _.forEach(res,function(content){
+                        if(_.find(ontime_data.employeeReasons,{key:content.reason}))
+                            content.reason = _.find(ontime_data.employeeReasons,{key:content.reason}).value;
+                    })
                     ctrl.events = res;
                     $rootScope.paginationLoading = false;
                 });

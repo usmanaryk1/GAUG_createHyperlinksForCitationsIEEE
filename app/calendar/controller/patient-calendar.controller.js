@@ -20,8 +20,8 @@
         }
 
         ctrl.viewPatient;
-        
-        ctrl.viewPatient ={'id':''};
+
+        ctrl.viewPatient = {'id': ''};
 
         ctrl.isOpen = false;
 
@@ -134,7 +134,7 @@
                         PatientDAO.getPatientsForSchedule({patientIds: $stateParams.id}).then(function (res1) {
                             ctrl.viewPatient = angular.copy(res1[0]);
                             ctrl.patientId = ctrl.viewPatient.id;
-                            if(ctrl.viewPatient.status === 'd'){
+                            if (ctrl.viewPatient.status === 'd') {
                                 ctrl.hideAddButton = false;
                             }
                         });
@@ -202,6 +202,8 @@
             var endCount = 6;
             angular.forEach(res, function (content) {
                 if (content.eventType == 'U') {
+                    if(_.find(ontime_data.patientReasons,{key:content.reason}))
+                        content.reason = _.find(ontime_data.patientReasons,{key:content.reason}).value;
                     var startDay = new Date(content.startDate).getDay();
                     var start = new Date(content.startDate);
                     var end = new Date(content.endDate);
@@ -470,15 +472,23 @@
                     $timeout(function () {
                         var name = '#' + "popuppatient" + $rootScope.patientPopup.data.eventType.toLowerCase();
                         if ($(name)[0].checkValidity()) {
-                            var a = moment(new Date($rootScope.patientPopup.data.startDate));
-                            var b = moment(new Date($rootScope.patientPopup.data.endDate));
-                            var diff = b.diff(a, 'days');
-                            if (diff > 6 && $rootScope.patientPopup.data.eventType == 'S') {
-                                toastr.error("Date range should be no more of 7 days.");
-                            } else if (diff > 89 && $rootScope.patientPopup.data.eventType == 'U') {
-                                toastr.error("Date range should be no more of 90 days.");
+                            if ($rootScope.patientPopup.data.isLoss && $rootScope.patientPopup.data.eventType === 'U') {
+                                if ($rootScope.patientPopup.dateChanged() === true) {
+                                    $rootScope.patientPopup.response = true;
+                                } else {
+                                    toastr.error("End Date should be in the same week as start date.");
+                                }
                             } else {
-                                $rootScope.patientPopup.response = true;
+                                var a = moment(new Date($rootScope.patientPopup.data.startDate));
+                                var b = moment(new Date($rootScope.patientPopup.data.endDate));
+                                var diff = b.diff(a, 'days');
+                                if (diff > 6 && $rootScope.patientPopup.data.eventType == 'S') {
+                                    toastr.error("Date range should be no more of 7 days.");
+                                } else if (diff > 89 && $rootScope.patientPopup.data.eventType == 'U') {
+                                    toastr.error("Date range should be no more of 90 days.");
+                                } else {
+                                    $rootScope.patientPopup.response = true;
+                                }
                             }
                         } else {
                             console.log("invalid form")
@@ -494,43 +504,47 @@
                         }
                     });
                 };
-                $rootScope.patientPopup.changed = function (form, event) {
-                    if (event != 'repeat') {
-                        var old = $rootScope.patientPopup.data.eventType;
-                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
-                        if (old == 'S') {
-                            $rootScope.patientPopup.data.forLiveIn = false;
-                            $rootScope.patientPopup.data.doNotBill = false;
-                            $rootScope.patientPopup.data.startTime = $rootScope.patientPopup.currentStartTime;
-                            $rootScope.patientPopup.data.endTime = $rootScope.patientPopup.currentEndTime;
+                $rootScope.patientPopup.changed = function (form, event) {                    
+                        if (event != 'repeat') {
+                            var old = $rootScope.patientPopup.data.eventType;
+                            $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
+                            if (old == 'S') {
+                                $rootScope.patientPopup.data.forLiveIn = false;
+                                $rootScope.patientPopup.data.doNotBill = false;
+                                $rootScope.patientPopup.data.startTime = $rootScope.patientPopup.currentStartTime;
+                                $rootScope.patientPopup.data.endTime = $rootScope.patientPopup.currentEndTime;
+                            }
+                            if (old == 'U') {
+                                $rootScope.patientPopup.data.isPaid = false;
+                            }
+                            if (!angular.isDefined(id))
+                                $rootScope.patientPopup.careTypes = [];
+                            if ($rootScope.patientPopup.data)
+                                delete $rootScope.patientPopup.data.companyCareTypeId;
+                            setTimeout(function () {
+                                $("#eventPatientIds").select2({
+                                    // minimumResultsForSearch: -1,
+                                    placeholder: 'Select Patient...',
+                                    // minimumInputLength: 1,
+                                    // placeholder: 'Search',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                                $("#employee").select2({
+                                    // minimumResultsForSearch: -1,
+                                    placeholder: 'Select Employee...',
+                                    // minimumInputLength: 1,
+                                    // placeholder: 'Search',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                                cbr_replace();
+                            }, 200);
                         }
-                        if (old == 'U') {
-                            $rootScope.patientPopup.data.isPaid = false;
-                        }
-                        setTimeout(function () {
-                            $("#eventPatientIds").select2({
-                                // minimumResultsForSearch: -1,
-                                placeholder: 'Select Patient...',
-                                // minimumInputLength: 1,
-                                // placeholder: 'Search',
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                            $("#employee").select2({
-                                // minimumResultsForSearch: -1,
-                                placeholder: 'Select Employee...',
-                                // minimumInputLength: 1,
-                                // placeholder: 'Search',
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                            cbr_replace();
-                        }, 200);
-                    }
                 };
                 $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
                     delete $rootScope.patientPopup.data.employeeId;
@@ -585,6 +599,27 @@
                         $rootScope.unmaskLoading();
                     });
                 }
+
+                $rootScope.patientPopup.dateChanged = function () {
+                    if ($rootScope.patientPopup.data.endDate && $rootScope.patientPopup.data.startDate) {
+                        var endDate = moment($rootScope.patientPopup.data.endDate, "MM-DD-YYYY").clone();
+                        var fromDate = moment($rootScope.patientPopup.data.startDate, "MM-DD-YYYY").clone();
+                        $rootScope.validDates = true;
+                        if (fromDate < endDate || ($rootScope.patientPopup.data.isLoss === true)) {
+                            while (fromDate < endDate) {
+                                if (fromDate.isoWeekday() === 6) {
+                                    $rootScope.validDates = false;
+                                    return;
+                                }
+                                fromDate = fromDate.add(1, 'days');
+                            }
+                        }
+                        return $rootScope.validDates;
+                    } else {
+                        return false;
+                    }
+                };
+
                 $rootScope.patientPopup.patientChanged = function (patientId, editMode, viewMode) {
                     if ($rootScope.patientPopup.data.eventType == 'S' && !editMode) {
                         setTimeout(function () {
@@ -594,8 +629,11 @@
                         delete $rootScope.patientPopup.data.employeeId;
                         $rootScope.patientPopup.carePatientMap = {};
                         $rootScope.patientPopup.careTypes = [];
+                    } else if ($rootScope.patientPopup.data.eventType == 'U' && !editMode) {
+                        delete $rootScope.patientPopup.data.companyCareTypeId;
+                        $rootScope.patientPopup.careTypes = [];
                     }
-                    if (!($rootScope.patientPopup.data.eventType != 'S' && !editMode && !viewMode)) {
+                    if ($rootScope.patientPopup.data.eventType === 'S' && ((!editMode && !viewMode) || editMode || viewMode)) {
                         $rootScope.paginationLoading = true;
                         PatientDAO.getPatientsForSchedule({patientIds: patientId, addressRequired: true}).then(function (res) {
                             patientObj = res[0];
@@ -706,6 +744,54 @@
                                 }
                             } else {
                                 open1();
+                            }
+                        });
+                    } else if ($rootScope.patientPopup.data.eventType === 'U' && ((!editMode && !viewMode) || editMode || viewMode)) {
+                        $rootScope.paginationLoading = true;
+                        PatientDAO.get({id: patientId}).then(function (res) {
+                            patientObj = angular.copy(res);
+                            if ($rootScope.patientPopup.searchParams != null) {
+                                $rootScope.patientPopup.searchParams.languages = [];
+                                var languages = patientObj.languagesSpoken.split(",");
+                                if (languages != null && languages.length > 0) {
+                                    angular.forEach(languages, function (language) {
+                                        $rootScope.patientPopup.searchParams.languages.push(language);
+                                    });
+                                }
+                                $rootScope.patientPopup.searchParams.sex = patientObj.gender;
+                                $rootScope.patientPopup.searchParams.patientId = patientObj.id;
+                            }
+                            if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
+                                $rootScope.patientPopup.patient = angular.copy(patientObj);
+                            }
+                        }).catch(function (data, status) {
+                            toastr.error("Failed to retrieve patient.");
+                        }).then(function () {
+                            if ($rootScope.patientPopup.data.eventType == 'U' || viewMode) {
+                                if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length > 0) {
+                                    var careTypesSelected = [];
+                                    var length = patientObj.patientCareTypeCollection.length;
+                                    var str = "";
+                                    for (var i = 0; i < length; i++) {
+                                        careTypesSelected.push(patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId);
+                                        if (str.length > 0) {
+                                            str = str + ",";
+                                        }
+                                        str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id;
+                                    }
+                                    careTypes = careTypesSelected;
+                                    $rootScope.patientPopup.careTypes = careTypes;
+                                    $rootScope.paginationLoading = false;
+                                } else if (!patientObj) {
+                                    $rootScope.paginationLoading = false;
+                                    patientObj = {};
+                                    $rootScope.unmaskLoading();
+                                    toastr.error("Failed to retrieve patient.");
+                                } else if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length === 0) {
+                                    $rootScope.paginationLoading = false;
+                                }
+                            } else {
+                                $rootScope.paginationLoading = false;
                             }
                         });
                     }

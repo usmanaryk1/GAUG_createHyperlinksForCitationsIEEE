@@ -402,7 +402,11 @@
                 <label class="col-sm-2 control-label">Reason</label>
 
                 <div class="col-sm-10">
-                    <select class="form-control" id="reason" name="reason" ng-model="employeePopup.data.reason" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in employeePopup.reasons" ng-required="employeePopup.data.eventType == 'U'">
+                    <select class="form-control" id="reason" name="reason" ng-model="employeePopup.data.reason" 
+                            ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" data-validate="required"  
+                            data-message-required="Please select the reason." 
+                            ng-options="reason.key as reason.value for reason in employeePopup.reasons"
+                            ng-required="employeePopup.data.eventType == 'U'">
                         <option value="">Select the reason</option>
                     </select>
                 </div>
