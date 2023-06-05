@@ -5,10 +5,16 @@ ontime_data = {
     'homepage': 'app.dashboard',
     'weatherCity':'New York, NY',
     'employeeReasons': [
-        "Sick", "Personal Day", "Vacation"
+        {key: "SICK", value: "Sick"},
+        {key: "PSNL", value: "Personal Day"},
+        {key: "VCTN", value: "Vacation"}
     ],
     'patientReasons': [
-        "Hospital", "Vacation", "As per Pt.", "No Service"
+        {key: "HPTL", value: "Hospitalization"},
+        {key: "VCTN", value: "Vacation"},
+        {key: "INCW", value: "Inclement weather"},
+        {key: "NOSP", value: "No Service As Per Patient"},
+        {key: "NOSC", value: "No Service - Coverage"}
     ],
     'recurranceTypes': {D: "Daily", W: "Weekly", N: "No Repeat"},
     'eventTypes': {S: "Schedule", A: "Available", U: "Unavailable"},

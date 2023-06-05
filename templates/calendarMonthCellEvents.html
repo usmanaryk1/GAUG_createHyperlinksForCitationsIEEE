@@ -28,7 +28,7 @@
         </span>
 
         <span ng-if="temp_event.eventType == 'U'" class="event-pointer event-style">
-            {{temp_event.reason}}
+            {{temp_event.reasonDisplay}}
         </span>                
     </div>
     <div ng-if="day.events.length - 2 > 0 && type == 'employee'" ng-click="toggleEvent($event)" data-placement="bottom">+ {{day.events.length - 2}} more</div>
@@ -56,7 +56,7 @@
             </span>
 
             <span ng-if="temp_event.eventType == 'U'" class="event-pointer event-style">
-                {{temp_event.reason}}
+                {{temp_event.reasonDisplay}}
             </span>                
         </div>
     </div>
@@ -97,7 +97,7 @@
         </span>
 
         <span ng-if="temp_event.eventType == 'U'" class="event-pointer event-style">
-            {{temp_event.reason}}
+            {{temp_event.reasonDisplay}}
         </span>                
     </div>
     <div ng-if="day.events.length - 2 > 0 && type == 'patient'" ng-click="toggleEvent($event)" data-placement="bottom">+ {{day.events.length - 2}} more</div>
@@ -136,7 +136,7 @@
             </span>
 
             <span ng-if="temp_event.eventType == 'U'" class="event-pointer event-style">
-                {{temp_event.reason}}
+                {{temp_event.reasonDisplay}}
             </span>                
         </div>
     </div>

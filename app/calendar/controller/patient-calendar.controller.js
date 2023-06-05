@@ -203,7 +203,7 @@
             angular.forEach(res, function (content) {
                 if (content.eventType == 'U') {
                     if(_.find(ontime_data.patientReasons,{key:content.reason}))
-                        content.reason = _.find(ontime_data.patientReasons,{key:content.reason}).value;
+                        content.reasonDisplay = _.find(ontime_data.patientReasons,{key:content.reason}).value;
                     var startDay = new Date(content.startDate).getDay();
                     var start = new Date(content.startDate);
                     var end = new Date(content.endDate);
