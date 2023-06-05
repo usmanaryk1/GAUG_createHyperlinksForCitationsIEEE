@@ -606,9 +606,9 @@
                     $rootScope.employeePopup.validationStartDate = {};
                     $rootScope.employeePopup.validationHours = {};
                     EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
-                        if (res && res.hiringDate) {
+                        if (res) {
                             $rootScope.employeePopup.availablityDetails = angular.copy(res);
-                            if ($rootScope.employeePopup.availablityDetails.vestingPeriodMap) {
+                            if (res.hiringDate && $rootScope.employeePopup.availablityDetails.vestingPeriodMap) {
                                 angular.forEach($rootScope.employeePopup.availablityDetails.vestingPeriodMap, function (val, key) {
                                     $rootScope.employeePopup.validationStartDate[key] = moment(new Date(res.hiringDate)).add(val, 'Days').toDate();
                                 });
@@ -616,7 +616,8 @@
                             if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
                                 $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
                             }
-                            if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited) {
+                            if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited
+                                    && $rootScope.employeePopup.data.isPaid==true) {
                                 var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
                                 $rootScope.employeePopup.validationHours[type] =
                                         $rootScope.employeePopup.validationHours[type] + parseFloat($rootScope.employeePopup.data.noOfHours);
