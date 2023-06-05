@@ -14,6 +14,13 @@
                 params: {
                     action: 'settings'
                 }
+            },
+            getHistory: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'sessions'
+                }
             }
         });
         return {
@@ -22,6 +29,9 @@
             },
             getSettings: function() {
                 return api.getSettings().$promise;
+            },
+            getHistory: function(data) {
+                return api.getHistory(data).$promise;
             }
         };
     };
