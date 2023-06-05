@@ -29,28 +29,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-                                <!--                                <div class="col-sm-7 pull-right pad_rg0 wd_full">
-                                                                    <div class="form-group">
-                                                                        <label class="col-sm-3 control-label">Payroll Provider</label>
-                                                                        <div class="col-sm-9"> 
-                                                                            <script type="text/javascript">
-                                                                                jQuery(document).ready(function($)
-                                                                                {
-                                                                                    $("#sboxit-3").selectBoxIt().on('open', function()
-                                                                                    {
-                                                                                        // Adding Custom Scrollbar
-                                                                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                                                                    });
-                                                                                });
-                                                                            </script>
-                                                                            <select class="form-control" id="sboxit-3">
-                                                                                <option value="al">Select Provider</option>
-                                                                                <option value="au">1</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>-->
                             </div>
                         </div>
                         <div class="row">
@@ -61,7 +39,7 @@
                                             <label for="field-93" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-93" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" max-date="empTimesheet.searchParams.endDate"/>
+                                                    <input type="text" id="field-93" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -72,7 +50,7 @@
                                             <label for="field-94" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-94" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" min-date="empTimesheet.searchParams.startDate"/>
+                                                    <input type="text" id="field-94" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate"/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -84,7 +62,7 @@
                         <div class="col-sm-12 pad0">
                             <div class="pull-right">
                                 <button type="button" class="btn btn-info btn-single process_bt pull-right">Process</button>
-                                <button type="button" class="btn btn-info green_bt  pull-right">Review</button>
+                                <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a href="javascript:;" onClick="showAjaxModal();" class="btn btn-info edit_bt  pull-right">Add Employee</a>
 
                             </div>
@@ -122,20 +100,20 @@
                                         <th nowrap><span class="wd60">Hours</span></th>
 
                                         <th nowrap><span class="wd98">1099 Earnings</span></th>
-<!--                                        <th nowrap><span class="tb_width">Vacation</span></th>
-                                        <th nowrap><span class="wd50">Sick</span></th>
-
-                                        <th nowrap><span class="tb_width">Personal</span></th>
-                                        <th nowrap><span class="tb_width">Holiday</span></th>
-                                        <th nowrap><span class="wd110">Bonus Earnings</span></th>
-
-                                        <th nowrap><span class="wd110">Misc Earnings</span></th>
-                                        <th nowrap><span class="wd110">Misc Deduction</span></th>
-                                        <th nowrap><span class="wd50">Loan</span></th>
-
-                                        <th nowrap><span class="wd110">ADP 401k Loan</span></th>
-                                        <th nowrap><span class="wd130">ADP 401k Deduction</span></th>
-                                        <th nowrap><span class="wd130">Advance Deduction</span></th>-->
+                                        <!--                                        <th nowrap><span class="tb_width">Vacation</span></th>
+                                                                                <th nowrap><span class="wd50">Sick</span></th>
+                                        
+                                                                                <th nowrap><span class="tb_width">Personal</span></th>
+                                                                                <th nowrap><span class="tb_width">Holiday</span></th>
+                                                                                <th nowrap><span class="wd110">Bonus Earnings</span></th>
+                                        
+                                                                                <th nowrap><span class="wd110">Misc Earnings</span></th>
+                                                                                <th nowrap><span class="wd110">Misc Deduction</span></th>
+                                                                                <th nowrap><span class="wd50">Loan</span></th>
+                                        
+                                                                                <th nowrap><span class="wd110">ADP 401k Loan</span></th>
+                                                                                <th nowrap><span class="wd130">ADP 401k Deduction</span></th>
+                                                                                <th nowrap><span class="wd130">Advance Deduction</span></th>-->
 
                                         <th><span class="wd50">Notes</span></th>
                                         <th nowrap>
@@ -145,33 +123,33 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="session in payrollSession.payrollSessions">
-                                        <th>{{session.lName}}</th>
-                                        <td>{{session.fName}}</td>
+                                        <th>{{session.lastName}}</th>
+                                        <td>{{session.firstName}}</td>
                                         <td> ${{session.grossPay}}</td>
                                         <td>${{session.rate1}}</td>
-                                        <td>{{session.hours1}}</td>
+                                        <td>{{session.hour1}}</td>
                                         <td>${{session.rate2}}</td>
-                                        <td>{{session.hours2}}</td>
-                                        <td>{{session.ot}}</td>
-                                        <td>{{session.hours}}</td>
+                                        <td>{{session.hour2}}</td>
+                                        <td>{{session.otRate}}</td>
+                                        <td>{{session.totalHours}}</td>
                                         <td>{{session.1Earnings}}</td>
-<!--                                        <td>37</td>
-                                        <td>87</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>
-                                        <td>21</td>-->
+                                        <!--                                        <td>37</td>
+                                                                                <td>87</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>
+                                                                                <td>21</td>-->
                                         <td><a href="javascript:;" onClick="createNotes();
                                                " class="fa fa-file-text-o file btn" ></a> 
                                         </td>
                                         <td>
                                             <div class="center">
-                                                <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(payroll, 'payrollModal','lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
+                                                <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(payroll, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
                                             </div>
                                         </td>
 
@@ -215,19 +193,19 @@
             <div class="modal-body">
 
                 <form class="form-horizontal" role="form">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <div class="user_p"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
-                            <div class="user_p_hd">
-                                <h1>Jack Gates</h1>
-                                <p>Administrator</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-7 pull-right">
-                            <button class="btn btn-info green_bt pull-right" type="button">Save Changes</button>
-                        </div>
-                    </div>
-                    <div class="form-group-separator"></div>
+                    <!--                    <div class="row">
+                                            <div class="col-sm-5">
+                                                <div class="user_p"><img src="assets/images/user-5.png" class="img-cirlce img-responsive" alt="user"></div>
+                                                <div class="user_p_hd">
+                                                    <h1>Jack Gates</h1>
+                                                    <p>Administrator</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7 pull-right">
+                                                <button class="btn btn-info green_bt pull-right" type="button">Save Changes</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-separator"></div>-->
 
 
                     <div class="form-group">
@@ -250,6 +228,62 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="grossPay">
+                            Gross Pay
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="grossPay" name="grossPay" type="text" ng-model="grossPay" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="rate1">
+                            Rate 1
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="rate1" name="rate1" type="text" ng-model="rate1" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="hours1">
+                            Hours 1
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours1" name="hours1" type="text" ng-model="hours1" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="rate2">
+                            Rate 2
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="rate2" name="rate2" type="text" ng-model="rate2" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="hours2">
+                            Hours 2
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours2" name="hours2" type="text" ng-model="hours2" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="otHd">
+                            OT/HD
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="otHd" name="otHd" type="text" ng-model="otHd" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="hours">
+                            Hours
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours" name="hours" type="text" ng-model="hours" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="earnings">
+                            1099 Earnings
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="earnings" name="earnings" type="text" ng-model="earnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                    </div>
 
                 </form>
 
@@ -325,99 +359,99 @@
 </script>
 
 <script type="text/ng-template" id="payrollModal">
-<form class="validate form-horizontal" name="payrollForm" id="payroll_form" >
+    <form class="validate form-horizontal" name="payrollForm" id="payroll_form" >
     <div class="modal-header">
-        <button type="button" class="close" ng-click="payrollModal.cancel();" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">
-            Satou Airi - Payroll Information
-        </h4>
+    <button type="button" class="close" ng-click="payrollModal.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">
+    Satou Airi - Payroll Information
+    </h4>
     </div>
 
     <div class="modal-body">
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" for="vacation">
-                Vacation
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="vacation" name="vacation" type="text" ng-model="payrollModal.payrollObj.vacation" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-            <label class="col-sm-3 control-label" for="Sick">
-                Sick
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="sick" name="sick" type="text" ng-model="payrollModal.payrollObj.sick" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-        </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label" for="personal">
-                Personal
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="personal" name="personal" type="text" ng-model="payrollModal.payrollObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-            <label class="col-sm-3 control-label" for="holiday">
-                Holiday
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="holiday" name="holiday" type="text" ng-model="payrollModal.payrollObj.holiday" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-        </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label" for="bonusEarnings">
-                Bonus Earnings
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="bonusEarnings" name="bonusEarnings" type="text" ng-model="payrollModal.payrollObj.bonusEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-            <label class="col-sm-3 control-label" for="miscEarnings">
-                Misc Earnings
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="miscEarnings" name="miscEarnings" type="text" ng-model="payrollModal.payrollObj.miscEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-        </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label" for="miscDeduction">
-                Misc Deduction
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="miscDeduction" name="miscDeduction" type="text" ng-model="payrollModal.payrollObj.miscDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-            <label class="col-sm-3 control-label" for="loan">
-                Loan
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="loan" name="loan" type="text" ng-model="payrollModal.payrollObj.loan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label" for="adpLoan">
-                ADP 401k Loan
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="adpLoan" name="adpLoan" type="text" ng-model="payrollModal.payrollObj.adpLoan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-            <label class="col-sm-3 control-label" for="adpDeduction">
-               ADP 401k Deduction
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="adpDeduction" name="adpDeduction" type="text" ng-model="payrollModal.payrollObj.adpDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-        </div>
-         <div class="form-group">
-            <label class="col-sm-3 control-label" for="advanceDeduction">
-               Advance Deduction
-            </label>
-            <div class="col-sm-3">
-                <input class="form-control" id="advanceDeduction" name="advanceDeduction" type="text" ng-model="payrollModal.payrollObj.advanceDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-            </div>
-        </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="vacation">
+    Vacation
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="vacation" name="vacation" type="text" ng-model="payrollModal.payrollObj.vacation" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="Sick">
+    Sick
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="sick" name="sick" type="text" ng-model="payrollModal.payrollObj.sick" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="personal">
+    Personal
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="personal" name="personal" type="text" ng-model="payrollModal.payrollObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="holiday">
+    Holiday
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="holiday" name="holiday" type="text" ng-model="payrollModal.payrollObj.holiday" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="bonusEarnings">
+    Bonus Earnings
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="bonusEarnings" name="bonusEarnings" type="text" ng-model="payrollModal.payrollObj.bonusEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="miscEarnings">
+    Misc Earnings
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="miscEarnings" name="miscEarnings" type="text" ng-model="payrollModal.payrollObj.miscEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="miscDeduction">
+    Misc Deduction
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="miscDeduction" name="miscDeduction" type="text" ng-model="payrollModal.payrollObj.miscDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="loan">
+    Loan
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="loan" name="loan" type="text" ng-model="payrollModal.payrollObj.loan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="adpLoan">
+    401k Loan
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="adpLoan" name="adpLoan" type="text" ng-model="payrollModal.payrollObj.adp401kLoan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="adpDeduction">
+    401k Deduction
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="adpDeduction" name="adpDeduction" type="text" ng-model="payrollModal.payrollObj.adp401kDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="advanceDeduction">
+    Advance Deduction
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="advanceDeduction" name="advanceDeduction" type="text" ng-model="payrollModal.payrollObj.advanceDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-white" ng-click="payrollModal.cancel();">Close</button>
-        <button type="submit" class="btn btn-info" ng-click="payrollModal.save();">Save changes</button>
+    <button type="button" class="btn btn-white" ng-click="payrollModal.cancel();">Close</button>
+    <button type="submit" class="btn btn-info" ng-click="payrollModal.save();">Save changes</button>
     </div>
-</form>
+    </form>
 </script>

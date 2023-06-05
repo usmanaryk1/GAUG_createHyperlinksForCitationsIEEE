@@ -21,6 +21,13 @@
                 params: {
                     action: 'sessions'
                 }
+            },
+            getSessions: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'sessions'
+                }
             }
         });
         return {
@@ -32,6 +39,9 @@
             },
             getHistory: function(data) {
                 return api.getHistory(data).$promise;
+            },
+            getSessions: function(data) {
+                return api.getSessions(data).$promise;
             }
         };
     };
