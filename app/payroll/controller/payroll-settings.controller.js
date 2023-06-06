@@ -11,6 +11,9 @@
                     ctrl.payrollObj = res;
                     ctrl.payrollObj.companyCode = ontimetest.company_code;
                 }
+                if (!ctrl.payrollObj.payrollFrequency || ctrl.payrollObj.payrollFrequency == null) {
+                    ctrl.payrollObj.payrollFrequency = '1W';
+                }
                 $timeout(function() {
                     $('#multi-select').multiSelect('refresh');
                     ctrl.setHolidayManually();

@@ -483,6 +483,9 @@
                     if (!ctrl.employee.wages || ctrl.employee.wages === null) {
                         ctrl.employee.wages = 'H';
                     }
+                    if (!ctrl.employee.salaryFrequency || ctrl.employee.salaryFrequency === null) {
+                        ctrl.employee.salaryFrequency = '1W';
+                    }
                     setValidationsForTab2(ctrl.employee.wages);
                     $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
                     $formService.setRadioValues('Wages', ctrl.employee.wages);
