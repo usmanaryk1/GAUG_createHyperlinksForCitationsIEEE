@@ -40,6 +40,12 @@
                 params: {
                     action: 'sessions'
                 }
+            },
+            deleteBatch:{
+                method: 'DELETE',
+                params: {
+                    action: 'sessions'
+                }             
             }
         });
         return {
@@ -60,6 +66,9 @@
             },
             getProcessedSessions: function(data) {
                 return api.getProcessedSessions({subAction: data.id}).$promise;
+            },
+            deleteBatch: function(data) {
+                return api.deleteBatch({subAction: data.paramId}).$promise;
             }
 
         };

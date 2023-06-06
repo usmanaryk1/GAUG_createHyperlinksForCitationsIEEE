@@ -1,5 +1,5 @@
 (function () {
-    function PayrollHistoryCtrl($rootScope, $location, $http, PayrollDAO, $timeout, $state, Page) {
+    function PayrollHistoryCtrl($rootScope, $location, $modal, PayrollDAO, $timeout, $state, Page) {
         var ctrl = this;
 //        ctrl.companyCode = ontime_data.company_code;
 //        ctrl.baseUrl = ontime_data.weburl;
@@ -104,8 +104,40 @@
                 ctrl.showPayrolls();
             }
         }
+        ctrl.openDeleteModal = function (session,e) {
+            e.stopPropagation();
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
+                controller: 'ConfirmModalController as confirmModal',
+                size: 'md',
+                resolve: {
+                    message: function () {
+                        return "Are you sure you want to delete this Payroll Batch?";
+                    },
+                    title: function () {
+                        return "Delete Payroll Batch";
+                    },
+                    subtitle: function () {
+                        return "";
+                    }
+                }
+            });
+            modalInstance.result.then(function (res) {
+                $rootScope.maskLoading();
+                PayrollDAO.deleteBatch({paramId: session.id}).then(function () {
+                    toastr.success("Payroll batch deleted.");
+                    ctrl.retrievePayrollHistory();                    
+                }).catch(function (data, status) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }, function () {
+            });
+
+        };
         initPage();
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollHistoryCtrl', ["$rootScope", "$location", "$http", "PayrollDAO", "$timeout", "$state", "Page", PayrollHistoryCtrl]);
+    angular.module('xenon.controllers').controller('PayrollHistoryCtrl', ["$rootScope", "$location", "$modal", "PayrollDAO", "$timeout", "$state", "Page", PayrollHistoryCtrl]);
 })();

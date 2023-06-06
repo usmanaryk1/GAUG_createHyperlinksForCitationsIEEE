@@ -33,11 +33,11 @@
                                         <div class="form-group">
                                             <label for="field-91" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
-                                                <div class="input-group" ng-if='payrollHist.searchParams.toDate!=null'>
+                                                <div class="input-group" ng-if='payrollHist.searchParams.toDate != null'>
                                                     <input type="text" id="field-91" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="payrollHist.searchParams.fromDate"  max-date="payrollHist.searchParams.toDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
-                                                <div class="input-group" ng-if='payrollHist.searchParams.toDate==null'>
+                                                <div class="input-group" ng-if='payrollHist.searchParams.toDate == null'>
                                                     <input type="text" id="field-91" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="payrollHist.searchParams.fromDate"  max-date="todayDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
@@ -83,6 +83,7 @@
                                     <th colspan="1" rowspan="1" tabindex="0">Total Employees</th>
                                     <th colspan="1" rowspan="1" tabindex="0">Total Hours</th>
                                     <th data-priority="6">Pay Period</th>
+                                    <th class="nosorting" ng-if="hasAccess('DELETE_PAYROLL_BATCH')"><span>Actions</span></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,6 +94,9 @@
                                     <td>{{history.totalEmployees}}</td>
                                     <td>{{history.totalHours|number:2}}</td>
                                     <td>{{history.sessionStartDate|date :dateFormat}} - {{history.sessionEndDate|date :dateFormat}}</td>
+                                    <td ng-if="hasAccess('DELETE_PAYROLL_BATCH')">
+                                        <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="payrollHist.openDeleteModal(history, $event)" tooltip="Delete"><span class="ed_b"></span></a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

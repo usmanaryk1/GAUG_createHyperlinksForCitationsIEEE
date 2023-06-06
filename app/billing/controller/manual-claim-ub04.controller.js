@@ -169,6 +169,7 @@
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
                     ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
+                    ctrl.billingClaimObj.authorizedCodes = [];
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                         if (fromDate == null || new Date(serviceLine.serviceDate).getTime() <= new Date(fromDate).getTime()) {
                             fromDate = serviceLine.serviceDate;
@@ -176,7 +177,11 @@
                         if (toDate == null || new Date(serviceLine.serviceDate).getTime() >= new Date(toDate).getTime()) {
                             toDate = serviceLine.serviceDate;
                         }
+                        if (ctrl.billingClaimObj.authorizedCodes.indexOf(serviceLine.CPTCode) === -1) {
+                            ctrl.billingClaimObj.authorizedCodes.push(serviceLine.CPTCode);
+                        }
                     });
+                    ctrl.billingClaimObj.authorizedCodes = ctrl.billingClaimObj.authorizedCodes.join(',');
                 }
                 ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
