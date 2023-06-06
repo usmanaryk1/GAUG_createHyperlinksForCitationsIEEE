@@ -539,6 +539,21 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.select2
+                        ]);
+                    },
+                }
+            }).
+            state('app.batch_session', {
+                url: '/payroll_session/:id',
+                controller: 'PayrollSessionCtrl as payrollSession',
+                templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_session'),
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                            ASSETS.forms.select2
                         ]);
                     },
                 }

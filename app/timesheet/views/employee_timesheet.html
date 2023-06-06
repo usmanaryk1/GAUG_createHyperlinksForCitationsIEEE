@@ -155,8 +155,8 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:170px;">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}&from={{empTimesheet.searchParams.startDate}}&to={{empTimesheet.searchParams.endDate}}"  tooltip="Edit"><span class="ed_b"></span></a> 
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited==true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}&from={{empTimesheet.searchParams.startDate}}&to={{empTimesheet.searchParams.endDate}}"  tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited==true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>

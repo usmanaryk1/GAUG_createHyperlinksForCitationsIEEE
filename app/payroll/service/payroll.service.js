@@ -34,7 +34,13 @@
                 params: {
                     action: 'process'
                 }
-            }            
+            },
+            getProcessedSessions: {
+                method: 'GET',
+                params: {
+                    action: 'sessions'
+                }
+            }
         });
         return {
             updateSettings: function(data) {
@@ -51,8 +57,11 @@
             },
             processSessions: function(data) {
                 return api.processSessions(data).$promise;
+            },
+            getProcessedSessions: function(data) {
+                return api.getProcessedSessions({subAction: data.id}).$promise;
             }
-            
+
         };
     };
     angular.module("xenon.factory").factory('PayrollDAO', ['$resource', PayrollDAO]);

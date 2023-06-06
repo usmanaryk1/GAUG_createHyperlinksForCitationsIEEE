@@ -63,7 +63,7 @@
                             <div class="pull-right">
                                 <button type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
-                                <a href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                <a ng-if="payrollSession.criteriaSelected" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
 
                             </div>
                         </div>
@@ -116,15 +116,15 @@
                                     <tr ng-repeat="session in payrollSession.payrollSessions">
                                         <th>{{payrollSession.empMap[session.employeeId].lName}}</th>
                                         <td>{{payrollSession.empMap[session.employeeId].fName}}</td>
-                                        <td> ${{session.grossPay}}</td>
-                                        <td>${{session.rate1}}</td>
-                                        <td>{{session.hour1}}</td>
-                                        <td>${{session.rate2}}</td>
-                                        <td>{{session.hour2}}</td>
-                                        <td>{{session.otRate}}</td>
-                                        <td>{{session.otHours}}</td>
-                                        <td>{{session.hdRate}}</td>
-                                        <td>{{session.hdHours}}</td>
+                                        <td> ${{session.grossPay| number:2}}</td>
+                                        <td>${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
+                                        <td>{{session.hour1 == null ? 0 : session.hour1| number:2}}</td>
+                                        <td>${{session.rate2 == null ? 0 : session.rate2| number:2}}</td>
+                                        <td>{{session.hour2 == null ? 0 : session.hour2| number:2}}</td>
+                                        <td>{{session.otRate == null ? 0 : session.otRate| number:2}}</td>
+                                        <td>{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
+                                        <td>{{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
+                                        <td>{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
                                         <!--                                        <td>{{session.totalHours}}</td>
                                                                                 <td>{{session.1Earnings}}</td>-->
                                         <!--                                        <td>37</td>
@@ -138,11 +138,11 @@
                                                                                 <td>21</td>
                                                                                 <td>21</td>
                                                                                 <td>21</td>-->
-                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session.notes)" class="fa fa-file-text-o file btn" ></a> 
+                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session)" class="fa fa-file-text-o file btn" ></a> 
                                         </td>
                                         <td>
                                             <div class="center">
-                                                <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
+                                                <a class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
                                             </div>
                                         </td>
 
@@ -179,18 +179,17 @@
 
 
 <!-- Modal 7 (Ajax Modal)-->
-<div class="modal fade" id="modal-7">
+<div class="modal fade" id="modal-7" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog width800">
         <div class="modal-content">
+            <form class="form-horizontal validate" name="addEmployeeForm" id="addEmployeeForm" role="form" ng-submit="payrollSession.addEmployee()">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Employee</h4>
+                </div>
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Employee</h4>
-            </div>
+                <div class="modal-body">
 
-            <div class="modal-body">
-
-                <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Employee</label>
                         <div class="col-sm-9"> 
@@ -212,9 +211,12 @@
 //
 //                                });
                             </script>
-                            <select class="form-control" id="sboxit-1" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in payrollSession.employeeList track by emp.id'>
+                            <select class="form-control" id="sboxit-1" ng-model="payrollSession.employeeModalObj.employeeId" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in payrollSession.addEmployeeList track by emp.id' ng-change="payrollSession.selectEmployee()">
                                 <option value="" selected hidden />
                             </select>
+                            <div ng-show='payrollSession.employeeModalObj.employeeId == null && payrollSession.payrollFormSubmitted'>
+                                <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee.</span>
+                            </div>
                         </div>
                     </div>
 
@@ -223,88 +225,103 @@
                             Gross Pay
                         </label>
                         <div class="col-sm-3">
-                            <input class="form-control" id="grossPay" name="grossPay" type="text" ng-model="grossPay" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-                        </div>
-                        <label class="col-sm-3 control-label" for="rate1">
-                            Rate 1
-                        </label>
-                        <div class="col-sm-3">
-                            <input class="form-control" id="rate1" name="rate1" type="text" ng-model="rate1" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="hours1">
-                            Hours 1
-                        </label>
-                        <div class="col-sm-3">
-                            <input class="form-control" id="hours1" name="hours1" type="text" ng-model="hours1" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-                        </div>
-                        <label class="col-sm-3 control-label" for="rate2">
-                            Rate 2
-                        </label>
-                        <div class="col-sm-3">
-                            <input class="form-control" id="rate2" name="rate2" type="text" ng-model="rate2" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="hours2">
-                            Hours 2
-                        </label>
-                        <div class="col-sm-3">
-                            <input class="form-control" id="hours2" name="hours2" type="text" ng-model="hours2" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-                        </div>
-                        <label class="col-sm-3 control-label" for="otHd">
-                            OT/HD
-                        </label>
-                        <div class="col-sm-3">
-                            <input class="form-control" id="otHd" name="otHd" type="text" ng-model="otHd" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label" for="hours">
-                            Hours
-                        </label>
-                        <div class="col-sm-3">
-                            <input class="form-control" id="hours" name="hours" type="text" ng-model="hours" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                            <input ng-disabled="true" class="form-control" id="grossPay" name="grossPay" type="text" ng-model="payrollSession.employeeModalObj.grossPay" maxlength="5" numbers-only="true" decimalallowed="true" data-validate="number"/>
                         </div>
                         <label class="col-sm-3 control-label" for="earnings">
                             1099 Earnings
                         </label>
                         <div class="col-sm-3">
-                            <input class="form-control" id="earnings" name="earnings" type="text" ng-model="earnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                            <input class="form-control" id="earnings" name="earnings" type="text" ng-model="payrollSession.employeeModalObj.earnings1099" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="rate1">
+                            Rate 1
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="rate1" name="rate1" type="text" ng-model="payrollSession.employeeModalObj.rate1" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hours1">
+                            Hours 1
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours1" name="hours1" type="text" ng-model="payrollSession.employeeModalObj.hour1" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                        
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="rate2">
+                            Rate 2
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="rate2" name="rate2" type="text" ng-model="payrollSession.employeeModalObj.rate2" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hours2">
+                            Hours 2
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours2" name="hours2" type="text" ng-model="payrollSession.employeeModalObj.hour2" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                        
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="otRate">
+                            OT Rate
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="otRate" name="otRate" type="text" ng-model="payrollSession.employeeModalObj.otRate" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="otHours">
+                            OT Hours
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="otHours" name="otHours" type="text" ng-model="payrollSession.employeeModalObj.otHours" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="hdRate">
+                            HD Rate
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hdRate" name="hdRate" type="text" ng-model="payrollSession.employeeModalObj.hdRate" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hdHours">
+                            HD Hours
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hdHours" name="hdHours" type="text" ng-model="payrollSession.employeeModalObj.hdHours" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
                     </div>
 
-                </form>
+                </div>
 
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info green_bt">Add</button>
+                </div>
+            </form>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info green_bt">Save changes</button>
-            </div>
         </div>
     </div>
 </div>
 
 
-<div class="modal fade" id="modal-8">
+<div class="modal fade" id="modal-8" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close" ng-click="payrollSession.closeNotes()" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Review</h4>
             </div>
 
             <div class="modal-body">
-                <textarea class="form-control" rows="10" ng-model="payrollSession.notes">
+                <textarea class="form-control" rows="10" ng-model="payrollSession.selectedSession.notes">
                 </textarea>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info">Save Notes</button>
+                <button type="button" class="btn btn-white" ng-click="payrollSession.closeNotes()">Close</button>
+                <button type="button" class="btn btn-info" ng-click="payrollSession.saveNotes()">Save Notes</button>
             </div>
         </div>
     </div>
@@ -315,7 +332,7 @@
     <div class="modal-header">
     <button type="button" class="close" ng-click="payrollModal.cancel();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
-    {{payrollModal.empMap[payrollModal.payrollObj.employeeId].lName +' '+payrollSession.empMap[payrollModal.payrollObj.employeeId].fName}} - Payroll Information
+    {{payrollModal.empMap[payrollModal.payrollObj.employeeId].lName +' '+payrollModal.empMap[payrollModal.payrollObj.employeeId].fName}} - Payroll Information
     </h4>
     </div>
 
@@ -394,7 +411,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="payrollModal.cancel();">Close</button>
-    <button type="submit" class="btn btn-info" ng-click="payrollModal.save();">Save changes</button>
+    <button type="button" class="btn btn-info" ng-click="payrollModal.save();">Save changes</button>
     </div>
     </form>
 </script>
