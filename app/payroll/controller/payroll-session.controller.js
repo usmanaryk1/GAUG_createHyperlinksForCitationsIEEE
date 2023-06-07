@@ -1,5 +1,5 @@
 (function() {
-    function PayrollSessionCtrl($rootScope, $scope, $modal, $timeout, PayrollDAO, EmployeeDAO) {
+    function PayrollSessionCtrl($rootScope, $scope, $modal, $timeout, PayrollDAO, EmployeeDAO, $state) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -10,6 +10,7 @@
                 $rootScope.maskLoading();
                 PayrollDAO.processSessions(ctrl.payrollSessions).then(function(res) {
                     console.log(res);
+                    $state.go('app.batch_session', {id: res.id});
                 }).catch(function(e) {
                     toastr.error("Payroll sessions cannot be processed.");
                 }).then(function() {
@@ -47,6 +48,7 @@
                         ctrl.setRates('vacation', 'vaccationRate', payrollObj);
                         ctrl.setRates('sick', 'sickRate', payrollObj);
                         ctrl.setRates('personal', 'personalRate', payrollObj);
+                        payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
                     });
                 }).catch(function(e) {
                     toastr.error("Payroll sessions cannot be retrieved.");
@@ -73,14 +75,47 @@
             $rootScope.payrollModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: false
             });
+            $rootScope.payrollModal.processdMode = ctrl.processdMode;
+            var selectedPayroll = angular.copy(payroll);
             $rootScope.payrollModal.empMap = ctrl.empMap;
             $rootScope.payrollModal.payrollObj = payroll;
+            var payroll_form_data;
+            $timeout(function() {
+                payroll_form_data = $('#payroll_form').serialize();
+            });
+            $rootScope.payrollModal.save = function() {
+                $rootScope.payrollModal.payrollObj.grossPay = ctrl.calculateGrossPay($rootScope.payrollModal.payrollObj);
+                $rootScope.payrollModal.close();
+            };
+            $rootScope.payrollModal.cancel = function() {
+                if (payroll_form_data != $('#payroll_form').serialize()) {
+                    for (var i = 0; i < ctrl.payrollSessions.length; i++) {
+                        if (ctrl.payrollSessions[i].employeeId == $rootScope.payrollModal.payrollObj.employeeId) {
+                            ctrl.payrollSessions[i] = selectedPayroll;
+                            ctrl.rerenderDataTable();
+                            break;
+                        }
+                    }
+                    ;
+                }
+                ;
+                $rootScope.payrollModal.close();
+            };
         };
-        ctrl.editNotes = function(note) {
+        ctrl.editNotes = function(session) {
+            ctrl.notes = angular.copy(session.notes);
             $('#modal-8').modal('show', {backdrop: 'static'});
-            ctrl.notes = note;
+            ctrl.selectedSession = session;
+//            ctrl.notes = session.notes;
+        };
+        ctrl.closeNotes = function() {
+            ctrl.selectedSession.notes = ctrl.notes;
+            $('#modal-8').modal('hide');
+        };
+        ctrl.saveNotes = function() {
+            $('#modal-8').modal('hide');
         };
         var checkNull = function(value) {
             if (value == null) {
@@ -99,6 +134,12 @@
             if (ctrl.payrollSettings[rateType] == 'OT') {
                 payrollObj[rateKey] = payrollObj.otRate;
             }
+            if (ctrl.payrollSettings[rateType] == 'HD') {
+                payrollObj[rateKey] = payrollObj.hdRate;
+            }
+        };
+        ctrl.setGrossPay = function(payrollObj) {
+            payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
         };
         ctrl.calculateGrossPay = function(payrollObj) {
             var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * 1.5) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * 1.5) + checkNull(payrollObj.earnings1099) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.rate1)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.rate1)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.rate1)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction);
@@ -107,19 +148,76 @@
 
         ctrl.showAddEmployeeModal = function() {
             $('#modal-7').modal('show', {backdrop: 'static'});
-//            setTimeout(function() {
-//                console.log($(document).find("#sboxit-1").html());
-//                $(document).find("#sboxit-1").select2({
-//                    placeholder: 'Select Employee...',
-//                }).on('select2-open', function()
-//                {
-//                    // Adding Custom Scrollbar
-//                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-//                });
-//            }, 200);
+            ctrl.addEmployeeList = [];
+            var empWithSessions = [];
+            ctrl.employeeModalObj = {};
+            ctrl.payrollFormSubmitted = false;
+            angular.forEach(ctrl.payrollSessions, function(payroll) {
+                empWithSessions.push(payroll.employeeId);
+            });
+            angular.forEach(ctrl.employeeList, function(emp) {
+                if (empWithSessions.indexOf(emp.id) < 0) {
+                    ctrl.addEmployeeList.push(emp);
+                }
+            });
+            setTimeout(function() {
+                $("#sboxit-1").select2({
+                    placeholder: 'Select Employee...',
+                }).on('select2-open', function()
+                {
+                    // Adding Custom Scrollbar
+                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                });
+            }, 200);
+        };
+        ctrl.selectEmployee = function() {
+            var empObj = angular.copy(ctrl.empMap[ctrl.employeeModalObj.employeeId]);
+            ctrl.employeeModalObj.otRate = empObj.otRate;
+            ctrl.employeeModalObj.hdRate = empObj.hdRate;
+            EmployeeDAO.retrieveEmployeeCareRates({employee_id: empObj.id}).then(function(res) {
+                ctrl.employeeModalObj.rate1 = res.rate1.rate;
+                ctrl.employeeModalObj.rate2 = res.rate2.rate;
+            });
+            ctrl.setGrossPay(ctrl.employeeModalObj);
+        };
+        ctrl.addEmployee = function() {
+            ctrl.payrollFormSubmitted = true;
+            if ($("#addEmployeeForm")[0].checkValidity() && ctrl.employeeModalObj.employeeId != null) {
+                ctrl.setRates('vacation', 'vaccationRate', ctrl.employeeModalObj);
+                ctrl.setRates('sick', 'sickRate', ctrl.employeeModalObj);
+                ctrl.setRates('personal', 'personalRate', ctrl.employeeModalObj);
+                if (ctrl.payrollSessions == null) {
+                    ctrl.payrollSessions = [];
+                }
+                ctrl.employeeModalObj.manuallyAdded = true;
+                ctrl.payrollSessions.push(ctrl.employeeModalObj);
+                ctrl.rerenderDataTable();
+                $('#modal-7').modal('hide');
+            }
         };
 
         ctrl.initSessions = function() {
+            if ($state.params.id && $state.params.id !== '') {
+                ctrl.processdMode = true;
+                ctrl.batchId = $state.params.id;
+                $rootScope.maskLoading();
+                PayrollDAO.getProcessedSessions({id: ctrl.batchId}).then(function(res) {
+                    ctrl.processedSessionObj = res;
+                    ctrl.payrollSessions = res.payrollList;
+                    ctrl.totalGrossPay = 0;
+                    angular.forEach(res.payrollList, function(payroll) {
+                        ctrl.totalGrossPay += payroll.grossPay;
+                    });
+                    ctrl.rerenderDataTable();
+                }).catch(function(e) {
+                    toastr.error("Payroll cannot be retrieved.");
+                }).then(function() {
+                    $rootScope.unmaskLoading();
+                });
+            } else {
+                ctrl.processdMode = false;
+            }
+
             EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
                 ctrl.employeeList = res;
                 ctrl.empMap = {};
@@ -144,5 +242,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$scope", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", PayrollSessionCtrl]);
+    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$scope", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", PayrollSessionCtrl]);
 })();
