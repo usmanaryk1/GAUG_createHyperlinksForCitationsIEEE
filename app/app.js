@@ -166,9 +166,11 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                     //Check the sub url i.e. after app/
                     if (newSubUrl && oldSubUrl && newSubUrl !== oldSubUrl) {
                         if ($.fn.dirtyForms) {
-                            if ($('form').dirtyForms('isDirty')) {
+                            if ($('form').dirtyForms('isDirty') || $rootScope.isFormDirty) {
                                 if (!confirm("You've made changes on this page which aren't saved. If you leave you will lose these changes.\n\nAre you sure you want to leave this page?")) {
                                     event.preventDefault();
+                                }else{
+                                    $rootScope.isFormDirty = false;
                                 }
                             }
                         }
@@ -782,6 +784,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'AddUserCtrl as addUser',
                 data: {
                     feature: 'CREATE_USER'
+                },
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.select2,
+                        ]);
+                    }
                 }
             }).
             state('admin.user-list', {

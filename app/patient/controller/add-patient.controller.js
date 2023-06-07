@@ -63,6 +63,7 @@
         ctrl.setBillingAddress = setBillingAddress;
         ctrl.setBillingAddressRadioButton = setBillingAddressRadioButton;
         ctrl.resetPatient = function () {
+            $rootScope.isFormDirty = false;            
         };
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
@@ -87,6 +88,7 @@
         //function to save patient data.
         function savePatientData() {
             if ($('#add_patient_form')[0].checkValidity()) {
+                $rootScope.isFormDirty = false;
                 var patientToSave = angular.copy(ctrl.patient);
 //                if (patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth) {
 //                    patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
@@ -338,6 +340,7 @@
 
         }
         function tab4DataInit() {
+            $rootScope.isFormDirty = false;
             ctrl.formDirty = false;
             $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
             $timeout(function () {
@@ -576,7 +579,14 @@
             };
 
         };
-
+        
+        $scope.$watch(function () {
+            return ctrl.authorizationDocuments;
+        }, function (newValue, oldValue) {
+            if(newValue && oldValue){                
+                $rootScope.isFormDirty = true;
+            }
+        },true);
         $scope.addCareType = function () {
             $rootScope.careTypeModel = {};
             $rootScope.careTypeModel.careTypeObj = {};
@@ -599,7 +609,7 @@
 
         $scope.$watch(function () {
             return ctrl.careTypes;
-        }, function (newValue, oldValue) {
+        }, function (newValue, oldValue) {            
             $timeout(function () {
                 $("#CareTypes").multiSelect('refresh');
             });
@@ -735,9 +745,9 @@
                     };
 
                     $scope.authorizationEndDateChanged = function () {
-                        if ($scope.addPatient.currentAuthorizationDocument && $scope.addPatient.currentAuthorizationDocument.id
-                                && $scope.addPatient.currentAuthorizationDocument.companyCareTypeId && $scope.addPatient.existingSchedule
-                                && $scope.addPatient.existingSchedule[$scope.addPatient.currentAuthorizationDocument.companyCareTypeId] === true
+                        if ($scope.careObj.careType && $scope.careObj.careType.companyCaretypeId
+                                && $scope.careObj.careType.companyCaretypeId.id && $scope.addPatient.existingSchedule
+                                && $scope.addPatient.existingSchedule[$scope.careObj.careType.companyCaretypeId.id] === true
                                 && $scope.careObj.expiryDate !== $scope.careObj.previousExpiryDate) {
 
                             var a = moment(new Date($scope.careObj.expiryDate));
@@ -751,9 +761,7 @@
                             $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
                         } else if ($scope.careObj.expiryDate == $scope.careObj.previousExpiryDate) {
                             $scope.careObj.changeSchedule = false;
-                        } else if (!$scope.addPatient.currentAuthorizationDocument) {
-                            $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, true, $scope.careObj);
-                        }
+                        } 
                     };
 
 //                    $scope.isValidCareType = function () {
