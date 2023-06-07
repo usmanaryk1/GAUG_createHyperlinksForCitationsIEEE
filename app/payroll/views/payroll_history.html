@@ -82,7 +82,7 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="history in payrollHist.historyList">
-                                    <th>{{history.id}}</th>
+                                    <th><a href="#app/payroll_session/{{history.id}}">{{history.id}}</a></th>
                                     <td>{{history.dateInserted|date :dateFormat}}</td>
                                     <td> ${{history.grossPay}}</td>
                                     <td>{{history.totalEmployees}}</td>

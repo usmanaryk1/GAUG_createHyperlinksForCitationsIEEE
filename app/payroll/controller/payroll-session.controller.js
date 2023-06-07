@@ -10,6 +10,7 @@
                 $rootScope.maskLoading();
                 PayrollDAO.processSessions(ctrl.payrollSessions).then(function(res) {
                     console.log(res);
+                    $state.go('app.batch_session', {id: res.id});
                 }).catch(function(e) {
                     toastr.error("Payroll sessions cannot be processed.");
                 }).then(function() {
@@ -76,8 +77,9 @@
                 size: modal_size,
                 backdrop: false
             });
-            $rootScope.payrollModal.empMap = ctrl.empMap;
+            $rootScope.payrollModal.processdMode = ctrl.processdMode;
             var selectedPayroll = angular.copy(payroll);
+            $rootScope.payrollModal.empMap = ctrl.empMap;
             $rootScope.payrollModal.payrollObj = payroll;
             var payroll_form_data;
             $timeout(function() {
@@ -187,6 +189,7 @@
                 if (ctrl.payrollSessions == null) {
                     ctrl.payrollSessions = [];
                 }
+                ctrl.employeeModalObj.manuallyAdded = true;
                 ctrl.payrollSessions.push(ctrl.employeeModalObj);
                 ctrl.rerenderDataTable();
                 $('#modal-7').modal('hide');
@@ -199,8 +202,13 @@
                 ctrl.batchId = $state.params.id;
                 $rootScope.maskLoading();
                 PayrollDAO.getProcessedSessions({id: ctrl.batchId}).then(function(res) {
-                    console.log(res);
-                    JSON.stringify(res);
+                    ctrl.processedSessionObj = res;
+                    ctrl.payrollSessions = res.payrollList;
+                    ctrl.totalGrossPay = 0;
+                    angular.forEach(res.payrollList, function(payroll) {
+                        ctrl.totalGrossPay += payroll.grossPay;
+                    });
+                    ctrl.rerenderDataTable();
                 }).catch(function(e) {
                     toastr.error("Payroll cannot be retrieved.");
                 }).then(function() {

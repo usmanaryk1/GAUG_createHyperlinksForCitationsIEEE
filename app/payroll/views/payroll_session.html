@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" ng-if="!payrollSession.processdMode">
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right wd_full">
                                     <div class="col-sm-6 pad0 wd_full">
@@ -60,18 +60,25 @@
                             </div>
                         </div>
                         <div class="col-sm-12 pad0">
-                            <div class="pull-right">
+                            <div class="pull-right" ng-if="!payrollSession.processdMode">
                                 <button type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a ng-if="payrollSession.criteriaSelected" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
-
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="panel-body pad_top0">
                     <div>
-                        <div class="table-responsive border0 timesheet_pg search_hide">
+                        <div class="table-responsive border0 search_hide">
+                            <div ng-if="payrollSession.processdMode">
+                                <div class="col-sm-3 col-sm-offset-9 pull-right">
+                                    Payroll Batch No: {{payrollSession.processedSessionObj.id}}
+                                </div>
+<!--                                <div class="col-sm-3 col-sm-offset-9 pull-right">
+                                    Pay Period: {{payrollSession.processedSessionObj.id}}
+                                </div>-->
+                            </div>
                             <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="payrollSession.payrollSessions.length" datatable-setup datatable-obj="payrollSession.datatableObj">
                                 <thead>
                                     <tr>
@@ -114,7 +121,7 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="session in payrollSession.payrollSessions">
-                                        <th>{{payrollSession.empMap[session.employeeId].lName}}</th>
+                                        <th><span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span> {{payrollSession.empMap[session.employeeId].lName}}</th>
                                         <td>{{payrollSession.empMap[session.employeeId].fName}}</td>
                                         <td> ${{session.grossPay| number:2}}</td>
                                         <td>${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
@@ -142,18 +149,26 @@
                                         </td>
                                         <td>
                                             <div class="center">
-                                                <a class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
+                                                <a ng-if="!payrollSession.processdMode" class="btn icon-left fa fa-pencil edit_button" ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" tooltip="Edit" tooltip-append-to-body="true"><span class="ed_b"></span></a> 
+                                                <a href="" style="color:blue" ng-if="payrollSession.processdMode" ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" tooltip="View" tooltip-append-to-body="true">View</a> 
                                             </div>
                                         </td>
-
                                     </tr>
                                 </tbody>
                             </table>
                             <div ng-if="(payrollSession.payrollSessions == null || payrollSession.payrollSessions.length == 0) && payrollSession.dataRetrieved && payrollSession.criteriaSelected === true">
                                 No payrolls are available for selected date range.
                             </div>
-                            <div ng-if="payrollSession.criteriaSelected == false">
+                            <div ng-if="payrollSession.criteriaSelected == false && !payrollSession.processdMode">
                                 Please select all filters to review payrolls.
+                            </div>
+                        </div>
+                        <div ng-if="payrollSession.processdMode">
+                            <div class="col-sm-6">
+                                Total Employees: {{payrollSession.processedSessionObj.totalEmployees}}
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                Total Gross Pay: ${{payrollSession.totalGrossPay| number:2}}
                             </div>
                         </div>
                         <script type="text/javascript">
@@ -315,13 +330,13 @@
             </div>
 
             <div class="modal-body">
-                <textarea class="form-control" rows="10" ng-model="payrollSession.selectedSession.notes">
+                <textarea ng-disabled="payrollSession.processdMode" class="form-control" rows="10" ng-model="payrollSession.selectedSession.notes">
                 </textarea>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" ng-click="payrollSession.closeNotes()">Close</button>
-                <button type="button" class="btn btn-info" ng-click="payrollSession.saveNotes()">Save Notes</button>
+                <button type="button" ng-if="!payrollSession.processdMode" class="btn btn-info" ng-click="payrollSession.saveNotes()">Save Notes</button>
             </div>
         </div>
     </div>
@@ -343,13 +358,13 @@
     Vacation
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="vacation" name="vacation" type="text" ng-model="payrollModal.payrollObj.vacation" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="vacation" ng-disabled="payrollModal.processdMode" name="vacation" type="text" ng-model="payrollModal.payrollObj.vacation" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     <label class="col-sm-3 control-label" for="Sick">
     Sick
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="sick" name="sick" type="text" ng-model="payrollModal.payrollObj.sick" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="sick" ng-disabled="payrollModal.processdMode" name="sick" type="text" ng-model="payrollModal.payrollObj.sick" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
     <div class="form-group">
@@ -357,13 +372,13 @@
     Personal
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="personal" name="personal" type="text" ng-model="payrollModal.payrollObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="personal" ng-disabled="payrollModal.processdMode" name="personal" type="text" ng-model="payrollModal.payrollObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     <label class="col-sm-3 control-label" for="bonusEarnings">
     Bonus Earnings
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="bonusEarnings" name="bonusEarnings" type="text" ng-model="payrollModal.payrollObj.bonusEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="bonusEarnings" ng-disabled="payrollModal.processdMode" name="bonusEarnings" type="text" ng-model="payrollModal.payrollObj.bonusEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
     <div class="form-group">
@@ -371,13 +386,13 @@
     Misc Earnings
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="miscEarnings" name="miscEarnings" type="text" ng-model="payrollModal.payrollObj.miscEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="miscEarnings" ng-disabled="payrollModal.processdMode" name="miscEarnings" type="text" ng-model="payrollModal.payrollObj.miscEarnings" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     <label class="col-sm-3 control-label" for="miscDeduction">
     Misc Deduction
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="miscDeduction" name="miscDeduction" type="text" ng-model="payrollModal.payrollObj.miscDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="miscDeduction" ng-disabled="payrollModal.processdMode" name="miscDeduction" type="text" ng-model="payrollModal.payrollObj.miscDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
     <div class="form-group">
@@ -385,13 +400,13 @@
     Loan
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="loan" name="loan" type="text" ng-model="payrollModal.payrollObj.loan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="loan" ng-disabled="payrollModal.processdMode" name="loan" type="text" ng-model="payrollModal.payrollObj.loan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     <label class="col-sm-3 control-label" for="adpLoan">
     401k Loan
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="adpLoan" name="adpLoan" type="text" ng-model="payrollModal.payrollObj.adp401kLoan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="adpLoan" ng-disabled="payrollModal.processdMode" name="adpLoan" type="text" ng-model="payrollModal.payrollObj.adp401kLoan" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
     <div class="form-group">
@@ -399,19 +414,19 @@
     401k Deduction
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="adpDeduction" name="adpDeduction" type="text" ng-model="payrollModal.payrollObj.adp401kDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="adpDeduction" ng-disabled="payrollModal.processdMode" name="adpDeduction" type="text" ng-model="payrollModal.payrollObj.adp401kDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     <label class="col-sm-3 control-label" for="advanceDeduction">
     Advance Deduction
     </label>
     <div class="col-sm-3">
-    <input class="form-control" id="advanceDeduction" name="advanceDeduction" type="text" ng-model="payrollModal.payrollObj.advanceDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    <input class="form-control" id="advanceDeduction" ng-disabled="payrollModal.processdMode" name="advanceDeduction" type="text" ng-model="payrollModal.payrollObj.advanceDeduction" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="payrollModal.cancel();">Close</button>
-    <button type="button" class="btn btn-info" ng-click="payrollModal.save();">Save changes</button>
+    <button type="button" ng-if="!payrollModal.processdMode" class="btn btn-info" ng-click="payrollModal.save();">Save changes</button>
     </div>
     </form>
 </script>
