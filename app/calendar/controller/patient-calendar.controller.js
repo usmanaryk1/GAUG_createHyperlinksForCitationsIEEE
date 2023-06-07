@@ -20,6 +20,8 @@
         }
 
         ctrl.viewPatient;
+        
+        ctrl.viewPatient ={'id':''};
 
         ctrl.isOpen = false;
 
@@ -132,6 +134,9 @@
                         PatientDAO.getPatientsForSchedule({patientIds: $stateParams.id}).then(function (res1) {
                             ctrl.viewPatient = angular.copy(res1[0]);
                             ctrl.patientId = ctrl.viewPatient.id;
+                            if(ctrl.viewPatient.status === 'd'){
+                                ctrl.hideAddButton = false;
+                            }
                         });
                     } else {
                         ctrl.viewPatient = angular.copy(obj);
