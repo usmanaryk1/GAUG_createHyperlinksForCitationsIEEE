@@ -358,6 +358,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.employeePopup.retrievingAvailabiltiy = false;
                 $rootScope.employeePopup.isWorksiteSchedulePage = ctrl.isWorksiteSchedulePage;
                 $rootScope.employeePopup.todayDate = new Date();
                 if (data != null && data.eventType == null) {
@@ -603,8 +604,9 @@
                     }
                 };
                 $rootScope.employeePopup.setAvailability = function (empId, validateDetails) {
+                    $rootScope.employeePopup.retrievingAvailabiltiy = true;
                     $rootScope.employeePopup.validationStartDate = {};
-                    $rootScope.employeePopup.validationHours = {};
+                    $rootScope.employeePopup.validationHours = {};                    
                     EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
                         if (res) {
                             $rootScope.employeePopup.availablityDetails = angular.copy(res);
@@ -625,6 +627,7 @@
                         } else {
                             $rootScope.employeePopup.availablityDetails = {};
                         }
+                        $rootScope.employeePopup.retrievingAvailabiltiy = false;
                         if (validateDetails) {
                             $rootScope.employeePopup.validateDetails();
                         }
@@ -771,7 +774,7 @@
                         && $rootScope.employeePopup.data.reason && oldValue && oldValue !== '' && newVal && newVal !== '') {
                     if ($rootScope.employeePopup.availablityDetails) {
                         $rootScope.employeePopup.validateDetails();
-                    } else {
+                    } else if($rootScope.employeePopup.retrievingAvailabiltiy === false){
                         if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
                             $rootScope.employeePopup.setAvailability($rootScope.employeePopup.data.employeeId, true);
                         } else if (ctrl.calendarView == 'month') {
