@@ -16,7 +16,7 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 no-padding">
 
                                 <div class="form-group col-sm-5 pull-left">
                                     <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
@@ -27,6 +27,15 @@
                                             <option value="50">50</option>
                                             <option value="100">100</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div ng-if="payrollSession.processdMode" class="col-sm-7 no-padding">
+                                    <div class="pull-right text-right">
+                                        Payroll Batch Number: {{payrollSession.processedSessionObj.id}}
+                                    </div>
+                                    <br/>
+                                    <div class="pull-right text-right">
+                                        Pay Period: {{payrollSession.processedSessionObj.sessionStartDate|date :dateFormat}} - {{payrollSession.processedSessionObj.sessionEndDate|date :dateFormat}}
                                     </div>
                                 </div>
                             </div>
@@ -70,15 +79,7 @@
                 </div>
                 <div class="panel-body pad_top0">
                     <div>
-                        <div class="table-responsive border0 search_hide">
-                            <div ng-if="payrollSession.processdMode">
-                                <div class="col-sm-3 col-sm-offset-9 pull-right">
-                                    Payroll Batch No: {{payrollSession.processedSessionObj.id}}
-                                </div>
-<!--                                <div class="col-sm-3 col-sm-offset-9 pull-right">
-                                    Pay Period: {{payrollSession.processedSessionObj.id}}
-                                </div>-->
-                            </div>
+                        <div class=" border0 search_hide">
                             <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="payrollSession.payrollSessions.length" datatable-setup datatable-obj="payrollSession.datatableObj">
                                 <thead>
                                     <tr>
@@ -159,8 +160,11 @@
                             <div ng-if="(payrollSession.payrollSessions == null || payrollSession.payrollSessions.length == 0) && payrollSession.dataRetrieved && payrollSession.criteriaSelected === true">
                                 No payrolls are available for selected date range.
                             </div>
-                            <div ng-if="payrollSession.criteriaSelected == false && !payrollSession.processdMode">
+                            <div ng-if="payrollSession.criteriaSelected == false && !payrollSession.processdMode && !payrollSession.processClicked">
                                 Please select all filters to review payrolls.
+                            </div>
+                            <div ng-if="payrollSession.criteriaSelected == false && !payrollSession.processdMode && payrollSession.processClicked">
+                                Please review payrolls to process sessions.
                             </div>
                         </div>
                         <div ng-if="payrollSession.processdMode">

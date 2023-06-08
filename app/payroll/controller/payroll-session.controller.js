@@ -6,14 +6,16 @@
         ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
         ctrl.processSessions = function() {
+            ctrl.processClicked = true;
             if (ctrl.payrollSessions != null && ctrl.payrollSessions.length > 0) {
                 $rootScope.maskLoading();
-                PayrollDAO.processSessions(ctrl.payrollSessions).then(function(res) {
+                PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function(res) {
                     console.log(res);
                     $state.go('app.batch_session', {id: res.id});
                 }).catch(function(e) {
                     toastr.error("Payroll sessions cannot be processed.");
                 }).then(function() {
+                    ctrl.processClicked = false;
                     $rootScope.unmaskLoading();
                 });
             }
@@ -67,8 +69,13 @@
             var payrollSessions = angular.copy(ctrl.payrollSessions);
             ctrl.payrollSessions = [];
             $("#example-1_wrapper").remove();
+
             $timeout(function() {
                 ctrl.payrollSessions = payrollSessions;
+                $timeout(function() {
+                    $("#example-1").wrap("<div class='table-responsive'></div>");
+                }, 50);
+
             });
         };
         ctrl.openPayrollModal = function(payroll, modal_id, modal_size, modal_backdrop) {
@@ -130,12 +137,6 @@
             }
             if (ctrl.payrollSettings[rateType] == 'R2') {
                 payrollObj[rateKey] = payrollObj.rate2;
-            }
-            if (ctrl.payrollSettings[rateType] == 'OT') {
-                payrollObj[rateKey] = payrollObj.otRate;
-            }
-            if (ctrl.payrollSettings[rateType] == 'HD') {
-                payrollObj[rateKey] = payrollObj.hdRate;
             }
         };
         ctrl.setGrossPay = function(payrollObj) {
@@ -208,6 +209,8 @@
                     angular.forEach(res.payrollList, function(payroll) {
                         ctrl.totalGrossPay += payroll.grossPay;
                     });
+                    ctrl.processedSessionObj.sessionStartDate = Date.parse(ctrl.processedSessionObj.sessionStartDate);
+                    ctrl.processedSessionObj.sessionEndDate = Date.parse(ctrl.processedSessionObj.sessionEndDate);
                     ctrl.rerenderDataTable();
                 }).catch(function(e) {
                     toastr.error("Payroll cannot be retrieved.");

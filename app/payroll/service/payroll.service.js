@@ -55,8 +55,8 @@
             reviewSessions: function(data) {
                 return api.reviewSessions(data).$promise;
             },
-            processSessions: function(data) {
-                return api.processSessions(data).$promise;
+            processSessions: function(params,data) {
+                return api.processSessions(params,data).$promise;
             },
             getProcessedSessions: function(data) {
                 return api.getProcessedSessions({subAction: data.id}).$promise;
