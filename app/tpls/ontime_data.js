@@ -20,7 +20,14 @@ ontime_data = {
     'eventTypes': {S: "Schedule", A: "Available", U: "Unavailable"},
     benefitList: [{key: 'SIT', value: 'Sick Time'}, {key: 'PRT', value: 'Personal Time'}, {key: 'VCT', value: 'Vacation Time'}, {key: 'HEC', value: 'Healthcare'},
         {key: 'WFC', value: 'WPP Flex Cards'}, {key: '401', value: '401K'}],
-    benefitMap: {'SIT': 'Sick Time', 'PRT': 'Personal Time', 'VCT': 'Vacation Time', 'HEC': 'Healthcare', 'WFC': 'WPP Flex Cards', '401': '401K'},    
+    benefitMap: {
+        'SIT': 'Sick Time',
+        'PRT': 'Personal Time',
+        'VCT': 'Vacation Time',
+        'HEC': 'Healthcare',
+        'WFC': 'WPP Flex Cards',
+//        '401': '401K'
+    },    
     'company_code': "TRT",
     employee_dispatch_responses : {
         '1': 'Interested',
@@ -44,7 +51,7 @@ ontime_data = {
         {id: 'patienttimesheet', label: "Patient Time Sheet"},
         {id: 'workedhours', label: "Worked Hours"},
         {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
-        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
+//        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
         {id: 'ptoreport', label: "Employee PTO Report"},
         {id: 'wppreport', label: "Employee WPP Report"},
