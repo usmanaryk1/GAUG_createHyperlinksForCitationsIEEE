@@ -74,6 +74,9 @@
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a ng-if="payrollSession.criteriaSelected" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                             </div>
+                            <div class="pull-right" ng-if="payrollSession.processdMode">
+                                <a ng-href="{{serverPath+'payrolls/sessions/'+payrollSession.processedSessionObj.id+'/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Print</a>
+                            </div>
                         </div>
                     </form>
                 </div>
