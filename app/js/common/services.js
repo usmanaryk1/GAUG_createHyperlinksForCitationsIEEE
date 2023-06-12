@@ -200,6 +200,7 @@ angular.module('xenon.services', []).
                 var users = this.addItem('Users', '/admin', 'linecons-user', 'CREATE_USER,EDIT_USER,VIEW_USER');
                 var worksite = this.addItem('Worksites', '/admin', 'fa-building', 'CREATE_WORKSITE,EDIT_WORKSITE,VIEW_WORKSITE');
                 var benefits = this.addItem('Benefits', '/admin', 'fa-usd', 'CREATE_BENEFIT,EDIT_BENEFIT,VIEW_BENEFIT');
+                var roles = this.addItem('Roles', '/admin/role-list', 'fa-tasks', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
                 var languages = this.addItem('Languages', './admin/language-list', 'fa-language', 'UPDATE_LANGUAGE, VIEW_LANGUAGE');
