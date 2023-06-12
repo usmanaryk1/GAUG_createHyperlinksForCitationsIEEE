@@ -73,7 +73,15 @@
         //If changed then it should be valid
         //function to navigate to different tab by state
         function navigateToTab(event, state) {
-            // Don't propogate the event to the document
+// Don't propogate the event to the document
+            if ($rootScope.isFormDirty === true) {
+                if (!confirm("You've made changes on this page which aren't saved. If you leave you will lose these changes.\n\nAre you sure you want to leave this page?")) {
+                    event.stopPropagation(); // W3C model
+                    return;
+                } else {
+                    $rootScope.isFormDirty = false;
+                }
+            }
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
