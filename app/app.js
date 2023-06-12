@@ -224,9 +224,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             deferred.resolve();
         } else {
             $timeout(function () {
-                UserDAO.getUserFeatures({subAction: getCookie("un")}).then(function (res) {
-                    if (res.data != null) {
-                        $rootScope.currentUser.allowedFeature = res.data.split(",");
+                UserDAO.getUserFeatures().then(function (featureList) {
+                    $rootScope.currentUser.allowedFeature = [];
+                    if (featureList != null) {
+                        for (var i = 0; i < featureList.length; i++) {
+                            $rootScope.currentUser.allowedFeature.push(featureList[i].label)
+                        }
                     }
                     deferred.resolve();
                 });
