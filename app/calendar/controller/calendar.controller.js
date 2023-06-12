@@ -575,9 +575,9 @@
                 };
 
                 $rootScope.employeePopup.types = {
-                    'Sick': 'SIT',
-                    'Personal Day': 'PRT',
-                    'Vacation': 'VCT'
+                    'SICK': 'SIT',
+                    'PSNL': 'PRT',
+                    'VCTN': 'VCT'
                 };
 
                 $rootScope.employeePopup.validateDetails = function () {
