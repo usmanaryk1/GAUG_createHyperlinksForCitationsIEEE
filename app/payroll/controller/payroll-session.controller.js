@@ -72,9 +72,9 @@
 
             $timeout(function() {
                 ctrl.payrollSessions = payrollSessions;
-                $timeout(function() {
-                    $("#example-1").wrap("<div class='table-responsive'></div>");
-                }, 50);
+//                $timeout(function() {
+//                    $("#example-1").wrap("<div class='table-responsive'></div>");
+//                }, 50);
 
             });
         };
