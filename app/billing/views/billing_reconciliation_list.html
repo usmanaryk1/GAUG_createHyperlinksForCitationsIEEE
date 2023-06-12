@@ -1,0 +1,51 @@
+<!--<div class="page-body"> 
+
+    <div> 
+        PAGE TITLE START 
+        <div class="page-title">
+            <div class="title-env">
+                <h1 class="title">View Billing Reconciliations</h1>
+                <p class="description">View Billing Reconciliation Information</p>
+            </div>
+        </div>-->
+        <div ng-include="'app/billing/views/billing_reconciliation.html'"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">     
+                        <div class="border0 table-responsive scroll">
+                            <table id="reconciliations" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="billingReconciliationList.reconciliations.length" datatable-setup datatable-obj="billingReconciliation.datatableObj">
+                                <thead>
+                                    <tr>
+                                        <th nowrap><span class="">Received From</span></th>                                
+                                        <th nowrap><span class="">Received Date</span></th>
+                                        <th nowrap><span class="">Payment Method</span></th>
+                                        <th nowrap><span class="">Payment Amount</span></th>
+                                        <th nowrap class='nosorting'><span class="">Action</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor: pointer" ng-repeat="reconciliation in billingReconciliationList.reconciliations">
+                                        <td>{{reconciliation.receivedFrom}}</td>
+                                        <td>{{reconciliation.receivedDate}}</td>
+                                        <td>{{reconciliation.paymentMethod}}</td>
+                                        <td>{{reconciliation.paymentAmount}}</td>
+                                        <td>
+                                            <div class="center">
+                                                <a class="btn icon-left fa fa-pencil edit_button" href="" tooltip="Edit"><span class="ed_b"></span></a>       
+                                                <a class="btn icon-left fa fa-trash-o delete_button" href="" tooltip="Delete"><span class="ed_b" ></span></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div ng-if="(billingReconciliationList.reconciliations == null || billingReconciliationList.reconciliations.length == 0)">
+                                No billings are available for selected filters.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--    </div>
+</div>-->

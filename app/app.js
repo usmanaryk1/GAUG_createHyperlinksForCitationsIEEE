@@ -1,3 +1,5 @@
+/* global appHelper, state */
+
 'use strict';
 
 var app = angular.module('xenon-app', [
@@ -645,6 +647,49 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'claim_search'),
                 data: {
                     feature: 'VIEW_BILLING_HISTORY'
+                }
+            }).
+            state('app.billing_reconciliation', {
+                url: '/billing_reconciliation',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY'
+                }
+            }).
+            state('app.billing_reconciliation_list', {                
+                url: '/billing_reconciliation/list',
+                controller: 'BillingReconciliationListCtrl as billingReconciliationList',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_list'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY',
+                    title:'View'
+                }
+            }).
+            state('app.billing_reconciliation_new', {                
+                url: '/billing_reconciliation/new',
+                controller: 'BillingReconciliationCtrl as billingReconciliation',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_new'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY',
+                    title:'New'
+                }
+            }).
+            state('app.billing_reconciliation_autoapply', {
+                url: '/billing_reconciliation/autoapply',
+                controller: 'BillingReconciliationCtrl as billingReconciliation',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_autoapply'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY',
+                    title:'Auto-Apply'
+                }
+            }).
+            state('app.billing_reconciliation_credits', {
+                url: '/billing_reconciliation/credits',
+                controller: 'BillingReconciliationCtrl as billingReconciliation',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_credits'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY',
+                    title:'Credits'
                 }
             }).
             state('app.location_lookup', {

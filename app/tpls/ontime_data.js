@@ -1,9 +1,9 @@
 ontime_data = {
-    'weburl': 'http://localhost:8084/webapplication/api/',
-//    'weburl': 'http://demotrt.com:8080/ontime/api/',
+//    'weburl': 'http://localhost:8084/webapplication/api/',
+    'weburl': 'http://localhost:8080/ontime/api/',
     'defaultState': 'login',
     'homepage': 'app.dashboard',
-    'weatherCity':'New York, NY',
+    'weatherCity': 'New York, NY',
     'employeeReasons': [
         {key: "SICK", value: "Sick"},
         {key: "PSNL", value: "Personal Day"},
@@ -27,9 +27,9 @@ ontime_data = {
         'HEC': 'Healthcare',
         'WFC': 'WPP Flex Cards',
 //        '401': '401K'
-    },    
+    },
     'company_code': "TRT",
-    employee_dispatch_responses : {
+    employee_dispatch_responses: {
         '1': 'Interested',
         '0': 'Not Interested',
         '2': 'Not Sure'
@@ -59,7 +59,179 @@ ontime_data = {
         {id: 'lossofhoursreport', label: "Loss Hours"}
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
-    defaultDistance: 5
+    defaultDistance: 5,
+    claims: [
+        {
+            "claimNumber": "T1011",
+            "id": 2941,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1012",
+            "id": 2942,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1013",
+            "id": 2943,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1014",
+            "id": 2944,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1015",
+            "id": 2945,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1016",
+            "id": 2946,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1017",
+            "id": 2947,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1018",
+            "id": 2948,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1019",
+            "id": 2949,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1024",
+            "id": 2924,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1025",
+            "id": 2925,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1026",
+            "id": 2926,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1027",
+            "id": 2927,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        },
+        {
+            "claimNumber": "T1028",
+            "id": 2928,
+            "patientBirthDate": "02/27/2017",
+            "billedDate": "02/27/2017",
+            "dateRange": "02/27/2017-03/04/2017",
+            "patientId": 511,
+            "patientName": "Abutaah, Martha J",
+            "originalBilledAmount": 160,
+            "amountDue": 160
+        }
+    ],
+    reconciliations:[
+        {
+            "id": 2928,
+            "receivedFrom": "North Shore LIJ",
+            "receivedDate": "02/27/2016",
+            "paymentMethod": "Cash",
+            "paymentAmount": 511
+        },
+        {
+            "id": 2928,
+            "receivedFrom": "Senior Health Partner",
+            "receivedDate": "02/27/2017",
+            "paymentMethod": "EFT",
+            "paymentAmount": 511
+        }
+    ]
 };
 
 function arr_diff(a1, a2)
