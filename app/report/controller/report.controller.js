@@ -14,7 +14,6 @@
         }
 
         ctrl.downloadReport = function (format) {
-            alert($('#report_form')[0].checkValidity());
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
                 if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours'
