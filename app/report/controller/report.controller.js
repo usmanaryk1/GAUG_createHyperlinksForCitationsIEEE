@@ -18,7 +18,8 @@
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
                 if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours'
-                        || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
+                        || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
+                        || ctrl.reportType == 'wppreport') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
