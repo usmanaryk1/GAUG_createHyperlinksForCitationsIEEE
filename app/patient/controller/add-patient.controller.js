@@ -171,7 +171,7 @@
                         .then(function (res, status) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
-
+                                ctrl.patient.id = res.id;
                             }
                             if ($rootScope.tabNo === 5) {
                                 $state.go('app.patient-list', {status: "active"});

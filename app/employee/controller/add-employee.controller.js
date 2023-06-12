@@ -278,7 +278,8 @@
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
-                            ctrl.editMode = true;         
+                            ctrl.editMode = true;   
+                            ctrl.employee.id = employeeRes.id;
                             ctrl.employee.employeeBenefitDetails = employeeRes.employeeBenefitDetails;
                             //to set the default data in employee with position 'pc'
                             if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
