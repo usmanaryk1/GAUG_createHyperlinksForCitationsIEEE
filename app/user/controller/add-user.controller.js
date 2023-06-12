@@ -1,5 +1,7 @@
+/* global _ */
+
 (function () {
-    function AddUserCtrl($scope, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, UserDAO) {
+    function AddUserCtrl($scope, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, UserDAO, RoleDAO) {
         var ctrl = this;
         ctrl.staticPosition;
         ctrl.retrivalRunning = true;
@@ -7,14 +9,16 @@
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.user = {};
         ctrl.user.employee = {employeeAttachments: []};
+        ctrl.unauthorisedRoleIds = [];
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.user.employee.otherLanguages);
             });
         };
-        ctrl.getAllRoles = function () {
-            UserDAO.getAllRoles().then(function (res) {
-                ctrl.roles = res;
+        ctrl.getAllRoles = function (callback) {
+            RoleDAO.retrieveAll({}).then(function (res) {
+                ctrl.roleList = res;
+                callback();
             });
         };
         ctrl.bindToExistingChange = function () {
@@ -188,9 +192,10 @@
             userToSave.employee = employeeToSave;
             userToSave.orgCode = ontime_data.company_code;
             delete userToSave.bindToExisting;
-            if (ctrl.user.bindToExisting == 'w') {                
+            if (ctrl.user.bindToExisting == 'w') {
                 userToSave.withoutEmployee = 'y';
             }
+            userToSave.roleIds = _.uniq(_.concat(ctrl.unauthorisedRoleIds ,userToSave.roleIds));                
             UserDAO.update({action: reqParam, data: userToSave})
                     .then(function (employeeRes) {
                         toastr.success("User saved.");
@@ -215,57 +220,60 @@
         //function called on page initialization.
         function pageInit() {
 
-            ctrl.getAllRoles();
-            if (ctrl.editMode) {
+            ctrl.getAllRoles(function () {
+                if (ctrl.editMode) {
 //                $rootScope.maskLoading();
-                UserDAO.get({id: $state.params.id}).then(function (res) {
-                    retrieveEmployeesData();
-                    showLoadingBar({
-                        delay: .5,
-                        pct: 100,
-                        finish: function () {
-                        }
-                    }); // showLoadingBar
-
-                    ctrl.user = res;
-                    if (ctrl.user.employee.profileImage != null && ctrl.user.employee.profileImage != '') {
-                        ctrl.hideLoadingImage = false;
-                    } else {
-                        ctrl.hideLoadingImage = true;
-                    }
-                    $timeout(function () {
-                        $("#sboxit-2").select2("val", ctrl.user.employee.id);
-                    });
-                    if (ctrl.user.employee.languageSpoken != null) {
-                        var languages = ctrl.user.employee.languageSpoken;
-                        angular.forEach(ctrl.languagesKeyValue, function (obj) {
-                            if (languages.indexOf(obj.key) >= 0) {
-                                obj.value = true;
+                    UserDAO.get({id: $state.params.id}).then(function (res) {
+                        retrieveEmployeesData();
+                        showLoadingBar({
+                            delay: .5,
+                            pct: 100,
+                            finish: function () {
                             }
-                        });
-                    }
-                    if (ctrl.user.employee.otherLanguages != null && ctrl.user.employee.otherLanguages != '') {
-                        ctrl.otherLanguageCheckbox = true;
-                        ctrl.refreshLanguages();
-                    }
-                    ctrl.retrivalRunning = false;
-                }).catch(function (data, status) {
-                    toastr.error("Failed to retrieve user.");
-                    ctrl.retrivalRunning = false;
-                    console.log(JSON.stringify(ctrl.user.employee))
-                }).then(function () {
-                    setTimeout(function () {
-                        //Reset dirty status of form
-                        if ($.fn.dirtyForms) {
-                            $('form').dirtyForms('setClean');
-                            $('.dirty').removeClass('dirty');
+                        }); // showLoadingBar
+
+                        ctrl.user = res;
+                        if($rootScope.currentUser && $rootScope.currentUser.allowedRoleIds)
+                            ctrl.unauthorisedRoleIds = _.difference(ctrl.user.roleIds, _.map($rootScope.currentUser.allowedRoleIds, 'id'));
+                        if (ctrl.user.employee.profileImage != null && ctrl.user.employee.profileImage != '') {
+                            ctrl.hideLoadingImage = false;
+                        } else {
+                            ctrl.hideLoadingImage = true;
                         }
-                    }, 100);
-                });
-            } else {
-                retrieveEmployeesData();
-                ctrl.retrivalRunning = false;
-            }
+                        $timeout(function () {
+                            $("#sboxit-2").select2("val", ctrl.user.employee.id);
+                        });
+                        if (ctrl.user.employee.languageSpoken != null) {
+                            var languages = ctrl.user.employee.languageSpoken;
+                            angular.forEach(ctrl.languagesKeyValue, function (obj) {
+                                if (languages.indexOf(obj.key) >= 0) {
+                                    obj.value = true;
+                                }
+                            });
+                        }
+                        if (ctrl.user.employee.otherLanguages != null && ctrl.user.employee.otherLanguages != '') {
+                            ctrl.otherLanguageCheckbox = true;
+                            ctrl.refreshLanguages();
+                        }
+                        ctrl.retrivalRunning = false;
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to retrieve user.");
+                        ctrl.retrivalRunning = false;
+                        console.log(JSON.stringify(ctrl.user.employee))
+                    }).then(function () {
+                        setTimeout(function () {
+                            //Reset dirty status of form
+                            if ($.fn.dirtyForms) {
+                                $('form').dirtyForms('setClean');
+                                $('.dirty').removeClass('dirty');
+                            }
+                        }, 100);
+                    });
+                } else {
+                    retrieveEmployeesData();
+                    ctrl.retrivalRunning = false;
+                }
+            });
         }
         ;
 
@@ -431,7 +439,7 @@
                     if (ctrl.user.employee.id != null) {
                         $("#sboxit-2").select2("val", ctrl.user.employee.id);
                     }
-                },500);
+                }, 500);
                 $rootScope.unmaskLoading();
             }).catch(function (data, status) {
                 $rootScope.unmaskLoading();
@@ -441,5 +449,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('AddUserCtrl', ["$scope", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "UserDAO", AddUserCtrl]);
+    angular.module('xenon.controllers').controller('AddUserCtrl', ["$scope", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "UserDAO", "RoleDAO", AddUserCtrl]);
 })();
