@@ -86,7 +86,7 @@
                                     <td>{{history.dateInserted|date :dateFormat}}</td>
                                     <td> ${{history.grossPay}}</td>
                                     <td>{{history.totalEmployees}}</td>
-                                    <td>{{history.totalHours}}</td>
+                                    <td>{{history.totalHours|number:2}}</td>
                                     <td>{{history.sessionStartDate|date :dateFormat}} - {{history.sessionEndDate|date :dateFormat}}</td>
                                 </tr>
                             </tbody>
