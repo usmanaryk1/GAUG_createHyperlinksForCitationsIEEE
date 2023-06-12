@@ -1,3 +1,5 @@
+/* global appData */
+
 function loginCtrlr($scope, $rootScope, $http, $state, Page) {
     $rootScope.stopIdle();
     $scope.username = "";
@@ -60,8 +62,8 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                                 if (appData.authResult.allowedFeature != null) {
                                     $rootScope.currentUser.allowedFeature = appData.authResult.allowedFeature.split(",");
                                 }
-                                if (appData.authResult.allowedRoleIds != null) {
-                                    $rootScope.currentUser.allowedRoleIds = appData.authResult.allowedRoleIds.split(",");
+                                if (appData.authResult.roleIds != null) {
+                                    $rootScope.currentUser.roleIds = appData.authResult.roleIds.split(",");
                                 }
                             }
 //                            window.location.hash = '#/app/dashboard';

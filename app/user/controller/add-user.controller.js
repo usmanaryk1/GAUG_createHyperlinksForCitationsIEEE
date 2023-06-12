@@ -233,8 +233,8 @@
                         }); // showLoadingBar
 
                         ctrl.user = res;
-                        if($rootScope.currentUser && $rootScope.currentUser.allowedRoleIds)
-                            ctrl.unauthorisedRoleIds = _.difference(ctrl.user.roleIds, _.map($rootScope.currentUser.allowedRoleIds, 'id'));
+                        if($rootScope.currentUser && $rootScope.currentUser.roleIds)
+                            ctrl.unauthorisedRoleIds = _.difference(ctrl.user.roleIds, $rootScope.currentUser.roleIds);
                         if (ctrl.user.employee.profileImage != null && ctrl.user.employee.profileImage != '') {
                             ctrl.hideLoadingImage = false;
                         } else {
