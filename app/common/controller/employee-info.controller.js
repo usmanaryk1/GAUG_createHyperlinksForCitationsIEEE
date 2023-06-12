@@ -13,7 +13,11 @@
             }
             $rootScope.unmaskLoading();
         });
-
+        
+        EmployeeDAO.getNotes({employeeId: employeeId}).then(function (res) {
+            ctrl.notes = angular.copy(res);
+        });
+        
         ctrl.close = function () {
             $modalInstance.close();
         };

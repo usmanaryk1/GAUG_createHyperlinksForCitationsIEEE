@@ -62,9 +62,19 @@
                     action: 'selectexceptruser'
                 }
             },
+            addNotes: {
+                method: 'POST',
+                params: {
+                    subAction: 'note'
+                }
+            },
+            getNotes: {
+                method: 'GET',
+                isArray: true
+            },
             getTimeAvailability: {
                 method: 'GET'
-             }
+            }
         });
         return {
             retrieveAll: function (filter) {
@@ -90,6 +100,12 @@
             },
             delete: function (data) {
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
+            },
+            addNotes: function (data) {
+                return api.addNotes({action: data.employeeId}, data.note).$promise;
+            },
+            getNotes: function (params) {
+                return api.getNotes({action: params.employeeId,subAction: 'notes'}).$promise;
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, terminationDate: data.terminationDate}).$promise;

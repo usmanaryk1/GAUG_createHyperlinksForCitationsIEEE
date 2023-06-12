@@ -64,8 +64,12 @@
                 ctrl.fileObj.errorMsg = "Please upload Contract File.";
             }
             if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile != null) {
+                if(ctrl.insurerObj.mdol !== 'MD Online'){
+                    delete ctrl.insurerObj.mdolAccountNumber;
+                }
+                
                 var insurerToSave = angular.copy(ctrl.insurerObj);
-                var reqParam;
+                var reqParam;                
                 if (ctrl.insurerObj.id && ctrl.insurerObj.id !== null) {
                     reqParam = 'update';
                     var length = ctrl.insurerObj.insuranceCareTypeCollection.length;

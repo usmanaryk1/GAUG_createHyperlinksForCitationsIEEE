@@ -230,21 +230,24 @@
             };
 
         };
-
-        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
+        
+        ctrl.openEditModal = function (employeeId, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.selectEmployeeModel = $modal.open({
-                templateUrl: modal_id,
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+                keyboard: false,
+                controller: 'EmployeeInfoCtrl as employeeinfo',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId;
+                    }
+                }
             });
-            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
-            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
-            $rootScope.selectEmployeeModel.employee = employee;
-            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
-                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
-            }
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
         };
 
         ctrl.openUTModal = function (timesheet, modal_id, modal_size, modal_backdrop)
