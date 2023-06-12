@@ -73,16 +73,20 @@
                                 <button type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a ng-if="payrollSession.criteriaSelected" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
+                                    Reset Filters
+                                </button>
+
                             </div>
                             <div class="pull-right" ng-if="payrollSession.processdMode">
-                                <a ng-href="{{serverPath+'payrolls/sessions/'+payrollSession.processedSessionObj.id+'/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Print</a>
+                                <a ng-href="{{serverPath + 'payrolls/sessions/' + payrollSession.processedSessionObj.id + '/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Print</a>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="panel-body pad_top0">
                     <div>
-                        <div class="table-responsive border0 search_hide">
+                        <div class="border0 search_hide">
                             <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="payrollSession.payrollSessions.length" datatable-setup datatable-obj="payrollSession.datatableObj">
                                 <thead>
                                     <tr>

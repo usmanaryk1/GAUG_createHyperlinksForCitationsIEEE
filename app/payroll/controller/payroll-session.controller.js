@@ -5,11 +5,23 @@
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
+        ctrl.resetFilters = function() {
+            ctrl.searchParams.fromDate = null;
+            ctrl.searchParams.toDate = null;
+            ctrl.payrollSessions = [];
+            ctrl.criteriaSelected = false;
+            ctrl.rerenderDataTable();
+            ctrl.processClicked = false;
+        };
         ctrl.processSessions = function() {
             ctrl.processClicked = true;
             if (ctrl.payrollSessions != null && ctrl.payrollSessions.length > 0) {
                 $rootScope.maskLoading();
+                angular.forEach(ctrl.payrollSessions, function(session) {
+                    session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
+                });
                 PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function(res) {
+                    window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
                     console.log(res);
                     $state.go('app.batch_session', {id: res.id});
                 }).catch(function(e) {
@@ -45,13 +57,13 @@
                 PayrollDAO.reviewSessions(ctrl.searchParams).then(function(res) {
                     ctrl.dataRetrieved = true;
                     ctrl.payrollSessions = res;
-//                    ctrl.payrollSessions = ontimetest.payrollSessions;
                     angular.forEach(ctrl.payrollSessions, function(payrollObj) {
                         ctrl.setRates('vacation', 'vaccationRate', payrollObj);
                         ctrl.setRates('sick', 'sickRate', payrollObj);
                         ctrl.setRates('personal', 'personalRate', payrollObj);
                         payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
                     });
+                    ctrl.rerenderDataTable();
                 }).catch(function(e) {
                     toastr.error("Payroll sessions cannot be retrieved.");
                 }).then(function() {
@@ -72,9 +84,9 @@
 
             $timeout(function() {
                 ctrl.payrollSessions = payrollSessions;
-//                $timeout(function() {
-//                    $("#example-1").wrap("<div class='table-responsive'></div>");
-//                }, 50);
+                $timeout(function() {
+                    $("#example-1").wrap("<div class='table-responsive'></div>");
+                }, 50);
 
             });
         };
@@ -128,22 +140,22 @@
             if (value == null) {
                 return 0;
             } else {
-                return value;
+                return Number(value);
             }
         };
         ctrl.setRates = function(rateKey, rateType, payrollObj) {
             if (ctrl.payrollSettings[rateType] == 'R1') {
-                payrollObj[rateKey] = payrollObj.rate1;
+                payrollObj[rateKey + 'Rate'] = payrollObj.rate1;
             }
             if (ctrl.payrollSettings[rateType] == 'R2') {
-                payrollObj[rateKey] = payrollObj.rate2;
+                payrollObj[rateKey + 'Rate'] = payrollObj.rate2;
             }
         };
         ctrl.setGrossPay = function(payrollObj) {
             payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
         };
         ctrl.calculateGrossPay = function(payrollObj) {
-            var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * 1.5) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * 1.5) + checkNull(payrollObj.earnings1099) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.rate1)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.rate1)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.rate1)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction);
+            var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * 1.5) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * 1.5) + checkNull(payrollObj.earnings1099) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction);
             return grossPay;
         };
 
@@ -192,6 +204,7 @@
                 }
                 ctrl.employeeModalObj.manuallyAdded = true;
                 ctrl.payrollSessions.push(ctrl.employeeModalObj);
+                console.log(JSON.stringify(ctrl.payrollSessions));
                 ctrl.rerenderDataTable();
                 $('#modal-7').modal('hide');
             }
@@ -241,7 +254,6 @@
             });
         };
         ctrl.initSessions();
-//        alert(ctrl.calculateGrossPay(ontimetest.payrollSessions[0]));
 
     }
     ;
