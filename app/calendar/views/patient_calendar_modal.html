@@ -5,7 +5,7 @@
         <h4 class="modal-title">
             <!--Display dispatch button for open cases-->
             <i ng-if="hasAccess('SEARCH_EMPLOYEE') && patientPopup.isOpenCase && patientPopup.data.dispatchStatus == 'active' && patientPopup.data.dispatchId != null" ui-sref="app.dispatch-info({id:patientPopup.data.dispatchId})" tooltip="Go To Dispatch" class="fa fa-wifi pull-right pointer" style='margin-top:20px;margin-right:-12px'></i>
-            <button ng-if="hasAccess('SEARCH_EMPLOYEE') && !patientPopup.isPastEvent && patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
+            <button ng-if="hasAccess('SEARCH_EMPLOYEE') && !patientPopup.data.isPastEvent && patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
             <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
             <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
         </h4>
@@ -65,7 +65,14 @@
                         <select class="form-control" id="care" name="care" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.companyCareTypeId" ng-options="care.id as care.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()" data-validate="required" data-message-required="Please select care." ng-required="patientPopup.data.eventType == 'S'">
                             <option value="">Select the care</option>
                         </select>
-                    </div>
+                    </div>                    
+                    <span class="text-warning col-sm-push-2 col-sm-10"
+                          ng-if="patientPopup.data.scheduleId && 
+                                      patientPopup.data.companyCareTypeId && 
+                                      patientPopup.careTypes && 
+                                     !patientPopup.isCareTypeExists(patientPopup.data.companyCareTypeId,patientPopup.careTypes)">
+                        This care type has been removed.
+                    </span>
                 </div>
 
                 <div class="form-group-separator"></div>
@@ -138,7 +145,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"></label>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
 
                         <div class="form-block">
                             <label class="no-padding-left checkbox" style="padding-top:0px;">
@@ -147,7 +154,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-block">
                             <label class="checkbox" style="padding-top:0px;">
                                 <input type="checkbox" class="cbr" id="donotbill" name="donotbill" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.doNotBill">
@@ -155,6 +162,17 @@
                             </label>
                         </div>
                     </div>
+                    <div class="col-sm-2" style="padding-right:0;" ng-if="patientPopup.data.scheduleId">
+                        <label class="no-padding-left checkbox" >
+                            <input type="checkbox" class="cbr" id="loss" name="loss" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.isLoss">
+                            Loss Of Hours
+                        </label>
+                    </div>
+                    <div class="col-sm-2" style="margin-top:0px;" ng-show="patientPopup.data.isLoss" ng-if="patientPopup.data.scheduleId">
+                        <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  
+                               ng-model="patientPopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." 
+                               ng-required="patientPopup.data.eventType == 'S' && patientPopup.data.isLoss">
+                    </div>     
                 </div>
 
                 <div class="form-group-separator"></div>
@@ -208,13 +226,13 @@
                             Single
                         </label>
                     </div>
-                    <div class="col-sm-3" ng-if="!patientPopup.data.isEdited1">
+                    <div class="col-sm-3" ng-if="!patientPopup.data.isPastEvent">
                         <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
                             <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="DOW">
                             Day Of Week
                         </label>
                     </div>
-                    <div class="col-sm-3" ng-if="!patientPopup.data.isEdited1">
+                    <div class="col-sm-3" ng-if="!patientPopup.data.isPastEvent">
                         <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
                             <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SEQ">
                             Sequence
@@ -223,9 +241,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openPasswordModal('delete')">Delete</button>
+                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openEventModal('delete')">Delete</button>
                 <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
-                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openPasswordModal('edit');">Save changes</button>
+                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openEventModal('edit');">Save changes</button>
             </div>
         </form>
     </div>
@@ -332,9 +350,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openPasswordModal('delete')">Delete</button>
+                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openEventModal('delete')">Delete</button>
                 <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
-                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openPasswordModal('edit');">Save changes</button>
+                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openEventModal('edit');">Save changes</button>
             </div>
         </form>
     </div>

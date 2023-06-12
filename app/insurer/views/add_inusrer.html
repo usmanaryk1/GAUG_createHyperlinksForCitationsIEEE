@@ -368,7 +368,7 @@
                                         });
                                     });
                                 </script>
-                                <select class="form-control" ng-model='addInsurer.selectedCareTypes' ng-options="careType.id as careType.careTypeTitle for careType in addInsurer.careTypeList"  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type." ng-change="addInsurer.displayCareTypeModal = true">
+                                <select class="form-control" ng-model='addInsurer.selectedCareTypes' ng-options="careType.id as careType.careTypeTitle for careType in addInsurer.careTypeList| orderBy:'careTypeTitle'"  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type." ng-change="addInsurer.displayCareTypeModal = true">
                                     <!--                                    <option value="1" >
                                                                             Personal Care HHA Hourly       
                                                                         </option>

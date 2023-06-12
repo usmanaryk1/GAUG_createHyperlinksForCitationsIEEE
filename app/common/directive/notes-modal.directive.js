@@ -1,32 +1,48 @@
 /* global _, appHelper */
 
-angular.module('xenon.directives').directive('notesDirective', function ($compile, $rootScope, EmployeeDAO) {
+angular.module('xenon.directives').directive('notesDirective', function ($compile, $rootScope, EmployeeDAO, PatientDAO) {
     return {
         restrict: 'E',
         scope: {
             defaultTemplate: "=?",
-            employeeId: "=?",
+            userId: "=?",
             hasCreate: "=?",
             hasRetrieve: "=?",
             canDelete: "=?",
-            canEdit: "=?"
+            canEdit: "=?",
+            type:'=?',
+            readNotes:'=?'
         },
         link: function (scope) {
-
+            var FeatureDAO;
+            if (scope.type === 'patient') {
+                FeatureDAO = PatientDAO;
+            } else {
+                FeatureDAO = EmployeeDAO;
+            }
+            
+            function readNotes() {
+                FeatureDAO.readNotes({userId: scope.userId}).then(function (res) {
+                  console.log("read documents",res);
+                });
+            }
+            
             function initData() {
                 scope.notes = [];
                 scope.allLoaded = false;
                 scope.data = {note: ""};
-                scope.searchParams = {employeeId: scope.employeeId, pageNo: 1, limit: 10, action: scope.employeeId, subAction: 'notes'};
+                scope.searchParams = {userId: scope.userId, pageNo: 1, limit: 10, action: scope.userId, subAction: 'notes'};
                 if (scope.hasRetrieve) {
                     scope.rerenderDataTable();
+                    if(scope.readNotes)
+                        readNotes();
                 } else {
                     $rootScope.unmaskLoading();
                 }
             }
 
             scope.rerenderDataTable = function () {
-                EmployeeDAO.getNotes(scope.searchParams).then(function (res) {
+                FeatureDAO.getNotes(scope.searchParams).then(function (res) {
                     if (res.length < scope.searchParams.limit)
                         scope.allLoaded = true;
                     scope.loading = false;
@@ -41,15 +57,18 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                             scope.hasScroll = $('#my_div1').hasScrollBar();
                         });
                     }, 0);
+                }).catch(function (data, status) {
+                    toastr.error("Note cannot be retrieved.");
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             };
 
             scope.addNote = function () {
-                if ($('#EmployeeNotesData')[0].checkValidity()) {
+                if ($('#NotesData')[0].checkValidity()) {
                     $rootScope.maskLoading();
-                    EmployeeDAO.addNotes(
-                            {employeeId: scope.employeeId,
+                    FeatureDAO.addNotes(
+                            {userId: scope.userId,
                                 note: {note: scope.data.note}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
@@ -65,10 +84,10 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
             };
 
             scope.saveNote = function () {
-                if ($('#EmployeeNotesData')[0].checkValidity()) {
+                if ($('#NotesData')[0].checkValidity()) {
                     $rootScope.maskLoading();
-                    EmployeeDAO.updateNotes(
-                            {employeeId: scope.employeeId,
+                    FeatureDAO.updateNotes(
+                            {userId: scope.userId,
                                 noteId: scope.data.id,
                                 note: {note: scope.data.note}}).then(function (res) {
                         if (scope.hasRetrieve)
@@ -86,8 +105,8 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
 
             scope.deleteNote = function (noteId) {
                 $rootScope.maskLoading();
-                EmployeeDAO.deleteNotes(
-                        {employeeId: scope.employeeId,
+                FeatureDAO.deleteNotes(
+                        {userId: scope.userId,
                             noteId: noteId}).then(function (res) {
                     if (scope.hasRetrieve)
                         initData();

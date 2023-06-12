@@ -78,8 +78,33 @@
             updateNotes: {
                 method: 'PUT'
             },
-            deleteNotes:{
+            deleteNotes: {
                 method: 'DELETE'
+            },
+            getOffset: {
+                method: 'GET'
+            },
+            setOffset: {
+                method: 'POST',
+                params: {
+                    subAction: 'offset'
+                }
+            },
+            retrieveSettings: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'offset'
+                }
+            },
+            saveSettings: {
+                method: 'POST',
+                params: {
+                    action: 'offset'
+                }
+            },
+            readNotes: {
+                method: 'PUT'
             }
         });
         return {
@@ -108,15 +133,17 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             addNotes: function (data) {
-                return api.addNotes({action: data.employeeId}, data.note).$promise;
+                return api.addNotes({action: data.userId}, data.note).$promise;
             },
             updateNotes: function (data) {
-                return api.updateNotes({action: data.employeeId, subAction: 'notes',subAction1:data.noteId}, data.note).$promise;
+                return api.updateNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, data.note).$promise;
             },
             deleteNotes: function (data) {
-                return api.deleteNotes({action: data.employeeId, subAction: 'notes',subAction1:data.noteId}, {}).$promise;
+                return api.deleteNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;
             },
             getNotes: function (params) {
+                params.employeeId = params.userId;
+                delete params.userId;
                 return api.getNotes(params).$promise;
             },
             changestatus: function (data) {
@@ -133,6 +160,21 @@
             },
             getTimeAvailability: function (params) {
                 return api.getTimeAvailability({action: params.employeeId, subAction: 'timeavailability'}).$promise;
+            },
+            getOffset: function (params) {
+                return api.getOffset({action: params.id, subAction: 'offset'}).$promise;
+            },
+            setOffset: function (data) {
+                return api.setOffset({action: data.id}, data.offsets).$promise;
+            },
+            retrieveSettings: function (filter) {
+                return api.retrieveSettings(filter).$promise;
+            },
+            saveSettings: function (data) {
+                return api.saveSettings(data).$promise;
+            },
+            readNotes: function (params) {
+                return api.readNotes({action: params.userId, subAction: 'notes', subAction1: 'read'},{}).$promise;
             }
         };
     };

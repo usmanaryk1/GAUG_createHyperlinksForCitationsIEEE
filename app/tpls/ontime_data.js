@@ -7,14 +7,18 @@ ontime_data = {
     'employeeReasons': [
         {key: "SICK", value: "Sick"},
         {key: "PSNL", value: "Personal Day"},
-        {key: "VCTN", value: "Vacation"}
+        {key: "VCTN", value: "Vacation"},
+        {key: "HOLI", value: "Holiday"},
+        {key: "BERV", value: "Bereavement"},
+        {key: "JUDU", value: "Jury Duty"}
     ],
     'patientReasons': [
         {key: "HPTL", value: "Hospitalization"},
         {key: "VCTN", value: "Vacation"},
         {key: "INCW", value: "Inclement weather"},
         {key: "NOSP", value: "No Service As Per Patient"},
-        {key: "NOSC", value: "No Service - Coverage"}
+        {key: "NOSC", value: "No Service - Coverage"},
+        {key: "USPC", value: "Unspecified"}
     ],
     'recurranceTypes': {D: "Daily", W: "Weekly", N: "No Repeat"},
     'eventTypes': {S: "Schedule", A: "Available", U: "Unavailable"},
@@ -46,17 +50,19 @@ ontime_data = {
     amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/ontimepatientsign/",
     reportTypes: [
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
+        {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
+//        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
+        {id: 'employeeothours', label: "Employee OT Hours Report"},
+        {id: 'ptoreport', label: "Employee PTO Report"},
         {id: 'employeetimesheet', label: "Employee Time Sheet"},
+        {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
+        {id: 'wppreport', label: "Employee WPP Report"},
+        {id: 'workedhours', label: "Worked Hours"},
+        {id: 'notesreport', label: "Employee/Patient Notes"},
+        {id: 'lossofhoursreport', label: "Loss Hours"},
         {id: 'patientcensus', label: "Patient Census"},
         {id: 'patienttimesheet', label: "Patient Time Sheet"},
-        {id: 'workedhours', label: "Worked Hours"},
-        {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
-//        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
-        {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
-        {id: 'ptoreport', label: "Employee PTO Report"},
-        {id: 'wppreport', label: "Employee WPP Report"},
-        {id: 'loginactivityreport', label: "Login Activity Report"},
-        {id: 'lossofhoursreport', label: "Loss Hours"}
+        {id: 'workedhours', label: "Worked Hours"}
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
     defaultDistance: 5,

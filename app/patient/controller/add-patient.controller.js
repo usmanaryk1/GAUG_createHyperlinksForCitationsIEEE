@@ -1,3 +1,5 @@
+/* global _ */
+
 (function () {
     function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO, Page, $modal) {
         var ctrl = this;
@@ -7,6 +9,7 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
+        ctrl.aideSkills = {};
         ctrl.nextTab;
 //        ctrl.fileObj = {};
 //        ctrl.formDirty = false;
@@ -24,12 +27,15 @@
         ctrl.staffCoordinatorList = [];
         ctrl.insuranceProviderList = [];
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
+            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_PATIENT') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             Page.setTitle("Update Patient");
             ctrl.editMode = true;
         } else if ($state.current.name.indexOf('tab1') > -1) {
+            if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_PATIENT') === -1) {
+                $state.transitionTo(ontime_data.defaultState);
+            }
             Page.setTitle("Add Patient");
             ctrl.editMode = false;
         } else {
@@ -45,6 +51,21 @@
             ctrl.staffCoordinatorList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");
+        });
+        PatientDAO.retrieveEnumType({'type': 'transportationAssistance'}).then(function (res) {
+            ctrl.transportationAssistanceLevels = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve transportation assistance levels.");
+        });
+        PatientDAO.retrieveEnumType({'type': 'priorityCodes'}).then(function (res) {
+            ctrl.priorityCodes = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve priority codes.");
+        });
+        PatientDAO.retrieveEnumType({'type': 'aideSkills'}).then(function (res) {
+            ctrl.capacitiesKeyValue = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve aide skill capacities.");
         });
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
@@ -63,7 +84,7 @@
         ctrl.setBillingAddress = setBillingAddress;
         ctrl.setBillingAddressRadioButton = setBillingAddressRadioButton;
         ctrl.resetPatient = function () {
-            $rootScope.isFormDirty = false;            
+            $rootScope.isFormDirty = false;
         };
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
@@ -73,7 +94,15 @@
         //If changed then it should be valid
         //function to navigate to different tab by state
         function navigateToTab(event, state) {
-            // Don't propogate the event to the document
+// Don't propogate the event to the document
+            if ($rootScope.isFormDirty === true) {
+                if (!confirm("You've made changes on this page which aren't saved. If you leave you will lose these changes.\n\nAre you sure you want to leave this page?")) {
+                    event.stopPropagation(); // W3C model
+                    return;
+                } else {
+                    $rootScope.isFormDirty = false;
+                }
+            }
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
@@ -109,6 +138,14 @@
                     }
                 });
                 patientToSave.languagesSpoken = patientToSave.languagesSpoken.toString();
+                
+                patientToSave.aideSkills = [];
+                angular.forEach(ctrl.aideSkills, function (value,key) {
+                    if (value === true) {
+                        patientToSave.aideSkills.push(key);
+                    }
+                });
+                patientToSave.aideSkills = patientToSave.aideSkills.toString();
 
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
@@ -163,7 +200,7 @@
                         .then(function (res, status) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
-
+                                ctrl.patient.id = res.id;
                             }
                             if ($rootScope.tabNo === 5) {
                                 $state.go('app.patient-list', {status: "active"});
@@ -236,6 +273,15 @@
                             }
                         });
                     }
+                    
+                    if (res.aideSkills != null) {
+                        var aideSkills = res.aideSkills.split(',');
+                        angular.forEach(aideSkills, function (skillId) {
+                            ctrl.aideSkills[skillId] = true;
+                        });
+                    }
+                    
+                    
                     if (ctrl.patient.otherLanguages != null && ctrl.patient.otherLanguages != '') {
                         ctrl.otherLanguageCheckbox = true;
                         ctrl.refreshLanguages();
@@ -299,6 +345,9 @@
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
                     if (!ctrl.patient.gender) {
                         ctrl.patient.gender = 'M';
+                    }
+                    if (!ctrl.patient.secondaryContactType) {
+                        ctrl.patient.secondaryContactType = 'P';
                     }
                     $formService.resetRadios();
                     form_data = $('#add_patient_form').serialize();
@@ -579,14 +628,14 @@
             };
 
         };
-        
+
         $scope.$watch(function () {
             return ctrl.authorizationDocuments;
         }, function (newValue, oldValue) {
-            if(newValue && oldValue){                
+            if (newValue && oldValue) {
                 $rootScope.isFormDirty = true;
             }
-        },true);
+        }, true);
         $scope.addCareType = function () {
             $rootScope.careTypeModel = {};
             $rootScope.careTypeModel.careTypeObj = {};
@@ -609,7 +658,7 @@
 
         $scope.$watch(function () {
             return ctrl.careTypes;
-        }, function (newValue, oldValue) {            
+        }, function (newValue, oldValue) {
             $timeout(function () {
                 $("#CareTypes").multiSelect('refresh');
             });
@@ -645,6 +694,7 @@
                     ctrl.selecteModalOpen = false;
                 }
             }
+            ctrl.getWarnings();
         }, true);
 
         // Open Authorization Document upload Modal
@@ -761,7 +811,7 @@
                             $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
                         } else if ($scope.careObj.expiryDate == $scope.careObj.previousExpiryDate) {
                             $scope.careObj.changeSchedule = false;
-                        } 
+                        }
                     };
 
 //                    $scope.isValidCareType = function () {
@@ -1173,11 +1223,26 @@
         ctrl.existingSchedule = undefined;
         if ($state.params.id != '') {
             PatientDAO.checkSchedule({patientId: $state.params.id})
-                    .then(function (res) {
-                        if (res && res.data)
-                            ctrl.existingSchedule = JSON.parse(res.data);
-                    });
+                .then(function (res) {
+                    if (res && res.data) {
+                        var checkSchedule = JSON.parse(res.data);
+                        ctrl.existingSchedule = checkSchedule.careTypeScheduleCheckMap;
+                        ctrl.scheduleAssociation = checkSchedule.careTypeScheduleAssociationMap;
+                    }
+                });
         }
+        
+        ctrl.getWarnings = function(){
+            if (ctrl.scheduleAssociation && _.isObject(ctrl.scheduleAssociation) && (_.keys(ctrl.scheduleAssociation).length > 0) && ctrl.careTypeList && (ctrl.careTypeList.length > 0)) {                
+                ctrl.warningList = [];
+                _.each(ctrl.scheduleAssociation, function (value, key) {                    
+                    if (value === true && ctrl.careTypeList[key] && ctrl.careTypes && (ctrl.careTypes.indexOf(ctrl.careTypeList[key].id) === -1)) {                        
+                        ctrl.warningList.push(ctrl.careTypeList[key].companyCaretypeId.careTypeTitle);
+                    }
+                });
+//                console.log("warningList--", ctrl.warningList);
+            }
+        };
 
         ctrl.unbindPatientCondition = function () {
             if (ctrl.patient.patientConditionRelatedTo) {
@@ -1248,28 +1313,6 @@
             $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
             $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
             $formService.resetRadios();
-        };
-
-        ctrl.openPasswordModal = function (index)
-        {
-            var modalInstance = $modal.open({
-                templateUrl: appHelper.viewTemplatePath('common', 'password_modal'),
-                size: 'md',
-                backdrop: 'static',
-                keyboard: false,
-                controller: 'PasswordModalCtrl as passwordModal',
-                resolve: {
-                    password: function () {
-                        return ontime_data.pastEventAuthorizationPassword;
-                    }
-                }
-            });
-            modalInstance.result.then(function (data) {
-                if (data != null) {
-                    ctrl.editAuthorizationDocument(index);
-                }
-            }).catch(function () {
-            });
         };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);

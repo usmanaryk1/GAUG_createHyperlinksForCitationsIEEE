@@ -78,6 +78,7 @@
                             <thead>
                                 <tr>
                                     <th colspan="1" rowspan="1" tabindex="0">Batch No.</th>
+                                    <th colspan="1" rowspan="1" tabindex="0">Group</th>
                                     <th colspan="1" rowspan="1" tabindex="0">Date Processed</th>
                                     <th colspan="1" rowspan="1" tabindex="0">Gross Pay</th>
                                     <th colspan="1" rowspan="1" tabindex="0">Total Employees</th>
@@ -89,6 +90,7 @@
                             <tbody>
                                 <tr ng-repeat="history in payrollHist.historyList" style='cursor:pointer' ng-click='payrollHist.navigateToProcessedPage(history.id)'>
                                     <th><a href="#app/payroll_session/{{history.id}}">{{history.id}}</a></th>
+                                    <td>{{history.payrollGroup}}</td>
                                     <td>{{history.processedOn|date :dateFormat}}</td>
                                     <td> ${{history.grossPay| number:2}}</td>
                                     <td>{{history.totalEmployees}}</td>

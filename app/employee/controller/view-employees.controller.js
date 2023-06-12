@@ -95,7 +95,7 @@
         }
 
         ctrl.retrieveEmployees();
-        ctrl.openEditModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
@@ -105,12 +105,14 @@
                 controller: 'EmployeeInfoCtrl as employeeinfo',
                 resolve: {
                     employeeId: function () {
-                        return employeeId;
+                        return employee.id;
                     }
                 }
             });
-            modalInstance.result.then(function () {
-                console.log("popup closed");
+            modalInstance.result.then(function (calledOnce) {
+                if(calledOnce)
+                    employee.newNotification = false;
+                console.log("popup closed",calledOnce);                
             });
         };
 
@@ -121,7 +123,29 @@
                 size: "lg",
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false,
-                controller: 'EmployeeNotesCtrl as employeeNotes',
+                controller: 'NotesCtrl as notes',
+                resolve: {
+                    userId: function () {
+                        return employeeId;
+                    },
+                    type: function () {
+                        return 'employee';
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+        
+        ctrl.openSettingsModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'employee-settings-modal'),
+                size: 'lg',
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'EmployeeSettingsCtrl as employeeSettings',
                 resolve: {
                     employeeId: function () {
                         return employeeId;
@@ -272,7 +296,7 @@
             
             $rootScope.employeeNotesModel.addNote = function () {
 
-                if ($('#EmployeeNotesData')[0].checkValidity()) {
+                if ($('#NotesData')[0].checkValidity()) {
                     $rootScope.maskLoading();
                     EmployeeDAO.addNotes(
                             {employeeId: employee.id,

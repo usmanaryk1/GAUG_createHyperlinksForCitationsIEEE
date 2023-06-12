@@ -27,8 +27,8 @@
 					<td>
 						<div class="center">
 							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_TASK')" ng-click="viewTask.editPopup(task);" tooltip="Edit"><span class="ed_b"></span></a> 
-							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="task.status == 'a'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="task.status == 'i'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
+							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('UPDATE_TASK') && task.status == 'a'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('UPDATE_TASK') && task.status == 'i'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
 						</div>
 					</td>
 				</tr>

@@ -12,12 +12,15 @@
         ctrl.positionIdMap = {};
         var allPositionIds = [];
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
+            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_WORKSITE') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             Page.setTitle("Update Worksite");
             ctrl.editMode = true;
         } else if ($state.current.name.indexOf('tab1') > -1) {
+            if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_WORKSITE') === -1) {
+                $state.transitionTo(ontime_data.defaultState);
+            }
             Page.setTitle("Add Worksite");
             ctrl.editMode = false;
         } else {
@@ -35,7 +38,7 @@
             ctrl.positions = [];
             $formService.uncheckCheckboxValue('allPositions');
             $("#employeeDropdown").select2("val", null);
-            $timeout(function () {                
+            $timeout(function () {
                 $('#Positions').multiSelect('deselect_all');
             }, 400);
         };

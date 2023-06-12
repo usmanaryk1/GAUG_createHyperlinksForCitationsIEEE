@@ -43,7 +43,7 @@
 
         function retrieveRolesData() {
 
-            RoleDAO.retrieveAll({status:'all',featuresRequired:true}).then(function (res) {
+            RoleDAO.retrieveAll({status:'all',featuresRequired:true}).then(function (roles) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -51,7 +51,10 @@
                     }
                 }); // showLoadingBar
 
-                ctrl.roleList = res;
+                _.each(roles,function(role){
+                    role.featuresArray = role.features ? role.features.split(',') : [];
+                    ctrl.roleList.push(role);
+                });
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve users.");
                 showLoadingBar({
@@ -80,14 +83,13 @@
                 $rootScope.roleModel.title = 'Add New Role';
                 $rootScope.roleModel.role = {};
                 $rootScope.roleModel.role.unauthorisedFeatures = [];
-                $rootScope.roleModel.role.adminAccess = 'false';                
                 $rootScope.roleModel.role.orgCode = ontime_data.company_code;
                 $rootScope.roleModel.role.status = "a";
             } else {
                 $rootScope.roleModel.title = 'Edit Role';
                 delete roleCopy.features;
                 $rootScope.roleModel.role = roleCopy;                
-                if (roleCopy.featureIds == undefined) {
+                if (!roleCopy.featureIds) {
                     $rootScope.roleModel.role.featureIds = [];
                     /* To Prevent From Removing UnAuthorised features*/
                         $rootScope.roleModel.role.unauthorisedFeatures = [];
@@ -120,7 +122,7 @@
 
         function save(role) {
             /* To Prevent From Removing UnAuthorised features*/
-                role.featureIds = _.uniq(_.concat(role.unauthorisedFeatures,role.featureIds));
+                role.featureIds = role.featureIds ? _.uniq(_.concat(role.unauthorisedFeatures,role.featureIds)) : [];
                 delete role.unauthorisedFeatures;
             /* To Prevent From Removing UnAuthorised features*/
             var save; 

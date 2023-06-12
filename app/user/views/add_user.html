@@ -71,15 +71,30 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    Role
+                                    Roles
                                 </label>
-                                <div class="col-sm-9">
-                                    <select class="form-control" ng-disabled="currentUser.userName == addUser.user.username" id="Role" name="Role" ng-model="addUser.user.roleId"
-                                            data-validate="required" data-message-required="Please select a role."
-                                            ng-options="role.id as role.name for role in addUser.roles">
-                                        <option value="">
-                                            Select a role
-                                        </option>
+                                <div class="col-sm-9">                       
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function ($)
+                                        {
+                                            setTimeout(function () {
+                                                $("#RoleIds").select2({
+                                                    // minimumResultsForSearch: -1,
+                                                    placeholder: 'Select Roles...',
+                                                    // minimumInputLength: 1,
+                                                    // placeholder: 'Search',
+                                                }).on('select2-open', function ()
+                                                {
+                                                    // Adding Custom Scrollbar
+                                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                });
+                                            }, 200);
+                                        });</script>
+                                    <select multiple class="form-control" name ="RoleIds" id="RoleIds" 
+                                            ng-model="addUser.user.roleIds" ng-options='role.id as role.name for role in addUser.roleList'
+                                            ng-disabled="currentUser.userName == addUser.user.username"
+                                            data-validate="required" data-message-required="Please select a role.">
+                                        <option value="" selected hidden />
                                     </select>
                                 </div>
                             </div>
@@ -138,7 +153,7 @@
 
                                             });
                                         </script>                                                                                                                             
-                                        <select class="form-control" name="sboxit-2" id="sboxit-2" ng-model="addUser.user.employee.id" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in addUser.employeeList track by emp.id' ng-change="addUser.changeEmp(addUser.user.employee.id)">
+                                        <select class="form-control" name="sboxit-2" id="sboxit-2" ng-model="addUser.user.employee.id" ng-options='emp.id as (emp.lName + ", " + emp.fName + " " + emp.middleInitial) for emp in addUser.employeeList track by emp.id' ng-change="addUser.changeEmp(addUser.user.employee.id)">
                                             <option value="" selected hidden />
                                         </select>
                                         <div ng-show='addUser.user.employee.id == null && addUser.formSubmitted'>

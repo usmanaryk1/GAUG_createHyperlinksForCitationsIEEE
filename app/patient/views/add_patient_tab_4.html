@@ -105,6 +105,11 @@
                                 </option>-->
                             </select>
                         </div>
+                        <div class="col-sm-9 col-sm-push-3" style="margin-top: 5px" ng-if="addPatient.warningList && addPatient.warningList.length>0">
+                            <span class="text-warning">
+                                {{addPatient.warningList.toString()}} has schedules. 
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group-separator">
                     </div>
@@ -116,7 +121,28 @@
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" id="StartDate" 
                                        name="StartDate" type="text" ng-model="addPatient.patient.authorizationStartDate"
-                                       data-validate="required"  data-message-required="Please enter Start Date." max-date="addPatient.patient.authorizationEndDate">
+                                       data-validate="required"  data-message-required="Please enter Start Date." 
+                                       max-date="addPatient.patient.lastDateOfService">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="StartDate">
+                            Last Date of Service
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" id="LastDate" 
+                                       name="LastDate" type="text" ng-model="addPatient.patient.lastDateOfService"
+                                       min-date="addPatient.patient.authorizationStartDate">
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
@@ -177,7 +203,7 @@
                                                 </td> 
                                                 <td align="center"><span ng-if="authDocument.startDate != null">{{authDocument.startDate|date:dateFormat}} -</span> {{authDocument.expiryDate|date:dateFormat}}</td> 
                                                 <td align="center">
-                                                    <a class="btn btn-warning btn-sm" ng-click="addPatient.openPasswordModal($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
+                                                    <a class="btn btn-warning btn-sm" ng-if="hasAccess('EDIT_PAST_AUTHORIZATION')"  ng-click="addPatient.editAuthorizationDocument($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
                                                     <span ng-if="authDocument.id === null || authDocument.id === undefined">
                                                         &nbsp;&nbsp;
                                                         <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);" ><em class="fa fa-trash"></em></a>

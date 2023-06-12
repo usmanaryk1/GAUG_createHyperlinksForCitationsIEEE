@@ -19,11 +19,11 @@
                 ctrl.dateMessage = null;
                 if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours'
                         || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
-                        || ctrl.reportType == 'wppreport' || ctrl.reportType == 'wppreport') {
+                        || ctrl.reportType == 'wppreport' || ctrl.reportType == 'employeeothours') {
                     ctrl.verifyDates();
 
                 }
-                if (ctrl.reportType == 'lossofhoursreport' || ctrl.reportType == 'loginactivityreport') {
+                if (ctrl.reportType == 'lossofhoursreport' || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {

@@ -122,6 +122,48 @@
                     <div class="form-group-separator">
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label" for="SecondaryContact">
+                            Secondary Contact Type
+                        </label>
+                        <div class="col-sm-9 form-control-static">
+                            <div>
+                                <label>
+                                    <input value="P" name="SecondaryContact" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.secondaryContactType" />
+                                    Proxy
+                                </label>
+                                <label>
+                                    <input name="SecondaryContact" value="E" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.secondaryContactType"/>
+                                    Emergency
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="SecondaryContactName">
+                            {{addPatient.patient.secondaryContactType==='P'?'Proxy':'Emergency'}} Contact Name
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" charactersonly id="field-60" name="SecondaryContactName" type="text" maxlength="200"
+                                   ng-model="addPatient.patient.secondaryContactName"/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="SecondaryContactNumber">
+                            {{addPatient.patient.secondaryContactType==='P'?'Proxy':'Emergency'}} Contact Number
+                        </label>
+                        <div class="col-sm-9">
+                            <input numbers-only="true" maxlength="10" class="form-control" id="SecondaryContactNumber" name="SecondaryContactNumber" type="text" ng-model="addPatient.patient.secondaryContactNumber" 
+                                   data-validate="number,minlength[10],maxlength[10]"
+                                   data-message-minlength="Secondary Contact Number must contain 10 digits" data-message-maxlength="Secondary Contact Number must contain 10 digits"/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">
                             Languages Spoken
                         </label>
@@ -145,25 +187,54 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
+                            Transportation Assistance Level
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="TransportationAssistanceLevels"  ng-model='addPatient.patient.transporatationAssistance' name="TransportationAssistanceLevels"                                    
+                                    ng-options='key *  1 as value for (key, value) in addPatient.transportationAssistanceLevels'>
+                                <option value="">Select transportation assistance level</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Priority Code
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="PriorityCodes"  ng-model='addPatient.patient.priorityCode' name="PriorityCodes"                                    
+                                    ng-options='key *  1 as value for (key, value) in addPatient.priorityCodes'>
+                                <option value="">Select priority code</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Aide Skill Capacities
+                        </label>
+                        <div class="col-sm-9">
+                            <div>
+                                <label class="no-padding-left checkbox col-sm-3" ng-repeat="(key, value) in addPatient.capacitiesKeyValue">
+                                    <input class="cbr" id="language{{$index}}" name="capacity{{$index}}" type="checkbox" ng-model="addPatient.aideSkills[key]"/>
+                                    {{value}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
                             Staffing Coordinator
                         </label>
                         <div class="col-sm-9">
-                            <script type="text/javascript">
-//                                jQuery(document).ready(function($)
-//                                {
-//                                    $("#StaffingCoordinator").selectBoxIt().on('open', function()
-//                                    {
-//                                        // Adding Custom Scrollbar
-//                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-//                                    });
-//                                });
-                            </script>
                             <select class="form-control" id="StaffingCoordinator"  ng-model='addPatient.patient.staffingCordinatorId' name="StaffingCoordinator"
                                     data-validate="required" data-message-required="Please select Staffing Coordinator."
                                     ng-options='emp.id as (emp.label) for emp in addPatient.staffCoordinatorList'>
-                                <option value="">Select the staffing coordinator</option>
-                                <!--<option ng-repeat="emp in addPatient.staffCoordinatorList" ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
-                                <!--<option value="1">1</option>-->
+                                <option value="">Select staffing coordinator</option>
                             </select>
                         </div>
                     </div>
@@ -188,7 +259,7 @@
                                     data-validate="required" data-message-required="Please select Nurse Case Manager."
                                     ng-options='emp.id as (emp.label) for emp in addPatient.nursingCareList'>
                                 <option value="">
-                                    Select the nurse case manager
+                                    Select nurse case manager
                                 </option>
                                 <!--<option ng-repeat="emp in " ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
                             </select>
