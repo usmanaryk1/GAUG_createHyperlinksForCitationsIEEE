@@ -109,6 +109,7 @@
             $formService.uncheckRadioValue('Wages', ctrl.employee.wages);
             ctrl.employee.taxStatus = 'W';
             ctrl.employee.wages = 'H';
+            ctrl.employee.payrollGroup = 'A';
             ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
             $timeout(function () {
                 $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
@@ -270,6 +271,7 @@
             if (!ctrl.employee.id || ctrl.employee.id === null) {
                 if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
                     employeeToSave.wages = 'H';
+                    employeeToSave.payrollGroup = 'A';
                     employeeToSave.taxStatus = 'W';
                     employeeToSave.otRate = 13.12;
                     employeeToSave.hdRate = 13.12;
@@ -278,7 +280,8 @@
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
-                            ctrl.editMode = true;         
+                            ctrl.editMode = true;   
+                            ctrl.employee.id = employeeRes.id;
                             ctrl.employee.employeeBenefitDetails = employeeRes.employeeBenefitDetails;
                             //to set the default data in employee with position 'pc'
                             if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
@@ -449,6 +452,12 @@
         });
 
         $scope.$watch(function () {
+            return ctrl.employee.wages;
+        }, function (newVal, oldValue) {
+            setValidationsForTab2(newVal);
+        });
+        
+        $scope.$watch(function () {
             if (!ctrl.employee.careRatesList) {
                 ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
             }
@@ -588,6 +597,9 @@
                     }
                     if (!ctrl.employee.wages || ctrl.employee.wages === null) {
                         ctrl.employee.wages = 'H';
+                    }
+                    if (!ctrl.employee.payrollGroup || ctrl.employee.payrollGroup === null) {
+                        ctrl.employee.payrollGroup = 'A';
                     }
                     $formService.resetRadios();
 //                    if (!ctrl.employee.salaryFrequency || ctrl.employee.salaryFrequency === null) {

@@ -2,7 +2,7 @@
     function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService, DispatchDAO) {
 
         var ctrl = this;
-        var dispatchMessage = "Open Case. $age year old $sex located in $city, $state $zip. To accept case now mark interested below or contact $patientCoordinator for more information.";
+        var dispatchMessage = "$age year old $sex $date from $startTime to $endTime located in $city, $state. To accept this case mark interested below or contact $patientCoordinator for more information.";
 
         ctrl.patient_list = [];
 
@@ -941,14 +941,14 @@
         ctrl.retrieveAllPositions();
         var getDispatchMessage = function () {
             var dispatchMessageToDisplay = angular.copy(dispatchMessage);
-            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$age", moment().diff($rootScope.patientPopup.patient.dateOfBirth, 'years') + ' Years ');
-            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$sex", ($rootScope.patientPopup.patient.gender === 'M' ? 'Male' : 'Female'));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$age", moment().diff($rootScope.patientPopup.patient.dateOfBirth, 'years'));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$sex", ($rootScope.patientPopup.patient.gender === 'M' ? 'M' : 'F'));
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$city", $rootScope.patientPopup.patient.patientAddress.city);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$state", $rootScope.patientPopup.patient.patientAddress.state);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$zip", $rootScope.patientPopup.patient.patientAddress.zipcode);
-            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$date", moment($rootScope.patientPopup.data.startDate).format("dddd, MMMM Do YYYY"));
-            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$startTime", $rootScope.patientPopup.data.startTime);
-            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$endTime", $rootScope.patientPopup.data.endTime);
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$date", moment($rootScope.patientPopup.data.startDate).format("ddd MM/DD/YYYY"));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$startTime", moment($rootScope.patientPopup.data.startTime, 'HH:mm').format('hh:mmA'));
+            dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$endTime", moment($rootScope.patientPopup.data.endTime, 'HH:mm').format('hh:mmA'));
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$liveIn", ($rootScope.patientPopup.data.forLiveIn == true ? ' - live in' : ''));
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$patientCoordinator", $rootScope.patientPopup.patient.staffingCordinatorId != null ? ctrl.staffCoordinatorMap[$rootScope.patientPopup.patient.staffingCordinatorId] : '');
             return dispatchMessageToDisplay;

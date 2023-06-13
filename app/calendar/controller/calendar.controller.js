@@ -597,7 +597,7 @@
                         $rootScope.employeePopup.validStart = true;
                         $rootScope.employeePopup.data.isPaidDisabled = false;
                     }
-                    if ($rootScope.employeePopup.validationHours && $rootScope.employeePopup.validationHours[type]) {
+                    if ($rootScope.employeePopup.validationHours!=null && $rootScope.employeePopup.validationHours[type]!=null) {
                         if ($rootScope.employeePopup.validationHours[type] < $rootScope.employeePopup.data.noOfHours) {
                             $rootScope.employeePopup.validHours = false;
                         } else {

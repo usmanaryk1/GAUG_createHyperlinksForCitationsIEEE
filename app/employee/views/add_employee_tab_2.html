@@ -42,6 +42,23 @@
                             </div>
                         </div>
                     </div>
+            <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Payroll Group</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <label class="cbr-inline" >
+                                    <input checked="true" type="radio" name="PayrollGroup" value='A' class="cbr cbr-primary" ng-model="addEmployee.employee.payrollGroup">
+                                    A </label>
+                                <label class="cbr-inline">
+                                    <input type="radio" name="PayrollGroup" value='B' class="cbr cbr-primary" ng-model="addEmployee.employee.payrollGroup">
+                                    B </label>
+                                <label class="cbr-inline">
+                                    <input type="radio" name="PayrollGroup" value='C' class="cbr cbr-primary" ng-model="addEmployee.employee.payrollGroup">
+                                    C </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-separator" ng-show="addEmployee.employee.wages === 'S'">
                     </div>
                     <div class="form-group" ng-show="addEmployee.employee.wages === 'S'">

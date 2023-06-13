@@ -1,15 +1,17 @@
 (function () {
-    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, TimesheetDAO, $state, Page) {
+    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, TimesheetDAO, $state, Page, $formService) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
-        ctrl.searchParams = {};
+        ctrl.searchParams = {payrollGroup:'A'};
         ctrl.searchParams.processedOn = $filter('date')(new Date(), $rootScope.dateFormat)
         ctrl.criteriaSelected = false;
         var otHdConstant = 1;
         ctrl.resetFilters = function () {
             ctrl.searchParams.fromDate = null;
             ctrl.searchParams.toDate = null;
+            ctrl.searchParams.payrollGroup = 'A';
+            $formService.resetRadios();
             ctrl.payrollSessions = [];
             ctrl.criteriaSelected = false;
             ctrl.rerenderDataTable();
@@ -467,5 +469,5 @@
             });
         };
     }
-    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "TimesheetDAO", "$state", "Page", PayrollSessionCtrl]);
+    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "TimesheetDAO", "$state", "Page", "$formService", PayrollSessionCtrl]);
 })();

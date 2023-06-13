@@ -142,7 +142,8 @@
                             <div class="col-sm-12 text-right" style="margin-bottom:10px;">
                                 <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
                                 <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patienttimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
-                                <button type="submit" ng-if="report.reportType && report.reportType != 'patientcensus' && report.reportType != 'lossofhoursreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
+                                <button type="submit" ng-if="report.reportType && 
+                                            report.reportType != 'patientcensus' && report.reportType != 'employeecensus' && report.reportType != 'lossofhoursreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                             </div>
                         </div>
                     </form>
