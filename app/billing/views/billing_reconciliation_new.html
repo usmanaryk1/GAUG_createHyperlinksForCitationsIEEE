@@ -26,10 +26,10 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="sboxit-1">
+                                        <label class="col-sm-4 control-label" for="sboxit-1">
                                             Received From
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <select class="form-control" id="sboxit-1" name="InsuranceProvider"
                                                     data-validate="required" data-message-required="Please select Insurance Provider." ng-model="billingReconciliation.bill.receivedFrom"
                                                     ng-options='insurer.id as (insurer.insuranceName) for insurer in billingReconciliation.insuranceProviderList'>
@@ -40,20 +40,20 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="paymentAmount">
+                                        <label class="col-sm-4 control-label" for="paymentAmount">
                                             Payment Amount
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <input numbers-only="true" maxlength="10" class="form-control" id="paymentAmount" name="paymentAmount" type="text" ng-model="billingReconciliation.bill.paymentAmount" 
                                                    data-validate="number"
                                                    data-message-minlength="Please enter Payment Amount."/>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="receivedDate">
+                                        <label class="col-sm-4 control-label" for="receivedDate">
                                             Received Date
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <div class="input-group" >
                                                 <input class="form-control datepicker" max-date="billingReconciliation.currentDate" data-format="mm/dd/yyyy" id="receivedDate" 
                                                        name="receivedDate" type="text" ng-model="billingReconciliation.bill.receivedDate" 
@@ -68,10 +68,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="referenceNumber">
+                                        <label class="col-sm-4 control-label" for="referenceNumber">
                                             Reference #
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <input class="form-control" id="referenceNumber" name="referenceNumber" type="text" maxlength="50"
                                                    ng-model="billingReconciliation.bill.referenceNumber" data-validate="required" data-message-required="Please enter Reference #." />
                                         </div>
@@ -79,10 +79,10 @@
                                 </div>    
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="sboxit-1">
+                                        <label class="col-sm-4 control-label" for="sboxit-1">
                                             Payment Method
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <select class="form-control" id="sboxit-1" name="paymentMethod"
                                                     data-validate="required" data-message-required="Please select Payment Method." ng-model="billingReconciliation.bill.paymentMethod">
                                                 <option value="">
@@ -102,10 +102,10 @@
                                     </div>
                                     <!--                                    ng-if="billingReconciliation.bill.paymentMethod === 'EFT'"-->
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="eftDate">
+                                        <label class="col-sm-4 control-label" for="eftDate">
                                             EFT Date
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <div class="input-group" >
                                                 <input class="form-control datepicker" max-date="billingReconciliation.currentDate" data-format="mm/dd/yyyy" id="eftDate" 
                                                        name="eftDate" type="text" ng-model="billingReconciliation.bill.eftDate" 
@@ -127,10 +127,10 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="patientIds">
+                                        <label class="col-sm-4 control-label" for="patientIds">
                                             Patient Name
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <script type="text/javascript">
                                                 jQuery(document).ready(function ($)
                                                 {
@@ -155,10 +155,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="claimNumber">
+                                        <label class="col-sm-4 control-label" for="claimNumber">
                                             Claim Number
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <input numbers-only="true" class="form-control" id="claimNumber" name="claimNumber" type="text" ng-model="billingReconciliation.searchParams.claimNumber" 
                                                    data-validate="number"/>
                                         </div>
@@ -168,10 +168,10 @@
                             <div class="row">                                
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">
+                                        <label class="col-sm-4 control-label">
                                             Service Period From
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <div class="input-group" >
                                                 <input class="form-control datepicker" max-date="billingReconciliation.currentDate" data-format="mm/dd/yyyy" id="servicePeriodFrom" 
                                                        name="servicePeriodFrom" type="text" ng-model="billingReconciliation.searchParams.servicePeriodFrom" 
@@ -188,10 +188,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">
+                                        <label class="col-sm-4 control-label">
                                             Service Period To
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <div class="input-group" >
                                                 <input class="form-control datepicker" max-date="billingReconciliation.currentDate" data-format="mm/dd/yyyy" id="servicePeriodTo" 
                                                        name="servicePeriodTo" type="text" ng-model="billingReconciliation.searchParams.servicePeriodTo" 
@@ -210,10 +210,10 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="dob">
+                                        <label class="col-sm-4 control-label" for="dob">
                                             Patient Date of Birth
                                         </label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <div class="input-group" >
                                                 <input class="form-control datepicker" max-date="billingReconciliation.currentDate" data-format="mm/dd/yyyy" id="dob" 
                                                        name="dob" type="text" ng-model="billingReconciliation.searchParams.dob" 
@@ -259,7 +259,7 @@
                                                 <th nowrap><span class="">DOB</span></th>
                                                 <th nowrap><span class="">Claim Number</span></th>
                                                 <th nowrap><span class="">Date of Range</span></th>
-                                                <th nowrap><span class="">Original Billed Amount</span></th>
+                                                <th nowrap><span class="">Original Billed<br>Amount</span></th>
                                                 <th nowrap class="text-center"><span class="">Amount Due</span></th>
                                                 <th nowrap class='nosorting'><span class="">Payment</span></th>
                                             </tr>
@@ -326,7 +326,7 @@
                                 <div class="clearfix"></div>
                                 <div>&nbsp;</div>
                                 <div class="row" ng-if="billingReconciliation.claims.length">
-                                    <div class="col-sm-3 pull-right">
+                                    <div class="col-sm-5 pull-right">
                                         <div class="panel panel-default panel-border" style="padding: 10px 10px 10px 10px;">
                                             <div class="panel-heading">Amounts For Selected Invoices</div>
                                             <hr>

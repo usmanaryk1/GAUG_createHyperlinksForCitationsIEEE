@@ -674,28 +674,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     title:'New'
                 }
             }).
-            state('app.billing_reconciliation_autoapply', {
-                url: '/billing_reconciliation/autoapply',
-                controller: 'BillingReconciliationCtrl as billingReconciliation',
-                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_autoapply'),
-                data: {
-                    feature: 'VIEW_BILLING_HISTORY',
-                    title:'Auto-Apply'
-                }
-            }).
-            state('app.billing_reconciliation_credits', {
-                url: '/billing_reconciliation/credits',
-                controller: 'BillingReconciliationCtrl as billingReconciliation',
-                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_credits'),
-                data: {
-                    feature: 'VIEW_BILLING_HISTORY',
-                    title:'Credits'
-                }
-            }).
             state('app.location_lookup', {
                 url: '/location_lookup',
                 controller: 'LocationLookupCtrl as locationLookup',
-                templateUrl: appHelper.viewTemplatePath('billing', 'location_lookup'),
+                templateUrl: appHelper.viewTemplatePath('billing', 'location_lookup')
             }).
             state('app.resubmission_lookup', {
                 url: '/resubmission_lookup',
