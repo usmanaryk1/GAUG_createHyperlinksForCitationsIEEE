@@ -5,6 +5,7 @@
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
+        var otHdConstant = 1;
         ctrl.resetFilters = function() {
             ctrl.searchParams.fromDate = null;
             ctrl.searchParams.toDate = null;
@@ -49,9 +50,25 @@
                 ctrl.rerenderDataTable();
             }
         };
+        var getDateDiff = function(firstDate, secondDate) {
+            var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+            return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+        }
+        ctrl.verifyDates = function() {
+            if (new Date(ctrl.searchParams.fromDate).getDay() != 1 || new Date(ctrl.searchParams.toDate).getDay() != 0) {
+                ctrl.dateMessage = "From date must be Monday & To date must be Sunday.";
+            } else if (ctrl.payrollSettings.payrollFrequency == '1W' && getDateDiff(new Date(ctrl.searchParams.fromDate), new Date(ctrl.searchParams.toDate)) != 6) {
+                ctrl.dateMessage = "Date range must be weekly.";
+            } else if (ctrl.payrollSettings.payrollFrequency == '2W' && getDateDiff(new Date(ctrl.searchParams.fromDate), new Date(ctrl.searchParams.toDate)) != 13) {
+                ctrl.dateMessage = "Date range must be bi-weekly.";
+            } else {
+                ctrl.dateMessage = null;
+            }
+        };
         //        ctrl.payrollSessions = ontimetest.payrollSessions;
         ctrl.retrieveSessions = function() {
-            if (ctrl.criteriaSelected) {
+            ctrl.verifyDates();
+            if (ctrl.criteriaSelected && ctrl.dateMessage==null) {
                 $rootScope.maskLoading();
                 ctrl.dataRetrieved = false;
                 PayrollDAO.reviewSessions(ctrl.searchParams).then(function(res) {
@@ -155,7 +172,7 @@
             payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
         };
         ctrl.calculateGrossPay = function(payrollObj) {
-            var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * 1.5) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * 1.5) + checkNull(payrollObj.earnings1099) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction);
+            var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * otHdConstant) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * otHdConstant) + checkNull(payrollObj.earnings1099) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction) - checkNull(payrollObj.adp401kLoan) - checkNull(payrollObj.adp401kDeduction);
             return grossPay;
         };
 

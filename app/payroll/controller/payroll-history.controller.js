@@ -1,5 +1,5 @@
 (function() {
-    function PayrollHistoryCtrl($rootScope, $scope, $http, PayrollDAO, $timeout) {
+    function PayrollHistoryCtrl($rootScope, $scope, $http, PayrollDAO, $timeout, $state) {
         var ctrl = this;
 //        ctrl.companyCode = ontimetest.company_code;
 //        ctrl.baseUrl = ontimetest.weburl;
@@ -11,6 +11,9 @@
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
+        };
+        ctrl.navigateToProcessedPage = function(id) {
+            $state.go('app.batch_session',{id:id});
         };
 
         ctrl.resetFilters = function() {
@@ -47,7 +50,7 @@
                 ctrl.rerenderDataTable();
             }
         };
-        
+
         ctrl.retrievePayrollHistory = function() {
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
@@ -76,5 +79,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollHistoryCtrl', ["$rootScope", "$scope", "$http", "PayrollDAO", "$timeout", PayrollHistoryCtrl]);
+    angular.module('xenon.controllers').controller('PayrollHistoryCtrl', ["$rootScope", "$scope", "$http", "PayrollDAO", "$timeout", "$state", PayrollHistoryCtrl]);
 })();

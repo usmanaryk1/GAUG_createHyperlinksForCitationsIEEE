@@ -714,7 +714,7 @@ angular.module('xenon.directives', []).
                                 }
                                 //Date commented by jack to give input maask for datepicker
 //                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'date', 'creditcard']) != -1)
-                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'creditcard','time']) != -1)
+                                if ($.inArray(rule, ['required', 'url', 'email', 'number', 'creditcard', 'time']) != -1)
                                 {
                                     opts['rules'][name][rule] = true;
 
@@ -854,7 +854,7 @@ angular.module('xenon.directives', []).
                 scope: {ngModel: "="},
                 link: function(scope, el, attr)
                 {
-                    
+
 //                     $(el).mask("99:99 aa");
 //                    if (!jQuery.isFunction(jQuery.fn.timepicker))
 //                        return false;
@@ -949,6 +949,17 @@ angular.module('xenon.directives', []).
                     $this.datepicker(opts).on('changeDate', function(ev) {
                         $this.datepicker('hide');
                     });
+//                    if (attr.enabled != null) {
+//                        if (attr.enabled == 'M') {
+//                            $this.datepicker()
+//                                    .on('show', function(ev) {
+//                                        for (var i = 0; i < 6; i++) {
+//                                            $('.datepicker-days tbody tr td:eq(' + i + ')').css('pointer-events', 'none');
+//                                        }
+//
+//                                    });
+//                        }
+//                    }
                     scope.$watch("minDate", function(value) {
                         if (value == null || value == "") {
                             $this.datepicker("setStartDate", null);
