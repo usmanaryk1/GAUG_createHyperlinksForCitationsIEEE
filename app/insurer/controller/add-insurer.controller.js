@@ -162,7 +162,8 @@
             $rootScope.careTypeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.careTypeModel.careTypeObj = {};
             $rootScope.careTypeModel.careTypeObj.unit = "unit";
@@ -197,7 +198,8 @@
             $rootScope.unselectCareTypeModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
 
             $rootScope.unselectCareTypeModal.confirm = function() {

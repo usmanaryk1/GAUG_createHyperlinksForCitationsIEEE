@@ -45,7 +45,8 @@
             $rootScope.deleteInsurerModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.deleteInsurerModel.insurer = insurer;
 
@@ -85,7 +86,8 @@
             $rootScope.selectInsurerModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.selectInsurerModel.planTypeMap = {"mcd": "Medicaid", "mcr": "Medicare", "tc": "Tricare Champus", "cva": "ChampVA", "gh": "Group Healthplan", "fbl": "Feca Black Lung", "bc": "Blue Cross", "bs": "Blue Shield", "bcb": "Blue Cross/Blue Sheild (BCBS)", "oth": "Other"};
             $rootScope.selectInsurerModel.insurer = insurer;

@@ -52,7 +52,8 @@
             $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
@@ -68,7 +69,8 @@
             $rootScope.deleteEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.deleteEmployeeModel.employee = employee;
 
@@ -108,7 +110,8 @@
             $rootScope.deactivateEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.deactivateEmployeeModel.employee = employee;
 
@@ -144,7 +147,8 @@
             $rootScope.activateEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.activateEmployeeModel.employee = employee;
 

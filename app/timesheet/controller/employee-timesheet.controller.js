@@ -133,7 +133,8 @@
             $rootScope.taskListModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             //            $rootScope.taskListModal.taskList = [{label: "Slicing", value: false}, {label: "WooCommerce", value: true}, {label: "Programming", value: false}, {label: "SEO Optimize", value: true}];
             $rootScope.taskListModal.taskList = tasks;
@@ -146,7 +147,8 @@
             $rootScope.deletePunchModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.deletePunchModal.punchObj = punchObj;
 
@@ -179,7 +181,8 @@
             $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;

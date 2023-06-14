@@ -111,7 +111,8 @@
             $rootScope.payrollModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: false
+                backdrop: false,
+                keyboard: false
             });
             $rootScope.payrollModal.processdMode = ctrl.processdMode;
             var selectedPayroll = angular.copy(payroll);

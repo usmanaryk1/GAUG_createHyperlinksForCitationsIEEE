@@ -77,6 +77,7 @@
             $rootScope.holidayRateModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
+                keyboard: false,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
             });
             $timeout(function() {

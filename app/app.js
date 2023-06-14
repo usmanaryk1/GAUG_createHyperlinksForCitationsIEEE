@@ -60,7 +60,8 @@ app.run(function($rootScope, $modal, $state, Idle)
         closeModals();
         $rootScope.warning = $modal.open({
             templateUrl: 'warning-dialog.html',
-            windowClass: 'modal-danger'
+            windowClass: 'modal-danger',
+            keyboard: false
         });
     });
 
