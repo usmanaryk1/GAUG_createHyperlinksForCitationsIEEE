@@ -195,7 +195,7 @@
             if (ctrl.user.bindToExisting == 'w') {
                 userToSave.withoutEmployee = 'y';
             }
-            userToSave.roleIds = _.uniq(_.concat(ctrl.unauthorisedRoleIds ,userToSave.roleIds));                
+            userToSave.roleIds = _.uniq(_.concat(ctrl.unauthorisedRoleIds, userToSave.roleIds));
             UserDAO.update({action: reqParam, data: userToSave})
                     .then(function (employeeRes) {
                         toastr.success("User saved.");
@@ -232,8 +232,11 @@
                             }
                         }); // showLoadingBar
 
+                        $timeout(function () {
+                            $('#RoleIds').trigger('change.select2');
+                        }, 100);
                         ctrl.user = res;
-                        if($rootScope.currentUser && $rootScope.currentUser.roleIds)
+                        if ($rootScope.currentUser && $rootScope.currentUser.roleIds)
                             ctrl.unauthorisedRoleIds = _.difference(ctrl.user.roleIds, $rootScope.currentUser.roleIds);
                         if (ctrl.user.employee.profileImage != null && ctrl.user.employee.profileImage != '') {
                             ctrl.hideLoadingImage = false;
