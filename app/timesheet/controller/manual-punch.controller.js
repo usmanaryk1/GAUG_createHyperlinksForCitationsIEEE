@@ -25,7 +25,6 @@
         function setAttendanceForEdit() {
             ctrl.empObj = angular.copy(ctrl.attendanceObj.employeeId);
             ctrl.patientObj = angular.copy(ctrl.attendanceObj.patientId);
-
             if (ctrl.attendanceObj.employeeId != null) {
                 ctrl.attendanceObj.employeeId = ctrl.attendanceObj.employeeId.id;
                 $timeout(function() {
@@ -124,7 +123,7 @@
             if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
                 hours = hours - 12;
             date.setHours(hours, minutes, seconds);
-            return date;
+            return $filter('date')(date, ontimetest.date_time_format);
         };
 
 //        var verifyTimeValidation=function(){
