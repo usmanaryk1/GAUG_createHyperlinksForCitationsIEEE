@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var BillingDAO = function(resource) {
-        var api = resource(ontime_data.weburl + 'billing/:action/:paramId', {paramId:'@paramId'}, {
+        var api = resource(ontime_data.weburl + 'billing/:action/:paramId/:paramId2', {paramId:'@paramId'}, {
             updateSettings: {
                 method: 'POST',
                 params: {
@@ -71,6 +71,32 @@
                 params: {
                     action: 'sessions'
                 }             
+            },
+            searchReconciliations:{
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'reconciliations'
+                }
+            },
+            saveClaimAdjustment:{
+                method: 'POST',
+                params: {
+                    paramId2: 'adjustment',
+                    action: 'claims'
+                }
+            },
+            saveReconciliations:{
+                method: 'POST',
+                params: {
+                    action: 'reconciliations'
+                }
+            },
+            deleteReconciliations:{
+                method: 'DELETE',
+                params: {
+                    action: 'reconciliations'
+                }  
             }
         });
         return {
@@ -106,8 +132,19 @@
             },
             deleteBatch: function(data) {
                 return api.deleteBatch(data).$promise;
+            },
+            searchReconciliations: function(data) {
+                return api.searchReconciliations(data).$promise;
+            },
+            saveClaimAdjustment: function (data) {
+                return api.saveClaimAdjustment({paramId: data.claimId}, data).$promise;
+            },
+            saveReconciliations: function (data) {
+                return api.saveReconciliations(data).$promise;
+            },
+            deleteReconciliations: function(data) {
+                return api.deleteReconciliations(data).$promise;
             }
-
         };
     };
     angular.module("xenon.factory").factory('BillingDAO', ['$resource', BillingDAO]);
