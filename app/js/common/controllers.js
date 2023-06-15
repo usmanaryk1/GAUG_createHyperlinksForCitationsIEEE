@@ -342,7 +342,8 @@ angular.module('xenon.controllers', []).
                 $rootScope.currentModal = $modal.open({
                     templateUrl: modal_id,
                     size: modal_size,
-                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false
                 });
             };
 
@@ -351,6 +352,7 @@ angular.module('xenon.controllers', []).
             {
                 $rootScope.currentModal = $modal.open({
                     templateUrl: modal_id,
+                    keyboard: false,
                     resolve: {
                         ajaxContent: function($http)
                         {

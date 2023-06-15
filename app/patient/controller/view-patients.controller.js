@@ -85,7 +85,8 @@
             $rootScope.selectPatientModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.selectPatientModel.patient = angular.copy(patient);
             $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
@@ -104,6 +105,7 @@
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
             $rootScope.deletePatientModel.patient = patient;
 
@@ -135,7 +137,8 @@
             $rootScope.dischargePatientModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
 
             $rootScope.dischargePatientModel.patient = patient;
@@ -172,7 +175,8 @@
             $rootScope.readmitPatientModal = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
             });
 
             $rootScope.readmitPatientModal.patient = patient;
