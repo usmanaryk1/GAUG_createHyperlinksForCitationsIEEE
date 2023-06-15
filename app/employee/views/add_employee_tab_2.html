@@ -42,7 +42,23 @@
                             </div>
                         </div>
                     </div>
-            <div class="form-group-separator"></div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="authorizedHours">
+                            Authorized hours
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input class="form-control" name="authorizedHours" maxlength="5" numbers-only="true" decimalallowed type="text" ng-model="addEmployee.employee.authorizedHours" 
+                                       data-validate="required"  data-message-required="Please enter Authorized Hours."> 
+                                <span class="input-group-addon">
+                                    <i>per week</i>
+                                </span>
+                                </input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Payroll Group</label>
                         <div class="col-sm-10">
@@ -274,23 +290,23 @@
                             401K Contribution
                         </label>
                         <div class="col-sm-6">
-                                <input class="form-control" name="401K" type="text" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401k"
-                                       numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="401K Rate">
-                                </input>
+                            <input class="form-control" name="401K" type="text" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401k"
+                                   numbers-only="true" decimalallowed onblur="setValidationMessage(this)" itemid="401K Rate">
+                            </input>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <label class="cbr-inline">
+                                    <input class="cbr cbr-primary" value="F" name="radioRate" type="radio" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401kType" >
+                                    Fixed per week
+                                </label>
+                                <label class="cbr-inline">
+                                    <input class="cbr cbr-primary" name="radioRate" value="P" type="radio" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401kType">
+                                    %
+                                </label>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="input-group">
-                                    <label class="cbr-inline">
-                                        <input class="cbr cbr-primary" value="F" name="radioRate" type="radio" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401kType" >
-                                        Fixed per week
-                                    </label>
-                                    <label class="cbr-inline">
-                                        <input class="cbr cbr-primary" name="radioRate" value="P" type="radio" ng-model="addEmployee.employee.employeeBenefitDetails.employeeContribution401kType">
-                                        %
-                                    </label>
-                                </div>
-                            </div>
-                        
+                        </div>
+
                     </div>
                     <div class="form-group-separator">
                     </div>

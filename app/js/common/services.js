@@ -96,6 +96,7 @@ angular.module('xenon.services', []).
                 // Subitems of employee
                 employee.addItem('Add Employee', './employee/tab1/', 'CREATE_EMPLOYEE');
                 employee.addItem('View Employee', './employee-list/active', 'VIEW_EMPLOYEE');
+                employee.addItem('Benefit Adjustments', './employee-adjustments/active', 'EMPLOYEE_BENEFIT_ADJUSTMENT');
 
 
                 // Subitems of patient

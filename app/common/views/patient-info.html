@@ -70,6 +70,21 @@
 
         </div>
     </div>
+    <div class="row" ng-if="Patientinfo.patient.secondaryContactType && 
+                (Patientinfo.patient.secondaryContactNumber || Patientinfo.patient.secondaryContactName)">
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label class="control-label col-md-4">
+                    <strong>{{Patientinfo.patient.secondaryContactType==='P'?'Proxy':'Emergency'}} Contact</strong>
+                </label>
+                <div class="col-md-8">
+                    {{Patientinfo.patient.secondaryContactName}}{{Patientinfo.patient.secondaryContactNumber?' - ':''}}{{Patientinfo.patient.secondaryContactNumber| tel}} 
+                </div>
+            </div>	
+
+        </div>
+    </div>
     <div class="row" ng-if="Patientinfo.patient.languagesSpoken">
         <div class="col-md-12">
 
