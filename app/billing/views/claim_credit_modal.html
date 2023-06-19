@@ -2,8 +2,8 @@
     <h4 class="modal-title"> Apply Credit</h4>
     <a href="" ng-click="claimCredit.isList = !claimCredit.isList" style="float: right;margin-top: -5px; text-decoration: none;">
         <span>
-            <i class="fa deactivate_bt" ng-class='{"fa-table":claimCredit.isList === true,"fa-edit":claimCredit.isList === false}'></i>
-            {{claimCredit.isList === true?"Show Credits":"New Credit"}}
+            <i class="fa deactivate_bt" ng-class='{"fa-table":claimCredit.isList === false,"fa-edit":claimCredit.isList === true}'></i>
+            {{claimCredit.isList === true?"New Credit":"Show Credits"}}
         </span>
     </a>
 </div>
@@ -45,135 +45,136 @@
             </button>
         </div>
         <div ng-if="claimCredit.claim">
-
-            <div class="row" ng-if="claimCredit.claim.id !== null">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Claim Number</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.id}} 
-                        </div>
-                    </div>	
-                </div>
-            </div>
-
-            <div class="row" ng-if="claimCredit.claim.patientName !== null">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Patient Name</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.patientName}} 
-                        </div>
-                    </div>	
-
-                </div>
-            </div>
-            <div class="row" ng-if="claimCredit.claim.patientBirthDate !== null">
-                <div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Patient Birth Date</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.patientBirthDate|date :dateFormat}} 
-                        </div>
-                    </div>	
-
-                </div>
-            </div>
-            <div class="row" ng-if="claimCredit.claim.claimType !== null">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Claim Type</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.claimType}} 
-                        </div>
-                    </div>	
-
-                </div>
-            </div>
-
-            <div class="row" ng-if="claimCredit.claim.billedDate !== null">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Billed Date</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.dateInserted|date :dateFormat}} 
-                        </div>
-                    </div>	
-                </div>
-            </div>
-
-            <div class="row" ng-if="claimCredit.claim.totalCosts !== null">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Total Cost</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.totalCosts| number : 2}} 
-                        </div>
-                    </div>	
-                </div>
-            </div>
-
-            <div class="row" ng-if="claimCredit.claim.paidAmount !== null">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Paid Amount</strong></label>
-                        <div class="col-md-7">
-                            {{claimCredit.claim.paidAmount| number : 2}} 
-                        </div>
-                    </div>	
-                </div>
-            </div>
-
-            <div class="row">
-                <div>
-                    <div class="form-group">
-                        <label class="control-label col-md-5"><strong>Apply Credit</strong></label>
-                        <div class="col-md-7">
-                            <div class="input-group" ng-if="claimCredit.availableCredit > 0">
-                                <input ng-model="claimCredit.credit.usedAmount" 
-                                       numbers-only="true" maxlength="10" class="form-control" 
-                                       id="paymentAmount" name="totalCosts" type="text"/>
-                                <span class="input-group-addon">/{{claimCredit.availableCredit| number : 2}}</span>
-                            </div>       
-                            <div ng-if="!(claimCredit.availableCredit > 0)">
-                                No Credit Available
+            <form class="form-horizontal validate" id="claim_credit_form" novalidate="" name="claim_credit_form" role="form">
+                <div class="row" ng-if="claimCredit.claim.id !== null">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Claim Number</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.id}} 
                             </div>
-                        </div>
-                    </div>	
+                        </div>	
+                    </div>
                 </div>
-            </div>
 
-            <div class="row" ng-if="claimCredit.claim.creditUsages !== null" style="margin-top: 15px">
-                <div>
-                    <div class="col-md-12">
-                        <label><strong>Credit Usage History</strong></label>
-                    </div>                
-                    <div class="col-md-12 form-group">                    
-                        <table class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th nowrap><span class="">Billing Reconciliation</span></th>
-                                    <th nowrap><span class="">Used Amount</span></th>
-                                    <th nowrap><span class="">Date</span></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="cursor: pointer" ng-repeat="credit in claimCredit.claim.creditUsages" ng-if="claimCredit.claim.creditUsages.length > 0">                                
-                                    <td>{{credit.billingReconciliationId}}</td>
-                                    <td>{{credit.usedAmount}}</td>
-                                    <td>{{credit.dateInserted}}</td>
-                                </tr>
-                                <tr ng-if="claimCredit.claim.creditUsages.length === 0">
-                                    <td colspan="3" style="text-align: center;">
-                                        No records found
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>      
-                    </div>	
+                <div class="row" ng-if="claimCredit.claim.patientName !== null">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Patient Name</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.patientName}} 
+                            </div>
+                        </div>	
+
+                    </div>
                 </div>
-            </div>                
+                <div class="row" ng-if="claimCredit.claim.patientBirthDate !== null">
+                    <div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Patient Birth Date</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.patientBirthDate|date :dateFormat}} 
+                            </div>
+                        </div>	
+
+                    </div>
+                </div>
+                <div class="row" ng-if="claimCredit.claim.claimType !== null">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Claim Type</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.claimType}} 
+                            </div>
+                        </div>	
+
+                    </div>
+                </div>
+
+                <div class="row" ng-if="claimCredit.claim.billedDate !== null">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Billed Date</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.dateInserted|date :dateFormat}} 
+                            </div>
+                        </div>	
+                    </div>
+                </div>
+
+                <div class="row" ng-if="claimCredit.claim.totalCosts !== null">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Total Cost</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.totalCosts| number : 2}} 
+                            </div>
+                        </div>	
+                    </div>
+                </div>
+
+                <div class="row" ng-if="claimCredit.claim.paidAmount !== null">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Paid Amount</strong></label>
+                            <div class="col-md-7">
+                                {{claimCredit.claim.paidAmount| number : 2}} 
+                            </div>
+                        </div>	
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5"><strong>Apply Credit</strong></label>
+                            <div class="col-md-7">
+                                <div class="input-group" ng-if="claimCredit.availableCredit > 0">
+                                    <input ng-model="claimCredit.credit.usedAmount" 
+                                           numbers-only="true" maxlength="10" class="form-control" decimalallowed
+                                           id="paymentAmount" name="totalCosts" type="text"/>
+                                    <span class="input-group-addon">/{{claimCredit.availableCredit| number : 2}}</span>
+                                </div>       
+                                <div ng-if="!(claimCredit.availableCredit > 0)">
+                                    No Credit Available
+                                </div>
+                            </div>
+                        </div>	
+                    </div>
+                </div>
+
+                <div class="row" ng-if="claimCredit.claim.creditUsages !== null" style="margin-top: 15px">
+                    <div>
+                        <div class="col-md-12">
+                            <label><strong>Credit Usage History</strong></label>
+                        </div>                
+                        <div class="col-md-12 form-group">                    
+                            <table class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th nowrap><span class="">Billing Reconciliation</span></th>
+                                        <th nowrap><span class="">Used Amount</span></th>
+                                        <th nowrap><span class="">Date</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor: pointer" ng-repeat="credit in claimCredit.claim.creditUsages" ng-if="claimCredit.claim.creditUsages.length > 0">                                
+                                        <td>{{credit.billingReconciliationId}}</td>
+                                        <td>{{credit.usedAmount}}</td>
+                                        <td>{{credit.dateInserted}}</td>
+                                    </tr>
+                                    <tr ng-if="claimCredit.claim.creditUsages.length === 0">
+                                        <td colspan="3" style="text-align: center;">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>      
+                        </div>	
+                    </div>
+                </div>
+            </form>                
         </div> 
     </div>   
 </div>

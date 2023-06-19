@@ -268,7 +268,7 @@
                                                     <td>{{claim.patientName}}</td>
                                                     <td>{{claim.patientBirthDate}}</td>
                                                     <td>{{claim.id}}</td>
-                                                    <td>{{claim.sessionStartDate + '-' + claim.sessionEndDate}}</td>
+                                                    <td>{{(claim.sessionStartDate | date:'MM/dd/yyyy') + '-' + (claim.sessionEndDate | date:'MM/dd/yyyy')}}</td>
                                                     <td class="text-center">{{claim.totalCosts | number : 2}}</td>
                                                     <td class="text-center">{{(claim.totalCosts - claim.paidAmount) | number : 2}}</td>
                                                     <td>
@@ -316,7 +316,7 @@
                                                 <td>{{claim.patientName}}</td>
                                                 <td>{{claim.patientBirthDate}}</td>
                                                 <td>{{claim.id}}</td>
-                                                <td>{{claim.sessionStartDate + '-' + claim.sessionEndDate}}</td>
+                                                <td>{{(claim.sessionStartDate | date:'MM/dd/yyyy') + '-' + (claim.sessionEndDate | date:'MM/dd/yyyy')}}</td>
                                                 <td class="text-center">{{claim.totalCosts | number : 2}}</td>
                                                 <td class="text-center">{{claim.totalCosts - claim.paidAmount | number : 2}}</td>
                                                 <td>
@@ -343,17 +343,17 @@
                                         <div class="panel-body">
                                             <label class="col-sm-8 text-left text-bold pad_lf0">Amount Due</label>
                                             <label class="col-sm-4 text-right text-bold pad_rg0">
-                                                {{billingReconciliation.totals['AmountDue']}}
+                                                {{billingReconciliation.totals['AmountDue'] | number : 2}}
                                             </label>
                                             <hr>
                                             <label class="col-sm-8 text-left text-bold pad_lf0">Applied</label>
                                             <label class="col-sm-4 text-right text-bold pad_rg0">
-                                                {{billingReconciliation.totals['Applied']}}
+                                                {{billingReconciliation.totals['Applied'] | number : 2}}
                                             </label>
                                             <hr>
                                             <label class="col-sm-8 text-left text-bold pad_lf0">Discount And Credits Applied</label>
                                             <label class="col-sm-4 text-right text-bold pad_rg0">
-                                                {{billingReconciliation.totals['Credits']}}
+                                                {{billingReconciliation.totals['Credits'] | number : 2}}
                                             </label>
                                         </div>                                                
                                     </div>
