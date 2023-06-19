@@ -68,7 +68,7 @@
         //        ctrl.payrollSessions = ontimetest.payrollSessions;
         ctrl.retrieveSessions = function() {
             ctrl.verifyDates();
-            if (ctrl.criteriaSelected && ctrl.dateMessage==null) {
+            if (ctrl.criteriaSelected && ctrl.dateMessage == null) {
                 $rootScope.maskLoading();
                 ctrl.dataRetrieved = false;
                 PayrollDAO.reviewSessions(ctrl.searchParams).then(function(res) {
@@ -203,12 +203,18 @@
         };
         ctrl.selectEmployee = function() {
             var empObj = angular.copy(ctrl.empMap[ctrl.employeeModalObj.employeeId]);
+            ctrl.employeeModalObj.earnings1099 = null;
+            if (empObj.wages == 'S') {
+                ctrl.employeeModalObj.earnings1099 = empObj.salary;
+            }
+//            else {
             ctrl.employeeModalObj.otRate = empObj.otRate;
             ctrl.employeeModalObj.hdRate = empObj.hdRate;
             EmployeeDAO.retrieveEmployeeCareRates({employee_id: empObj.id}).then(function(res) {
                 ctrl.employeeModalObj.rate1 = res.rate1.rate;
                 ctrl.employeeModalObj.rate2 = res.rate2.rate;
             });
+//            }
             ctrl.setGrossPay(ctrl.employeeModalObj);
         };
         ctrl.addEmployee = function() {
@@ -254,7 +260,7 @@
                 ctrl.processdMode = false;
             }
 
-          
+
             PayrollDAO.getSettings().then(function(res) {
                 if (res != null) {
                     ctrl.payrollSettings = res;
@@ -262,20 +268,20 @@
             }).catch(function() {
                 console.log("Payroll settings cannot be retrieved.");
             });
-        };  
+        };
         EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
-                ctrl.employeeList = res;
-                ctrl.empMap = {};
-                angular.forEach(res, function(emp) {
-                    ctrl.empMap[emp.id] = emp;
-                });
-                ctrl.initSessions();
-            }).catch(function(data, status) {
-                console.log('Error in retrieving data')
-            }).then(function() {
-                $rootScope.unmaskLoading();
+            ctrl.employeeList = res;
+            ctrl.empMap = {};
+            angular.forEach(res, function(emp) {
+                ctrl.empMap[emp.id] = emp;
             });
-        
+            ctrl.initSessions();
+        }).catch(function(data, status) {
+            console.log('Error in retrieving data')
+        }).then(function() {
+            $rootScope.unmaskLoading();
+        });
+
 
     }
     ;
