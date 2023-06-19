@@ -53,7 +53,8 @@
             $rootScope.paginationLoading = true;
             $rootScope.maskLoading();
             BillingDAO.searchReconciliations(ctrl.searchParams).then(function (res) {
-                ctrl.reconciliations = res;                
+                ctrl.reconciliationCount = Number(res.headers.reconciliationcount);
+                ctrl.reconciliations = res.data;                
             }).catch(function (e) {
                 if (e.data !== null) {
                     toastr.error(e.data);
@@ -64,6 +65,10 @@
                 $rootScope.paginationLoading = false;
                 $rootScope.unmaskLoading();
             });    
+        };
+        
+        ctrl.viewReconciliation = function(){
+            
         };
         
         ctrl.openDeleteModal = function (billingReconcilliation)

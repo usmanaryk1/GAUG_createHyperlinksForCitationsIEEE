@@ -7,20 +7,20 @@
     }
 </style>
 <div ng-controller="BillingReconciliationCtrl as billingReconciliation">
-    <div class="page-title" ng-class="{'pad_bt0':billingReconciliation.title}">
+    <div class="page-title" ng-class="{'pad_bt0':billingReconciliation.search.title}">
         <div class="title-env">
             <h1 class="title">Billing Reconciliations</h1>
-            <span class="description" ng-if="billingReconciliation.title">
+            <span class="description" ng-if="billingReconciliation.search.title">
                 <ol class="breadcrumb bc-1 pad_top5" xe-breadcrumb>
                             <li>
                                 <a href="#/app/billing_reconciliation/list"><i class="fa-home"></i>Billing Reconciliation</a>
                             </li>
                             <li class="active">
-                                <strong>{{billingReconciliation.title}}</strong>
+                                <strong>{{billingReconciliation.search.title}}</strong>
                             </li>
                 </ol>
             </span>
-            <p class="description" ng-if="!billingReconciliation.title">
+            <p class="description" ng-if="!billingReconciliation.search.title">
                 Billing Reconciliations
             </p>
         </div>
@@ -31,8 +31,7 @@
                 <div class="panel-body">        
                     <div class="form-group">
                         <div class="col-sm-3 pad_lf0">
-                            <select class="form-control" id="type" name="type" ng-model="billingReconciliation.type"                        
-                                    data-validate="required" data-message-required="Please select a type.">
+                            <select class="form-control" id="type" name="type" ng-model="billingReconciliation.search.type">
                                 <option value="">
                                     Select a type
                                 </option>

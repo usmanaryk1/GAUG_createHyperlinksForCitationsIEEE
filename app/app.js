@@ -658,7 +658,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             state('app.billing_reconciliation_list', {                
                 url: '/billing_reconciliation/list',
-                controller: 'BillingReconciliationListCtrl as billingReconciliationList',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_list'),
                 data: {
                     feature: 'VIEW_BILLING_HISTORY',
@@ -667,11 +666,18 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             state('app.billing_reconciliation_new', {                
                 url: '/billing_reconciliation/new',
-                controller: 'BillingReconciliationCtrl as billingReconciliation',
-                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_new'),
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
                 data: {
                     feature: 'VIEW_BILLING_HISTORY',
                     title:'New'
+                }
+            }).
+            state('app.billing_reconciliation_view', {                
+                url: '/billing_reconciliation/view/:id',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY',
+                    title:'View'
                 }
             }).
             state('app.location_lookup', {

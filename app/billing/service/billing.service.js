@@ -74,9 +74,15 @@
             },
             searchReconciliations:{
                 method: 'GET',
-                isArray: true,
+                isArray: false,
                 params: {
                     action: 'reconciliations'
+                },
+                transformResponse: function (data, headers) {
+                    var response = {};
+                    response.data = JSON.parse(data);
+                    response.headers = headers();
+                    return response;
                 }
             },
             saveClaimAdjustment:{
@@ -97,6 +103,13 @@
                 params: {
                     action: 'reconciliations'
                 }  
+            },
+            getReconciliation: {
+                method: 'GET',
+                isArray: false,
+                params: {
+                    action: 'reconciliations'
+                }
             }
         });
         return {
@@ -144,6 +157,9 @@
             },
             deleteReconciliations: function(data) {
                 return api.deleteReconciliations(data).$promise;
+            },
+            getReconciliation: function(data) {
+                return api.getReconciliation({paramId: data.id}).$promise;
             }
         };
     };

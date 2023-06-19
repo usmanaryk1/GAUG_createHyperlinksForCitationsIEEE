@@ -1,5 +1,5 @@
 <div ng-include="'app/billing/views/billing_reconciliation.html'"></div>
-<div class="row">
+<div class="row" ng-controller="BillingReconciliationListCtrl as billingReconciliationList">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body"> 
@@ -37,7 +37,7 @@
                             </thead>
                             <tbody>
                                 <tr pagination-id="drinksPagination" dir-paginate="reconciliation in billingReconciliationList.reconciliations| itemsPerPage: billingReconciliationList.searchParams.limit" 
-                                    total-items="totalRecords"
+                                    total-items="billingReconciliationList.reconciliationCount"
                                     current-page="billingReconciliationList.searchParams.pageNo">
                                     <td>{{reconciliation.receivedFromName}}</td>
                                     <td>{{reconciliation.receivedDate}}</td>
@@ -45,7 +45,7 @@
                                     <td>{{reconciliation.paymentAmount | number : 2}}</td>
                                     <td>
                                         <div class="center">
-                                            <!--<a class="btn icon-left fa fa-pencil edit_button" href="" tooltip="Edit"><span class="ed_b"></span></a>-->       
+                                            <a class="btn icon-left fa fa-search edit_button" href="" tooltip="Edit"  ui-sref="app.billing_reconciliation_view({id:reconciliation.id})"><span class="ed_b"></span></a>       
                                             <a class="btn icon-left fa fa-trash-o delete_button" href="" tooltip="Delete" ng-click="billingReconciliationList.openDeleteModal(reconciliation)"><span class="ed_b" ></span></a>
                                         </div>
                                     </td>
