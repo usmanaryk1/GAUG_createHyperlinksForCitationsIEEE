@@ -99,7 +99,7 @@ a {
 
 
 /*UPDATES ON 20-3-2015*/
-.green_dot{ width:7px; height:7px; background-color:#72a230; float:left; border-radius:100px; margin:5px 5px  0 0;}
+.green_dot{ width:7px; height:7px; background-color:#82b240; float:left; border-radius:100px; margin:5px 5px  0 0;}
 .red_dot{ width:7px; height:7px; background-color:#F00; float:left; border-radius:100px; margin:5px 5px  0 0;}
 .black_dot{ width:7px; height:7px; background-color:#474747; float:left; border-radius:100px; margin:5px 5px  0 0;}
 
@@ -116,7 +116,7 @@ a {
 .time_sh_bt_buttons{ width:260px; margin:auto;}
 
 .file{ font-size:15px; padding:0px !important;}
-.green_dot{ width:7px; height:7px; background-color:#7c50bb; float:left; border-radius:100px; margin:5px 5px  0 0;}
+.green_dot{ width:7px; height:7px; background-color:#82b240; float:left; border-radius:100px; margin:5px 5px  0 0;}
 
 .input30{ width:30px !important; padding: 6px 5px !important;}
 
@@ -168,6 +168,7 @@ div.dataTables_length label{ width:100% !important;}
 .search_hide .dataTables_length{display:none !important;}
 .search_hide #example-1_filter{display:none !important;}
 .search_only_hide #example-1_filter{display:none !important;}
+.dataTables_length_hide .dataTables_length{display:none !important;}
 
 .pad_lf0{ padding-left:0px !important;}
 

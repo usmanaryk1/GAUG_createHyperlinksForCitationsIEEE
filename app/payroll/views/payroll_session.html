@@ -63,7 +63,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-if='payrollSession.dateMessage!=null' class='text-right' style='color: #cc3f44;'>{{payrollSession.dateMessage}}<br/><br/></div>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +83,7 @@
                 </div>
                 <div class="panel-body pad_top0">
                     <div>
-                        <div class="border0">
+                        <div class="border0" ng-class='{"search_hide":!payrollSession.processdMode,"dataTables_length_hide":payrollSession.processdMode}'>
                             <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="payrollSession.payrollSessions.length" datatable-setup datatable-obj="payrollSession.datatableObj">
                                 <thead>
                                     <tr>
@@ -171,6 +170,7 @@
                             <div ng-if="payrollSession.criteriaSelected == false && !payrollSession.processdMode && payrollSession.processClicked">
                                 Please review payrolls to process sessions.
                             </div>
+                            <div ng-if='payrollSession.dateMessage!=null'  style='color: #cc3f44;'>{{payrollSession.dateMessage}}<br/><br/></div>
                         </div>
                         <div ng-if="payrollSession.processdMode">
                             <div class="col-sm-6">

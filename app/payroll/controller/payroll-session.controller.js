@@ -238,6 +238,8 @@
                     ctrl.payrollSessions = res.payrollList;
                     ctrl.totalGrossPay = 0;
                     angular.forEach(res.payrollList, function(payroll) {
+//                        payroll.firstName=ctrl.empMap[payroll.employeeId].fName;
+//                        payroll.lastName=ctrl.empMap[payroll.employeeId].lName;
                         ctrl.totalGrossPay += payroll.grossPay;
                     });
                     ctrl.processedSessionObj.sessionStartDate = Date.parse(ctrl.processedSessionObj.sessionStartDate);
@@ -252,17 +254,7 @@
                 ctrl.processdMode = false;
             }
 
-            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
-                ctrl.employeeList = res;
-                ctrl.empMap = {};
-                angular.forEach(res, function(emp) {
-                    ctrl.empMap[emp.id] = emp;
-                });
-            }).catch(function(data, status) {
-                console.log('Error in retrieving data')
-            }).then(function() {
-                $rootScope.unmaskLoading();
-            });
+          
             PayrollDAO.getSettings().then(function(res) {
                 if (res != null) {
                     ctrl.payrollSettings = res;
@@ -270,8 +262,20 @@
             }).catch(function() {
                 console.log("Payroll settings cannot be retrieved.");
             });
-        };
-        ctrl.initSessions();
+        };  
+        EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
+                ctrl.employeeList = res;
+                ctrl.empMap = {};
+                angular.forEach(res, function(emp) {
+                    ctrl.empMap[emp.id] = emp;
+                });
+                ctrl.initSessions();
+            }).catch(function(data, status) {
+                console.log('Error in retrieving data')
+            }).then(function() {
+                $rootScope.unmaskLoading();
+            });
+        
 
     }
     ;
