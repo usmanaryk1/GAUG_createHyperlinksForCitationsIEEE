@@ -99,7 +99,6 @@ angular.module('xenon.services', []).
                 // Subitems of employee
                 employee.addItem('Add Employee', './employee/tab1/', 'CREATE_EMPLOYEE');
                 employee.addItem('View Employee', './employee-list/active', 'VIEW_EMPLOYEE');
-                employee.addItem('Benefit Adjustments', './employee-adjustments/active', 'EMPLOYEE_BENEFIT_ADJUSTMENT');
 
 
                 // Subitems of patient
@@ -203,7 +202,7 @@ angular.module('xenon.services', []).
 //                var dashboard = this.addItem('Dashboard', '/admin/dashboard', 'fa-home');
                 var users = this.addItem('Users', '/admin', 'linecons-user', 'CREATE_USER,EDIT_USER,VIEW_USER');
                 var worksite = this.addItem('Worksites', '/admin', 'fa-building', 'CREATE_WORKSITE,EDIT_WORKSITE,VIEW_WORKSITE');
-                var benefits = this.addItem('Benefits', '/admin', 'fa-usd', 'CREATE_BENEFIT,EDIT_BENEFIT,VIEW_BENEFIT');
+                var benefits = this.addItem('Benefits', '/admin', 'fa-usd', 'CREATE_BENEFIT,EDIT_BENEFIT,VIEW_BENEFIT,EMPLOYEE_BENEFIT_ADJUSTMENT');
                 var roles = this.addItem('Roles', '/admin/role-list', 'fa-tasks', 'CREATE_ROLE,EDIT_ROLE,VIEW_ROLE');
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
@@ -223,6 +222,7 @@ angular.module('xenon.services', []).
                 // Subitems of benefits
                 benefits.addItem('Add Benefit', './benefits/', 'CREATE_BENEFIT');
                 benefits.addItem('View Benefit', './benefits', 'VIEW_BENEFIT');
+                benefits.addItem('Benefit Adjustments', './employee-adjustments/active', 'EMPLOYEE_BENEFIT_ADJUSTMENT');
                 // Subitems of company
 //                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 

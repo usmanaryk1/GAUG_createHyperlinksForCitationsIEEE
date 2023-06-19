@@ -1,7 +1,7 @@
 /* global ontime_data, _ */
 
 (function () {
-    function SettingEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, BenefitDAO) {
+    function BenefitAdjistmentsCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, BenefitDAO) {
         var ctrl = this;
         ctrl.datatableObj = {};        
         Page.setTitle("Employee Benefit Adjustments");
@@ -233,5 +233,5 @@
         };
         
     };
-    angular.module('xenon.controllers').controller('SettingEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "BenefitDAO", SettingEmployeesCtrl]);
+    angular.module('xenon.controllers').controller('BenefitAdjistmentsCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "BenefitDAO", BenefitAdjistmentsCtrl]);
 })();
