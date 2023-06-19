@@ -19,23 +19,7 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form">
-                        <div class="col-sm-12 pull-right" ng-if="!payrollSession.processdMode">
-                            <div class="col-sm-12">
-                                <div class="form-group pull-right">
-                                    <label for="field-95" class="control-label">Payroll Group : </label>
-                                    <label class="cbr-inline" >
-                                        <input checked="true" type="radio" name="PayrollGroup" value='A' class="cbr cbr-primary" ng-model="payrollSession.searchParams.payrollGroup">
-                                        A </label>
-                                    <label class="cbr-inline">
-                                        <input type="radio" name="PayrollGroup" value='B' class="cbr cbr-primary" ng-model="payrollSession.searchParams.payrollGroup">
-                                        B </label>
-                                    <label class="cbr-inline">
-                                        <input type="radio" name="PayrollGroup" value='C' class="cbr cbr-primary" ng-model="payrollSession.searchParams.payrollGroup">
-                                        C </label>
-                                </div>
-                            </div>
-                        </div>
+                    <form class="form-horizontal" role="form">     
                         <div class="col-sm-12 pad0">
 
                             <div class="form-group col-sm-3 pull-left">
@@ -60,9 +44,30 @@
                                 </div>
 
                             </div>
-                            <div class="col-sm-7 pull-right wd_full" ng-if="!payrollSession.processdMode">
-
-                                <div class="col-sm-6 pad0 wd_full">
+                            <div class="col-sm-9 pull-right wd_full pad0" ng-if="!payrollSession.processdMode">
+                                <div class="col-sm-4 pad0 wd_full">
+                                    <div class="form-group">
+                                        <label for="PayrollGroup" class="col-sm-6 control-label">Payroll Group</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control pull-right" id="PayrollGroup" name="PayrollGroup" ng-model="payrollSession.searchParams.payrollGroup">
+<!--                                                <option value="">
+                                                    Select a Payroll Group
+                                                </option>-->
+                                                <option value="A">
+                                                    A
+                                                </option>
+                                                <option value="B">
+                                                    B
+                                                </option>
+                                                <option value="C">
+                                                    C
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-4 pad0 wd_full">
                                     <div class="form-group">
                                         <label for="field-93" class="col-sm-3 control-label">From</label>
                                         <div class="col-sm-9">
@@ -77,7 +82,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 pad0">
+                                <div class="col-sm-4 pad0">
                                     <div class="form-group">
                                         <label for="field-94" class="col-sm-3 control-label">To</label>
                                         <div class="col-sm-9">
@@ -88,13 +93,13 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                             </div>
                         </div>
                         <div class="col-sm-12 pad0">
                             <div class="pull-right" ng-if="!payrollSession.processdMode">
                                 <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
-                                <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
+                                <button type="button" class="btn btn-info green_bt  pull-right" style="margin-right: 0px" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null, null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
                                     Reset Filters
@@ -622,64 +627,64 @@
     current-page="payrollSession.searchParams.pageNo">
     <th>
     {{timesheet.roundedPunchInTime|timesheetformat}} - {{timesheet.roundedPunchInTime|date :dateFormat}}
-</th>
-<th>
+    </th>
+    <th>
     <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
-        {{timesheet.roundedPunchOutTime|timesheetformat}} - {{timesheet.roundedPunchOutTime|date :dateFormat}}
+    {{timesheet.roundedPunchOutTime|timesheetformat}} - {{timesheet.roundedPunchOutTime|date :dateFormat}}
     </span>
     <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
-</th>
-<td>
+    </th>
+    <td>
     <!--Display green dot for matched GPS location-->
     <!--<div class="green_dot"></div>-->
     <!--Display red dot for not matched GPS location-->
     <!--<div class="red_dot"></div>-->
     <div ng-class="{'black_dot':timesheet.punchInColorFlag == 'black','red_dot':timesheet.punchInColorFlag == 'red','green_dot':timesheet.punchInColorFlag == 'green'}"></div>
     {{timesheet.roundedPunchInTime|date :timeFormat}}
-</td>
-<td>
+    </td>
+    <td>
     <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
-        <div ng-clas        s="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
-        {{timesh        eet.roundedPunchOutTime|date :timeFormat}}
+    <div ng-clas        s="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
+    {{timesh        eet.roundedPunchOutTime|date :timeFormat}}
     </span>
     <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
-</td>
-<td>
+    </td>
+    <td>
     <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
-        <span ng-if=        'timesheet.unauthorizedTime && timesheet.forPayroll && timesheet.scheduleId'>
-            {{ti            mesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
-        </span>
-        <span ng-if='(timesheet.unauthorizedTime && !timesheet.forPayroll && timesheet.scheduleId) || timesheet.ut'>
-            {{timesheet.scheduleId.roundedStartTime|duration:timesheet.scheduleId.roundedEn        dTime}}
-        </span>
-        <span ng-if='!timesheet.ut && !timesheet.una            uthorizedTime'>
-            {{timesheet.roundedPunchInTime|duration:timeshee        t.roundedPunchOutTime}}
-        </span>
+    <span ng-if=        'timesheet.unauthorizedTime && timesheet.forPayroll && timesheet.scheduleId'>
+    {{ti            mesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
+    </span>
+    <span ng-if='(timesheet.unauthorizedTime && !timesheet.forPayroll && timesheet.scheduleId) || timesheet.ut'>
+    {{timesheet.scheduleId.roundedStartTime|duration:timesheet.scheduleId.roundedEn        dTime}}
+    </span>
+    <span ng-if='!timesheet.ut && !timesheet.una            uthorizedTime'>
+    {{timesheet.roundedPunchInTime|duration:timeshee        t.roundedPunchOutTime}}
+    </span>
     </span>
     <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>N/A</span>
-</td>
-<td>
+    </td>
+    <td>
     <span ng-if='timesheet.ut' style="cursor: pointer;" ng-click="payrollSession.openUTModal(timesheet, 'utModal')">{{timesheet.ut}}</span>
     <span ng-if='timesheet        .unauthorizedTime'>
-        {{timesheet.unauthorizedTime}} <i class="fa fa-check edit_button" style="cursor: pointer;" ng-click="hide(this);" onc        lick="hide(this);"></i>
-        <div class="eventstol            oad" style                ="display:none;">
-            <div>
-                <div ng-if="timesheet.unauthorizedDocument">
-                    <a style="color: blue;text-decoration: underline" ng-href="{{payrollSession.baseUrl}}file/download/{{payr                        ollSession.companyCode}}/u/{{timesheet.unauthorizedDocume                    nt}}">
-                        document{{timesheet.unauthor                izedDocument|extension}}
-                    </a>
-                    <br/>
-                </div>
-                <b>Scheduled At</b                ><br/>
-                from                 {{timesheet.scheduleId.roundedStartTime|date :timeFormat}                } to {{timesheet.scheduleId.roundedEndTime|date :timeForm            at}}<br/>
-                <b>Cleared For</b><br/>
-                <div ng-if="timesheet.forPayroll">Payroll<br/></div>
-                <div ng-if="timesheet.forBilling">Billing<br/></div>
-            </div>
-        </div>
+    {{timesheet.unauthorizedTime}} <i class="fa fa-check edit_button" style="cursor: pointer;" ng-click="hide(this);" onc        lick="hide(this);"></i>
+    <div class="eventstol            oad" style                ="display:none;">
+    <div>
+    <div ng-if="timesheet.unauthorizedDocument">
+    <a style="color: blue;text-decoration: underline" ng-href="{{payrollSession.baseUrl}}file/download/{{payr                        ollSession.companyCode}}/u/{{timesheet.unauthorizedDocume                    nt}}">
+    document{{timesheet.unauthor                izedDocument|extension}}
+    </a>
+    <br/>
+    </div>
+    <b>Scheduled At</b                ><br/>
+    from                 {{timesheet.scheduleId.roundedStartTime|date :timeFormat}                } to {{timesheet.scheduleId.roundedEndTime|date :timeForm            at}}<br/>
+    <b>Cleared For</b><br/>
+    <div ng-if="timesheet.forPayroll">Payroll<br/></div>
+    <div ng-if="timesheet.forBilling">Billing<br/></div>
+    </div>
+    </div>
     </span>
-</td>
-<td>
+    </td>
+    <td>
     {{timesheet.patientId.lName + ", " + timesheet.patientId.fName + " " + timesheet.patientId.middleInitial}}
     </td>
 
