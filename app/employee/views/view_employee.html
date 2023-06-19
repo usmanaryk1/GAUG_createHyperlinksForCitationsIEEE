@@ -114,7 +114,7 @@
                                                             <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.employee-calendar({id: emp.id})" ng-if="hasAccess('VIEW_EMPLOYEE_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
                                                             <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="viewEmployee.openNotesModal(emp.id)" tooltip="Notes"><span class="ed_b"></span></a>
-                                                            <a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewEmployee.openSettingsModal(emp.id)" tooltip="Employee Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && emp.benefitPackageId"><span class="ed_b"></span></a>
+                                                            <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewEmployee.openSettingsModal(emp.id)" tooltip="Employee Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && emp.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
                                                     </td>
                                                 </tr>

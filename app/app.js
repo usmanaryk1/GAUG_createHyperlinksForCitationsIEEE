@@ -398,6 +398,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'VIEW_EMPLOYEE'
                 }
+            }).                    
+            state('app.employee-adjustments', {
+                url: '/employee-adjustments/:status',
+                templateUrl: appHelper.viewTemplatePath('employee', 'setting_employee'),
+                controller: 'SettingEmployeesCtrl as settingEmployee',
+                data: {
+                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+                }
             }).
             // edit_timesheet
             state('app.edit_timesheet', {
