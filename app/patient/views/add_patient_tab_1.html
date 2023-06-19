@@ -122,6 +122,48 @@
                     <div class="form-group-separator">
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label" for="SecondaryContact">
+                            Secondary Contact Type
+                        </label>
+                        <div class="col-sm-9 form-control-static">
+                            <div>
+                                <label>
+                                    <input value="P" name="SecondaryContact" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.secondaryContactType" />
+                                    Proxy
+                                </label>
+                                <label>
+                                    <input name="SecondaryContact" value="E" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.secondaryContactType"/>
+                                    Emergency
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="SecondaryContactName">
+                            {{addPatient.patient.secondaryContactType==='P'?'Proxy':'Emergency'}} Contact Name
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" charactersonly id="field-60" name="SecondaryContactName" type="text" maxlength="200"
+                                   ng-model="addPatient.patient.secondaryContactName"/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="SecondaryContactNumber">
+                            {{addPatient.patient.secondaryContactType==='P'?'Proxy':'Emergency'}} Contact Number
+                        </label>
+                        <div class="col-sm-9">
+                            <input numbers-only="true" maxlength="10" class="form-control" id="SecondaryContactNumber" name="SecondaryContactNumber" type="text" ng-model="addPatient.patient.secondaryContactNumber" 
+                                   data-validate="number,minlength[10],maxlength[10]"
+                                   data-message-minlength="Secondary Contact Number must contain 10 digits" data-message-maxlength="Secondary Contact Number must contain 10 digits"/>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">
                             Languages Spoken
                         </label>

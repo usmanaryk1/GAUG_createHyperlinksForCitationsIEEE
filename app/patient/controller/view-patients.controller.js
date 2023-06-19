@@ -131,21 +131,29 @@
         ctrl.retrievePatients();
         ctrl.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired:true}).then(function (patients) {
-                var patient = patients[0];
-                $rootScope.selectPatientModel = $modal.open({
-                    templateUrl: modal_id,
-                    size: modal_size,
-                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                    keyboard: false
-                });
-                $rootScope.selectPatientModel.patient = angular.copy(patient);
-                $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
-                $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
-                $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
-                if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
-                    $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'patient-info'),
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'PatientInfoCtrl as Patientinfo',
+                resolve: {
+                    patientId: function () {
+                        return patient.id;
+                    },
+                    insuranceProviderMap: function () {
+                        return ctrl.insuranceProviderMap;
+                    },
+                    nursingCareMap: function () {
+                        return ctrl.nursingCareMap;
+                    },
+                    staffCoordinatorMap: function () {
+                        return ctrl.staffCoordinatorMap;
+                    }
                 }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
             });
         };
 

@@ -308,6 +308,9 @@
                     if (!ctrl.patient.gender) {
                         ctrl.patient.gender = 'M';
                     }
+                    if (!ctrl.patient.secondaryContactType) {
+                        ctrl.patient.secondaryContactType = 'P';
+                    }
                     $formService.resetRadios();
                     form_data = $('#add_patient_form').serialize();
                 } else {
