@@ -305,6 +305,7 @@ ontimetest = {
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
     'company_code': "TRT",
+    'date_time_format':"yyyy/MM/dd hh:mm:ss aa"
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },
