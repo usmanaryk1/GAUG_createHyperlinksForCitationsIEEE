@@ -103,8 +103,8 @@ angular.module('xenon.filter', [])
                         durationSum += laterdate.getTime() - earlierdate.getTime();
                     });
 
-                    var daysDifference = Math.floor(durationSum / 1000 / 60 / 60 / 24);
-                    durationSum -= daysDifference * 1000 * 60 * 60 * 24
+//                    var daysDifference = Math.floor(durationSum / 1000 / 60 / 60 / 24);
+//                    durationSum -= daysDifference * 1000 * 60 * 60 * 24
 
                     var hoursDifference = Math.floor(durationSum / 1000 / 60 / 60);
                     if (hoursDifference.toString().length == 1) {

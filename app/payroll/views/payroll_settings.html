@@ -34,7 +34,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <div class="input-group">
-                                    <input class="form-control" ng-model="payrollSet.payrollObj.overtimeThreshhold" id="field-95" name="OvertimeThresholdPerWeek" type="text" data-validate="required"  data-message-required="Please enter Overtime Threshold (Per Week)." maxlength="5" numbers-only="true" decimalallowed>
+                                    <input class="form-control" ng-model="payrollSet.payrollObj.overtimeThreshhold" id="field-95" name="OvertimeThresholdPerWeek" type="text" data-validate="required"  data-message-required="Please enter Overtime Threshold (Per Week)." maxlength="5" numbers-only="true" decimalallowed required>
                                     <span class="input-group-addon">
                                         <i>
                                             Hours
@@ -61,7 +61,7 @@
                                 Vacation Rate
                             </label>
                             <div class="col-sm-8">
-                                <select class="form-control" ng-model="payrollSet.payrollObj.vaccationRate" ng-options="rate.key as rate.value for rate in payrollRates" id="sboxit-1" name="VacationRate" data-validate="required"  data-message-required="Please select Vacation Rate.">
+                                <select class="form-control" ng-model="payrollSet.payrollObj.vaccationRate" ng-options="rate.key as rate.value for rate in payrollRates" id="sboxit-1" name="VacationRate" data-validate="required"  data-message-required="Please select Vacation Rate." required>
                                     <option value="">
                                         Select
                                     </option>
@@ -75,7 +75,7 @@
                                 Sick Rate
                             </label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="sboxit-2" ng-model="payrollSet.payrollObj.sickRate" ng-options="rate.key as rate.value for rate in payrollRates" name="SickRate" data-validate="required"  data-message-required="Please select Sick Rate.">
+                                <select class="form-control" id="sboxit-2" ng-model="payrollSet.payrollObj.sickRate" ng-options="rate.key as rate.value for rate in payrollRates" name="SickRate" data-validate="required"  data-message-required="Please select Sick Rate." required>
                                     <option value="">
                                         Select
                                     </option>
@@ -90,7 +90,7 @@
                             </label>
                             <div class="col-sm-8">
 
-                                <select class="form-control" id="sboxit-3" ng-model="payrollSet.payrollObj.personalRate" ng-options="rate.key as rate.value for rate in payrollRates" name="PersonalRate" data-validate="required"  data-message-required="Please select Personal Rate.">
+                                <select class="form-control" id="sboxit-3" ng-model="payrollSet.payrollObj.personalRate" ng-options="rate.key as rate.value for rate in payrollRates" name="PersonalRate" data-validate="required"  data-message-required="Please select Personal Rate." required>
                                     <option value="">
                                         Select
                                     </option>
@@ -235,7 +235,7 @@
     <form class="validate form-horizontal" name="holidayRateForm" id="holiday_rate_form" >
     <div class="modal-header">
     <button type="button" class="close" ng-click="holidayRateModal.cancel();" aria-hidden="true">&times;</button>
-    <h4 class="modal-title">Select Date For Holiday</h4>
+    <h4 class="modal-title">Select Date For {{holidayRateModal.holiday.name}}</h4>
     </div>
     <div class="modal-body">
 

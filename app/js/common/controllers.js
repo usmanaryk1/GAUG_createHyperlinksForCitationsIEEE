@@ -29,9 +29,10 @@ angular.module('xenon.controllers', []).
                 $rootScope.currentUser = {userName: userName};
                 $rootScope.startIdle();
             }
-            $rootScope.serverPath=ontimetest.weburl;
+            $rootScope.serverPath = ontimetest.weburl;
             $rootScope.languages = {"En": "English", "Cr": "Creole", "Sp": "Spanish", "Ru": "Russian", "Fr": "French", "Hi": "Hindi", "Be": "Bengali", "Ma": "Mandarin", "Ko": "Korean", "Ar": "Arabic", "Fa": "Farsi", "Ur": "Urdu"};
             $rootScope.amazonPublicUrl = "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/";
+            $rootScope.todayDate = new Date();
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;
             $rootScope.isLockscreenPage = false;

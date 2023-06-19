@@ -45,7 +45,8 @@
                                             <label for="field-93" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
+                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" ng-if='payrollSession.searchParams.toDate!=null' max-date="payrollSession.searchParams.toDate"/>
+                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" ng-if='payrollSession.searchParams.toDate==null' max-date='todayDate'/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -56,7 +57,7 @@
                                             <label for="field-94" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate"/>
+                                                    <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate" max-date='todayDate'/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -70,7 +71,7 @@
                             <div class="pull-right" ng-if="!payrollSession.processdMode">
                                 <button type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
-                                <a ng-if="payrollSession.criteriaSelected" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
                                     Reset Filters
                                 </button>
