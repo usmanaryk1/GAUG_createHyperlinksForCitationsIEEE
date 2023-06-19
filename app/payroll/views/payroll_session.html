@@ -45,9 +45,9 @@
 
                             </div>
                             <div class="col-sm-9 pull-right wd_full pad0" ng-if="!payrollSession.processdMode">
-                                <div class="col-sm-4 pad0 wd_full">
+                                <div class="col-sm-4 wd_full">
                                     <div class="form-group">
-                                        <label for="PayrollGroup" class="col-sm-6 control-label">Payroll Group</label>
+                                        <label for="PayrollGroup" class="col-sm-6 control-label" style="padding-right: 0px">Payroll Group</label>
                                         <div class="col-sm-6">
                                             <select class="form-control pull-right" id="PayrollGroup" name="PayrollGroup" ng-model="payrollSession.searchParams.payrollGroup">
 <!--                                                <option value="">
@@ -69,7 +69,7 @@
                                 
                                 <div class="col-sm-4 pad0 wd_full">
                                     <div class="form-group">
-                                        <label for="field-93" class="col-sm-3 control-label">From</label>
+                                        <label for="field-93" class="col-sm-3 control-label" style="padding-right: 0px">From</label>
                                         <div class="col-sm-9">
                                             <div class="input-group" ng-if='payrollSession.searchParams.toDate != null'>
                                                 <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="col-sm-4 pad0">
                                     <div class="form-group">
-                                        <label for="field-94" class="col-sm-3 control-label">To</label>
+                                        <label for="field-94" class="col-sm-3 control-label" style="padding-right: 0px">To</label>
                                         <div class="col-sm-9">
                                             <div class="input-group">
                                                 <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate" max-date='todayDate'/>
@@ -99,7 +99,7 @@
                         <div class="col-sm-12 pad0">
                             <div class="pull-right" ng-if="!payrollSession.processdMode">
                                 <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
-                                <button type="button" class="btn btn-info green_bt  pull-right" style="margin-right: 0px" ng-click="payrollSession.filterSessions()">Review</button>
+                                <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null, null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
                                     Reset Filters
