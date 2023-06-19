@@ -83,11 +83,14 @@ angular.module('xenon.services', []).
                 var dashboard = this.addItem('Dashboard', '/app/dashboard', 'fa-home');
                 var employee = this.addItem('Employee', '/app', 'linecons-cog', 'CREATE_EMPLOYEE,VIEW_EMPLOYEE');
                 var patient = this.addItem('Patient', '/app', 'linecons-user', 'CREATE_PATIENT,VIEW_PATIENT');
-                var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock', 'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET');
+                var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock', 
+                'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET,WORKSITE_SCHEDULE');
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella', 'CREATE_INSURANCE_PROVIDER,VIEW_INSURANCE_PROVIDER');
-                var billing = this.addItem('Billing', '/app', 'linecons-money', 'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
+                var billing = this.addItem('Billing', '/app', 'linecons-money', 
+                'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
-                var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE');
+                var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 
+                'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
                 var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
 
                 // Subitems of Dashboard
