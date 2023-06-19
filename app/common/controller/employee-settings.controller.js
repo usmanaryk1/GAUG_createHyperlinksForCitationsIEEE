@@ -19,6 +19,7 @@
 
         EmployeeDAO.getOffset({id: employeeId}).then(function (res) {
             ctrl.settings = angular.copy(res);
+            ctrl.settings.employeeId = employeeId;
             $rootScope.unmaskLoading();
         });
 
@@ -28,7 +29,7 @@
 
         ctrl.save = function () {
             $rootScope.maskLoading();
-            var offsets = {employeeId: employeeId};
+            var offsets = angular.copy(ctrl.settings);
             if (ctrl.settings.sickTimeOffset && !isNaN(ctrl.settings.sickTimeOffset)) {
                 offsets.sickTimeOffset = parseFloat(ctrl.settings.sickTimeOffset);
             }
