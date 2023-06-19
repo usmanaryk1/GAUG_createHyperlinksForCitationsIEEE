@@ -80,6 +80,15 @@
             },
             deleteNotes:{
                 method: 'DELETE'
+            },
+            getOffset: {
+                method: 'GET'
+            },
+            setOffset: {
+                method: 'POST',
+                params: {
+                    subAction: 'offset'
+                }
             }
         });
         return {
@@ -133,6 +142,12 @@
             },
             getTimeAvailability: function (params) {
                 return api.getTimeAvailability({action: params.employeeId, subAction: 'timeavailability'}).$promise;
+            },
+            getOffset: function (params) {
+                return api.getOffset({action: params.id, subAction: 'offset'}).$promise;
+            },
+            setOffset: function (data) {
+                return api.setOffset({action: data.id}, data.offsets).$promise;
             }
         };
     };
