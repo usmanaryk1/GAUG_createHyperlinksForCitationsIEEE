@@ -84,7 +84,7 @@ angular.module('xenon.services', []).
                 var employee = this.addItem('Employee', '/app', 'linecons-cog', 'CREATE_EMPLOYEE,VIEW_EMPLOYEE');
                 var patient = this.addItem('Patient', '/app', 'linecons-user', 'CREATE_PATIENT,VIEW_PATIENT');
                 var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock', 
-                'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET,WORKSITE_SCHEDULE');
+                'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET,WORKSITE_TIMESHEET');
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella', 'CREATE_INSURANCE_PROVIDER,VIEW_INSURANCE_PROVIDER');
                 var billing = this.addItem('Billing', '/app', 'linecons-money', 
                 'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
@@ -113,7 +113,7 @@ angular.module('xenon.services', []).
                 timeSheet.addItem('Manual Punch', './manual_punch', 'CREATE_MANUAL_PUNCH');
                 timeSheet.addItem('Daily Attendance', './daily_attendance', 'VIEW_DAILY_ATTENDANCE');
                 timeSheet.addItem('Patient Timesheet', './patient_time_sheet', 'VIEW_PATIENT_TIMESHEET');
-                timeSheet.addItem('Worksite Timesheet', './worksite_time_sheet', 'WORKSITE_SCHEDULE');
+                timeSheet.addItem('Worksite Timesheet', './worksite_time_sheet', 'WORKSITE_TIMESHEET');
 
                 // Subitems of insuranceProvider
                 insuranceProvider.addItem('Add Insurance Provider', './insurer/', 'CREATE_INSURANCE_PROVIDER');

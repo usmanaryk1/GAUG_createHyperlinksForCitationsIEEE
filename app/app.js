@@ -500,7 +500,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
                 data: {
-                    feature: 'VIEW_DAILY_ATTENDANCE'
+                    feature: 'WORKSITE_TIMESHEET'
                 }
             }).
             // add_inusrer
