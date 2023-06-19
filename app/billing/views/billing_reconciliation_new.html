@@ -269,12 +269,12 @@
                                                     <td>{{claim.patientBirthDate}}</td>
                                                     <td>{{claim.id}}</td>
                                                     <td>{{claim.sessionStartDate + '-' + claim.sessionEndDate}}</td>
-                                                    <td class="text-center">{{claim.totalCosts}}</td>
-                                                    <td class="text-center">{{claim.totalCosts - claim.paidAmount}}</td>
+                                                    <td class="text-center">{{claim.totalCosts | number : 2}}</td>
+                                                    <td class="text-center">{{(claim.totalCosts - claim.paidAmount) | number : 2}}</td>
                                                     <td>
                                                         <input ng-disabled="!billingReconciliation.selectedClaims[claim.id]" 
                                                                numbers-only="true" maxlength="10" class="form-control" 
-                                                               name="totalCosts" type="text" 
+                                                               name="totalCosts" type="text" decimalallowed
                                                                ng-model="claim.AmountPaid" data-validate="number" ng-change="billingReconciliation.getTotals()"/>
                                                     </td>
                                                 </tr>
@@ -317,12 +317,12 @@
                                                 <td>{{claim.patientBirthDate}}</td>
                                                 <td>{{claim.id}}</td>
                                                 <td>{{claim.sessionStartDate + '-' + claim.sessionEndDate}}</td>
-                                                <td class="text-center">{{claim.totalCosts}}</td>
-                                                <td class="text-center">{{claim.totalCosts - claim.paidAmount}}</td>
+                                                <td class="text-center">{{claim.totalCosts | number : 2}}</td>
+                                                <td class="text-center">{{claim.totalCosts - claim.paidAmount | number : 2}}</td>
                                                 <td>
                                                     <input ng-disabled="!billingReconciliation.selectedClaims[claim.id]" 
                                                            numbers-only="true" maxlength="10" class="form-control" 
-                                                           name="totalCosts" type="text" 
+                                                           name="totalCosts" type="text" decimalallowed
                                                            ng-model="claim.AmountPaid" ng-change="billingReconciliation.getTotals()"/>
                                                 </td>
                                             </tr>

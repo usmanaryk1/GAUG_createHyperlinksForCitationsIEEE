@@ -11,7 +11,7 @@
         function navigateToTab() {
             $state.go(ctrl.type);
         }
-        ctrl.searchParams = {limit: 5, pageNo: 1};
+        ctrl.searchParams = {limit: 10, pageNo: 1};
         
         ctrl.pageChanged = function (pagenumber) {
             ctrl.searchParams.pageNo = pagenumber;

@@ -37,9 +37,9 @@
             ctrl.claims = [];
             ctrl.selectedClaims = [];
             ctrl.bill.reconciliationDetails = [];
-        };        
-        
-        ctrl.resetFilters = function(){
+        };
+
+        ctrl.resetFilters = function () {
             delete ctrl.searchParams;
             ctrl.searchParams = {limit: 5, pageNo: 1, sortBy: 'id', order: 'desc'};
         };
@@ -133,19 +133,18 @@
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('billing', 'claim_credit_modal'),
                 controller: 'ClaimCreditCtrl as claimCredit',
-                size: 'md'
+                size: 'md',
+                resolve: {
+                    creditUsages: function () {
+                        return ctrl.bill.creditUsages ? angular.copy(ctrl.bill.creditUsages) : [];
+                    }
+                }
             });
-            modalInstance.result.then(function (creditUsage) {
-                console.log("creditUsage", creditUsage);
-                if (!ctrl.bill.creditUsages) {
-                    ctrl.bill.creditUsages = [];
-                }
-                if (_.find(ctrl.bill.creditUsages, {claimId: creditUsage.claimId})) {
-                    ctrl.bill.creditUsages[_.findIndex(ctrl.bill.creditUsages, {claimId: creditUsage.claimId})] = creditUsage;
-                } else {
-                    ctrl.bill.creditUsages.push(creditUsage);
-                }
+            modalInstance.result.then(function (creditUsages) {
+                console.log("creditUsages", creditUsages);
+                ctrl.bill.creditUsages = angular.copy(creditUsages);                    
                 ctrl.getTotals();
+                toastr.success("Credits updated successfully.");
             }, function () {
             });
         };
