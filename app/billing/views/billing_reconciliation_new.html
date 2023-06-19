@@ -36,7 +36,7 @@
                                             <select class="form-control" id="sboxit-1" name="InsuranceProvider"
                                                     data-validate="required" data-message-required="Please select Insurance Provider." ng-model="billingReconciliation.bill.receivedBy"
                                                     ng-options='insurer.id as (insurer.insuranceName) for insurer in billingReconciliation.insuranceProviderList'
-                                                    ng-change="billingReconciliation.renderPatientList()">
+                                                    ng-change="billingReconciliation.resetDataAndFilters();billingReconciliation.renderPatientList()">
                                                 <option value="">
                                                     Select the insurance provider
                                                 </option>
@@ -217,7 +217,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-info green_bt pull-right" ng-click="billingReconciliation.filterClaims()">Apply</button>
+                                    <button type="button" class="btn btn-info green_bt pull-right" ng-click="billingReconciliation.searchParams.pageNo=1;billingReconciliation.filterClaims()">Apply</button>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="billingReconciliation.resetFilters()">
                                         Reset
                                     </button>
@@ -279,7 +279,10 @@
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        </table> 
+                                        </table>
+                                        <div ng-if="(billingReconciliation.claims == null || billingReconciliation.claims.length == 0)">
+                                            No claims are available with selected filters.
+                                        </div>
                                     </div>
 
                                 </div>

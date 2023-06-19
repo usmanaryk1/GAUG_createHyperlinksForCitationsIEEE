@@ -29,6 +29,21 @@
             });
             return totalSelected;
         };
+
+        ctrl.resetDataAndFilters = function () {
+            ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
+            ctrl.searchParams = {limit: 5, pageNo: 1, sortBy: 'id', order: 'desc'};
+            ctrl.selectedClaimsShow = [];
+            ctrl.claims = [];
+            ctrl.selectedClaims = [];
+            ctrl.bill.reconciliationDetails = [];
+        };        
+        
+        ctrl.resetFilters = function(){
+            delete ctrl.searchParams;
+            ctrl.searchParams = {limit: 5, pageNo: 1, sortBy: 'id', order: 'desc'};
+        };
+
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
@@ -105,8 +120,8 @@
                 size: 'md'
             });
             modalInstance.result.then(function (claim) {
-                if(_.findIndex(ctrl.claims,{id:claim.id}) > -1){
-                    ctrl.claims[_.findIndex(ctrl.claims,{id:claim.id})].totalCosts = claim.totalCosts;
+                if (_.findIndex(ctrl.claims, {id: claim.id}) > -1) {
+                    ctrl.claims[_.findIndex(ctrl.claims, {id: claim.id})].totalCosts = claim.totalCosts;
                     ctrl.updateSelection();
                 }
             }, function () {
