@@ -302,7 +302,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_1'),
                 data: {
                     tabNo: 1,
-                    feature: 'CREATE_PATIENT'
+                    feature: 'CREATE_PATIENT,EDIT_PATIENT'
                 }
             }).
             // add_patient_tab_2
@@ -311,7 +311,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_2'),
                 data: {
                     tabNo: 2,
-                    feature: 'CREATE_PATIENT'
+                    feature: 'CREATE_PATIENT,EDIT_PATIENT'
                 }
             }).
             // add_patient_tab_3
@@ -320,7 +320,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_3'),
                 data: {
                     tabNo: 3,
-                    feature: 'CREATE_PATIENT'
+                    feature: 'CREATE_PATIENT,EDIT_PATIENT'
                 }
             }).
             // add_patient_tab_4
@@ -329,7 +329,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_4'),
                 data: {
                     tabNo: 4,
-                    feature: 'CREATE_PATIENT'
+                    feature: 'CREATE_PATIENT,EDIT_PATIENT'
                 }
             }).
             // add_patient_tab_5
@@ -338,7 +338,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_5'),
                 data: {
                     tabNo: 5,
-                    feature: 'CREATE_PATIENT'
+                    feature: 'CREATE_PATIENT,EDIT_PATIENT'
                 }
             }).
             // view patients single page
@@ -363,7 +363,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_1'),
                 data: {
                     tabNo: 1,
-                    feature: 'CREATE_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
                 }
             }).
             // add_employee_tab_2
@@ -372,7 +372,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
                 data: {
                     tabNo: 2,
-                    feature: 'CREATE_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
                 }
             }).
             // add_employee_tab_3
@@ -381,7 +381,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
                 data: {
                     tabNo: 3,
-                    feature: 'CREATE_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
                 }
             }).
             // add_employee_tab_4
@@ -390,7 +390,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_4'),
                 data: {
                     tabNo: 4,
-                    feature: 'CREATE_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
                 }
             }).
             //view employees single page
@@ -509,7 +509,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'AddInsurerCtrl as addInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'add_inusrer'),
                 data: {
-                    feature: 'CREATE_INSURANCE_PROVIDER'
+                    feature: 'CREATE_INSURANCE_PROVIDER,EDIT_INSURANCE_PROVIDER'
                 }
             }).
             // view_insurer
@@ -772,34 +772,49 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             state('admin.position-list', {
                 url: '/position-list',
                 templateUrl: appHelper.viewTemplatePath('position', 'view_position'),
-                controller: 'ViewPositionsCtrl as viewPosition'
+                controller: 'ViewPositionsCtrl as viewPosition',
+                data: {
+                    feature: 'VIEW_POSITION'
+                }
             }).
             state('admin.role-list', {
                 url: '/role-list',
                 templateUrl: appHelper.viewTemplatePath('roles', 'view_roles'),
-                controller: 'ViewRolesCtrl as viewRole'
+                controller: 'ViewRolesCtrl as viewRole',
+                data: {
+                    feature: 'VIEW_ROLE'
+                }
             }).
             state('admin.caretype-list', {
                 url: '/caretype-list',
                 templateUrl: appHelper.viewTemplatePath('caretype', 'view_caretype'),
-                controller: 'ViewCareTypesCtrl as viewCareType'
+                controller: 'ViewCareTypesCtrl as viewCareType',
+                data: {
+                    feature: 'VIEW_CARETYPE'
+                }
             }).
             state('admin.language-list', {
                 url: '/language-list',
                 templateUrl: appHelper.viewTemplatePath('language', 'view_language'),
-                controller: 'ViewLanguagesCtrl as viewLanguage'
+                controller: 'ViewLanguagesCtrl as viewLanguage',
+                data: {
+                    feature: 'VIEW_LANGUAGE'
+                }
             }).
             state('admin.task-list', {
                 url: '/task-list',
                 templateUrl: appHelper.viewTemplatePath('task', 'view_task'),
-                controller: 'ViewTasksCtrl as viewTask'
+                controller: 'ViewTasksCtrl as viewTask',
+                data: {
+                    feature: 'VIEW_TASK'
+                }
             }).
             state('admin.user', {
                 url: '/user/:id',
                 templateUrl: appHelper.viewTemplatePath('user', 'add_user'),
                 controller: 'AddUserCtrl as addUser',
                 data: {
-                    feature: 'CREATE_USER'
+                    feature: 'CREATE_USER,EDIT_USER'
                 },
                 resolve: {
                     resources: function ($ocLazyLoad) {
@@ -830,7 +845,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_1'),
                 data: {
                     tabNo: 1,
-                    feature: 'CREATE_WORKSITE'
+                    feature: 'CREATE_WORKSITE,EDIT_WORKSITE'
                 }
             }).
             // add_worksite_tab_2
@@ -839,7 +854,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('worksite', 'add_worksite_tab_2'),
                 data: {
                     tabNo: 2,
-                    feature: 'CREATE_WORKSITE'
+                    feature: 'CREATE_WORKSITE,EDIT_WORKSITE'
                 }
             }).
             // view worksites page
@@ -909,7 +924,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('benefits', 'add_benefit'),
                 controller: 'ManageBenefitCtrl as manageBenefit',
                 data: {
-                    feature: 'EDIT_BENEFIT'
+                    feature: 'CREATE_BENEFIT,EDIT_BENEFIT'
                 }
             }).
             // Update Highlights

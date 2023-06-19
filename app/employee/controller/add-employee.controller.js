@@ -1254,12 +1254,15 @@
         };
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
+            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
             Page.setTitle("Update Employee");
         } else if ($state.current.name.indexOf('tab1') > -1) {
+            if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_EMPLOYEE') === -1) {
+                $state.transitionTo(ontime_data.defaultState);
+            }
             ctrl.employee = {}
             ctrl.editMode = false;
             Page.setTitle("Add Employee");

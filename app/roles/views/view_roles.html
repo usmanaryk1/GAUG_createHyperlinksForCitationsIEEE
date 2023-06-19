@@ -4,7 +4,7 @@
         <p class="description ng-binding">Listing of Roles</p>
     </div>
     <div class="title-env" style="width:20%" >
-        <a class="btn btn-secondary pull-right" ng-click="viewRole.addEditPopup()" ng-if="hasAccess('CREATE_POSITION')" style="margin-top: 10px;">Add New Role</a>
+        <a class="btn btn-secondary pull-right" ng-click="viewRole.addEditPopup()" ng-if="hasAccess('CREATE_ROLE')" style="margin-top: 10px;">Add New Role</a>
     </div>
 </div>
 <div class="panel panel-default">
@@ -27,9 +27,9 @@
                     <td>{{role.features}}</td>
                     <td>
                         <div class="center">
-                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_POSITION')" ng-click="viewRole.addEditPopup(role);" tooltip="Edit"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('UPDATE_POSITION') && role.status == 'a'" ng-click="viewRole.activateDeactivatePopup(role, 'roleActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('UPDATE_POSITION') && role.status == 'i'" ng-click="viewRole.activateDeactivatePopup(role, 'roleActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
+                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('EDIT_ROLE')" ng-click="viewRole.addEditPopup(role);" tooltip="Edit"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('ACTIVATE_ROLE') && role.status == 'a'" ng-click="viewRole.activateDeactivatePopup(role, 'roleActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('ACTIVATE_ROLE') && role.status == 'i'" ng-click="viewRole.activateDeactivatePopup(role, 'roleActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
                         </div>
                     </td>
                 </tr>

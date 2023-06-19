@@ -98,12 +98,15 @@
         }
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
+            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_USER') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
             Page.setTitle("Update User");
         } else {
+            if($rootScope.currentUser.allowedFeature.indexOf('CREATE_USER') === -1){
+                $state.transitionTo(ontime_data.defaultState);
+            }
             Page.setTitle("Add User");
         }
 

@@ -79,7 +79,7 @@ angular.module('xenon.factory').
     };
 
     return debounce;
-}).factory('$layoutToggles', function ($rootScope, $layout) {
+}).factory('$layoutToggles', function ($rootScope, $layout, $state) {
 
     return {
         initToggles: function ()
@@ -182,6 +182,32 @@ angular.module('xenon.factory').
             {
                 $layout.setOptions('userInfoNavVisible', !$rootScope.layoutOptions.userInfoNavVisible);
             }
+            
+            // Navigation to admin portal based on feature assigned
+            $rootScope.navigateToPreferredMenu = function ()
+            {
+                if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_USER') > -1) {
+                    $state.go('admin.user-list', {status: 'active'});
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_WORKSITE') > -1) {
+                    $state.go('admin.worksite-list', {status: 'active'});
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_BENEFIT') > -1) {
+                    $state.go('admin.benefits');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_ROLE') > -1) {
+                    $state.go('admin.role-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_POSITION') > -1) {
+                    $state.go('admin.position-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_CARETYPE') > -1) {
+                    $state.go('admin.caretype-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_LANGUAGE') > -1) {
+                    $state.go('admin.language-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_TASK') > -1) {
+                    $state.go('admin.task-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_COMPANY_INFORMATION') > -1) {
+                    $state.go('admin.company_information');
+                } else {
+                    $state.transitionTo(ontime_data.defaultState);
+                }
+            };
         }
     };
 }).

@@ -22,13 +22,16 @@
         };
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
+            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_INSURANCE_PROVIDER') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
             ctrl.displayCareTypeModal = false;
             Page.setTitle("Update Insurance Provider");
         } else {
+            if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_INSURANCE_PROVIDER') === -1) {
+                $state.transitionTo(ontime_data.defaultState);
+            }
             ctrl.editMode = false;
             Page.setTitle("Add Insurance Provider");
         }
