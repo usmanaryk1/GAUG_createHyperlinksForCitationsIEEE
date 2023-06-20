@@ -156,7 +156,7 @@
                 return api.saveReconciliations(data).$promise;
             },
             deleteReconciliations: function(data) {
-                return api.deleteReconciliations(data).$promise;
+                return api.deleteReconciliations({paramId: data.id}).$promise;
             },
             getReconciliation: function(data) {
                 return api.getReconciliation({paramId: data.id}).$promise;

@@ -11,7 +11,6 @@
         ctrl.currentDate = new Date();
         ctrl.viewRecords = 5;
         ctrl.filteredDatatableObj = {};
-        ctrl.selectedDatatableObj = {};
         ctrl.bill = {};
         var form_data;
         ctrl.navigateToTab = navigateToTab;
@@ -30,7 +29,7 @@
             });
             return totalSelected;
         };
-
+        
         ctrl.resetDataAndFilters = function () {
             ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
             ctrl.searchParams = {limit: 5, pageNo: 1, sortBy: 'id', order: 'desc'};
@@ -86,20 +85,11 @@
             ctrl.filteredDatatableObj.page.len(ctrl.viewRecords).draw();
         };
 
-        ctrl.rerenderSelectedDataTable = function () {
-            $("#selected-claims_wrapper").remove();
-            $timeout(function () {
-                $timeout(function () {
-                    $("#selected-claims").wrap("<div class='table-responsive'></div>");
-                    ctrl.selectedDatatableObj.page.len(ctrl.viewRecords).draw();
-                }, 50);
-            });
-        };
-
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
             ctrl.searchParams.pageNo = pagenumber;
-            ctrl.filterClaims();
+            if(ctrl.claims && ctrl.claims.length > 0)
+                ctrl.filterClaims();
         };
 
         ctrl.updateSelection = function () {

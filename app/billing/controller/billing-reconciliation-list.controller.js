@@ -92,7 +92,8 @@
 
             modalInstance.result.then(function (res) {
                 $rootScope.maskLoading();
-                BillingDAO.deleteReconciliations({id: billingReconcilliation.id}).then(function (res) {                    
+                BillingDAO.deleteReconciliations({id: billingReconcilliation.id}).then(function (res) {   
+                    ctrl.searchParams.pageNo = 1;
                     rerenderDataTable();
                     toastr.success("Reconcilliation deleted.");
                 }).catch(function (data, status) {

@@ -3,29 +3,25 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body"> 
-                <div class="row">                            
-                    <div class="col-sm-12">
-                        <div class="form-group col-sm-6 pull-left">
-                            <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
-                            <div style="width:70px; float:left;">
-                                <select class="form-control input-sm" ng-model="billingReconciliationList.searchParams.limit">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                            </div>
-                        </div> 
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
-                            <input type="search" class="form-control input-sm" ng-model="billingReconciliationList.searchParams.name" placeholder="Search by [Received Form,Date]" ng-change="billingReconciliationList.applySearch()">
-                        </div> 
-
-                    </div>
+                <div class="row" ng-if="billingReconciliationList.reconciliations.length">                            
+                    <div class="form-group col-sm-6 pull-left">
+                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                        <div style="width:70px; float:left;">
+                            <select class="form-control input-sm" ng-model="billingReconciliationList.searchParams.limit">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
+                        <input type="search" class="form-control input-sm" ng-model="billingReconciliationList.searchParams.name" placeholder="Search by [Received Form,Date]" ng-change="billingReconciliationList.applySearch()">
+                    </div> 
                 </div>
-                <div class="row">  </div>
-                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="dataTables_wrapper form-inline dt-bootstrap" ng-if="billingReconciliationList.reconciliations.length">
                     <div class="table-responsive scroll">
-                        <table id="example-1" ng-if="billingReconciliationList.reconciliations.length" class="table table-striped table-bordered  table table-small-font" cellspacing="0">
+                        <table id="example-1" class="table table-striped table-bordered  table table-small-font" cellspacing="0">
                             <thead>
                                 <tr>                                    
                                     <th width="24%" ng-click="viewEmployee.applySorting('receivedFromName')" >Received From</th>
@@ -42,7 +38,7 @@
                                     <td>{{reconciliation.receivedFromName}}</td>
                                     <td>{{reconciliation.receivedDate}}</td>
                                     <td>{{reconciliation.paymentMethod}}</td>
-                                    <td>{{reconciliation.paymentAmount | number : 2}}</td>
+                                    <td>{{reconciliation.paymentAmount| number : 2}}</td>
                                     <td>
                                         <div class="center">
                                             <a class="btn icon-left fa fa-search edit_button" href="" tooltip="Edit"  ui-sref="app.billing_reconciliation_view({id:reconciliation.id})"><span class="ed_b"></span></a>       
@@ -52,11 +48,10 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-
-                    <div ng-if="(billingReconciliationList.reconciliations === null || billingReconciliationList.reconciliations.length === 0)">
-                        No billing reconciliations are available for selected filters.
-                    </div>
+                    </div>                    
+                </div>
+                <div ng-if="(billingReconciliationList.reconciliations === null || billingReconciliationList.reconciliations.length === 0)">
+                    No billing reconciliations available.
                 </div>
                 <div ng-show="billingReconciliationList.reconciliations.length">                    
                     <div id="paginationButtons" class="text-right">
