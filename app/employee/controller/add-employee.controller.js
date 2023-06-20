@@ -248,23 +248,24 @@
         function updateEmployee(reqParam, employeeToSave) {
             $rootScope.maskLoading();
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
-                    .then(function(res) {
+                    .then(function(employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
                         }
                         if ($rootScope.tabNo == 3) {
                             $state.go('app.employee-list', {status: "active"});
                         } else {
-                            $state.go('^.' + ctrl.nextTab, {id: res.id});
+                            $state.go('^.' + ctrl.nextTab, {id: employeeRes.id});
                         }
                         toastr.success("Employee saved.");
-                        ctrl.employee = res;
+                        
                         EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
+                            ctrl.employee = employeeRes;
                             ctrl.employee.careRatesList = res;
                             $timeout(function() {
                                 $("#rate2").multiSelect('refresh');
                                 $("#rate1").multiSelect('refresh');
-                            }, 200);
+                            }, 100);
                         });
                         ctrl.formSubmitted = false;
                     })

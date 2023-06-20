@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-sm-12 pad0">
                             <div class="pull-right" ng-if="!payrollSession.processdMode">
-                                <button type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
+                                <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
                                 <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
@@ -134,11 +134,11 @@
                                         <td>{{session.hour1 == null ? 0 : session.hour1| number:2}}</td>
                                         <td>${{session.rate2 == null ? 0 : session.rate2| number:2}}</td>
                                         <td>{{session.hour2 == null ? 0 : session.hour2| number:2}}</td>
-                                        <td>{{session.otRate == null ? 0 : session.otRate| number:2}}</td>
+                                        <td>${{session.otRate == null ? 0 : session.otRate| number:2}}</td>
                                         <td>{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
-                                        <td>{{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
+                                        <td>${{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
                                         <td>{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
-                                        <td>{{session.earnings1099 == null ? 0 : session.earnings1099| number:2}}</td>
+                                        <td>${{session.earnings1099 == null ? 0 : session.earnings1099| number:2}}</td>
                                         <!--                                        <td>{{session.totalHours}}</td>
                                                                                 <td>{{session.1Earnings}}</td>-->
                                         <!--                                        <td>37</td>

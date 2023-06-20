@@ -43,7 +43,7 @@
                 if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
                     ctrl.searchParams.endDate = null;
                 }
-                if (ctrl.searchParams.startDate !== null && ctrl.searchParams.endDate !== null) {
+                if (ctrl.searchParams.startDate !== null) {
                     ctrl.criteriaSelected = true;
                     ctrl.retrieveTimesheet();
                 } else {
@@ -96,7 +96,7 @@
         ctrl.retrieveTimesheet = function() {
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
-            if (ctrl.searchParams.staffingCordinatorId != null && ctrl.searchParams.startDate != null && ctrl.searchParams.endDate != null) {
+            if (ctrl.searchParams.staffingCordinatorId != null && ctrl.searchParams.startDate != null) {
                 $location.search({id: ctrl.searchParams.staffingCordinatorId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
             }
             TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function(res) {

@@ -40,7 +40,7 @@
                 if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
                     ctrl.searchParams.endDate = null;
                 }
-                if (ctrl.searchParams.startDate !== null && ctrl.searchParams.endDate !== null) {
+                if (ctrl.searchParams.startDate !== null) {
                     ctrl.criteriaSelected = true;
                     ctrl.retrieveTimesheet();
                 } else {
@@ -57,16 +57,13 @@
         };
         ctrl.retrieveTimesheet = function() {
             $scope.hideDefaultImage = false;
-            if (ctrl.searchParams.employeeId !== null) {
-                ctrl.selectedEmployee = ctrl.employeeIdMap[ctrl.searchParams.employeeId];
-                if (ctrl.selectedEmployee.profileImage == null || ctrl.selectedEmployee.profileImage == '') {
-                    $scope.hideDefaultImage = true;
-                }
-            }
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
-            if (ctrl.searchParams.employeeId != null && ctrl.searchParams.startDate != null && ctrl.searchParams.endDate != null) {
+            if (ctrl.searchParams.employeeId != null && ctrl.searchParams.startDate != null) {
                 $location.search({id: ctrl.searchParams.employeeId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
+            }
+            if (ctrl.searchParams.employeeId !== null) {
+                ctrl.selectedEmployee = ctrl.employeeIdMap[ctrl.searchParams.employeeId];
             }
             TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
@@ -86,6 +83,9 @@
                 }); // showLoadingBar
                 //                ctrl.timesheetList = ontimetest.employeeTimesheet;
             }).then(function() {
+                if (ctrl.searchParams.employeeId !== null) {
+                    $scope.hideDefaultImage = true;
+                }
                 $rootScope.unmaskLoading();
             });
         };

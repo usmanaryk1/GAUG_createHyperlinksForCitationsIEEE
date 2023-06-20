@@ -67,7 +67,7 @@
                 if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
                     ctrl.searchParams.endDate = null;
                 }
-                if (ctrl.searchParams.startDate !== null && ctrl.searchParams.endDate !== null) {
+                if (ctrl.searchParams.startDate !== null) {
                     ctrl.criteriaSelected = true;
                     ctrl.retrieveTimesheet();
                 } else {
@@ -89,7 +89,7 @@
                 ctrl.selectedPatient = ctrl.patientIdMap[ctrl.searchParams.patientId];
             }
             ctrl.dataRetrieved = false;
-            if (ctrl.searchParams.patientId != null && ctrl.searchParams.startDate != null && ctrl.searchParams.endDate != null) {
+            if (ctrl.searchParams.patientId != null && ctrl.searchParams.startDate != null) {
                 $location.search({id: ctrl.searchParams.patientId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
             }
             TimesheetDAO.retrievePatientTimeSheet(ctrl.searchParams).then(function(res) {
