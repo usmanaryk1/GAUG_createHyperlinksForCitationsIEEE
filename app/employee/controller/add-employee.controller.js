@@ -185,6 +185,9 @@
             var fileUploadValid = ctrl.checkFileUploadValidity();
             var employeeToSave = angular.copy(ctrl.employee);
             employeeToSave.phone = employeeToSave.phone.toString();
+            if (employeeToSave.phone2) {
+                employeeToSave.phone2 = employeeToSave.phone2.toString();
+            }
             employeeToSave.languageSpoken = [];
             angular.forEach(ctrl.languagesKeyValue, function(obj) {
                 if (obj.value == true) {
@@ -247,10 +250,45 @@
 
         function updateEmployee(reqParam, employeeToSave) {
             $rootScope.maskLoading();
+            if (!ctrl.employee.id || ctrl.employee.id === null) {
+                if (ctrl.employee.position === 'pc') {
+                    employeeToSave.wages = 'H';
+                    employeeToSave.taxStatus = 'W';
+                    employeeToSave.otRate = 13.12;
+                    employeeToSave.hdRate = 13.12;
+                }
+            }
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function(employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
+                            //to set the default data in employee with position 'pc'
+                            if (ctrl.employee.position === 'pc') {
+                                var rate1CareTypes = ['Personal Care HHA Hourly', 'Personal Care HHA Live In', 'PCA/HHA - One Client', 'PCA/HHA - Live In One Client', "CDPAP - One Client", "CDPAP - Live In One Client"];
+                                var rate2CareTypes = ['Personal Care HHA Mutual', 'Personal Care HHA Live In-Mutual', "PCA/HHA - Mutual Care", "PCA/HHA - Live In Mutual Care", "CDPAP - Mutual Care", "CDPAP - Live In Mutual Care"];
+                                CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function(careTypes) {
+                                    var careRateList = {employeeId: employeeRes.id};
+                                    careRateList.rate1 = {rate: 10, careTypes: []};
+                                    careRateList.rate2 = {rate: 10.7, careTypes: []};
+                                    angular.forEach(careTypes, function(obj) {
+                                        if (rate1CareTypes.indexOf(obj.careTypeTitle) >= 0) {
+                                            careRateList.rate1.careTypes.push(obj.id);
+                                        }
+                                        if (rate2CareTypes.indexOf(obj.careTypeTitle) >= 0) {
+                                            careRateList.rate2.careTypes.push(obj.id);
+                                        }
+                                    });
+                                    EmployeeDAO.updateCareRates(careRateList)
+                                            .then(function() {
+                                                retrieveEmployeeCareTypeAfterSave(employeeRes);
+                                            })
+                                            .catch(function() {
+                                                console.log(JSON.stringify(careRateList));
+                                            });
+                                });
+                            }
+                        } else {
+                            retrieveEmployeeCareTypeAfterSave(employeeRes);
                         }
                         if ($rootScope.tabNo == 3) {
                             $state.go('app.employee-list', {status: "active"});
@@ -258,24 +296,25 @@
                             $state.go('^.' + ctrl.nextTab, {id: employeeRes.id});
                         }
                         toastr.success("Employee saved.");
-                        
-                        EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
-                            ctrl.employee = employeeRes;
-                            ctrl.employee.careRatesList = res;
-                            $timeout(function() {
-                                $("#rate2").multiSelect('refresh');
-                                $("#rate1").multiSelect('refresh');
-                            }, 100);
-                        });
-                        ctrl.formSubmitted = false;
                     })
                     .catch(function() {
                         toastr.error("Employee cannot be saved.");
-                        ctrl.formSubmitted = false;
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
                     }).then(function() {
+                ctrl.formSubmitted = false;
                 $rootScope.unmaskLoading();
+            });
+        }
+
+        function retrieveEmployeeCareTypeAfterSave(employeeRes) {
+            EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function(res) {
+                ctrl.employee = employeeRes;
+                ctrl.employee.careRatesList = res;
+                $timeout(function() {
+                    $("#rate2").multiSelect('refresh');
+                    $("#rate1").multiSelect('refresh');
+                }, 100);
             });
         }
 
@@ -895,13 +934,13 @@
                 cropBoxData,
                 canvasData;
         $('body').on('shown.bs.modal', "#cropper-example-2-modal", function() {
-              $image = $('#cropper-example-2 > img'),
+            $image = $('#cropper-example-2 > img'),
                     cropBoxData,
                     canvasData;
-                    $image.cropper("destroy");
+            $image.cropper("destroy");
             if (cropBoxData != null) {
-                canvasData=null;
-                cropBoxData=null;
+                canvasData = null;
+                cropBoxData = null;
             }
 
             $image = $('#cropper-example-2 > img'),
