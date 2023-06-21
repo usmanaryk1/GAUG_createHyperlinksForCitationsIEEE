@@ -37,7 +37,7 @@
                                     current-page="billingReconciliationList.searchParams.pageNo">
                                     <td>{{reconciliation.receivedFromName}}</td>
                                     <td>{{reconciliation.receivedDate}}</td>
-                                    <td>{{reconciliation.paymentMethod}}</td>
+                                    <td>{{reconciliation.paymentMethod === 'CSH' ? 'Cash': (reconciliation.paymentMethod === 'EFT' ? 'EFT' : 'Check')}}</td>
                                     <td>{{reconciliation.paymentAmount| number : 2}}</td>
                                     <td>
                                         <div class="center">

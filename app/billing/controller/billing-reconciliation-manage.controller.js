@@ -157,21 +157,28 @@
         };
 
         ctrl.save = function () {
-            if ($('#billing_reconciliation_form').serialize() !== form_data) {
-                ctrl.formDirty = true;
-            }
+//            if ($('#billing_reconciliation_form').serialize() !== form_data) {
+//                ctrl.formDirty = true;
+//            }
             if ($('#billing_reconciliation_form')[0].checkValidity()) {
-                ctrl.bill.orgCode = ontime_data.company_code;
-                ctrl.bill.reconciliationDetails = [];
+                var billToSave = angular.copy(ctrl.bill);
+                billToSave.orgCode = ontime_data.company_code;
+                
+                billToSave.reconciliationDetails = [];
 
                 if (ctrl.selectedClaimsShow && ctrl.selectedClaimsShow.length > 0) {
                     _.each(ctrl.selectedClaimsShow, function (claim) {
-                        ctrl.bill.reconciliationDetails.push({claimId: claim.id, paidAmount: claim.AmountPaid});
+                        if(claim.AmountPaid)
+                            billToSave.reconciliationDetails.push({claimId: claim.id, paidAmount: claim.AmountPaid});
                     });
                 }
-                console.log("ctrl.bill", ctrl.bill);
+                if (billToSave.reconciliationDetails.length === 0 && (!billToSave.creditUsages || billToSave.creditUsages.length === 0)) {
+                    toastr.warning("Please add valid claims to save.");
+                    return;
+                }
+                console.log("billToSave", billToSave);
                 $rootScope.maskLoading();
-                BillingDAO.saveReconciliations(ctrl.bill).then(function () {
+                BillingDAO.saveReconciliations(billToSave).then(function () {
                     toastr.success("Reconciliation saved successfully.");
                     $state.go('app.billing_reconciliation_list');
                 }).catch(function (data, status) {

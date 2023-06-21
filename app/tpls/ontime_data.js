@@ -1,6 +1,7 @@
 ontime_data = {
-//    'weburl': 'http://localhost:8084/webapplication/api/',
     'weburl': 'http://localhost:8080/ontime/api/',
+//    'weburl': 'http://localhost:8084/webapplication/api/',
+//    'weburl': 'http://localhost:8080/ontime/api/',
     'defaultState': 'login',
     'homepage': 'app.dashboard',
     'weatherCity': 'New York, NY',

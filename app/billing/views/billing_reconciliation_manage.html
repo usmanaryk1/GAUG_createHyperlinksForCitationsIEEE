@@ -22,7 +22,7 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">                
-                <form class="form-horizontal validate" id="billing_reconciliation_form" autocomplete="off" name="billing_reconciliation_form">
+                <form class="form-horizontal validate" novalidate="" id="billing_reconciliation_form" name="billing_reconciliation_form" role="form" ng-submit="manageBillingReconciliation.save()">
                     <accordion class="panel-group-joined" close-others="false">
                         <accordion-group heading="Customer Payment" is-open="true" class="expanded">
                             <div class="row">&nbsp;</div>
@@ -372,7 +372,7 @@
                             <div class="clearfix"></div>
                             <div>&nbsp;</div>
                             <div class="row">
-                                <button type="button" class="btn btn-info green_bt  pull-right col-md-2" ng-click="manageBillingReconciliation.save()" ng-hide="manageBillingReconciliation.isViewOnly">Save</button>
+                                <button type="submit" class="btn btn-info green_bt  pull-right col-md-2" ng-hide="manageBillingReconciliation.isViewOnly">Save</button>
                                 <button class="btn btn-info btn-single gray_bt pull-right col-md-2" type="button" ng-click="manageBillingReconciliation.clear()">
                                     Clear
                                 </button>
