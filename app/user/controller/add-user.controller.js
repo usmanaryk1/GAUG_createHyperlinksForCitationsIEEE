@@ -239,8 +239,8 @@
                             $('#RoleIds').trigger('change.select2');
                         }, 100);
                         ctrl.user = res;
-                        if ($rootScope.currentUser && $rootScope.currentUser.roleIds)
-                            ctrl.unauthorisedRoleIds = _.difference(ctrl.user.roleIds, $rootScope.currentUser.roleIds);
+                        if (ctrl.user && ctrl.user.roleIds && ctrl.roleList)
+                            ctrl.unauthorisedRoleIds = _.difference(ctrl.user.roleIds, _.map(ctrl.roleList,'id'));
                         if (ctrl.user.employee.profileImage != null && ctrl.user.employee.profileImage != '') {
                             ctrl.hideLoadingImage = false;
                         } else {
