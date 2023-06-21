@@ -11,47 +11,49 @@
     <!--PAGE TITLE END -->
 
     <div class="row">
-        <div class="col-md-12">
-            <form class="form-horizontal">
-
-                <div class="panel-body">                        
-                    <div class="panel-body pad_top0 pad0">
-                        <div class="row form-group">                            
-                            <div class="col-sm-12"> 
-                                <span class="btn btn-success pull-right" ng-click="settingEmployee.saveAdjustments()"
-                                      ng-disabled="(!(settingEmployee.searchParams.benefitPackageId &&
-                                                  settingEmployee.searchParams.year)) || settingEmployee.showCount === 0">Save Changes{{settingEmployee.showCount ? '('+settingEmployee.showCount+')':''}}</span>
-                                <span class="btn btn-default pull-right" style="margin-right: 20px;" ng-click="settingEmployee.retrieveEmployees(true)"
-                                      ng-disabled="!(settingEmployee.searchParams.benefitPackageId &&
-                                                  settingEmployee.searchParams.year)">Apply Filter</span>
-                                <div class="pull-right col-sm-4">
-                                    <div class="form-group sm-layout-align">
-                                        <label class="col-sm-4 control-label">
-                                            Benefit Package
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" ng-model="settingEmployee.searchParams.benefitPackageId" 
-                                                    ng-options="package.id as package.packageName for package in settingEmployee.benefitList">
-                                                <option value="">
-                                                    Select
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pull-right col-sm-3">                                
-                                    <div class="form-group sm-layout-align">
-                                        <label class="control-label col-sm-3">Year</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" ng-model='settingEmployee.searchParams.year'
-                                                    ng-options='year as (year) for year in settingEmployee.yearList'>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>                            
+        <form class="form-horizontal">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="color:#2c2e2f" >
+                        <div class="row">                            
+                            <div class="col-md-3 pull-right">    
+                                <label>Year</label>
+                                <select class="form-control" ng-model='settingEmployee.searchParams.year'
+                                        ng-options='year as (year) for year in settingEmployee.yearList'>
+                                    <option value="">
+                                        Select
+                                    </option>
+                                </select>
+                            </div>                      
+                            <div class="col-md-3 pull-right">
+                                <label>
+                                    Benefit Package
+                                </label>
+                                <select class="form-control" ng-model="settingEmployee.searchParams.benefitPackageId" 
+                                        ng-options="package.id as package.packageName for package in settingEmployee.benefitList">
+                                    <option value="">
+                                        Select
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row form-group" ng-if="settingEmployee.employeeList.length > 0 || settingEmployee.searchParams.name">                            
+                        <div class="row">
+                            <div class="col-md-12 filter-checkbox pull-right">
+                                <div class="col-md-12" style="padding-top:20px;">
+                                    <button class="btn btn-success pull-right" ng-click="settingEmployee.saveAdjustments()"
+                                            ng-disabled="(!(settingEmployee.searchParams.benefitPackageId &&
+                                                        settingEmployee.searchParams.year)) || settingEmployee.showCount === 0">Save Changes{{settingEmployee.showCount ? '(' + settingEmployee.showCount + ')' : ''}}</button>                        
+                                    <button class="btn btn-default btn-single gray_bt pull-right" ng-click="settingEmployee.retrieveEmployees(true)"
+                                            ng-disabled="!(settingEmployee.searchParams.benefitPackageId &&
+                                                        settingEmployee.searchParams.year)">
+                                        Apply Filters
+                                    </button>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding-top: 10px;">
+                        <div class="row" ng-if="settingEmployee.employeeList.length > 0 || settingEmployee.searchParams.name">                            
                             <div class="col-sm-12">
                                 <div class="form-group col-sm-6 pull-left">
                                     <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
@@ -69,8 +71,8 @@
                                 </div> 
 
                             </div>
-                        </div>
-                        <!--<div class="row">  </div>-->
+                        </div>                    
+                        <div class="clearfix"></div>
                         <div class="dataTables_wrapper form-inline dt-bootstrap">
                             <div class="table table-bordered table-striped table-responsive scroll">
 
@@ -128,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
