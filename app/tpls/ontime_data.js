@@ -7,7 +7,10 @@ ontime_data = {
     'employeeReasons': [
         {key: "SICK", value: "Sick"},
         {key: "PSNL", value: "Personal Day"},
-        {key: "VCTN", value: "Vacation"}
+        {key: "VCTN", value: "Vacation"},
+        {key: "HOLI", value: "Holiday"},
+        {key: "BERV", value: "Bereavement"},
+        {key: "JUDU", value: "Jury Duty"}
     ],
     'patientReasons': [
         {key: "HPTL", value: "Hospitalization"},
