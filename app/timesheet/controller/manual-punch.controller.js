@@ -5,6 +5,7 @@
         ctrl.todaysDate = new Date();
         var timeFormat = 'hh:mm:ss a';
         ctrl.editTimesheet = null;
+        ctrl.patientMandatory = true;
         ctrl.resetManualPunch = function() {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
             if (ctrl.editTimesheet) {
@@ -27,6 +28,7 @@
             ctrl.patientObj = angular.copy(ctrl.attendanceObj.patientId);
             if (ctrl.attendanceObj.employeeId != null) {
                 ctrl.attendanceObj.employeeId = ctrl.attendanceObj.employeeId.id;
+                ctrl.retrieveEmployee();
                 $timeout(function() {
                     $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
                 });
@@ -60,6 +62,7 @@
                     });
                 } else if ($state.current.name.indexOf('employee') > 0) {
                     ctrl.attendanceObj.employeeId = Number(id);
+                    ctrl.retrieveEmployee();
                     $timeout(function() {
                         $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
                     });
@@ -84,6 +87,15 @@
                 ctrl.attendanceObj.isManualPunch = true;
             }
         };
+
+        ctrl.retrieveEmployee = function() {
+            ctrl.patientMandatory = true;
+            EmployeeDAO.get({id: ctrl.attendanceObj.employeeId}).then(function(res) {
+                if (res.position === 'a' || res.position === 'mr') {
+                    ctrl.patientMandatory = false;
+                }
+            });
+        }
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
@@ -151,7 +163,7 @@
         };
         ctrl.saveManualAttendance = function() {
             ctrl.formSubmitted = true;
-            if ($("#manual_punch_form")[0].checkValidity() && ctrl.attendanceObj.patientId != null && ctrl.attendanceObj.employeeId != null) {
+            if ($("#manual_punch_form")[0].checkValidity() && (ctrl.attendanceObj.patientId != null || !ctrl.patientMandatory) && ctrl.attendanceObj.employeeId != null) {
                 $rootScope.maskLoading();
                 var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
                 if (attendanceObjToSave.isMissedPunch === false) {
