@@ -1,4 +1,4 @@
-/* global ontime_data, _, appHelper */
+/* global ontime_data, _, appHelper, parseFloat */
 
 (function () {
     function ManageBillingReconciliationCtrl($state, $timeout, $modal, $rootScope, InsurerDAO, PatientDAO, BillingDAO) {
@@ -102,7 +102,26 @@
             });
             ctrl.getTotals();
         };
-
+        
+        ctrl.updateAmountPaid = function (claimId, AmountPaid) {
+            var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claimId});
+            if (selectedClaim) {
+                selectedClaim.AmountPaid = AmountPaid;
+            }
+            ctrl.getTotals()
+        };
+        
+        ctrl.updateAllClaims = function(){
+            if (ctrl.claims && ctrl.claims.length > 0) {
+                ctrl.claims.forEach(function (claim) {
+                    var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claim.id});
+                    if (selectedClaim) {
+                        claim.AmountPaid = selectedClaim.AmountPaid;
+                    }
+                });
+            }
+        }
+        
         ctrl.filterClaims = function () {
             ctrl.updateSelection();
             if (ctrl.bill.receivedBy) {
@@ -111,6 +130,7 @@
                 searchParams.insuranceProviderId = ctrl.bill.receivedBy;
                 BillingDAO.searchClaims(searchParams).then(function (claims) {
                     ctrl.claims = angular.copy(claims);
+                    ctrl.updateAllClaims();
                 }).catch(function (err) {
                     console.log("No claim found", err);
                 }).then(function () {
@@ -156,11 +176,14 @@
             });
         };
 
-        ctrl.save = function () {
-//            if ($('#billing_reconciliation_form').serialize() !== form_data) {
-//                ctrl.formDirty = true;
-//            }
+        ctrl.save = function () {            
             if ($('#billing_reconciliation_form')[0].checkValidity()) {
+                 ctrl.getTotals();
+                if (!(ctrl.totals['Applied'] && (parseFloat(ctrl.totals['Applied']).toFixed(2)
+                        === (parseFloat((ctrl.bill.paymentAmount ? parseFloat(ctrl.bill.paymentAmount) : 0) + (ctrl.totals['Credits'] ? ctrl.totals['Credits'] : 0)).toFixed(2))))) {
+                    toastr.error("Applied amount does not match available amount(credits + payment amount).");
+                    return;
+                }
                 var billToSave = angular.copy(ctrl.bill);
                 billToSave.orgCode = ontime_data.company_code;
                 
@@ -175,7 +198,7 @@
                 if (billToSave.reconciliationDetails.length === 0 && (!billToSave.creditUsages || billToSave.creditUsages.length === 0)) {
                     toastr.warning("Please add valid claims to save.");
                     return;
-                }
+            }
                 console.log("billToSave", billToSave);
                 $rootScope.maskLoading();
                 BillingDAO.saveReconciliations(billToSave).then(function () {

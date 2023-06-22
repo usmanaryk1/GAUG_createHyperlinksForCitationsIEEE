@@ -237,7 +237,8 @@
                             <div class="row" style="margin-top: -3%;">                     
                                 <div class="input-group pull-right filter-font">
                                     <label class="cbr-inline pad_top0">
-                                        <input checked="true" type="radio" name="show" value='filtered' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show">
+                                        <input checked="true" type="radio" name="show" value='filtered' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show"
+                                               ng-click="manageBillingReconciliation.updateAllClaims()">
                                         Show Filtered </label>
                                     <label class="cbr-inline pad_top0">
                                         <input type="radio" name="show"  value='selected' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show">
@@ -284,7 +285,7 @@
                                                         <input ng-disabled="!manageBillingReconciliation.selectedClaims[claim.id]" 
                                                                numbers-only="true" maxlength="10" class="form-control" 
                                                                name="totalCosts" type="text" decimalallowed
-                                                               ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.getTotals()"/>
+                                                               ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.updateAmountPaid(claim.id, claim.AmountPaid)"/>
                                                     </td>
                                                 </tr>
                                             </tbody>
