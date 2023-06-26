@@ -2,6 +2,20 @@
     function AddCompanyCtrl(Page, $rootScope, CompanyDAO, $formService) {
         var ctrl = this;
         ctrl.companyObj = {};
+        ctrl.months = [
+            {'id': 1, 'label': 'JAN'},
+            {'id': 2, 'label': 'FEB'},
+            {'id': 3, 'label': 'MAR'},
+            {'id': 4, 'label': 'APR'},
+            {'id': 5, 'label': 'MAY'},
+            {'id': 6, 'label': 'JUN'},
+            {'id': 7, 'label': 'JUL'},
+            {'id': 8, 'label': 'AUG'},
+            {'id': 9, 'label': 'SEP'},
+            {'id': 10, 'label': 'OCT'},
+            {'id': 11, 'label': 'NOV'},
+            {'id': 12, 'label': 'DEC'}
+        ]
         ctrl.profileFileObj = {};
         ctrl.saveCompany = saveCompanyData;
         ctrl.companyCode = ontime_data.company_code;
@@ -20,6 +34,8 @@
                     if (ctrl.companyObj.federalIdType != null) {
                         $formService.setRadioValues('FederalTaxID', ctrl.companyObj.federalIdType);
                     }
+                    ctrl.changeDays('expiration', res.ptoExpirationMonth, res.ptoExpirationDay);
+                    ctrl.changeDays('utilization', res.ptoUtilizationMonth, res.ptoUtilizationDay);
                 }
 
             }).catch(function () {
@@ -27,6 +43,46 @@
             }).then(function () {
                 $rootScope.unmaskLoading();
             });
+        };
+
+        var days29 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 25, 26, 27, 28, 29];
+
+        var days30 = days29.concat([30]);
+
+        var days31 = days30.concat([31]);
+
+        ctrl.changeDays = function (fieldDesc, month, dayOfMonth) {
+
+            if (month) {
+                if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1) {
+                    if (fieldDesc === 'expiration') {
+                        ctrl.expirationDays = days31;
+                    } else if (fieldDesc === 'utilization') {
+                        ctrl.utilizationDays = days31;
+                    }
+                } else {
+                    if (fieldDesc === 'expiration') {
+                        ctrl.expirationDays = (month == 2) ? days29 : days30;
+                        if (dayOfMonth == 31 || (month == 2 && dayOfMonth == 30))
+                            ctrl.companyObj.ptoExpirationDay = null;
+                    } else if (fieldDesc === 'utilization') {
+                        ctrl.utilizationDays = (month == 2) ? days29 : days30;
+                        if (dayOfMonth == 31 || (month == 2 && dayOfMonth == 30))
+                            ctrl.companyObj.ptoUtilizationDay = null;
+                    }
+
+                }
+            } else {
+                if (fieldDesc === 'expiration') {
+                    ctrl.expirationDays = [];
+                    ctrl.companyObj.ptoExpirationDay = null;
+                } else if (fieldDesc === 'utilization') {
+                    ctrl.utilizationDays = [];
+                    ctrl.companyObj.ptoUtilizationDay = null;
+                }
+            }
         };
 
         ctrl.profileUploadFile = {

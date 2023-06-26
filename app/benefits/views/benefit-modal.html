@@ -31,25 +31,6 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label add-padding-modal" >
-                                Expiration required
-                            </label>
-                            <div class="col-sm-5 add-padding-modal">
-                                <div class="input-group">
-                                    <label class="cbr-inline">
-                                        <input class="cbr cbr-primary" name="expirationRequired" value="true" type="radio" ng-model="benefitModal.parameters.expirationRequired">
-                                        Yes
-                                    </label>
-                                    <label class="cbr-inline">
-                                        <input name="expirationRequired" class="cbr cbr-primary" value="false" type="radio" ng-model="benefitModal.parameters.expirationRequired">
-                                        No
-                                    </label>
-                                </div>
-                            </div>                    
-                        </div>
-                    </div>
                     <div class="row" ng-if="benefitModal.parameters.expirationRequired === 'true'">
                         <div class="form-group">
                             <label class="col-sm-4 control-label add-padding-modal" >
