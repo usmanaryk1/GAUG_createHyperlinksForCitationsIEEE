@@ -21,7 +21,7 @@
 
         ctrl.viewPatient;
 
-        ctrl.viewPatient = {'id': ''};
+//        ctrl.viewPatient = {'id': ''};
 
         ctrl.isOpen = false;
 
@@ -48,11 +48,12 @@
         };
 
         ctrl.selectDate = function (e) {
-            ctrl.showDatepicker(e);
+//            ctrl.showDatepicker(e);
             setTimeout(function () {
                 var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
                 var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
                 if (a != ctrl.startRetrieved || b != ctrl.endRetrieved) {
+                    ctrl.showDatepicker(e);
                     $rootScope.refreshCalendarView();
                 }
             }, 200);
@@ -94,6 +95,7 @@
         $rootScope.refreshCalendarView = function () {
             $rootScope.paginationLoading = true;
             ctrl.retrievePatients();
+            ctrl.retrieve
         };
 
         ctrl.retrievePatients = function () {
@@ -202,8 +204,8 @@
             var endCount = 6;
             angular.forEach(res, function (content) {
                 if (content.eventType == 'U') {
-                    if(_.find(ontime_data.patientReasons,{key:content.reason}))
-                        content.reasonDisplay = _.find(ontime_data.patientReasons,{key:content.reason}).value;
+                    if (_.find(ontime_data.patientReasons, {key: content.reason}))
+                        content.reasonDisplay = _.find(ontime_data.patientReasons, {key: content.reason}).value;
                     var startDay = new Date(content.startDate).getDay();
                     var start = new Date(content.startDate);
                     var end = new Date(content.endDate);
@@ -250,6 +252,8 @@
 
         ctrl.retrieveAllPatients = function () {
             PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                ctrl.searchParams.patientIds = null;
+                $('#patientdropdownIds').select2('val', null);
                 ctrl.patientList = res;
             });
         };
@@ -380,7 +384,8 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 200);
+                    cbr_replace();
+                }, 800);
                 $rootScope.patientPopup = $modal.open({
                     templateUrl: 'app/calendar/views/patient_calendar_modal.html',
                     size: modal_size,
@@ -428,10 +433,6 @@
                             $rootScope.patientPopup.data.applyTo = "SINGLE";
                     }
                 }
-                //to make the radio buttons selected, theme bug
-                setTimeout(function () {
-                    cbr_replace();
-                }, 100);
 
                 $rootScope.patientPopup.currentStartTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 $rootScope.patientPopup.currentEndTime = $rootScope.patientPopup.currentStartTime;
@@ -504,47 +505,47 @@
                         }
                     });
                 };
-                $rootScope.patientPopup.changed = function (form, event) {                    
-                        if (event != 'repeat') {
-                            var old = $rootScope.patientPopup.data.eventType;
-                            $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
-                            if (old == 'S') {
-                                $rootScope.patientPopup.data.forLiveIn = false;
-                                $rootScope.patientPopup.data.doNotBill = false;
-                                $rootScope.patientPopup.data.startTime = $rootScope.patientPopup.currentStartTime;
-                                $rootScope.patientPopup.data.endTime = $rootScope.patientPopup.currentEndTime;
-                            }
-                            if (old == 'U') {
-                                $rootScope.patientPopup.data.isPaid = false;
-                            }
-                            if (!angular.isDefined(id))
-                                $rootScope.patientPopup.careTypes = [];
-                            if ($rootScope.patientPopup.data)
-                                delete $rootScope.patientPopup.data.companyCareTypeId;
-                            setTimeout(function () {
-                                $("#eventPatientIds").select2({
-                                    // minimumResultsForSearch: -1,
-                                    placeholder: 'Select Patient...',
-                                    // minimumInputLength: 1,
-                                    // placeholder: 'Search',
-                                }).on('select2-open', function ()
-                                {
-                                    // Adding Custom Scrollbar
-                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                });
-                                $("#employee").select2({
-                                    // minimumResultsForSearch: -1,
-                                    placeholder: 'Select Employee...',
-                                    // minimumInputLength: 1,
-                                    // placeholder: 'Search',
-                                }).on('select2-open', function ()
-                                {
-                                    // Adding Custom Scrollbar
-                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                });
-                                cbr_replace();
-                            }, 200);
+                $rootScope.patientPopup.changed = function (form, event) {
+                    if (event != 'repeat') {
+                        var old = $rootScope.patientPopup.data.eventType;
+                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
+                        if (old == 'S') {
+                            $rootScope.patientPopup.data.forLiveIn = false;
+                            $rootScope.patientPopup.data.doNotBill = false;
+                            $rootScope.patientPopup.data.startTime = $rootScope.patientPopup.currentStartTime;
+                            $rootScope.patientPopup.data.endTime = $rootScope.patientPopup.currentEndTime;
                         }
+                        if (old == 'U') {
+                            $rootScope.patientPopup.data.isPaid = false;
+                        }
+                        if (!angular.isDefined(id))
+                            $rootScope.patientPopup.careTypes = [];
+                        if ($rootScope.patientPopup.data)
+                            delete $rootScope.patientPopup.data.companyCareTypeId;
+                        setTimeout(function () {
+                            $("#eventPatientIds").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            $("#employee").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Employee...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            cbr_replace();
+                        }, 200);
+                    }
                 };
                 $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
                     delete $rootScope.patientPopup.data.employeeId;

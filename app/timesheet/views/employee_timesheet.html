@@ -1,4 +1,4 @@
-<div class="page-body">
+<div class="page-body"> 
     <!--PAGE TITLE START -->
     <div class="page-title">
         <div class="title-env">
@@ -12,37 +12,29 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <form class="form-horizontal validate" role="form" id='emp_timesheet_form'>
-                        <div class="row adjust-row-padding">
-                            <div class="col-sm-4 element-align sm-flex-align">
-
-                                <div class="element-align" ng-show="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null" style="cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee.id)">
-                                    <div class="user_p" style="float:none;">
-                                        <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (amazonPublicUrl + empTimesheet.companyCode + '/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
-                                        <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4 pad_lf0" style="margin-top:-15px;" ng-if="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null">                                    
+                                    <div class="user_panel" ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')" style="cursor: pointer">
+                                        <div class="user_img" ng-if="empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != ''" > 
+                                            <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (amazonPublicUrl + empTimesheet.companyCode + '/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
+                                            <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
+                                        </div>
+                                        <div ng-if="empTimesheet.selectedEmployee.profileImage == null || empTimesheet.selectedEmployee.profileImage == ''" class="user_img"> 
+                                            <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> 
+                                        </div>
+                                        <div class="emp_user_hd">
+                                            <div class="emp_user_name" style="color: #2c2e2f;">{{empTimesheet.selectedEmployee.lName}}, {{empTimesheet.selectedEmployee.fName}} {{empTimesheet.selectedEmployee.middleInitial}}</div>
+                                            <p>{{positions[empTimesheet.selectedEmployee.companyPositionId]}}</p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="element-align user-info">
-                                    <h3 style="color: #16191e">{{empTimesheet.selectedEmployee.lName + " " + empTimesheet.selectedEmployee.fName + " " + empTimesheet.selectedEmployee.middleInitial}}</h3>
-                                    <p style="color: #9d9d9d">{{positions[empTimesheet.selectedEmployee.companyPositionId]}}</p>
-                                </div>
-
-                            </div>
-                            <div class="col-sm-8">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="form-group sm-layout-align" ng-class="{ 'validate-has-error':empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted}">
-                                            <label class="control-label">Employee Name</label>
-                                            <!--<script type="text/javascript">
-                                            jQuery(document).ready(function($)
-                                            {
-                                                $("#sboxit-2").selectBoxIt().on('open', function()
-                                                {
-                                                    // Adding Custom Scrollbar
-                                                    $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                                });
-                                            });
-                                            </script>-->
+                                <div class="col-sm-8 pull-right pad0 wd_full">
+                                    <div class="form-group" ng-class="{ 'validate-has-error': empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted}">
+                                        <label class="col-sm-3 control-label">Employee Name</label>
+                                        <div class="col-sm-9">
+                                            <!--<input type="text" class="form-control" ng-model="patTimesheet.searchValue" ng-change="patTimesheet.filterTimesheet()">-->
                                             <script type="text/javascript">
                                                 jQuery(document).ready(function ($)
                                                 {
@@ -61,65 +53,72 @@
 
                                                 });
                                             </script>
-                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="empTimesheet.searchParams.employeeId" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in empTimesheet.employeeList track by emp.id'>
+                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="empTimesheet.searchParams.employeeId" ng-options='emp.id as (emp.lName + ", " + emp.fName + " " + emp.middleInitial) for emp in empTimesheet.employeeList track by emp.id'>
                                                 <option value="" selected hidden />
                                             </select>
-                                            <div ng-show='empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted'>
+                                            <div ng-show='empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted'>                                                
                                                 <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee Name.</span>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 element-align">
-                                        <div class="col-sm-6 element-align lg-layout-align-right">
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <label for="field-68" class="control-label">From</label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" max-date="empTimesheet.searchParams.endDate" data-validate="required"  data-message-required="Please select From Date." required>
-                                                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 element-align lg-layout-align-left">
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <label for="field-69" class="control-label">To</label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" min-date="empTimesheet.searchParams.startDate">
-                                                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 pad0">
+                                <div class="form-group col-sm-5 pull-left" ng-show="empTimesheet.timesheetList.length">
+                                    <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                                    <div style="width:70px; float:left">
+                                        <select class="form-control input-sm" ng-model="empTimesheet.searchParams.limit">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-7 pull-right wd_full">
+                                    <div class="col-sm-6 pad0 wd_full">
+                                        <div class="form-group">
+                                            <label for="field-68" class="col-sm-3 control-label">From</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" max-date="empTimesheet.searchParams.endDate" name='fromDate' data-validate="required"  data-message-required="Please select From Date." required>
+
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 pad0" style="margin-bottom:10px;">
-                                        <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="empTimesheet.resetFilters()">Reset Filters</button>
-                                        <a href="#/app/manual_punch{{empTimesheet.selectedEmployee==null?'':'/employee/'+empTimesheet.searchParams.employeeId+'?lastPage=employee_timesheet'}}" class="btn btn-single btn-info clean-margin btn-block-xs" ng-disabled="empTimesheet.selectedEmployee.status === 'i'">Manual Punch</a>
-                                        <button type="submit" class="btn btn-single btn-success clean-margin btn-block-xs"  ng-click="empTimesheet.searchParams.pageNo = 1;
-                                            empTimesheet.searchParams.sortBy = 'date';
-                                            empTimesheet.searchParams.order = 'desc';
-                                            empTimesheet.filterTimesheet();
-                                            empTimesheet.formSubmitted = true">Review</button>
+                                    <div class="col-sm-6 pad0">
+                                        <div class="form-group">
+                                            <label for="field-69" class="col-sm-3 control-label">To</label>
+                                            <div class="col-sm-9 pad_lf0">
+                                                <div class="input-group">
+                                                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" min-date="empTimesheet.searchParams.startDate">
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row adjust-row-padding">
-                            <div class="form-group col-sm-5 pull-left" ng-show="empTimesheet.timesheetList.length">
-                                <label class="col-sm-4 control-label pull-left element-align" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
-                                <div style="width:70px; float:left;">
-                                    <select class="form-control input-sm" ng-model="empTimesheet.searchParams.limit">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
+
+                        <div class="row">
+                            <div class="col-sm-12 pad0">
+                                <div class="col-sm-6 pull-right">           
+                                    <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="empTimesheet.searchParams.pageNo = 1;
+                                        empTimesheet.searchParams.sortBy = 'date';
+                                        empTimesheet.searchParams.order = 'desc';
+                                        empTimesheet.filterTimesheet();
+                                        empTimesheet.formSubmitted = true">Review</button>
+                                    <a href="#/app/manual_punch{{empTimesheet.selectedEmployee==null?'':'/employee/'+empTimesheet.searchParams.employeeId+'?lastPage=employee_timesheet'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5" ng-disabled="empTimesheet.selectedEmployee.status === 'i'">Manual Punch</a>
+                                    <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
+                                        Reset Filters
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -214,60 +213,6 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <!--                                        <tr>
-                                          <th>11/28/2008</th>
-                                          <td><div class="green_dot"></div>
-                                              09:20 AM</td>
-                                          <td><div class="red_dot"></div>
-                                              06:00 PM</td>
-                                          <td>09:00</td>
-                                          <td>Capoblanco Anne</td>
-                                          <td><div style="float:left; min-width:170px;">
-                                                  <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                  <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                  <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                              </div></td>
-                                          </tr>
-                                          <tr>
-                                          <th>11/28/2008</th>
-                                          <td><div class="black_dot"></div>
-                                              09:00 AM</td>
-                                          <td><div class="black_dot"></div>
-                                              06:30 PM</td>
-                                          <td>09:00</td>
-                                          <td>Capoblanco Anne</td>
-                                          <td><div style="float:left; min-width:170px;">
-                                                  <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                  <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                  <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                              </div></td>
-                                          </tr>
-                                          <tr>
-                                          <th>11/28/2008</th>
-                                          <td><div class="green_dot"></div>
-                                              09:00 AM</td>
-                                          <td><div class="green_dot"></div>
-                                              06:00 PM</td>
-                                          <td>09:00</td>
-                                          <td>Capoblanco Anne</td>
-                                          <td><div style="float:left; min-width:170px;">
-                                                  <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                  <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                  <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                              </div></td>
-                                          </tr>
-                                          <tr>
-                                          <th>11/28/2008</th>
-                                          <td> 09:00 AM</td>
-                                          <td> 06:00 PM</td>
-                                          <td>09:00</td>
-                                          <td>Capoblanco Anne</td>
-                                          <td><div style="float:left; min-width:170px;">
-                                                  <a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                  <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                  <a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>
-                                              </div></td>
-                                          </tr>-->
                                     </tbody>
                                 </table>
                                 <div ng-if="(empTimesheet.timesheetList == null || empTimesheet.timesheetList.length == 0) && empTimesheet.dataRetrieved && empTimesheet.criteriaSelected === true">
@@ -295,28 +240,28 @@
                         </tbody>
                     </table>
                 </div>
-                <!--                <div class="panel-body pad_top0">
-                  <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><script type="text/javascript">
-                      // This JavaScript Will Replace Checkboxes in dropdown toggles
+<!--                <div class="panel-body pad_top0">
+                    <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><script type="text/javascript">
+                        // This JavaScript Will Replace Checkboxes in dropdown toggles
                       jQuery(document).ready(function($)
-                      {
+                        {
                           setTimeout(function()
-                          {
-                              $(".checkbox-row input").addClass('cbr');
-                              cbr_replace();
-                          }, 0);
-                      });
-                      </script>
-                      <div class="row">
-                          <div class="col-sm-12">
-                              <div class="time_sh_bt_buttons">
-                                  <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">&laquo; Previous</button>
-                                  <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">Next &raquo;</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  </div>-->
+                            {
+                                $(".checkbox-row input").addClass('cbr');
+                                cbr_replace();
+                            }, 0);
+                        });
+                        </script>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="time_sh_bt_buttons">
+                                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">&laquo; Previous</button>
+                                    <button style="width:auto;" class="btn btn-info green_bt pull-left" type="button">Next &raquo;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
             </div>
         </div>
     </div>

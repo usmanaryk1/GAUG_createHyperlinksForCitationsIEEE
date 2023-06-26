@@ -52,8 +52,8 @@
         }
         ;
         ctrl.saveSettings = saveSettings;
-        function setFormDynamicValidityMessages() {
-            $("#companyCode-error").text('Please enter Payroll Company Code.');
+        function setFormDynamicValidityMessages(payrollGroup) {
+            $("#companyCod"+payrollGroup+"-error").text('Please enter Payroll Company Code '+payrollGroup+'.');
         }
         $scope.$watch(function () {
             return ctrl.payrollObj.payrollProvider;
@@ -61,17 +61,35 @@
             setValidationsForCompanyCode(newVal);
         });
         $scope.$watch(function () {
-            return ctrl.payrollObj.payrollCompanyCode;
+            return ctrl.payrollObj.payrollCompanyCodeA;
         }, function (newVal, oldValue) {
-            if (newVal && (newVal === '' || newVal === null)) {
-                setFormDynamicValidityMessages();
+            if ((newVal === '' || newVal === null)) {
+                setFormDynamicValidityMessages('A');
+            }
+        });
+        $scope.$watch(function () {
+            return ctrl.payrollObj.payrollCompanyCodeB;
+        }, function (newVal, oldValue) {
+            if ((newVal === '' || newVal === null)) {
+                setFormDynamicValidityMessages('B');
+            }
+        });
+        $scope.$watch(function () {
+            return ctrl.payrollObj.payrollCompanyCodeC;
+        }, function (newVal, oldValue) {
+            if ((newVal === '' || newVal === null)) {
+                setFormDynamicValidityMessages('C');
             }
         });
         function setValidationsForCompanyCode(payrollProvider) {
             if (payrollProvider && payrollProvider !== '' && payrollProvider != null) {
-                $("input[name='companyCode']").attr('required', true);
+                $("input[name='companyCodeA']").attr('required', true);
+                $("input[name='companyCodeB']").attr('required', true);
+                $("input[name='companyCodeC']").attr('required', true);
             } else {
-                $("input[name='companyCode']").attr('required', false);
+                $("input[name='companyCodeA']").attr('required', false);
+                $("input[name='companyCodeB']").attr('required', false);
+                $("input[name='companyCodeC']").attr('required', false);
             }
         }
         //function to save the payroll settings
