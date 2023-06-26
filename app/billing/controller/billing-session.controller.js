@@ -15,9 +15,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
-        if ($state.params.id && $state.params.id !== '') {
-            ctrl.processdMode = true;
-            $rootScope.maskLoading();
+        ctrl.fetchBillingBatch = function(){
             BillingDAO.getSessionById({paramId: $state.params.id}).then(function (res) {
                 $rootScope.unmaskLoading();
                 if (res && res.billingClaims) {
@@ -36,6 +34,12 @@
                 $rootScope.unmaskLoading();
                 toastr.error("Some arror occurred while retrieving existing session.");
             });
+        }
+        
+        if ($state.params.id && $state.params.id !== '') {
+            ctrl.processdMode = true;
+            $rootScope.maskLoading();
+            ctrl.fetchBillingBatch();
         } else {
             ctrl.processdMode = false;
         }
@@ -122,7 +126,7 @@
             BillingDAO.processSessions(ctrl.reviewedFilters, payload).then(function (res) {
                 if (ctrl.billingSessions != null && ctrl.billingSessions.length > 0 && ctrl.billingSessions[0].claimType != 'UB04') {
                     window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
-                }else{
+                } else {
                     window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
                 }
                 $state.go('app.billing_batch', {id: res.id});
@@ -198,6 +202,38 @@
                 result += chars[Math.round(Math.random() * (chars.length - 1))];
             return result;
         }
+        ctrl.openDeleteModal = function (claim, e) {
+            e.stopPropagation();
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
+                controller: 'ConfirmModalController as confirmModal',
+                size: 'md',
+                resolve: {
+                    message: function () {
+                        return "Are you sure you want to delete this Billing Claim?";
+                    },
+                    title: function () {
+                        return "Delete Billing Claim";
+                    },
+                    subtitle: function () {
+                        return "";
+                    }
+                }
+            });
+            modalInstance.result.then(function (res) {
+                $rootScope.maskLoading();
+                BillingDAO.deleteClaim({paramId: claim.id}).then(function () {
+                    toastr.success("Billing claim deleted.");
+                    ctrl.fetchBillingBatch();
+                }).catch(function (data, status) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }, function () {
+            });
+
+        };
     }
     angular.module('xenon.controllers').controller('BillingSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "BillingDAO", "InsurerDAO", "$state", "Page", BillingSessionCtrl]);
 })();

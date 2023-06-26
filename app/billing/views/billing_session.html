@@ -102,7 +102,7 @@
                         <div>
                             <a style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download">Download EDI</a>
-                            <a ng-if="billingSession.billingSessions[0].claimType=='UB04'" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                            <a ng-if="billingSession.billingSessions[0].claimType == 'UB04'" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/download/batch/{{billingSession.sessionId}}" download>Download UB04</a>
                         </div>
                         <div class="text-left">
@@ -127,12 +127,12 @@
 
                                         <th nowrap><span class="">Billed</span></th>
                                         <th nowrap class="text-center"><span class="">Authorized Codes</span></th>
-                                        <th nowrap class='nosorting text-center' ng-if="!billingSession.processdMode">
-                                            <span class="">View Claim</span>
+                                        <th nowrap class='nosorting text-center'>
+                                            <span class="">Actions</span>
                                         </th>
-<!--                                        <th nowrap class='nosorting text-center' ng-if="billingSession.processdMode">
-                                            <span class="">Download EDI</span>
-                                        </th>-->
+                                        <!--                                        <th nowrap class='nosorting text-center' ng-if="billingSession.processdMode">
+                                                                                    <span class="">Download EDI</span>
+                                                                                </th>-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -144,16 +144,22 @@
                                         <td>{{session.totalServiceLines ? session.totalServiceLines: 0}}</td>
                                         <td>${{session.totalCosts ? (session.totalCosts | number:2): 0}}</td>
                                         <td class="text-center">{{session.authorizedCodes}}</td>
-                                        <td class="text-center" ng-if="!billingSession.processdMode">
+                                        <td class="text-center">
                                             <div class="center">
-                                                <a class="btn icon-left fa fa-file-text-o edit_button" tooltip="View Claim" tooltip-append-to-body="true" ng-click="billingSession.openClaim1500(session);"><span class="ed_b"></span></a>
+                                                <a ng-if="hasAccess('DELETE_BILLING_CLAIM') && billingSession.processdMode" class="btn icon-left fa fa-trash-o delete_button" 
+                                                   href="" ng-click="billingSession.openDeleteModal(session, $event)" tooltip="Delete"><span class="ed_b"></span></a>
+                                                <a ng-if="billingSession.processdMode" 
+                                                   class="btn icon-left fa fa-search view_task_button" tooltip="View Claim" tooltip-append-to-body="true"
+                                                   ng-click="billingSession.openClaim1500(session);"><span class="ed_b"></span></a>
+                                                <a ng-if="!billingSession.processdMode" 
+                                                   class="btn icon-left fa fa-file-text-o edit_button" tooltip="View Claim" tooltip-append-to-body="true" ng-click="billingSession.openClaim1500(session);"><span class="ed_b"></span></a>
                                             </div>
                                         </td>
-<!--                                        <td class="text-center" ng-if="billingSession.processdMode">
-                                            <div class="center">
-                                                <a class="btn icon-left fa fa-download download_bt" tooltip="Download EDI" tooltip-append-to-body="true" ng-href="{{billingSession.baseUrl}}billing/claim/{{session.id}}/edi/download"><span class="ed_b"></span></a>
-                                            </div>
-                                        </td>-->
+                                        <!--                                        <td class="text-center" ng-if="billingSession.processdMode">
+                                                                                    <div class="center">
+                                                                                        <a class="btn icon-left fa fa-download download_bt" tooltip="Download EDI" tooltip-append-to-body="true" ng-href="{{billingSession.baseUrl}}billing/claim/{{session.id}}/edi/download"><span class="ed_b"></span></a>
+                                                                                    </div>
+                                                                                </td>-->
                                     </tr>
                                 </tbody>
                             </table>

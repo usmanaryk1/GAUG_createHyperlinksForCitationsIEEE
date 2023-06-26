@@ -110,6 +110,12 @@
                 params: {
                     action: 'reconciliations'
                 }
+            },
+            deleteClaim:{
+                method: 'DELETE',
+                params: {
+                    action: 'claims'
+                }             
             }
         });
         return {
@@ -160,6 +166,9 @@
             },
             getReconciliation: function(data) {
                 return api.getReconciliation({paramId: data.id}).$promise;
+            },
+            deleteClaim: function(data) {
+                return api.deleteClaim(data).$promise;
             }
         };
     };

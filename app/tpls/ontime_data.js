@@ -47,8 +47,8 @@ ontime_data = {
     'pastEventAuthorizationPassword': '!avalanche!',
     'hrPassword': 'Avalanche!HR',
     'date_time_format': "yyyy/MM/dd hh:mm:ss a",
-    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/",
-    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/ontimepatientsign/",
+    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
+    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/",
     reportTypes: [
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},

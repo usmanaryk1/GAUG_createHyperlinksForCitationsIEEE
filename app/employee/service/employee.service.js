@@ -105,6 +105,18 @@
             },
             readNotes: {
                 method: 'PUT'
+            },
+            addAttachment: {
+                method: 'POST',
+                params: {
+                    subAction: 'attachments'
+                }
+            },
+            updateAttachment: {
+                method: 'PUT'
+            },
+            deleteAttachment: {
+                method: 'DELETE'
             }
         });
         return {
@@ -175,6 +187,15 @@
             },
             readNotes: function (params) {
                 return api.readNotes({action: params.userId, subAction: 'notes', subAction1: 'read'},{}).$promise;
+            },
+            addAttachment: function (data) {
+                return api.addAttachment({action: data.employeeId}, data).$promise;
+            },
+            deleteAttachment: function (data) {
+                return api.deleteAttachment({action: data.employeeId, subAction: 'attachments', subAction1: data.id}, {}).$promise;
+            },
+            updateAttachment: function (data) {
+                return api.updateNotes({action: data.employeeId, subAction: 'attachments', subAction1: data.id}, data).$promise;
             }
         };
     };
