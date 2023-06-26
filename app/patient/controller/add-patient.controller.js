@@ -79,7 +79,9 @@
             // Don't propogate the event to the document
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
+                console.log('--------1-----------')
             }
+            console.log($('#add_patient_form').serialize() + "------------------------" + form_data)
             var validAuthorization = ctrl.isValidAutorization(ctrl.formDirty);
             if (($('#add_patient_form').valid() && validAuthorization) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
@@ -94,9 +96,9 @@
             var validAuthorization = ctrl.isValidAutorization(true);
             if ($('#add_patient_form')[0].checkValidity() && validAuthorization) {
                 var patientToSave = angular.copy(ctrl.patient);
-                if (patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth) {
-                    patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
-                }
+//                if (patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth) {
+//                    patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
+//                }
 //                if (patientToSave.dateOfBirth) {
 //                    patientToSave.dateOfBirth = new Date(patientToSave.dateOfBirth);
 //                }
@@ -113,7 +115,7 @@
                     }
                 });
                 patientToSave.languagesSpoken = patientToSave.languagesSpoken.toString();
-                
+
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
@@ -138,7 +140,7 @@
                                 ctrl.editMode = true;
 
                             }
-                            if ($rootScope.tabNo == 5 || ($rootScope.tabNo == 4 && ctrl.patient.isSubscriber == false) && ctrl.nextTab !== 'tab3') {
+                            if ($rootScope.tabNo === 5) {
                                 $state.go('app.patient-list', {status: "active"});
                             } else {
                                 $state.go('^.' + ctrl.nextTab, {id: res.id});
@@ -298,7 +300,7 @@
                         ctrl.patient.subscriberInfo = [];
                         ctrl.patient.subscriberInfo[0] = {};
                     }
-                    if (!ctrl.patient.subscriberInfo[0].fName || ctrl.patient.subscriberInfo[0].fName === null) {
+                    if (ctrl.patient.isSubscriber && ctrl.patient.isSubscriber === true) {
                         ctrl.patient.subscriberInfo[0].fName = ctrl.patient.fName;
                         ctrl.patient.subscriberInfo[0].lName = ctrl.patient.lName;
                         ctrl.patient.subscriberInfo[0].middleInitial = ctrl.patient.middleInitial;

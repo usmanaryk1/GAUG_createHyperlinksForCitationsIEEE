@@ -77,7 +77,7 @@
                 </a>
             </li>
             <li class="{{tabNo==5?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab5')" style="{{(!addPatient.editMode || addPatient.patient.isSubscriber === false)?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab5')" style="{{(!addPatient.editMode)?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-info-circle"></i></div> 
                     <div class="hidden-xs">Insurance Subscriber Information</div>
                     <span>
