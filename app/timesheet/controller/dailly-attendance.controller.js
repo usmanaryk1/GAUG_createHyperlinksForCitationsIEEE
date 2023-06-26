@@ -13,6 +13,7 @@
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
+            ctrl.searchParams.staffingCordinatorId = null;
             ctrl.selectedEmployee = null;
             ctrl.attendanceList = [];
             ctrl.criteriaSelected = false;

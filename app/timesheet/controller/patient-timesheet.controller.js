@@ -3,6 +3,7 @@
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.searchParams = {};
+        ctrl.companyCode = ontimetest.company_code;
         ctrl.criteriaSelected = false;
         ctrl.viewRecords = 10;
         ctrl.nursingCareMap = {};
@@ -46,6 +47,7 @@
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.selectedPatient = null;
+            ctrl.searchParams.patientId = null;
             ctrl.criteriaSelected = false;
             ctrl.timesheetList = [];
             ctrl.rerenderDataTable();
