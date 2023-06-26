@@ -16,6 +16,16 @@
     .panel-group .panel .panel-heading{
         pointer-events: none;
     }    
+    #selected-claims_filter{
+        display: none
+    }
+    .border-red {
+        border-width: 1px!important;
+        border-color: #cc3f44!important;
+    }
+    td .validate-has-error {
+        display: none!important;
+    }
 </style>
 <div ng-include="'app/billing/views/billing_reconciliation.html'"></div>
 <div class="row" ng-controller="ManageBillingReconciliationCtrl as manageBillingReconciliation">
@@ -251,19 +261,22 @@
                                 </div>
                             </div>    
 
-                            <div ng-if="manageBillingReconciliation.show === 'filtered'">
+                            <div ng-if="manageBillingReconciliation.show === 'filtered'" style="margin-top: 10px;">
                                 <div class="row" ng-if="manageBillingReconciliation.claims.length">                            
                                     <div class="form-group col-sm-6 pull-left">
-                                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
-                                        <div style="width:70px; float:left;">
-                                            <select class="form-control input-sm" ng-model="manageBillingReconciliation.searchParams.limit" ng-change="manageBillingReconciliation.filterClaims()">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </div>
-                                    </div> 
+                                        <span class="col-md-6">
+                                            <span class="pull-left" style="min-width:50px;"><span style="float: right;margin-right: 5px;padding-top: 7px;">Show</span></span>
+                                            <div style="width:70px; float:left;">
+                                                <select class="form-control input-sm" ng-model="manageBillingReconciliation.searchParams.limit" ng-change="manageBillingReconciliation.filterClaims()">
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>
+                                            </div>
+                                            <span class="pull-left" style="min-width: 45px;"><span style="float: right;padding-top: 7px;">entries</span></span>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                                     <div class="table-responsive scroll">
@@ -305,8 +318,10 @@
                                                     <td>
                                                         <input ng-disabled="!manageBillingReconciliation.selectedClaims[claim.id]" 
                                                                numbers-only="true" maxlength="10" class="form-control" 
-                                                               name="totalCosts" type="text" decimalallowed
-                                                               ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.updateAmountPaid(claim.id, claim.AmountPaid)"/>
+                                                               name="totalCosts" type="text" decimalallowed                                                               
+                                                               ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.updateAmountPaid(claim.id, claim.AmountPaid)"
+                                                               ng-required="!claim.AmountPaid && manageBillingReconciliation.selectedClaims[claim.id]==true"                                                               
+                                                               ng-class="{'border-red':!claim.AmountPaid && manageBillingReconciliation.selectedClaims[claim.id]===true && manageBillingReconciliation.formSubmitted}"/>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -327,7 +342,7 @@
                                 </div>
                             </div>
                             <div ng-if="manageBillingReconciliation.show === 'selected'">
-                                <div class="border0 table-responsive scroll search_hide" ng-show="manageBillingReconciliation.selectedClaimsShow.length">
+                                <div class="border0 table-responsive scroll" ng-show="manageBillingReconciliation.selectedClaimsShow.length">
                                     <table id="selected-claims" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" 
                                            cellspacing="0" datatable-setup display-print="false">                                    
                                         <thead>
@@ -355,7 +370,9 @@
                                                     <input ng-disabled="!manageBillingReconciliation.selectedClaims[claim.id]" 
                                                            numbers-only="true" maxlength="10" class="form-control" 
                                                            name="totalCosts" type="text" decimalallowed
-                                                           ng-model="claim.AmountPaid" ng-change="manageBillingReconciliation.getTotals()"/>
+                                                           ng-model="claim.AmountPaid" ng-change="manageBillingReconciliation.getTotals()"
+                                                           ng-required="!claim.AmountPaid"                                                               
+                                                           ng-class="{'border-red':!claim.AmountPaid && manageBillingReconciliation.formSubmitted}"/>
                                                 </td>
                                             </tr>
                                         </tbody>

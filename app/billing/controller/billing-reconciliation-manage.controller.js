@@ -104,6 +104,7 @@
                 }
             });
             ctrl.getTotals();
+            _.reverse(ctrl.selectedClaimsShow);
         };
 
         ctrl.updateAllSelection = function () {
@@ -147,7 +148,11 @@
             if (ctrl.selectedClaimsShow && ctrl.selectedClaimsShow.length > 0) {
                 ctrl.selectedClaimsShow.forEach(function (claim) {
                     if (claim) {
-                        claim.AmountPaid = (claim.totalCosts - claim.paidAmount) > 0 ? parseFloat(claim.totalCosts - claim.paidAmount).toFixed(2) : 0;
+                        if (ctrl.claimList.setAmountDue === true) {
+                            claim.AmountPaid = (claim.totalCosts - claim.paidAmount) > 0 ? parseFloat(claim.totalCosts - claim.paidAmount).toFixed(2) : 0;
+                        } else {
+                            delete claim.AmountPaid;
+                        }                        
                     }
                 });
                 ctrl.getTotals();
@@ -209,7 +214,14 @@
         };
 
         ctrl.save = function () {
-            if ($('#billing_reconciliation_form')[0].checkValidity()) {
+            ctrl.formSubmitted = true;
+            var isValid = true;
+            ctrl.selectedClaimsShow.forEach(function (claim) {
+                if(_.isUndefined(claim.AmountPaid)){
+                    isValid = false;
+                }
+            });
+            if ($('#billing_reconciliation_form')[0].checkValidity() && isValid) {
                 ctrl.getTotals();
                 if (!(ctrl.totals['Applied'] && (parseFloat(ctrl.totals['Applied']).toFixed(2)
                         === (parseFloat((ctrl.bill.paymentAmount ? parseFloat(ctrl.bill.paymentAmount) : 0) + (ctrl.totals['Credits'] ? ctrl.totals['Credits'] : 0)).toFixed(2))))) {

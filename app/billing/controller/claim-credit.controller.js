@@ -51,36 +51,15 @@
             }
         };
 
-        ctrl.openDeleteModal = function (credit)
-        {
-            var modalInstance = $modal.open({
-                templateUrl: appHelper.viewTemplatePath('common', 'confirmation_modal'),
-                controller: 'ConfirmModalController as confirmModal',
-                size: 'md',
-                resolve: {
-                    message: function () {
-                        return "Are you sure you want to delete this Credit?";
-                    },
-                    title: function () {
-                        return 'Credit';
-                    },
-                    subtitle: function () {
-                        return;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function () {
-                if (_.find(ctrl.creditUsages, {claimId: credit.claimId})) {
-                    _.remove(ctrl.creditUsages, {claimId: credit.claimId});
-                    console.log("ctrl.creditUsages",ctrl.creditUsages);
-                }
-            });
-
+        ctrl.openDeleteModal = function (credit) {
+            if (_.find(ctrl.creditUsages, {claimId: credit.claimId})) {
+                _.remove(ctrl.creditUsages, {claimId: credit.claimId});
+                console.log("ctrl.creditUsages", ctrl.creditUsages);
+            }
         };
 
         ctrl.close = function () {
-            $modalInstance.dismiss();
+            $modalInstance.close(ctrl.creditUsages);
         };
     }
     ;
