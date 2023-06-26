@@ -57,10 +57,10 @@
         ctrl.verifyDates = function() {
             if (new Date(ctrl.searchParams.fromDate).getDay() != 0 || new Date(ctrl.searchParams.toDate).getDay() != 6) {
                 ctrl.dateMessage = "From date must be Sunday & To date must be Saturday.";
-            } else if (ctrl.payrollSettings.payrollFrequency == '1W' && getDateDiff(new Date(ctrl.searchParams.fromDate), new Date(ctrl.searchParams.toDate)) != 6) {
-                ctrl.dateMessage = "Date range must be weekly.";
-            } else if (ctrl.payrollSettings.payrollFrequency == '2W' && getDateDiff(new Date(ctrl.searchParams.fromDate), new Date(ctrl.searchParams.toDate)) != 13) {
-                ctrl.dateMessage = "Date range must be bi-weekly.";
+//            } else if (ctrl.payrollSettings.payrollFrequency == '1W' && getDateDiff(new Date(ctrl.searchParams.fromDate), new Date(ctrl.searchParams.toDate)) != 6) {
+//                ctrl.dateMessage = "Date range must be weekly.";
+//            } else if (ctrl.payrollSettings.payrollFrequency == '2W' && getDateDiff(new Date(ctrl.searchParams.fromDate), new Date(ctrl.searchParams.toDate)) != 13) {
+//                ctrl.dateMessage = "Date range must be bi-weekly.";
             } else {
                 ctrl.dateMessage = null;
             }
