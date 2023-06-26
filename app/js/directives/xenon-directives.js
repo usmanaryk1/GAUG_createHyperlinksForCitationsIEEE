@@ -6,12 +6,20 @@ angular.module('xenon.directives', []).
                     restrict: 'A',
                     scope: {datatableObj: "="},
                     link: function(scope, element, attrs) {
-
+                        var datatableOptions = {};
+                        if (attrs.displayPrint != null && attrs.displayPrint == 'true') {
+                            datatableOptions = {dom: 'Bfrtip', buttons: [
+                                    {
+                                        extend: 'print',
+                                        title: 'Processed Sessions'                                        
+                                    }
+                                ]};
+                        }
                         $timeout(function() {
                             if (attrs.datatableObj != null) {
-                                scope.datatableObj = element.dataTable();
+                                scope.datatableObj = element.DataTable(datatableOptions);
                             } else {
-                                element.dataTable()
+                                element.DataTable(datatableOptions)
                             }
                         });
                     }

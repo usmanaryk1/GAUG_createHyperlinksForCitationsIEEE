@@ -21,6 +21,7 @@
             ctrl.selectedEmployee = null;
             ctrl.timesheetList = [];
             ctrl.criteriaSelected = false;
+            ctrl.searchParams.employeeId = null;
             ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {

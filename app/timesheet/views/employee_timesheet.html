@@ -11,7 +11,7 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal validate" role="form" id='emp_timesheet_form'>
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="col-sm-4 pad_lf0" ng-show="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null" style="margin-top:-15px; cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')">
@@ -20,12 +20,12 @@
                                         <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
                                     </div>
                                     <div class="user_av_hd">
-                                        <h1>{{empTimesheet.selectedEmployee.lName+", "+empTimesheet.selectedEmployee.fName+" "+empTimesheet.selectedEmployee.middleInitial}}</h1>
+                                        <h1>{{empTimesheet.selectedEmployee.lName + ", " + empTimesheet.selectedEmployee.fName + " " + empTimesheet.selectedEmployee.middleInitial}}</h1>
                                         <p>{{positions[empTimesheet.selectedEmployee.position]}}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 pull-right pad0 wd_full">
-                                    <div class="form-group ">
+                                    <div class="form-group " ng-class="{ 'validate-has-error':empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted}">
                                         <label class="col-sm-3 control-label">Employee Name</label>
                                         <div class="col-sm-9">
                                             <!--                                            <script type="text/javascript">
@@ -59,6 +59,9 @@
                                             <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="empTimesheet.searchParams.employeeId" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in empTimesheet.employeeList track by emp.id'>
                                                 <option value="" selected hidden />
                                             </select>
+                                            <div ng-show='empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted'>
+                                                <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee Name.</span>
+                                            </div>
                                             <!--<input type="text" class="form-control" ng-model="empTimesheet.searchValue" ng-change="empTimesheet.filterTimesheet()">-->
                                         </div>
                                     </div>
@@ -84,7 +87,7 @@
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" max-date="empTimesheet.searchParams.endDate">
+                                                    <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.startDate" max-date="empTimesheet.searchParams.endDate" data-validate="required"  data-message-required="Please select From Date." required>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -107,8 +110,8 @@
                         <div class="row">
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
-                                    <button type="button" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.selectEmployee(empTimesheet.emp);
-                                        empTimesheet.filterTimesheet()" style="width:auto;">Review</button>
+                                    <button type="submit" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.selectEmployee(empTimesheet.emp);
+                                        empTimesheet.filterTimesheet();empTimesheet.formSubmitted=true" style="width:auto;">Review</button>
                                     <a href="#/app/manual_punch{{empTimesheet.searchParams.employeeId==null?'':'/employee/'+empTimesheet.searchParams.employeeId+'?from='+empTimesheet.searchParams.startDate+'&to='+empTimesheet.searchParams.endDate}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
                                         Reset Filters
@@ -140,11 +143,11 @@
                                                 <!--<div class="green_dot"></div>-->
                                                 <!--Display red dot for not matched GPS location-->
                                                 <!--<div class="red_dot"></div>-->
-                                                <div ng-class="{'black_dot':timesheet.punchInColorFlag=='black','red_dot':timesheet.punchInColorFlag=='red','green_dot':timesheet.punchInColorFlag=='green'}"></div>
+                                                <div ng-class="{'black_dot':timesheet.punchInColorFlag == 'black','red_dot':timesheet.punchInColorFlag == 'red','green_dot':timesheet.punchInColorFlag == 'green'}"></div>
                                                 {{timesheet.roundedPunchInTime|date :timeFormat}}
                                             </td>
                                             <td>
-                                                <div ng-class="{'black_dot':timesheet.punchOutColorFlag=='black','red_dot':timesheet.punchOutColorFlag=='red','green_dot':timesheet.punchOutColorFlag=='green'}"></div>
+                                                <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
                                                 {{timesheet.roundedPunchOutTime|date :timeFormat}}
                                             </td>
                                             <td>
@@ -155,8 +158,8 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:170px;">
-                                                    <a ng-if="timesheet.isEdited==true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}&from={{empTimesheet.searchParams.startDate}}&to={{empTimesheet.searchParams.endDate}}"  tooltip="Edit"><span class="ed_b"></span></a> 
-                                                    <a ng-if="timesheet.isEdited==true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}&from={{empTimesheet.searchParams.startDate}}&to={{empTimesheet.searchParams.endDate}}"  tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>

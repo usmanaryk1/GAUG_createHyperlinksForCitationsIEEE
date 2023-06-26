@@ -103,8 +103,11 @@
                 ctrl.payrollSessions = payrollSessions;
                 $timeout(function() {
                     $("#example-1").wrap("<div class='table-responsive'></div>");
-                }, 50);
+                    if (ctrl.processdMode) {
+                        $(".dt-button").attr("class", "btn btn-info green_bt pull-right print-btn");
+                    }
 
+                }, 50);
             });
         };
         ctrl.openPayrollModal = function(payroll, modal_id, modal_size, modal_backdrop) {

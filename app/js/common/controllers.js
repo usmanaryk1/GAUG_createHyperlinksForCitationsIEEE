@@ -32,6 +32,7 @@ angular.module('xenon.controllers', []).
             $rootScope.serverPath = ontimetest.weburl;
             $rootScope.languages = {"En": "English", "Cr": "Creole", "Sp": "Spanish", "Ru": "Russian", "Fr": "French", "Hi": "Hindi", "Be": "Bengali", "Ma": "Mandarin", "Ko": "Korean", "Ar": "Arabic", "Fa": "Farsi", "Ur": "Urdu"};
             $rootScope.amazonPublicUrl = "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/";
+            $rootScope.amazonSignatureUrl="https://s3-us-west-1.amazonaws.com/ontimepatientsign/";
             $rootScope.todayDate = new Date();
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;

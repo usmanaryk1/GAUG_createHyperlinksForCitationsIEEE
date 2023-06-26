@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal validate" role="form">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="col-sm-4 pad_lf0" style="margin-top:-15px;" ng-show="patTimesheet.selectedPatient && patTimesheet.selectedPatient !== null" >                                    
@@ -24,7 +24,7 @@
                                 </div>
 
                                 <div class="col-sm-8 pull-right pad0 wd_full">
-                                    <div class="form-group ">
+                                    <div class="form-group" ng-class="{'validate-has-error':patTimesheet.searchParams.patientId == null && patTimesheet.formSubmitted}">
                                         <label class="col-sm-3 control-label">Patient Name</label>
                                         <div class="col-sm-9">
                                             <!--<input type="text" class="form-control" ng-model="patTimesheet.searchValue" ng-change="patTimesheet.filterTimesheet()">-->
@@ -49,6 +49,9 @@
                                             <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in patTimesheet.patientList track by pat.id'>
                                                 <option value="" selected hidden />
                                             </select>
+                                            <div ng-show='patTimesheet.searchParams.patientId == null && patTimesheet.formSubmitted'>
+                                                <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient Name.</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +77,7 @@
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patTimesheet.searchParams.startDate" max-date="patTimesheet.searchParams.endDate">
+                                                    <input type="text" id="field-68" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patTimesheet.searchParams.startDate" max-date="patTimesheet.searchParams.endDate" name='fromDate' data-validate="required"  data-message-required="Please select From Date." required>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -99,8 +102,9 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
 
-                                    <button type="button" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);
-                                        patTimesheet.filterTimesheet()">Review</button>
+                                    <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="patTimesheet.selectPatient(patTimesheet.pat);
+                                        patTimesheet.filterTimesheet();
+                                        patTimesheet.formSubmitted = true">Review</button>
                                     <a href="#/app/manual_punch{{patTimesheet.searchParams.patientId==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?from='+patTimesheet.searchParams.startDate+'&to='+patTimesheet.searchParams.endDate}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
@@ -133,11 +137,11 @@
                                                 <!--<div class="green_dot"></div>-->
                                                 <!--Display red dot for not matched GPS location-->
                                                 <!--<div class="red_dot"></div>-->
-                                                <div ng-class="{'black_dot':timesheet.punchInColorFlag=='black','red_dot':timesheet.punchInColorFlag=='red','green_dot':timesheet.punchInColorFlag=='green'}"></div>
+                                                <div ng-class="{'black_dot':timesheet.punchInColorFlag == 'black','red_dot':timesheet.punchInColorFlag == 'red','green_dot':timesheet.punchInColorFlag == 'green'}"></div>
                                                 {{timesheet.roundedPunchInTime|date :timeFormat}}
                                             </td>
                                             <td>
-                                                <div ng-class="{'black_dot':timesheet.punchOutColorFlag=='black','red_dot':timesheet.punchOutColorFlag=='red','green_dot':timesheet.punchOutColorFlag=='green'}"></div>
+                                                <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
                                                 {{timesheet.roundedPunchOutTime|date :timeFormat}}
                                             </td>
                                             <td>
@@ -149,15 +153,15 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:120px;">
-                                                    <a ng-if="timesheet.isEdited==true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?patId={{patTimesheet.selectedPatient.id}}&from={{patTimesheet.searchParams.startDate}}&to={{patTimesheet.searchParams.endDate}}" tooltip="Edit"><span class="ed_b"></span></a> 
-                                                    <a ng-if="timesheet.isEdited==true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?patId={{patTimesheet.selectedPatient.id}}&from={{patTimesheet.searchParams.startDate}}&to={{patTimesheet.searchParams.endDate}}" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 
                                                     <a class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
                                             <td><div ng-if="timesheet.isManualPunch === true">Admin Verified</div>
-                                                <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{timesheet.signature}}"></td>
+                                                <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + patTimesheet.companyCode + '/' + timesheet.signature}}"></td>
                                         </tr>
 
                                         <!--                                        <tr>
