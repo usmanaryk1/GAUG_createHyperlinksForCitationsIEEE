@@ -1,3 +1,8 @@
+<style>
+    .text-allign-left{
+        text-align: left!important;
+    }
+</style>
 <div class="modal-header">      
     <h4 class="modal-title"> Apply Credit</h4>
     <a href="" ng-click="claimCredit.isList = !claimCredit.isList" style="float: right;margin-top: -5px; text-decoration: none;">
@@ -50,7 +55,7 @@
                     <div>
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Claim Number</strong></label>
-                            <div class="col-md-7">
+                            <div class="control-label col-md-7 text-allign-left">
                                 {{claimCredit.claim.id}} 
                             </div>
                         </div>	
@@ -61,7 +66,7 @@
                     <div>
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Patient Name</strong></label>
-                            <div class="col-md-7">
+                            <div class="control-label col-md-7 text-allign-left">
                                 {{claimCredit.claim.patientName}} 
                             </div>
                         </div>	
@@ -73,7 +78,7 @@
 
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Patient Birth Date</strong></label>
-                            <div class="col-md-7">
+                            <div class="control-label col-md-7 text-allign-left">
                                 {{claimCredit.claim.patientBirthDate|date :dateFormat}} 
                             </div>
                         </div>	
@@ -84,7 +89,7 @@
                     <div>
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Claim Type</strong></label>
-                            <div class="col-md-7">
+                            <div class="control-label col-md-7 text-allign-left">
                                 {{claimCredit.claim.claimType}} 
                             </div>
                         </div>	
@@ -96,7 +101,7 @@
                     <div>
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Billed Date</strong></label>
-                            <div class="col-md-7">
+                            <div class="control-label col-md-7 text-allign-left">
                                 {{claimCredit.claim.dateInserted|date :dateFormat}} 
                             </div>
                         </div>	
@@ -107,8 +112,8 @@
                     <div>
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Total Cost</strong></label>
-                            <div class="col-md-7">
-                                {{claimCredit.claim.totalCosts| number : 2}} 
+                            <div class="control-label col-md-7 text-allign-left">
+                                {{claimCredit.claim.totalCosts| currency:'$':2}} 
                             </div>
                         </div>	
                     </div>
@@ -118,8 +123,8 @@
                     <div>
                         <div class="form-group">
                             <label class="control-label col-md-5"><strong>Paid Amount</strong></label>
-                            <div class="col-md-7">
-                                {{claimCredit.claim.paidAmount| number : 2}} 
+                            <div class="control-label col-md-7 text-allign-left">
+                                {{claimCredit.claim.paidAmount| currency:'$':2}} 
                             </div>
                         </div>	
                     </div>
@@ -134,7 +139,7 @@
                                     <input ng-model="claimCredit.credit.usedAmount" 
                                            numbers-only="true" maxlength="10" class="form-control" decimalallowed
                                            id="paymentAmount" name="totalCosts" type="text"/>
-                                    <span class="input-group-addon">/{{claimCredit.availableCredit| number : 2}}</span>
+                                    <span class="input-group-addon">/${{claimCredit.availableCredit| number : 2}}</span>
                                 </div>       
                                 <div ng-if="!(claimCredit.availableCredit > 0)">
                                     No Credit Available
@@ -161,7 +166,7 @@
                                 <tbody>
                                     <tr style="cursor: pointer" ng-repeat="credit in claimCredit.claim.creditUsages" ng-if="claimCredit.claim.creditUsages.length > 0">                                
                                         <td>{{credit.billingReconciliationId}}</td>
-                                        <td>{{credit.usedAmount}}</td>
+                                        <td>{{credit.usedAmount| currency:'$':2}}</td>
                                         <td>{{credit.dateInserted}}</td>
                                     </tr>
                                     <tr ng-if="claimCredit.claim.creditUsages.length === 0">

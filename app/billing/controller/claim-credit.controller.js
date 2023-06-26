@@ -23,6 +23,9 @@
                     _.each(claim.creditUsages, function (credit) {
                         ctrl.availableCredit = ctrl.availableCredit - credit.usedAmount;
                     });
+                    var appliedCredit = _.find(ctrl.creditUsages, {claimId: claim.id});
+                    if(appliedCredit)
+                        ctrl.credit.usedAmount = appliedCredit.usedAmount;
                 }).catch(function (err) {
                     console.log("No claim found", err);
                     toastr.error("Error retrieveing claim.");
