@@ -272,7 +272,7 @@
                 console.log("Payroll settings cannot be retrieved.");
             });
         };
-        EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
+        EmployeeDAO.retrieveAll({subAction: 'all'}).then(function(res) {
             ctrl.employeeList = res;
             ctrl.empMap = {};
             angular.forEach(res, function(emp) {
