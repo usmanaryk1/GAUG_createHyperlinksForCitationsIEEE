@@ -93,7 +93,7 @@
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function(res) {
+            EmployeeDAO.retrieveAll({subAction: 'all'}).then(function(res) {
                 ctrl.employeeList = res;
                 ctrl.employeeIdMap = {};
                 for (var i = 0; i < res.length; i++) {
