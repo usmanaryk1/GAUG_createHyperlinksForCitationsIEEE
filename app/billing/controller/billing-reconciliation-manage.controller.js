@@ -132,6 +132,14 @@
             }
             ctrl.getTotals();
         };
+        
+        ctrl.removeAmountPaid = function (claimId) {
+            var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claimId});
+            if (selectedClaim) {
+                delete selectedClaim.AmountPaid;
+            }
+            ctrl.getTotals();
+        };        
 
         ctrl.updateAllClaims = function(){
             if (ctrl.claims && ctrl.claims.length > 0) {
@@ -152,7 +160,7 @@
                             claim.AmountPaid = (claim.totalCosts - claim.paidAmount) > 0 ? parseFloat(claim.totalCosts - claim.paidAmount).toFixed(2) : 0;
                         } else {
                             delete claim.AmountPaid;
-                        }                        
+                        }
                     }
                 });
                 ctrl.getTotals();
@@ -217,7 +225,7 @@
             ctrl.formSubmitted = true;
             var isValid = true;
             ctrl.selectedClaimsShow.forEach(function (claim) {
-                if(_.isUndefined(claim.AmountPaid)){
+                if(ctrl.selectedClaims[claim.id] && _.isUndefined(claim.AmountPaid)){
                     isValid = false;
                 }
             });
@@ -258,8 +266,10 @@
         ctrl.getTotals = function () {
             ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
             _.each(ctrl.selectedClaimsShow, function (claim) {
-                ctrl.totals.AmountDue = ctrl.totals.AmountDue + ((claim.totalCosts ? parseFloat(claim.totalCosts) : 0) - (claim.paidAmount ? parseFloat(claim.paidAmount) : 0));
-                ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);
+                if(ctrl.selectedClaims[claim.id]){
+                    ctrl.totals.AmountDue = ctrl.totals.AmountDue + ((claim.totalCosts ? parseFloat(claim.totalCosts) : 0) - (claim.paidAmount ? parseFloat(claim.paidAmount) : 0));
+                    ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);
+                }                
             });
             _.each(ctrl.bill.creditUsages, function (credit) {
                 ctrl.totals.Credits = ctrl.totals.Credits + (credit.usedAmount ? parseFloat(credit.usedAmount) : 0);
