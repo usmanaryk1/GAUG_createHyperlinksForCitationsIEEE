@@ -131,7 +131,10 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="session in payrollSession.payrollSessions">
-                                        <th><span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span> {{payrollSession.empMap[session.employeeId].lName}}</th>
+                                        <th>
+                                            <span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span>
+                                            <span class="fa-calendar" tooltip="Missed Punch Affected" ng-if="session.missedPunchAffected"></span> 
+                                             {{payrollSession.empMap[session.employeeId].lName}}</th>
                                         <td>{{payrollSession.empMap[session.employeeId].fName}}</td>
                                         <td> ${{session.grossPay| number:2}}</td>
                                         <td>${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
