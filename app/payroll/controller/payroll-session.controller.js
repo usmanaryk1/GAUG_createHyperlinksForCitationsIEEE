@@ -79,6 +79,7 @@
                         ctrl.setRates('sick', 'sickRate', payrollObj);
                         ctrl.setRates('personal', 'personalRate', payrollObj);
                         payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
+                        payrollObj.totalHours = ctrl.calculateTotalHours(payrollObj);
                     });
                     ctrl.rerenderDataTable();
                 }).catch(function(e) {
@@ -127,6 +128,7 @@
             });
             $rootScope.payrollModal.save = function() {
                 $rootScope.payrollModal.payrollObj.grossPay = ctrl.calculateGrossPay($rootScope.payrollModal.payrollObj);
+                $rootScope.payrollModal.payrollObj.totalHours = ctrl.calculateTotalHours($rootScope.payrollModal.payrollObj);
                 $rootScope.payrollModal.close();
             };
             $rootScope.payrollModal.cancel = function() {
@@ -174,10 +176,15 @@
         };
         ctrl.setGrossPay = function(payrollObj) {
             payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
+            payrollObj.totalHours = ctrl.calculateTotalHours(payrollObj);
         };
         ctrl.calculateGrossPay = function(payrollObj) {
             var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * otHdConstant) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * otHdConstant) + checkNull(payrollObj.earnings1099) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction) - checkNull(payrollObj.adp401kLoan) - checkNull(payrollObj.adp401kDeduction);
             return grossPay;
+        };
+        ctrl.calculateTotalHours = function(payrollObj) {
+            var totalHours = checkNull(payrollObj.hour1) + checkNull(payrollObj.hour2) + checkNull(payrollObj.otHours) + checkNull(payrollObj.hdHours) + checkNull(payrollObj.vacation) + checkNull(payrollObj.sick) + checkNull(payrollObj.personal);
+            return totalHours;
         };
 
         ctrl.showAddEmployeeModal = function() {
