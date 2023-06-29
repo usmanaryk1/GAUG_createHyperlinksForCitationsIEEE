@@ -1,4 +1,8 @@
-
+<style>
+    .panel-body-color{
+            color: #979898!important;
+    }
+</style>
 <div class="page-body"> 
 
 
@@ -245,7 +249,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
+                            <div class="panel-body-color" ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
                                 <div ng-if="!dAttendance.isWorksiteTimesheet">
                                     No daily attendance available for selected coordinator.
                                 </div>
@@ -253,7 +257,7 @@
                                     No timesheet available for selected worksite.
                                 </div>
                             </div>
-                            <div ng-if="dAttendance.criteriaSelected === false">
+                            <div class="panel-body-color" ng-if="dAttendance.criteriaSelected === false">
                                 <div ng-if="!dAttendance.isWorksiteTimesheet">
                                     Please select all filters to review daily attendance.
                                 </div>
@@ -331,10 +335,10 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
+                            <div class="panel-body-color" ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
                                 No schedule available for selected filters.
                             </div>
-                            <div ng-if="dAttendance.criteriaSelected === false">
+                            <div class="panel-body-color" ng-if="dAttendance.criteriaSelected === false">
                                 Please select all filters to review schedule.
                             </div>
                         </div>

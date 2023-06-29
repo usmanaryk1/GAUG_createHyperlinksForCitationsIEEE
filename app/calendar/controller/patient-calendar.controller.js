@@ -48,11 +48,12 @@
         };
 
         ctrl.selectDate = function (e) {
-            ctrl.showDatepicker(e);
+//            ctrl.showDatepicker(e);
             setTimeout(function () {
                 var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
                 var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
                 if (a != ctrl.startRetrieved || b != ctrl.endRetrieved) {
+                    ctrl.showDatepicker(e);
                     $rootScope.refreshCalendarView();
                 }
             }, 200);
