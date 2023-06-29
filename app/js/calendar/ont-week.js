@@ -12,7 +12,10 @@ angular
                     $scope.eventClickCalled = false;
                     $scope.onEventClick = function (eventCell, object, onClickDate) {
                         if (!eventCell) {
-                            if (!$scope.eventClickCalled) {
+                            if($rootScope.currentUser.allowedFeature.indexOf('ADD_SCHEDULE') === -1){
+                                return;
+                            }
+                            if (!$scope.eventClickCalled) {                                
                                 var day = new Date(onClickDate.date);
                                 var day1 = moment(day);
                                 var diff = moment().diff(day1, 'days');

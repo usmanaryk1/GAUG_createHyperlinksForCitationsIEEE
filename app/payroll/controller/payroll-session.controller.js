@@ -20,7 +20,7 @@
         ctrl.processSessions = function () {
             ctrl.processClicked = true;
             var adpRunProvider = false;
-            if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider === 'ADP - Run') {
+            if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider !== 'ADP - Work Force Now') {
                 adpRunProvider = true;
             }
             if (ctrl.payrollSessions != null && ctrl.payrollSessions.length > 0) {
@@ -34,7 +34,7 @@
 
         ctrl.processPayroll = function (checkDate) {
             if (checkDate) {
-                ctrl.searchParams.checkDate = checkDate;
+                ctrl.searchParamsAtReview.checkDate = checkDate;
             }
             $rootScope.maskLoading();
             angular.forEach(ctrl.payrollSessions, function (session) {

@@ -290,7 +290,7 @@
                         </label>
                     </div>
                     <div class="col-sm-2" style="margin-top:0px;" ng-show="patientPopup.data.isLoss">
-                        <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" 
+                        <input type="text" class="form-control" decimalallowed numbers-only="true" id="hours" name="hours" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" 
                                ng-model="patientPopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." 
                                ng-required="patientPopup.data.eventType == 'U' && patientPopup.data.isLoss">
                     </div>                           

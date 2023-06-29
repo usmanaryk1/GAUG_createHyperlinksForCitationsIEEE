@@ -175,18 +175,20 @@
 
     <div class="form-group">
     <label class="col-sm-3 control-label">Deactivate Reason</label>
-    <div class="col-sm-8">
-    <select class="form-control" name ="reason" id="daReason" ng-model="deactivateEmployeeModel.reason" data-validate="required" required data-message-required="Please select Discharge Reason." ng-init="deactivateEmployeeModel.reason='loa'" >
-    <option value="Leave of Absence" selected>Leave of Absence</option>
+    <div class="col-sm-9">
+    <select class="form-control" name ="reason" id="daReason" ng-model="deactivateEmployeeModel.reason" data-validate="required" data-message-required="Please select Discharge Reason." ng-init="deactivateEmployeeModel.reason='Leave of Absence'" >
+    <option value="Leave of Absence">Leave of Absence</option>
     <option value="Out of Compliance">Out of Compliance</option>
     <option value="Terminated">Terminated</option>
+    <option value="In-active">In-active</option>
     </select>
     </div>
     </div>
-    <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'terminated'"></div>
-    <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'terminated'">
+    
+    <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'Terminated'"></div>
+    <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'Terminated'">
     <label class="col-sm-3 control-label">Termination Date</label>
-    <div class="col-sm-8">
+    <div class="col-sm-9">
     <div class="input-group" style="z-index:1060">
     <input class="datepicker form-control" data-format="mm/dd/yyyy" id="terDate" name="terminationDateDate" type="text" ng-model="deactivateEmployeeModel.terminationDate" 
     data-validate="required,date" data-message-required="Please enter Date of Termination." required/>
@@ -200,6 +202,13 @@
     </div>
     </div>
 
+    <div class="form-group-separator" ></div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Note</label>
+    <div class="col-sm-9">
+    <textarea ng-model="deactivateEmployeeModel.note" class="form-control" name="note" placeholder="Add note for deactivation..." rows="2"></textarea>
+    </div>
+    </div>
 
     </div>
 
