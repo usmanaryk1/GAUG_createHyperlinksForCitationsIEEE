@@ -196,11 +196,12 @@
             angular.forEach(ctrl.payrollSessions, function(payroll) {
                 empWithSessions.push(payroll.employeeId);
             });
-            angular.forEach(ctrl.employeeList, function(emp) {
-                if (empWithSessions.indexOf(emp.id) < 0) {
-                    ctrl.addEmployeeList.push(emp);
-                }
-            });
+            ctrl.addEmployeeList=ctrl.employeeList;
+//            angular.forEach(ctrl.employeeList, function(emp) {
+//                if (empWithSessions.indexOf(emp.id) < 0) {
+//                    ctrl.addEmployeeList.push(emp);
+//                }
+//            });
             setTimeout(function() {
                 $("#sboxit-1").select2({
                     placeholder: 'Select Employee...',
