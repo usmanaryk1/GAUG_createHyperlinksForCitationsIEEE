@@ -351,6 +351,12 @@
                             $("#rate1").multiSelect('refresh');
                         }, 200);
                         ctrl.retrivalRunning = false;
+                        if (ctrl.employee.careRatesList.rate1 != null && ctrl.employee.careRatesList.rate1.rate != null) {
+                            ctrl.employee.careRatesList.rate1.rate = ctrl.employee.careRatesList.rate1.rate.toFixed(2);                            
+                        }
+                        if (ctrl.employee.careRatesList.rate2 != null && ctrl.employee.careRatesList.rate2.rate != null) {
+                            ctrl.employee.careRatesList.rate2.rate = ctrl.employee.careRatesList.rate2.rate.toFixed(2);
+                        }
                     }).catch(function() {
                         toastr.error("Failed to retrieve employee care rates.");
                     });

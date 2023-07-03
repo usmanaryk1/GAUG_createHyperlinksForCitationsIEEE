@@ -147,7 +147,7 @@
                                         <td>{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
                                         <td>${{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
                                         <td>{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
-                                        <td>${{session.earnings1099 == null ? 0 : session.earnings1099| number:2}}</td>
+                                        <td>${{session.salary == null ? 0 : session.salary| number:2}}</td>
                                         <!--                                        <td>{{session.totalHours}}</td>
                                                                                 <td>{{session.1Earnings}}</td>-->
                                         <!--                                        <td>37</td>
@@ -161,7 +161,7 @@
                                                                                 <td>21</td>
                                                                                 <td>21</td>
                                                                                 <td>21</td>-->
-                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session)" class="fa fa-file-text-o file btn" ></a> 
+                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session)" ng-if="!payrollSession.processdMode || (session.notes!=null && session.notes!='')" class="fa fa-file-text-o file btn" ></a> 
                                         </td>
                                         <td>
                                             <div class="center">
@@ -266,7 +266,7 @@
                             Salary
                         </label>
                         <div class="col-sm-3">
-                            <input ng-disabled='true' class="form-control" id="earnings" name="earnings" type="text" ng-model="payrollSession.employeeModalObj.earnings1099" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                            <input ng-disabled='true' class="form-control" id="earnings" name="earnings" type="text" ng-model="payrollSession.employeeModalObj.salary" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>
 
                     </div>

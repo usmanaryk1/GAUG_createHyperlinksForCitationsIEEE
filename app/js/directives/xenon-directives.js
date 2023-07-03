@@ -11,7 +11,7 @@ angular.module('xenon.directives', []).
                             datatableOptions = {dom: 'Bfrtip', buttons: [
                                     {
                                         extend: 'print',
-                                        title: 'Processed Sessions'                                        
+                                        title: 'Processed Sessions'
                                     }
                                 ]};
                         }
@@ -1213,7 +1213,7 @@ angular.module('xenon.directives', []).
                 }
             };
         })
-        .directive('numbersOnly', ['$parse', function($parse) {
+        .directive('numbersOnly', ['$parse', "$filter", function($parse, $filter) {
                 return {
                     require: ['^form', 'ngModel'],
                     link: function(scope, element, attrs, ctrls) {
@@ -1221,6 +1221,7 @@ angular.module('xenon.directives', []).
                             var mdlctrl = ctrls[1];
                             var model = $parse(attrs.ngModel);
                             var arr = String(newValue).split("");
+                            var transformedNewValue;
                             if (arr.length === 0) {
                                 return;
                             }
