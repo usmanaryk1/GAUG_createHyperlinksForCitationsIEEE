@@ -384,7 +384,7 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 100);
+                }, 200);
                 $rootScope.patientPopup = $modal.open({
                     templateUrl: 'app/calendar/views/patient_calendar_modal.html',
                     size: modal_size,
@@ -543,7 +543,7 @@
                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                             });
                             cbr_replace();
-                        }, 100);
+                        }, 200);
                     }
                 };
                 $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {

@@ -356,7 +356,7 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 100);
+                }, 200);
                 $rootScope.employeePopup = $modal.open({
                     templateUrl: 'app/calendar/views/employee_calendar_modal.html',
                     size: modal_size,
@@ -520,7 +520,7 @@
                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                             });
                             cbr_replace();
-                        }, 100);
+                        }, 200);
                     }
                 };
                 $rootScope.employeePopup.openPasswordModal = function (action) {
