@@ -800,6 +800,10 @@
             var carePatientMap;
             employeeObj = {};
             open();
+            //to make the radio buttons selected, theme bug
+            setTimeout(function () {
+                cbr_replace();
+            }, 300);
         };
 
         ctrl.saveEmployeePopupChanges = function (data, isPast) {
