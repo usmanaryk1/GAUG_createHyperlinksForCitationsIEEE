@@ -187,30 +187,43 @@
             return totalHours;
         };
 
-        ctrl.showAddEmployeeModal = function() {
-            $('#modal-7').modal('show', {backdrop: 'static'});
-            ctrl.addEmployeeList = [];
-            var empWithSessions = [];
-            ctrl.employeeModalObj = {};
-            ctrl.payrollFormSubmitted = false;
-            angular.forEach(ctrl.payrollSessions, function(payroll) {
-                empWithSessions.push(payroll.employeeId);
-            });
-            ctrl.addEmployeeList=ctrl.employeeList;
+        ctrl.showAddEmployeeModal = function(empObj, index) {
+            if (empObj == null || empObj.manuallyAdded) {
+                $('#modal-7').modal('show', {backdrop: 'static'});
+                ctrl.addEmployeeList = [];
+//            var empWithSessions = [];
+                if (empObj == null) {
+                    ctrl.employeeModalObj = {};
+                    ctrl.editEmpSession = false;
+                } else {
+                    ctrl.editEmpSession = true;
+//                    ctrl.selectedEmp = angular.copy(empObj);
+                    ctrl.selectedEmpIndex = index;
+                    $timeout(function() {
+                        $("#sboxit-1").select2("val", empObj.employeeId);
+                    });
+                    ctrl.employeeModalObj = angular.copy(empObj);
+                }
+                ctrl.payrollFormSubmitted = false;
+//            angular.forEach(ctrl.payrollSessions, function(payroll) {
+//                empWithSessions.push(payroll.employeeId);
+//            });
+                ctrl.addEmployeeList = ctrl.employeeList;
 //            angular.forEach(ctrl.employeeList, function(emp) {
 //                if (empWithSessions.indexOf(emp.id) < 0) {
 //                    ctrl.addEmployeeList.push(emp);
 //                }
 //            });
-            setTimeout(function() {
-                $("#sboxit-1").select2({
-                    placeholder: 'Select Employee...',
-                }).on('select2-open', function()
-                {
-                    // Adding Custom Scrollbar
-                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                });
-            }, 200);
+                setTimeout(function() {
+                    $("#sboxit-1").select2({
+                        placeholder: 'Select Employee...',
+                    }).on('select2-open', function()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                }, 200);
+            }
         };
         ctrl.selectEmployee = function() {
             var empObj = angular.copy(ctrl.empMap[ctrl.employeeModalObj.employeeId]);
@@ -238,7 +251,11 @@
                     ctrl.payrollSessions = [];
                 }
                 ctrl.employeeModalObj.manuallyAdded = true;
-                ctrl.payrollSessions.push(ctrl.employeeModalObj);
+                if (ctrl.editEmpSession) {
+                    ctrl.payrollSessions[ctrl.selectedEmpIndex] = ctrl.employeeModalObj;
+                } else {
+                    ctrl.payrollSessions.push(ctrl.employeeModalObj);
+                }
                 console.log(JSON.stringify(ctrl.payrollSessions));
                 ctrl.rerenderDataTable();
                 $('#modal-7').modal('hide');

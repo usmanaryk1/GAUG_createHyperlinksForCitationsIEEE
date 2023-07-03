@@ -74,7 +74,7 @@
                             <div class="pull-right" ng-if="!payrollSession.processdMode">
                                 <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
-                                <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal()" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null,null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
                                     Reset Filters
                                 </button>
@@ -131,7 +131,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="session in payrollSession.payrollSessions">
+                                    <tr style="cursor: pointer" ng-repeat="session in payrollSession.payrollSessions" ng-click="payrollSession.showAddEmployeeModal(session,$index)">
                                         <th>
                                             <span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span>
                                             <span class="fa-calendar" tooltip="Missed Punch Affected" ng-if="session.missedPunchAffected"></span> 
@@ -220,7 +220,8 @@
             <form class="form-horizontal validate" name="addEmployeeForm" id="addEmployeeForm" role="form" ng-submit="payrollSession.addEmployee()">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Add Employee</h4>
+                    <h4 ng-if="!payrollSession.editEmpSession" class="modal-title">Add Employee</h4>
+                    <h4 ng-if="payrollSession.editEmpSession" class="modal-title">Edit Employee Session</h4>
                 </div>
 
                 <div class="modal-body">
@@ -331,7 +332,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-info green_bt">Add</button>
+                    <button type="submit" class="btn btn-info green_bt">
+                        <span ng-if="payrollSession.editEmpSession">Save</span>
+                        <span ng-if="!payrollSession.editEmpSession">Add</span>
+                    </button>
                 </div>
             </form>
 
