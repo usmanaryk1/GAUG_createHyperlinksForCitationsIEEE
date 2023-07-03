@@ -48,9 +48,12 @@
                                         <div class="form-group">
                                             <label for="field-93" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
-                                                <div class="input-group">
-                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" ng-if='payrollSession.searchParams.toDate!=null' max-date="payrollSession.searchParams.toDate"/>
-                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" ng-if='payrollSession.searchParams.toDate==null' max-date='todayDate'/>
+                                                <div class="input-group" ng-if='payrollSession.searchParams.toDate!=null'>
+                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                                <div class="input-group" ng-if='payrollSession.searchParams.toDate==null'>
+                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate"  max-date='todayDate'/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
