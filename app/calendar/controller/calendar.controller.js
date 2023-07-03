@@ -316,7 +316,6 @@
                         $rootScope.employeePopup.data.worksiteSchedule = true;
                     }
                 });
-                cbr_replace();
             });
         };
         $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop) 
@@ -357,7 +356,7 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 200);
+                }, 100);
                 $rootScope.employeePopup = $modal.open({
                     templateUrl: 'app/calendar/views/employee_calendar_modal.html',
                     size: modal_size,
@@ -399,10 +398,7 @@
                             $rootScope.employeePopup.data.applyTo = "SINGLE";
                     }
                 }
-                //to make the radio buttons selected, theme bug
-                setTimeout(function () {
-                    cbr_replace();
-                }, 100);
+                
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
@@ -524,7 +520,7 @@
                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                             });
                             cbr_replace();
-                        }, 200);
+                        }, 100);
                     }
                 };
                 $rootScope.employeePopup.openPasswordModal = function (action) {
@@ -803,7 +799,7 @@
             //to make the radio buttons selected, theme bug
             setTimeout(function () {
                 cbr_replace();
-            }, 300);
+            }, 800);
         };
 
         ctrl.saveEmployeePopupChanges = function (data, isPast) {
