@@ -21,7 +21,7 @@
 
         ctrl.viewPatient;
 
-        ctrl.viewPatient = {'id': ''};
+//        ctrl.viewPatient = {'id': ''};
 
         ctrl.isOpen = false;
 
@@ -95,6 +95,7 @@
         $rootScope.refreshCalendarView = function () {
             $rootScope.paginationLoading = true;
             ctrl.retrievePatients();
+            ctrl.retrieve
         };
 
         ctrl.retrievePatients = function () {
@@ -251,6 +252,8 @@
 
         ctrl.retrieveAllPatients = function () {
             PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                ctrl.searchParams.patientIds = null;
+                $('#patientdropdownIds').select2('val', null);
                 ctrl.patientList = res;
             });
         };

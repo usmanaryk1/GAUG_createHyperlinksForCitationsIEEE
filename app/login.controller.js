@@ -1,10 +1,12 @@
+/* global ontime_data */
+
 function loginCtrlr($scope, $rootScope, $http, $state, Page) {
     $rootScope.stopIdle();
     $scope.username = "";
     $scope.password = "";
     $scope.ordCode = "";
 //    setCookie("changePassword", false, 7);
-    $scope.submitHandler = function () {
+    $scope.submitHandler = function () {        
         if ($("form#login").valid()) {
             showLoadingBar(70); // Fill progress bar to 70% (just a given value)
 
@@ -90,6 +92,7 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
 
                     $(".errors-container .alert").hide().slideDown();
                     //$(form).find('#password').select();
+                    $("form#login")[0].reset();
                 }
             }).error(function (data, status, headers, config) {
                 alert("Error");
