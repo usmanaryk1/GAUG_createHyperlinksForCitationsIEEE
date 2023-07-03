@@ -45,8 +45,31 @@
         }
         ;
         ctrl.saveSettings = saveSettings;
+        function setFormDynamicValidityMessages() {
+            $("#companyCode-error").text('Please enter Payroll Company Code.');
+        }
+        $scope.$watch(function() {
+            return ctrl.payrollObj.payrollProvider;
+        }, function(newVal, oldValue) {
+            setValidationsForCompanyCode(newVal);
+        });
+        $scope.$watch(function() {
+            return ctrl.payrollObj.payrollCompanyCode;
+        }, function(newVal, oldValue) {
+            if (newVal && (newVal === '' || newVal === null)) {
+                setFormDynamicValidityMessages();
+            }
+        });
+        function setValidationsForCompanyCode(payrollProvider) {
+            if (payrollProvider && payrollProvider !== '' && payrollProvider != null) {
+                $("input[name='companyCode']").attr('required', true);
+            } else {
+                $("input[name='companyCode']").attr('required', false);
+            }
+        }
         //function to save the payroll settings
         function saveSettings() {
+            setFormDynamicValidityMessages();
             if ($('#payroll_settings_form')[0].checkValidity() && ctrl.payrollObj.holidays != null && ctrl.payrollObj.holidays.length > 0) {
                 $rootScope.maskLoading();
                 ctrl.payrollObj.holidays = angular.copy(ctrl.payrollObj.holidays);

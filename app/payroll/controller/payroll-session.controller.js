@@ -22,7 +22,9 @@
                     session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
                 });
                 PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function(res) {
-                    window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
+                    if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider === "ADP - Work Force Now") {
+                        window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
+                    }
                     console.log(res);
                     $state.go('app.batch_session', {id: res.id});
                 }).catch(function(e) {
@@ -196,7 +198,7 @@
             angular.forEach(ctrl.payrollSessions, function(payroll) {
                 empWithSessions.push(payroll.employeeId);
             });
-            ctrl.addEmployeeList=ctrl.employeeList;
+            ctrl.addEmployeeList = ctrl.employeeList;
 //            angular.forEach(ctrl.employeeList, function(emp) {
 //                if (empWithSessions.indexOf(emp.id) < 0) {
 //                    ctrl.addEmployeeList.push(emp);
