@@ -316,9 +316,10 @@
                         $rootScope.employeePopup.data.worksiteSchedule = true;
                     }
                 });
+                cbr_replace();
             });
         };
-        $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
+        $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop) 
         {
             var data;
             var employeeObj;
@@ -598,7 +599,7 @@
                         $rootScope.employeePopup.validStart = true;
                         $rootScope.employeePopup.data.isPaidDisabled = false;
                     }
-                    if ($rootScope.employeePopup.validationHours!=null && $rootScope.employeePopup.validationHours[type]!=null) {
+                    if ($rootScope.employeePopup.validationHours != null && $rootScope.employeePopup.validationHours[type] != null) {
                         if ($rootScope.employeePopup.validationHours[type] < $rootScope.employeePopup.data.noOfHours) {
                             $rootScope.employeePopup.validHours = false;
                         } else {
@@ -611,7 +612,7 @@
                 $rootScope.employeePopup.setAvailability = function (empId, validateDetails) {
                     $rootScope.employeePopup.retrievingAvailabiltiy = true;
                     $rootScope.employeePopup.validationStartDate = {};
-                    $rootScope.employeePopup.validationHours = {};                    
+                    $rootScope.employeePopup.validationHours = {};
                     EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
                         if (res) {
                             $rootScope.employeePopup.availablityDetails = angular.copy(res);
@@ -624,7 +625,7 @@
                                 $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
                             }
                             if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited
-                                    && $rootScope.employeePopup.data.isPaid==true) {
+                                    && $rootScope.employeePopup.data.isPaid == true) {
                                 var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
                                 $rootScope.employeePopup.validationHours[type] =
                                         $rootScope.employeePopup.validationHours[type] + parseFloat($rootScope.employeePopup.data.noOfHours);
@@ -779,14 +780,14 @@
                         && $rootScope.employeePopup.data.reason && oldValue && oldValue !== '' && newVal && newVal !== '') {
                     if ($rootScope.employeePopup.availablityDetails) {
                         $rootScope.employeePopup.validateDetails();
-                    } else if($rootScope.employeePopup.retrievingAvailabiltiy === false){
+                    } else if ($rootScope.employeePopup.retrievingAvailabiltiy === false) {
                         if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
                             $rootScope.employeePopup.setAvailability($rootScope.employeePopup.data.employeeId, true);
                         } else if (ctrl.calendarView == 'month') {
                             $rootScope.employeePopup.setAvailability(ctrl.viewEmployee.id, true);
-                        } else if($rootScope.employeePopup.employee){
+                        } else if ($rootScope.employeePopup.employee) {
                             $rootScope.employeePopup.setAvailability($rootScope.employeePopup.employee.id, true);
-                        }                      
+                        }
                     }
                 } else {
                     $rootScope.employeePopup.validHours = true;
