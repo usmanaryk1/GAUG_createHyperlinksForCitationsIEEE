@@ -1,14 +1,14 @@
 /* global ontime_data */
 
 (function () {
-    function ClaimAdjustmentCtrl($modalInstance, $rootScope, BillingDAO) {
+    function ClaimAdjustmentCtrl($modalInstance, $rootScope, ClaimNumber, BillingDAO) {
         var ctrl = this;
-
+        ctrl.hasClaimNumber = ClaimNumber !== null ? true : false;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         ctrl.calledOnce = false;
         ctrl.update = {};
-        ctrl.reasons = [{key: 'Reason', value: 'Reason to Update'}];
+        ctrl.reasons = [{key: 'Reason', value: 'Reason to Update'}];        
         ctrl.getClaim = function () {
             if (ctrl.claimNumber) {
                 ctrl.update = {};
@@ -26,6 +26,12 @@
                 toastr.error("Claim number is required.");
             }            
         };
+        
+        if(ctrl.hasClaimNumber){
+            ctrl.claimNumber = ClaimNumber;
+            ctrl.getClaim();
+        }
+            
 
         ctrl.save = function () {
             if (ctrl.update.claimId && ctrl.update.totalCosts && ctrl.update.reason) {
@@ -48,5 +54,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ClaimAdjustmentCtrl', ["$modalInstance", "$rootScope", "BillingDAO", ClaimAdjustmentCtrl]);
+    angular.module('xenon.controllers').controller('ClaimAdjustmentCtrl', ["$modalInstance", "$rootScope", "ClaimNumber", "BillingDAO", ClaimAdjustmentCtrl]);
 })();

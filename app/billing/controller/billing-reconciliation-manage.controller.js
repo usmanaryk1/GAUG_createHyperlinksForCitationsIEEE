@@ -7,6 +7,7 @@
         ctrl.isViewOnly = $state.current.data.title === 'View' ? true : false;
         ctrl.show = 'filtered';
         ctrl.selectedClaims = {};
+        ctrl.creditUsages = [];
         ctrl.currentDate = new Date();
         ctrl.viewRecords = 10;
         ctrl.filteredDatatableObj = {};
@@ -91,9 +92,9 @@
                 ctrl.filterClaims();
         };
 
-        ctrl.updateSelection = function () {
+        ctrl.updateSelection = function () {            
             _.each(ctrl.selectedClaims, function (selected, selectedClaimId) {
-                var claim = _.find(ctrl.claims, {id: parseInt(selectedClaimId)});
+                var claim = _.find(ctrl.claims, {id: parseInt(selectedClaimId)});                
                 if (claim && !_.find(ctrl.selectedClaimsShow, {id: parseInt(selectedClaimId)}) && (selected === true)) {
                     if (ctrl.claimList.setAmountDue)
                         claim.AmountPaid = (claim.totalCosts - claim.paidAmount) > 0 ? parseFloat(claim.totalCosts - claim.paidAmount).toFixed(2) : 0;
@@ -143,10 +144,13 @@
 
         ctrl.updateAllClaims = function(){
             if (ctrl.claims && ctrl.claims.length > 0) {
-                ctrl.claims.forEach(function (claim) {
+                ctrl.claims.forEach(function (claim) {                    
                     var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claim.id});
                     if (selectedClaim) {
                         claim.AmountPaid = selectedClaim.AmountPaid;
+                        claim.creditUsed = selectedClaim.creditUsed;
+                    } else{
+                        claim.creditUsed = 0;
                     }
                 });
             }        
@@ -186,11 +190,16 @@
             }
         };
         
-        ctrl.openAdjustments = function () {
+        ctrl.openAdjustments = function (claimId) {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('billing', 'claim_adjustment_modal'),
                 controller: 'ClaimAdjustmentCtrl as claimAdjustment',
-                size: 'md'
+                size: 'md',
+                resolve: {
+                    ClaimNumber: function () {
+                        return claimId ? claimId : null;
+                    }
+                }
             });
             modalInstance.result.then(function (claim) {
                 if (_.findIndex(ctrl.claims, {id: claim.id}) > -1) {
@@ -202,18 +211,39 @@
             });
         };
 
-        ctrl.openCredits = function () {
+        ctrl.openCredits = function (claimId) {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('billing', 'claim_credit_modal'),
                 controller: 'ClaimCreditCtrl as claimCredit',
-                size: 'md',
+                size: 'lg',
                 resolve: {
                     creditUsages: function () {
                         return ctrl.bill.creditUsages ? angular.copy(ctrl.bill.creditUsages) : [];
+                    },
+                    creditsAvailable: function() {
+                        return BillingDAO.getCreditsAvailable({insuranceProviderId: ctrl.bill.receivedBy}).then(function(credits){
+                            if(credits.length === 0){
+                                toastr.error('No credits available');
+                            } else{
+                                return angular.copy(credits);
+                            }
+                        },function(){
+                            console.log("Error retrieveing available credits");
+                            toastr.error("Error retrieveing available credits");
+                        });
+                    },
+                    ClaimNumber: function () {
+                        return claimId ? claimId : null;
                     }
                 }
             });
             modalInstance.result.then(function (creditUsages) {
+                var creditUsage = 0;
+                _.each(_.filter(creditUsages,{toClaimId:claimId}), function (credit) {
+                    creditUsage+= credit.usedAmount;
+                });
+                var cliam = _.find(ctrl.claims,{id:claimId});
+                cliam.creditUsed = creditUsage;
                 ctrl.bill.creditUsages = angular.copy(creditUsages);
                 ctrl.getTotals();
                 toastr.success("Credits updated successfully.");
@@ -244,7 +274,7 @@
                 if (ctrl.selectedClaimsShow && ctrl.selectedClaimsShow.length > 0) {
                     _.each(ctrl.selectedClaimsShow, function (claim) {
                         if (claim.AmountPaid)
-                            billToSave.reconciliationDetails.push({claimId: claim.id, paidAmount: claim.AmountPaid});
+                            billToSave.reconciliationDetails.push({claimId: claim.id, paidAmount: claim.AmountPaid, creditUsed: claim.creditUsed});
                     });
                 }
                 if (billToSave.reconciliationDetails.length === 0 && (!billToSave.creditUsages || billToSave.creditUsages.length === 0)) {
@@ -268,7 +298,7 @@
             _.each(ctrl.selectedClaimsShow, function (claim) {
                 if(ctrl.selectedClaims[claim.id]){
                     ctrl.totals.AmountDue = ctrl.totals.AmountDue + ((claim.totalCosts ? parseFloat(claim.totalCosts) : 0) - (claim.paidAmount ? parseFloat(claim.paidAmount) : 0));
-                    ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);
+                    ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);                    
                 }                
             });
             _.each(ctrl.bill.creditUsages, function (credit) {

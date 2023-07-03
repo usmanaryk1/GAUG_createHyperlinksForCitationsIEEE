@@ -85,16 +85,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label" for="referenceNumber">
-                                            Reference #
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" id="referenceNumber" name="referenceNumber" type="text" maxlength="50"
-                                                   ng-model="manageBillingReconciliation.bill.referenceNumber" data-validate="required" data-message-required="Please enter Reference #." required
-                                                   ng-disabled="manageBillingReconciliation.isViewOnly"/>
-                                        </div>
-                                    </div>
                                 </div>    
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -104,7 +94,8 @@
                                         <div class="col-sm-8">
                                             <select class="form-control" id="sboxit-1" name="paymentMethod"
                                                     data-validate="required" data-message-required="Please select Payment Method." ng-model="manageBillingReconciliation.bill.paymentMethod" required
-                                                    ng-disabled="manageBillingReconciliation.isViewOnly">
+                                                    ng-disabled="manageBillingReconciliation.isViewOnly"
+                                                    ng-change="manageBillingReconciliation.bill.eftDate = null">
                                                 <option value="">
                                                     Select the Payment Method
                                                 </option>
@@ -121,9 +112,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" ng-if="['EFT', 'CHK'].indexOf(manageBillingReconciliation.bill.paymentMethod) > -1">
                                         <label class="col-sm-4 control-label" for="eftDate">
-                                            EFT Date
+                                            {{manageBillingReconciliation.bill.paymentMethod === 'EFT' ? 'EFT':'Check'}} Date
                                         </label>
                                         <div class="col-sm-8">
                                             <div class="input-group" >
@@ -138,6 +129,16 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label" for="referenceNumber">
+                                            Reference #
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input class="form-control" id="referenceNumber" name="referenceNumber" type="text" maxlength="50"
+                                                   ng-model="manageBillingReconciliation.bill.referenceNumber" data-validate="required" data-message-required="Please enter Reference #." required
+                                                   ng-disabled="manageBillingReconciliation.isViewOnly"/>
                                         </div>
                                     </div>
                                 </div>    
@@ -213,27 +214,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label" for="dob">
-                                            Patient Date of Birth
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group" >
-                                                <input class="form-control datepicker" max-date="manageBillingReconciliation.currentDate" data-format="mm/dd/yyyy" id="dob" 
-                                                       name="dob" type="text" ng-model="manageBillingReconciliation.searchParams.dob" 
-                                                       data-validate="date"/>
-                                                <div class="input-group-addon">
-                                                    <a href="#">
-                                                        <i class="linecons-calendar">
-                                                        </i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-push-12">
                                     <button type="button" class="btn btn-info green_bt pull-right" ng-click="manageBillingReconciliation.searchParams.pageNo = 1;manageBillingReconciliation.filterClaims()">Apply</button>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="manageBillingReconciliation.resetFilters()">
                                         Reset
@@ -255,10 +236,10 @@
                                         <input type="radio" name="show"  value='selected' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show">
                                         Show Selected(<b>{{manageBillingReconciliation.selectedClaims ? manageBillingReconciliation.getlength(manageBillingReconciliation.selectedClaims) : 0}}</b>) </label>
                                 </div>
-                                <div class="form-group">
+<!--                                <div class="form-group">
                                     <button type="button" class="btn btn-info green_bt pull-right" style="margin-right: 15px" ng-click="manageBillingReconciliation.openAdjustments()">Adjustment</button>
                                     <button type="button" class="btn btn-info green_bt pull-right" style="margin-right: 15px" ng-click="manageBillingReconciliation.openCredits()">Credit</button>
-                                </div>
+                                </div>-->
                             </div>    
 
                             <div ng-if="manageBillingReconciliation.show === 'filtered'" style="margin-top: 10px;">
@@ -277,7 +258,7 @@
                                             <span class="pull-left" style="min-width: 45px;"><span style="float: right;padding-top: 7px;">entries</span></span>
                                         </span>
                                     </div> 
-                                </div>
+                                </div>                                
                                 <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                                     <div class="table-responsive scroll">
                                         <table id="example-4" ng-show="manageBillingReconciliation.claims.length" class="table table-striped table-bordered  table-small-font" cellspacing="0">
@@ -289,15 +270,18 @@
                                                     </th>
                                                     <th nowrap><span class="">Billed Date</span></th>
                                                     <th nowrap><span class="">Patient Name</span></th>
-                                                    <th nowrap><span class="">DOB</span></th>
-                                                    <th nowrap><span class="">Claim Number</span></th>
+                                                    <th nowrap><span class="">Claim<br>Number</span></th>
                                                     <th nowrap><span class="">Date of Range</span></th>
-                                                    <th nowrap><span class="">Original Billed<br>Amount</span></th>
-                                                    <th nowrap class="text-center"><span class="">Amount Due</span></th>
+                                                    <th nowrap><span class="">Original<br>Billed<br>Amount</span></th>
+                                                    <th nowrap><span class="">Amount<br>Due</span></th>
+                                                    <th nowrap><span class="">Credit<br>Applied</span></th>
                                                     <th>
                                                         <input type="checkbox" ng-model="manageBillingReconciliation.claimList.setAmountDue" 
                                                                ng-change="manageBillingReconciliation.updateSelectedClaimsShow()">
                                                         <span class="">Payment</span>
+                                                    </th>
+                                                    <th>
+                                                        Action
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -310,11 +294,11 @@
                                                     </td>
                                                     <td>{{claim.billedDate}}</td>
                                                     <td>{{claim.patientName}}</td>
-                                                    <td>{{claim.patientBirthDate}}</td>
                                                     <td>{{claim.id}}</td>
                                                     <td>{{(claim.sessionStartDate| date:'MM/dd/yyyy') + '-' + (claim.sessionEndDate | date:'MM/dd/yyyy')}}</td>
                                                     <td class="text-center">{{claim.totalCosts| currency:'$':2}}</td>
                                                     <td class="text-center">{{(claim.totalCosts - claim.paidAmount)| currency:'$':2}}</td>
+                                                    <td>{{claim.creditUsed | currency:'$':2}}</td>
                                                     <td>
                                                         <input ng-disabled="!manageBillingReconciliation.selectedClaims[claim.id]" 
                                                                numbers-only="true" maxlength="10" class="form-control" 
@@ -322,6 +306,16 @@
                                                                ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.updateAmountPaid(claim.id, claim.AmountPaid)"
                                                                ng-required="!claim.AmountPaid && manageBillingReconciliation.selectedClaims[claim.id]==true"                                                               
                                                                ng-class="{'border-red':!claim.AmountPaid && manageBillingReconciliation.selectedClaims[claim.id]===true && manageBillingReconciliation.formSubmitted}"/>
+                                                    </td>
+                                                    <td>
+                                                        <div class="center">
+                                                            <a href="" class="btn icon-left fa fa-adjust edit_button" 
+                                                               ng-click="manageBillingReconciliation.openAdjustments(claim.id)"
+                                                               tooltip="Adjustment"><span class="ed_b"></span></a> 
+                                                            <a href="" class="btn icon-left fa fa-credit-card deactivate_bt"
+                                                               ng-click="manageBillingReconciliation.openCredits(claim.id)" 
+                                                               tooltip="Credit"><span class="ed_b"></span></a> 
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -350,11 +344,11 @@
                                                 <th nowrap><span class=""></span></th>
                                                 <th nowrap><span class="">Billed Date</span></th>
                                                 <th nowrap><span class="">Patient Name</span></th>
-                                                <th nowrap><span class="">DOB</span></th>
                                                 <th nowrap><span class="">Claim Number</span></th>
                                                 <th nowrap><span class="">Date of Range</span></th>
                                                 <th nowrap><span class="">Original Billed Amount</span></th>
                                                 <th nowrap class="text-center"><span class="">Amount Due</span></th>
+                                                <th nowrap class='nosorting'><span class="">Credit Applied</span></th>
                                                 <th nowrap class='nosorting'><span class="">Payment</span></th>
                                             </tr>
                                         </thead>
@@ -365,11 +359,11 @@
                                                 </td>
                                                 <td>{{claim.billedDate}}</td>
                                                 <td>{{claim.patientName}}</td>
-                                                <td>{{claim.patientBirthDate}}</td>
                                                 <td>{{claim.id}}</td>
                                                 <td>{{(claim.sessionStartDate| date:'MM/dd/yyyy') + '-' + (claim.sessionEndDate | date:'MM/dd/yyyy')}}</td>
                                                 <td class="text-center">{{claim.totalCosts| currency:'$':2}}</td>
                                                 <td class="text-center">{{claim.totalCosts - claim.paidAmount| currency:'$':2}}</td>
+                                                <td class="text-center">{{claim.creditUsed| currency:'$':2}}</td>
                                                 <td>
                                                     <input ng-disabled="!manageBillingReconciliation.selectedClaims[claim.id]" 
                                                            numbers-only="true" maxlength="10" class="form-control" 
@@ -389,7 +383,37 @@
                             <div class="clearfix"></div>
                             <div>&nbsp;</div>
                             <div class="row" ng-if="manageBillingReconciliation.claims.length">
-                                <div class="col-sm-5 pull-right">
+                                <div class="col-sm-7" style="margin-top: -22px">
+                                    <div>
+                                        <div class="row" style="margin-left: 0px">
+                                            <label style="color: black;"><strong>Credit Usage</strong></label>
+                                        </div>                
+                                        <div class="col-md-12 form-group">                    
+                                            <table class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th nowrap><span class="">From Claim</span></th>
+                                                        <th nowrap><span class="">To Claim</span></th>
+                                                        <th nowrap><span class="">Amount</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr style="cursor: pointer" ng-repeat="credit in manageBillingReconciliation.bill.creditUsages" ng-if="manageBillingReconciliation.bill.creditUsages.length > 0">                                
+                                                        <td>{{credit.claimId}}</td>
+                                                        <td>{{credit.toClaimId}}</td>
+                                                        <td>{{credit.usedAmount| currency:'$':2}}</td>
+                                                    </tr>
+                                                    <tr ng-if="manageBillingReconciliation.bill.creditUsages.length === 0">
+                                                        <td colspan="3" style="text-align: center;">
+                                                            No records found
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>      
+                                        </div>	
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
                                     <div class="panel panel-default panel-border" style="padding: 10px 10px 10px 10px;">
                                         <div class="panel-heading">Amounts For Selected Invoices</div>
                                         <hr>
@@ -414,8 +438,9 @@
                             </div>
                             <div class="clearfix"></div>
                             <div>&nbsp;</div>
-                            <div class="row">
-                                <button type="submit" class="btn btn-info green_bt  pull-right col-md-2" ng-hide="manageBillingReconciliation.isViewOnly">Save</button>
+                            <div class="col-md-12" style="padding-right: 0px;">
+                                <button type="submit" class="btn btn-info green_bt  pull-right col-md-2" 
+                                        style="margin-right: 0px" ng-hide="manageBillingReconciliation.isViewOnly">Save</button>
                                 <button class="btn btn-info btn-single gray_bt pull-right col-md-2" type="button" ng-click="manageBillingReconciliation.clear()">
                                     Clear
                                 </button>

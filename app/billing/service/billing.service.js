@@ -116,6 +116,14 @@
                 params: {
                     action: 'claims'
                 }             
+            },
+            getCreditsAvailable:{
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'claims',
+                    paramId: 'credit'
+                }
             }
         });
         return {
@@ -169,6 +177,9 @@
             },
             deleteClaim: function(data) {
                 return api.deleteClaim(data).$promise;
+            },
+            getCreditsAvailable: function (data) {
+                return api.getCreditsAvailable(data).$promise;
             }
         };
     };
