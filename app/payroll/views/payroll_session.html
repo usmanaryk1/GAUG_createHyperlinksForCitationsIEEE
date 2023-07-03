@@ -2,6 +2,10 @@
     .print-btn{
         margin-left: 20px
     }
+    .set-margins{
+        width:auto; 
+        margin-right: 0px
+    }
 </style>
 <div class="page-body"> 
 
@@ -20,92 +24,95 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <form class="form-horizontal" role="form">     
-                        <div class="col-sm-12 pad0">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-2 pad0">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                                        <!--<div style="width:70px; float:right">-->
+                                        <select class="pull-right input-sm" style="background-color: transparent;width: 70px;" ng-model="payrollSession.viewRecords" ng-change="payrollSession.changeViewRecords()">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                        <!--</div>-->
+                                    </div>
+                                </div>
+                                <div class="pull-right col-sm-7 pad0" ng-if="payrollSession.processdMode">
+                                    <div ng-if="payrollSession.payrollSettings.payrollProvider && payrollSession.payrollSettings.payrollProvider !== null">
+                                        <a style="margin-left: 10px" ng-href="{{serverPath + 'payrolls/sessions/' + payrollSession.processedSessionObj.id + '/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Download Data</a>
+                                    </div>
+                                    <div class="text-right">
+                                        Payroll Batch Number: {{payrollSession.processedSessionObj.id}} | Group: {{payrollSession.processedSessionObj.payrollGroup}}
+                                        <br/>
+                                        Pay Period: {{payrollSession.processedSessionObj.sessionStartDate|date :dateFormat}} - {{payrollSession.processedSessionObj.sessionEndDate|date :dateFormat}}
+                                    </div>
 
-                            <div class="form-group col-sm-3 pull-left">
-                                <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
-                                <div style="width:70px; float:left">
-                                    <select class="form-control input-sm" ng-model="payrollSession.viewRecords" ng-change="payrollSession.changeViewRecords()">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
                                 </div>
-                            </div>
-                            <div class="pull-right col-sm-7 pad0" ng-if="payrollSession.processdMode">
-                                <div ng-if="payrollSession.payrollSettings.payrollProvider && payrollSession.payrollSettings.payrollProvider !== null">
-                                    <a style="margin-left: 10px" ng-href="{{serverPath + 'payrolls/sessions/' + payrollSession.processedSessionObj.id + '/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Download Data</a>
-                                </div>
-                                <div class="text-right">
-                                    Payroll Batch Number: {{payrollSession.processedSessionObj.id}} | Group: {{payrollSession.processedSessionObj.payrollGroup}}
-                                    <br/>
-                                    Pay Period: {{payrollSession.processedSessionObj.sessionStartDate|date :dateFormat}} - {{payrollSession.processedSessionObj.sessionEndDate|date :dateFormat}}
-                                </div>
-
-                            </div>
-                            <div class="col-sm-9 pull-right wd_full pad0" ng-if="!payrollSession.processdMode">
-                                <div class="col-sm-4 wd_full">
-                                    <div class="form-group">
-                                        <label for="PayrollGroup" class="col-sm-6 control-label" style="padding-right: 0px">Payroll Group</label>
-                                        <div class="col-sm-6">
-                                            <select class="form-control pull-right" id="PayrollGroup" name="PayrollGroup" ng-model="payrollSession.searchParams.payrollGroup">
-<!--                                                <option value="">
-                                                    Select a Payroll Group
-                                                </option>-->
-                                                <option value="A">
-                                                    A
-                                                </option>
-                                                <option value="B">
-                                                    B
-                                                </option>
-                                                <option value="C">
-                                                    C
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-sm-4 pad0 wd_full">
-                                    <div class="form-group">
-                                        <label for="field-93" class="col-sm-3 control-label" style="padding-right: 0px">From</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group" ng-if='payrollSession.searchParams.toDate != null'>
-                                                <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
-                                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                            </div>
-                                            <div class="input-group" ng-if='payrollSession.searchParams.toDate == null'>
-                                                <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate"  max-date='todayDate'/>
-                                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                <div class="col-sm-10 pull-right pad0" ng-if="!payrollSession.processdMode">
+                                    <div class="col-sm-4 pad0 wd_full">
+                                        <div class="form-group">
+                                            <label for="PayrollGroup" class="col-sm-5 control-label">Payroll Group</label>
+                                            <div class="col-sm-7">
+                                                <select class="form-control pull-right" id="PayrollGroup" name="PayrollGroup" ng-model="payrollSession.searchParams.payrollGroup">
+                                                    <!--                                                <option value="">
+                                                                                                        Select a Payroll Group
+                                                                                                    </option>-->
+                                                    <option value="A">
+                                                        A
+                                                    </option>
+                                                    <option value="B">
+                                                        B
+                                                    </option>
+                                                    <option value="C">
+                                                        C
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-4 pad0">
-                                    <div class="form-group">
-                                        <label for="field-94" class="col-sm-3 control-label" style="padding-right: 0px">To</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate" max-date='todayDate'/>
-                                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                    <div class="col-sm-4 pad0">
+                                        <div class="form-group">
+                                            <label for="field-93" class="col-sm-3 control-label">From</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group" ng-if='payrollSession.searchParams.toDate != null'>
+                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                                <div class="input-group" ng-if='payrollSession.searchParams.toDate == null'>                                                    
+                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate"  max-date='todayDate'/>
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                
+                                    <div class="col-sm-4 pad0">
+                                        <div class="form-group">
+                                            <label for="field-94" class="col-sm-3 control-label">To</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate" max-date='todayDate'/>
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                 
                             </div>
                         </div>
-                        <div class="col-sm-12 pad0">
-                            <div class="pull-right" ng-if="!payrollSession.processdMode">
-                                <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
-                                <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
-                                <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null, null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
-                                <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
-                                    Reset Filters
-                                </button>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="pull-right" ng-if="!payrollSession.processdMode">
+                                    
+                                    <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" type="button" class="btn btn-info btn-single process_bt pull-right" style="width:auto; margin-right: 0px" ng-click="payrollSession.processSessions()">Process</button>
+                                    <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()" ng-class="{'set-margins':!(payrollSession.criteriaSelected && payrollSession.dateMessage == null)}" >Review</button>
+                                    <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null, null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                    <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()" ng-class="{'set-margins':payrollSession.criteriaSelected && payrollSession.dateMessage == null}">
+                                        Reset Filters
+                                    </button>
+                                </div>
                             </div>
-
                         </div>
                     </form>
                 </div>

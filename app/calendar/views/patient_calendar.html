@@ -14,7 +14,7 @@
             <datepicker ng-model="patientcalendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-click="patientcalendar.selectDate($event)" ng-class="{'show':patientcalendar.isOpen,'hide':!patientcalendar.isOpen}"></datepicker>
         </div>
         <div class="mwl-right">
-            <span ng-if="patientcalendar.viewPatient.status != 'd'">
+            <span ng-if="patientcalendar.viewPatient && patientcalendar.viewPatient.status != 'd'">
                 <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add New Event</a>
             </span>
             <div class="mwl-button-group">
