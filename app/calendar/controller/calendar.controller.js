@@ -358,11 +358,124 @@
                 $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
                 $rootScope.employeePopup.patients = patients;
-                $rootScope.employeePopup.reasons = ontime_data.employeeReasons;
                 $rootScope.employeePopup.eventTypes = ontime_data.eventTypes;
                 $rootScope.employeePopup.recurranceTypes = ontime_data.recurranceTypes;
                 $rootScope.employeePopup.employee = angular.copy(employeeObj);
                 $rootScope.employeePopup.patientMandatory = true;
+
+                $rootScope.employeePopup.types = {
+                    'SICK': 'SIT',
+                    'PSNL': 'PRT',
+                    'VCTN': 'VCT'
+                };
+                $rootScope.employeePopup.validateDetails = function () {
+                    var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
+                    if ($rootScope.employeePopup.validationStartDate && $rootScope.employeePopup.validationStartDate[type]) {
+                        if (moment($rootScope.employeePopup.validationStartDate[type]).toDate() > moment(new Date($rootScope.employeePopup.data.startDate)).toDate()) {
+                            $rootScope.employeePopup.validStart = false;
+                            $rootScope.employeePopup.data.isPaidDisabled = true;
+                            $rootScope.employeePopup.data.isPaid = false;
+                            $formService.uncheckCheckboxValue('paid');
+                            delete $rootScope.employeePopup.data.noOfHours;
+                        } else {
+                            $rootScope.employeePopup.validStart = true;
+                            $rootScope.employeePopup.data.isPaidDisabled = false;
+                        }
+                    } else {
+                        $rootScope.employeePopup.validStart = true;
+                        $rootScope.employeePopup.data.isPaidDisabled = false;
+                    }
+                    if ($rootScope.employeePopup.validationHours != null) {
+                        $rootScope.employeePopup.checkHoursValidity($rootScope.employeePopup.validationHours, type);
+                    } else {
+                        $rootScope.employeePopup.validHours = true;
+                        $rootScope.employeePopup.validHours2 = true;
+                    }
+                };
+
+                $rootScope.employeePopup.setAvailability = function (empId, validateDetails) {
+                    if (empId) {
+                        $rootScope.employeePopup.retrievingAvailabiltiy = true;
+                        $rootScope.employeePopup.validationStartDate = {};
+                        $rootScope.employeePopup.validationHours = {};
+                        EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
+                            if (res) {
+                                $rootScope.employeePopup.availablityDetails = angular.copy(res);
+                                $rootScope.employeePopup.reasons = [];
+                                for (var i = 0; i < ontime_data.employeeReasons.length; i++) {
+                                    var key = ontime_data.employeeReasons[i].key;
+                                    if (["SICK", "PSNL", "VCTN"].indexOf(key) > -1) {
+                                        if (($rootScope.employeePopup.availablityDetails.vestingPeriodMap['SIT'] && key === 'SICK')
+                                                || ($rootScope.employeePopup.availablityDetails.vestingPeriodMap['PIT'] && key === 'PSNL')
+                                                || ($rootScope.employeePopup.availablityDetails.vestingPeriodMap['VCT'] && key === 'VCTN')) {
+                                            $rootScope.employeePopup.reasons.push(ontime_data.employeeReasons[i]);
+                                        }
+                                    } else {
+                                        $rootScope.employeePopup.reasons.push(ontime_data.employeeReasons[i]);
+                                    }
+                                }
+                                if (res.hiringDate && $rootScope.employeePopup.availablityDetails.vestingPeriodMap) {
+                                    angular.forEach($rootScope.employeePopup.availablityDetails.vestingPeriodMap, function (val, key) {
+                                        $rootScope.employeePopup.validationStartDate[key] = moment(new Date(res.hiringDate)).add(val, 'Days').toDate();
+                                    });
+                                }
+                                if (res.utilizationDate) {
+                                    $rootScope.employeePopup.utilizationDate = new Date(res.utilizationDate);
+                                }
+
+                                if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
+                                    _.each($rootScope.employeePopup.availablityDetails.timeAvailabilityMap, function (year, details) {
+                                        _.each(details, function (type) {
+                                            if (type && details[type] !== null && !_.isInteger(details[type])) {
+                                                details[type] = parseFloat(details[type]).toPrecision(2);
+                                            }
+                                        });
+                                    });
+                                    $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
+                                }
+                                if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited
+                                        && $rootScope.employeePopup.data.isPaid == true) {
+                                    var reasonType = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
+                                    _.each($rootScope.employeePopup.validationHours, function (details, year) {
+                                        _.each(details, function (hours, type) {
+                                            if (reasonType == type) {
+                                                if (year == $rootScope.employeePopup.data.leaveYear && $rootScope.employeePopup.data.noOfHours != null) {
+                                                    if (_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours))
+                                                        $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours);
+                                                    else
+                                                        $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours)).toPrecision(2));
+                                                } else if (year == $rootScope.employeePopup.data.leaveYear2 && $rootScope.employeePopup.data.noOfHours2 != null) {
+                                                    if (_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours2))
+                                                        $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours2);
+                                                    else
+                                                        $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours2)).toPrecision(2));
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            } else {
+                                $rootScope.employeePopup.availablityDetails = {};
+                            }
+                            $rootScope.employeePopup.retrievingAvailabiltiy = false;
+                            if (validateDetails) {
+                                $rootScope.employeePopup.validateDetails();
+                            }
+
+                        }).catch(function (data, status) {
+                            $rootScope.employeePopup.availablityDetails = {};
+                        }).then(function (data, status) {
+                            if (empId && $rootScope.employeePopup.data.eventType == 'U' && $rootScope.employeePopup.data.reason) {
+                                $rootScope.employeePopup.validateDetails();
+                            } else {
+                                $rootScope.employeePopup.validHours = true;
+                                $rootScope.employeePopup.validHours2 = true;
+                                $rootScope.employeePopup.validStart = true;
+                                $rootScope.employeePopup.utilizationDateFallsBtw = false;
+                            }
+                        });
+                    }
+                };
                 if (data == null) {
                     $rootScope.employeePopup.isNew = true;
                     $rootScope.employeePopup.showEmployee = true;
@@ -471,6 +584,7 @@
                             $rootScope.employeePopup.data.endTime = currentTime;
                         }
                         if (old == 'U') {
+                            $rootScope.employeePopup.setAvailability($rootScope.employeePopup.employee.id, false);
                             if (!angular.isDefined($rootScope.employeePopup.data.isPaid))
                                 $rootScope.employeePopup.data.isPaid = false;
                         }
@@ -557,12 +671,6 @@
                     });
                 };
 
-                $rootScope.employeePopup.types = {
-                    'SICK': 'SIT',
-                    'PSNL': 'PRT',
-                    'VCTN': 'VCT'
-                };
-
                 $rootScope.employeePopup.checkHoursValidity = function (validationHours, type) {
                     if (!$rootScope.employeePopup.hoursData) {
                         $rootScope.employeePopup.hoursData = {};
@@ -610,7 +718,7 @@
                                 delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
                             }
                         } else {
-                            $rootScope.employeePopup.showSingleBox = true;                            
+                            $rootScope.employeePopup.showSingleBox = true;
                             $rootScope.employeePopup.utilizationDateFallsBtw = true;
                             delete $rootScope.employeePopup.data.leaveYear;
                             delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
@@ -618,7 +726,7 @@
                             delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
                         }
                     } else {
-                        $rootScope.employeePopup.showSingleBox = true;                        
+                        $rootScope.employeePopup.showSingleBox = true;
                         delete $rootScope.employeePopup.data.leaveYear;
                         delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
                         delete $rootScope.employeePopup.data.leaveYear2;
@@ -643,99 +751,7 @@
                     }
                 };
 
-                $rootScope.employeePopup.validateDetails = function () {
-                    var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
-                    if ($rootScope.employeePopup.validationStartDate && $rootScope.employeePopup.validationStartDate[type]) {
-                        if (moment($rootScope.employeePopup.validationStartDate[type]).toDate() > moment(new Date($rootScope.employeePopup.data.startDate)).toDate()) {
-                            $rootScope.employeePopup.validStart = false;
-                            $rootScope.employeePopup.data.isPaidDisabled = true;
-                            $rootScope.employeePopup.data.isPaid = false;
-                            $formService.uncheckCheckboxValue('paid');
-                            delete $rootScope.employeePopup.data.noOfHours;
-                        } else {
-                            $rootScope.employeePopup.validStart = true;
-                            $rootScope.employeePopup.data.isPaidDisabled = false;
-                        }
-                    } else {
-                        $rootScope.employeePopup.validStart = true;
-                        $rootScope.employeePopup.data.isPaidDisabled = false;
-                    }
-                    if ($rootScope.employeePopup.validationHours != null) {
-                        $rootScope.employeePopup.checkHoursValidity($rootScope.employeePopup.validationHours, type);
-                    } else {
-                        $rootScope.employeePopup.validHours = true;
-                        $rootScope.employeePopup.validHours2 = true;
-                    }
-                };
 
-                $rootScope.employeePopup.setAvailability = function (empId, validateDetails) {
-                    $rootScope.employeePopup.retrievingAvailabiltiy = true;
-                    $rootScope.employeePopup.validationStartDate = {};
-                    $rootScope.employeePopup.validationHours = {};
-                    EmployeeDAO.getTimeAvailability({employeeId: empId}).then(function (res) {
-                        if (res) {
-                            $rootScope.employeePopup.availablityDetails = angular.copy(res);
-                            if (res.hiringDate && $rootScope.employeePopup.availablityDetails.vestingPeriodMap) {
-                                angular.forEach($rootScope.employeePopup.availablityDetails.vestingPeriodMap, function (val, key) {
-                                    $rootScope.employeePopup.validationStartDate[key] = moment(new Date(res.hiringDate)).add(val, 'Days').toDate();
-                                });
-                            }
-                            if (res.utilizationDate) {
-                                $rootScope.employeePopup.utilizationDate = new Date(res.utilizationDate);
-                            }
-
-                            if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
-                                _.each($rootScope.employeePopup.availablityDetails.timeAvailabilityMap, function (year, details) {
-                                    _.each(details, function (type) {
-                                        if (type && details[type] !== null && !_.isInteger(details[type])) {
-                                            details[type] = parseFloat(details[type]).toPrecision(2);
-                                        }
-                                    });
-                                });
-                                $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
-                            }
-                            if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited
-                                    && $rootScope.employeePopup.data.isPaid == true) {
-                                var reasonType = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
-                                _.each($rootScope.employeePopup.validationHours, function (details, year) {
-                                    _.each(details, function (hours, type) {
-                                        if (reasonType == type) {
-                                            if (year == $rootScope.employeePopup.data.leaveYear && $rootScope.employeePopup.data.noOfHours !=null) {
-                                                if(_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours))
-                                                    $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours);
-                                                else
-                                                    $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours)).toPrecision(2));
-                                            } else if (year == $rootScope.employeePopup.data.leaveYear2 && $rootScope.employeePopup.data.noOfHours2 !=null) {
-                                                if(_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours2))
-                                                    $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours2);
-                                                else
-                                                    $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours2)).toPrecision(2));
-                                            }
-                                        }
-                                    });
-                                });
-                            }                            
-                        } else {
-                            $rootScope.employeePopup.availablityDetails = {};
-                        }
-                        $rootScope.employeePopup.retrievingAvailabiltiy = false;
-                        if (validateDetails) {
-                            $rootScope.employeePopup.validateDetails();
-                        }
-
-                    }).catch(function (data, status) {
-                        $rootScope.employeePopup.availablityDetails = {};
-                    }).then(function (data, status) {
-                        if (empId && $rootScope.employeePopup.data.eventType == 'U' && $rootScope.employeePopup.data.reason) {
-                            $rootScope.employeePopup.validateDetails();
-                        } else {
-                            $rootScope.employeePopup.validHours = true;
-                            $rootScope.employeePopup.validHours2 = true;
-                            $rootScope.employeePopup.validStart = true;
-                            $rootScope.employeePopup.utilizationDateFallsBtw = false;
-                        }
-                    });
-                };
 
                 $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
                     if ($rootScope.employeePopup.data.eventType == 'U' || (editMode === false)) {

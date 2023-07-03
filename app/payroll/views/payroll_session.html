@@ -164,6 +164,8 @@
                                 <tbody>
                                     <tr style="cursor: pointer" ng-repeat="session in payrollSession.payrollSessions">
                                         <th ng-click="payrollSession.showAddEmployeeModal(session, $index)">
+                                            <span class="fa-calendar-o" tooltip="Includes PTO" 
+                                                  ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" ng-if="session.ptoAdded"></span>
                                             <span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span>
                                             <span ng-click="payrollSession.showMissedPunchModal(session, $index, $event)" class="fa-calendar" tooltip="Missed Punch Affected" ng-if="session.missedPunchAffected"></span> 
                                             {{payrollSession.empMap[session.employeeId].lName}}</th>

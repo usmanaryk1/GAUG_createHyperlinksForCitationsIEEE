@@ -117,6 +117,15 @@
             },
             deleteAttachment: {
                 method: 'DELETE'
+            },
+            checkFutureSchedules: {
+                method: 'GET',
+                params: {
+                    subAction: 'futureschedule'
+                },
+                transformResponse: function (data, headersGetter, status) {
+                    return {data: JSON.parse(data)};
+                }
             }
         });
         return {
@@ -198,6 +207,9 @@
             },
             updateAttachment: function (data) {
                 return api.updateNotes({action: data.employeeId, subAction: 'attachments', subAction1: data.id}, data).$promise;
+            },
+            checkFutureSchedules: function (data) {
+                return api.checkFutureSchedules({action: data.employeeId}, {}).$promise;
             }
         };
     };
