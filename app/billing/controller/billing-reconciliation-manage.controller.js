@@ -17,7 +17,7 @@
             $state.go(ctrl.type);
         }
         ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc'};
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc', 'billingReconciliation': true};
         ctrl.selectedClaimsShow = [];
         ctrl.getlength = function (selectedClaims) {
             var totalSelected = 0;
@@ -31,7 +31,7 @@
 
         ctrl.resetDataAndFilters = function () {
             ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
-            ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc'};
+            ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc', 'billingReconciliation': true};
             ctrl.selectedClaimsShow = [];
             ctrl.claims = [];
             ctrl.selectedClaims = [];
@@ -40,7 +40,7 @@
 
         ctrl.resetFilters = function () {
             delete ctrl.searchParams;
-            ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc'};
+            ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc', 'billingReconciliation': true};
         };
 
         InsurerDAO.retrieveAll().then(function (res) {
