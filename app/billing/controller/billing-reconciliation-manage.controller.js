@@ -55,6 +55,7 @@
             if (ctrl.bill.receivedBy) {
                 search['insuranceProviderId'] = ctrl.bill.receivedBy;
             }
+            search['populateInsuranceId'] = true;
             PatientDAO.retrieveForSelect(search).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function () {
@@ -132,16 +133,16 @@
             }
             ctrl.getTotals();
         };
-        
+
         ctrl.removeAmountPaid = function (claimId) {
             var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claimId});
             if (selectedClaim) {
                 delete selectedClaim.AmountPaid;
             }
             ctrl.getTotals();
-        };        
+        };
 
-        ctrl.updateAllClaims = function(){
+        ctrl.updateAllClaims = function () {
             if (ctrl.claims && ctrl.claims.length > 0) {
                 ctrl.claims.forEach(function (claim) {
                     var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claim.id});
@@ -149,9 +150,9 @@
                         claim.AmountPaid = selectedClaim.AmountPaid;
                     }
                 });
-            }        
+            }
         };
-        
+
         ctrl.updateSelectedClaimsShow = function () {
             if (ctrl.selectedClaimsShow && ctrl.selectedClaimsShow.length > 0) {
                 ctrl.selectedClaimsShow.forEach(function (claim) {
@@ -185,7 +186,7 @@
                 toastr.warning('Please select insurance provider');
             }
         };
-        
+
         ctrl.openAdjustments = function () {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('billing', 'claim_adjustment_modal'),
@@ -225,7 +226,7 @@
             ctrl.formSubmitted = true;
             var isValid = true;
             ctrl.selectedClaimsShow.forEach(function (claim) {
-                if(ctrl.selectedClaims[claim.id] && _.isUndefined(claim.AmountPaid)){
+                if (ctrl.selectedClaims[claim.id] && _.isUndefined(claim.AmountPaid)) {
                     isValid = false;
                 }
             });
@@ -266,10 +267,10 @@
         ctrl.getTotals = function () {
             ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
             _.each(ctrl.selectedClaimsShow, function (claim) {
-                if(ctrl.selectedClaims[claim.id]){
+                if (ctrl.selectedClaims[claim.id]) {
                     ctrl.totals.AmountDue = ctrl.totals.AmountDue + ((claim.totalCosts ? parseFloat(claim.totalCosts) : 0) - (claim.paidAmount ? parseFloat(claim.paidAmount) : 0));
                     ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);
-                }                
+                }
             });
             _.each(ctrl.bill.creditUsages, function (credit) {
                 ctrl.totals.Credits = ctrl.totals.Credits + (credit.usedAmount ? parseFloat(credit.usedAmount) : 0);
