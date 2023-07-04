@@ -356,7 +356,8 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 200);
+                    cbr_replace();
+                }, 800);
                 $rootScope.employeePopup = $modal.open({
                     templateUrl: 'app/calendar/views/employee_calendar_modal.html',
                     size: modal_size,
@@ -796,10 +797,6 @@
             var carePatientMap;
             employeeObj = {};
             open();
-            //to make the radio buttons selected, theme bug
-            setTimeout(function () {
-                cbr_replace();
-            }, 800);
         };
 
         ctrl.saveEmployeePopupChanges = function (data, isPast) {

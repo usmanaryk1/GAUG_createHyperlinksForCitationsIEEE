@@ -384,7 +384,8 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 200);
+                    cbr_replace();
+                }, 800);
                 $rootScope.patientPopup = $modal.open({
                     templateUrl: 'app/calendar/views/patient_calendar_modal.html',
                     size: modal_size,
@@ -861,10 +862,6 @@
             var careEmployeeMap;
             patientObj = {};
             open();
-            //to make the radio buttons selected, theme bug
-            setTimeout(function () {
-                cbr_replace();
-            }, 800);
         };
         EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
