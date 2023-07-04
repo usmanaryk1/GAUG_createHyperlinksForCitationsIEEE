@@ -533,8 +533,8 @@
 //                        ctrl.employee.salaryFrequency = '1W';
 //                    }
                     setValidationsForTab2(ctrl.employee.wages);
-                    $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
-                    $formService.setRadioValues('Wages', ctrl.employee.wages);
+//                    $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
+//                    $formService.setRadioValues('Wages', ctrl.employee.wages);
                     form_data = $('#add_employee_form').serialize();
                 } else {
                     ctrl.tab2DataInit();
@@ -558,7 +558,7 @@
                     if (!ctrl.employee.position || ctrl.employee.position === null) {
                         ctrl.employee.position = 'pc';
                     }
-                    $formService.setRadioValues('Position', ctrl.employee.position);
+//                    $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();
                 } else {
                     ctrl.tab1DataInit();

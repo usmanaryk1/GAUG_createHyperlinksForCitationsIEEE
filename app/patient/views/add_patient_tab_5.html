@@ -138,10 +138,10 @@
                             </script>
                             <select class="form-control" id="State" name="State" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                     ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state"
-                                    data-validate="required" data-message-required="Please enter State."
+                                    data-validate="required" data-message-required="Please select the state."
                                     ng-options="state.abbreviation as state.abbreviation for state in states">
                                 <option value="">
-                                    Select
+                                    Select the state
                                 </option>
                             </select>
                         </div>
@@ -200,7 +200,7 @@
 //                MiddleInitial: {required: 'Please enter Middle Initial.'},
 //                ZipCode: {required: 'Please enter Zip Code.'},
 //                DateofBirth: {required: 'Please enter Date of Birth.'},
-//                State: {required: 'Please enter State.'},
+//                State: {required: 'Please select the state.'},
 //                RelationshipWithPatient: {required: 'Please enter Relationship With Patient.'},
 //                Address1: {required: 'Please enter Address 1.'},
 //            },

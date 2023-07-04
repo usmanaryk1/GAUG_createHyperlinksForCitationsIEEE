@@ -128,7 +128,7 @@
                         <div class="col-sm-9">
                             <div class="form-block">
                                 <label class="checkbox col-sm-3" ng-repeat="language in addPatient.languagesKeyValue">
-                                    <input checked="true" class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
+                                    <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                     {{languages[language.key]}}
                                 </label>
                             </div>
@@ -154,7 +154,7 @@
                             <select class="form-control" id="StaffingCoordinator"  ng-model='addPatient.patient.staffingCordinatorId' name="StaffingCoordinator"
                                     data-validate="required" data-message-required="Please select Staffing Coordinator."
                                     ng-options='emp.id as (emp.label) for emp in addPatient.staffCoordinatorList'>
-                                <option value="">Select</option>
+                                <option value="">Select the staffing coordinator</option>
                                 <!--<option ng-repeat="emp in addPatient.staffCoordinatorList" ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
                                 <!--<option value="1">1</option>-->
                             </select>
@@ -181,7 +181,7 @@
                                     data-validate="required" data-message-required="Please select Nurse Case Manager."
                                     ng-options='emp.id as (emp.label) for emp in addPatient.nursingCareList'>
                                 <option value="">
-                                    Select
+                                    Select the nurse case manager
                                 </option>
                                 <!--<option ng-repeat="emp in " ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
                             </select>

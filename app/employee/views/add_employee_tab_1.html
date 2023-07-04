@@ -265,10 +265,10 @@
                                     //            });
                                 </script>
                                 <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.employee.state"
-                                        data-validate="required" data-message-required="Please enter State."
+                                        data-validate="required" data-message-required="Please select the state."
                                         ng-options="state.abbreviation as state.abbreviation for state in states">
                                     <option value="">
-                                        Select
+                                        Select the state
                                     </option>
                                 </select>
                             </div>
@@ -362,7 +362,7 @@
                             <div class="col-sm-9">
                                 <div class="form-block">
                                     <label class="checkbox col-sm-3" ng-repeat="language in addEmployee.languagesKeyValue">
-                                        <input checked="true" class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
+                                        <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                         {{languages[language.key]}}
                                     </label>
                                 </div>

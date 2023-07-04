@@ -53,6 +53,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                             }
 //                            window.location.hash = '#/app/dashboard';
                             $state.transitionTo(ontimetest.homepage);
+                            document.title = ':: Welcome ::';
                             $rootScope.startIdle();
                             // window.location.hash = '#/app/add_patient_tab_1';
                         }
