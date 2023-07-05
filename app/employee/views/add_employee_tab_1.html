@@ -365,6 +365,13 @@
                                         <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                         {{languages[language.key]}}
                                     </label>
+                                    <label class="checkbox col-sm-3">
+                                        <input class="cbr" id="languageOther" name="languageOther" type="checkbox" ng-model="addEmployee.otherLanguageCheckbox" ng-change="addEmployee.refreshLanguages()" />
+                                        Others
+                                    </label>
+                                    <label class="col-sm-6" ng-if="addEmployee.otherLanguageCheckbox" style="margin-left:-20px">
+                                        <input id="languageOtherText" name="languageOtherText" class="form-control" data-role="tagsinput" type="text" ng-model="addEmployee.employee.otherLanguages" tagsinput/>
+                                    </label>
                                 </div>
                             </div>
                         </div>

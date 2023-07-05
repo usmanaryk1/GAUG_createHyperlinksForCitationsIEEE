@@ -10,6 +10,11 @@
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
+        ctrl.refreshLanguages = function() {
+            $timeout(function() {
+                $('#languageOtherText').tagsinput("add", ctrl.patient.otherLanguages);
+            });
+        };
         ctrl.nursingCareList = [];
         ctrl.staffCoordinatorList = [];
         ctrl.insuranceProviderList = [];
@@ -181,6 +186,10 @@
                                 obj.value = true;
                             }
                         });
+                    }
+                    if (ctrl.patient.otherLanguages != null && ctrl.patient.otherLanguages != '') {
+                        ctrl.otherLanguageCheckbox = true;
+                        ctrl.refreshLanguages();
                     }
                     if (res.patientCareTypeCollection) {
                         var careTypesSelected = [];

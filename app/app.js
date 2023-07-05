@@ -175,6 +175,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
+                            ASSETS.forms.tagsinput
                         ]);
                     },
                 },
@@ -274,6 +275,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
                             ASSETS.forms.inputmask,
+                            ASSETS.forms.tagsinput
                         ]);
                     },
                 }
