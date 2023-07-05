@@ -114,12 +114,20 @@
                                                     {{attachment.DateCompleted}}
                                                 </td>-->
                                                 <td align="center"> {{attachment.expiryDate}} </td>
-                                                <td align="center">
+                                                <td align="center">                                                    
                                                     <a class="btn icon-left fa fa-download download_bt"                                                    
                                                        ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}" 
-                                                       tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}"><em class="ed_b"></em></a>                                                    
-                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-trash-o delete_button" ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"><span class="ed_b"></span></a>
+                                                       tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}"><em class="ed_b"></em></a>                                                                                                        
+                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" 
+                                                       ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><span class="ed_b"></span></a>                                                    
+                                                    <a class="btn icon-left fa fa-trash-o delete_button"
+                                                       ng-if="attachment.modified !== true"
+                                                       ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
+                                                    <a class="btn icon-left fa fa-external-link download_bt"  
+                                                       ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}&viewDownload=true" 
+                                                       target="_blank" tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}">
+                                                        <span class="ed_b"></span>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -166,8 +174,16 @@
                                                 <a class="btn icon-left fa fa-download download_bt"                                                    
                                                    ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}" 
                                                    tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}"><em class="ed_b"></em></a>                                                    
-                                                <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><span class="ed_b"></span></a>
-                                                <a class="btn icon-left fa fa-trash-o delete_button" ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"><span class="ed_b"></span></a>
+                                                <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" 
+                                                   ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><span class="ed_b"></span></a>
+                                                <a class="btn icon-left fa fa-trash-o delete_button"
+                                                   ng-if="attachment.modified !== true"
+                                                   ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"><span class="ed_b"></span></a>
+                                               <a class="btn icon-left fa fa-external-link download_bt"  
+                                                   ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}&viewDownload=true" 
+                                                   target="_blank" tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}">
+                                                    <span class="ed_b"></span>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>

@@ -1,18 +1,20 @@
 /* global _, ontime_data */
 
 (function () {
-    function EmployeeAttachmentCtrl(attachmentInfo, $rootScope, $modalInstance, EmployeeDAO) {
+    function EmployeeAttachmentCtrl(attachmentInfo, employee, $rootScope, $modalInstance, EmployeeDAO) {
         var ctrl = this;
-
+//        console.log("employee.hireDate",employee.hireDate)
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
 
         $rootScope.maskLoading();
 
-        if (attachmentInfo && attachmentInfo.type === 'med') {
-            ctrl.subTypes = ['Pre – Employment Medical Documents', 'Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation', 'Flu Shot'];
+        if (attachmentInfo && attachmentInfo.type === 'med') {            
+            ctrl.subTypes = ['Pre – Employment Medical Documents', 'Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation', 'Flu Shot', 'Drug Test'];
         } else {
-            ctrl.subTypes = ['Initial Application Packet', 'Initial Application Packet Nursing', 'W-4', 'Employment Eligibility', 'CHRC Forms', 'Evaluation'];
+            ctrl.subTypes = ['Initial Application Packet', 'Initial Application Packet Nursing', 'W-4', 'Employment Eligibility (I-9)', 'CHRC Forms', 'Evaluation', 
+                'Orientation Packet', 'Competency Exam', 'Certificate/License', 'References', 'HCR', 
+                'OP Search', 'License', 'Infection Control'];
         }
 
         if (attachmentInfo && attachmentInfo.extraFields) {
@@ -29,6 +31,17 @@
             cbr_replace();
         }, 100);
         $rootScope.unmaskLoading();
+        
+        ctrl.warningForDrugTestDate = function () {
+            if (ctrl.attachment.extraFields.drugTestDate) {
+                var drugTestDate = moment(ctrl.attachment.extraFields.drugTestDate, "MM/DD/YYYY");
+                var hireDate = moment(employee.hireDate ? employee.hireDate : new Date());
+
+                return hireDate.diff(drugTestDate, 'days') > 180;
+            } else {
+                return false;
+            }
+        };
         
         ctrl.checkTBQuestionnaireRequired = function () {
             if (ctrl.attachment.extraFields.chestXRayClearance) {
@@ -164,5 +177,5 @@
         }
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeAttachmentCtrl', ["attachmentInfo", "$rootScope", "$modalInstance", "EmployeeDAO", EmployeeAttachmentCtrl]);
+    angular.module('xenon.controllers').controller('EmployeeAttachmentCtrl', ["attachmentInfo", "employee", "$rootScope", "$modalInstance", "EmployeeDAO", EmployeeAttachmentCtrl]);
 })();
