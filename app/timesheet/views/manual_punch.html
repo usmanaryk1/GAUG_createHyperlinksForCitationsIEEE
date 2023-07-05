@@ -174,6 +174,36 @@
                         </div>
                         <div class="form-group-separator">
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="tasks">
+                                Date
+                            </label>
+                            <div class="col-sm-9">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                        $("#tasks").multiSelect({
+                                            afterInit: function()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="tasks" multiple="multiple" name="tasks"
+                                        ng-model="manualPunch.attendanceObj.companyTaskIds"
+                                        ng-options='ct.id as ct.task for ct in manualPunch.taskList'>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
                     </form>
                 </div>
             </div>

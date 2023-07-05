@@ -1,6 +1,6 @@
-(function() {
+(function () {
     'use strict';
-    var EmployeeDAO = function(resource) {
+    var EmployeeDAO = function (resource) {
         var api = resource(ontimetest.weburl + 'employees/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
@@ -36,37 +36,37 @@
             delete: {
                 method: 'GET'
             },
-            changestatus:{
+            changestatus: {
                 method: 'GET'
             }
         });
         return {
-            retrieveAll: function(filter) {
+            retrieveAll: function (filter) {
                 return api.retrieveAll(filter).$promise;
             },
-            retrieveByPosition: function(filter) {
+            retrieveByPosition: function (filter) {
                 return api.retrieveByPosition(filter).$promise;
             },
-            retrieveEmployeeCareRates: function(filter) {
+            retrieveEmployeeCareRates: function (filter) {
                 return api.retrieveEmployeeCareRates({subAction: filter.employee_id}).$promise;
             },
-            get: function(params) {
-                return api.get({action: params.id}).$promise;
+            get: function (params) {
+                return api.get({action: params.id, includeTasks: params.includeTasks}).$promise;
             },
-            save: function(data) {
+            save: function (data) {
                 return api.save(data).$promise;
             },
-            update: function(data) {
+            update: function (data) {
                 return api.update({action: data.action}, data.data).$promise;
             },
-            updateCareRates: function(data) {
+            updateCareRates: function (data) {
                 return api.updateCareRates(data).$promise;
             },
             delete: function (data) {
-                return api.delete({action:'delete', subAction:data.id}).$promise;
+                return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action:'changestatus', subAction:data.id, status:data.status}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             },
         };
     };
