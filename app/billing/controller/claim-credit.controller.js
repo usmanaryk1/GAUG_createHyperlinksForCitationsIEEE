@@ -26,7 +26,7 @@
                 if (claim && !_.find(ctrl.selectedCreditList, {claimId: parseInt(selectedClaimId)}) && (selected === true)) {
                     ctrl.selectedCreditList.push(claim);
                 } else if (claim && _.find(ctrl.selectedCreditList, {claimId: parseInt(selectedClaimId)}) && (selected === false)) {
-                    delete claim.AmountPaid;
+                    delete claim.usedAmount;
                     _.remove(ctrl.selectedCreditList, {claimId: parseInt(selectedClaimId)});
                 }
             });
@@ -44,15 +44,16 @@
             
             _.each(ctrl.selectedCreditList, function (credit) {
                 credit.usedAmount = parseFloat(credit.usedAmount);
-                if (_.find(ctrl.creditUsages, {claimId: credit.claimId, toClaimId: claimNumber})) {
-                    ctrl.creditUsages[_.findIndex(ctrl.creditUsages, {claimId: credit.claimId, toClaimId: claimNumber})] = {claimId: credit.claimId, toClaimId: claimNumber, usedAmount: credit.usedAmount};
+                var newCredit = _.find(ctrl.creditUsages, {claimId: credit.claimId, toClaimId: claimNumber});
+                if (newCredit) {
+                    newCredit.usedAmount = credit.usedAmount;
                 } else {
                     ctrl.creditUsages.push({claimId: credit.claimId, toClaimId: claimNumber, usedAmount: credit.usedAmount});
                 }
             });            
             $modalInstance.close(ctrl.creditUsages);
         };
-
+        ctrl.updateCreditSelection();
         ctrl.close = function () {
             $modalInstance.dismiss();
         };
