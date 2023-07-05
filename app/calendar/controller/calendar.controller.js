@@ -1,7 +1,7 @@
-/* global moment */
+/* global moment, ontime_data, _, parseFloat */
 
 (function () {
-    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope, $formService) {
+    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, CompanyDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope, $formService) {
         var ctrl = this;
         ctrl.pageNo = 1;
         ctrl.retrieveWorkSites = function () {
@@ -226,9 +226,9 @@
                 EventTypeDAO.retrieveBySchedule(eventParams).then(function (res) {
                     delete res.$promise;
                     delete res.$resolved;
-                    _.forEach(res,function(content){
-                        if(_.find(ontime_data.employeeReasons,{key:content.reason}))
-                            content.reasonDisplay = _.find(ontime_data.employeeReasons,{key:content.reason}).value;
+                    _.forEach(res, function (content) {
+                        if (_.find(ontime_data.employeeReasons, {key: content.reason}))
+                            content.reasonDisplay = _.find(ontime_data.employeeReasons, {key: content.reason}).value;
                     })
                     ctrl.events = res;
                     $rootScope.paginationLoading = false;
@@ -318,7 +318,7 @@
                 });
             });
         };
-        $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop) 
+        $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
         {
             var data;
             var employeeObj;
@@ -399,7 +399,7 @@
                             $rootScope.employeePopup.data.applyTo = "SINGLE";
                     }
                 }
-                
+
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 $rootScope.employeePopup.workSiteChanged = function (workSiteId) {
@@ -579,6 +579,86 @@
                     'VCTN': 'VCT'
                 };
 
+                $rootScope.employeePopup.checkHoursValidity = function (validationHours, type) {
+                    if (!$rootScope.employeePopup.hoursData) {
+                        $rootScope.employeePopup.hoursData = {};
+                    }
+                    $rootScope.employeePopup.utilizationDateFallsBtw = false;
+                    if ($rootScope.employeePopup.utilizationDate) {
+                        var years = _.keys(validationHours ? validationHours : {});
+
+                        if ((moment($rootScope.employeePopup.utilizationDate).toDate() >= moment(new Date($rootScope.employeePopup.data.startDate)).toDate())
+                                && (moment($rootScope.employeePopup.utilizationDate).toDate() >= moment(new Date($rootScope.employeePopup.data.endDate)).toDate())) {
+                            if (years && years.length > 0) {
+                                $rootScope.employeePopup.data.leaveYear = years[0];
+                                $rootScope.employeePopup.data.leaveYear2 = years[1];
+                                if (years[0] && validationHours[years[0]] && validationHours[years[0]][type] != null) {
+                                    $rootScope.employeePopup.hoursData.noOfAllowedHours = validationHours[years[0]][type];
+                                } else {
+                                    delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
+                                }
+                                if (years[1] && validationHours[years[1]] && validationHours[years[1]][type] != null) {
+                                    $rootScope.employeePopup.hoursData.noOfAllowedHours2 = validationHours[years[1]][type];
+                                } else {
+                                    delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
+                                }
+                                $rootScope.employeePopup.showSingleBox = false;
+                            } else {
+                                $rootScope.employeePopup.showSingleBox = true;
+                                delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
+                                delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
+                            }
+                        } else if ((moment($rootScope.employeePopup.utilizationDate).toDate() < moment(new Date($rootScope.employeePopup.data.startDate)).toDate())
+                                && (moment($rootScope.employeePopup.utilizationDate).toDate() < moment(new Date($rootScope.employeePopup.data.endDate)).toDate())) {
+                            delete $rootScope.employeePopup.data.leaveYear2;
+                            delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
+                            if (years && years.length > 0) {
+                                $rootScope.employeePopup.data.leaveYear = years[1];
+                                if (years[1] && validationHours[years[1]] && validationHours[years[1]][type] != null) {
+                                    $rootScope.employeePopup.hoursData.noOfAllowedHours = validationHours[years[1]][type];
+                                } else {
+                                    delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
+                                }
+                                $rootScope.employeePopup.showSingleBox = false;
+                            } else {
+                                $rootScope.employeePopup.showSingleBox = true;
+                                delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
+                                delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
+                            }
+                        } else {
+                            $rootScope.employeePopup.showSingleBox = true;                            
+                            $rootScope.employeePopup.utilizationDateFallsBtw = true;
+                            delete $rootScope.employeePopup.data.leaveYear;
+                            delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
+                            delete $rootScope.employeePopup.data.leaveYear2;
+                            delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
+                        }
+                    } else {
+                        $rootScope.employeePopup.showSingleBox = true;                        
+                        delete $rootScope.employeePopup.data.leaveYear;
+                        delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
+                        delete $rootScope.employeePopup.data.leaveYear2;
+                        delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
+                    }
+
+                    if ($rootScope.employeePopup.showSingleBox) {
+                        $rootScope.employeePopup.validHours = true;
+                        $rootScope.employeePopup.validHours2 = true;
+                    } else {
+                        if ($rootScope.employeePopup.data.leaveYear && ($rootScope.employeePopup.hoursData.noOfAllowedHours < $rootScope.employeePopup.data.noOfHours)) {
+                            $rootScope.employeePopup.validHours = false;
+                        } else {
+                            $rootScope.employeePopup.validHours = true;
+                        }
+
+                        if ($rootScope.employeePopup.data.leaveYear2 && ($rootScope.employeePopup.hoursData.noOfAllowedHours2 < $rootScope.employeePopup.data.noOfHours2)) {
+                            $rootScope.employeePopup.validHours2 = false;
+                        } else {
+                            $rootScope.employeePopup.validHours2 = true;
+                        }
+                    }
+                };
+
                 $rootScope.employeePopup.validateDetails = function () {
                     var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
                     if ($rootScope.employeePopup.validationStartDate && $rootScope.employeePopup.validationStartDate[type]) {
@@ -596,16 +676,14 @@
                         $rootScope.employeePopup.validStart = true;
                         $rootScope.employeePopup.data.isPaidDisabled = false;
                     }
-                    if ($rootScope.employeePopup.validationHours != null && $rootScope.employeePopup.validationHours[type] != null) {
-                        if ($rootScope.employeePopup.validationHours[type] < $rootScope.employeePopup.data.noOfHours) {
-                            $rootScope.employeePopup.validHours = false;
-                        } else {
-                            $rootScope.employeePopup.validHours = true;
-                        }
+                    if ($rootScope.employeePopup.validationHours != null) {
+                        $rootScope.employeePopup.checkHoursValidity($rootScope.employeePopup.validationHours, type);
                     } else {
                         $rootScope.employeePopup.validHours = true;
+                        $rootScope.employeePopup.validHours2 = true;
                     }
                 };
+
                 $rootScope.employeePopup.setAvailability = function (empId, validateDetails) {
                     $rootScope.employeePopup.retrievingAvailabiltiy = true;
                     $rootScope.employeePopup.validationStartDate = {};
@@ -618,15 +696,41 @@
                                     $rootScope.employeePopup.validationStartDate[key] = moment(new Date(res.hiringDate)).add(val, 'Days').toDate();
                                 });
                             }
+                            if (res.utilizationDate) {
+                                $rootScope.employeePopup.utilizationDate = new Date(res.utilizationDate);
+                            }
+
                             if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
+                                _.each($rootScope.employeePopup.availablityDetails.timeAvailabilityMap, function (year, details) {
+                                    _.each(details, function (type) {
+                                        if (type && details[type] !== null && !_.isInteger(details[type])) {
+                                            details[type] = parseFloat(details[type]).toPrecision(2);
+                                        }
+                                    });
+                                });
                                 $rootScope.employeePopup.validationHours = $rootScope.employeePopup.availablityDetails.timeAvailabilityMap;
                             }
                             if ($rootScope.employeePopup.data && $rootScope.employeePopup.data.reason && $rootScope.employeePopup.data.isEdited
                                     && $rootScope.employeePopup.data.isPaid == true) {
-                                var type = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
-                                $rootScope.employeePopup.validationHours[type] =
-                                        $rootScope.employeePopup.validationHours[type] + parseFloat($rootScope.employeePopup.data.noOfHours);
-                            }
+                                var reasonType = $rootScope.employeePopup.types[$rootScope.employeePopup.data.reason];
+                                _.each($rootScope.employeePopup.validationHours, function (details, year) {
+                                    _.each(details, function (hours, type) {
+                                        if (reasonType == type) {
+                                            if (year == $rootScope.employeePopup.data.leaveYear && $rootScope.employeePopup.data.noOfHours !=null) {
+                                                if(_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours))
+                                                    $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours);
+                                                else
+                                                    $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours)).toPrecision(2));
+                                            } else if (year == $rootScope.employeePopup.data.leaveYear2 && $rootScope.employeePopup.data.noOfHours2 !=null) {
+                                                if(_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours2))
+                                                    $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours2);
+                                                else
+                                                    $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours2)).toPrecision(2));
+                                            }
+                                        }
+                                    });
+                                });
+                            }                            
                         } else {
                             $rootScope.employeePopup.availablityDetails = {};
                         }
@@ -642,7 +746,9 @@
                             $rootScope.employeePopup.validateDetails();
                         } else {
                             $rootScope.employeePopup.validHours = true;
+                            $rootScope.employeePopup.validHours2 = true;
                             $rootScope.employeePopup.validStart = true;
+                            $rootScope.employeePopup.utilizationDateFallsBtw = false;
                         }
                     });
                 };
@@ -772,7 +878,7 @@
                 }
             }
 
-            $rootScope.$watch('employeePopup.data.reason + employeePopup.data.startDate + employeePopup.data.eventType + employeePopup.data.noOfHours + $rootScope.employeePopup.data.eventType', function (newVal, oldValue) {
+            $rootScope.$watch('employeePopup.data.reason + employeePopup.data.startDate + employeePopup.data.endDate + employeePopup.data.eventType + employeePopup.data.noOfHours + employeePopup.data.noOfHours2 + $rootScope.employeePopup.data.eventType', function (newVal, oldValue) {
                 if (($rootScope.employeePopup.data.employeeId || (ctrl.viewEmployee && ctrl.viewEmployee.id)) && $rootScope.employeePopup.data.eventType == 'U'
                         && $rootScope.employeePopup.data.reason && oldValue && oldValue !== '' && newVal && newVal !== '') {
                     if ($rootScope.employeePopup.availablityDetails) {
@@ -788,6 +894,7 @@
                     }
                 } else {
                     $rootScope.employeePopup.validHours = true;
+                    $rootScope.employeePopup.validHours2 = true;
                     $rootScope.employeePopup.validStart = true;
                 }
             });
@@ -1129,5 +1236,5 @@
         }
     }
 
-    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", "$formService", CalendarCtrl]);
+    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "CompanyDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", "$formService", CalendarCtrl]);
 })();
