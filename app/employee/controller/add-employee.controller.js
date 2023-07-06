@@ -19,7 +19,27 @@
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
-        }
+        };
+        
+        var employeeAttachmentTypes = {
+            'CHRC': 'CHRC Forms',
+            'HCR': 'HCR',
+            'References': 'References',
+            'CompetencyExam': 'Competency Exam',
+            'W4': 'W-4',
+            'Certificate': 'Certificate/License',
+            'OrientationPacket': 'Orientation Packet',
+            'InfectionControl': 'Infection Control',
+            'OPSearch': 'OP Search',
+            'License': 'License'
+        };
+        
+        ctrl.subTypes = ['Pre – Employment Medical Documents',
+                'Physical', 'TB Testing',
+                'Chest X-Ray', 'TB Questionnaire',
+                'Habituation', 'Flu Shot'];
+        
+        
         ctrl.positionList = [];
         PositionDAO.retrieveAll({}).then(function (res) {
             ctrl.positionList = res;
@@ -364,21 +384,134 @@
             result.data = angular.copy(_.uniqBy(filteredAttachments, getUnique));
             result.count = result.data.length;
 
-            var existingIds = _.map(result.data, 'id');
-
             result.data = result.data.concat(_.filter(filteredAttachments, function (applicationEmployeeAttachment) {
-                return existingIds.indexOf(applicationEmployeeAttachment.id) === -1;
+                return _.findIndex(result.data,{id:applicationEmployeeAttachment.id,
+                                                    attachmentType : applicationEmployeeAttachment.attachmentType}) === -1;
             }));
             return result;
         };
 
         var getFilteredAttachments = function () {
-            if (ctrl.employee.employeeAttachments) {
-                var employeeEligibilities = [];
-                _.each(_.filter(ctrl.employee.employeeAttachments, {type: 'aed', attachmentType: "Initial Application Packet"}), function (intialApplicationPacket) {
+            if (ctrl.actualAttachments) {
+                var employeeEligibilities = [];                                       
+                _.each(_.filter(ctrl.actualAttachments, function(attachment){
+                        return attachment.type === 'med' && (['Pre – Employment Medical Documents','Physical'].indexOf(attachment.attachmentType) > -1)
+                    }), function (medicalDocument) {
+                    var extrafield = JSON.parse(medicalDocument.extraFields);
+                    var rowToPush = {
+                        modified: true,
+                        dateInserted: medicalDocument.dateInserted,
+                        dateUpdated: medicalDocument.dateUpdated,
+                        employeeId: medicalDocument.employeeId,
+                        filePath: medicalDocument.filePath,
+                        id: medicalDocument.id,
+                        name: medicalDocument.name,
+                        type: medicalDocument.type
+                    };
+                    if(medicalDocument.attachmentType === 'Pre – Employment Medical Documents'){                                                
+                        if(extrafield.physicalExpirationDate){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'Physical',
+                                expiryDate:extrafield.physicalExpirationDate,
+                                extraFields: JSON.stringify({})
+                            }));
+                        } 
+                        if (extrafield.tbTesting){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'TB Testing',
+                                expiryDate:extrafield.physicalExpirationDate,
+                                extraFields: JSON.stringify({
+                                    tbTesting: extrafield.tbTesting,
+                                    isPositive : extrafield.isPositive,
+                                    chestXRayExpiration : extrafield.chestXRayExpiration,
+                                    tbQuestionnaire: extrafield.tbQuestionnaire,
+                                    TBtestingExpirationDate : extrafield.tbTestingExpirationDate
+                                })
+                            }));                            
+                        }
+                        if(extrafield.chestXRayExpiration){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'Chest X-Ray',
+                                expiryDate:extrafield.chestXRayExpiration,
+                                extraFields: JSON.stringify({})
+                            }));
+                        }
+                        if(extrafield.tbQuestionnaire){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'TB Questionnaire',
+                                expiryDate:extrafield.tbQuestionnaire,
+                                extraFields: JSON.stringify({})
+                            }));
+                        }
+                        if(extrafield.habituation){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'Habituation',
+                                expiryDate:extrafield.habituation,
+                                extraFields: JSON.stringify({})
+                            }));
+                        }
+                        if(extrafield.fluShotDate){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'Flu Shot',
+                                expiryDate:extrafield.fluShotDate,
+                                extraFields: JSON.stringify({})
+                            }));
+                        }
+                        if(extrafield.drugTestDate){
+                            employeeEligibilities.push(_.extend({}, rowToPush, {
+                                attachmentType: 'Drug Test',
+                                expiryDate:extrafield.drugTestDate,
+                                extraFields: JSON.stringify({})
+                            }));
+                        }
+                    } else if(medicalDocument.attachmentType === 'Physical'){
+                        employeeEligibilities.push(_.extend({}, rowToPush, {
+                            attachmentType: 'Habituation',
+                            expiryDate: medicalDocument.expiryDate,
+                            extraFields: JSON.stringify({})
+                        }));
+                    }
+                });
+                
+                
+                _.each(_.filter(ctrl.actualAttachments, function(attachment){
+                        return attachment.type === 'aed' && (['Initial Application Packet','Initial Application Packet Nursing'].indexOf(attachment.attachmentType) > -1);
+                    }), function (intialApplicationPacket) {
                     var extrafield = JSON.parse(intialApplicationPacket.extraFields);
+                    if(extrafield.subtypes){
+                        _.each(extrafield.subtypes, function (exists, type) {
+                            if (exists === true && employeeAttachmentTypes[type]) {
+                                var rowToPush = {
+                                    modified:true,
+                                    attachmentType: employeeAttachmentTypes[type],
+                                    dateInserted: intialApplicationPacket.dateInserted,
+                                    dateUpdated: intialApplicationPacket.dateUpdated,
+                                    employeeId: intialApplicationPacket.employeeId,
+                                    filePath: intialApplicationPacket.filePath,
+                                    id: intialApplicationPacket.id,
+                                    name: intialApplicationPacket.name,
+                                    type: intialApplicationPacket.type,
+                                    extraFields: {}
+                                };
+                                
+                                if (['HCR', 'References', 'CompetencyExam',
+                                    'Certificate', 'OPSearch', 'InfectionControl'].indexOf(type) > -1) {
+                                    rowToPush['expiryDate'] = extrafield.eligibilityExpDate;
+                                } else if (['OrientationPacket'].indexOf(type) > -1) {
+                                    rowToPush['extraFields']['orientationDate'] = extrafield.eligibilityExpDate;
+                                } else if (['W4', 'CHRC'].indexOf(type) > -1) {
+                                    rowToPush['extraFields']['DateCompleted'] = extrafield.eligibilityExpDate;
+                                } else if (['License'].indexOf(type) > -1) {
+                                    rowToPush['expiryDate'] = extrafield.licenseExpDate;
+                                }
+                                rowToPush['extraFields'] = JSON.stringify(rowToPush['extraFields']);
+                                employeeEligibilities.push(rowToPush);
+                            }
+                        });
+                    }
                     employeeEligibilities.push({
-                        attachmentType: 'Employment Eligibility',
+                        modified:true,
+                        attachmentType: 'Employment Eligibility (I-9)',
                         dateInserted: intialApplicationPacket.dateInserted,
                         dateUpdated: intialApplicationPacket.dateUpdated,
                         employeeId: intialApplicationPacket.employeeId,
@@ -389,7 +522,7 @@
                         expiryDate: extrafield.eligibilityExpDate
                     });
                 });
-                ctrl.employee.employeeAttachments = ctrl.employee.employeeAttachments.concat(employeeEligibilities);                
+                ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);                
                 ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments, function (attachment) {
                     return attachment.expiryDate ? new Date(attachment.expiryDate) : new Date(1970, 1, 1);
                 }, ['desc']);
@@ -422,7 +555,7 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
-
+                    ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                     getFilteredAttachments();
 
                     ctrl.displayDocumentsByPosition();
@@ -1140,7 +1273,7 @@
         ctrl.deleteAttachment = function (attachment) {
             $rootScope.maskLoading();
             EmployeeDAO.deleteAttachment(attachment).then(function () {
-                ctrl.employee.employeeAttachments = ctrl.employee.employeeAttachments.filter(function (attachmentValid) {
+                ctrl.actualAttachments = ctrl.actualAttachments.filter(function (attachmentValid) {
                     return attachmentValid.id !== attachment.id;
                 });
                 getFilteredAttachments();
@@ -1153,6 +1286,12 @@
         };
 
         ctrl.openAttachmentModal = function (attachment, mode) {
+//            console.log("attachment", attachment);
+            var attachmentToEdit = attachment;
+            if (attachment.modified === true) {
+                attachmentToEdit = _.find(ctrl.actualAttachments, {id: attachment.id});
+            }
+//            console.log("attachmentToEdit", attachmentToEdit)
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('employee', 'employee-attachment'),
                 size: "lg",
@@ -1161,18 +1300,21 @@
                 controller: 'EmployeeAttachmentCtrl as employeeAttachment',
                 resolve: {
                     attachmentInfo: function () {
-                        return mode === 'Edit' ? angular.copy(attachment) : {employeeId: ctrl.employee.id, type: attachment};
+                        return mode === 'Edit' ? angular.copy(attachmentToEdit) : {employeeId: ctrl.employee.id, type: attachmentToEdit};
+                    },
+                    employee: function (){
+                        return ctrl.employee;
                     }
                 }
             });
             modalInstance.result.then(function (updatedAttachment) {
                 if (updatedAttachment) {
                     if (mode === 'Create') {
-                        ctrl.employee.employeeAttachments.push(updatedAttachment);
+                        ctrl.actualAttachments.push(updatedAttachment);
                     } else {
-                        for (var index = 0; index < ctrl.employee.employeeAttachments.length; index++) {
-                            if (ctrl.employee.employeeAttachments[index].id === attachment.id) {
-                                ctrl.employee.employeeAttachments[index] = angular.copy(updatedAttachment);
+                        for (var index = 0; index < ctrl.actualAttachments.length; index++) {
+                            if (ctrl.actualAttachments[index].id === attachmentToEdit.id) {
+                                ctrl.actualAttachments[index] = angular.copy(updatedAttachment);
                                 break;
                             }
                         }

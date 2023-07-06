@@ -1,3 +1,11 @@
+<style>
+    .no-error{
+        border-color: #B0B0B0!important;
+    }
+    .hide-error #FluShotDate-error{
+        display: none
+    }
+</style>
 <form class="validate form-horizontal" name="upload_popup" id="upload_popup" role="form">
     <div class="modal-header">
         <button type="button" class="close" ng-click="employeeAttachment.close();" aria-hidden="true">&times;</button>
@@ -13,9 +21,9 @@
                         data-message-required="Please select attachment type." data-validate="required" required="true"
                         ng-change="employeeAttachment.setUploadFile(true);"
                         ng-click="employeeAttachment.attachment.type === 'med' ? employeeAttachment.remove(['physicalExpirationDate', 'tbTesting', 'isPositive', 'chestXRayExpiration', 'chestXRayClearance', 'tbQuestionnaire', 'hepatitisB', 'vaccinations'
-                                            , 'habituation', 'drugTestDate', 'fluShotDate', 'declination', 'fluInoculation', 'declination', 'reason']) :
-                                        employeeAttachment.remove(['applicationDate', 'orientationDate', 'eligibilityExpDate', 'CHRC', 'HCR', 'References', 'CompetencyExam', 'W4', 'Certificate'
-                                                    , 'licenseExpDate', 'malpracticeExpDate', 'cprExpDate', 'References', 'InfectionControl', 'OPSearch', 'License', 'DateCompleted', 'TypeUpload'])">
+                                            , 'habituation', 'drugTestDate', 'fluShotDate', 'declination', 'fluInoculation', 'declination', 'reason', 'IsHabituation']) :
+                                        employeeAttachment.remove(['applicationDate', 'orientationDate', 'eligibilityExpDate', 'subtypes'
+                                                    , 'licenseExpDate', 'malpracticeExpDate', 'cprExpDate', 'InfectionControl', 'OPSearch', 'License', 'DateCompleted', 'TypeUpload'])">
                     <option value="" selected hidden />
                 </select>
             </div>
@@ -36,7 +44,9 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div ng-if="employeeAttachment.attachment.attachmentType === 'Pre – Employment Medical Documents'
+                      || employeeAttachment.attachment.attachmentType === 'TB Testing'">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="TbTesting">
@@ -53,46 +63,31 @@
                 </div>
             </div>
 
-
-            <div class="form-group-separator" ng-if="employeeAttachment.attachment.extraFields.tbTesting"></div>
-            <div class="form-group" ng-if="employeeAttachment.attachment.extraFields.tbTesting">
-                <div class="col-md-push-4 col-sm-8 add-padding-modal">
-                    <div class="input-group" style="z-index:1060">
-                        <label class="cbr-inline">
-                            <input name="isPositive" value="true" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.isPositive"/>
-                            Positive
-                        </label>
-                        <label class="cbr-inline">
-                            <input name="isPositive" value="false" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.isPositive"
-                                   ng-click="employeeAttachment.remove(['chestXRayExpiration', 'tbQuestionnaire', 'chestXRayClearance', 'fluInoculation', 'reason'])"/>
-                            Negative
-                        </label>
+            <div ng-if="employeeAttachment.attachment.extraFields.tbTesting">
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <div class="col-md-push-4 col-sm-8 add-padding-modal">
+                        <div class="input-group" style="z-index:1060">
+                            <label class="cbr-inline">
+                                <input name="isPositive" value="true" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.isPositive"/>
+                                Positive
+                            </label>
+                            <label class="cbr-inline">
+                                <input name="isPositive" value="false" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.isPositive"
+                                       ng-click="employeeAttachment.remove(['chestXRayExpiration', 'tbQuestionnaire', 'chestXRayClearance', 'fluInoculation', 'reason'])"/>
+                                Negative
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
             <div ng-if="employeeAttachment.attachment.extraFields.tbTesting && employeeAttachment.attachment.extraFields.isPositive === 'true'">
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label add-padding-modal" for="ChestXRayClearance">
-                        Chest X-Ray Clearance
-                    </label>
-                    <div class="col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <input type="text" class="form-control datepicker" id="ChestXRayClearance" name="ChestXRayClearance" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.chestXRayClearance" 
-                                   data-validate="required,date" data-message-required="Please select Chest X-Ray Clearance Date.">
-                            <div class="input-group-addon">
-                                <a href=""><i class="linecons-calendar"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-group-separator"></div>                
                 <div class="form-group">
                     <label class="col-sm-4 control-label add-padding-modal" for="ChestXRayExpiration">
-                        Chest X-Ray Expiration
+                        Chest X-Ray Expiration Date
                     </label>
                     <div class="col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
@@ -109,7 +104,7 @@
                 <div class="form-group-separator"></div>
                 <div class="form-group">
                     <label class="col-sm-4 control-label add-padding-modal" for="TBQuestionnaire">
-                        TB Questionnaire
+                        TB Questionnaire Expiration Date
                     </label>
                     <div class="col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
@@ -122,8 +117,26 @@
                     </div>
                 </div>
             </div>
-
-
+            <div ng-if="employeeAttachment.attachment.extraFields.tbTesting && 
+                                            employeeAttachment.attachment.extraFields.isPositive === 'false'">                 
+                <div class="form-group-separator"></div>                 
+                <div class="form-group">                     
+                    <label class="col-sm-4 control-label add-padding-modal" for="tbTestingExpirationDate">                         
+                        TB Testing Expiration Date                     
+                    </label>                     
+                    <div class="col-sm-8 add-padding-modal">                         
+                        <div class="input-group" style="z-index:1060">                             
+                            <input type="text" class="form-control datepicker" id="tbTestingExpirationDate" name="tbTestingExpirationDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.tbTestingExpirationDate"                                     
+                                   data-validate="required,date"  data-message-required="Please select TB Testing Expiration Date." required="true">                             
+                            <div class="input-group-addon">                                 
+                                <a href=""><i class="linecons-calendar"></i></a>                             
+                            </div>                         
+                        </div>                     
+                    </div>                 
+                </div>             
+            </div>
+        </div>
+        <div ng-if="employeeAttachment.attachment.attachmentType === 'Pre – Employment Medical Documents'">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="HepatitisB">
@@ -146,7 +159,8 @@
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal">
-                    Vaccinations
+<!--Renamed                    Vaccinations-->
+                    Titers
                 </label>
                 <div class="col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
@@ -172,7 +186,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
 
             <div class="form-group-separator"></div>
             <div class="form-group">
@@ -187,19 +201,26 @@
                             <a href=""><i class="linecons-calendar"></i></a>
                         </div>
                     </div>
-                </div>
+                    <span class="text-warning"
+                          ng-if="employeeAttachment.warningForDrugTestDate()">
+                        More than 180 days difference between hire date and the drug test date
+                    </span>
+                </div>                
             </div>
 
             <div class="form-group-separator"></div>
-            <div class="form-group">
+            <div class="form-group" ng-class="{'hide-error':employeeAttachment.attachment.extraFields.declination === true}">
                 <label class="col-sm-4 control-label add-padding-modal" for="FluShotDate">
                     Flu Shot Date
-                </label>
+                </label>                
                 <div class="col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" class="form-control datepicker" id="FluShotDate" name="FluShotDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.fluShotDate" 
-                               data-validate="date">
-                        <div class="input-group-addon">
+                        <input type="text" class="form-control datepicker" id="FluShotDate" name="FluShotDate" 
+                               data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.fluShotDate" 
+                               data-validate="date" ng-disabled="employeeAttachment.attachment.extraFields.declination === true"
+                               ng-required="employeeAttachment.attachment.extraFields.declination !== true"
+                               ng-class="{'no-error':employeeAttachment.attachment.extraFields.declination === true}">
+                        <div class="input-group-addon" style="pointer-events: {{employeeAttachment.attachment.extraFields.declination === true ? 'none':'all'}};">
                             <a href=""><i class="linecons-calendar"></i></a>
                         </div>
                     </div>
@@ -211,7 +232,8 @@
                 <div class="col-sm-push-4 col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
                         <label class="cbr-inline">
-                            <input name="Declination" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.declination"/>
+                            <input name="Declination" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.declination"
+                                   ng-click="employeeAttachment.remove(['fluShotDate'])"/>
                             Declination
                         </label>
                     </div>
@@ -219,9 +241,27 @@
             </div>
 
         </div>
-
-        <div ng-if="['Pre – Employment Medical Documents', 'Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation'
-                            , 'Employment Eligibility', 'CHRC Forms'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
+        <div ng-if="['Orientation Packet'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label add-padding-modal" for="OrientationDate">
+                    Orientation Date
+                </label>
+                <div class="col-sm-8 add-padding-modal">
+                    <div class="input-group" style="z-index:1060">
+                        <input type="text" class="form-control datepicker" id="OrientationDate" name="OrientationDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.orientationDate" 
+                               data-validate="required,date"  data-message-required="Please select Orientation Date.">
+                        <div class="input-group-addon">
+                            <a href=""><i class="linecons-calendar"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+                
+        <div ng-if="['Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation',
+                            'Employment Eligibility (I-9)', 'HCR', 'References', 'Competency Exam', 'Certificate/License',
+                            'OP Search', 'License', 'Infection Control', 'Drug Test'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="expiryDate">
@@ -234,6 +274,20 @@
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div ng-if="employeeAttachment.attachment.attachmentType === 'Physical'">
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <div class="col-sm-push-4 col-sm-8 add-padding-modal">
+                    <div class="input-group" style="z-index:1060">
+                        <label class="cbr-inline">
+                            <input name="IsHabituation" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.IsHabituation"/>
+                            Habituation
+                        </label>
                     </div>
                 </div>
             </div>
@@ -321,12 +375,12 @@
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="EligibilityExpDate">
-                    Employment Eligibility Expiration Date
+                    Employment Eligibility (I-9) Expiration Date
                 </label>
                 <div class="col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
                         <input type="text" class="form-control datepicker" id="EligibilityExpDate" name="EligibilityExpDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.eligibilityExpDate" 
-                               data-validate="required,date"  data-message-required="Please select Employment Eligibility Expiration Date.">
+                               data-validate="required,date"  data-message-required="Please select Employment Eligibility (I-9) Expiration Date.">
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
                         </div>
@@ -342,7 +396,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="CHRC" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.CHRC"/>
+                                        <input name="CHRC" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.CHRC"/>
                                         CHRC
                                     </label>
                                 </div>
@@ -350,7 +404,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="HCR" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.HCR"/>
+                                        <input name="HCR" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.HCR"/>
                                         HCR
                                     </label>
                                 </div>
@@ -358,7 +412,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="References" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.References"/>
+                                        <input name="References" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.References"/>
                                         References
                                     </label>
                                 </div>
@@ -374,7 +428,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="CompetencyExam" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.CompetencyExam"/>
+                                        <input name="CompetencyExam" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.CompetencyExam"/>
                                         Competency Exam
                                     </label>
                                 </div>
@@ -382,7 +436,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="W4" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.W4"/>
+                                        <input name="W4" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.W4"/>
                                         W-4
                                     </label>
                                 </div>
@@ -390,8 +444,23 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="Certificate" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.Certificate"/>
+                                        <input name="Certificate" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.Certificate"/>
                                         Certificate/License
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+                <div class="form-group-separator"></div>
+                <div class="form-group">        
+                    <div class="col-sm-push-4 col-sm-8">  
+                        <div class="row">
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="OrientationPacket" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.OrientationPacket"/>
+                                        Orientation Packet
                                     </label>
                                 </div>
                             </div>
@@ -399,7 +468,6 @@
                     </div>
                 </div>
             </div>
-
             <div ng-if="employeeAttachment.attachment.attachmentType === 'Initial Application Packet Nursing'">
 
                 <div class="form-group-separator"></div>
@@ -457,7 +525,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="W4-1" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.W4"/>
+                                        <input name="W4-1" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.W4"/>
                                         W-4
                                     </label>
                                 </div>
@@ -465,7 +533,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="References-1" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.References"/>
+                                        <input name="References-1" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.References"/>
                                         References
                                     </label>
                                 </div>
@@ -473,7 +541,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="InfectionControl" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.InfectionControl"/>
+                                        <input name="InfectionControl" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.InfectionControl"/>
                                         Infection Control
                                     </label>
                                 </div>
@@ -488,7 +556,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="OPSearch" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.OPSearch"/>
+                                        <input name="OPSearch" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.OPSearch"/>
                                         OP Search
                                     </label>
                                 </div>
@@ -496,7 +564,7 @@
                             <div class="col-sm-4 add-padding-modal">
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
-                                        <input name="License" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.License"/>
+                                        <input name="License" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.License"/>
                                         License
                                     </label>
                                 </div>
@@ -509,7 +577,7 @@
 
         </div>
 
-        <div ng-if="['W-4', 'Evaluation'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
+        <div ng-if="['W-4', 'Evaluation', 'CHRC Forms'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="DateCompleted">
@@ -518,7 +586,8 @@
                 <div class="col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
                         <input type="text" class="form-control datepicker" id="DateCompleted" name="DateCompleted" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.DateCompleted" 
-                               data-validate="required,date"  data-message-required="Please select Date Completed.">
+                               data-validate="required,date"  data-message-required="Please select Date Completed."
+                               required="true">
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
                         </div>
@@ -527,7 +596,7 @@
             </div>
         </div>
 
-        <div ng-if="employeeAttachment.attachment.attachmentType === 'Employment Eligibility'">
+        <div ng-if="employeeAttachment.attachment.attachmentType === 'Employment Eligibility (I-9)'">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="TypeUpload">
@@ -535,7 +604,7 @@
                 </label>
                 <div class="col-sm-8 add-padding-modal">
                     <select class="form-control" name ="TypeUpload" id="TypeUpload" ng-model="employeeAttachment.attachment.extraFields.typeUpload" 
-                            ng-options='typeUpload as typeUpload for typeUpload in ["State ID", "Parmanent Resident Card", "Employment Authorization Card", "US Passport"]' 
+                            ng-options='typeUpload as typeUpload for typeUpload in ["State ID", "Permanent Resident Card", "Employment Authorization Card", "US Passport"]' 
                             data-message-required="Please select Type Upload." data-validate="required">
                         <option value="" selected hidden />
                     </select>
