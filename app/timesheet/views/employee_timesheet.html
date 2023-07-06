@@ -14,17 +14,20 @@
                     <form class="form-horizontal validate" role="form" id='emp_timesheet_form'>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="col-sm-4 pad_lf0" ng-show="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null" style="margin-top:-15px; cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')">
+                                <div class="col-sm-1 pad_lf0" ng-show="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null" style="cursor: pointer;"  ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')">
                                     <div class="user_p mar_bt0">
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (amazonPublicUrl + empTimesheet.companyCode + '/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
                                         <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
                                     </div>
-                                    <div class="user_av_hd">
+                                  
+                                </div>
+                                <div class='col-sm-3'>
+                                  <div class="user_av_hd">
                                         <h1>{{empTimesheet.selectedEmployee.lName + ", " + empTimesheet.selectedEmployee.fName + " " + empTimesheet.selectedEmployee.middleInitial}}</h1>
                                         <p>{{positions[empTimesheet.selectedEmployee.position]}}</p>
                                     </div>
                                 </div>
-                                <div class="col-sm-7 pull-right pad0 wd_full">
+                                <div class="col-sm-8 pull-right pad0 wd_full">
                                     <div class="form-group " ng-class="{ 'validate-has-error':empTimesheet.searchParams.employeeId == null && empTimesheet.formSubmitted}">
                                         <label class="col-sm-3 control-label">Employee Name</label>
                                         <div class="col-sm-9">
@@ -81,7 +84,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 pull-right wd_full pad0">
+                                <div class="col-sm-7 pull-right wd_full">
                                     <div class="col-sm-6 pad0 wd_full">
                                         <div class="form-group">
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
@@ -93,10 +96,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 ">
+                                    <div class="col-sm-6 pad0">
                                         <div class="form-group">
                                             <label for="field-69" class="col-sm-3 control-label">To</label>
-                                            <div class="col-sm-9 pad_lf0">
+                                            <div class="col-sm-9">
                                                 <div class="input-group">
                                                     <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="empTimesheet.searchParams.endDate" min-date="empTimesheet.searchParams.startDate">
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
