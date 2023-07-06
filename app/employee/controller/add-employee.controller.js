@@ -3,7 +3,13 @@
         var ctrl = this;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
+        ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.employee = {employeeDocumentId: {}};
+        ctrl.refreshLanguages = function() {
+            $timeout(function() {
+                $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
+            });
+        };
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
@@ -343,6 +349,10 @@
                             }
                         });
                     }
+                    if (ctrl.employee.otherLanguages != null && ctrl.employee.otherLanguages != '') {
+                        ctrl.otherLanguageCheckbox = true;
+                        ctrl.refreshLanguages();
+                    }
                     ctrl.retrivalRunning = false;
                     EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
                         ctrl.employee.careRatesList = res;
@@ -352,7 +362,7 @@
                         }, 200);
                         ctrl.retrivalRunning = false;
                         if (ctrl.employee.careRatesList.rate1 != null && ctrl.employee.careRatesList.rate1.rate != null) {
-                            ctrl.employee.careRatesList.rate1.rate = ctrl.employee.careRatesList.rate1.rate.toFixed(2);                            
+                            ctrl.employee.careRatesList.rate1.rate = ctrl.employee.careRatesList.rate1.rate.toFixed(2);
                         }
                         if (ctrl.employee.careRatesList.rate2 != null && ctrl.employee.careRatesList.rate2.rate != null) {
                             ctrl.employee.careRatesList.rate2.rate = ctrl.employee.careRatesList.rate2.rate.toFixed(2);

@@ -116,7 +116,7 @@
                             <div flow-init="addPatient.uploadFile" flow-file-added="addPatient.fileAdded($file, $flow)" flow-file-success="addPatient.fileUploaded($message,$file,$flow)" flow-files-submitted="addPatient.fileSelected($file,$flow)" flow-file-error="addPatient.fileError( $file, $message, $flow )">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <input type="file" id="contract_file" ng-model="addPatient.patient.authorization" flow-btn name="contract_file" style="color:transparent" ng-disabled="addPatient.disableUploadButton"/>
+                                        <button type='button' class='btn btn-single gray_bt' id="contract_file" ng-model="addPatient.patient.authorization" flow-btn name="contract_file" ng-disabled="addPatient.disableUploadButton">Choose File</button>
                                     </div>
                                     <div class="col-sm-9">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.patient.authorization}}">{{addPatient.patient.authorization}}</a>

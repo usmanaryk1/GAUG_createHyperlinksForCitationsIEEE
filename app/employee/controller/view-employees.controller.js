@@ -1,6 +1,7 @@
 (function() {
     function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope, $compile, $timeout) {
         var ctrl = this;
+        ctrl.datatableObj = {};
         $rootScope.selectEmployeeModel = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
@@ -98,11 +99,19 @@
 
         };
         ctrl.rerenderDataTable = function() {
+            var pageInfo = ctrl.datatableObj.page.info();
             var employeeList = angular.copy(ctrl.employeeList);
             ctrl.employeeList = [];
             $("#example-1_wrapper").remove();
             $timeout(function() {
                 ctrl.employeeList = employeeList;
+                $timeout(function() {
+                    var pageNo = Number(pageInfo.page);
+                    if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                        pageNo--;
+                    }
+                    ctrl.datatableObj.page(pageNo).draw(false);
+                }, 20);
             });
         };
         ctrl.openDeactivateModal = function(employee, modal_id, modal_size, modal_backdrop)

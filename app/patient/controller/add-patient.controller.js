@@ -2,6 +2,7 @@
     function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
         ctrl.currentDate = new Date();
+        ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear()+1900) - 10);
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
@@ -10,6 +11,11 @@
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
+        ctrl.refreshLanguages = function() {
+            $timeout(function() {
+                $('#languageOtherText').tagsinput("add", ctrl.patient.otherLanguages);
+            });
+        };
         ctrl.nursingCareList = [];
         ctrl.staffCoordinatorList = [];
         ctrl.insuranceProviderList = [];
@@ -181,6 +187,10 @@
                                 obj.value = true;
                             }
                         });
+                    }
+                    if (ctrl.patient.otherLanguages != null && ctrl.patient.otherLanguages != '') {
+                        ctrl.otherLanguageCheckbox = true;
+                        ctrl.refreshLanguages();
                     }
                     if (res.patientCareTypeCollection) {
                         var careTypesSelected = [];

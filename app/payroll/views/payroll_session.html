@@ -127,8 +127,8 @@
                                                                                 <th nowrap><span class="wd130">ADP 401k Deduction</span></th>
                                                                                 <th nowrap><span class="wd130">Advance Deduction</span></th>-->
 
-                                        <th><span class="wd50">Notes</span></th>
-                                        <th nowrap>
+                                        <th class='nosorting'><span class="wd50">Notes</span></th>
+                                        <th nowrap class='nosorting'>
                                             <span class="wd60">Actions</span>
                                         </th>
                                     </tr>
@@ -329,6 +329,14 @@
                         <div class="col-sm-3">
                             <input class="form-control" id="hdHours" name="hdHours" type="text" ng-model="payrollSession.employeeModalObj.hdHours" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                       
+                    </div>
+                      <div class="form-group">
+                        <label class="col-sm-3 control-label" for="taxFrequency">
+                            Tax frequency
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="taxFrequency" name="taxFrequency" type="text" ng-model="payrollSession.employeeModalObj.taxFrequency" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
                     </div>
 
                 </div>

@@ -134,6 +134,19 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     $rootScope.isLightLoginPage = false;
                     $rootScope.isLockscreenPage = false;
                     $rootScope.isMainPage = true;
+                },
+                resolve: {
+                    resources: function($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
+                            ASSETS.forms.tagsinput,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker,
+                            ASSETS.forms.select2
+                        ]);
+                    },
                 }
             }).
             // Login
@@ -141,14 +154,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/login',
                 templateUrl: appHelper.templatePath('login'),
                 controller: 'LoginCtrl',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // patient creation page
             state('app.patient', {
@@ -156,28 +161,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/patient',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient'),
                 controller: 'AddPatientCtrl as addPatient',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.inputmask,
-                        ]);
-                    },
-                }
             }).
             // add_patient_tab_1
             state('app.patient.tab1', {
                 url: '/tab1/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_1'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 1
                 }
@@ -186,14 +174,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.patient.tab2', {
                 url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_2'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 2
                 }
@@ -202,14 +182,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.patient.tab3', {
                 url: '/tab3/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_3'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 3
                 }
@@ -218,16 +190,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.patient.tab4', {
                 url: '/tab4/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_4'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.core.moment,
-                            ASSETS.forms.daterangepicker
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 4
                 }
@@ -236,14 +198,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.patient.tab5', {
                 url: '/tab5/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_5'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 5
                 }
@@ -253,14 +207,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/patient-list/:status',
                 templateUrl: appHelper.viewTemplatePath('patient', 'view_patient'),
                 controller: 'ViewPatientsCtrl as viewPatient',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // employee creation page
             state('app.employee', {
@@ -268,28 +214,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/employee',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee'),
                 controller: 'AddEmployeeCtrl as addEmployee',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.inputmask,
-                        ]);
-                    },
-                }
             }).
             // add_employee_tab_1
             state('app.employee.tab1', {
                 url: '/tab1/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_1'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 1
                 }
@@ -298,14 +227,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.employee.tab2', {
                 url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 2
                 }
@@ -314,14 +235,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
             state('app.employee.tab3', {
                 url: '/tab3/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                },
                 data: {
                     tabNo: 3
                 }
@@ -331,247 +244,99 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/employee-list/:status',
                 templateUrl: appHelper.viewTemplatePath('employee', 'view_employee'),
                 controller: 'ViewEmployeesCtrl as viewEmployee',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // edit_timesheet
             state('app.edit_timesheet', {
                 url: '/edit_timesheet/:id?empId&patId',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             // edit_missed_punch
             state('app.edit_missed_punch', {
                 url: '/edit_missed_punch/:id?empId&patId',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             // timesheet
             state('app.employee_timesheet', {
                 url: '/employee_timesheet?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
                 controller: 'EmployeeTimeSheetCtrl as empTimesheet',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2,
-                        ]);
-                    },
-                }
             }).
             // manual_punch
             state('app.manual_punch', {
                 url: '/manual_punch',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             // manual_punch
             state('app.manual_punch_employee', {
                 url: '/manual_punch/employee/:id?from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             // manual_punch
             state('app.manual_punch_patient', {
                 url: '/manual_punch/patient/:id',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
                 url: '/patient_time_sheet?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
                 controller: 'PatientTimeSheetCtrl as patTimesheet',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2,
-                        ]);
-                    },
-                }
             }).
             // daily_attendance
             state('app.daily_attendance', {
                 url: '/daily_attendance?id&from&to',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2,
-                        ]);
-                    },
-                }
             }).
             // add_inusrer
             state('app.insurer', {
                 url: '/insurer/:id',
                 controller: 'AddInsurerCtrl as addInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'add_inusrer'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.core.moment,
-                            ASSETS.forms.daterangepicker
-                        ]);
-                    }
-                }
             }).
             // view_insurer
             state('app.insurer-list', {
                 url: '/insurer-list',
                 controller: 'ViewInsurersCtrl as viewInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'view_insurer'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // pay_rates
             state('app.pay_rates', {
                 url: '/pay_rates',
                 templateUrl: appHelper.templatePath('pay_rates'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // payroll_history
             state('app.payroll_history', {
                 url: '/payroll_history',
                 controller: 'PayrollHistoryCtrl as payrollHist',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_history'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // payroll_review
             state('app.payroll_review', {
                 url: '/payroll_review',
                 templateUrl: appHelper.templatePath('payroll_review'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // payroll_session
             state('app.payroll_session', {
                 url: '/payroll_session',
                 controller: 'PayrollSessionCtrl as payrollSession',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_session'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             state('app.batch_session', {
                 url: '/payroll_session/:id',
                 controller: 'PayrollSessionCtrl as payrollSession',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_session'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.select2
-                        ]);
-                    },
-                }
             }).
             // payroll_settings
             state('app.payroll_settings', {
                 url: '/payroll_settings',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_settings'),
                 controller: 'PayrollSettingsCtrl as payrollSet',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // biling
 //            state('app.biling', {
@@ -590,52 +355,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/manual_claim',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim'),
                 controller: 'BillingTab1Ctrl as billing1',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             state('app.billing_tab_1', {
                 url: '/billing_tab_1',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_1'),
                 controller: 'BillingTab1Ctrl as billing1',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             state('app.billing_tab_2', {
                 url: '/billing_tab_2',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_2'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // biling_history
             state('app.biling_history', {
                 url: '/biling_history',
                 templateUrl: appHelper.templatePath('biling_history'),
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                        ]);
-                    },
-                }
             }).
             // Dashboards
             state('app.dashboard', {
@@ -661,15 +394,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 url: '/company_information',
                 templateUrl: appHelper.viewTemplatePath('company', 'company_information'),
                 controller: 'AddCompanyCtrl as addCompany',
-                resolve: {
-                    resources: function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.inputmask,
-                        ]);
-                    },
-                }
             }).
             // Update Highlights
             state('app.update-highlights', {

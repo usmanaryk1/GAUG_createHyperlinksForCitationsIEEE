@@ -126,7 +126,7 @@
                             <div class="col-sm-9">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <input type="file" id="ProfileImage" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" style="color:transparent" ng-disabled="addEmployee.disableProfileUploadButton" />
+                                        <button type='button' class='btn btn-single gray_bt' id="ProfileImage" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" ng-disabled="addEmployee.disableProfileUploadButton">Choose File</button>
                                     </div>
                                     <div class="col-sm-9">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{amazonPublicUrl + addEmployee.companyCode}}/{{addEmployee.employee.profileImage}}">{{addEmployee.employee.profileImage}}</a>
@@ -169,7 +169,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input class="form-control datepicker" max-date="addEmployee.currentDate" data-format="mm/dd/yyyy" name="DateOfBirth" type="text" ng-model="addEmployee.employee.dateOfBirth"
+                                    <input class="form-control datepicker" max-date="addEmployee.maxBirthDate" data-format="mm/dd/yyyy" name="DateOfBirth" type="text" ng-model="addEmployee.employee.dateOfBirth"
                                            data-validate="required,date" data-message-required="Please enter Date of Birth."/>
                                     <div class="input-group-addon">
                                         <a href="#">
@@ -360,10 +360,17 @@
                                 Languages Spoken
                             </label>
                             <div class="col-sm-9">
-                                <div class="form-block">
+                                <div>
                                     <label class="checkbox col-sm-3" ng-repeat="language in addEmployee.languagesKeyValue">
                                         <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                         {{languages[language.key]}}
+                                    </label>
+                                    <label class="checkbox col-sm-3">
+                                        <input class="cbr" id="languageOther" name="languageOther" type="checkbox" ng-model="addEmployee.otherLanguageCheckbox" ng-change="addEmployee.refreshLanguages()" />
+                                        Others
+                                    </label>
+                                    <label class="col-sm-6" ng-if="addEmployee.otherLanguageCheckbox" style="margin-left:-20px">
+                                        <input id="languageOtherText" name="languageOtherText" class="form-control" data-role="tagsinput" type="text" ng-model="addEmployee.employee.otherLanguages" tagsinput/>
                                     </label>
                                 </div>
                             </div>

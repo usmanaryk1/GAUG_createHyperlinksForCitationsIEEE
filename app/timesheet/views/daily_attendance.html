@@ -18,20 +18,9 @@
 
                     <form class="form-horizontal validate" role="form">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group col-sm-5 pull-left">
-                                    <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
-                                    <div style="width:70px; float:left">
-                                        <select class="form-control" ng-model="dAttendance.viewRecords" ng-change="dAttendance.changeViewRecords()">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="col-sm-12 pad0">
 
-                                <div class="col-sm-7 pull-right pad0 wd_full">
+                                <div class="col-sm-8 pull-right pad0 wd_full">
                                     <div class="form-group" ng-class="{ 'validate-has-error':dAttendance.searchParams.staffingCordinatorId == null && dAttendance.formSubmitted}">
                                         <label class="col-sm-3 control-label pad_lf0">Employee Name</label>
                                         <div class="col-sm-9"> 
@@ -77,8 +66,18 @@
                         <div class="row">
                             <div class="col-sm-12 pad0">
 
-
-                                <div class="col-sm-6 pull-right wd_full pad0">
+                                <div class="form-group col-sm-5 pull-left">
+                                    <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                                    <div style="width:70px; float:left">
+                                        <select class="form-control" ng-model="dAttendance.viewRecords" ng-change="dAttendance.changeViewRecords()">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 pull-right wd_full">
                                     <div class="col-sm-6 pad0 wd_full">
                                         <div class="form-group">
                                             <label for="field-68" class="col-sm-3 control-label">From</label>
@@ -108,7 +107,8 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
 
-                                    <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="dAttendance.filterTimesheet();dAttendance.formSubmitted=true">Review</button>
+                                    <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="dAttendance.filterTimesheet();
+                                        dAttendance.formSubmitted = true">Review</button>
                                     <a href="#/app/manual_punch{{dAttendance.searchParams.staffingCordinatorId==null?'':'/employee/'+dAttendance.searchParams.staffingCordinatorId+'?from='+dAttendance.searchParams.startDate+'&to='+dAttendance.searchParams.endDate}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="dAttendance.resetFilters()">
                                         Reset Filters
@@ -130,8 +130,8 @@
                                     <th width="17%" colspan="1" rowspan="1" tabindex="0" nowrap>Patient Name</th>
                                     <th width="12%" colspan="1" rowspan="1" tabindex="0" nowrap>Time In</th>
                                     <th width="12%" colspan="1" rowspan="1" tabindex="0" nowrap>Time Out</th>
-                                    <th width="10%" data-priority="6" nowrap>Actions</th>
-                                    <th width="16%" data-priority="6" nowrap>Signature</th>
+                                    <th class='nosorting' width="10%" data-priority="6" nowrap>Actions</th>
+                                    <th class='nosorting' width="16%" data-priority="6" nowrap>Signature</th>
                                 </tr>
                             </thead> 
                             <tbody>

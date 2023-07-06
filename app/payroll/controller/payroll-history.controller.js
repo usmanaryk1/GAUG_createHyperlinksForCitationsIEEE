@@ -13,7 +13,7 @@
             ctrl.datatableObj.fnDraw();
         };
         ctrl.navigateToProcessedPage = function(id) {
-            $state.go('app.batch_session',{id:id});
+            $state.go('app.batch_session', {id: id});
         };
 
         ctrl.resetFilters = function() {
@@ -25,12 +25,25 @@
         };
 
         ctrl.rerenderDataTable = function() {
+            var pageInfo;
+            if (ctrl.datatableObj.page != null) {
+                pageInfo = ctrl.datatableObj.page.info();
+            }
             ctrl.datatableObj = {};
             var historyList = angular.copy(ctrl.historyList);
             ctrl.historyList = [];
 //            $("#example-1_wrapper").remove();
             $timeout(function() {
                 ctrl.historyList = historyList;
+                if (pageInfo != null) {
+                    $timeout(function() {
+                        var pageNo = Number(pageInfo.page);
+                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                            pageNo--;
+                        }
+                        ctrl.datatableObj.page(pageNo).draw(false);
+                    }, 20);
+                }
             });
         };
 

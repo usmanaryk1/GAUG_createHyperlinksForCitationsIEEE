@@ -97,6 +97,10 @@
         };
 
         ctrl.rerenderDataTable = function() {
+            var pageInfo;
+            if (ctrl.datatableObj.page != null) {
+                pageInfo = ctrl.datatableObj.page.info();
+            }
             ctrl.datatableObj = {};
             var payrollSessions = angular.copy(ctrl.payrollSessions);
             ctrl.payrollSessions = [];
@@ -109,8 +113,16 @@
                     if (ctrl.processdMode) {
                         $(".dt-button").attr("class", "btn btn-info green_bt pull-right print-btn");
                     }
-
                 }, 50);
+                if (pageInfo != null) {
+                    $timeout(function() {
+                        var pageNo = Number(pageInfo.page);
+                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                            pageNo--;
+                        }
+                        ctrl.datatableObj.page(pageNo).draw(false);
+                    }, 20);
+                }
             });
         };
         ctrl.openPayrollModal = function(payroll, modal_id, modal_size, modal_backdrop) {
