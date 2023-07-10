@@ -87,7 +87,7 @@ angular.module('xenon.services', []).
                 'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET,WORKSITE_TIMESHEET');
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella', 'CREATE_INSURANCE_PROVIDER,VIEW_INSURANCE_PROVIDER');
                 var billing = this.addItem('Billing', '/app', 'linecons-money', 
-                'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
+                'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM,MANAGE_BILLING_RECONCILIATION');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
                 var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 
                 'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
@@ -123,7 +123,7 @@ angular.module('xenon.services', []).
                 billing.addItem('Billing History', './biling_history', 'VIEW_BILLING_HISTORY');
                 billing.addItem('Billing Setting', './biling_setting', 'CREATE_BILLING_SETTING');
                 billing.addItem('Search Claim', './claim_search', 'VIEW_BILLING_HISTORY');
-                billing.addItem('Billing Reconciliation', './billing_reconciliation', 'VIEW_BILLING_HISTORY');
+                billing.addItem('Billing Reconciliation', './billing_reconciliation', 'MANAGE_BILLING_RECONCILIATION');
                 billing.addItem('Manual Claim 1500', './manual_claim', 'CREATE_MANUAL_CLAIM');
                 billing.addItem('Manual Claim UB04', './manual_claim_ub04', 'CREATE_MANUAL_CLAIM');
 
