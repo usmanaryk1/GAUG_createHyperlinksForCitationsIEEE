@@ -95,11 +95,13 @@
             }
         };
 
-        ctrl.retrieveEmployee = function () {
+        ctrl.retrieveEmployee = function (reset) {
             ctrl.patientMandatory = true;
             EmployeeDAO.get({id: ctrl.attendanceObj.employeeId, includeTasks: true}).then(function (res) {
                 ctrl.taskList = res.companyTasks;
-                ctrl.attendanceObj.companyTaskIds = [];
+                if (reset) {
+                    ctrl.attendanceObj.companyTaskIds = [];
+                }
                 $timeout(function () {
                     $('#tasks').multiSelect('refresh');
                 }, 100);

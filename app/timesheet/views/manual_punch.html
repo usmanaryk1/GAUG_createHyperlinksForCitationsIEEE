@@ -112,7 +112,7 @@
 
                                     });
                                 </script>
-                                <select ng-show="manualPunch.attendanceObj.isManualPunch" ng-change="manualPunch.retrieveEmployee()" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList track by emp.id">
+                                <select ng-show="manualPunch.attendanceObj.isManualPunch" ng-change="manualPunch.retrieveEmployee(true)" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList track by emp.id">
                                     <option value="" selected hidden />
                                 </select>
 
