@@ -656,6 +656,12 @@ angular.module('xenon.directives', []).
                     if (!jQuery.isFunction(jQuery.fn.validate)) {
                         return false;
                     }
+                    //to prevent form to get submitted by pressing enter
+                    $(el).keypress(function checkEnter(e) {
+                        e = e || event;
+                        var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
+                        return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
+                    })
                     var validator;
                     var validateForm = function() {
 
