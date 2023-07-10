@@ -1279,9 +1279,12 @@ angular.module('xenon.directives', []).
                 restrict: 'A',
                 scope: {imageonload: '='},
                 link: function(scope, element, attrs) {
+                    scope.height = element.height();
+                    element.height("0");
                     element.bind('load', function() {
                         scope.$apply(function() {
                             scope.imageonload = true;
+                            element.height(scope.height);
                         });
                     });
                 }

@@ -53,12 +53,25 @@
             ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
+            var pageInfo;
+            if (ctrl.datatableObj.page != null) {
+                pageInfo = ctrl.datatableObj.page.info();
+            }
             ctrl.datatableObj = {};
             var timesheetList = angular.copy(ctrl.timesheetList);
             ctrl.timesheetList = [];
             $("#example-1_wrapper").remove();
             $timeout(function() {
                 ctrl.timesheetList = timesheetList;
+                if (pageInfo != null) {
+                    $timeout(function() {
+                        var pageNo = Number(pageInfo.page);
+                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                            pageNo--;
+                        }
+                        ctrl.datatableObj.page(pageNo).draw(false);
+                    }, 20);
+                }
             });
         };
         ctrl.filterTimesheet = function() {

@@ -1,6 +1,7 @@
 (function() {
     function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
+        ctrl.datatableObj = {};
         $rootScope.selectPatientModel = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
@@ -206,11 +207,19 @@
         };
 
         ctrl.rerenderDataTable = function() {
+            var pageInfo = ctrl.datatableObj.page.info();
             var patientList = angular.copy(ctrl.patientList);
             ctrl.patientList = [];
             $("#example-4_wrapper").remove();
             $timeout(function() {
                 ctrl.patientList = patientList;
+                $timeout(function(){
+                    var pageNo=Number(pageInfo.page);
+                    if(ctrl.datatableObj.page.info().pages<=pageInfo.page){
+                        pageNo--;
+                    }
+                    ctrl.datatableObj.page(pageNo).draw(false);
+                },20);                
             });
         };
 

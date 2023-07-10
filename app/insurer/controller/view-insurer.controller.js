@@ -1,6 +1,7 @@
 (function() {
     function ViewInsurersCtrl(InsurerDAO, $rootScope, $timeout, $state, $modal) {
         var ctrl = this;
+        ctrl.datatableObj = {};
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
         ctrl.companyCode = ontimetest.company_code;
@@ -74,11 +75,19 @@
 
         };
         ctrl.rerenderDataTable = function() {
+            var pageInfo = ctrl.datatableObj.page.info();
             var insurerList = angular.copy(ctrl.insurerList);
             ctrl.insurerList = [];
             $("#example-1_wrapper").remove();
             $timeout(function() {
                 ctrl.insurerList = insurerList;
+                $timeout(function() {
+                    var pageNo = Number(pageInfo.page);
+                    if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                        pageNo--;
+                    }
+                    ctrl.datatableObj.page(pageNo).draw(false);
+                }, 20);
             });
         };
         ctrl.openEditModal = function(insurer, modal_id, modal_size, modal_backdrop)

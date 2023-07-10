@@ -2,6 +2,7 @@
     function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
         ctrl.currentDate = new Date();
+        ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear()+1900) - 10);
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;

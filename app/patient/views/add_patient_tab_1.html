@@ -65,7 +65,7 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group" >
-                                <input class="form-control datepicker" max-date="addPatient.currentDate" data-format="mm/dd/yyyy" id="field-32" name="DateofBirth" type="text" ng-model="addPatient.patient.dateOfBirth" 
+                                <input class="form-control datepicker" max-date="addPatient.maxBirthDate" data-format="mm/dd/yyyy" id="field-32" name="DateofBirth" type="text" ng-model="addPatient.patient.dateOfBirth" 
                                        data-validate="required,date" data-message-required="Please enter Date of Birth."/>
                                 <div class="input-group-addon">
                                     <a href="#">
@@ -126,7 +126,7 @@
                             Languages Spoken
                         </label>
                         <div class="col-sm-9">
-                            <div class="form-block">
+                            <div>
                                 <label class="checkbox col-sm-3" ng-repeat="language in addPatient.languagesKeyValue">
                                     <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                     {{languages[language.key]}}

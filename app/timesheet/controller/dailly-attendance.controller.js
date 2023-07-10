@@ -20,12 +20,25 @@
             ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
+            var pageInfo;
+            if (ctrl.datatableObj.page != null) {
+                pageInfo = ctrl.datatableObj.page.info();
+            }
             ctrl.datatableObj = {};
             var attendanceList = angular.copy(ctrl.attendanceList);
             ctrl.attendanceList = [];
             $("#example-1_wrapper").remove();
             $timeout(function() {
                 ctrl.attendanceList = attendanceList;
+                if (pageInfo != null) {
+                    $timeout(function() {
+                        var pageNo = Number(pageInfo.page);
+                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                            pageNo--;
+                        }
+                        ctrl.datatableObj.page(pageNo).draw(false);
+                    }, 20);
+                }
             });
 //            ctrl.datatableObj = {};
 //            var attendanceList = angular.copy(ctrl.attendanceList);

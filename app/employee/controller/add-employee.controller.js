@@ -3,6 +3,7 @@
         var ctrl = this;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
+        ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.employee = {employeeDocumentId: {}};
         ctrl.refreshLanguages = function() {
             $timeout(function() {
