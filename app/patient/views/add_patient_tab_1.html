@@ -187,25 +187,56 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
+                            Transportation Assistance Level
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="TransportationAssistanceLevels"  ng-model='addPatient.patient.transporatationAssistance' name="TransportationAssistanceLevels"
+                                    data-validate="required" data-message-required="Please select Transportation Assistance Level."
+                                    ng-options='key *  1 as value for (key, value) in addPatient.transportationAssistanceLevels'>
+                                <option value="">Select transportation assistance level</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Priority Code
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="PriorityCodes"  ng-model='addPatient.patient.priorityCode' name="PriorityCodes"
+                                    data-validate="required" data-message-required="Please select Priority Code."
+                                    ng-options='key *  1 as value for (key, value) in addPatient.priorityCodes'>
+                                <option value="">Select priority code</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Aide Skill Capacities
+                        </label>
+                        <div class="col-sm-9">
+                            <div>
+                                <label class="no-padding-left checkbox col-sm-3" ng-repeat="(key, value) in addPatient.capacitiesKeyValue">
+                                    <input class="cbr" id="language{{$index}}" name="capacity{{$index}}" type="checkbox" ng-model="addPatient.aideSkills[key]"/>
+                                    {{value}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
                             Staffing Coordinator
                         </label>
                         <div class="col-sm-9">
-                            <script type="text/javascript">
-//                                jQuery(document).ready(function($)
-//                                {
-//                                    $("#StaffingCoordinator").selectBoxIt().on('open', function()
-//                                    {
-//                                        // Adding Custom Scrollbar
-//                                        $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-//                                    });
-//                                });
-                            </script>
                             <select class="form-control" id="StaffingCoordinator"  ng-model='addPatient.patient.staffingCordinatorId' name="StaffingCoordinator"
                                     data-validate="required" data-message-required="Please select Staffing Coordinator."
                                     ng-options='emp.id as (emp.label) for emp in addPatient.staffCoordinatorList'>
-                                <option value="">Select the staffing coordinator</option>
-                                <!--<option ng-repeat="emp in addPatient.staffCoordinatorList" ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
-                                <!--<option value="1">1</option>-->
+                                <option value="">Select staffing coordinator</option>
                             </select>
                         </div>
                     </div>
@@ -230,7 +261,7 @@
                                     data-validate="required" data-message-required="Please select Nurse Case Manager."
                                     ng-options='emp.id as (emp.label) for emp in addPatient.nursingCareList'>
                                 <option value="">
-                                    Select the nurse case manager
+                                    Select nurse case manager
                                 </option>
                                 <!--<option ng-repeat="emp in " ng-value="{{emp.id}}">{{emp.fName}} {{emp.lName}}</option>-->
                             </select>

@@ -7,6 +7,7 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
+        ctrl.aideSkills = {};
         ctrl.nextTab;
 //        ctrl.fileObj = {};
 //        ctrl.formDirty = false;
@@ -46,6 +47,21 @@
         }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");
         });
+        PatientDAO.retrieveEnumType({'type': 'transportationAssistance'}).then(function (res) {
+            ctrl.transportationAssistanceLevels = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve transportation assistance levels.");
+        });
+        PatientDAO.retrieveEnumType({'type': 'priorityCodes'}).then(function (res) {
+            ctrl.priorityCodes = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve priority codes.");
+        });
+        PatientDAO.retrieveEnumType({'type': 'aideSkills'}).then(function (res) {
+            ctrl.capacitiesKeyValue = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve aide skill capacities.");
+        });
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
@@ -63,7 +79,7 @@
         ctrl.setBillingAddress = setBillingAddress;
         ctrl.setBillingAddressRadioButton = setBillingAddressRadioButton;
         ctrl.resetPatient = function () {
-            $rootScope.isFormDirty = false;            
+            $rootScope.isFormDirty = false;
         };
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
@@ -117,6 +133,14 @@
                     }
                 });
                 patientToSave.languagesSpoken = patientToSave.languagesSpoken.toString();
+                
+                patientToSave.aideSkills = [];
+                angular.forEach(ctrl.aideSkills, function (value,key) {
+                    if (value === true) {
+                        patientToSave.aideSkills.push(key);
+                    }
+                });
+                patientToSave.aideSkills = patientToSave.aideSkills.toString();
 
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
@@ -244,6 +268,15 @@
                             }
                         });
                     }
+                    
+                    if (res.aideSkills != null) {
+                        var aideSkills = res.aideSkills.split(',');
+                        angular.forEach(aideSkills, function (skillId) {
+                            ctrl.aideSkills[skillId] = true;
+                        });
+                    }
+                    
+                    
                     if (ctrl.patient.otherLanguages != null && ctrl.patient.otherLanguages != '') {
                         ctrl.otherLanguageCheckbox = true;
                         ctrl.refreshLanguages();
@@ -590,14 +623,14 @@
             };
 
         };
-        
+
         $scope.$watch(function () {
             return ctrl.authorizationDocuments;
         }, function (newValue, oldValue) {
-            if(newValue && oldValue){                
+            if (newValue && oldValue) {
                 $rootScope.isFormDirty = true;
             }
-        },true);
+        }, true);
         $scope.addCareType = function () {
             $rootScope.careTypeModel = {};
             $rootScope.careTypeModel.careTypeObj = {};
@@ -620,7 +653,7 @@
 
         $scope.$watch(function () {
             return ctrl.careTypes;
-        }, function (newValue, oldValue) {            
+        }, function (newValue, oldValue) {
             $timeout(function () {
                 $("#CareTypes").multiSelect('refresh');
             });
@@ -772,7 +805,7 @@
                             $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
                         } else if ($scope.careObj.expiryDate == $scope.careObj.previousExpiryDate) {
                             $scope.careObj.changeSchedule = false;
-                        } 
+                        }
                     };
 
 //                    $scope.isValidCareType = function () {

@@ -56,6 +56,9 @@
                     response.data = data;
                     return response;
                 }
+            },
+            retrieveEnumType: {
+                method: 'GET'
             }
         });
         return {
@@ -85,6 +88,9 @@
             },
             checkSchedule: function (data) {
                 return api.checkSchedule(data).$promise;
+            },
+            retrieveEnumType: function (data) {
+                return api.retrieveEnumType({action:data.type}).$promise;
             }
         };
     };
