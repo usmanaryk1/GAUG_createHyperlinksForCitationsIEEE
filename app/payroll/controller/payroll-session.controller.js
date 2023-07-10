@@ -202,7 +202,7 @@
         };
 
         ctrl.showAddEmployeeModal = function(empObj, index) {
-            if (empObj == null || empObj.manuallyAdded) {
+            if ((empObj == null || empObj.manuallyAdded) && ctrl.processdMode===false) {
                 $('#modal-7').modal('show', {backdrop: 'static'});
                 ctrl.addEmployeeList = [];
 //            var empWithSessions = [];

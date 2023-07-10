@@ -134,23 +134,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr style="cursor: pointer" ng-repeat="session in payrollSession.payrollSessions" ng-click="payrollSession.showAddEmployeeModal(session,$index)">
-                                        <th>
+                                    <tr style="cursor: pointer" ng-repeat="session in payrollSession.payrollSessions">
+                                        <th ng-click="payrollSession.showAddEmployeeModal(session,$index)">
                                             <span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span>
                                             <span class="fa-calendar" tooltip="Missed Punch Affected" ng-if="session.missedPunchAffected"></span> 
                                              {{payrollSession.empMap[session.employeeId].lName}}</th>
-                                        <td>{{payrollSession.empMap[session.employeeId].fName}}</td>
-                                        <td> {{session.totalHours| number:2}}</td>
-                                        <td> ${{session.grossPay| number:2}}</td>
-                                        <td>${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
-                                        <td>{{session.hour1 == null ? 0 : session.hour1| number:2}}</td>
-                                        <td>${{session.rate2 == null ? 0 : session.rate2| number:2}}</td>
-                                        <td>{{session.hour2 == null ? 0 : session.hour2| number:2}}</td>
-                                        <td>${{session.otRate == null ? 0 : session.otRate| number:2}}</td>
-                                        <td>{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
-                                        <td>${{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
-                                        <td>{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
-                                        <td>${{session.salary == null ? 0 : session.salary| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{payrollSession.empMap[session.employeeId].fName}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)"> {{session.totalHours| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)"> ${{session.grossPay| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.hour1 == null ? 0 : session.hour1| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.rate2 == null ? 0 : session.rate2| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.hour2 == null ? 0 : session.hour2| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.otRate == null ? 0 : session.otRate| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.salary == null ? 0 : session.salary| number:2}}</td>
                                         <!--                                        <td>{{session.totalHours}}</td>
                                                                                 <td>{{session.1Earnings}}</td>-->
                                         <!--                                        <td>37</td>
