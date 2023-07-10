@@ -7,11 +7,10 @@
         ctrl.isViewOnly = $state.current.data.title === 'View' ? true : false;
         ctrl.show = 'filtered';
         ctrl.selectedClaims = {};
-        ctrl.creditUsages = [];
         ctrl.currentDate = new Date();
         ctrl.viewRecords = 10;
         ctrl.filteredDatatableObj = {};
-        ctrl.bill = {};
+        ctrl.bill = {creditUsages:[]};
         ctrl.claimList = {allSelected: false, setAmountDue: false};
         ctrl.navigateToTab = navigateToTab;
         function navigateToTab() {
@@ -73,10 +72,10 @@
                     _.each(bill.reconciliationDetails, function (reconciliation) {
                         var claim = angular.copy(reconciliation.claim);
                         claim.paidAmount = reconciliation.paidAmount;
+                        claim.creditUsed = reconciliation.creditUsed;                        
                         ctrl.reconciliationDetails.push(claim);
                     });
                 }
-                ctrl.creditUsages = angular.copy(bill.creditUsages);
                 ctrl.bill = angular.copy(bill);
                 ctrl.bill.receivedBy = bill.receivedFrom;
             });
@@ -92,8 +91,27 @@
             if (ctrl.claims && ctrl.claims.length > 0)
                 ctrl.filterClaims();
         };
+        
+        ctrl.removeCreditUsage = function(credit){
+            _.remove(ctrl.bill.creditUsages,credit); 
+            var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: credit.toClaimId});
+            if(selectedClaim){
+                selectedClaim.creditUsed = selectedClaim.creditUsed - credit.usedAmount;
+            }
+            if(selectedClaim.creditUsed === 0 && !selectedClaim.AmountPaid){
+                ctrl.selectedClaims[selectedClaim.id] = false;
+            }
+            ctrl.updateSelection();
+        };
 
-        ctrl.updateSelection = function () {            
+        ctrl.updateSelection = function () {     
+            _.remove(ctrl.bill.creditUsages,function(credit){
+                return ctrl.selectedClaims[credit.toClaimId] !== true;
+            });        
+            _.each(ctrl.selectedClaimsShow, function (claim) {
+                if (ctrl.selectedClaims[claim.id] !== true)
+                    claim.creditUsed = 0;
+            });
             _.each(ctrl.selectedClaims, function (selected, selectedClaimId) {
                 var claim = _.find(ctrl.claims, {id: parseInt(selectedClaimId)});                
                 if (claim && !_.find(ctrl.selectedClaimsShow, {id: parseInt(selectedClaimId)}) && (selected === true)) {
@@ -104,7 +122,7 @@
                     delete claim.AmountPaid;
                     _.remove(ctrl.selectedClaimsShow, {id: parseInt(selectedClaimId)});
                 }
-            });
+            });            
             ctrl.getTotals();
             _.reverse(ctrl.selectedClaimsShow);
         };
@@ -135,10 +153,12 @@
             ctrl.getTotals();
         };
 
-        ctrl.removeAmountPaid = function (claimId) {
+        ctrl.removedSelection = function (claimId) {
             var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claimId});
             if (selectedClaim) {
-                delete selectedClaim.AmountPaid;
+                delete selectedClaim.AmountPaid;                
+                _.remove(ctrl.bill.creditUsages, {toClaimId: claimId});
+                selectedClaim.creditUsed = 0;
             }
             ctrl.getTotals();
         };
@@ -256,15 +276,15 @@
             ctrl.formSubmitted = true;
             var isValid = true;
             ctrl.selectedClaimsShow.forEach(function (claim) {
-                if (ctrl.selectedClaims[claim.id] && _.isUndefined(claim.AmountPaid)) {
+                if (ctrl.selectedClaims[claim.id] && (_.isUndefined(claim.AmountPaid) && (claim.creditUsed === 0))) {
                     isValid = false;
                 }
             });
             if ($('#billing_reconciliation_form')[0].checkValidity() && isValid) {
                 ctrl.getTotals();
                 if (!(ctrl.totals['Applied'] && (parseFloat(ctrl.totals['Applied']).toFixed(2)
-                        === (parseFloat((ctrl.bill.paymentAmount ? parseFloat(ctrl.bill.paymentAmount) : 0) + (ctrl.totals['Credits'] ? ctrl.totals['Credits'] : 0)).toFixed(2))))) {
-                    toastr.error("Applied amount does not match available amount(credits + payment amount).");
+                        === (parseFloat((ctrl.bill.paymentAmount ? parseFloat(ctrl.bill.paymentAmount) : 0)).toFixed(2))))) {
+                    toastr.error("Applied amount does not match payment amount.");
                     return;
                 }
                 var billToSave = angular.copy(ctrl.bill);

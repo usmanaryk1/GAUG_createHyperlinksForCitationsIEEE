@@ -304,8 +304,8 @@
                                                                numbers-only="true" maxlength="10" class="form-control" 
                                                                name="totalCosts" type="text" decimalallowed
                                                                ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.updateAmountPaid(claim.id, claim.AmountPaid)"
-                                                               ng-required="!claim.AmountPaid && manageBillingReconciliation.selectedClaims[claim.id]==true"                                                               
-                                                               ng-class="{'border-red':!claim.AmountPaid && manageBillingReconciliation.selectedClaims[claim.id]===true && manageBillingReconciliation.formSubmitted}"/>
+                                                               ng-required="(!claim.AmountPaid && !claim.creditUsed)"                                                               
+                                                               ng-class="{'border-red':(!claim.AmountPaid && !claim.creditUsed) && manageBillingReconciliation.selectedClaims[claim.id]===true && manageBillingReconciliation.formSubmitted}"/>
                                                     </td>
                                                     <td>
                                                         <div class="center">
@@ -313,6 +313,7 @@
                                                                ng-click="manageBillingReconciliation.openAdjustments(claim.id)"
                                                                tooltip="Adjustment"><span class="ed_b"></span></a> 
                                                             <a href="" class="btn icon-left fa fa-credit-card deactivate_bt"
+                                                               ng-if="manageBillingReconciliation.selectedClaims[claim.id]" 
                                                                ng-click="manageBillingReconciliation.openCredits(claim.id)" 
                                                                tooltip="Credit"><span class="ed_b"></span></a> 
                                                         </div>
@@ -355,7 +356,7 @@
                                         <tbody>
                                             <tr style="cursor: pointer" ng-repeat="claim in manageBillingReconciliation.selectedClaimsShow">
                                                 <td>
-                                                    <input type="checkbox" ng-model="manageBillingReconciliation.selectedClaims[claim.id]" ng-change="manageBillingReconciliation.removeAmountPaid(claim.id)">
+                                                    <input type="checkbox" ng-model="manageBillingReconciliation.selectedClaims[claim.id]" ng-change="manageBillingReconciliation.removedSelection(claim.id)">
                                                 </td>
                                                 <td>{{claim.billedDate}}</td>
                                                 <td>{{claim.patientName}}</td>
@@ -369,8 +370,8 @@
                                                            numbers-only="true" maxlength="10" class="form-control" 
                                                            name="totalCosts" type="text" decimalallowed
                                                            ng-model="claim.AmountPaid" ng-change="manageBillingReconciliation.getTotals()"
-                                                           ng-required="!claim.AmountPaid"                                                               
-                                                           ng-class="{'border-red':!claim.AmountPaid && manageBillingReconciliation.formSubmitted}"/>
+                                                           ng-required="(!claim.AmountPaid && !claim.creditUsed)"                                                               
+                                                           ng-class="{'border-red':(!claim.AmountPaid && !claim.creditUsed) && manageBillingReconciliation.formSubmitted}"/>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -395,6 +396,7 @@
                                                         <th nowrap><span class="">From Claim</span></th>
                                                         <th nowrap><span class="">To Claim</span></th>
                                                         <th nowrap><span class="">Amount</span></th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -402,9 +404,16 @@
                                                         <td>{{credit.claimId}}</td>
                                                         <td>{{credit.toClaimId}}</td>
                                                         <td>{{credit.usedAmount| currency:'$':2}}</td>
+                                                        <td>
+                                                            <div class="center">
+                                                                <a href="" class="btn icon-left fa fa-trash-o delete_button" 
+                                                                   ng-click="manageBillingReconciliation.removeCreditUsage(credit)"
+                                                                   tooltip="Remove"><span class="ed_b"></span></a> 
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr ng-if="manageBillingReconciliation.bill.creditUsages.length === 0">
-                                                        <td colspan="3" style="text-align: center;">
+                                                        <td colspan="4" style="text-align: center;">
                                                             No records found
                                                         </td>
                                                     </tr>
@@ -471,7 +480,8 @@
                                             <th nowrap><span class="">Date of Range</span></th>
                                             <th nowrap><span class="">Original Billed<br>Amount</span></th>
                                             <th nowrap class="text-center"><span class="">Amount Due</span></th>
-                                            <th nowrap class='nosorting'><span class="">Amount Paid</span></th>
+                                            <th nowrap><span class="">Credit Applied</span></th>
+                                            <th nowrap><span class="">Amount Paid</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -483,6 +493,7 @@
                                             <td>{{(claim.sessionStartDate| date:'MM/dd/yyyy') + '-' + (claim.sessionEndDate | date:'MM/dd/yyyy')}}</td>
                                             <td class="text-center">{{claim.totalCosts| currency:'$':2}}</td>
                                             <td class="text-center">{{(claim.totalCosts - claim.paidAmount)| currency:'$':2}}</td>
+                                            <td class="text-center">{{claim.creditUsed| currency:'$':2}}</td>
                                             <td class="text-center">{{claim.paidAmount| currency:'$':2}}</td>
                                         </tr>
                                     </tbody>
@@ -492,23 +503,25 @@
                                 </div>
                             </div>
                             <button class="btn btn-info btn-single gray_bt pull-right col-md-2" type="button" 
-                                    ng-if="manageBillingReconciliation.isViewOnly && manageBillingReconciliation.creditUsages.length === 0"
+                                    ng-if="manageBillingReconciliation.isViewOnly && manageBillingReconciliation.bill.creditUsages.length === 0"
                                     ui-sref="app.billing_reconciliation_list()">Cancel</button>
                         </accordion-group>
-                        <accordion-group heading="Credits" is-open="true" class="expanded" ng-if="manageBillingReconciliation.isViewOnly && manageBillingReconciliation.creditUsages.length > 0">
+                        <accordion-group heading="Credits" is-open="true" class="expanded" ng-if="manageBillingReconciliation.isViewOnly && manageBillingReconciliation.bill.creditUsages.length > 0">
                             <div class="border0 table-responsive scroll">
                                 <table id="Credit-Usages" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" 
-                                       cellspacing="0" ng-if="manageBillingReconciliation.creditUsages.length" datatable-setup display-print="false">                                    
+                                       cellspacing="0" ng-if="manageBillingReconciliation.bill.creditUsages.length" datatable-setup display-print="false">                                    
                                     <thead>
                                         <tr>
-                                            <th nowrap><span class="">Claim Number</span></th>
+                                            <th nowrap><span class="">From Claim</span></th>
+                                            <th nowrap><span class="">To Claim</span></th>
                                             <th nowrap><span class="">Date Inserted</span></th>
                                             <th nowrap><span class="">Used Amount</span></th>                                                
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="credit in manageBillingReconciliation.creditUsages">
+                                        <tr ng-repeat="credit in manageBillingReconciliation.bill.creditUsages">
                                             <td>{{credit.claimId}}</td>
+                                            <td>{{credit.toClaimId}}</td>
                                             <td>{{credit.dateInserted}}</td>
                                             <td>{{credit.usedAmount| currency:'$':2}}</td>                                                
                                         </tr>
