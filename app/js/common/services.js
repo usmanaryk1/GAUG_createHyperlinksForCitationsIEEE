@@ -83,11 +83,14 @@ angular.module('xenon.services', []).
                 var dashboard = this.addItem('Dashboard', '/app/dashboard', 'fa-home');
                 var employee = this.addItem('Employee', '/app', 'linecons-cog', 'CREATE_EMPLOYEE,VIEW_EMPLOYEE');
                 var patient = this.addItem('Patient', '/app', 'linecons-user', 'CREATE_PATIENT,VIEW_PATIENT');
-                var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock', 'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET');
+                var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock', 
+                'VIEW_EMPLOYEE_TIMESHEET,CREATE_MANUAL_PUNCH,VIEW_DAILY_ATTENDANCE,VIEW_PATIENT_TIMESHEET,WORKSITE_TIMESHEET');
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella', 'CREATE_INSURANCE_PROVIDER,VIEW_INSURANCE_PROVIDER');
-                var billing = this.addItem('Billing', '/app', 'linecons-money', 'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
+                var billing = this.addItem('Billing', '/app', 'linecons-money', 
+                'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
-                var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE');
+                var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 
+                'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
                 var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
 
                 // Subitems of Dashboard
@@ -109,7 +112,7 @@ angular.module('xenon.services', []).
                 timeSheet.addItem('Manual Punch', './manual_punch', 'CREATE_MANUAL_PUNCH');
                 timeSheet.addItem('Daily Attendance', './daily_attendance', 'VIEW_DAILY_ATTENDANCE');
                 timeSheet.addItem('Patient Timesheet', './patient_time_sheet', 'VIEW_PATIENT_TIMESHEET');
-                timeSheet.addItem('Worksite Timesheet', './worksite_time_sheet', 'WORKSITE_SCHEDULE');
+                timeSheet.addItem('Worksite Timesheet', './worksite_time_sheet', 'WORKSITE_TIMESHEET');
 
                 // Subitems of insuranceProvider
                 insuranceProvider.addItem('Add Insurance Provider', './insurer/', 'CREATE_INSURANCE_PROVIDER');
@@ -200,10 +203,11 @@ angular.module('xenon.services', []).
                 var users = this.addItem('Users', '/admin', 'linecons-user', 'CREATE_USER,EDIT_USER,VIEW_USER');
                 var worksite = this.addItem('Worksites', '/admin', 'fa-building', 'CREATE_WORKSITE,EDIT_WORKSITE,VIEW_WORKSITE');
                 var benefits = this.addItem('Benefits', '/admin', 'fa-usd', 'CREATE_BENEFIT,EDIT_BENEFIT,VIEW_BENEFIT,EMPLOYEE_BENEFIT_ADJUSTMENT');
+                var roles = this.addItem('Roles', '/admin/role-list', 'fa-tasks', 'CREATE_ROLE,EDIT_ROLE,VIEW_ROLE');
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
-                var languages = this.addItem('Languages', './admin/language-list', 'fa-language', 'UPDATE_LANGUAGE, VIEW_LANGUAGE');
-                var tasks = this.addItem('Tasks', './admin/task-list', 'fa-tasks');
+                var languages = this.addItem('Languages', './admin/language-list', 'fa-language', 'UPDATE_LANGUAGE,VIEW_LANGUAGE');
+                var tasks = this.addItem('Tasks', './admin/task-list', 'fa-tasks', 'CREATE_TASK,UPDATE_TASK,VIEW_TASK');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
                 var company = this.addItem('Company', '/admin/company_information', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
 

@@ -48,11 +48,9 @@
             },
             getUserFeatures: {
                 method: 'GET',
+                isArray: true,
                 params: {
                     action: 'userfeatures'
-                },
-                transformResponse: function (data) {
-                    return {data: data};
                 }
             }
 

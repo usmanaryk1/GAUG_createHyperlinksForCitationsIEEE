@@ -27,12 +27,15 @@
         ctrl.staffCoordinatorList = [];
         ctrl.insuranceProviderList = [];
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))) {
+            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_PATIENT') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             Page.setTitle("Update Patient");
             ctrl.editMode = true;
         } else if ($state.current.name.indexOf('tab1') > -1) {
+            if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_PATIENT') === -1) {
+                $state.transitionTo(ontime_data.defaultState);
+            }
             Page.setTitle("Add Patient");
             ctrl.editMode = false;
         } else {
