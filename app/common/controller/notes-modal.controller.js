@@ -1,15 +1,16 @@
 (function () {
-    function EmployeeNotesCtrl(employeeId, $rootScope, $modal, $modalInstance, EmployeeDAO) {
+    function NotesCtrl(userId, type, $rootScope, $modalInstance) {
         var ctrl = this;
 
         $rootScope.maskLoading();
 
-        ctrl.employeeId = employeeId;
+        ctrl.userId = userId;
+        ctrl.type = type;
 
         ctrl.close = function () {
             $modalInstance.close();
         };
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeNotesCtrl', ["employeeId", "$rootScope", "$modal", "$modalInstance", "EmployeeDAO", EmployeeNotesCtrl]);
+    angular.module('xenon.controllers').controller('NotesCtrl', ["userId", "type", "$rootScope", "$modalInstance", NotesCtrl]);
 })();

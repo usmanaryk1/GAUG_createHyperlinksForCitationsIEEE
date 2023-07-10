@@ -59,6 +59,22 @@
             },
             retrieveEnumType: {
                 method: 'GET'
+            },
+            addNotes: {
+                method: 'POST',
+                params: {
+                    subAction: 'note'
+                }
+            },
+            getNotes: {
+                method: 'GET',
+                isArray: true
+            },
+            updateNotes: {
+                method: 'PUT'
+            },
+            deleteNotes: {
+                method: 'DELETE'
             }
         });
         return {
@@ -91,6 +107,20 @@
             },
             retrieveEnumType: function (data) {
                 return api.retrieveEnumType({action:data.type}).$promise;
+            },
+            addNotes: function (data) {
+                return api.addNotes({action: data.userId}, data.note).$promise;
+            },
+            updateNotes: function (data) {
+                return api.updateNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, data.note).$promise;
+            },
+            deleteNotes: function (data) {
+                return api.deleteNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;
+            },
+            getNotes: function (params) {
+                params.patientId = params.userId;
+                delete params.userId;
+                return api.getNotes(params).$promise;
             }
         };
     };

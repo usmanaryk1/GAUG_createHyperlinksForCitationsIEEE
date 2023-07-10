@@ -1,3 +1,5 @@
+/* global appHelper */
+
 (function () {
     function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $debounce, EmployeeDAO, InsurerDAO, Page, CareTypeDAO) {
         var ctrl = this;
@@ -275,6 +277,29 @@
                 ctrl.retrievePatients();
             }
         };
+        
+        ctrl.openNotesModal = function (patientId, modal_id, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'notes-modal'),
+                size: "lg",
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'NotesCtrl as notes',
+                resolve: {
+                    userId: function () {
+                        return patientId;
+                    },
+                    type: function () {
+                        return 'patient';
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+        
 
         ctrl.getLanguagesFromCode = function (languageCodes) {
             if (languageCodes != null && languageCodes.length > 0) {

@@ -121,10 +121,13 @@
                 size: "lg",
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false,
-                controller: 'EmployeeNotesCtrl as employeeNotes',
+                controller: 'NotesCtrl as notes',
                 resolve: {
-                    employeeId: function () {
+                    userId: function () {
                         return employeeId;
+                    },
+                    type: function () {
+                        return 'employee';
                     }
                 }
             });
@@ -291,7 +294,7 @@
             
             $rootScope.employeeNotesModel.addNote = function () {
 
-                if ($('#EmployeeNotesData')[0].checkValidity()) {
+                if ($('#NotesData')[0].checkValidity()) {
                     $rootScope.maskLoading();
                     EmployeeDAO.addNotes(
                             {employeeId: employee.id,
