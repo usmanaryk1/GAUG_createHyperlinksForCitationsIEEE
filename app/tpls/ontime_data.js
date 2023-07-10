@@ -17,7 +17,8 @@ ontime_data = {
         {key: "VCTN", value: "Vacation"},
         {key: "INCW", value: "Inclement weather"},
         {key: "NOSP", value: "No Service As Per Patient"},
-        {key: "NOSC", value: "No Service - Coverage"}
+        {key: "NOSC", value: "No Service - Coverage"},
+        {key: "USPC", value: "Unspecified"}
     ],
     'recurranceTypes': {D: "Daily", W: "Weekly", N: "No Repeat"},
     'eventTypes': {S: "Schedule", A: "Available", U: "Unavailable"},
