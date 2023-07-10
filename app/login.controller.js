@@ -59,6 +59,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                         }
                     }
                 });
+                document.title=":: Welcome ::";
                 $rootScope.unmaskLoading();
                 // Remove any alert
                 $(".errors-container .alert").slideUp('fast');
