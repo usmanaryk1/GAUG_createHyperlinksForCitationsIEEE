@@ -716,12 +716,12 @@
                                 _.each($rootScope.employeePopup.validationHours, function (details, year) {
                                     _.each(details, function (hours, type) {
                                         if (reasonType == type) {
-                                            if (year == $rootScope.employeePopup.data.leaveYear) {
+                                            if (year == $rootScope.employeePopup.data.leaveYear && $rootScope.employeePopup.data.noOfHours !=null) {
                                                 if(_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours))
                                                     $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours);
                                                 else
                                                     $rootScope.employeePopup.validationHours[year][type] = parseFloat((parseFloat(hours) + parseFloat($rootScope.employeePopup.data.noOfHours)).toPrecision(2));
-                                            } else if (year == $rootScope.employeePopup.data.leaveYear2) {
+                                            } else if (year == $rootScope.employeePopup.data.leaveYear2 && $rootScope.employeePopup.data.noOfHours2 !=null) {
                                                 if(_.isInteger(hours) && _.isInteger($rootScope.employeePopup.data.noOfHours2))
                                                     $rootScope.employeePopup.validationHours[year][type] = parseInt(hours) + parseInt($rootScope.employeePopup.data.noOfHours2);
                                                 else
