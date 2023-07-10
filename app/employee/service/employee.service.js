@@ -130,15 +130,17 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             addNotes: function (data) {
-                return api.addNotes({action: data.employeeId}, data.note).$promise;
+                return api.addNotes({action: data.userId}, data.note).$promise;
             },
             updateNotes: function (data) {
-                return api.updateNotes({action: data.employeeId, subAction: 'notes', subAction1: data.noteId}, data.note).$promise;
+                return api.updateNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, data.note).$promise;
             },
             deleteNotes: function (data) {
-                return api.deleteNotes({action: data.employeeId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;
+                return api.deleteNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;
             },
             getNotes: function (params) {
+                params.employeeId = params.userId;
+                delete params.userId;
                 return api.getNotes(params).$promise;
             },
             changestatus: function (data) {

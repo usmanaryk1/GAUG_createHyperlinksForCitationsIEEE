@@ -1,3 +1,5 @@
+/* global _ */
+
 (function () {
     function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService, DispatchDAO) {
 
@@ -95,7 +97,6 @@
         $rootScope.refreshCalendarView = function () {
             $rootScope.paginationLoading = true;
             ctrl.retrievePatients();
-            ctrl.retrieve
         };
 
         ctrl.retrievePatients = function () {
@@ -396,7 +397,19 @@
                 if (data != null && data.eventType == null) {
                     $rootScope.patientPopup.todayDate = data.startDate;
                 }
-
+                
+        
+                $rootScope.patientPopup.isCareTypeExists = function (companyCareTypeId, careTypes) {
+                    var careType = true;
+                    if (companyCareTypeId && careTypes) {
+                        console.log("$rootScope.patientPopup.data.scheduleId", $rootScope.patientPopup.data.scheduleId)
+                        if (careTypes && _.isArray(careTypes)) {
+                            careType = _.find(careTypes, {id: companyCareTypeId}) ? true : false;
+                        }
+                    }
+                    return careType;
+                };                                
+                
                 $rootScope.patientPopup.dispatchClicked = false;
                 $rootScope.patientPopup.positions = ctrl.positions;
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;

@@ -65,7 +65,14 @@
                         <select class="form-control" id="care" name="care" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.companyCareTypeId" ng-options="care.id as care.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()" data-validate="required" data-message-required="Please select care." ng-required="patientPopup.data.eventType == 'S'">
                             <option value="">Select the care</option>
                         </select>
-                    </div>
+                    </div>                    
+                    <span class="text-warning col-sm-push-2 col-sm-10"
+                          ng-if="patientPopup.data.scheduleId && 
+                                      patientPopup.data.companyCareTypeId && 
+                                      patientPopup.careTypes && 
+                                     !patientPopup.isCareTypeExists(patientPopup.data.companyCareTypeId,patientPopup.careTypes)">
+                        This care type has been removed.
+                    </span>
                 </div>
 
                 <div class="form-group-separator"></div>
@@ -138,7 +145,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"></label>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
 
                         <div class="form-block">
                             <label class="no-padding-left checkbox" style="padding-top:0px;">
@@ -147,7 +154,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-block">
                             <label class="checkbox" style="padding-top:0px;">
                                 <input type="checkbox" class="cbr" id="donotbill" name="donotbill" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.doNotBill">
@@ -155,6 +162,17 @@
                             </label>
                         </div>
                     </div>
+                    <div class="col-sm-2" style="padding-right:0;" ng-if="patientPopup.data.scheduleId">
+                        <label class="no-padding-left checkbox" >
+                            <input type="checkbox" class="cbr" id="loss" name="loss" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited" ng-model="patientPopup.data.isLoss">
+                            Loss Of Hours
+                        </label>
+                    </div>
+                    <div class="col-sm-2" style="margin-top:0px;" ng-show="patientPopup.data.isLoss" ng-if="patientPopup.data.scheduleId">
+                        <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  
+                               ng-model="patientPopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." 
+                               ng-required="patientPopup.data.eventType == 'S' && patientPopup.data.isLoss">
+                    </div>     
                 </div>
 
                 <div class="form-group-separator"></div>

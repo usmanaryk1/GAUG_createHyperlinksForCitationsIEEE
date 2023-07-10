@@ -1,3 +1,5 @@
+/* global _ */
+
 (function () {
     function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO, Page, $modal) {
         var ctrl = this;
@@ -689,6 +691,7 @@
                     ctrl.selecteModalOpen = false;
                 }
             }
+            ctrl.getWarnings();
         }, true);
 
         // Open Authorization Document upload Modal
@@ -1217,11 +1220,26 @@
         ctrl.existingSchedule = undefined;
         if ($state.params.id != '') {
             PatientDAO.checkSchedule({patientId: $state.params.id})
-                    .then(function (res) {
-                        if (res && res.data)
-                            ctrl.existingSchedule = JSON.parse(res.data);
-                    });
+                .then(function (res) {
+                    if (res && res.data) {
+                        var checkSchedule = JSON.parse(res.data);
+                        ctrl.existingSchedule = checkSchedule.careTypeScheduleCheckMap;
+                        ctrl.scheduleAssociation = checkSchedule.careTypeScheduleAssociationMap;
+                    }
+                });
         }
+        
+        ctrl.getWarnings = function(){
+            if (ctrl.scheduleAssociation && _.isObject(ctrl.scheduleAssociation) && (_.keys(ctrl.scheduleAssociation).length > 0) && ctrl.careTypeList && (ctrl.careTypeList.length > 0)) {                
+                ctrl.warningList = [];
+                _.each(ctrl.scheduleAssociation, function (value, key) {                    
+                    if (value === true && ctrl.careTypeList[key] && ctrl.careTypes && (ctrl.careTypes.indexOf(ctrl.careTypeList[key].id) === -1)) {                        
+                        ctrl.warningList.push(ctrl.careTypeList[key].companyCaretypeId.careTypeTitle);
+                    }
+                });
+//                console.log("warningList--", ctrl.warningList);
+            }
+        };
 
         ctrl.unbindPatientCondition = function () {
             if (ctrl.patient.patientConditionRelatedTo) {
