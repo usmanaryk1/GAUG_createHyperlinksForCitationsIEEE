@@ -259,13 +259,13 @@
             </div>
         </div>        
                 
-        <div ng-if="['Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation',
+        <div ng-if="['Physical', 'Chest X-Ray', 'TB Questionnaire', 'Habituation',
                             'Employment Eligibility (I-9)', 'HCR', 'References', 'Competency Exam', 'Certificate/License',
                             'OP Search', 'License', 'Infection Control', 'Drug Test'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="expiryDate">
-                    Expiration Date
+                    {{employeeAttachment.attachment.attachmentType !== 'Drug Test' ? 'Expiration' : 'Clearance'}} Date
                 </label>
                 <div class="col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
@@ -628,7 +628,7 @@
                             <div class="col-sm-12" ng-if="employeeAttachment.attachment.filePath" >
                                 <label class="control-label">
                                     <a style="color: blue;text-decoration: underline" ng-href="{{employeeAttachment.baseUrl}}file/download/{{employeeAttachment.companyCode}}/a/{{employeeAttachment.attachment.filePath}}?userFileName={{employeeAttachment.fileName}}">
-                                        {{employeeAttachment.fileName}}.{{employeeAttachment.attachment.filePath.substring(employeeAttachment.attachment.filePath.lastIndexOf('.') + 1)}}
+                                        {{employeeAttachment.fileName}}
                                     </a>
                                 </label>
                             </div>
@@ -650,17 +650,6 @@
                     </div>                    
                     <span style="color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;" ng-if="!employeeAttachment.attachment.filePath && employeeAttachment.submitted">file upload is required.</span>
                 </div>                
-            </div>
-
-            <div class="form-group-separator"></div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label add-padding-modal" for="DocumentName">
-                    Document Name
-                </label>
-                <div class="col-sm-8 add-padding-modal">
-                    <input type="text" class="form-control" id="DocumentName" name="DocumentName" ng-model="employeeAttachment.attachment.name"
-                           data-validate="required"  data-message-required="Please enter Document Name." required='true'>
-                </div>
             </div>
         </div>        
 

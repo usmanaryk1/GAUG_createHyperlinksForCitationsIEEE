@@ -38,6 +38,32 @@
                 'Physical', 'TB Testing',
                 'Chest X-Ray', 'TB Questionnaire',
                 'Habituation', 'Flu Shot'];
+            
+            
+        var MappingForDownload = {
+            'Initial Application Packet': 'InitialApplicationPacket',
+            'Initial Application Packet Nursing': 'InitialApplicationPacketNursing',
+            'Employment Eligibility (I-9)': 'EmploymentEligibility',
+            'CHRC Forms': 'CHRC',
+            'Evaluation': 'Evaluation',
+            'HCR': 'HCR',
+            'References': 'References',
+            'Competency Exam': 'CompetencyExam',
+            'W-4': 'W4',
+            'Certificate/License': 'Certificate',
+            'Orientation Packet': 'OrientationPacket',
+            'Infection Control': 'InfectionControl',
+            'OP Search': 'OPSearch',
+            'License': 'License',
+            'Pre – Employment Medical Documents': 'PreEmploymentMedicalDocuments',
+            'Physical': 'Physical',
+            'TB Testing': 'TBTesting',
+            'Chest X-Ray': 'ChestXRay',
+            'TB Questionnaire': 'TBQuestionnaire',
+            'Habituation': 'Habituation',
+            'Flu Shot': 'FluShot',
+            'Drug Test': 'DrugTest'
+        };     
         
         
         ctrl.positionList = [];
@@ -191,8 +217,9 @@
         };
 
         //Check if ssn number is already present.
-        $scope.checkSsnNumber = function () {
+        $scope.checkSsnNumber = function (cmp) {
             if (ctrl.employee.ssn && ctrl.employee.ssn.trim().length > 0) {
+//                setValidationMessage(cmp);
                 EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
                         .then(function (res) {
                             if (res.data)
@@ -537,6 +564,19 @@
                 ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
             }
         };
+        
+        ctrl.getAttachmentName = function(attachment){
+            var fileName = attachment.filePath;                                    
+            return ctrl.employee.lName 
+                    + ' ' + 
+                    ctrl.employee.fName
+                    + '-' +
+                    (MappingForDownload[attachment.attachmentType]?MappingForDownload[attachment.attachmentType]:attachment.attachmentType)
+                    + '-' +
+                    moment(attachment.dateInserted).format("MMDDYYYYHHmm")
+                    + '.' +
+                    fileName.substring(fileName.lastIndexOf('.') + 1);            
+        };
 
         //function called on page initialization.
         function pageInit() {
@@ -553,7 +593,7 @@
                         ctrl.hideLoadingImage = false;
                     } else {
                         ctrl.hideLoadingImage = true;
-                    }
+                    }                    
                     ctrl.employee = res;
                     ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                     getFilteredAttachments();
@@ -607,11 +647,32 @@
             }
         }
         ;
-
+        
+        ctrl.openSSNModal = function (employeeId)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'ssn-modal'),
+                size: "md",
+                backdrop: false,
+                keyboard: false,
+                controller: 'SsnCtrl as managessn',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId;
+                    }
+                }
+            });
+            modalInstance.result.then(function (value) {
+                ctrl.employee.ssn = value;
+            }).catch(function () {
+                console.log("popup dismissed");
+            });
+        };
 
         //        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
         function setFormDynamicValidityMessages() {
             $("#Salary-error").text('Please enter Salary.');
+            $("#SocialSecurity-error").text('Please enter Social Security.');
             $("#rate1-error").text('Please select Care Types.');
             $("#Rate1-error").text('Please enter Rate 1.');
             $("#OTRate-error").text('Please enter OT Rate.');
@@ -820,11 +881,12 @@
                 ctrl.employee = {};
             } else {
                 ctrl.editMode = true;
+                
             }
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-
+                    $("input[name='SocialSecurity']").attr('required', true);
                     if (!ctrl.employee.gender) {
                         ctrl.employee.gender = 'M';
                     }
@@ -1304,6 +1366,9 @@
                     },
                     employee: function (){
                         return ctrl.employee;
+                    },
+                    filename: function(){
+                        return mode === 'Edit' ? ctrl.getAttachmentName(attachmentToEdit) : null;
                     }
                 }
             });

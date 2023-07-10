@@ -1,7 +1,7 @@
 /* global _, ontime_data */
 
 (function () {
-    function EmployeeAttachmentCtrl(attachmentInfo, employee, $rootScope, $modalInstance, EmployeeDAO) {
+    function EmployeeAttachmentCtrl(attachmentInfo, employee, filename, $rootScope, $modalInstance, EmployeeDAO) {
         var ctrl = this;
 //        console.log("employee.hireDate",employee.hireDate)
         ctrl.companyCode = ontime_data.company_code;
@@ -44,11 +44,11 @@
         };
         
         ctrl.checkTBQuestionnaireRequired = function () {
-            if (ctrl.attachment.extraFields.chestXRayClearance) {
-                var chestXRayClearanceDate = moment(ctrl.attachment.extraFields.chestXRayClearance, "MM/DD/YYYY");
+            if (ctrl.attachment.extraFields.chestXRayExpiration) {
+                var chestXRayExpirationDate = moment(ctrl.attachment.extraFields.chestXRayExpiration, "MM/DD/YYYY");
                 var insertionDate = moment(ctrl.attachment.dateInserted ? ctrl.attachment.dateInserted : new Date());
 
-                return chestXRayClearanceDate.diff(insertionDate, 'days') > 365;
+                return chestXRayExpirationDate.diff(insertionDate, 'days') > 365;
             } else {
                 return false;
             }
@@ -173,9 +173,9 @@
 
         if (ctrl.attachment.id) {
             ctrl.setUploadFile(false);
-            ctrl.fileName = ctrl.attachment.name;
+            ctrl.fileName = filename;
         }
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeAttachmentCtrl', ["attachmentInfo", "employee", "$rootScope", "$modalInstance", "EmployeeDAO", EmployeeAttachmentCtrl]);
+    angular.module('xenon.controllers').controller('EmployeeAttachmentCtrl', ["attachmentInfo", "employee", "filename", "$rootScope", "$modalInstance", "EmployeeDAO", EmployeeAttachmentCtrl]);
 })();
