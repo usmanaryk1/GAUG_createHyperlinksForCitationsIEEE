@@ -1295,4 +1295,22 @@ angular.module('xenon.directives', []).
                     });
                 }
             };
+        })
+        .directive('charactersonly', function() {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    var regex = /^[a-zA-Z. ]*$/;
+                    var value;
+                    $(element).keypress(function(event) {
+                        value = String.fromCharCode(event.keyCode);
+                        if (regex.test(value)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
+                }
+            }
+
         });
