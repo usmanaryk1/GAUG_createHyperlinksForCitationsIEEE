@@ -52,6 +52,7 @@ ontime_data = {
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
 //        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
+        {id: 'employeeothours', label: "Employee OT Hours Report"},
         {id: 'ptoreport', label: "Employee PTO Report"},
         {id: 'employeetimesheet', label: "Employee Time Sheet"},
         {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},

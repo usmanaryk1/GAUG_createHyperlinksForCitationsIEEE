@@ -52,7 +52,7 @@
                                                             });
                                                         }, 200);
                                                     });</script>
-                                                <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="report.searchParams.id" ng-options='emp.id as (emp.lName + ", " + emp.fName + " " + emp.middleInitial) for emp in report.employeeList'>
+                                                <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="report.searchParams.id" ng-options='emp.id as (emp.lName +  ", " +  emp.fName +  " " +  emp.middleInitial) for emp in report.employeeList'>
                                                     <option value="" selected hidden>Select All</option>
                                                 </select>
                                             </div>
@@ -80,7 +80,7 @@
                                                             });
                                                         }, 200);
                                                     });</script>
-                                                <select class="form-control" name="patientdropdownIds" ng-model="report.searchParams.id" id="patientdropdownIds" ng-options='data.id as (data.lName + ", " + data.fName + " " + data.middleInitial) for data in report.patientList'>
+                                                <select class="form-control" name="patientdropdownIds" ng-model="report.searchParams.id" id="patientdropdownIds" ng-options='data.id as (data.lName +  ", " +  data.fName +  " " +  data.middleInitial) for data in report.patientList'>
                                                     <option value="" selected hidden>Select All</option>
                                                 </select>
                                             </div>
@@ -92,7 +92,8 @@
                         <div class="row" ng-show="report.reportType == 'employeeworkedhoursbycounty' || report.reportType == 'workedhours' || report.reportType == 'wppreport'
                                         || report.reportType == 'patienttimesheet' || report.reportType == 'employeetimesheet'
                                         || report.reportType == 'employeebenefits401k' || report.reportType == 'employeebenefitshealthcare'
-                                        || report.reportType == 'loginactivityreport' || report.reportType == 'lossofhoursreport'" style="margin-top: 10px;">
+                                        || report.reportType == 'loginactivityreport' || report.reportType == 'lossofhoursreport'
+                                        || report.reportType == 'employeeothours'" style="margin-top: 10px;">
                             <div class="">
                                 <div class="col-sm-7 pull-right wd_full">
                                     <div class="col-sm-6 pad0 wd_full">
@@ -142,8 +143,8 @@
                             <div class="col-sm-12 text-right" style="margin-bottom:10px;">
                                 <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
                                 <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patienttimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
-                                <button type="submit" ng-if="report.reportType && 
-                                            report.reportType != 'patientcensus' && report.reportType != 'employeecensus' && report.reportType != 'lossofhoursreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
+                                <button type="submit" ng-if="report.reportType &&
+                                                report.reportType != 'patientcensus' && report.reportType != 'employeecensus' && report.reportType != 'lossofhoursreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                             </div>
                         </div>
                     </form>
