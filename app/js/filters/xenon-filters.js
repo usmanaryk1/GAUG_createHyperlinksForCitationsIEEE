@@ -98,9 +98,11 @@ angular.module('xenon.filter', [])
                 return function(objList) {
                     var durationSum = 0;
                     angular.forEach(objList, function(obj) {
-                        var earlierdate = new Date(obj.roundedPunchInTime);
-                        var laterdate = new Date(obj.roundedPunchOutTime);
-                        durationSum += laterdate.getTime() - earlierdate.getTime();
+                        if (!isNaN(obj.roundedPunchOutTime) && !isNaN(obj.roundedPunchInTime) != null) {
+                            var earlierdate = new Date(obj.roundedPunchInTime);
+                            var laterdate = new Date(obj.roundedPunchOutTime);
+                            durationSum += laterdate.getTime() - earlierdate.getTime();
+                        }
                     });
 
 //                    var daysDifference = Math.floor(durationSum / 1000 / 60 / 60 / 24);
