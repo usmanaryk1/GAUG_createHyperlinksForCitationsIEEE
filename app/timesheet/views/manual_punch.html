@@ -198,7 +198,7 @@
                                 </script>
                                 <select class="form-control" id="tasks" multiple="multiple" name="tasks"
                                         ng-model="manualPunch.attendanceObj.companyTaskIds"
-                                        ng-options='ct.id as ct.task for ct in manualPunch.taskList'>
+                                        ng-options="ct.id as ct.task for ct in manualPunch.taskList  | orderBy:'task'">
                                 </select>
                             </div>
                         </div>
