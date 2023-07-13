@@ -15,7 +15,10 @@
                 ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchInDate = null;
             } else {
-                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false, isManualPunch: true};
+                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false, isManualPunch: true, taskList: []};
+                $timeout(function () {
+                    $('#tasks').multiSelect('refresh');
+                }, 100);
                 $("#sboxit-2").select2("val", null);
                 $("#sboxit-1").select2("val", null);
             }
