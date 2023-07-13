@@ -75,6 +75,9 @@
             },
             deleteNotes: {
                 method: 'DELETE'
+            },
+            readNotes: {
+                method: 'PUT'
             }
         });
         return {
@@ -121,6 +124,9 @@
                 params.patientId = params.userId;
                 delete params.userId;
                 return api.getNotes(params).$promise;
+            },
+            readNotes: function (params) {
+                return api.readNotes({action: params.userId, subAction: 'notes', subAction1: 'read'},{}).$promise;
             }
         };
     };

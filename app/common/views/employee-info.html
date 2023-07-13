@@ -27,7 +27,7 @@
                     <div class="emp_user_name">{{employeeinfo.employee.lName}}, {{employeeinfo.employee.fName}} {{employeeinfo.employee.middleInitial}}</div>
                     <p>{{positions[employeeinfo.employee.companyPositionId]}}</p>
                 </div>
-                <a href="" ng-click="isProfile = !isProfile" style="margin-top: 20px;position: absolute;text-decoration: none;">
+                <a href="" ng-click="isProfile = !isProfile;employeeinfo.readNotes(isProfile)" style="margin-top: 20px;position: absolute;text-decoration: none;">
                     <span>
                         <i class="fa deactivate_bt" ng-class='{"fa-book":isProfile === true,"fa-info-circle":isProfile === false}'></i>
                         {{isProfile === true?"Show Notes":"Show Information"}}
@@ -39,8 +39,8 @@
         </div>
         <hr/>
         <div ng-show="!isProfile">
-            <notes-directive employee-id="employeeinfo.employeeId" has-create="true" has-retrieve="true" can-edit="true"
-                     can-delete="true"></notes-directive>
+            <notes-directive user-id="employeeinfo.employeeId" has-create="true" has-retrieve="true" can-edit="true"
+                     can-delete="true" read-notes="false"></notes-directive>
         </div>
         <div ng-show="isProfile">
             <div class="row">

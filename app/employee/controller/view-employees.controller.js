@@ -95,7 +95,7 @@
         }
 
         ctrl.retrieveEmployees();
-        ctrl.openEditModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
@@ -105,12 +105,14 @@
                 controller: 'EmployeeInfoCtrl as employeeinfo',
                 resolve: {
                     employeeId: function () {
-                        return employeeId;
+                        return employee.id;
                     }
                 }
             });
-            modalInstance.result.then(function () {
-                console.log("popup closed");
+            modalInstance.result.then(function (calledOnce) {
+                if(calledOnce)
+                    employee.newNotification = false;
+                console.log("popup closed",calledOnce);                
             });
         };
 

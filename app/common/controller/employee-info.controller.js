@@ -4,6 +4,7 @@
 
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.calledOnce = false;
         $rootScope.maskLoading();
         ctrl.employeeId = employeeId;
         EmployeeDAO.get({id: employeeId}).then(function (res) {
@@ -14,8 +15,17 @@
             $rootScope.unmaskLoading();
         });
         
+        ctrl.readNotes = function (isProfile) {
+            if(!isProfile && !ctrl.calledOnce){
+                ctrl.calledOnce = true;
+                EmployeeDAO.readNotes({userId: employeeId}).then(function (res) {
+                    console.log("read documents", res);
+                });
+            }            
+        };
+        
         ctrl.close = function () {
-            $modalInstance.close();
+            $modalInstance.close(ctrl.calledOnce);
         };
     }
     ;

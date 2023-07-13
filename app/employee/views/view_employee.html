@@ -1,4 +1,3 @@
-
 <div class="page-body"> <!--TOP BAR MENU PANEL START -->
 
     <!--PAGE TITLE START -->
@@ -87,7 +86,7 @@
                                                     total-items="totalRecords"
                                                     current-page="viewEmployee.searchParams.pageNo">
                                                     <th> 
-                                                        <div class="user_panel" ng-click="viewEmployee.openEditModal(emp.id)" style="cursor: pointer">
+                                                        <div class="user_panel" ng-click="viewEmployee.openEditModal(emp)" style="cursor: pointer">
                                                             <div ng-if="emp.profileImage != null && emp.profileImage != ''" class="user_img"> 
                                                                 <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.profileImage != null && emp.profileImage != '') ? (amazonPublicUrl + viewEmployee.companyCode + '/' + emp.profileImage) : ('assets/images/user-5.png')}}"> 
                                                                 <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
@@ -113,7 +112,7 @@
                                                             <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('ACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')" tooltip="Deactivate"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_EMPLOYEE')" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.employee-calendar({id: emp.id})" ng-if="hasAccess('VIEW_EMPLOYEE_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                            <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="viewEmployee.openNotesModal(emp.id)" tooltip="Notes"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="emp.newNotification=false;viewEmployee.openNotesModal(emp.id)" tooltip="Notes" ng-class="{'has-newNotification':emp.newNotification}"><span class="ed_b"></span></a>
                                                             <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewEmployee.openSettingsModal(emp.id)" tooltip="Employee Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && emp.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
                                                     </td>

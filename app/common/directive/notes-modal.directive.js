@@ -10,7 +10,8 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
             hasRetrieve: "=?",
             canDelete: "=?",
             canEdit: "=?",
-            type:'=?'
+            type:'=?',
+            readNotes:'=?'
         },
         link: function (scope) {
             var FeatureDAO;
@@ -20,6 +21,12 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                 FeatureDAO = EmployeeDAO;
             }
             
+            function readNotes() {
+                FeatureDAO.readNotes({userId: scope.userId}).then(function (res) {
+                  console.log("read documents",res);
+                });
+            }
+            
             function initData() {
                 scope.notes = [];
                 scope.allLoaded = false;
@@ -27,6 +34,8 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                 scope.searchParams = {userId: scope.userId, pageNo: 1, limit: 10, action: scope.userId, subAction: 'notes'};
                 if (scope.hasRetrieve) {
                     scope.rerenderDataTable();
+                    if(scope.readNotes)
+                        readNotes();
                 } else {
                     $rootScope.unmaskLoading();
                 }

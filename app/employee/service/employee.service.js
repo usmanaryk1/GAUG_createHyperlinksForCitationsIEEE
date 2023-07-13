@@ -102,6 +102,9 @@
                 params: {
                     action: 'offset'
                 }
+            },
+            readNotes: {
+                method: 'PUT'
             }
         });
         return {
@@ -169,6 +172,9 @@
             },
             saveSettings: function (data) {
                 return api.saveSettings(data).$promise;
+            },
+            readNotes: function (params) {
+                return api.readNotes({action: params.userId, subAction: 'notes', subAction1: 'read'},{}).$promise;
             }
         };
     };
