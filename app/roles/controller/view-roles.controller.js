@@ -43,7 +43,7 @@
 
         function retrieveRolesData() {
 
-            RoleDAO.retrieveAll({status:'all',featuresRequired:true}).then(function (res) {
+            RoleDAO.retrieveAll({status:'all',featuresRequired:true}).then(function (roles) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -51,7 +51,10 @@
                     }
                 }); // showLoadingBar
 
-                ctrl.roleList = res;
+                _.each(roles,function(role){
+                    role.featuresArray = role.features.split(',');
+                    ctrl.roleList.push(role);
+                });
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve users.");
                 showLoadingBar({

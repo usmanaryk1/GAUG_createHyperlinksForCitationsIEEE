@@ -775,6 +775,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'ViewRolesCtrl as viewRole',
                 data: {
                     feature: 'VIEW_ROLE'
+                },
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.select2,
+                        ]);
+                    }
                 }
             }).
             state('admin.caretype-list', {
