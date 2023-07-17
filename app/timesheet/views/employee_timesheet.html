@@ -19,10 +19,10 @@
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (amazonPublicUrl + empTimesheet.companyCode + '/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
                                         <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
                                     </div>
-                                  
+
                                 </div>
                                 <div class='col-sm-3'>
-                                  <div class="user_av_hd">
+                                    <div class="user_av_hd">
                                         <h1>{{empTimesheet.selectedEmployee.lName + ", " + empTimesheet.selectedEmployee.fName + " " + empTimesheet.selectedEmployee.middleInitial}}</h1>
                                         <p>{{positions[empTimesheet.selectedEmployee.position]}}</p>
                                     </div>
@@ -114,7 +114,8 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
                                     <button type="submit" class="btn btn-info green_bt pull-right"  ng-click="empTimesheet.selectEmployee(empTimesheet.emp);
-                                        empTimesheet.filterTimesheet();empTimesheet.formSubmitted=true" style="width:auto;">Review</button>
+                                        empTimesheet.filterTimesheet();
+                                        empTimesheet.formSubmitted = true" style="width:auto;">Review</button>
                                     <a href="#/app/manual_punch{{empTimesheet.searchParams.employeeId==null?'':'/employee/'+empTimesheet.searchParams.employeeId+'?from='+empTimesheet.searchParams.startDate+'&to='+empTimesheet.searchParams.endDate}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="empTimesheet.resetFilters()">
                                         Reset Filters
@@ -150,18 +151,24 @@
                                                 {{timesheet.roundedPunchInTime|date :timeFormat}}
                                             </td>
                                             <td>
-                                                <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
-                                                {{timesheet.roundedPunchOutTime|date :timeFormat}}
+                                                <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
+                                                    <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
+                                                    {{timesheet.roundedPunchOutTime|date :timeFormat}}
+                                                </span>
+                                                <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                             </td>
                                             <td>
-                                                {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
+                                                <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
+                                                    {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
+                                                </span>
+                                                <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>N/A</span>
                                             </td>
                                             <td>
                                                 {{timesheet.patientId.fName + " " + timesheet.patientId.lName}}
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:170px;">
-                                                    <a ng-if="timesheet.isEdited == true && empTimesheet.selectedEmployee.status!='i'" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}&from={{empTimesheet.searchParams.startDate}}&to={{empTimesheet.searchParams.endDate}}"  tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true && empTimesheet.selectedEmployee.status != 'i'" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?empId={{empTimesheet.selectedEmployee.id}}&from={{empTimesheet.searchParams.startDate}}&to={{empTimesheet.searchParams.endDate}}"  tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="empTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-search view_task_button" href="" ng-click="empTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>

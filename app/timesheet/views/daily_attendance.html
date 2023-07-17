@@ -150,8 +150,11 @@
                                         {{timesheet.roundedPunchInTime|date :timeFormat}}
                                     </td>
                                     <td>
-                                        <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
-                                        {{timesheet.roundedPunchOutTime|date :timeFormat}}
+                                        <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
+                                            <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
+                                            {{timesheet.roundedPunchOutTime|date :timeFormat}}
+                                        </span>
+                                        <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                     </td>
                                     <td>
                                         <div style="float:left; min-width:100px;">

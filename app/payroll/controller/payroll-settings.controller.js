@@ -10,6 +10,7 @@
                 if (res != null) {
                     ctrl.payrollObj = res;
                     ctrl.payrollObj.companyCode = ontimetest.company_code;
+                    ctrl.retrievedHolidays = angular.copy(res.holidays);
                 }
 //                if (!ctrl.payrollObj.payrollFrequency || ctrl.payrollObj.payrollFrequency == null) {
 //                    ctrl.payrollObj.payrollFrequency = '1W';
@@ -73,8 +74,17 @@
             if ($('#payroll_settings_form')[0].checkValidity() && ctrl.payrollObj.holidays != null && ctrl.payrollObj.holidays.length > 0) {
                 $rootScope.maskLoading();
                 ctrl.payrollObj.holidays = angular.copy(ctrl.payrollObj.holidays);
+                var holidaysToSave = angular.copy(ctrl.payrollObj.holidays);
+                angular.forEach(holidaysToSave, function(holiday, index) {
+                    if (holiday.holidayDate == null) {
+//                        ctrl.payrollObj.holidays[indexOfHoliday(holiday, ctrl.payrollObj.holidays)] = ctrl.retrievedHolidays[indexOfHoliday(holiday, ctrl.retrievedHolidays)];
+                        holidaysToSave[index] = ctrl.retrievedHolidays[indexOfHoliday(holiday, ctrl.retrievedHolidays)];
+                    }
+                });
+                ctrl.payrollObj.holidays = holidaysToSave;
                 PayrollDAO.updateSettings(ctrl.payrollObj).then(function(res) {
                     ctrl.payrollObj = res;
+                    ctrl.retrievedHolidays = angular.copy(res.holidays);
                     console.log(res);
                     toastr.success("Payroll settings saved.");
                 }).catch(function() {
@@ -87,9 +97,17 @@
         ;
         ctrl.setHolidayManually = function() {
             if (ctrl.payrollObj.holidays != null && ctrl.payrollObj.holidays.length > 0) {
-                angular.forEach(ctrl.payrollObj.holidays, function(holiday) {
+                var holidaysToSave = angular.copy(ctrl.payrollObj.holidays);
+                angular.forEach(holidaysToSave, function(holiday, index) {
+                    if (holiday.holidayDate == null) {
+//                        ctrl.payrollObj.holidays[indexOfHoliday(holiday, ctrl.payrollObj.holidays)] = ctrl.retrievedHolidays[indexOfHoliday(holiday, ctrl.retrievedHolidays)];
+                        holidaysToSave[index] = ctrl.retrievedHolidays[indexOfHoliday(holiday, ctrl.retrievedHolidays)];
+                    }
+                });
+                $(".ms-selection").find("span").css("color", "black");
+                angular.forEach(holidaysToSave, function(holiday) {
                     if (holiday.isRepeatAnnually == false) {
-                        $(".ms-selection").find("span:contains('" + holiday.name + "')").css("color", "red");
+                        $(".ms-selection").find("span:contains(" + holiday.name + ")").css("color", "red");
                     }
                 });
             }
@@ -131,19 +149,19 @@
             };
 
             $rootScope.holidayRateModal.cancel = function() {
-                ctrl.payrollObj.holidays.splice(indexOfHoliday(ctrl.newSelectedRate[0]), 1);
+                ctrl.payrollObj.holidays.splice(indexOfHoliday(ctrl.newSelectedRate[0], ctrl.payrollObj.holidays), 1);
                 $timeout(function() {
                     $("#multi-select").multiSelect('refresh');
-                    ctrl.setHolidayManually();
+                        ctrl.setHolidayManually();
                 });
                 $rootScope.holidayRateModal.close();
             };
 
         };
 
-        var indexOfHoliday = function(holiday) {
-            for (var i = 0; i < ctrl.payrollObj.holidays.length; i++) {
-                if (ctrl.payrollObj.holidays[i].name == holiday.name) {
+        var indexOfHoliday = function(holiday, holidays) {
+            for (var i = 0; i < holidays.length; i++) {
+                if (holidays[i].name == holiday.name) {
                     return i;
                 }
             }
@@ -171,6 +189,7 @@
                 }
                 ctrl.newSelectedRate[0].isRepeatAnnually = true;
                 ctrl.openModal('modal-5', 'md', false);
+                ctrl.setHolidayManually();
             }
         });
         ctrl.initSettings();
