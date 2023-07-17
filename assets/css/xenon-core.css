@@ -33,7 +33,7 @@
     filter: alpha(opacity=0);
     -webkit-opacity: 0;
     -moz-opacity: 0;
-    opacity: 0;
+    opacity: 0.5;
     -webkit-transition: background-color .2s linear, opacity .2s linear;
     -moz-transition: background-color .2s linear, opacity .2s linear;
     -o-transition: background-color .2s linear, opacity .2s linear;
@@ -76,7 +76,7 @@
 .ps-container .ps-scrollbar-y {
     position: absolute;
     right: 0;
-    width: 5px;
+    width: 10px;
     background-color: #aaa;
     -webkit-transition: background-color .2s linear;
     -moz-transition: background-color .2s linear;
@@ -87,7 +87,7 @@
     font-size: 0
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y, .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-    background-color: #FAFAFA
+    /*background-color: #FAFAFA*/
 }
 .ps-container.ie .ps-scrollbar-x, .ps-container.ie .ps-scrollbar-y {
     visibility: hidden
