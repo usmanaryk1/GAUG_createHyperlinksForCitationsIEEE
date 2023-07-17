@@ -1239,6 +1239,16 @@ angular.module('xenon.directives', []).
                             {
                                 return;
                             }
+                            if(attrs.zeroallowed!== undefined && attrs.zeroallowed.toString()==="false"){
+                                if ((newValue != null)) {
+                                    transformedNewValue =
+                                            newValue.toString().replace('0', '');
+                                    if (newValue !== transformedNewValue) {
+                                        model.assign(scope,
+                                                transformedNewValue);
+                                    }
+                                }
+                            }
                             if ((arr.length === 2 && newValue === '-.') &&
                                     ((attrs.decimalallowed !== undefined &&
                                             attrs.decimalallowed.toString() === "true"))) {
