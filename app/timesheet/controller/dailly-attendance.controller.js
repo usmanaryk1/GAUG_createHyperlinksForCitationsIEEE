@@ -5,6 +5,7 @@
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
+        ctrl.companyCode = ontimetest.company_code;
         ctrl.changeViewRecords = function() {
             ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
             ctrl.datatableObj.fnDraw();
