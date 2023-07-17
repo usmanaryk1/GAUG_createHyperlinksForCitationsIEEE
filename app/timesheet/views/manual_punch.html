@@ -61,15 +61,15 @@
                             </label>
                             <div class="col-sm-9" >
                                 <script type="text/javascript">
-                                            jQuery(document).ready(function($)
+                                            jQuery(document).ready(function ($)
                                     {
-                                        setTimeout(function() {
+                                        setTimeout(function () {
                                             $("#sboxit-1").select2({
 //                                                        minimumResultsForSearch: -1,
                                                 placeholder: 'Select Patient...',
 //                                                        minimumInputLength: 1,
 //                                                        placeholder: 'Search',
-                                            }).on('select2-open', function()
+                                            }).on('select2-open', function ()
                                             {
                                                 // Adding Custom Scrollbar
                                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
@@ -95,15 +95,15 @@
                             </label>
                             <div class="col-sm-9">
                                 <script type="text/javascript" ng-if="manualPunch.attendanceObj.isManualPunch">
-                                    jQuery(document).ready(function($)
+                                    jQuery(document).ready(function ($)
                                     {
-                                        setTimeout(function() {
+                                        setTimeout(function () {
                                             $("#sboxit-2").select2({
 //                                                        minimumResultsForSearch: -1,
                                                 placeholder: 'Select Employee...',
 //                                                        minimumInputLength: 1,
 //                                                        placeholder: 'Search',
-                                            }).on('select2-open', function()
+                                            }).on('select2-open', function ()
                                             {
                                                 // Adding Custom Scrollbar
                                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
@@ -180,15 +180,15 @@
                             </label>
                             <div class="col-sm-9">
                                 <script type="text/javascript">
-                                    jQuery(document).ready(function($)
+                                    jQuery(document).ready(function ($)
                                     {
                                         $("#tasks").multiSelect({
-                                            afterInit: function()
+                                            afterInit: function ()
                                             {
                                                 // Add alternative scrollbar to list
                                                 this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
                                             },
-                                            afterSelect: function()
+                                            afterSelect: function ()
                                             {
                                                 // Update scrollbar size
                                                 this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
@@ -200,6 +200,9 @@
                                         ng-model="manualPunch.attendanceObj.companyTaskIds"
                                         ng-options="ct.id as ct.task for ct in manualPunch.taskList  | orderBy:'task'">
                                 </select>
+                                <div ng-show="manualPunch.tasksErrorMsg !== null && manualPunch.formSubmitted">
+                                    <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>{{manualPunch.tasksErrorMsg}}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group-separator">

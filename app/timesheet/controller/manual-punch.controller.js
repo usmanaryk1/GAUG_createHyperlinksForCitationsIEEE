@@ -7,6 +7,8 @@
         var timeFormat = 'hh:mm:ss a';
         ctrl.editTimesheet = null;
         ctrl.patientMandatory = true;
+        ctrl.tasksErrorMsg = null;
+        ctrl.selectedPosition = '';
         ctrl.resetManualPunch = function () {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
             if (ctrl.editTimesheet) {
@@ -105,6 +107,7 @@
                 if (reset) {
                     ctrl.attendanceObj.companyTaskIds = [];
                 }
+                ctrl.selectedPosition = res.position;
                 $timeout(function () {
                     $('#tasks').multiSelect('refresh');
                 }, 100);
@@ -179,7 +182,26 @@
         };
         ctrl.saveManualAttendance = function () {
             ctrl.formSubmitted = true;
-            if ($("#manual_punch_form")[0].checkValidity() && (ctrl.attendanceObj.patientId != null || !ctrl.patientMandatory) && ctrl.attendanceObj.employeeId != null) {
+            if (ctrl.attendanceObj.employeeId && ctrl.attendanceObj.employeeId !== null) {
+                if (ctrl.attendanceObj.employeeId.position === 'pc') {
+                    if (ctrl.attendanceObj.companyTaskIds.length < 5 && ctrl.attendanceObj.companyTaskIds.length !== ctrl.taskList.length) {
+                        ctrl.tasksErrorMsg = 'Please select atleast 5 tasks.';
+                    } else {
+                        ctrl.tasksErrorMsg = null;
+                    }
+                } else {
+                    if (ctrl.attendanceObj.companyTaskIds.length < 1 && ctrl.attendanceObj.companyTaskIds.length !== ctrl.taskList.length) {
+                        ctrl.tasksErrorMsg = 'Please select atleast one task.';
+                    } else {
+                        ctrl.tasksErrorMsg = null;
+                    }
+                }
+            }else{
+                ctrl.tasksErrorMsg = null;
+            }
+            if ($("#manual_punch_form")[0].checkValidity() &&
+                    (ctrl.attendanceObj.patientId != null || !ctrl.patientMandatory) &&
+                    ctrl.attendanceObj.employeeId != null && ctrl.tasksErrorMsg == null) {
                 $rootScope.maskLoading();
                 var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
                 if (attendanceObjToSave.isMissedPunch === false) {
