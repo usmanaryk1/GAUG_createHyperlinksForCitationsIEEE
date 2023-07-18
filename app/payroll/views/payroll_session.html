@@ -20,53 +20,53 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <form class="form-horizontal" role="form">
-                        <div class="row">
-                            <div class="col-sm-12 no-padding">
+                        <div class="col-sm-12 pad0">
 
-                                <div class="form-group col-sm-5 pull-left">
-                                    <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
-                                    <div style="width:70px; float:left">
-                                        <select class="form-control" ng-model="payrollSession.viewRecords" ng-change="payrollSession.changeViewRecords()">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                    </div>
+                            <div class="form-group col-sm-5 pull-left">
+                                <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                                <div style="width:70px; float:left">
+                                    <select class="form-control" ng-model="payrollSession.viewRecords" ng-change="payrollSession.changeViewRecords()">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
                                 </div>
-                                <div ng-if="payrollSession.processdMode" class="col-sm-7 no-padding">
-                                    <div class="pull-right text-right">
-                                        Payroll Batch Number: {{payrollSession.processedSessionObj.id}}
-                                    </div>
+                            </div>
+                            <div class="pull-right col-sm-7 pad0" ng-if="payrollSession.processdMode">
+                                <div >
+                                    <a style="margin-left: 10px" ng-href="{{serverPath + 'payrolls/sessions/' + payrollSession.processedSessionObj.id + '/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Download CSV</a>
+                                </div>
+                                <div class="text-right">
+                                    Payroll Batch Number: {{payrollSession.processedSessionObj.id}}
                                     <br/>
-                                    <div class="pull-right text-right">
-                                        Pay Period: {{payrollSession.processedSessionObj.sessionStartDate|date :dateFormat}} - {{payrollSession.processedSessionObj.sessionEndDate|date :dateFormat}}
-                                    </div>
+                                    Pay Period: {{payrollSession.processedSessionObj.sessionStartDate|date :dateFormat}} - {{payrollSession.processedSessionObj.sessionEndDate|date :dateFormat}}
                                 </div>
-                                <div class="col-sm-7 pull-right wd_full" ng-if="!payrollSession.processdMode">
-                                    <div class="col-sm-6 pad0 wd_full">
-                                        <div class="form-group">
-                                            <label for="field-93" class="col-sm-3 control-label">From</label>
-                                            <div class="col-sm-9">
-                                                <div class="input-group" ng-if='payrollSession.searchParams.toDate!=null'>
-                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
-                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                </div>
-                                                <div class="input-group" ng-if='payrollSession.searchParams.toDate==null'>
-                                                    <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate"  max-date='todayDate'/>
-                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                </div>
+
+                            </div>
+                            <div class="col-sm-7 pull-right wd_full" ng-if="!payrollSession.processdMode">
+                                <div class="col-sm-6 pad0 wd_full">
+                                    <div class="form-group">
+                                        <label for="field-93" class="col-sm-3 control-label">From</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group" ng-if='payrollSession.searchParams.toDate != null'>
+                                                <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate" max-date="payrollSession.searchParams.toDate"/>
+                                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                            </div>
+                                            <div class="input-group" ng-if='payrollSession.searchParams.toDate == null'>
+                                                <input type="text" id="field-93" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.fromDate"  max-date='todayDate'/>
+                                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 pad0">
-                                        <div class="form-group">
-                                            <label for="field-94" class="col-sm-3 control-label">To</label>
-                                            <div class="col-sm-9">
-                                                <div class="input-group">
-                                                    <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate" max-date='todayDate'/>
-                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                </div>
+                                </div>
+                                <div class="col-sm-6 pad0">
+                                    <div class="form-group">
+                                        <label for="field-94" class="col-sm-3 control-label">To</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" id="field-94" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="payrollSession.searchParams.toDate" min-date="payrollSession.searchParams.fromDate" max-date='todayDate'/>
+                                                <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                             </div>
                                         </div>
                                     </div>
@@ -75,16 +75,14 @@
                         </div>
                         <div class="col-sm-12 pad0">
                             <div class="pull-right" ng-if="!payrollSession.processdMode">
-                                <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
+                                <button ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" type="button" class="btn btn-info btn-single process_bt pull-right" ng-click="payrollSession.processSessions()">Process</button>
                                 <button type="button" class="btn btn-info green_bt  pull-right" ng-click="payrollSession.filterSessions()">Review</button>
-                                <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage==null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null,null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
+                                <a ng-if="payrollSession.criteriaSelected && payrollSession.dateMessage == null" href="javascript:;" ng-click="payrollSession.showAddEmployeeModal(null, null)" class="btn btn-info edit_bt  pull-right">Add Employee</a>
                                 <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="payrollSession.resetFilters()">
                                     Reset Filters
                                 </button>
                             </div>
-<!--                            <div class="pull-right" ng-if="payrollSession.processdMode">
-                                <a ng-href="{{serverPath + 'payrolls/sessions/' + payrollSession.processedSessionObj.id + '/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Print</a>
-                            </div>-->
+
                         </div>
                     </form>
                 </div>
@@ -135,22 +133,22 @@
                                 </thead>
                                 <tbody>
                                     <tr style="cursor: pointer" ng-repeat="session in payrollSession.payrollSessions">
-                                        <th ng-click="payrollSession.showAddEmployeeModal(session,$index)">
+                                        <th ng-click="payrollSession.showAddEmployeeModal(session, $index)">
                                             <span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span>
                                             <span class="fa-calendar" tooltip="Missed Punch Affected" ng-if="session.missedPunchAffected"></span> 
-                                             {{payrollSession.empMap[session.employeeId].lName}}</th>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{payrollSession.empMap[session.employeeId].fName}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)"> {{session.totalHours| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)"> ${{session.grossPay| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.hour1 == null ? 0 : session.hour1| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.rate2 == null ? 0 : session.rate2| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.hour2 == null ? 0 : session.hour2| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.otRate == null ? 0 : session.otRate| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
-                                        <td ng-click="payrollSession.showAddEmployeeModal(session,$index)">${{session.salary == null ? 0 : session.salary| number:2}}</td>
+                                            {{payrollSession.empMap[session.employeeId].lName}}</th>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">{{payrollSession.empMap[session.employeeId].fName}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)"> {{session.totalHours| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)"> ${{session.grossPay| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">${{session.rate1 == null ? 0 : session.rate1| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">{{session.hour1 == null ? 0 : session.hour1| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">${{session.rate2 == null ? 0 : session.rate2| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">{{session.hour2 == null ? 0 : session.hour2| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">${{session.otRate == null ? 0 : session.otRate| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">{{session.otHours == null ? 0 : session.otHours| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">${{session.hdRate == null ? 0 : session.hdRate| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">{{session.hdHours == null ? 0 : session.hdHours| number:2}}</td>
+                                        <td ng-click="payrollSession.showAddEmployeeModal(session, $index)">${{session.salary == null ? 0 : session.salary| number:2}}</td>
                                         <!--                                        <td>{{session.totalHours}}</td>
                                                                                 <td>{{session.1Earnings}}</td>-->
                                         <!--                                        <td>37</td>
@@ -164,7 +162,7 @@
                                                                                 <td>21</td>
                                                                                 <td>21</td>
                                                                                 <td>21</td>-->
-                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session)" ng-if="!payrollSession.processdMode || (session.notes!=null && session.notes!='')" class="fa fa-file-text-o file btn" ></a> 
+                                        <td><a href="javascript:;" ng-click="payrollSession.editNotes(session)" ng-if="!payrollSession.processdMode || (session.notes != null && session.notes != '')" class="fa fa-file-text-o file btn" ></a> 
                                         </td>
                                         <td>
                                             <div class="center">
@@ -184,7 +182,7 @@
                             <div ng-if="payrollSession.criteriaSelected == false && !payrollSession.processdMode && payrollSession.processClicked">
                                 Please review payrolls to process sessions.
                             </div>
-                            <div ng-if='payrollSession.dateMessage!=null'  style='color: #cc3f44;'>{{payrollSession.dateMessage}}<br/><br/></div>
+                            <div ng-if='payrollSession.dateMessage != null'  style='color: #cc3f44;'>{{payrollSession.dateMessage}}<br/><br/></div>
                         </div>
                         <div ng-if="payrollSession.processdMode">
                             <div class="col-sm-6">
@@ -196,9 +194,9 @@
                         </div>
                         <script type="text/javascript">
                             // This JavaScript Will Replace Checkboxes in dropdown toggles
-                            jQuery(document).ready(function($)
+                            jQuery(document).ready(function ($)
                             {
-                                setTimeout(function()
+                                setTimeout(function ()
                                 {
                                     $(".checkbox-row input").addClass('cbr');
                                     cbr_replace();
@@ -330,7 +328,7 @@
                             <input class="form-control" id="hdHours" name="hdHours" type="text" ng-model="payrollSession.employeeModalObj.hdHours" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                       
                     </div>
-                      <div class="form-group">
+                    <div class="form-group">
                         <label class="col-sm-3 control-label" for="taxFrequency">
                             Tax frequency
                         </label>
