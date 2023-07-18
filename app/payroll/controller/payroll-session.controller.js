@@ -202,7 +202,7 @@
         };
 
         ctrl.showAddEmployeeModal = function(empObj, index) {
-            if ((empObj == null || empObj.manuallyAdded) && ctrl.processdMode===false) {
+            if ((empObj == null || empObj.manuallyAdded) && ctrl.processdMode === false) {
                 $('#modal-7').modal('show', {backdrop: 'static'});
                 ctrl.addEmployeeList = [];
 //            var empWithSessions = [];
@@ -323,7 +323,22 @@
         }).then(function() {
             $rootScope.unmaskLoading();
         });
+        ctrl.openDeleteModal = function(employee, modal_id, index)
+        {
+            $rootScope.deleteEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: null,
+                backdrop: true,
+                keyboard: false
+            });
+            $rootScope.deleteEmployeeModel.employee = employee;
+            $rootScope.deleteEmployeeModel.delete = function(employee) {
+                ctrl.payrollSessions.splice(index,1);
+                ctrl.rerenderDataTable();
+                $rootScope.deleteEmployeeModel.close();
+            };
 
+        };
 
     }
     ;
