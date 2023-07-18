@@ -52,7 +52,7 @@
                 }); // showLoadingBar
 
                 _.each(roles,function(role){
-                    role.featuresArray = role.features.split(',');
+                    role.featuresArray = role.features ? role.features.split(',') : [];
                     ctrl.roleList.push(role);
                 });
             }).catch(function (data, status) {
@@ -83,14 +83,13 @@
                 $rootScope.roleModel.title = 'Add New Role';
                 $rootScope.roleModel.role = {};
                 $rootScope.roleModel.role.unauthorisedFeatures = [];
-                $rootScope.roleModel.role.adminAccess = 'false';                
                 $rootScope.roleModel.role.orgCode = ontime_data.company_code;
                 $rootScope.roleModel.role.status = "a";
             } else {
                 $rootScope.roleModel.title = 'Edit Role';
                 delete roleCopy.features;
                 $rootScope.roleModel.role = roleCopy;                
-                if (roleCopy.featureIds == undefined) {
+                if (!roleCopy.featureIds) {
                     $rootScope.roleModel.role.featureIds = [];
                     /* To Prevent From Removing UnAuthorised features*/
                         $rootScope.roleModel.role.unauthorisedFeatures = [];
@@ -123,7 +122,7 @@
 
         function save(role) {
             /* To Prevent From Removing UnAuthorised features*/
-                role.featureIds = _.uniq(_.concat(role.unauthorisedFeatures,role.featureIds));
+                role.featureIds = role.featureIds ? _.uniq(_.concat(role.unauthorisedFeatures,role.featureIds)) : [];
                 delete role.unauthorisedFeatures;
             /* To Prevent From Removing UnAuthorised features*/
             var save; 
