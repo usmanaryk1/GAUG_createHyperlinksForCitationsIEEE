@@ -3,11 +3,11 @@
     position: absolute;
     top:0;
     left:0;
-    /*-moz-opacity: 0.5;*/
-    /*opacity: 0.5;*/
-    /*filter: alpha(opacity=50);*/
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
     /*background-color: #CCC;*/
-    background:"#2c2e2f"
+    /*background:"#2c2e2f"*/
     width: 100%;
     height: 100%;
     zoom: 1;
@@ -93,4 +93,9 @@
 .link:hover {
   background: rgba(0,0,0,0.04);
   color: #6c6;
+}
+.page-loading-overlay{
+    -moz-opacity: 0.4;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
 }
