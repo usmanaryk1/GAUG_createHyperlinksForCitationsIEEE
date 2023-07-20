@@ -5,7 +5,7 @@
         <h4 class="modal-title">
             <!--Display dispatch button for open cases-->
             <i ng-if="hasAccess('SEARCH_EMPLOYEE') && patientPopup.isOpenCase && patientPopup.data.dispatchStatus == 'active' && patientPopup.data.dispatchId != null" ui-sref="app.dispatch-info({id:patientPopup.data.dispatchId})" tooltip="Go To Dispatch" class="fa fa-wifi pull-right pointer" style='margin-top:20px;margin-right:-12px'></i>
-            <button ng-if="hasAccess('SEARCH_EMPLOYEE') && !patientPopup.isPastEvent && patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
+            <button ng-if="hasAccess('SEARCH_EMPLOYEE') && !patientPopup.data.isPastEvent && patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
             <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
             <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
         </h4>
@@ -226,13 +226,13 @@
                             Single
                         </label>
                     </div>
-                    <div class="col-sm-3" ng-if="!patientPopup.data.isEdited1">
+                    <div class="col-sm-3" ng-if="!patientPopup.data.isPastEvent">
                         <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
                             <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="DOW">
                             Day Of Week
                         </label>
                     </div>
-                    <div class="col-sm-3" ng-if="!patientPopup.data.isEdited1">
+                    <div class="col-sm-3" ng-if="!patientPopup.data.isPastEvent">
                         <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
                             <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SEQ">
                             Sequence
@@ -241,9 +241,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openPasswordModal('delete')">Delete</button>
+                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openEventModal('delete')">Delete</button>
                 <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
-                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openPasswordModal('edit');">Save changes</button>
+                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openEventModal('edit');">Save changes</button>
             </div>
         </form>
     </div>
@@ -350,9 +350,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openPasswordModal('delete')">Delete</button>
+                <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.openEventModal('delete')">Delete</button>
                 <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
-                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openPasswordModal('edit');">Save changes</button>
+                <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.openEventModal('edit');">Save changes</button>
             </div>
         </form>
     </div>

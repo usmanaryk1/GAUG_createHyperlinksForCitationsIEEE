@@ -1314,28 +1314,6 @@
             $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
             $formService.resetRadios();
         };
-
-        ctrl.openPasswordModal = function (index)
-        {
-            var modalInstance = $modal.open({
-                templateUrl: appHelper.viewTemplatePath('common', 'password_modal'),
-                size: 'md',
-                backdrop: 'static',
-                keyboard: false,
-                controller: 'PasswordModalCtrl as passwordModal',
-                resolve: {
-                    password: function () {
-                        return ontime_data.pastEventAuthorizationPassword;
-                    }
-                }
-            });
-            modalInstance.result.then(function (data) {
-                if (data != null) {
-                    ctrl.editAuthorizationDocument(index);
-                }
-            }).catch(function () {
-            });
-        };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
 })();

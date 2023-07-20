@@ -645,9 +645,6 @@
                     ctrl.tab1DataInit();
                 }
             }, 100);
-            if (!$state.params.id || $state.params.id == '') {
-                ctrl.openPasswordModal();
-            }
         };
 
         ctrl.applicationUploadFile = {
@@ -1231,27 +1228,6 @@
                 ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, z: true, t: true, b: true, l: true};
                 ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
             }
-        };
-        ctrl.openPasswordModal = function (index)
-        {
-            var modalInstance = $modal.open({
-                templateUrl: appHelper.viewTemplatePath('common', 'password_modal'),
-                size: 'md',
-                backdrop: 'static',
-                keyboard: false,
-                controller: 'PasswordModalCtrl as passwordModal',
-                resolve: {
-                    password: function () {
-                        return ontime_data.hrPassword;
-                    }
-                }
-            });
-            modalInstance.result.then(function (data) {
-                if (data == null) {
-                    $state.go('app.employee-list', {'status':'all'});
-                }
-            }).catch(function () {
-            });
         };
 
         if ($state.params.id && $state.params.id !== '') {

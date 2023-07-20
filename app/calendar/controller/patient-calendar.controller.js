@@ -315,33 +315,18 @@
                 });
             }
         };
-        ctrl.passwordModalLogic = function (action, data, modal_id, modal_size, modal_backdrop) {
-            $rootScope.passwordPopup = $modal.open({
-                templateUrl: 'password-modal',
-                size: 'md',
-                backdrop: 'static',
-                keyboard: false
-            });
-            $rootScope.passwordPopup.save = function () {
-                if ($('#popuppassword')[0].checkValidity()) {
-                    if ($rootScope.passwordPopup.password != ontime_data.pastEventAuthorizationPassword) {
-                        toastr.error('Authorization Failed');
-                        $rootScope.passwordPopup.closePopup();
-                    } else {
-                        if (action === 'delete') {
-                            $rootScope.patientPopup.deleteSchedule();
-                        } else if (action === 'edit') {
-                            ctrl.savePatientPopupChanges($rootScope.patientPopup.data, true);
-                        } else if (action === 'add') {
-                            $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
-                        }
-                        $rootScope.passwordPopup.closePopup();
-                    }
+        ctrl.actionBasedLogic = function (action, data, modal_id, modal_size, modal_backdrop) {
+            if ($rootScope.hasAccess('EDIT_PAST_SCHEDULE')) {
+                if (action === 'delete') {
+                    $rootScope.patientPopup.deleteSchedule();
+                } else if (action === 'edit') {
+                    ctrl.savePatientPopupChanges($rootScope.patientPopup.data, true);
+                } else if (action === 'add') {
+                    $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
                 }
-            };
-            $rootScope.passwordPopup.closePopup = function () {
-                $rootScope.passwordPopup.close();
-            };
+            } else if (action !== 'add') {
+                toastr.error('Not authorized to edit past events.');
+            }
         };
         ctrl.eventClicked = function (eventObj) {
             $rootScope.openModalCalendar1(eventObj, 'calendar-modal', 'lg', 'static');
@@ -350,7 +335,7 @@
         $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
         {
             if (data != null && data.eventType == null && data.askPassword) {
-                ctrl.passwordModalLogic('add', data, modal_id, modal_size, modal_backdrop);
+                ctrl.actionBasedLogic('add', data, modal_id, modal_size, modal_backdrop);
             } else {
                 $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
             }
@@ -397,8 +382,8 @@
                 if (data != null && data.eventType == null) {
                     $rootScope.patientPopup.todayDate = data.startDate;
                 }
-                
-        
+
+
                 $rootScope.patientPopup.isCareTypeExists = function (companyCareTypeId, careTypes) {
                     var careType = true;
                     if (companyCareTypeId && careTypes) {
@@ -408,8 +393,8 @@
                         }
                     }
                     return careType;
-                };                                
-                
+                };
+
                 $rootScope.patientPopup.dispatchClicked = false;
                 $rootScope.patientPopup.positions = ctrl.positions;
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
@@ -433,7 +418,7 @@
                         var a = moment(new Date(data.startDate));
                         var diff = moment().diff(date, 'days');
                         if (diff > 0) { // past date
-                            data.isEdited1 = true;
+                            data.isPastEvent = true;
                         }
                         data.isEdited = true;
                         $rootScope.patientPopup.data = data;
@@ -567,27 +552,23 @@
                     }, 100);
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
                 };
-                $rootScope.patientPopup.openPasswordModal = function (action) {
+                $rootScope.patientPopup.openEventModal = function (action) {
                     $rootScope.patientPopup.action = action;
-                    if (!$rootScope.patientPopup.data.isEdited1) {
+                    if (!$rootScope.patientPopup.data.isPastEvent) {
                         if (action == 'delete') {
                             $rootScope.patientPopup.deleteSchedule();
                         } else {
                             $rootScope.patientPopup.save();
                         }
                     } else {
-                        function open() {
-                            $rootScope.patientPopup.close();
-                            ctrl.passwordModalLogic(action);
-                        }
                         if (action == 'delete') {
-                            open();
+                            ctrl.actionBasedLogic(action);
                         } else {
                             delete $rootScope.patientPopup.response;
                             $rootScope.patientPopup.save1();
                             $timeout(function () {
                                 if ($rootScope.patientPopup.response) {
-                                    open();
+                                    ctrl.actionBasedLogic(action);
                                 }
                             });
                         }
@@ -742,7 +723,7 @@
                                         var diff = moment().diff(a, 'days');
                                         $rootScope.patientPopup.isPastEvent = false;
                                         if (diff > 0) { // past date
-                                            data.isEdited1 = true;
+                                            data.isPastEvent = true;
                                             $rootScope.patientPopup.isPastEvent = true;
                                         }
                                         data.isEdited = true;

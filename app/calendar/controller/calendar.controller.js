@@ -265,33 +265,18 @@
                 }
             });
         };
-        ctrl.passwordModalLogic = function (action, data, modal_id, modal_size, modal_backdrop) {
-            $rootScope.passwordPopup = $modal.open({
-                templateUrl: 'password-modal',
-                size: 'md',
-                backdrop: 'static',
-                keyboard: false
-            });
-            $rootScope.passwordPopup.save = function () {
-                if ($('#popuppassword')[0].checkValidity()) {
-                    if ($rootScope.passwordPopup.password != ontime_data.pastEventAuthorizationPassword) {
-                        toastr.error('Authorization Failed');
-                        $rootScope.passwordPopup.closePopup();
-                    } else {
-                        if (action === 'delete') {
-                            $rootScope.employeePopup.deleteSchedule();
-                        } else if (action === 'edit') {
-                            ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data, true);
-                        } else if (action === 'add') {
-                            $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
-                        }
-                        $rootScope.passwordPopup.closePopup();
-                    }
+        ctrl.actionBasedLogic = function (action, data, modal_id, modal_size, modal_backdrop) {
+            if ($rootScope.hasAccess('EDIT_PAST_SCHEDULE')) {
+                if (action === 'delete') {
+                    $rootScope.employeePopup.deleteSchedule();
+                } else if (action === 'edit') {
+                    ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data, true);
+                } else if (action === 'add') {
+                    $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
                 }
-            };
-            $rootScope.passwordPopup.closePopup = function () {
-                $rootScope.passwordPopup.close();
-            };
+            } else if (action !== 'add') {
+                toastr.error('Not authorized to edit past events.');
+            }
         };
         ctrl.eventClicked = function (eventObj) {
             $rootScope.openModalCalendar1(eventObj, 'calendar-modal', 'lg', 'static');
@@ -300,7 +285,7 @@
         $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
         {
             if (data != null && data.eventType == null && data.askPassword) {
-                ctrl.passwordModalLogic('add', data, modal_id, modal_size, modal_backdrop);
+                ctrl.actionBasedLogic('add', data, modal_id, modal_size, modal_backdrop);
             } else {
                 $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
             }
@@ -524,7 +509,7 @@
                         }, 200);
                     }
                 };
-                $rootScope.employeePopup.openPasswordModal = function (action) {
+                $rootScope.employeePopup.openEventModal = function (action) {
                     $rootScope.employeePopup.action = action;
                     if (!$rootScope.employeePopup.data.isEdited1) {
                         if (action == 'delete') {
@@ -535,8 +520,7 @@
                     } else {
                         function open() {
                             delete $rootScope.employeePopup.availablityDetails;
-                            $rootScope.employeePopup.close();
-                            ctrl.passwordModalLogic(action);
+                            ctrl.actionBasedLogic(action);
                         }
                         if (action == 'delete') {
                             open();

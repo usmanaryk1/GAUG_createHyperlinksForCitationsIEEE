@@ -182,7 +182,7 @@
                                                 </td> 
                                                 <td align="center"><span ng-if="authDocument.startDate != null">{{authDocument.startDate|date:dateFormat}} -</span> {{authDocument.expiryDate|date:dateFormat}}</td> 
                                                 <td align="center">
-                                                    <a class="btn btn-warning btn-sm" ng-click="addPatient.openPasswordModal($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
+                                                    <a class="btn btn-warning btn-sm" ng-if="hasAccess('EDIT_PAST_AUTHORIZATION')"  ng-click="addPatient.editAuthorizationDocument($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
                                                     <span ng-if="authDocument.id === null || authDocument.id === undefined">
                                                         &nbsp;&nbsp;
                                                         <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);" ><em class="fa fa-trash"></em></a>

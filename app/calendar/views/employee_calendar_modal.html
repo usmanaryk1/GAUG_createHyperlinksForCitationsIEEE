@@ -185,9 +185,9 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
+            <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openEventModal('delete')">Delete</button>
             <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-            <button type="submit" class="btn btn-success" ng-click="employeePopup.openPasswordModal('edit');" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)">Save changes</button>
+            <button type="submit" class="btn btn-success" ng-click="employeePopup.openEventModal('edit');" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)">Save changes</button>
         </div>
     </form>
 </div>
@@ -377,9 +377,9 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
+            <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.openEventModal('delete')">Delete</button>
             <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-            <button type="submit" class="btn btn-success" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
+            <button type="submit" class="btn btn-success" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.openEventModal('edit');">Save changes</button>
         </div>
     </form>
 </div>
@@ -497,9 +497,9 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openPasswordModal('delete')">Delete</button>
+            <button type="button" class="btn btn-red" ng-if="!employeePopup.isNew" ng-click="employeePopup.openEventModal('delete')">Delete</button>
             <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
-            <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-disabled="(employeePopup.validHours === false || employeePopup.validHours2 === false || employeePopup.utilizationDateFallsBtw === true) && employeePopup.data.isPaid" ng-click="employeePopup.openPasswordModal('edit');">Save changes</button>
+            <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-disabled="(employeePopup.validHours === false || employeePopup.validHours2 === false || employeePopup.utilizationDateFallsBtw === true) && employeePopup.data.isPaid" ng-click="employeePopup.openEventModal('edit');">Save changes</button>
         </div>
 
     </form>
