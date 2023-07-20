@@ -9,8 +9,7 @@
         ctrl.criteriaSelected = false;
         ctrl.historyList = [];
         ctrl.changeViewRecords = function() {
-            ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
-            ctrl.datatableObj.fnDraw();
+            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
         };
         ctrl.navigateToProcessedPage = function(id) {
             $state.go('app.batch_session', {id: id});

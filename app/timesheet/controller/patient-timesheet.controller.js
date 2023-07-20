@@ -39,8 +39,7 @@
             toastr.error("Failed to retrieve insurance provider list.");
         });
         ctrl.changeViewRecords = function() {
-            ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
-            ctrl.datatableObj.fnDraw();
+            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
         };
         ctrl.resetFilters = function() {
             ctrl.searchParams.startDate = null;

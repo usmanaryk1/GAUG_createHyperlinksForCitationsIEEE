@@ -20,7 +20,7 @@
                                 <div class="form-group col-sm-5 pull-left">
                                     <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
                                     <div style="width:70px; float:left;">
-                                        <select class="form-control" ng-model="payrollHist.viewRecords" ng-change="payrollHist.changeViewRecords()">
+                                        <select class="form-control input-sm" ng-model="payrollHist.viewRecords" ng-change="payrollHist.changeViewRecords()">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -88,7 +88,7 @@
                                 <tr ng-repeat="history in payrollHist.historyList" style='cursor:pointer' ng-click='payrollHist.navigateToProcessedPage(history.id)'>
                                     <th><a href="#app/payroll_session/{{history.id}}">{{history.id}}</a></th>
                                     <td>{{history.dateInserted|date :dateFormat}}</td>
-                                    <td> ${{history.grossPay}}</td>
+                                    <td> ${{history.grossPay| number:2}}</td>
                                     <td>{{history.totalEmployees}}</td>
                                     <td>{{history.totalHours|number:2}}</td>
                                     <td>{{history.sessionStartDate|date :dateFormat}} - {{history.sessionEndDate|date :dateFormat}}</td>

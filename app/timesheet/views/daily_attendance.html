@@ -21,7 +21,7 @@
                             <div class="col-sm-12 pad0">
 
                                 <div class="col-sm-8 pull-right pad0 wd_full">
-                                    <div class="form-group" ng-class="{ 'validate-has-error':dAttendance.searchParams.staffingCordinatorId == null && dAttendance.formSubmitted}">
+                                    <div class="form-group">
                                         <label class="col-sm-3 control-label pad_lf0">Employee Name</label>
                                         <div class="col-sm-9"> 
                                             <!--                                            <script type="text/javascript">
@@ -55,9 +55,9 @@
                                             <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="dAttendance.searchParams.staffingCordinatorId" ng-options='emp.id as (emp.label) for emp in dAttendance.employeeList track by emp.id'>
                                                 <option value="" selected hidden />
                                             </select>
-                                            <div ng-show='dAttendance.searchParams.staffingCordinatorId == null && dAttendance.formSubmitted'>
+<!--                                            <div ng-show='dAttendance.searchParams.staffingCordinatorId == null && dAttendance.formSubmitted'>
                                                 <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Employee Name.</span>
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                 <div class="form-group col-sm-5 pull-left">
                                     <label class="col-sm-4 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
                                     <div style="width:70px; float:left">
-                                        <select class="form-control" ng-model="dAttendance.viewRecords" ng-change="dAttendance.changeViewRecords()">
+                                        <select class="form-control input-sm" ng-model="dAttendance.viewRecords" ng-change="dAttendance.changeViewRecords()">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>

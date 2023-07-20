@@ -7,8 +7,7 @@
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.changeViewRecords = function() {
-            ctrl.datatableObj.fnSettings()._iDisplayLength = ctrl.viewRecords;
-            ctrl.datatableObj.fnDraw();
+            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
         };
         ctrl.resetFilters = function() {
             ctrl.searchParams.startDate = null;
@@ -50,7 +49,7 @@
 //            });
         };
         ctrl.filterTimesheet = function() {
-            if (ctrl.searchParams.staffingCordinatorId && ctrl.searchParams.staffingCordinatorId !== null) {
+//            if (ctrl.searchParams.staffingCordinatorId && ctrl.searchParams.staffingCordinatorId !== null) {
                 ctrl.cordinatorId = ctrl.searchParams.staffingCordinatorId;
                 if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
@@ -67,12 +66,12 @@
                     ctrl.rerenderDataTable();
                 }
 
-            } else {
-                ctrl.cordinatorId = undefined;
-                ctrl.attendanceList = [];
-                ctrl.criteriaSelected = false;
-                ctrl.rerenderDataTable();
-            }
+//            } else {
+//                ctrl.cordinatorId = undefined;
+//                ctrl.attendanceList = [];
+//                ctrl.criteriaSelected = false;
+//                ctrl.rerenderDataTable();
+//            }
 
 //            if (ctrl.searchParams.startDate === "") {
 //                ctrl.searchParams.startDate = null;
