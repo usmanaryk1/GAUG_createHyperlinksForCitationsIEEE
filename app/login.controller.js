@@ -55,12 +55,13 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                             $state.transitionTo(ontimetest.homepage);
                             document.title = ':: Welcome ::';
                             $rootScope.startIdle();
+                            $rootScope.unmaskLoading();
                             // window.location.hash = '#/app/add_patient_tab_1';
                         }
                     }
                 });
                 document.title=":: Welcome ::";
-                $rootScope.unmaskLoading();
+                
                 // Remove any alert
                 $(".errors-container .alert").slideUp('fast');
 
