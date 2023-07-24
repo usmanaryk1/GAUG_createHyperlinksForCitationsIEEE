@@ -121,7 +121,28 @@
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" id="StartDate" 
                                        name="StartDate" type="text" ng-model="addPatient.patient.authorizationStartDate"
-                                       data-validate="required"  data-message-required="Please enter Start Date." max-date="addPatient.patient.authorizationEndDate">
+                                       data-validate="required"  data-message-required="Please enter Start Date." 
+                                       max-date="addPatient.patient.lastDateOfService">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="StartDate">
+                            Last Date of Service
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" id="LastDate" 
+                                       name="LastDate" type="text" ng-model="addPatient.patient.lastDateOfService"
+                                       min-date="addPatient.patient.authorizationStartDate">
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">
