@@ -201,7 +201,7 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-
+            $rootScope.unselectCareTypeModal.careTypeIdMap=ctrl.careTypeIdMap;
             $rootScope.unselectCareTypeModal.confirm = function() {
                 $timeout(function() {
                     ctrl.unselecteModalOpen = false;
@@ -241,6 +241,7 @@
                 if (!ctrl.selecteModalOpen) {
                     ctrl.newDeselectedType = arr_diff(oldValue, newValue);
                     ctrl.openUnselectCareTypeModal('modal-3', 'md', 'static');
+                    $rootScope.unselectCareTypeModal.newDeselectedType=ctrl.newDeselectedType;
                 } else {
                     ctrl.selecteModalOpen = false;
                 }
