@@ -110,9 +110,9 @@
                 }
             });
             modalInstance.result.then(function (calledOnce) {
-                if(calledOnce)
+                if (calledOnce)
                     employee.newNotification = false;
-                console.log("popup closed",calledOnce);                
+                console.log("popup closed", calledOnce);
             });
         };
 
@@ -137,7 +137,7 @@
                 console.log("popup closed");
             });
         };
-        
+
         ctrl.openSettingsModal = function (employeeId, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
@@ -254,53 +254,48 @@
 
             $rootScope.activateEmployeeModel.activate = function (employee) {
 
-                if ($rootScope.activateEmployeeModel.password == "jorgeHRavalanche")
-                {
-                    $rootScope.maskLoading();
-                    EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
-                        var length = ctrl.employeeList.length;
+                $rootScope.maskLoading();
+                EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
+                    var length = ctrl.employeeList.length;
 
-                        for (var i = 0; i < length; i++) {
-                            if (ctrl.employeeList[i].id === employee.id) {
-                                if (ctrl.viewType !== 'all') {
-                                    ctrl.employeeList.splice(i, 1);
-                                } else {
-                                    ctrl.employeeList[i].status = 'a';
-                                }
-                                break;
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.employeeList[i].id === employee.id) {
+                            if (ctrl.viewType !== 'all') {
+                                ctrl.employeeList.splice(i, 1);
+                            } else {
+                                ctrl.employeeList[i].status = 'a';
                             }
+                            break;
                         }
-                        ctrl.rerenderDataTable();
-                        toastr.success("Employee activated.");
-                        $rootScope.activateEmployeeModel.close();
-                    }).catch(function (data, status) {
-                        toastr.error("Employee cannot be activated.");
-                        $rootScope.activateEmployeeModel.close();
-                    }).then(function () {
-                        $rootScope.unmaskLoading();
-                    });
-                } else {
-                    toastr.error("Wrong Password.");
-                }
+                    }
+                    ctrl.rerenderDataTable();
+                    toastr.success("Employee activated.");
+                    $rootScope.activateEmployeeModel.close();
+                }).catch(function (data, status) {
+                    toastr.error("Employee cannot be activated.");
+                    $rootScope.activateEmployeeModel.close();
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
             };
         };
-        
-        ctrl.openNotes = function (employee, modal_id, modal_size, modal_backdrop){
-            
+
+        ctrl.openNotes = function (employee, modal_id, modal_size, modal_backdrop) {
+
             $rootScope.employeeNotesModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            
+
             $rootScope.employeeNotesModel.addNote = function () {
 
                 if ($('#NotesData')[0].checkValidity()) {
                     $rootScope.maskLoading();
                     EmployeeDAO.addNotes(
                             {employeeId: employee.id,
-                                note: {note:$rootScope.employeeNotesModel.note}}).then(function (res) {
+                                note: {note: $rootScope.employeeNotesModel.note}}).then(function (res) {
                         ctrl.rerenderDataTable();
                         toastr.success("Note added.");
                         $rootScope.employeeNotesModel.close();
@@ -319,8 +314,8 @@
                 $rootScope.employeeNotesModel.close();
             };
         };
-        
-        
+
+
         ctrl.getLanguagesFromCode = function (languageCodes) {
             if (languageCodes != null && languageCodes.length > 0) {
                 languageCodes = languageCodes.split(",");
