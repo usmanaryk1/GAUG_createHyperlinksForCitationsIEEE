@@ -223,3 +223,33 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 .nosorting{
     pointer-events: none;
 }
+
+/*
+ * Custom CSS
+ * Used to adjust show dropdown and search bar in every view files
+ */
+
+/* Space around dropdown and Searchbar*/
+.dataTables_wrapper .row {
+    padding: 10px 10px 4px 10px;
+}
+/*Medium compatibility i.e. Tablets*/
+@media screen and (max-width:767px) {
+    .dataTables_wrapper .dataTables_filter .form-control {
+        margin-left: 0 !important;
+    }
+    div.dataTables_filter input {
+        width: 8em !important;
+    }
+}
+/*Small Screen compatibility i.e. Mobile phones*/
+@media screen and (max-width: 380px) {
+    div.dataTables_filter input {
+        width: 5em !important;
+    }
+}
+/*Remove Border overlapping issue in view files*/
+.dataTables_wrapper table {
+    border-left: 0;
+    border-right: 0;
+}
