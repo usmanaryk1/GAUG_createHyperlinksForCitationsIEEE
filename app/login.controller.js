@@ -57,6 +57,8 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                             $rootScope.startIdle();
                             $rootScope.unmaskLoading();
                             // window.location.hash = '#/app/add_patient_tab_1';
+                        }else{
+                            $rootScope.unmaskLoading();
                         }
                     }
                 });
