@@ -116,8 +116,8 @@ app.run(function($rootScope, $modal, $state, Idle)
 
 
 app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
-    IdleProvider.idle(3600);
-    IdleProvider.timeout(30);
+    IdleProvider.idle(900);
+    IdleProvider.timeout(60);
     KeepaliveProvider.interval(10);
 
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
