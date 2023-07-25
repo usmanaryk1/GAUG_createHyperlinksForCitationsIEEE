@@ -85,11 +85,11 @@
                         <div class="col-sm-9 form-control-static">
                             <div>
                                 <label>
-                                    <input value="M" name="Gender" type="radio" class="cbr" ng-model="addPatient.patient.gender" />
+                                    <input value="M" name="Gender" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.gender" />
                                     Male
                                 </label>
                                 <label>
-                                    <input name="Gender" value="F" type="radio" class="cbr" ng-model="addPatient.patient.gender"/>
+                                    <input name="Gender" value="F" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.gender"/>
                                     Female
                                 </label>
                             </div>
@@ -264,6 +264,7 @@
     customJqueryValidation();
 
     jQuery(document).ready(function($) {
+        cbr_replace();
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);

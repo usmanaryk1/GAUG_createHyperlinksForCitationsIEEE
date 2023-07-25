@@ -296,11 +296,11 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input value="P" name="TBTesting" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
+                                    <input value="P" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
                                     PPD
                                 </label>
                                 <label class="cbr-inline">
-                                    <input name="TBTesting" value="C" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
+                                    <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
                                     CXR
                                 </label>
                             </div>
@@ -401,11 +401,11 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input value="P" name="BGStatus" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.bgCheckStatus"/>
+                                    <input value="P" name="BGStatus" type="radio" class="cbr cbr-primary" ng-model="addEmployee.employee.employeeDocumentId.bgCheckStatus"/>
                                     Passed
                                 </label>
                                 <label class="cbr-inline">
-                                    <input name="BGStatus" value="F" type="radio" class="cbr" ng-model="addEmployee.employee.employeeDocumentId.bgCheckStatus"/>
+                                    <input name="BGStatus" value="F" type="radio" class="cbr cbr-primary" ng-model="addEmployee.employee.employeeDocumentId.bgCheckStatus"/>
                                     Failed
                                 </label>
                             </div>
@@ -483,6 +483,7 @@
 
         setTimeout(function()
         {
+            cbr_replace();
             jQuery.ajax({
                 url: "data/ajax-content.txt",
                 success: function(response)

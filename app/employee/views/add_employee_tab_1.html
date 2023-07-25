@@ -305,49 +305,49 @@
                             <div class="col-sm-9">
                                 <div class="form-block">
                                     <label>
-                                        <input checked="true" class="cbr" id="Position" name="Position" value="pc" type="radio" ng-model="addEmployee.employee.position">
+                                        <input checked="true" class="cbr cbr-primary" id="Position" name="Position" value="pc" type="radio" ng-model="addEmployee.employee.position">
                                         Personal Care
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" type="radio" value="nc" ng-model="addEmployee.employee.position">
+                                        <input class="cbr cbr-primary" name="Position" type="radio" value="nc" ng-model="addEmployee.employee.position">
                                         Nursing Care
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" value="pt" type="radio" ng-model="addEmployee.employee.position">
+                                        <input class="cbr cbr-primary" name="Position" value="pt" type="radio" ng-model="addEmployee.employee.position">
                                         Physical Therapist
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" value="ot" type="radio" ng-model="addEmployee.employee.position">
+                                        <input class="cbr cbr-primary" name="Position" value="ot" type="radio" ng-model="addEmployee.employee.position">
                                         Occupational Therapist
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" value="nut" type="radio" ng-model="addEmployee.employee.position">
+                                        <input class="cbr cbr-primary" name="Position" value="nut" type="radio" ng-model="addEmployee.employee.position">
                                         Nutritionist
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" value="st" type="radio" ng-model="addEmployee.employee.position">
+                                        <input class="cbr cbr-primary" name="Position" value="st" type="radio" ng-model="addEmployee.employee.position">
                                         Speech Therapist
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" value="a" type="radio" ng-model="addEmployee.employee.position">
+                                        <input class="cbr cbr-primary" name="Position" value="a" type="radio" ng-model="addEmployee.employee.position">
                                         Admin
                                         </input>
                                     </label>
                                     <br/>
                                     <label>
-                                        <input class="cbr" name="Position" value="mr" type="radio" ng-model="addEmployee.employee.position"/>
+                                        <input class="cbr cbr-primary" name="Position" value="mr" type="radio" ng-model="addEmployee.employee.position"/>
                                         Market Rep.
                                     </label>
                                 </div>
@@ -362,11 +362,11 @@
                             <div class="col-sm-9">
                                 <div>
                                     <label class="checkbox col-sm-3" ng-repeat="language in addEmployee.languagesKeyValue">
-                                        <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
+                                        <input class="cbr cbr-primary" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                         {{languages[language.key]}}
                                     </label>
                                     <label class="checkbox col-sm-3">
-                                        <input class="cbr" id="languageOther" name="languageOther" type="checkbox" ng-model="addEmployee.otherLanguageCheckbox" ng-change="addEmployee.refreshLanguages()" />
+                                        <input class="cbr cbr-primary" id="languageOther" name="languageOther" type="checkbox" ng-model="addEmployee.otherLanguageCheckbox" ng-change="addEmployee.refreshLanguages()" />
                                         Others
                                     </label>
                                     <label class="col-sm-6" ng-if="addEmployee.otherLanguageCheckbox" style="margin-left:-20px">
@@ -384,12 +384,12 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <label class="cbr-inline">
-                                        <input class="cbr" name="DoesEmpDrive" type="radio" ng-value="true" ng-model="addEmployee.employee.doesEmpDrive">
+                                        <input class="cbr cbr-primary" name="DoesEmpDrive" type="radio" ng-value="true" ng-model="addEmployee.employee.doesEmpDrive">
                                         Yes
                                         </input>
                                     </label>
                                     <label class="cbr-inline">
-                                        <input class="cbr" name="DoesEmpDrive" type="radio" ng-value="false" ng-model="addEmployee.employee.doesEmpDrive">
+                                        <input class="cbr cbr-primary" name="DoesEmpDrive" type="radio" ng-value="false" ng-model="addEmployee.employee.doesEmpDrive">
                                         No
                                         </input>
                                     </label>
@@ -420,6 +420,7 @@
     var form_clean;
     customJqueryValidation();
     jQuery(document).ready(function($) {
+        cbr_replace();
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
 

@@ -1,7 +1,5 @@
 
 <div class="page-body"> 
-
-
     <!--PAGE TITLE START -->
     <div class="page-title">
         <div class="title-env">
@@ -113,12 +111,12 @@
                                             <div class="col-sm-9">
                                                 <div class="input-group">
                                                     <label class="cbr-inline">
-                                                        <input checked="" class="cbr" name="radio-2" type="radio">
+                                                        <input checked="" class="cbr cbr-primary" name="radio-2" type="radio">
                                                         Male
                                                         </input>
                                                     </label>
                                                     <label class="cbr-inline">
-                                                        <input class="cbr" name="radio-2" type="radio">
+                                                        <input class="cbr cbr-primary" name="radio-2" type="radio">
                                                         Female
                                                         </input>
                                                     </label>
@@ -218,11 +216,11 @@
                                             <div class="col-sm-9">
                                                 <div class="input-group">
                                                     <label class="cbr-inline">
-                                                        <input class="cbr" name="benefitPlan" type="radio" ng-model='benefitPlan' value='true'>
+                                                        <input class="cbr cbr-primary" name="benefitPlan" type="radio" ng-model='benefitPlan' value='true'>
                                                         Yes
                                                     </label>
                                                     <label class="cbr-inline">
-                                                        <input class="cbr" name="benefitPlan" type="radio" ng-model='benefitPlan'>
+                                                        <input class="cbr cbr-primary" name="benefitPlan" type="radio" ng-model='benefitPlan'>
                                                         No
                                                     </label>
                                                 </div>
@@ -440,11 +438,11 @@
                                             <div class="col-sm-3">
                                                 <div class="input-group">
                                                     <label class="cbr-inline">
-                                                        <input class="cbr" name="outsideLab" type="radio" ng-model='outsideLab' value='true'>
+                                                        <input class="cbr cbr-primary" name="outsideLab" type="radio" ng-model='outsideLab' value='true'>
                                                         Yes
                                                     </label>
                                                     <label class="cbr-inline">
-                                                        <input class="cbr" name="outsideLab" type="radio" ng-model='outsideLab'>
+                                                        <input class="cbr cbr-primary" name="outsideLab" type="radio" ng-model='outsideLab'>
                                                         No
                                                     </label>
                                                 </div>
@@ -557,6 +555,9 @@
             </div>
         </div>
     </div>
-
-
 </div>
+<script type="text/javascript">
+    $(function(){
+        cbr_replace();
+    });
+</script>

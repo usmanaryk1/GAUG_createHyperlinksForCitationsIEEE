@@ -59,11 +59,11 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input value="M" name="Gender" type="radio" class="cbr" ng-model="addPatient.patient.subscriberInfo[0].gender" />
+                                    <input value="M" name="Gender" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.subscriberInfo[0].gender" />
                                     Male
                                 </label>
                                 <label class="cbr-inline">
-                                    <input name="Gender" value="F" type="radio" class="cbr" ng-model="addPatient.patient.subscriberInfo[0].gender"/>
+                                    <input name="Gender" value="F" type="radio" class="cbr cbr-primary" ng-model="addPatient.patient.subscriberInfo[0].gender"/>
                                     Female
                                 </label>
                             </div>
@@ -88,10 +88,10 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline" ng-click="addPatient.setBillingAddress(true)">
-                                    <input type="radio" class="cbr" name="IsBillingAddressSameAsPatient" value="Yes" ng-model="addPatient.isBillingAddressSameAsPatient">
+                                    <input type="radio" class="cbr cbr-primary" name="IsBillingAddressSameAsPatient" value="Yes" ng-model="addPatient.isBillingAddressSameAsPatient">
                                     Yes </label>
                                 <label class="cbr-inline" ng-click="addPatient.setBillingAddress(false)">
-                                    <input type="radio" class="cbr" name="IsBillingAddressSameAsPatient" value="No" ng-model="addPatient.isBillingAddressSameAsPatient">
+                                    <input type="radio" class="cbr cbr-primary" name="IsBillingAddressSameAsPatient" value="No" ng-model="addPatient.isBillingAddressSameAsPatient">
                                     No </label>
                             </div>
                         </div>
@@ -172,6 +172,7 @@
     // validate
     customJqueryValidation();
     jQuery(document).ready(function($) {
+        cbr_replace();
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);

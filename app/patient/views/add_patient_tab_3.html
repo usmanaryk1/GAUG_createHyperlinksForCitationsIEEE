@@ -91,12 +91,12 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input class="cbr" name="IsSubscriber" type="radio" ng-value="true" ng-model="addPatient.patient.isSubscriber">
+                                    <input class="cbr cbr-primary" name="IsSubscriber" type="radio" ng-value="true" ng-model="addPatient.patient.isSubscriber">
                                     Yes
                                     </input>
                                 </label>
                                 <label class="cbr-inline">
-                                    <input class="cbr" name="IsSubscriber" type="radio" ng-value="false" ng-model="addPatient.patient.isSubscriber">
+                                    <input class="cbr cbr-primary" name="IsSubscriber" type="radio" ng-value="false" ng-model="addPatient.patient.isSubscriber">
                                     No
                                     </input>
                                 </label>
@@ -125,6 +125,7 @@
     // validate
     customJqueryValidation();
     jQuery(document).ready(function($) {
+        cbr_replace();
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);

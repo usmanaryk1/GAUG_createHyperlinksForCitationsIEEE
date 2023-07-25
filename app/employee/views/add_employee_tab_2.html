@@ -19,10 +19,10 @@
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <label class="cbr-inline">
-                                    <input checked="true" type="radio" name="TaxStatus" value='W' class="cbr" ng-model="addEmployee.employee.taxStatus">
+                                    <input checked="true" type="radio" name="TaxStatus" value='W' class="cbr cbr-primary" ng-model="addEmployee.employee.taxStatus">
                                     W-2 </label>
                                 <label class="cbr-inline">
-                                    <input type="radio" name="TaxStatus"  value='1' class="cbr" ng-model="addEmployee.employee.taxStatus">
+                                    <input type="radio" name="TaxStatus"  value='1' class="cbr cbr-primary" ng-model="addEmployee.employee.taxStatus">
                                     1099 </label>
 
                             </div>
@@ -33,10 +33,10 @@
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <label class="cbr-inline" >
-                                    <input checked="true" type="radio" name="Wages" value='H' class="cbr" ng-model="addEmployee.employee.wages">
+                                    <input checked="true" type="radio" name="Wages" value='H' class="cbr cbr-primary" ng-model="addEmployee.employee.wages">
                                     Hourly </label>
                                 <label class="cbr-inline">
-                                    <input type="radio" name="Wages" value='S' class="cbr" ng-model="addEmployee.employee.wages">
+                                    <input type="radio" name="Wages" value='S' class="cbr cbr-primary" ng-model="addEmployee.employee.wages">
                                     Salary </label>
 
                             </div>
@@ -59,10 +59,10 @@
                         <!--                        <div class="col-sm-5">
                                                     <div class="input-group">
                                                         <label class="cbr-inline" >
-                                                            <input type="radio" checked="true" name="SalaryFreq" value='1W' class="cbr" ng-model="addEmployee.employee.salaryFrequency">
+                                                            <input type="radio" checked="true" name="SalaryFreq" value='1W' class="cbr cbr-primary" ng-model="addEmployee.employee.salaryFrequency">
                                                             weekly </label>
                                                         <label class="cbr-inline">
-                                                            <input type="radio" name="SalaryFreq" value='2W' class="cbr" ng-model="addEmployee.employee.salaryFrequency">
+                                                            <input type="radio" name="SalaryFreq" value='2W' class="cbr cbr-primary" ng-model="addEmployee.employee.salaryFrequency">
                                                             bi-weekly </label>
                         
                                                     </div>
@@ -197,6 +197,7 @@
     var form_clean;
     customJqueryValidation();
     jQuery(document).ready(function($) {
+        cbr_replace();
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
 
