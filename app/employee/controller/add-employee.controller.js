@@ -132,6 +132,8 @@
                 ctrl.applicationFileObj.errorMsg = null;
                 ctrl.w4FileObj.errorMsg = null;
             } else {
+                //this return is added because it needs to mute validation for a timebeing
+                return true;
                 if (ctrl.displayDocumentsByPositionMap) {
                     if (ctrl.displayDocumentsByPositionMap['a']) {
                         if ($rootScope.tabNo == 4 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
