@@ -214,4 +214,34 @@
     </div>
     <!-- FORM WIZARD WITH VALIDATION END HERE-->
 </div>
+<script type="text/ng-template" id="modal-5">
+    <form class="validate form-horizontal" name="taskForm" id="taskForm" >
+    <!--<div class="modal-header">
+    <button type="button" class="close" ng-click="taskModal.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">How did you find it?</h4>
+    </div>-->
 
+    <div class="modal-body">
+
+    <div>
+    <div class="form-group">
+    <!--<label class="col-sm-3 control-label" for="rate">
+    Rate
+    </label>-->
+    <div class="col-sm-12">
+    <select class="form-control" id="task_value" name="task_value" ng-model="taskModal.taskValue"
+                                 data-required="true"   ng-options="answerOption as answerOption for answerOption in taskModal.answerOptions">
+            <option value="" selected hidden />                
+    </select>
+            
+    </div>
+    </div>
+    </div>
+    </div>
+    
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="taskModal.cancel();">Close</button>
+    <button type="submit" class="btn btn-info" ng-click="taskModal.save();">Save</button>
+    </div>
+    </form>
+</script>

@@ -1,7 +1,8 @@
 (function () {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, TasksDAO) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal) {
         var ctrl = this;
         ctrl.taskList = [];
+        ctrl.taskOptionsMap = {};
         var searchParams = $location.search();
         ctrl.todaysDate = new Date();
         var timeFormat = 'hh:mm:ss a';
@@ -16,20 +17,32 @@
                 ctrl.attendanceObj.punchInTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchInDate = null;
+                ctrl.attendanceObj.companyTaskIds = [];
+                ctrl.attendanceObj.taskIdValues = {};
             } else {
-                ctrl.attendanceObj = {punchInTime: ctrl.currentTime, punchOutTime: ctrl.currentTime, isMissedPunch: false, isManualPunch: true, taskList: []};
-                $timeout(function () {
-                    $('#tasks').multiSelect('refresh');
-                }, 100);
+                ctrl.attendanceObj = {
+                    punchInTime: ctrl.currentTime,
+                    punchOutTime: ctrl.currentTime,
+                    isMissedPunch: false,
+                    isManualPunch: true,
+                    companyTaskIds: [],
+                    taskIdValues: {}
+                };
+                ctrl.taskList = [];
+
                 $("#sboxit-2").select2("val", null);
                 $("#sboxit-1").select2("val", null);
             }
+            $timeout(function () {
+                $('#tasks').multiSelect('refresh');
+            }, 100);
         };
         ctrl.resetManualPunch();
         ctrl.retrieveEmployees = retrieveEmployeesData;
 
         //once you retrieve data for edit
         function setAttendanceForEdit() {
+            ctrl.attendanceObj.taskIdValues = {};
             ctrl.empObj = angular.copy(ctrl.attendanceObj.employeeId);
             ctrl.patientObj = angular.copy(ctrl.attendanceObj.patientId);
             if (ctrl.attendanceObj.employeeId != null) {
@@ -104,9 +117,16 @@
             ctrl.patientMandatory = true;
             EmployeeDAO.get({id: ctrl.attendanceObj.employeeId, includeTasks: true}).then(function (res) {
                 ctrl.taskList = res.companyTasks;
+                ctrl.taskOptionsMap = {};
+                angular.forEach(ctrl.taskList, function (obj) {
+                    if (obj.options && obj.options !== null) {
+                        ctrl.taskOptionsMap[obj.id] = obj.options.split("|");
+                    }
+                })
                 if (reset) {
                     ctrl.attendanceObj.companyTaskIds = [];
                 }
+                ctrl.attendanceObj.taskIdValues = {};
                 ctrl.selectedPosition = res.position;
                 $timeout(function () {
                     $('#tasks').multiSelect('refresh');
@@ -196,7 +216,7 @@
                         ctrl.tasksErrorMsg = null;
                     }
                 }
-            }else{
+            } else {
                 ctrl.tasksErrorMsg = null;
             }
             if ($("#manual_punch_form")[0].checkValidity() &&
@@ -207,7 +227,8 @@
                 if (attendanceObjToSave.isMissedPunch === false) {
                     delete attendanceObjToSave.isMissedPunch;
                     if (attendanceObjToSave.id == null) {
-                        console.log(JSON.stringify(attendanceObjToSave));
+                        //to add new record we have to send this json as string
+                        attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
                             ctrl.resetManualPunch();
@@ -231,6 +252,14 @@
                         if (attendanceObjToSave.patientId != null) {
                             attendanceObjToSave.patientId = {id: ctrl.attendanceObj.patientId};
                         }
+                        //to update we have to send this in tasks list of timesheet/missed_punch object
+                        attendanceObjToSave.tasks = [];
+                        for (var key in attendanceObjToSave.taskIdValues) {
+                            var newTask = {};
+                            newTask.companyTasksId = {id: key};
+                            newTask.value = attendanceObjToSave.taskIdValues[key];
+                            attendanceObjToSave.tasks.push(newTask);
+                        }
                         TimesheetDAO.update(attendanceObjToSave).then(function () {
                             toastr.success("Timesheet saved.");
                             ctrl.navigateToState();
@@ -249,7 +278,8 @@
                 } else {
                     if (attendanceObjToSave.id == null) {
                         delete attendanceObjToSave.isMissedPunch;
-                        console.log(JSON.stringify(attendanceObjToSave));
+                        //to add new record we have to send this json as string
+                        attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addMissedPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
                             ctrl.resetManualPunch();
@@ -273,6 +303,14 @@
                         if (attendanceObjToSave.patientId != null) {
                             attendanceObjToSave.patientId = {id: ctrl.attendanceObj.patientId};
                         }
+                        //to update we have to send this in tasks list of timesheet/missed_punch object
+                        attendanceObjToSave.tasks = [];
+                        for (var key in attendanceObjToSave.taskIdValues) {
+                            var newTask = {};
+                            newTask.companyTasksId = {id: key};
+                            newTask.value = attendanceObjToSave.taskIdValues[key];
+                            attendanceObjToSave.tasks.push(newTask);
+                        }
                         TimesheetDAO.updateMissedPunch(attendanceObjToSave).then(function () {
                             toastr.success("Timesheet saved.");
                             ctrl.navigateToState();
@@ -291,7 +329,58 @@
                 }
             }
         };
+
+
+// Open Simple Modal
+        ctrl.openModal = function (modal_id, modal_size, modal_backdrop, optionArr)
+        {
+            ctrl.selecteModalOpen = true;
+            $rootScope.taskModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.taskModal.answerOptions = optionArr;
+            $rootScope.taskModal.taskValue = optionArr[0];
+            $rootScope.taskModal.save = function () {
+                $timeout(function () {
+                    if ($('#taskForm')[0].checkValidity()) {
+                        ctrl.attendanceObj.taskIdValues[ctrl.newSelectedTaskId] = $rootScope.taskModal.taskValue;
+                        $rootScope.taskModal.dismiss();
+                    }
+                    ctrl.selecteModalOpen = false;
+                });
+            };
+
+            $rootScope.taskModal.cancel = function () {
+                ctrl.attendanceObj.companyTaskIds.splice(ctrl.attendanceObj.companyTaskIds.indexOf(ctrl.newSelectedTaskId), 1);
+                $timeout(function () {
+                    $("#tasks").multiSelect('refresh');
+                });
+                $rootScope.taskModal.close();
+            };
+
+        };
+
+        $scope.$watch(function () {
+            return ctrl.attendanceObj.companyTaskIds;
+        }, function (newValue, oldValue) {
+            $timeout(function () {
+                $("#tasks").multiSelect('refresh');
+            });
+            if (newValue !== null && (oldValue === null || newValue.length > oldValue.length)) {
+                if (oldValue === null) {
+                    ctrl.newSelectedTaskId = newValue;
+                } else {
+                    ctrl.newSelectedTaskId = arr_diff(newValue, oldValue);
+                }
+                if (ctrl.taskOptionsMap[ctrl.newSelectedTaskId]) {
+                    ctrl.openModal('modal-5', 'sm', 'static', ctrl.taskOptionsMap[ctrl.newSelectedTaskId]);
+                }
+
+            }
+        }, true);
     }
-    ;
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "TasksDAO", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", ManualPunchCtrl]);
 })();
