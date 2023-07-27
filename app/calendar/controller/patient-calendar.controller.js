@@ -87,6 +87,8 @@
             ctrl.searchParams = {limit: 10, skip: 0};
             ctrl.searchParams.openCaseEndDate = null;
             ctrl.searchParams.openCaseStartDate = null;
+            ctrl.searchParams.liveInEndDate = null;
+            ctrl.searchParams.liveInStartDate = null;
             $('#coordinatorIds').select2('val', null);
             $('#patientIds').select2('val', null);
             $('#positions').select2('val', null);
@@ -169,6 +171,16 @@
             } else {
                 delete ctrl.searchParams.openCaseStartDate;
                 delete ctrl.searchParams.openCaseEndDate;
+            }
+        };
+        
+        ctrl.checkLiveIn = function () {
+            if (ctrl.searchParams.forLiveIn) {
+                ctrl.searchParams.liveInStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                ctrl.searchParams.liveInEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+            } else {
+                delete ctrl.searchParams.liveInStartDate;
+                delete ctrl.searchParams.liveInEndDate;
             }
         };
 
