@@ -42,15 +42,15 @@
                                                                                             });
                                                                                         </script>-->
                                             <script type="text/javascript">
-                                                jQuery(document).ready(function($)
+                                                jQuery(document).ready(function ($)
                                                 {
-                                                    setTimeout(function() {
+                                                    setTimeout(function () {
                                                         $("#sboxit-2").select2({
 //                                                        minimumResultsForSearch: -1,
                                                             placeholder: 'Select Employee...',
 //                                                        minimumInputLength: 1,
 //                                                        placeholder: 'Search',
-                                                        }).on('select2-open', function()
+                                                        }).on('select2-open', function ()
                                                         {
                                                             // Adding Custom Scrollbar
                                                             $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
@@ -286,7 +286,7 @@
 
     <div class="col-sm-12" ng-repeat="task in taskListModal.taskList" ng-if="taskListModal.taskList!=null && taskListModal.taskList.length>0">
     <div>
-    {{task.companyTasksId.task}}
+    {{task.companyTasksId.task}} <span ng-show="task.value!=null">- {{task.value}}</span>
     </div>
     </div>
     <div class="col-sm-12" ng-if="taskListModal.taskList==null || taskListModal.taskList.length==0">
