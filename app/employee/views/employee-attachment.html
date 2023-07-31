@@ -3,7 +3,7 @@
         <button type="button" class="close" ng-click="employeeAttachment.close();" aria-hidden="true">&times;</button>
         <h4 class="modal-title">{{employeeAttachment.attachment.type === 'med' ? 'Add Medical Attachment':'Add Application Attachment'}}</h4>
     </div>
-
+    
     <div class="modal-body">
         <div class="form-group">
             <label class="col-sm-4 control-label">Type</label>
@@ -12,7 +12,7 @@
                         ng-options='type as type for type in employeeAttachment.subTypes' 
                         data-message-required="Please select attachment type." data-validate="required" required="true"
                         ng-change="employeeAttachment.setUploadFile(true);"
-                        ng-click="employeeAttachment.attachment.type === 'aed' ? employeeAttachment.remove(['physicalExpirationDate', 'tbTesting', 'isPositive', 'chestXRayClearance', 'tbQuestionnaire', 'hepatitisB', 'vaccinations'
+                        ng-click="employeeAttachment.attachment.type === 'med' ? employeeAttachment.remove(['physicalExpirationDate', 'tbTesting', 'isPositive', 'chestXRayClearance', 'tbQuestionnaire', 'hepatitisB', 'vaccinations'
                                             , 'habituation', 'drugTestDate', 'fluShotDate', 'declination', 'fluInoculation', 'declination', 'reason']) :
                                         employeeAttachment.remove(['applicationDate', 'orientationDate', 'eligibilityExpDate', 'CHRC', 'HCR', 'References', 'Test', 'W4', 'Certificate'                                            
                                             , 'licenseExpDate', 'malpracticeExpDate', 'cprExpDate', 'References', 'InfectionControl', 'OPSearch', 'DateCompleted', 'TypeUpload'])">
@@ -59,11 +59,11 @@
                 <div class="col-md-push-4 col-sm-8 add-padding-modal">
                     <div class="input-group" style="z-index:1060">
                         <label class="cbr-inline">
-                            <input name="isPositive" value="true" type="radio" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.isPositive"/>
+                            <input name="isPositive" value="true" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.isPositive"/>
                             Positive
                         </label>
                         <label class="cbr-inline">
-                            <input name="isPositive" value="false" type="radio" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.isPositive"
+                            <input name="isPositive" value="false" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.isPositive"
                                    ng-click="employeeAttachment.remove(['chestXRayClearance', 'tbQuestionnaire', 'hepatitisB', 'vaccinations', 'habituation', 'drugTestDate', 'fluShotDate', 'declination',
                                            'fluInoculation', 'reason'])"/>
                             Negative
@@ -117,11 +117,11 @@
                     <div class="col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
                             <label class="cbr-inline">
-                                <input name="HepatitisB" value="Yes" type="radio" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.hepatitisB"/>
+                                <input name="HepatitisB" value="Yes" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.hepatitisB"/>
                                 Yes
                             </label>
                             <label class="cbr-inline">
-                                <input name="HepatitisB" value="Declined" type="radio" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.hepatitisB"/>
+                                <input name="HepatitisB" value="Declined" type="radio" class="cbr" ng-model="employeeAttachment.attachment.extraFields.hepatitisB"/>
                                 Declined
                             </label>
                         </div>
@@ -136,7 +136,7 @@
                     <div class="col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
                             <label class="cbr-inline">
-                                <input name="Vaccinations" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.vaccinations"/>
+                                <input name="Vaccinations" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.vaccinations"/>
                                 Yes
                             </label>
                         </div>
@@ -196,7 +196,7 @@
                     <div class="col-sm-push-4 col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
                             <label class="cbr-inline">
-                                <input name="Declination" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.declination"/>
+                                <input name="Declination" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.declination"/>
                                 Declination
                             </label>
                         </div>
@@ -324,73 +324,65 @@
             
             <div ng-if="employeeAttachment.attachment.attachmentType === 'Initial Application Packet'">
                 <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="CHRC" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.CHRC"/>
-                                CHRC
-                            </label>
+                <div class="form-group">        
+                    <div class="col-sm-push-4 col-sm-8">                    
+                        <div class="row">
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="CHRC" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.CHRC"/>
+                                        CHRC
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="HCR" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.HCR"/>
+                                        HCR
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="References" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.References"/>
+                                        References
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="HCR" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.HCR"/>
-                                HCR
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="References" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.References"/>
-                                References
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="Test" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.Test"/>
-                                Test
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="W4" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.W4"/>
-                                W-4
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="Certificate" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.Certificate"/>
-                                Certificate
-                            </label>
+                <div class="form-group">        
+                    <div class="col-sm-push-4 col-sm-8">  
+                        <div class="row">
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="Test" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.Test"/>
+                                        Test
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="W4" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.W4"/>
+                                        W-4
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="Certificate" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.Certificate"/>
+                                        Certificate
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -445,49 +437,44 @@
                         </div>
                     </div>
                 </div>
-                
+                                
                 <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="W4" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.W4"/>
-                                W-4
-                            </label>
+                <div class="form-group">        
+                    <div class="col-sm-push-4 col-sm-8">                    
+                        <div class="row">
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="W4-1" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.W4"/>
+                                        W-4
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="References-1" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.References"/>
+                                        References
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="InfectionControl" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.InfectionControl"/>
+                                        Infection Control
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
+                </div>                             
                 <div class="form-group-separator"></div>
                 <div class="form-group">
                     <div class="col-sm-push-4 col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
                             <label class="cbr-inline">
-                                <input name="References" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.References"/>
-                                References
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="InfectionControl" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.InfectionControl"/>
-                                Infection Control
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group-separator"></div>
-                <div class="form-group">
-                    <div class="col-sm-push-4 col-sm-8 add-padding-modal">
-                        <div class="input-group" style="z-index:1060">
-                            <label class="cbr-inline">
-                                <input name="OPSearch" value="Yes" type="checkbox" class="cbr cbr-primary" ng-model="employeeAttachment.attachment.extraFields.OPSearch"/>
+                                <input name="OPSearch" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.OPSearch"/>
                                 OP Search
                             </label>
                         </div>
