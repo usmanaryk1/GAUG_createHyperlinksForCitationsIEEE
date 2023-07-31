@@ -257,3 +257,6 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 .other-language .bootstrap-tagsinput {
    margin-top: 7px;
 }
+.red-label{
+    color: #CC3F44;
+}

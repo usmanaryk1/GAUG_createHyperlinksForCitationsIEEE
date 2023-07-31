@@ -357,7 +357,7 @@
                             Personal Hours
                         </label>
                         <div class="col-sm-3">
-                            <input class="form-control" id="personal" ng-disabled="payrollSession.processdMode" name="personal" type="text" ng-model="payrollSession.employeeModalObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)"/>
+                            <input class="form-control" id="personal" disabled="true" name="personal" type="text" ng-model="payrollSession.employeeModalObj.personal" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)"/>
                         </div>
                         <label class="col-sm-3 control-label" for="bonusEarnings">
                             Bonus Earnings
@@ -373,7 +373,7 @@
                         <div class="col-sm-3">
                             <input class="form-control" id="miscEarnings" ng-disabled="payrollSession.processdMode" name="miscEarnings" type="text" ng-model="payrollSession.employeeModalObj.miscEarnings" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)"/>
                         </div>
-                        <label class="col-sm-3 control-label" for="miscDeduction">
+                        <label class="col-sm-3 control-label red-label" for="miscDeduction">
                             Misc Deduction
                         </label>
                         <div class="col-sm-3">
@@ -381,27 +381,27 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label" for="loan">
-                            Loan
+                        <label class="col-sm-3 control-label red-label" for="loan">
+                            Loan Repayment
                         </label>
                         <div class="col-sm-3">
                             <input class="form-control" id="loan" ng-disabled="payrollSession.processdMode" name="loan" type="text" ng-model="payrollSession.employeeModalObj.loan" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)"/>
                         </div>
-                        <label class="col-sm-3 control-label" for="adpLoan">
-                            401k Loan
+                        <label class="col-sm-3 control-label red-label" for="adpLoan">
+                            401k Loan Repayment
                         </label>
                         <div class="col-sm-3">
                             <input class="form-control" id="adpLoan" ng-disabled="payrollSession.processdMode" name="adpLoan" type="text" ng-model="payrollSession.employeeModalObj.adp401kLoan" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label" for="adpDeduction">
-                            401k Deduction
+                        <label class="col-sm-3 control-label red-label" for="adpDeduction">
+                            401k Addition
                         </label>
                         <div class="col-sm-3">
                             <input class="form-control" id="adpDeduction" ng-disabled="payrollSession.processdMode" name="adpDeduction" type="text" ng-model="payrollSession.employeeModalObj.adp401kDeduction" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)"/>
                         </div>
-                        <label class="col-sm-3 control-label" for="advanceDeduction">
+                        <label class="col-sm-3 control-label red-label" for="advanceDeduction">
                             Advance Deduction
                         </label>
                         <div class="col-sm-3">
