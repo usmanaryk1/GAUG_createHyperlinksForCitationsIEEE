@@ -1,12 +1,12 @@
-(function() {
+(function () {
     function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, $modal) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.employee = {employeeDocumentId: {}};
-        ctrl.refreshLanguages = function() {
-            $timeout(function() {
+        ctrl.refreshLanguages = function () {
+            $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
             });
         };
@@ -14,7 +14,7 @@
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
         ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
-        ctrl.setFromNext = function(tab) {
+        ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
         ctrl.careTypeList = [];
@@ -26,7 +26,7 @@
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
         ctrl.profileFileObj = {};
-        ctrl.resetEmployeeTab3 = function() {
+        ctrl.resetEmployeeTab3 = function () {
             ctrl.applicationFileObj.errorMsg = null;
             ctrl.licenceFileObj.errorMsg = null;
             ctrl.i9eligibilityFileObj.errorMsg = null;
@@ -71,7 +71,7 @@
             $scope.resetForm = true;
         };
 
-        ctrl.resetEmployeeTab1 = function() {
+        ctrl.resetEmployeeTab1 = function () {
             ctrl.profileFileObj.errorMsg = null;
             if (ctrl.employee.profileImage !== null) {
                 ctrl.employee.profileImage = null;
@@ -81,7 +81,7 @@
             }
             $scope.resetForm = true;
         };
-        ctrl.clearLicence = function() {
+        ctrl.clearLicence = function () {
             if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.licence != null) {
                 ctrl.employee.employeeDocumentId.licence = null;
             }
@@ -89,7 +89,7 @@
                 ctrl.licenceFileObj.flowObj.cancel();
             }
         };
-        ctrl.clearRefereces = function() {
+        ctrl.clearRefereces = function () {
             if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.references != null) {
                 ctrl.employee.employeeDocumentId.references = null;
             }
@@ -97,7 +97,7 @@
                 ctrl.referencesFileObj.flowObj.cancel();
             }
         };
-        ctrl.clearPhysical = function() {
+        ctrl.clearPhysical = function () {
             if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.physical != null) {
                 ctrl.employee.employeeDocumentId.physical = null;
             }
@@ -105,7 +105,7 @@
                 ctrl.physicalFileObj.flowObj.cancel();
             }
         };
-        ctrl.clearProfileImage = function() {
+        ctrl.clearProfileImage = function () {
             if (ctrl.employee.profileImage != null) {
                 ctrl.employee.profileImage = null;
             }
@@ -113,12 +113,12 @@
                 ctrl.profileFileObj.flowObj.cancel();
             }
         }
-        ctrl.resetEmployeeTab2 = function() {
+        ctrl.resetEmployeeTab2 = function () {
             ctrl.employee.taxStatus = 'W';
             ctrl.employee.wages = 'H';
             ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
 
-            $timeout(function() {
+            $timeout(function () {
                 $("#rate2").multiSelect('refresh');
                 $("#rate1").multiSelect('refresh');
             }, 100);
@@ -142,7 +142,7 @@
         ctrl.pageInitCall = pageInit;
         var form_data;
 
-        ctrl.checkFileUploadValidity = function() {
+        ctrl.checkFileUploadValidity = function () {
             var validApplication = true;
             var validI9Eligibility = true;
             var validW4 = true;
@@ -169,7 +169,7 @@
 
         //ceck if form has been changed or not
         //If changed then it should be valid
-        ctrl.navigateToTab = function(event, state) {
+        ctrl.navigateToTab = function (event, state) {
             $scope.resetForm = false;
             if ($('#add_employee_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
@@ -195,7 +195,7 @@
                 employeeToSave.phone2 = employeeToSave.phone2.toString();
             }
             employeeToSave.languageSpoken = [];
-            angular.forEach(ctrl.languagesKeyValue, function(obj) {
+            angular.forEach(ctrl.languagesKeyValue, function (obj) {
                 if (obj.value == true) {
                     employeeToSave.languageSpoken.push(obj.key);
                 }
@@ -236,10 +236,10 @@
                         var careRateList = angular.copy(ctrl.employee.careRatesList);
                         careRateList.employeeId = ctrl.employee.id;
                         EmployeeDAO.updateCareRates(careRateList)
-                                .then(function() {
+                                .then(function () {
                                     updateEmployee(reqParam, employeeToSave);
                                 })
-                                .catch(function() {
+                                .catch(function () {
                                     console.log(JSON.stringify(careRateList));
                                 });
                     } else {
@@ -265,18 +265,18 @@
                 }
             }
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
-                    .then(function(employeeRes) {
+                    .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
                             //to set the default data in employee with position 'pc'
                             if (ctrl.employee.position === 'pc') {
                                 var rate1CareTypes = ['Personal Care HHA Hourly', 'Personal Care HHA Live In', 'PCA/HHA - One Client', 'PCA/HHA - Live In One Client', "CDPAP - One Client", "CDPAP - Live In One Client"];
                                 var rate2CareTypes = ['Personal Care HHA Mutual', 'Personal Care HHA Live In-Mutual', "PCA/HHA - Mutual Care", "PCA/HHA - Live In Mutual Care", "CDPAP - Mutual Care", "CDPAP - Live In Mutual Care"];
-                                CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function(careTypes) {
+                                CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function (careTypes) {
                                     var careRateList = {employeeId: employeeRes.id};
                                     careRateList.rate1 = {rate: 10, careTypes: []};
                                     careRateList.rate2 = {rate: 10.7, careTypes: []};
-                                    angular.forEach(careTypes, function(obj) {
+                                    angular.forEach(careTypes, function (obj) {
                                         if (rate1CareTypes.indexOf(obj.careTypeTitle) >= 0) {
                                             careRateList.rate1.careTypes.push(obj.id);
                                         }
@@ -285,10 +285,10 @@
                                         }
                                     });
                                     EmployeeDAO.updateCareRates(careRateList)
-                                            .then(function() {
+                                            .then(function () {
                                                 retrieveEmployeeCareTypeAfterSave(employeeRes);
                                             })
-                                            .catch(function() {
+                                            .catch(function () {
                                                 console.log(JSON.stringify(careRateList));
                                             });
                                 });
@@ -303,21 +303,21 @@
                         }
                         toastr.success("Employee saved.");
                     })
-                    .catch(function() {
+                    .catch(function () {
                         toastr.error("Employee cannot be saved.");
                         //exception logic
                         console.log('Employee2 Object : ' + JSON.stringify(ctrl.employee));
-                    }).then(function() {
+                    }).then(function () {
                 ctrl.formSubmitted = false;
                 $rootScope.unmaskLoading();
             });
         }
 
         function retrieveEmployeeCareTypeAfterSave(employeeRes) {
-            EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function(res) {
+            EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function (res) {
                 ctrl.employee = employeeRes;
                 ctrl.employee.careRatesList = res;
-                $timeout(function() {
+                $timeout(function () {
                     $("#rate2").multiSelect('refresh');
                     $("#rate1").multiSelect('refresh');
                 }, 100);
@@ -328,11 +328,11 @@
         function pageInit() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
-                EmployeeDAO.get({id: $state.params.id}).then(function(res) {
+                EmployeeDAO.get({id: $state.params.id}).then(function (res) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
-                        finish: function() {
+                        finish: function () {
                         }
                     }); // showLoadingBar
                     if (res.profileImage != null && res.profileImage != '') {
@@ -343,7 +343,7 @@
                     ctrl.employee = res;
                     if (res.languageSpoken != null) {
                         var languages = res.languageSpoken;
-                        angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                        angular.forEach(ctrl.languagesKeyValue, function (obj) {
                             if (languages.indexOf(obj.key) >= 0) {
                                 obj.value = true;
                             }
@@ -354,9 +354,9 @@
                         ctrl.refreshLanguages();
                     }
                     ctrl.retrivalRunning = false;
-                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function(res) {
+                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function (res) {
                         ctrl.employee.careRatesList = res;
-                        $timeout(function() {
+                        $timeout(function () {
                             $("#rate2").multiSelect('refresh');
                             $("#rate1").multiSelect('refresh');
                         }, 200);
@@ -367,14 +367,14 @@
                         if (ctrl.employee.careRatesList.rate2 != null && ctrl.employee.careRatesList.rate2.rate != null) {
                             ctrl.employee.careRatesList.rate2.rate = ctrl.employee.careRatesList.rate2.rate.toFixed(2);
                         }
-                    }).catch(function() {
+                    }).catch(function () {
                         toastr.error("Failed to retrieve employee care rates.");
                     });
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error("Failed to retrieve employee.");
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             } else {
@@ -395,12 +395,12 @@
             $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
         }
 
-        $scope.$watch(function() {
+        $scope.$watch(function () {
             if (!ctrl.employee.employeeDocumentId) {
                 ctrl.employee.employeeDocumentId = {};
             }
             return ctrl.employee.employeeDocumentId.physical;
-        }, function(newVal, oldValue) {
+        }, function (newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='PhysicalExpirationDate']").attr('required', true);
             } else {
@@ -408,12 +408,12 @@
             }
         });
 
-        $scope.$watch(function() {
+        $scope.$watch(function () {
             if (!ctrl.employee.employeeDocumentId) {
                 ctrl.employee.employeeDocumentId = {};
             }
             return ctrl.employee.employeeDocumentId.tbTesting;
-        }, function(newVal, oldValue) {
+        }, function (newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='TBTestingExpirationDate']").attr('required', true);
             } else {
@@ -421,46 +421,46 @@
             }
         });
 
-        $scope.$watch(function() {
+        $scope.$watch(function () {
             return ctrl.employee.wages;
-        }, function(newVal, oldValue) {
+        }, function (newVal, oldValue) {
             setValidationsForTab2(newVal);
         });
 
-        $scope.$watch(function() {
+        $scope.$watch(function () {
             if (!ctrl.employee.careRatesList) {
                 ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
             }
             return ctrl.employee.careRatesList.rate1.careTypes;
-        }, function(newVal, oldValue) {
+        }, function (newVal, oldValue) {
             if (ctrl.careTypeList2) {
                 var newCareTypes2 = [];
-                angular.forEach(ctrl.careTypeList, function(obj) {
+                angular.forEach(ctrl.careTypeList, function (obj) {
                     if (newVal.indexOf(obj.id) < 0) {
                         newCareTypes2.push(obj);
                     }
                 });
                 ctrl.careTypeList2 = newCareTypes2;
-                $timeout(function() {
+                $timeout(function () {
                     $('#rate2').multiSelect('refresh');
                 }, 100);
             }
         });
-        $scope.$watch(function() {
+        $scope.$watch(function () {
             if (!ctrl.employee.careRatesList) {
                 ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
             }
             return ctrl.employee.careRatesList.rate2.careTypes;
-        }, function(newVal, oldValue) {
+        }, function (newVal, oldValue) {
             if (ctrl.careTypeList1) {
                 var newCareTypes1 = [];
-                angular.forEach(ctrl.careTypeList, function(obj) {
+                angular.forEach(ctrl.careTypeList, function (obj) {
                     if (newVal.indexOf(obj.id) < 0) {
                         newCareTypes1.push(obj);
                     }
                 });
                 ctrl.careTypeList1 = newCareTypes1;
-                $timeout(function() {
+                $timeout(function () {
                     $('#rate1').multiSelect('refresh');
                 }, 100);
             }
@@ -482,15 +482,16 @@
             }
         }
 
-        ctrl.tab3DataInit = function() {
+        ctrl.tab3DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
                     ctrl.employee.employeeDocumentId = {};
                 }
                 if (!ctrl.retrivalRunning) {
                     form_data = $('#add_employee_form').serialize();
+                    $formService.resetRadios();
                 } else {
                     ctrl.tab3DataInit();
                 }
@@ -498,25 +499,25 @@
 
         };
 
-        ctrl.tab2DataInit = function() {
+        ctrl.tab2DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             //to set radio buttons on tab init..
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-                    CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function(res) {
+                    CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function (res) {
                         ctrl.careTypeList2 = [];
                         ctrl.careTypeList1 = [];
                         ctrl.careTypeList = res;
                         var selectedCareTypes1 = [];
-                        angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function(obj) {
+                        angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function (obj) {
                             selectedCareTypes1.push(obj);
                         });
                         var selectedCareTypes2 = [];
-                        angular.forEach(ctrl.employee.careRatesList.rate2.careTypes, function(obj) {
+                        angular.forEach(ctrl.employee.careRatesList.rate2.careTypes, function (obj) {
                             selectedCareTypes2.push(obj);
                         });
-                        angular.forEach(res, function(obj) {
+                        angular.forEach(res, function (obj) {
                             if (selectedCareTypes1.indexOf(obj.id) < 0) {
                                 ctrl.careTypeList2.push(obj);
                             }
@@ -524,12 +525,12 @@
                                 ctrl.careTypeList1.push(obj);
                             }
                         });
-                        $timeout(function() {
+                        $timeout(function () {
                             $('#rate1').multiSelect('refresh');
                             $('#rate2').multiSelect('refresh');
                             form_data = $('#add_employee_form').serialize();
                         }, 200);
-                    }).catch(function() {
+                    }).catch(function () {
                         toastr.error("Failed to retrieve care types.");
                         form_data = $('#add_employee_form').serialize();
                     });
@@ -539,6 +540,7 @@
                     if (!ctrl.employee.wages || ctrl.employee.wages === null) {
                         ctrl.employee.wages = 'H';
                     }
+                    $formService.resetRadios();
 //                    if (!ctrl.employee.salaryFrequency || ctrl.employee.salaryFrequency === null) {
 //                        ctrl.employee.salaryFrequency = '1W';
 //                    }
@@ -552,7 +554,7 @@
             }, 300);
 
         };
-        ctrl.tab1DataInit = function() {
+        ctrl.tab1DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             //to set edit mode in tab change
@@ -563,13 +565,14 @@
                 ctrl.editMode = true;
             }
             //to set radio buttons on tab init..
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.employee.position || ctrl.employee.position === null) {
                         ctrl.employee.position = 'pc';
                     }
 //                    $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();
+                    $formService.resetRadios();
                 } else {
                     ctrl.tab1DataInit();
                 }
@@ -589,12 +592,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.applicationFileSelected = function(file, flow) {
+        ctrl.applicationFileSelected = function (file, flow) {
             ctrl.applicationFileObj.flowObj = flow;
             ctrl.applicationFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.applicationFileUploaded = function(response, file, flow) {
+        ctrl.applicationFileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -604,7 +607,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableApplicationUploadButton = false;
         };
-        ctrl.applicationFileError = function($file, $message, $flow) {
+        ctrl.applicationFileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableApplicationUploadButton = false;
@@ -612,7 +615,7 @@
             ctrl.applicationFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.applicationFileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.applicationFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.application = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -639,12 +642,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.licenceFileSelected = function(file, flow) {
+        ctrl.licenceFileSelected = function (file, flow) {
             ctrl.licenceFileObj.flowObj = flow;
             ctrl.licenceFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.licenceFileUploaded = function(response, file, flow) {
+        ctrl.licenceFileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -654,7 +657,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableLicenceUploadButton = false;
         };
-        ctrl.licenceFileError = function($file, $message, $flow) {
+        ctrl.licenceFileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableLicenceUploadButton = false;
@@ -662,7 +665,7 @@
             ctrl.licenceFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.licenceFileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.licenceFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.licence = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -689,12 +692,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.i9eligibilityFileSelected = function(file, flow) {
+        ctrl.i9eligibilityFileSelected = function (file, flow) {
             ctrl.i9eligibilityFileObj.flowObj = flow;
             ctrl.i9eligibilityFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.i9eligibilityFileUploaded = function(response, file, flow) {
+        ctrl.i9eligibilityFileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -704,7 +707,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
         };
-        ctrl.i9eligibilityFileError = function($file, $message, $flow) {
+        ctrl.i9eligibilityFileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
@@ -712,7 +715,7 @@
             ctrl.i9eligibilityFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.i9eligibilityFileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.i9eligibilityFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.i9 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -739,12 +742,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.w4FileSelected = function(file, flow) {
+        ctrl.w4FileSelected = function (file, flow) {
             ctrl.w4FileObj.flowObj = flow;
             ctrl.w4FileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.w4FileUploaded = function(response, file, flow) {
+        ctrl.w4FileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -754,7 +757,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
         };
-        ctrl.w4FileError = function($file, $message, $flow) {
+        ctrl.w4FileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
@@ -762,7 +765,7 @@
             ctrl.w4FileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.w4FileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.w4FileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.w4 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -789,12 +792,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.referencesFileSelected = function(file, flow) {
+        ctrl.referencesFileSelected = function (file, flow) {
             ctrl.referencesFileObj.flowObj = flow;
             ctrl.referencesFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.referencesFileUploaded = function(response, file, flow) {
+        ctrl.referencesFileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -804,7 +807,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableReferencesUploadButton = false;
         };
-        ctrl.referencesFileError = function($file, $message, $flow) {
+        ctrl.referencesFileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableReferencesUploadButton = false;
@@ -812,7 +815,7 @@
             ctrl.referencesFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.referencesFileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.referencesFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.references = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -839,12 +842,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.physicalFileSelected = function(file, flow) {
+        ctrl.physicalFileSelected = function (file, flow) {
             ctrl.physicalFileObj.flowObj = flow;
             ctrl.physicalFileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.physicalFileUploaded = function(response, file, flow) {
+        ctrl.physicalFileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -854,7 +857,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disablePhysicalUploadButton = false;
         };
-        ctrl.physicalFileError = function($file, $message, $flow) {
+        ctrl.physicalFileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disablePhysicalUploadButton = false;
@@ -862,7 +865,7 @@
             ctrl.physicalFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.physicalFileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.physicalFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.employee.employeeDocumentId.physical = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -889,12 +892,12 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.profileFileSelected = function(file, flow) {
+        ctrl.profileFileSelected = function (file, flow) {
             ctrl.profileFileObj.flowObj = flow;
 
         };
         //When file is uploaded this method will be called.
-        ctrl.profileFileUploaded = function(response, file, flow) {
+        ctrl.profileFileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -905,7 +908,7 @@
             ctrl.disableProfileUploadButton = false;
             ctrl.hideLoadingImage = false;
         };
-        ctrl.profileFileError = function($file, $message, $flow) {
+        ctrl.profileFileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableProfileUploadButton = false;
@@ -913,7 +916,7 @@
             ctrl.profileFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.profileFileAdded = function(file, flow) { //It will allow all types of attahcments'
+        ctrl.profileFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
             ctrl.profileUploadFile.headers.fileExt = file.getExtension();
             ctrl.employee.profileImage = null;
@@ -928,7 +931,7 @@
             return true;
         };
 
-        ctrl.crop = function() {
+        ctrl.crop = function () {
             ctrl.profileUploadFile.query = $image.cropper("getData");
             var cropObj = $image.cropper("getData");
             ctrl.profileUploadFile.headers.x = parseInt(cropObj.x);
@@ -942,14 +945,14 @@
             ctrl.disableProfileUploadButton = true;
             ctrl.profileShowfileProgress = true;
         }
-        ctrl.closeCropModal = function() {
+        ctrl.closeCropModal = function () {
             $("#cropper-example-2-modal").modal('hide');
             ctrl.profileFileObj.flowObj.cancel();
         };
         var $image = $('#cropper-example-2 > img'),
                 cropBoxData,
                 canvasData;
-        $('body').on('shown.bs.modal', "#cropper-example-2-modal", function() {
+        $('body').on('shown.bs.modal', "#cropper-example-2-modal", function () {
             $image = $('#cropper-example-2 > img'),
                     cropBoxData,
                     canvasData;
@@ -966,24 +969,24 @@
                 autoCropArea: 0.5,
                 aspectRatio: 1 / 1,
                 preview: ".img-preview",
-                built: function() {
+                built: function () {
                     // Strict mode: set crop box data first
                     $image.cropper('setCropBoxData', cropBoxData);
                     $image.cropper('setCanvasData', canvasData);
                 }
             });
-        }).on('hidden.bs.modal', function() {
+        }).on('hidden.bs.modal', function () {
             cropBoxData = $image.cropper('getCropBoxData');
             canvasData = $image.cropper('getCanvasData');
             $image.cropper('destroy');
         });
-        ctrl.zoomIn = function() {
+        ctrl.zoomIn = function () {
             $image.cropper('zoom', 0.1);
         };
-        ctrl.zoomOut = function() {
+        ctrl.zoomOut = function () {
             $image.cropper('zoom', -0.1);
         };
-        ctrl.reset = function() {
+        ctrl.reset = function () {
             $image.cropper('reset');
         };
 

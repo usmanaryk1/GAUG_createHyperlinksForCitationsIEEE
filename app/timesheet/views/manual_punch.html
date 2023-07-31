@@ -41,12 +41,12 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <label class="cbr-inline">
-                                        <input class="cbr" name="IsMissedPunch" type="radio" ng-value="true" ng-model="manualPunch.attendanceObj.isMissedPunch" ng-disabled="manualPunch.editTimesheet">
+                                        <input class="cbr cbr-primary" name="IsMissedPunch" type="radio" ng-value="true" ng-model="manualPunch.attendanceObj.isMissedPunch" ng-disabled="manualPunch.editTimesheet">
                                         Yes
                                         </input>
                                     </label>
                                     <label class="cbr-inline">
-                                        <input class="cbr" checked name="IsMissedPunch" type="radio" ng-value="false" ng-model="manualPunch.attendanceObj.isMissedPunch" ng-disabled="manualPunch.editTimesheet">
+                                        <input class="cbr cbr-primary" checked name="IsMissedPunch" type="radio" ng-value="false" ng-model="manualPunch.attendanceObj.isMissedPunch" ng-disabled="manualPunch.editTimesheet">
                                         No
                                         </input>
                                     </label>
@@ -244,4 +244,11 @@
     <button type="submit" class="btn btn-info" ng-click="taskModal.save();">Save</button>
     </div>
     </form>
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        setTimeout(function () {
+            cbr_replace();
+        }, 100);
+    });
 </script>

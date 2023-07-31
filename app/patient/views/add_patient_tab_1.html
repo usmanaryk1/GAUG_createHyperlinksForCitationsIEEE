@@ -128,14 +128,14 @@
                         <div class="col-sm-9">
                             <div>
                                 <label class="checkbox col-sm-3" ng-repeat="language in addPatient.languagesKeyValue">
-                                    <input id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
+                                    <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                     {{languages[language.key]}}
                                 </label>
                                 <label class="checkbox col-sm-3">
-                                    <input id="languageOther" name="languageOther" type="checkbox" ng-model="addPatient.otherLanguageCheckbox" ng-change="addPatient.refreshLanguages()" />
+                                    <input class="cbr" id="languageOther" name="languageOther" type="checkbox" ng-model="addPatient.otherLanguageCheckbox" ng-change="addPatient.refreshLanguages()" />
                                     Others
                                 </label>
-                                <label class="col-sm-6" ng-if="addPatient.otherLanguageCheckbox" style="margin-left:-20px">
+                                <label class="col-sm-6 other-language" ng-if="addPatient.otherLanguageCheckbox">
                                     <input id="languageOtherText" name="languageOtherText" class="form-control" data-role="tagsinput" type="text" ng-model="addPatient.patient.otherLanguages" tagsinput/>
                                 </label>
                             </div>
@@ -264,7 +264,7 @@
     customJqueryValidation();
 
     jQuery(document).ready(function($) {
-        cbr_replace();
+        
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
         }, 1);

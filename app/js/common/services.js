@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('xenon.services', []).
-        service('$menuItems', function()
+        service('$menuItems', function ()
         {
             this.menuItems = [];
 
@@ -16,7 +16,7 @@ angular.module('xenon.services', []).
                 isActive: false,
                 label: null,
                 menuItems: [],
-                setLabel: function(label, color, hideWhenCollapsed)
+                setLabel: function (label, color, hideWhenCollapsed)
                 {
                     if (typeof hideWhenCollapsed == 'undefined')
                         hideWhenCollapsed = true;
@@ -29,7 +29,7 @@ angular.module('xenon.services', []).
 
                     return this;
                 },
-                addItem: function(title, link, icon)
+                addItem: function (title, link, icon)
                 {
                     var parent = this,
                             item = angular.extend(angular.copy(menuItemObj), {
@@ -56,7 +56,7 @@ angular.module('xenon.services', []).
                 }
             };
 
-            this.addItem = function(title, link, icon)
+            this.addItem = function (title, link, icon)
             {
                 var item = angular.extend(angular.copy(menuItemObj), {
                     title: title,
@@ -70,12 +70,12 @@ angular.module('xenon.services', []).
                 return item;
             };
 
-            this.getAll = function()
+            this.getAll = function ()
             {
                 return this.menuItems;
             };
 
-            this.prepareSidebarMenu = function()
+            this.prepareSidebarMenu = function ()
             {
                 var dashboard = this.addItem('Dashboard', '/app/dashboard', 'fa-home');
                 var employee = this.addItem('Employee', '/app', 'linecons-cog');
@@ -129,7 +129,7 @@ angular.module('xenon.services', []).
                 return this;
             };
 
-            this.prepareHorizontalMenu = function()
+            this.prepareHorizontalMenu = function ()
             {
                 var dashboard = this.addItem('Dashboard', '/app/dashboard-variant-1', 'fa-home');
                 var employee = this.addItem('Employee', '/app', 'linecons-cog');
@@ -174,22 +174,22 @@ angular.module('xenon.services', []).
                 return this;
             }
 
-            this.instantiate = function()
+            this.instantiate = function ()
             {
                 return angular.copy(this);
             }
 
-            this.toStatePath = function(path)
+            this.toStatePath = function (path)
             {
                 return path.replace(/\//g, '.').replace(/^\./, '');
             };
 
-            this.setActive = function(path)
+            this.setActive = function (path)
             {
                 this.iterateCheck(this.menuItems, this.toStatePath(path));
             };
 
-            this.setActiveParent = function(item)
+            this.setActiveParent = function (item)
             {
                 item.isActive = true;
                 item.isOpen = true;
@@ -198,9 +198,9 @@ angular.module('xenon.services', []).
                     this.setActiveParent(item.parent);
             };
 
-            this.iterateCheck = function(menuItems, currentState)
+            this.iterateCheck = function (menuItems, currentState)
             {
-                angular.forEach(menuItems, function(item)
+                angular.forEach(menuItems, function (item)
                 {
                     if (item.state == currentState)
                     {
@@ -229,9 +229,15 @@ angular.module('xenon.services', []).
                 });
             };
         })
-        .service('$formService', function() {
-            this.setRadioValues = function(name, newVal) {
+        .service('$formService', function () {
+            this.setRadioValues = function (name, newVal) {
                 $("input[name='" + name + "'][value='" + newVal + "']").attr('checked', 'checked');
                 $("input[name='" + name + "'][value='" + newVal + "']").parent().parent().addClass('cbr-checked');
             };
+
+            this.resetRadios = function () {
+                setTimeout(function () {
+                    cbr_replace();
+                }, 100);
+            }
         });

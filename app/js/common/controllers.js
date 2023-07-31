@@ -207,9 +207,9 @@ angular.module('xenon.controllers', []).
             $scope.$watch(function()
             {
 //                cbr_replace();
-                if (!$("input[type='radio']").parent().find("span").length) {
-                    $("input[type='radio']").parent().append("<span class='radio_overlay'></span>");
-                }
+//                if (!$("input[type='radio']").parent().find("span").length) {
+//                    $("input[type='radio']").parent().append("<span class='radio_overlay'></span>");
+//                }
             });
 
             // Watch sidebar status to remove the psScrollbar

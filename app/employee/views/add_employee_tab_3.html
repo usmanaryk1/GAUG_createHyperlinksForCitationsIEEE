@@ -483,7 +483,7 @@
 
         setTimeout(function()
         {
-            cbr_replace();
+            
             jQuery.ajax({
                 url: "data/ajax-content.txt",
                 success: function(response)
@@ -506,6 +506,7 @@
     jQuery(document).ready(function($) {
         setTimeout(function() {
             $(".fade-in-effect").addClass('in');
+//            cbr_replace();
         }, 1);
         //to set an variable to check dirtiness of form.
 //        setTimeout(function() {

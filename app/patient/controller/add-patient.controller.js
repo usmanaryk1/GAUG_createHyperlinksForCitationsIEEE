@@ -238,7 +238,7 @@
                     if (!ctrl.patient.gender) {
                         ctrl.patient.gender = 'M';
                     }
-                    $formService.setRadioValues('Gender', ctrl.patient.gender);
+                    $formService.resetRadios();
                     form_data = $('#add_patient_form').serialize();
                 } else {
                     ctrl.tab1DataInit();
@@ -269,6 +269,7 @@
                     }
                     $formService.setRadioValues('IsSubscriber', ctrl.patient.isSubscriber);
                     form_data = $('#add_patient_form').serialize();
+                    $formService.resetRadios();
                 } else {
                     ctrl.tab3DataInit();
                 }
@@ -354,6 +355,7 @@
                     }
                     $formService.setRadioValues('Gender', ctrl.patient.subscriberInfo[0].gender);
                     form_data = $('#add_patient_form').serialize();
+                    $formService.resetRadios();
                 } else {
                     ctrl.tab5DataInit();
                 }

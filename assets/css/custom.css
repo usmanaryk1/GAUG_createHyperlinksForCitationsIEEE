@@ -253,3 +253,7 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
     border-left: 0;
     border-right: 0;
 }
+/*To solve marginal issue in other language textbox*/
+.other-language .bootstrap-tagsinput {
+   margin-top: 7px;
+}

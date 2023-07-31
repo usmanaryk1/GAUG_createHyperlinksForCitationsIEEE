@@ -138,7 +138,7 @@
                                         <span class="red">{{addEmployee.profileFileObj.errorMsg}}</span>
                                     </div> 
                                 </div>
-                                <div flow-transfers class="col-md-12 form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress()<1">
+                                <div flow-transfers class="col-md-12 form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
                                     <div ng-repeat="file in transfers">
                                         <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.profileShowfileProgress">
                                             <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
@@ -362,14 +362,14 @@
                             <div class="col-sm-9">
                                 <div>
                                     <label class="checkbox col-sm-3" ng-repeat="language in addEmployee.languagesKeyValue">
-                                        <input id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
+                                        <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                         {{languages[language.key]}}
                                     </label>
                                     <label class="checkbox col-sm-3">
-                                        <input id="languageOther" name="languageOther" type="checkbox" ng-model="addEmployee.otherLanguageCheckbox" ng-change="addEmployee.refreshLanguages()" />
+                                        <input class="cbr" id="languageOther" name="languageOther" type="checkbox" ng-model="addEmployee.otherLanguageCheckbox" ng-change="addEmployee.refreshLanguages()" />
                                         Others
                                     </label>
-                                    <label class="col-sm-6" ng-if="addEmployee.otherLanguageCheckbox" style="margin-left:-20px">
+                                    <label class="col-sm-6 other-language" ng-if="addEmployee.otherLanguageCheckbox">
                                         <input id="languageOtherText" name="languageOtherText" class="form-control" data-role="tagsinput" type="text" ng-model="addEmployee.employee.otherLanguages" tagsinput/>
                                     </label>
                                 </div>
@@ -419,9 +419,8 @@
     // validate
     var form_clean;
     customJqueryValidation();
-    jQuery(document).ready(function($) {
-        cbr_replace();
-        setTimeout(function() {
+    jQuery(document).ready(function ($) {
+        setTimeout(function () {
             $(".fade-in-effect").addClass('in');
 
         }, 1);

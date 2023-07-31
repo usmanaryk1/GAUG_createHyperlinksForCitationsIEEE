@@ -1,4 +1,4 @@
-(function() {
+(function () {
     function AddInsurerCtrl($scope, $rootScope, $state, $modal, $timeout, InsurerDAO, CareTypeDAO) {
         var ctrl = this;
         ctrl.insurerObj = {insuranceCareTypeCollection: []};
@@ -7,10 +7,10 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.planTypes = [{label: "Medicaid", value: "mcd"}, {label: "Medicare", value: "mcr"}, {label: "Tricare Champus", value: "tc"}, {label: "ChampVA", value: "cva"}, {label: "Group Healthplan", value: "gh"}, {label: "Feca Black Lung", value: "fbl"}, {label: "Blue Cross", value: "bc"}, {label: "Blue Shield", value: "bs"}, {label: "Blue Cross/Blue Sheild (BCBS)", value: "bcb"}, {label: "Other", value: "oth"}];
-        ctrl.initForm = function() {
+        ctrl.initForm = function () {
             $("#add_inusrer_form input:text, #add_inusrer_form textarea").first().focus();
         };
-        ctrl.resetInsurer = function() {
+        ctrl.resetInsurer = function () {
             if (ctrl.insurerObj.contractFile != null) {
                 ctrl.insurerObj.contractFile = null;
             }
@@ -91,7 +91,7 @@
 //                }
                 $rootScope.maskLoading();
                 InsurerDAO.update({action: reqParam, data: insurerToSave})
-                        .then(function(res) {
+                        .then(function (res) {
 //                            if (!ctrl.insurerObj.id || ctrl.insurerObj.id === null) {
 //                                $state.go('^.insurer', {id: res.id});
 //                                ctrl.editMode = true;
@@ -99,11 +99,11 @@
                             $state.go('app.insurer-list');
                             ctrl.insurerObj = res;
                             toastr.success("Insurance provider saved.");
-                        }).catch(function() {
+                        }).catch(function () {
                     //exception logic
                     toastr.error("Insurance provider cannot be saved.");
 
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
 
@@ -112,51 +112,51 @@
 
         //function called on page initialization.
         function pageInit() {
-            CareTypeDAO.retrieveAll().then(function(res) {
+            CareTypeDAO.retrieveAll().then(function (res) {
                 ctrl.careTypeList = res;
                 ctrl.careTypeIdMap = {};
-                angular.forEach(ctrl.careTypeList, function(obj) {
+                angular.forEach(ctrl.careTypeList, function (obj) {
                     ctrl.careTypeIdMap[obj.id] = obj;
                 });
-                $timeout(function() {
+                $timeout(function () {
                     $('#multi-select').multiSelect('refresh');
                 });
-            }).catch(function() {
+            }).catch(function () {
                 toastr.error("Failed to retrieve care type.");
                 form_data = $('#add_patient_form').serialize();
             });
             if (ctrl.editMode) {
                 ctrl.retrivalRunning = true;
                 $rootScope.maskLoading();
-                InsurerDAO.get({id: $state.params.id}).then(function(res) {
+                InsurerDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.insurerObj = res;
 
                     if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
                         ctrl.insurerObj.insuranceCareTypeCollection = [];
                     } else {
-                        angular.forEach(ctrl.insurerObj.insuranceCareTypeCollection, function(obj) {
+                        angular.forEach(ctrl.insurerObj.insuranceCareTypeCollection, function (obj) {
                             ctrl.selectedCareTypes.push(obj.companyCaretypeId.id);
                         });
                     }
                     ctrl.retrivalRunning = false;
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error("Failed to retrieve insurance provider.");
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
-                        finish: function() {
+                        finish: function () {
 
                         }
                     }); // showLoadingBar
                     console.log(JSON.stringify(ctrl.insurerObj));
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             }
         }
 
 // Open Simple Modal
-        ctrl.openModal = function(modal_id, modal_size, modal_backdrop)
+        ctrl.openModal = function (modal_id, modal_size, modal_backdrop)
         {
             ctrl.selecteModalOpen = true;
             $rootScope.careTypeModel = $modal.open({
@@ -167,9 +167,11 @@
             });
             $rootScope.careTypeModel.careTypeObj = {};
             $rootScope.careTypeModel.careTypeObj.unit = "unit";
-
-            $rootScope.careTypeModel.save = function() {
-                $timeout(function() {
+            setTimeout(function () {
+                cbr_replace();
+            }, 100);
+            $rootScope.careTypeModel.save = function () {
+                $timeout(function () {
                     if ($('#care_type_form')[0].checkValidity()) {
                         $rootScope.careTypeModel.dismiss();
                         $rootScope.careTypeModel.careTypeObj.companyCaretypeId = ctrl.careTypeIdMap[ctrl.newSelectedType];
@@ -182,9 +184,9 @@
                 });
             };
 
-            $rootScope.careTypeModel.cancel = function() {
+            $rootScope.careTypeModel.cancel = function () {
                 ctrl.selectedCareTypes.splice(ctrl.selectedCareTypes.indexOf(ctrl.newSelectedType), 1);
-                $timeout(function() {
+                $timeout(function () {
                     $("#multi-select").multiSelect('refresh');
                 });
                 $rootScope.careTypeModel.close();
@@ -192,7 +194,7 @@
 
         };
 
-        ctrl.openUnselectCareTypeModal = function(modal_id, modal_size, modal_backdrop)
+        ctrl.openUnselectCareTypeModal = function (modal_id, modal_size, modal_backdrop)
         {
             ctrl.unselecteModalOpen = true;
             $rootScope.unselectCareTypeModal = $modal.open({
@@ -201,17 +203,17 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.unselectCareTypeModal.careTypeIdMap=ctrl.careTypeIdMap;
-            $rootScope.unselectCareTypeModal.confirm = function() {
-                $timeout(function() {
+            $rootScope.unselectCareTypeModal.careTypeIdMap = ctrl.careTypeIdMap;
+            $rootScope.unselectCareTypeModal.confirm = function () {
+                $timeout(function () {
                     ctrl.unselecteModalOpen = false;
                     $rootScope.unselectCareTypeModal.dismiss();
                 });
             };
 
-            $rootScope.unselectCareTypeModal.cancelDelete = function() {
+            $rootScope.unselectCareTypeModal.cancelDelete = function () {
                 ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
-                $timeout(function() {
+                $timeout(function () {
                     $("#multi-select").multiSelect('refresh');
                 });
                 $rootScope.unselectCareTypeModal.close();
@@ -220,10 +222,10 @@
         };
         ctrl.pageInitCall();
 
-        $scope.$watch(function() {
+        $scope.$watch(function () {
             return ctrl.selectedCareTypes;
-        }, function(newValue, oldValue) {
-            $timeout(function() {
+        }, function (newValue, oldValue) {
+            $timeout(function () {
                 $("#multi-select").multiSelect('refresh');
             });
             if (ctrl.displayCareTypeModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
@@ -241,7 +243,7 @@
                 if (!ctrl.selecteModalOpen) {
                     ctrl.newDeselectedType = arr_diff(oldValue, newValue);
                     ctrl.openUnselectCareTypeModal('modal-3', 'md', 'static');
-                    $rootScope.unselectCareTypeModal.newDeselectedType=ctrl.newDeselectedType;
+                    $rootScope.unselectCareTypeModal.newDeselectedType = ctrl.newDeselectedType;
                 } else {
                     ctrl.selecteModalOpen = false;
                 }
@@ -259,13 +261,13 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.fileSelected = function(file, flow) {
+        ctrl.fileSelected = function (file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.fileUploaded = function(response, file, flow) {
+        ctrl.fileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -275,7 +277,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
         };
-        ctrl.fileError = function($file, $message, $flow) {
+        ctrl.fileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
@@ -285,7 +287,7 @@
             ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
             ctrl.insurerObj.contractFile = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.fileObj.errorMsg = "Please upload a valid file.";
