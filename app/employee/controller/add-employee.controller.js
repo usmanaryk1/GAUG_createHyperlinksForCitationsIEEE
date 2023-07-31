@@ -1,3 +1,5 @@
+/* global appHelper, ontime_data, _ */
+
 (function () {
     function AddEmployeeCtrl($scope, CareTypeDAO, BenefitDAO, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
         var ctrl = this;
@@ -230,6 +232,7 @@
 //            }
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
+            delete employeeToSave.employeeAttachments;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 //Check if ssn number is already present
                 EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
@@ -347,6 +350,44 @@
                 }, 100);
             });
         }
+        
+        var getUnique = function (attachment) {
+            return attachment.attachmentType;
+        };
+        
+        var getAttachmentsByType = function (attachments, type) {
+            var result = {count: 0, data: []};
+            var filteredAttachments = attachments.filter(function (attachment) {
+                return attachment.type === type;
+            });
+            
+            result.data = angular.copy(_.uniqBy(filteredAttachments, getUnique));
+            result.count = result.data.length;
+
+            var existingIds = _.map(result.data, 'id');
+
+            result.data = result.data.concat(_.filter(filteredAttachments, function (applicationEmployeeAttachment) {
+                return existingIds.indexOf(applicationEmployeeAttachment.id) === -1;
+            }));            
+            return result;
+        };
+        
+        var getFilteredAttachments = function () {
+            if (ctrl.employee.employeeAttachments) {    
+                ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments,function(attachment){
+                    return attachment.expiryDate ? new Date(attachment.expiryDate): new Date(1970,1,1);
+                }, ['desc']);
+                ctrl.attachmentCount = {};
+                
+                var aedResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'aed');
+                var medResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'med');
+                
+                ctrl.attachmentCount.AED = aedResults.count;
+                ctrl.applicationEmployeeAttachments = angular.copy(aedResults.data);
+                ctrl.attachmentCount.MED = medResults.count;
+                ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
+            }
+        };
 
         //function called on page initialization.
         function pageInit() {
@@ -365,6 +406,9 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
+                    
+                    getFilteredAttachments();
+                    
                     ctrl.displayDocumentsByPosition();
                     if (res.languageSpoken != null) {
                         var languages = res.languageSpoken;
@@ -1077,140 +1121,52 @@
 //        });
 
 //        ctrl.pageInitCall();
-        ctrl.deleteAttachment = function (i) {
-            ctrl.employee.employeeAttachments = $filter('orderBy')(ctrl.employee.employeeAttachments, '-expiryDate');
-            ctrl.employee.employeeAttachments.splice(i, 1);
+        ctrl.deleteAttachment = function (attachment) {
+            $rootScope.maskLoading();
+            EmployeeDAO.deleteAttachment(attachment).then(function () {
+                ctrl.employee.employeeAttachments = ctrl.employee.employeeAttachments.filter(function (attachmentValid) {
+                    return attachmentValid.id !== attachment.id;
+                });
+                getFilteredAttachments();
+                toastr.success("Document deleted successfully.");
+            }).catch(function () {
+                toastr.error("Document cannot be deleted.");
+            }).then(function () {
+                $rootScope.unmaskLoading();
+            });
         };
 
-        ctrl.openAttachmentModal = function (modal_id, modal_size, modal_backdrop)
-        {
-            $rootScope.unmaskLoading();
-            $rootScope.uploadPopup = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+        ctrl.openAttachmentModal = function (attachment, mode) {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('employee', 'employee-attachment'),
+                size: "lg",
+                backdrop: false,
+                keyboard: false,
+                controller: 'EmployeeAttachmentCtrl as employeeAttachment',
+                resolve: {
+                    attachmentInfo: function () {
+                        return mode === 'Edit' ? angular.copy(attachment) : {employeeId: ctrl.employee.id, type: attachment};
+                    }
+                }
             });
-            $rootScope.uploadPopup.baseUrl = ontime_data.weburl;
-            $rootScope.uploadPopup.companyCode = ontime_data.company_code;
-            $rootScope.uploadPopup.data = {employeeId: ctrl.employee.id};
-            $rootScope.uploadPopup.fileObj = {};
-            $rootScope.uploadPopup.closePopup = function () {
-                $rootScope.uploadPopup.close();
-            };
-            $rootScope.uploadPopup.save = function () {
-                var required = true;
-                if ($rootScope.uploadPopup.data.type == 'l' && ctrl.position == 'staff') {
-                    required = false;
-                }
-                if (required) {
-                    if (!$rootScope.uploadPopup.data.filePath) {
-                        $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
-                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
-                        $rootScope.uploadPopup.errorMsg = "Please select Tb Testing.";
-                    } else if ($rootScope.uploadPopup.data.type == 'b' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
-                        $rootScope.uploadPopup.errorMsg = "Please select Background Status.";
+            modalInstance.result.then(function (updatedAttachment) {
+                if (updatedAttachment) {
+                    if (mode === 'Create') {
+                        ctrl.employee.employeeAttachments.push(updatedAttachment);
                     } else {
-                        ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
-                        $rootScope.uploadPopup.closePopup();
-                    }
-                } else {
-                    ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
-                    $rootScope.uploadPopup.closePopup();
-                }
-
-            };
-            $rootScope.uploadPopup.typeList = [];
-            if (ctrl.displayDocumentsByPositionMap['l']) {
-                if (ctrl.position == 'staff') {
-                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License"});
-                } else {
-                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License or Certificate"});
-                }
-            }
-            if (ctrl.displayDocumentsByPositionMap['9']) {
-                $rootScope.uploadPopup.typeList.push({id: '9', label: "I-9 Eligibility"});
-            }
-            if (ctrl.displayDocumentsByPositionMap['z']) {
-                $rootScope.uploadPopup.typeList.push({id: 'z', label: "Physical"});
-            }
-            if (ctrl.displayDocumentsByPositionMap['t']) {
-                $rootScope.uploadPopup.typeList.push({id: 't', label: "Tb Testing"});
-            }
-            if (ctrl.displayDocumentsByPositionMap['b']) {
-                $rootScope.uploadPopup.typeList.push({id: 'b', label: "Background Check"});
-            }
-            $rootScope.uploadPopup.setUploadFile = function () {
-                $formService.resetRadios();
-                $rootScope.uploadPopup.disableUploadButton = false;
-                if ($rootScope.uploadPopup.fileObj.flowObj != null) {
-                    $rootScope.uploadPopup.fileObj.flowObj.cancel();
-                }
-                delete $rootScope.uploadPopup.errorMsg;
-                $rootScope.uploadPopup.fileObj = {};
-                delete $rootScope.uploadPopup.data.filePath;
-                if ($rootScope.uploadPopup.data.type == 't' || $rootScope.uploadPopup.data.type == 'b') {
-                    delete $rootScope.uploadPopup.data.result;
-                    delete $rootScope.uploadPopup.data.name;
-                }
-                $rootScope.uploadPopup.uploadFile = {
-                    target: ontime_data.weburl + 'file/upload',
-                    chunkSize: 1024 * 1024 * 1024,
-                    testChunks: false,
-                    fileParameterName: "fileUpload",
-                    singleFile: true,
-                    headers: {
-                        type: $rootScope.uploadPopup.data.type,
-                        company_code: ontime_data.company_code
-                    }
-                };
-            }
-            //When file is selected from browser file picker
-            $rootScope.uploadPopup.fileSelected = function (file, flow) {
-                $rootScope.uploadPopup.fileObj.flowObj = flow;
-                $rootScope.maskLoading();
-                $rootScope.uploadPopup.fileObj.flowObj.upload();
-            };
-            //When file is uploaded this method will be called.
-            $rootScope.uploadPopup.fileUploaded = function (response, file, flow) {
-                if (response != null) {
-                    response = JSON.parse(response);
-                    if (response.fileName != null && response.status != null && response.status == 's') {
-                        $rootScope.uploadPopup.data.filePath = response.fileName;
-                        if ($rootScope.uploadPopup.data.name == null || $rootScope.uploadPopup.data.name == '') {
-                            $rootScope.uploadPopup.data.name = file.name.substring(0, file.name.lastIndexOf('.'));
+                        for (var index = 0; index < ctrl.employee.employeeAttachments.length; index++) {
+                            if (ctrl.employee.employeeAttachments[index].id === attachment.id) {
+                                ctrl.employee.employeeAttachments[index] = angular.copy(updatedAttachment);
+                                break;
+                            }
                         }
                     }
+                    getFilteredAttachments();
                 }
-                $rootScope.uploadPopup.disableSaveButton = false;
-                $rootScope.uploadPopup.disableUploadButton = false;
-                $rootScope.unmaskLoading();
-            };
-            $rootScope.uploadPopup.fileError = function ($file, $message, $flow) {
-                $flow.cancel();
-                $rootScope.uploadPopup.disableSaveButton = false;
-                $rootScope.uploadPopup.disableUploadButton = false;
-                $rootScope.uploadPopup.data.filePath = null;
-                $rootScope.uploadPopup.data.name = null;
-                $rootScope.uploadPopup.fileObj.errorMsg = "File cannot be uploaded";
-                $rootScope.unmaskLoading();
-            };
-            //When file is added in file upload
-            $rootScope.uploadPopup.fileAdded = function (file, flow) { //It will allow all types of attahcments'
-                $rootScope.uploadPopup.formDirty = true;
-                $rootScope.uploadPopup.data.filePath = null;
-                if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
-                    $rootScope.uploadPopup.fileObj.errorMsg = "Please upload a valid file.";
-                    return false;
-                }
-                $rootScope.uploadPopup.disableSaveButton = true;
-                $rootScope.uploadPopup.disableUploadButton = true;
-                $rootScope.uploadPopup.showfileProgress = true;
-                $rootScope.uploadPopup.fileObj.errorMsg = null;
-                $rootScope.uploadPopup.fileObj.flow = flow;
-                return true;
-            };
-        };
+                console.log("popup closed");
+            });
+        };        
+        
         ctrl.officeStaffIds = [];
         PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
             if (res && res.length > 0) {
