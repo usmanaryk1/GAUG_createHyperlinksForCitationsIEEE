@@ -71,6 +71,12 @@
                 params: {
                     action: 'sessions'
                 }             
+            },
+            deleteClaim:{
+                method: 'DELETE',
+                params: {
+                    action: 'claims'
+                }             
             }
         });
         return {
@@ -106,6 +112,9 @@
             },
             deleteBatch: function(data) {
                 return api.deleteBatch(data).$promise;
+            },
+            deleteClaim: function(data) {
+                return api.deleteClaim(data).$promise;
             }
 
         };
