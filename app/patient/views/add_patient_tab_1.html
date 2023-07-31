@@ -128,11 +128,11 @@
                         <div class="col-sm-9">
                             <div>
                                 <label class="checkbox col-sm-3" ng-repeat="language in addPatient.languagesKeyValue">
-                                    <input class="cbr" id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
+                                    <input id="language{{$index}}" name="language{{$index}}" type="checkbox" ng-model="language.value"/>
                                     {{languages[language.key]}}
                                 </label>
                                 <label class="checkbox col-sm-3">
-                                    <input class="cbr" id="languageOther" name="languageOther" type="checkbox" ng-model="addPatient.otherLanguageCheckbox" ng-change="addPatient.refreshLanguages()" />
+                                    <input id="languageOther" name="languageOther" type="checkbox" ng-model="addPatient.otherLanguageCheckbox" ng-change="addPatient.refreshLanguages()" />
                                     Others
                                 </label>
                                 <label class="col-sm-6" ng-if="addPatient.otherLanguageCheckbox" style="margin-left:-20px">
