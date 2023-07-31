@@ -9,7 +9,7 @@
 
         $rootScope.maskLoading();
 
-        if (attachmentInfo && attachmentInfo.type === 'aed') {
+        if (attachmentInfo && attachmentInfo.type === 'med') {
             ctrl.subTypes = ['Pre – Employment Medical Documents', 'Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation', 'Flu Shot'];
         } else {
             ctrl.subTypes = ['Initial Application Packet', 'Initial Application Packet Nursing', 'W-4', 'Employment Eligibility', 'CHRC Forms', 'Evaluation'];
