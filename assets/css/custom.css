@@ -258,5 +258,5 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
    margin-top: 7px;
 }
 .red-label{
-    color: #CC3F44;
+    color: #CC3F44 !important;;
 }
