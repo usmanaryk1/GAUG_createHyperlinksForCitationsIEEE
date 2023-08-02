@@ -206,9 +206,9 @@
                     employeeToSave.languageSpoken.push(obj.key);
                 }
             });
-            employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();     
-            
-            if(ctrl.benefitPackages && (ctrl.benefitPackages.length > 0) && employeeToSave.employeeBenefitDetails){
+            employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
+
+            if (ctrl.benefitPackages && (ctrl.benefitPackages.length > 0) && employeeToSave.employeeBenefitDetails) {
                 if (employeeToSave.employeeBenefitDetails.benefitPackageId) {
                     var lineTypes = ctrl.benefitPackageWiseLineTypes[employeeToSave.employeeBenefitDetails.benefitPackageId];
                     if (lineTypes.indexOf('HEC') === -1) {
@@ -285,7 +285,7 @@
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
-                            ctrl.editMode = true;   
+                            ctrl.editMode = true;
                             ctrl.employee.id = employeeRes.id;
                             ctrl.employee.status = employeeRes.status;
                             ctrl.employee.employeeBenefitDetails = employeeRes.employeeBenefitDetails;
@@ -350,17 +350,17 @@
                 }, 100);
             });
         }
-        
+
         var getUnique = function (attachment) {
             return attachment.attachmentType;
         };
-        
+
         var getAttachmentsByType = function (attachments, type) {
             var result = {count: 0, data: []};
             var filteredAttachments = attachments.filter(function (attachment) {
                 return attachment.type === type;
             });
-            
+
             result.data = angular.copy(_.uniqBy(filteredAttachments, getUnique));
             result.count = result.data.length;
 
@@ -368,20 +368,36 @@
 
             result.data = result.data.concat(_.filter(filteredAttachments, function (applicationEmployeeAttachment) {
                 return existingIds.indexOf(applicationEmployeeAttachment.id) === -1;
-            }));            
+            }));
             return result;
         };
-        
+
         var getFilteredAttachments = function () {
-            if (ctrl.employee.employeeAttachments) {    
-                ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments,function(attachment){
-                    return attachment.expiryDate ? new Date(attachment.expiryDate): new Date(1970,1,1);
+            if (ctrl.employee.employeeAttachments) {
+                var employeeEligibilities = [];
+                _.each(_.filter(ctrl.employee.employeeAttachments, {type: 'aed', attachmentType: "Initial Application Packet"}), function (intialApplicationPacket) {
+                    var extrafield = JSON.parse(intialApplicationPacket.extraFields);
+                    employeeEligibilities.push({
+                        attachmentType: 'Employment Eligibility',
+                        dateInserted: intialApplicationPacket.dateInserted,
+                        dateUpdated: intialApplicationPacket.dateUpdated,
+                        employeeId: intialApplicationPacket.employeeId,
+                        filePath: intialApplicationPacket.filePath,
+                        id: intialApplicationPacket.id,
+                        name: intialApplicationPacket.name,
+                        type: intialApplicationPacket.type,
+                        expiryDate: extrafield.eligibilityExpDate
+                    });
+                });
+                ctrl.employee.employeeAttachments = ctrl.employee.employeeAttachments.concat(employeeEligibilities);                
+                ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments, function (attachment) {
+                    return attachment.expiryDate ? new Date(attachment.expiryDate) : new Date(1970, 1, 1);
                 }, ['desc']);
                 ctrl.attachmentCount = {};
-                
+
                 var aedResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'aed');
                 var medResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'med');
-                
+
                 ctrl.attachmentCount.AED = aedResults.count;
                 ctrl.applicationEmployeeAttachments = angular.copy(aedResults.data);
                 ctrl.attachmentCount.MED = medResults.count;
@@ -406,9 +422,9 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
-                    
+
                     getFilteredAttachments();
-                    
+
                     ctrl.displayDocumentsByPosition();
                     if (res.languageSpoken != null) {
                         var languages = res.languageSpoken;
@@ -503,7 +519,7 @@
         }, function (newVal, oldValue) {
             setValidationsForTab2(newVal);
         });
-        
+
         $scope.$watch(function () {
             if (!ctrl.employee.careRatesList) {
                 ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
@@ -627,18 +643,18 @@
                         toastr.error("Failed to retrieve care types.");
                         form_data = $('#add_employee_form').serialize();
                     });
-                    
+
                     BenefitDAO.retrieveAll({subAction: "active", linesRequired: true}).then(function (benefitPackages) {
                         ctrl.benefitPackages = [];
                         ctrl.benefitPackageWiseLineTypes = {};
                         _.each(benefitPackages, function (benefitPackage) {
-                            ctrl.benefitPackages.push({id: benefitPackage.id, packageName:benefitPackage.packageName});
-                            ctrl.benefitPackageWiseLineTypes[benefitPackage.id] = _.map(benefitPackage.benefitPackageLineSet, "lineType");                            
+                            ctrl.benefitPackages.push({id: benefitPackage.id, packageName: benefitPackage.packageName});
+                            ctrl.benefitPackageWiseLineTypes[benefitPackage.id] = _.map(benefitPackage.benefitPackageLineSet, "lineType");
                         });
                     }).catch(function () {
                         toastr.error("Failed to benefits packages.");
                     });
-                    
+
                     if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
                         ctrl.employee.taxStatus = 'W';
                     }
@@ -1165,8 +1181,8 @@
                 }
                 console.log("popup closed");
             });
-        };        
-        
+        };
+
         ctrl.officeStaffIds = [];
         PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
             if (res && res.length > 0) {
@@ -1201,7 +1217,7 @@
             ctrl.employee = {}
             ctrl.editMode = false;
             Page.setTitle("Add Employee");
-            
+
         } else {
             $state.transitionTo(ontime_data.defaultState);
         }

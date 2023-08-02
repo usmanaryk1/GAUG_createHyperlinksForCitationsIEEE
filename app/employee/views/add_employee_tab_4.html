@@ -102,7 +102,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center col-md-4"> Type </th>
-                                                <th class="text-center col-md-3"> Document Name </th>
+                                                <!--<th class="text-center col-md-3"> Completion Date </th>-->
                                                 <th class="text-center col-md-2"> Expiration Date </th>
                                                 <th class="text-center col-md-2"> <em class="fa fa-cog"> </em></th>
                                             </tr>
@@ -110,13 +110,14 @@
                                         <tbody>
                                             <tr  pagination-id="applicationPagination" dir-paginate="attachment in addEmployee.applicationEmployeeAttachments | itemsPerPage: addEmployee.attachmentCount.AED">
                                                 <td align="center"> {{attachment.attachmentType}}</td>
-                                                <td align="center"> 
-                                                    <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}">
-                                                        {{attachment.name}}
-                                                    </a>
-                                                </td>
+<!--                                                <td align="center"> 
+                                                    {{attachment.DateCompleted}}
+                                                </td>-->
                                                 <td align="center"> {{attachment.expiryDate}} </td>
                                                 <td align="center">
+                                                    <a class="btn btn-success btn-sm"                                                    
+                                                        ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}" 
+                                                        tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}"><em class="fa fa-download "></em></a>                                                    
                                                     <a class="btn btn-warning btn-sm" tooltip="Edit" ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><em class="fa fa-pencil"></em></a> 
                                                     <a class="btn btn-danger btn-sm" ng-click="addEmployee.deleteAttachment(attachment)"> <em class="fa fa-trash"> </em></a>
                                                 </td>
@@ -149,7 +150,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center col-md-4"> Type </th>
-                                            <th class="text-center col-md-3"> Document Name </th>
+                                            <!--<th class="text-center col-md-3"> Completion Date </th>-->
                                             <th class="text-center col-md-2"> Expiration Date </th>
                                             <th class="text-center col-md-2"> <em class="fa fa-cog"> </em></th>
                                         </tr>
@@ -157,13 +158,14 @@
                                     <tbody>
                                         <tr pagination-id="medicalPagination" dir-paginate="attachment in addEmployee.medicalEmployeeAttachments | itemsPerPage: addEmployee.attachmentCount.MED">
                                             <td align="center"> {{attachment.attachmentType}}</td>
-                                            <td align="center"> 
-                                                <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}">
-                                                    {{attachment.name}}
-                                                </a>
-                                            </td>
+<!--                                            <td align="center"> 
+                                                {{attachment.DateCompleted}}
+                                            </td>-->
                                             <td align="center"> {{attachment.expiryDate}} </td>
                                             <td align="center">
+                                                <a class="btn btn-success btn-sm"                                                    
+                                                   ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}" 
+                                                   tooltip="{{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}"><em class="fa fa-download "></em></a>                                                    
                                                 <a class="btn btn-warning btn-sm" tooltip="Edit" ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><em class="fa fa-pencil"></em></a> 
                                                 <a class="btn btn-danger" ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"> <em class="fa fa-trash"> </em></a>
                                             </td>
