@@ -219,6 +219,7 @@
                 if (!scope.maxSize) { scope.maxSize = 9; }
                 scope.directionLinks = angular.isDefined(attrs.directionLinks) ? scope.$parent.$eval(attrs.directionLinks) : true;
                 scope.boundaryLinks = angular.isDefined(attrs.boundaryLinks) ? scope.$parent.$eval(attrs.boundaryLinks) : false;
+                scope.showPageNumbers = angular.isDefined(attrs.showPageNumbers) ? scope.$parent.$eval(attrs.showPageNumbers) : true;
 
                 var paginationRange = Math.max(scope.maxSize, 5);
                 scope.pages = [];
