@@ -203,15 +203,11 @@
                                                 </td> 
                                                 <td align="center"><span ng-if="authDocument.startDate != null">{{authDocument.startDate|date:dateFormat}} -</span> {{authDocument.expiryDate|date:dateFormat}}</td> 
                                                 <td align="center">
-                                                    <a class="btn btn-warning btn-sm" ng-if="hasAccess('EDIT_PAST_AUTHORIZATION')"  ng-click="addPatient.editAuthorizationDocument($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
+                                                    <a class="btn icon-left fa fa-pencil edit_button" ng-if="hasAccess('EDIT_PAST_AUTHORIZATION')"  ng-click="addPatient.editAuthorizationDocument($index)" ng-if="authDocument.careType"><em class="ed_b"></em></a>
                                                     <span ng-if="authDocument.id === null || authDocument.id === undefined">
-                                                        &nbsp;&nbsp;
-                                                        <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);" ><em class="fa fa-trash"></em></a>
-                                                    </span>
-                                                    <span>
-                                                        &nbsp;&nbsp;
-                                                        <a class="btn btn-success btn-sm"  ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}?userFileName={{authDocument.name}}" tooltip="{{authDocument.name}}.{{authDocument.filePath.substring(authDocument.filePath.lastIndexOf('.') + 1)}}"><em class="fa fa-download "></em></a>
-                                                    </span>
+                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-click="addPatient.removeAuthorizationDocument($index)" tooltip="Delete"><span class="ed_b"></span></a>
+                                                    </span>                                                    
+                                                    <a class="btn icon-left fa fa-download download_bt"  ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}?userFileName={{authDocument.name}}" tooltip="{{authDocument.name}}.{{authDocument.filePath.substring(authDocument.filePath.lastIndexOf('.') + 1)}}"><em class="ed_b"></em></a>
                                                 </td>
                                             </tr>
                                         </tbody>
