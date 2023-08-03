@@ -334,7 +334,9 @@
                             Tax frequency
                         </label>
                         <div class="col-sm-3">
-                            <input class="form-control" id="taxFrequency" name="taxFrequency" type="text" ng-model="payrollSession.employeeModalObj.taxFrequency" maxlength="1" numbers-only="true" data-validate="number" zeroallowed="false"/>
+                            <input class="form-control" id="taxFrequency" name="taxFrequency" type="text" ng-model="payrollSession.employeeModalObj.taxFrequency" 
+                                   maxlength="1" numbers-only="true" data-validate="number,required" zeroallowed="false"
+                                   data-message-required="Please enter Tax Frequency." />
                         </div>
                     </div>
                     <!--<hr style="border: 1px solid #e5e5e5"/>-->
