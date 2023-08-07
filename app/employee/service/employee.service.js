@@ -37,7 +37,7 @@
                 method: 'GET'
             },
             changestatus: {
-                method: 'GET'
+                method: 'PUT'
             },
             getEmployeesForSchedule: {
                 method: 'GET',
@@ -159,7 +159,9 @@
                 return api.getNotes(params).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, terminationDate: data.terminationDate}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id},
+                {status: data.status, reason: data.reason,
+                    terminationDate: data.terminationDate, note: data.note}).$promise;
             },
             getEmployeesForSchedule: function (data) {
                 return api.getEmployeesForSchedule(data).$promise;
