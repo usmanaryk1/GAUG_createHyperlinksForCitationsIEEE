@@ -85,9 +85,7 @@
             // Don't propogate the event to the document
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
-                console.log('--------1-----------')
             }
-            console.log($('#add_patient_form').serialize() + "------------------------" + form_data)
             var validAuthorization = ctrl.isValidAutorization(ctrl.formDirty);
             if (($('#add_patient_form').valid() && validAuthorization) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
@@ -341,13 +339,7 @@
                         ctrl.isBillingAddressSameAsPatient = 'Yes';
                         $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
                     } else {
-                        if (ctrl.patient.patientAddress && JSON.stringify(ctrl.patient.patientAddress) === JSON.stringify(ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0])) {
-                            ctrl.isBillingAddressSameAsPatient = 'Yes';
-                            $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
-                        } else {
-                            ctrl.isBillingAddressSameAsPatient = 'No';
-                            $formService.setRadioValues('IsBillingAddressSameAsPatient', 'No');
-                        }
+                        setBillingAddressRadioButton();
                     }
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
                     if (!ctrl.patient.subscriberInfo[0].gender) {
@@ -380,7 +372,13 @@
         }
 
         function setBillingAddressRadioButton() {
-            if (JSON.stringify(ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0]) === JSON.stringify(ctrl.patient.patientAddress)) {
+            var subscriberAddress = ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0];
+            var patientAddress = ctrl.patient.patientAddress;
+            if (subscriberAddress.address1 === patientAddress.address1
+                    && subscriberAddress.address2 === patientAddress.address2
+                    && subscriberAddress.city === patientAddress.city
+                    && subscriberAddress.state === patientAddress.state
+                    && subscriberAddress.zipcode === patientAddress.zipcode) {
                 ctrl.isBillingAddressSameAsPatient = 'Yes';
                 $formService.setRadioValues('IsBillingAddressSameAsPatient', 'Yes');
             } else {
