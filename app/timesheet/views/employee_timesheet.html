@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="col-sm-4 pad_lf0" style="margin-top:-15px;" ng-if="empTimesheet.selectedEmployee && empTimesheet.selectedEmployee !== null">                                    
-                                    <div class="user_panel" ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee, 'modal-5')" style="cursor: pointer">
+                                    <div class="user_panel" ng-click="empTimesheet.openEditModal(empTimesheet.selectedEmployee.id, 'modal-5')" style="cursor: pointer">
                                         <div class="user_img" ng-if="empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != ''" > 
                                             <img alt="user" class="img-cirlce img-responsive" ng-show="hideDefaultImage" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(empTimesheet.selectedEmployee.profileImage != null && empTimesheet.selectedEmployee.profileImage != '') ? (amazonPublicUrl + empTimesheet.companyCode + '/' + empTimesheet.selectedEmployee.profileImage) : ('assets/images/user-5.png')}}"> 
                                             <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
