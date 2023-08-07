@@ -24,6 +24,9 @@ angular
                         $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                     };
                     $scope.dayClicked = function (date) {
+                        if($rootScope.currentUser.allowedFeature.indexOf('ADD_SCHEDULE') === -1){
+                            return;
+                        }                        
                         if (!$scope.eventClickCalled) {
                             var eventCell;
                             var day = new Date(date.date);
