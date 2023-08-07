@@ -3,7 +3,7 @@
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
-        ctrl.searchParams = {payrollGroup:'A'};
+        ctrl.searchParams = {payrollGroup: 'A'};
         ctrl.searchParams.processedOn = $filter('date')(new Date(), $rootScope.dateFormat)
         ctrl.criteriaSelected = false;
         var otHdConstant = 1;
@@ -33,17 +33,18 @@
         };
 
         ctrl.processPayroll = function (checkDate) {
-            if(checkDate){
-                ctrl.searchParams.checkDate=checkDate;
+            if (checkDate) {
+                ctrl.searchParams.checkDate = checkDate;
             }
             $rootScope.maskLoading();
             angular.forEach(ctrl.payrollSessions, function (session) {
                 session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
             });
-            PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function (res) {
+            PayrollDAO.processSessions(ctrl.searchParamsAtReview, ctrl.payrollSessions).then(function (res) {
                 if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider !== null) {
                     window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
                 }
+                ctrl.searchParamsAtReview = {};
                 console.log(res);
                 $state.go('app.batch_session', {id: res.id});
             }).catch(function (e) {
@@ -91,7 +92,8 @@
             if (ctrl.criteriaSelected && ctrl.dateMessage == null) {
                 $rootScope.maskLoading();
                 ctrl.dataRetrieved = false;
-                PayrollDAO.reviewSessions(ctrl.searchParams).then(function (res) {
+                ctrl.searchParamsAtReview = angular.copy(ctrl.searchParams);
+                PayrollDAO.reviewSessions(ctrl.searchParamsAtReview).then(function (res) {
                     ctrl.dataRetrieved = true;
                     ctrl.payrollSessions = res;
                     angular.forEach(ctrl.payrollSessions, function (payrollObj) {
@@ -406,8 +408,8 @@
                 $rootScope.checkDateModal.dismiss();
             };
         }
-        
-        ctrl.showMissedPunchModal = function(empObj, index, event) {
+
+        ctrl.showMissedPunchModal = function (empObj, index, event) {
 
             var searchParams = {};
             searchParams.fromDate = ctrl.searchParams.fromDate;
@@ -416,9 +418,9 @@
             ctrl.selectedEmployeeId = empObj.employeeId;
 
             $rootScope.maskLoading();
-            TimesheetDAO.getEffectiveMissedPunchesByEmployeeWithinDate(searchParams).then(function(response) {
+            TimesheetDAO.getEffectiveMissedPunchesByEmployeeWithinDate(searchParams).then(function (response) {
                 ctrl.missedPunchList = response;
-                angular.forEach(ctrl.missedPunchList, function(obj) {
+                angular.forEach(ctrl.missedPunchList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                     if (obj.scheduleId && !obj.unauthorizedTime) {
@@ -430,13 +432,13 @@
                     }
                 });
                 ctrl.openMissedPunchModal('payroll-session-missed-punch-modal', 'md', 'static');
-            }).catch(function(e) {
+            }).catch(function (e) {
                 if (e.data != null) {
                     toastr.error(e.data);
                 } else {
                     toastr.error("Missed Punches cannot be retrieved.");
                 }
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
             });
             event.preventDefault();
@@ -445,7 +447,7 @@
 
 
 
-        ctrl.openMissedPunchModal = function(modal_id, modal_size, modal_backdrop) {
+        ctrl.openMissedPunchModal = function (modal_id, modal_size, modal_backdrop) {
 
             ctrl.missedPunchModal = $modal.open({
                 templateUrl: modal_id,
@@ -453,16 +455,16 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false,
                 resolve: {
-                    payrollSession: function() {
+                    payrollSession: function () {
                         return ctrl;
                     },
-                    root: function() {
+                    root: function () {
                         return $rootScope;
                     }
                 },
-                controller: function(payrollSession, $scope, root, $modalInstance) {
+                controller: function (payrollSession, $scope, root, $modalInstance) {
                     $scope.payrollSession = payrollSession;
-                    $scope.close = function() {
+                    $scope.close = function () {
                         $modalInstance.dismiss('cancel');
                     };
                 }
