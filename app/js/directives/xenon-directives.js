@@ -1,12 +1,17 @@
 angular.module('xenon.directives', []).
         // datatable
         directive('datatableSetup', ['$timeout',
-            function($timeout) {
+            function ($timeout) {
                 return {
                     restrict: 'A',
                     scope: {datatableObj: "="},
-                    link: function(scope, element, attrs) {
+                    link: function (scope, element, attrs) {
                         var datatableOptions = {};
+                        if (attrs.datatableSorting) {
+                            if (attrs.datatableSorting.toString() === 'false') {
+                                datatableOptions.aaSorting = [];
+                            }
+                        }
                         if (attrs.displayPrint != null && attrs.displayPrint == 'true') {
                             datatableOptions = {dom: 'Bfrtip', buttons: [
                                     {
@@ -15,7 +20,7 @@ angular.module('xenon.directives', []).
                                     }
                                 ]};
                         }
-                        $timeout(function() {
+                        $timeout(function () {
                             if (attrs.datatableObj != null) {
                                 scope.datatableObj = element.DataTable(datatableOptions);
                             } else {
@@ -27,14 +32,14 @@ angular.module('xenon.directives', []).
             }
         ]).
         // Layout Related Directives
-        directive('settingsPane', function() {
+        directive('settingsPane', function () {
             return {
                 restrict: 'E',
                 templateUrl: appHelper.templatePath('layout/settings-pane'),
                 controller: 'SettingsPaneCtrl'
             };
         }).
-        directive('horizontalMenu', function() {
+        directive('horizontalMenu', function () {
             return {
                 restrict: 'E',
                 replace: true,
@@ -42,21 +47,21 @@ angular.module('xenon.directives', []).
                 controller: 'HorizontalMenuCtrl'
             }
         }).
-        directive('sidebarMenu', function() {
+        directive('sidebarMenu', function () {
             return {
                 restrict: 'E',
                 templateUrl: appHelper.templatePath('layout/sidebar-menu'),
                 controller: 'SidebarMenuCtrl'
             };
         }).
-        directive('sidebarChat', function() {
+        directive('sidebarChat', function () {
             return {
                 restrict: 'E',
                 replace: true,
                 templateUrl: appHelper.templatePath('layout/sidebar-chat')
             };
         }).
-        directive('footerChat', function() {
+        directive('footerChat', function () {
             return {
                 restrict: 'E',
                 replace: true,
@@ -64,48 +69,48 @@ angular.module('xenon.directives', []).
                 templateUrl: appHelper.templatePath('layout/footer-chat')
             };
         }).
-        directive('sidebarLogo', function() {
+        directive('sidebarLogo', function () {
             return {
                 restrict: 'E',
                 replace: true,
                 templateUrl: appHelper.templatePath('layout/sidebar-logo')
             };
         }).
-        directive('sidebarProfile', function() {
+        directive('sidebarProfile', function () {
             return {
                 restrict: 'E',
                 replace: true,
                 templateUrl: appHelper.templatePath('layout/sidebar-profile')
             };
         }).
-        directive('userInfoNavbar', function() {
+        directive('userInfoNavbar', function () {
             return {
                 restrict: 'E',
                 replace: true,
                 templateUrl: appHelper.templatePath('layout/user-info-navbar')
             };
         }).
-        directive('pageTitle', function() {
+        directive('pageTitle', function () {
             return {
                 restrict: 'E',
                 replace: true,
                 templateUrl: appHelper.templatePath('layout/page-title'),
-                link: function(scope, el, attr) {
+                link: function (scope, el, attr) {
                     scope.title = attr.title;
                     scope.description = attr.description;
                 }
             };
         }).
-        directive('siteFooter', function() {
+        directive('siteFooter', function () {
             return {
                 restrict: 'E',
                 templateUrl: appHelper.templatePath('layout/footer')
             };
         }).
-        directive('xeBreadcrumb', function() {
+        directive('xeBreadcrumb', function () {
             return {
                 restrict: 'A',
-                link: function(scope, el)
+                link: function (scope, el)
                 {
                     var $bc = angular.element(el);
 
@@ -115,18 +120,18 @@ angular.module('xenon.directives', []).
                                 collapsed_width = $as.width(),
                                 expanded_width = 0;
 
-                        $as.each(function(i, el)
+                        $as.each(function (i, el)
                         {
                             var $a = $(el);
 
                             expanded_width = $a.outerWidth(true);
                             $a.addClass('collapsed').width(expanded_width);
 
-                            $a.hover(function()
+                            $a.hover(function ()
                             {
                                 $a.removeClass('collapsed');
                             },
-                                    function()
+                                    function ()
                                     {
                                         $a.addClass('collapsed');
                                     });
@@ -136,16 +141,16 @@ angular.module('xenon.directives', []).
             }
         }).
         // Widgets Directives
-        directive('xeCounter', function() {
+        directive('xeCounter', function () {
 
             return {
                 restrict: 'EAC',
-                link: function(scope, el, attrs)
+                link: function (scope, el, attrs)
                 {
                     var $el = angular.element(el),
                             sm = scrollMonitor.create(el);
 
-                    sm.fullyEnterViewport(function()
+                    sm.fullyEnterViewport(function ()
                     {
                         var opts = {
                             useEasing: attrDefault($el, 'easing', true),
@@ -163,7 +168,7 @@ angular.module('xenon.directives', []).
                                 decimals = new String(to).match(/\.([0-9]+)/) ? new String(to).match(/\.([0-9]+)$/)[1].length : 0,
                                 counter = new countUp($count.get(0), from, to, decimals, duration, opts);
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             counter.start();
                         }, delay * 1000);
 
@@ -172,16 +177,16 @@ angular.module('xenon.directives', []).
                 }
             };
         }).
-        directive('xeFillCounter', function() {
+        directive('xeFillCounter', function () {
 
             return {
                 restrict: 'EAC',
-                link: function(scope, el, attrs)
+                link: function (scope, el, attrs)
                 {
                     var $el = angular.element(el),
                             sm = scrollMonitor.create(el);
 
-                    sm.fullyEnterViewport(function()
+                    sm.fullyEnterViewport(function ()
                     {
                         var fill = {
                             current: null,
@@ -191,7 +196,7 @@ angular.module('xenon.directives', []).
                             unit: attrDefault($el, 'fill-unit', '%'),
                         },
                                 opts = {
-                                    current: fill.to, onUpdate: function() {
+                                    current: fill.to, onUpdate: function () {
                                         $el.css(fill.property, fill.current + fill.unit);
                                     },
                                     delay: attrDefault($el, 'delay', 0),
@@ -214,11 +219,11 @@ angular.module('xenon.directives', []).
                 }
             };
         }).
-        directive('xeStatusUpdate', function() {
+        directive('xeStatusUpdate', function () {
 
             return {
                 restrict: 'EAC',
-                link: function(scope, el, attrs)
+                link: function (scope, el, attrs)
                 {
                     var $el = angular.element(el),
                             $nav = $el.find('.xe-nav a'),
@@ -229,19 +234,19 @@ angular.module('xenon.directives', []).
 
                     if (auto_switch > 0)
                     {
-                        as_interval = setInterval(function()
+                        as_interval = setInterval(function ()
                         {
                             goTo(1);
 
                         }, auto_switch * 1000);
 
-                        $el.hover(function()
+                        $el.hover(function ()
                         {
                             window.clearInterval(as_interval);
                         },
-                                function()
+                                function ()
                                 {
-                                    as_interval = setInterval(function()
+                                    as_interval = setInterval(function ()
                                     {
                                         goTo(1);
 
@@ -264,7 +269,7 @@ angular.module('xenon.directives', []).
                         $to_show.addClass('active').fadeTo(0, 0).fadeTo(320, 1);
                     }
 
-                    $nav.on('click', function(ev)
+                    $nav.on('click', function (ev)
                     {
                         ev.preventDefault();
 
@@ -276,10 +281,10 @@ angular.module('xenon.directives', []).
             };
         }).
         // Extra (Section) Directives
-        directive('tocify', function() {
+        directive('tocify', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.tocify))
                         return false;
@@ -297,17 +302,17 @@ angular.module('xenon.directives', []).
 
                     watcher.lock();
 
-                    watcher.stateChange(function()
+                    watcher.stateChange(function ()
                     {
                         $($this.get(0)).toggleClass('fixed', this.isAboveViewport)
                     });
                 }
             }
         }).
-        directive('scrollable', function() {
+        directive('scrollable', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.perfectScrollbar))
                         return false;
@@ -324,10 +329,10 @@ angular.module('xenon.directives', []).
             }
         }).
         // Forms Directives
-        directive('tagsinput', function() {
+        directive('tagsinput', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     var $el = angular.element(el);
 
@@ -338,10 +343,10 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('dropzone', function() {
+        directive('dropzone', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     var $el = angular.element(el);
 
@@ -352,11 +357,11 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('wysihtml5', function() {
+        directive('wysihtml5', function () {
 
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.wysihtml5))
                         return false;
@@ -374,10 +379,10 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('autogrow', function() {
+        directive('autogrow', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.autosize))
                         return false;
@@ -388,10 +393,10 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('slider', function() {
+        directive('slider', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.slider))
                         return false;
@@ -424,7 +429,7 @@ angular.module('xenon.directives', []).
                             max: max,
                             values: [min_val, max_val],
                             step: step,
-                            slide: function(e, ui)
+                            slide: function (e, ui)
                             {
                                 var min_val = (prefix ? prefix : '') + ui.values[0] + (postfix ? postfix : ''),
                                         max_val = (prefix ? prefix : '') + ui.values[1] + (postfix ? postfix : '');
@@ -437,7 +442,7 @@ angular.module('xenon.directives', []).
 
                                 reps++;
                             },
-                            change: function(ev, ui)
+                            change: function (ev, ui)
                             {
                                 if (reps == 1)
                                 {
@@ -474,7 +479,7 @@ angular.module('xenon.directives', []).
                             max: max,
                             value: value,
                             step: step,
-                            slide: function(ev, ui)
+                            slide: function (ev, ui)
                             {
                                 var val = (prefix ? prefix : '') + ui.value + (postfix ? postfix : '');
 
@@ -486,7 +491,7 @@ angular.module('xenon.directives', []).
 
                                 reps++;
                             },
-                            change: function(ev, ui)
+                            change: function (ev, ui)
                             {
                                 if (reps == 1)
                                 {
@@ -516,12 +521,12 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('formWizard', function() {
+        directive('formWizard', function () {
             return {
                 restrict: 'AC',
                 //by Hardik
                 scope: {'selectedtab': "=", dirty: "="},
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.bootstrapWizard))
                         return;
@@ -537,7 +542,7 @@ angular.module('xenon.directives', []).
 
                     //watch on tabNo in rootscope for next previous click, to set progress bar
                     //by Hardik
-                    scope.$watch("selectedtab", function(value) {
+                    scope.$watch("selectedtab", function (value) {
                         if (value) {
                             _index = scope.selectedtab - 1;
                             // Setup Progress
@@ -553,7 +558,7 @@ angular.module('xenon.directives', []).
                         }
                     }, true);
                     // Validation
-                    var checkFormWizardValidaion = function(tab, navigation, index)
+                    var checkFormWizardValidaion = function (tab, navigation, index)
                     {
                         if ($this.hasClass('validate'))
                         {
@@ -575,7 +580,7 @@ angular.module('xenon.directives', []).
 
                     $this.bootstrapWizard({
                         tabClass: "",
-                        onTabShow: function($tab, $navigation, index)
+                        onTabShow: function ($tab, $navigation, index)
                         {
 //                            var pct = $tabs.eq(index).position().left / $tabs.parent().width() * 100;
 //
@@ -588,17 +593,17 @@ angular.module('xenon.directives', []).
 
                     $this.data('bootstrapWizard').show(_index);
 
-                    $this.find('.pager a').on('click', function(ev)
+                    $this.find('.pager a').on('click', function (ev)
                     {
                         ev.preventDefault();
                     });
                 }
             }
         }).
-        directive('colorpicker', function() {
+        directive('colorpicker', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.colorpicker))
                         return false;
@@ -614,7 +619,7 @@ angular.module('xenon.directives', []).
 
                     if ($n.is('.input-group-addon') && $n.has('a'))
                     {
-                        $n.on('click', function(ev)
+                        $n.on('click', function (ev)
                         {
                             ev.preventDefault();
 
@@ -624,7 +629,7 @@ angular.module('xenon.directives', []).
 
                     if ($p.is('.input-group-addon') && $p.has('a'))
                     {
-                        $p.on('click', function(ev)
+                        $p.on('click', function (ev)
                         {
                             ev.preventDefault();
 
@@ -634,7 +639,7 @@ angular.module('xenon.directives', []).
 
                     if ($preview.length)
                     {
-                        $this.on('changeColor', function(ev) {
+                        $this.on('changeColor', function (ev) {
 
                             $preview.css('background-color', ev.color.toHex());
                         });
@@ -647,11 +652,11 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('validate', function() {
+        directive('validate', function () {
             return {
                 restrict: 'AC',
 //                scope:{required:"="},
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.validate)) {
                         return false;
@@ -663,7 +668,7 @@ angular.module('xenon.directives', []).
                         return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
                     })
                     var validator;
-                    var validateForm = function() {
+                    var validateForm = function () {
 
 
                         var $this = angular.element(el),
@@ -672,15 +677,15 @@ angular.module('xenon.directives', []).
                                     messages: {},
                                     errorElement: 'span',
                                     errorClass: 'validate-has-error',
-                                    highlight: function(element) {
+                                    highlight: function (element) {
                                         $(element).closest('.form-group').addClass('validate-has-error');
                                     },
-                                    unhighlight: function(element) {
+                                    unhighlight: function (element) {
                                         //remove custom invalidity of component when it has valid value - by hardik
                                         element.setCustomValidity('');
                                         $(element).closest('.form-group').removeClass('validate-has-error');
                                     },
-                                    errorPlacement: function(error, element)
+                                    errorPlacement: function (error, element)
                                     {                                    //setting custom validity of for component so we cn check form-validity in controller. - by hardik
                                         element['0'].setCustomValidity(error);
                                         if (element.closest('.has-switch').length)
@@ -709,7 +714,7 @@ angular.module('xenon.directives', []).
                                 },
                         $fields = $this.find('[data-validate]');
 
-                        $fields.each(function(j, el2)
+                        $fields.each(function (j, el2)
                         {
                             var $field = $(el2),
                                     name = $field.attr('name'),
@@ -768,12 +773,12 @@ angular.module('xenon.directives', []).
                     }
                     validateForm();
                     //this is added to remove validation messages when resetForm is set true
-                    scope.$watch("resetForm", function(value) {
+                    scope.$watch("resetForm", function (value) {
                         if (value !== null && value === true) {
                             validator.resetForm();
                             var $this = angular.element(el);
                             var $fields = $this.find('.validate-has-error');
-                            $fields.each(function(j, el2)
+                            $fields.each(function (j, el2)
                             {
                                 $(el2).removeClass('validate-has-error');
                             });
@@ -782,10 +787,10 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('inputmask', function() {
+        directive('inputmask', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     if (!jQuery.isFunction(jQuery.fn.inputmask))
                         return false;
@@ -862,11 +867,11 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('timepicker', function() {
+        directive('timepicker', function () {
             return {
                 restrict: 'AC',
                 scope: {ngModel: "="},
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
 
 //                     $(el).mask("99:99 aa");
@@ -912,11 +917,11 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('datepicker', function($timeout) {
+        directive('datepicker', function ($timeout) {
             return {
                 restrict: 'AC',
                 scope: {minDate: "=", maxDate: "=", ngModel: "="},
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     $(el).attr('maxlength', '10');
 //                    $(el).mask("99/99/9999");
@@ -924,7 +929,7 @@ angular.module('xenon.directives', []).
                         return false;
 
 
-                    $(el).keydown(function(e) {
+                    $(el).keydown(function (e) {
                         var key = e.keyCode || e.which;
 
                         if (key == 37 || key == 38 || key == 39 || key == 40 || key == 8 || key == 46 || key == 191 || key == 9) { // Left / Up / Right / Down Arrow, Backspace, Delete keys
@@ -960,7 +965,7 @@ angular.module('xenon.directives', []).
                             $n = $this.next(),
                             $p = $this.prev();
 
-                    $this.datepicker(opts).on('changeDate', function(ev) {
+                    $this.datepicker(opts).on('changeDate', function (ev) {
                         $this.datepicker('hide');
                     });
 //                    if (attr.enabled != null) {
@@ -974,14 +979,14 @@ angular.module('xenon.directives', []).
 //                                    });
 //                        }
 //                    }
-                    scope.$watch("minDate", function(value) {
+                    scope.$watch("minDate", function (value) {
                         if (value == null || value == "") {
                             $this.datepicker("setStartDate", null);
                         } else {
                             $this.datepicker("setStartDate", new Date(value));
                         }
                     });
-                    scope.$watch("maxDate", function(value) {
+                    scope.$watch("maxDate", function (value) {
                         if (value == null || value == "") {
                             $this.datepicker("setEndDate", null);
                         } else {
@@ -990,13 +995,13 @@ angular.module('xenon.directives', []).
 
                     });
                     //changes to edit the date as currently editing the date is not working properly and we can not make it blank again.
-                    var dateWatch = scope.$watch("ngModel", function(value) {
+                    var dateWatch = scope.$watch("ngModel", function (value) {
                         if (value != null && value.length >= 10) {
                             $this.datepicker("setDate", new Date(value));
 //                            dateWatch();
                         }
                     });
-                    $(el).blur(function(e) {
+                    $(el).blur(function (e) {
                         if (new Date(scope.ngModel).toString() !== "Invalid Date") {
                             var validDate = true;
                             if (scope.maxDate && scope.maxDate < new Date(scope.ngModel)) {
@@ -1020,7 +1025,7 @@ angular.module('xenon.directives', []).
 //        });
                     if ($n.is('.input-group-addon') && $n.has('a'))
                     {
-                        $n.on('click', function(ev)
+                        $n.on('click', function (ev)
                         {
                             ev.preventDefault();
 
@@ -1030,7 +1035,7 @@ angular.module('xenon.directives', []).
 
                     if ($p.is('.input-group-addon') && $p.has('a'))
                     {
-                        $p.on('click', function(ev)
+                        $p.on('click', function (ev)
                         {
                             ev.preventDefault();
 
@@ -1040,14 +1045,14 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('daterange', function() {
+        directive('daterange', function () {
             return {
                 restrict: 'AC',
                 //Added by 'K' for date range assignement to scope value
                 scope: {startDate: "=", endDate: "="},
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
-                    $(el).keydown(function(e) {
+                    $(el).keydown(function (e) {
                         return;
                     });
                     if (!jQuery.isFunction(jQuery.fn.daterangepicker))
@@ -1102,7 +1107,7 @@ angular.module('xenon.directives', []).
                     }
 
 
-                    $this.daterangepicker(opts, function(start, end)
+                    $this.daterangepicker(opts, function (start, end)
                     {
                         //Added by 'K' for date range assignement to scope value
                         scope.startDate = start;
@@ -1129,10 +1134,10 @@ angular.module('xenon.directives', []).
                 }
             }
         }).
-        directive('spinner', function() {
+        directive('spinner', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el, attr)
+                link: function (scope, el, attr)
                 {
                     var $ig = angular.element(el),
                             $dec = $ig.find('[data-type="decrement"]'),
@@ -1144,7 +1149,7 @@ angular.module('xenon.directives', []).
                             umm = min < max;
 
 
-                    $dec.on('click', function(ev)
+                    $dec.on('click', function (ev)
                     {
                         ev.preventDefault();
 
@@ -1158,7 +1163,7 @@ angular.module('xenon.directives', []).
                         $inp.val(num);
                     });
 
-                    $inc.on('click', function(ev)
+                    $inc.on('click', function (ev)
                     {
                         ev.preventDefault();
 
@@ -1175,28 +1180,28 @@ angular.module('xenon.directives', []).
             }
         }).
         // Other Directives
-        directive('loginForm', function() {
+        directive('loginForm', function () {
             return {
                 restrict: 'AC',
-                link: function(scope, el) {
+                link: function (scope, el) {
 
-                    jQuery(el).find(".form-group:has(label)").each(function(i, el)
+                    jQuery(el).find(".form-group:has(label)").each(function (i, el)
                     {
                         var $this = angular.element(el),
                                 $label = $this.find('label'),
                                 $input = $this.find('.form-control');
 
-                        $input.on('focus', function()
+                        $input.on('focus', function ()
                         {
                             $this.addClass('is-focused');
                         });
 
-                        $input.on('keydown', function()
+                        $input.on('keydown', function ()
                         {
                             $this.addClass('is-focused');
                         });
 
-                        $input.on('blur', function()
+                        $input.on('blur', function ()
                         {
                             $this.removeClass('is-focused');
 
@@ -1206,7 +1211,7 @@ angular.module('xenon.directives', []).
                             }
                         });
 
-                        $label.on('click', function()
+                        $label.on('click', function ()
                         {
                             $input.focus();
                         });
@@ -1219,11 +1224,11 @@ angular.module('xenon.directives', []).
                 }
             };
         })
-        .directive('numbersOnly', ['$parse', "$filter", function($parse, $filter) {
+        .directive('numbersOnly', ['$parse', "$filter", function ($parse, $filter) {
                 return {
                     require: ['^form', 'ngModel'],
-                    link: function(scope, element, attrs, ctrls) {
-                        scope.$watch(attrs.ngModel, function(newValue, oldValue) {
+                    link: function (scope, element, attrs, ctrls) {
+                        scope.$watch(attrs.ngModel, function (newValue, oldValue) {
                             var mdlctrl = ctrls[1];
                             var model = $parse(attrs.ngModel);
                             var arr = String(newValue).split("");
@@ -1239,7 +1244,7 @@ angular.module('xenon.directives', []).
                             {
                                 return;
                             }
-                            if(attrs.zeroallowed!== undefined && attrs.zeroallowed.toString()==="false"){
+                            if (attrs.zeroallowed !== undefined && attrs.zeroallowed.toString() === "false") {
                                 if ((newValue != null)) {
                                     transformedNewValue =
                                             newValue.toString().replace('0', '');
@@ -1290,15 +1295,15 @@ angular.module('xenon.directives', []).
                     }
                 };
             }])
-        .directive('imageonload', function() {
+        .directive('imageonload', function () {
             return {
                 restrict: 'A',
                 scope: {imageonload: '='},
-                link: function(scope, element, attrs) {
+                link: function (scope, element, attrs) {
                     scope.height = element.height();
                     element.height("0");
-                    element.bind('load', function() {
-                        scope.$apply(function() {
+                    element.bind('load', function () {
+                        scope.$apply(function () {
                             scope.imageonload = true;
                             element.height(scope.height);
                         });
@@ -1306,13 +1311,13 @@ angular.module('xenon.directives', []).
                 }
             };
         })
-        .directive('charactersonly', function() {
+        .directive('charactersonly', function () {
             return {
                 restrict: 'A',
-                link: function(scope, element, attrs) {
+                link: function (scope, element, attrs) {
                     var regex = /^[a-zA-Z. ]*$/;
                     var value;
-                    $(element).keypress(function(event) {
+                    $(element).keypress(function (event) {
                         value = String.fromCharCode(event.keyCode);
                         if (regex.test(value)) {
                             return true;
