@@ -97,7 +97,8 @@
                     <div class="col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
                             <input type="text" class="form-control datepicker" id="ChestXRayExpiration" name="ChestXRayExpiration" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.chestXRayExpiration" 
-                                   data-validate="required,date" data-message-required="Please select Chest X-Ray Expiration Date.">
+                                   data-validate="required,date" data-message-required="Please select Chest X-Ray Expiration Date."
+                                   ng-required="employeeAttachment.attachment.extraFields.tbTesting && employeeAttachment.attachment.extraFields.isPositive === 'true'">
                             <div class="input-group-addon">
                                 <a href=""><i class="linecons-calendar"></i></a>
                             </div>
@@ -113,7 +114,7 @@
                     <div class="col-sm-8 add-padding-modal">
                         <div class="input-group" style="z-index:1060">
                             <input type="text" class="form-control datepicker" id="TBQuestionnaire" name="TBQuestionnaire" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.tbQuestionnaire" 
-                                   data-validate="date">
+                                   data-validate="date" ng-required="employeeAttachment.checkTBQuestionnaireRequired()">
                             <div class="input-group-addon">
                                 <a href=""><i class="linecons-calendar"></i></a>
                             </div>
@@ -588,7 +589,7 @@
                     Document Name
                 </label>
                 <div class="col-sm-8 add-padding-modal">
-                    <input type="text" class="form-control" name="DocumentName" ng-model="employeeAttachment.attachment.name"
+                    <input type="text" class="form-control" id="DocumentName" name="DocumentName" ng-model="employeeAttachment.attachment.name"
                            data-validate="required"  data-message-required="Please enter Document Name." required='true'>
                 </div>
             </div>

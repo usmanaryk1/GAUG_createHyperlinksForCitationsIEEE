@@ -29,6 +29,17 @@
             cbr_replace();
         }, 100);
         $rootScope.unmaskLoading();
+        
+        ctrl.checkTBQuestionnaireRequired = function () {
+            if (ctrl.attachment.extraFields.chestXRayClearance) {
+                var chestXRayClearanceDate = moment(ctrl.attachment.extraFields.chestXRayClearance, "MM/DD/YYYY");
+                var insertionDate = moment(ctrl.attachment.dateInserted ? ctrl.attachment.dateInserted : new Date());
+
+                return chestXRayClearanceDate.diff(insertionDate, 'days') > 365;
+            } else {
+                return false;
+            }
+        };
 
         ctrl.remove = function (keys) {
             ctrl.attachment.extraFields = _.omit(ctrl.attachment.extraFields, keys);
