@@ -1,5 +1,5 @@
-(function() {
-    function PayrollHistoryCtrl($rootScope, $scope, $http, PayrollDAO, $timeout, $state) {
+(function () {
+    function PayrollHistoryCtrl($rootScope, $location, $http, PayrollDAO, $timeout, $state) {
         var ctrl = this;
 //        ctrl.companyCode = ontimetest.company_code;
 //        ctrl.baseUrl = ontimetest.weburl;
@@ -8,14 +8,14 @@
         ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
         ctrl.historyList = [];
-        ctrl.changeViewRecords = function() {
+        ctrl.changeViewRecords = function () {
             ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
         };
-        ctrl.navigateToProcessedPage = function(id) {
+        ctrl.navigateToProcessedPage = function (id) {
             $state.go('app.batch_session', {id: id});
         };
 
-        ctrl.resetFilters = function() {
+        ctrl.resetFilters = function () {
             ctrl.searchParams.fromDate = null;
             ctrl.searchParams.toDate = null;
             ctrl.historyList = [];
@@ -23,7 +23,7 @@
             ctrl.rerenderDataTable();
         };
 
-        ctrl.rerenderDataTable = function() {
+        ctrl.rerenderDataTable = function () {
             var pageInfo;
             if (ctrl.datatableObj.page != null) {
                 pageInfo = ctrl.datatableObj.page.info();
@@ -32,10 +32,10 @@
             var historyList = angular.copy(ctrl.historyList);
             ctrl.historyList = [];
 //            $("#example-1_wrapper").remove();
-            $timeout(function() {
+            $timeout(function () {
                 ctrl.historyList = historyList;
                 if (pageInfo != null) {
-                    $timeout(function() {
+                    $timeout(function () {
                         var pageNo = Number(pageInfo.page);
                         if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
                             pageNo--;
@@ -46,7 +46,7 @@
             });
         };
 
-        ctrl.showPayrolls = function() {
+        ctrl.showPayrolls = function () {
             if (!ctrl.searchParams.fromDate || ctrl.searchParams.fromDate == "") {
                 ctrl.searchParams.fromDate = null;
             }
@@ -63,33 +63,48 @@
             }
         };
 
-        ctrl.retrievePayrollHistory = function() {
+        ctrl.retrievePayrollHistory = function () {
             $rootScope.maskLoading();
             ctrl.dataRetrieved = false;
-            PayrollDAO.getHistory(ctrl.searchParams).then(function(res) {
+            $location.search({from: ctrl.searchParams.fromDate, to: ctrl.searchParams.toDate});
+            PayrollDAO.getHistory(ctrl.searchParams).then(function (res) {
                 ctrl.dataRetrieved = true;
                 ctrl.historyList = res;
 //		ctrl.historyList = [{batchNo: "13025", dateProcessed: "2008/11/28", grossPay: "10", totalEmployees: 2, totalHours: 20, payPeriod: "2008/11/28 To 2008/ 11/ 29"}];
-                angular.forEach(ctrl.historyList, function(obj) {
+                angular.forEach(ctrl.historyList, function (obj) {
                     obj.dateInserted = Date.parse(obj.dateInserted);
                     obj.sessionStartDate = Date.parse(obj.sessionStartDate);
                     obj.sessionEndDate = Date.parse(obj.sessionEndDate);
                 });
                 ctrl.rerenderDataTable();
-            }).catch(function() {
+            }).catch(function () {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 });
                 toastr.error("Could not load data.");
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
             });
         };
+
+        function initPage() {
+            var params = $location.search();
+            if (params != null) {
+                if (params.from != null) {
+                    ctrl.searchParams.fromDate = params.from;
+                }
+                if (params.to != null) {
+                    ctrl.searchParams.toDate = params.to;
+                }
+                ctrl.showPayrolls();
+            }
+        }
+        initPage();
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollHistoryCtrl', ["$rootScope", "$scope", "$http", "PayrollDAO", "$timeout", "$state", PayrollHistoryCtrl]);
+    angular.module('xenon.controllers').controller('PayrollHistoryCtrl', ["$rootScope", "$location", "$http", "PayrollDAO", "$timeout", "$state", PayrollHistoryCtrl]);
 })();
