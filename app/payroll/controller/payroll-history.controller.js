@@ -72,7 +72,7 @@
                 ctrl.historyList = res;
 //		ctrl.historyList = [{batchNo: "13025", dateProcessed: "2008/11/28", grossPay: "10", totalEmployees: 2, totalHours: 20, payPeriod: "2008/11/28 To 2008/ 11/ 29"}];
                 angular.forEach(ctrl.historyList, function (obj) {
-                    obj.dateInserted = Date.parse(obj.dateInserted);
+                    obj.processedOn = Date.parse(obj.processedOn);
                     obj.sessionStartDate = Date.parse(obj.sessionStartDate);
                     obj.sessionEndDate = Date.parse(obj.sessionEndDate);
                 });

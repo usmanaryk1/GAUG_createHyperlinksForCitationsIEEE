@@ -1,9 +1,10 @@
 (function () {
-    function PayrollSessionCtrl($rootScope, $scope, $modal, $timeout, PayrollDAO, EmployeeDAO, $state) {
+    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, $state) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
+        ctrl.searchParams.processedOn = $filter('date')(new Date(), $rootScope.dateFormat)
         ctrl.criteriaSelected = false;
         var otHdConstant = 1;
         ctrl.resetFilters = function () {
@@ -341,5 +342,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$scope", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", PayrollSessionCtrl]);
+    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", PayrollSessionCtrl]);
 })();
