@@ -23,7 +23,7 @@
                     ctrl.verifyDates();
 
                 }
-                if (ctrl.reportType == 'lossofhoursreport' || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport') {
+                if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport' || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {
