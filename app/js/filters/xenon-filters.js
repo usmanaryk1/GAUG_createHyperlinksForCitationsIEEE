@@ -94,6 +94,16 @@ angular.module('xenon.filter', [])
                 return weekDays[new Date(input).getDay()];
             };
         })
+        .filter('extension', function() {
+            return function(input) {
+                if(input && input!==null){
+                    return input.substring(input.lastIndexOf("."))
+                }else{
+                    return input;
+                }
+                return weekDays[new Date(input).getDay()];
+            };
+        })
         .filter('durationtotal', ['$filter', function($filter) {
                 return function(objList) {
                     var durationSum = 0;

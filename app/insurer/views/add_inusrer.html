@@ -169,11 +169,13 @@
                                                                        data-validate="required"  data-message-required="Please upload Contract File." >-->
                                 <div flow-init="addInsurer.uploadFile" flow-file-added="addInsurer.fileAdded($file, $flow)" flow-file-success="addInsurer.fileUploaded($message,$file,$flow)" flow-files-submitted="addInsurer.fileSelected($file,$flow)" flow-file-error="addInsurer.fileError( $file, $message, $flow )">
                                     <div class="row">
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-2">
                                             <button type='button' class='btn btn-single gray_bt' style="margin-bottom:0px !important" id="contract_file" ng-model="addInsurer.insurerObj.contractFile" flow-btn name="contract_file" ng-disabled="addInsurer.disableUploadButton">Choose File</button>
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">
                                             <a style="color: blue;text-decoration: underline" ng-href="{{addInsurer.baseUrl}}file/download/{{addInsurer.companyCode}}/i/{{addInsurer.insurerObj.contractFile}}">{{addInsurer.insurerObj.contractFile}}</a>
+                                            </label>
                                         </div>
                                     </div>
                                     <div>
