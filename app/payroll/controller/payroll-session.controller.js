@@ -29,7 +29,7 @@
                 } else {
                     ctrl.processPayroll();
                 }
-            }s
+            }
         };
 
         ctrl.processPayroll = function (checkDate) {
