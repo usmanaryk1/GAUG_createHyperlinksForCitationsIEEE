@@ -210,6 +210,12 @@
             });
             $rootScope.deactivateEmployeeModel.employee = employee;
 
+            EmployeeDAO.checkFutureSchedules({employeeId: employee.id}).then(function (res) {
+                if (res.data === true) {
+                    $rootScope.deactivateEmployeeModel.showWarningMessage = true;
+                }
+            });
+
             $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
 
                 if ($('#popup_dea_employees')[0].checkValidity()) {
