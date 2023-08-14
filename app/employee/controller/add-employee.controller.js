@@ -38,6 +38,32 @@
                 'Physical', 'TB Testing',
                 'Chest X-Ray', 'TB Questionnaire',
                 'Habituation', 'Flu Shot'];
+            
+            
+        var MappingForDownload = {
+            'Initial Application Packet': 'InitialApplicationPacket',
+            'Initial Application Packet Nursing': 'InitialApplicationPacketNursing',
+            'Employment Eligibility (I-9)': 'EmploymentEligibility',
+            'CHRC Forms': 'CHRC',
+            'Evaluation': 'Evaluation',
+            'HCR': 'HCR',
+            'References': 'References',
+            'Competency Exam': 'CompetencyExam',
+            'W-4': 'W4',
+            'Certificate/License': 'Certificate',
+            'Orientation Packet': 'OrientationPacket',
+            'Infection Control': 'InfectionControl',
+            'OP Search': 'OPSearch',
+            'License': 'License',
+            'Pre – Employment Medical Documents': 'PreEmploymentMedicalDocuments',
+            'Physical': 'Physical',
+            'TB Testing': 'TBTesting',
+            'Chest X-Ray': 'ChestXRay',
+            'TB Questionnaire': 'TBQuestionnaire',
+            'Habituation': 'Habituation',
+            'Flu Shot': 'FluShot',
+            'Drug Test': 'DrugTest'
+        };     
         
         
         ctrl.positionList = [];
@@ -537,6 +563,19 @@
                 ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
             }
         };
+        
+        ctrl.getAttachmentName = function(attachment){
+            var fileName = attachment.filePath;                                    
+            return ctrl.employee.lName 
+                    + ' ' + 
+                    ctrl.employee.fName
+                    + '-' +
+                    (MappingForDownload[attachment.attachmentType]?MappingForDownload[attachment.attachmentType]:attachment.attachmentType)
+                    + '-' +
+                    moment(attachment.dateInserted).format("MMDDYYYYHHmm")
+                    + '.' +
+                    fileName.substring(fileName.lastIndexOf('.') + 1);            
+        };
 
         //function called on page initialization.
         function pageInit() {
@@ -553,7 +592,7 @@
                         ctrl.hideLoadingImage = false;
                     } else {
                         ctrl.hideLoadingImage = true;
-                    }
+                    }                    
                     ctrl.employee = res;
                     ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                     getFilteredAttachments();
@@ -1304,6 +1343,9 @@
                     },
                     employee: function (){
                         return ctrl.employee;
+                    },
+                    filename: function(){
+                        return mode === 'Edit' ? ctrl.getAttachmentName(attachmentToEdit) : null;
                     }
                 }
             });
