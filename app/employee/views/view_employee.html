@@ -63,10 +63,13 @@
                                             <tr ng-repeat="emp in viewEmployee.employeeList">
                                                 <th> 
                                         <div class="user_panel" ng-click="viewEmployee.openEditModal(emp, 'modal-5')" style="cursor: pointer">
-<!--                                            <div class="user_img"> 
+                                            <div ng-if="emp.profileImage != null && emp.profileImage != ''" class="user_img"> 
                                                 <img alt="user" class="img-cirlce img-responsive" imageonload="hideDefaultImage" src="assets/images/user-5.png" ng-src="{{(emp.profileImage != null && emp.profileImage != '') ? (amazonPublicUrl + viewEmployee.companyCode + '/' + emp.profileImage) : ('assets/images/user-5.png')}}"> 
                                                 <img alt="user" class="img-cirlce img-responsive" ng-hide="hideDefaultImage" src="assets/images/loading.gif"/>
-                                            </div>-->
+                                            </div>
+                                            <div ng-if="emp.profileImage == null || emp.profileImage == ''" class="user_img"> 
+                                                <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png"> 
+                                            </div>
                                             <div class="emp_user_hd">
                                                 <div class="emp_user_name">{{emp.lName}}, {{emp.fName}} {{emp.middleInitial}}</div>
                                                 <p>{{positions[emp.position]}}</p>
