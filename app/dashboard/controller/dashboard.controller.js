@@ -1,8 +1,8 @@
 (function() {
-    function DashboardCtrl($rootScope) {
+    function DashboardCtrl(Page) {
         var ctrl = this;
-      
+        Page.setTitle("Dashboard");
     }
     ;
-    angular.module('xenon.controllers').controller('DashboardCtrl', ["$rootScope", DashboardCtrl]);
+    angular.module('xenon.controllers').controller('DashboardCtrl', ["Page", DashboardCtrl]);
 })();

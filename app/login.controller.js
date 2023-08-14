@@ -1,5 +1,8 @@
-function loginCtrlr($scope, $rootScope, $http, $state) {
+function loginCtrlr($scope, $rootScope, $http, $state, Page) {
     $rootScope.stopIdle();
+    $scope.username = "";
+    $scope.password = "";
+    $scope.ordCode="";
     $scope.submitHandler = function() {
         if ($("form#login").valid()) {
             showLoadingBar(70); // Fill progress bar to 70% (just a given value)
@@ -53,7 +56,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                             }
 //                            window.location.hash = '#/app/dashboard';
                             $state.transitionTo(ontimetest.homepage);
-                            document.title = ':: Welcome ::';
+                            Page.setTitle("Welcome");
                             $rootScope.startIdle();
                             $rootScope.unmaskLoading();
                             // window.location.hash = '#/app/add_patient_tab_1';
@@ -62,7 +65,7 @@ function loginCtrlr($scope, $rootScope, $http, $state) {
                         }
                     }
                 });
-                document.title=":: Welcome ::";
+                Page.setTitle("Welcome");
                 
                 // Remove any alert
                 $(".errors-container .alert").slideUp('fast');

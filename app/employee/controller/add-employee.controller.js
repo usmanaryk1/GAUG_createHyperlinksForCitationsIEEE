@@ -1,5 +1,5 @@
 (function () {
-    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, $modal) {
+    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, Page) {
         var ctrl = this;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
@@ -130,9 +130,11 @@
                 $state.transitionTo(ontimetest.defaultState);
             }
             ctrl.editMode = true;
+            Page.setTitle("Update Employee");
         } else if ($state.current.name.indexOf('tab1') > -1) {
             ctrl.employee = {}
             ctrl.editMode = false;
+            Page.setTitle("Add Employee");
         } else {
             $state.transitionTo(ontimetest.defaultState);
         }
@@ -1009,5 +1011,5 @@
 //        ctrl.pageInitCall();
     }
     ;
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "$modal", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", AddEmployeeCtrl]);
 })();

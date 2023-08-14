@@ -1,6 +1,7 @@
 (function() {
-    function PatientTimeSheetCtrl($scope, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location) {
+    function PatientTimeSheetCtrl(Page, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location) {
         var ctrl = this;
+        Page.setTitle("Patient Timesheet");
         ctrl.datatableObj = {};
         ctrl.searchParams = {};
         ctrl.companyCode = ontimetest.company_code;
@@ -241,5 +242,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "PatientDAO", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", "$location", PatientTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["Page", "$rootScope", "TimesheetDAO", "PatientDAO", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", "$location", PatientTimeSheetCtrl]);
 })();

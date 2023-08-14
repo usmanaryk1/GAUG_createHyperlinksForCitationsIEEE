@@ -1,8 +1,9 @@
 (function() {
-    function AddCompanyCtrl($scope, $rootScope, CompanyDAO, $formService) {
+    function AddCompanyCtrl(Page, $rootScope, CompanyDAO, $formService) {
         var ctrl = this;
         ctrl.companyObj = {};
         ctrl.saveCompany = saveCompanyData;
+        Page.setTitle("Company Information");
         ctrl.initForm = function() {
             $("#company_information_form input:text, #company_information_form textarea").first().focus();
         };
@@ -42,5 +43,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('AddCompanyCtrl', ["$scope", "$rootScope", "CompanyDAO", "$formService", AddCompanyCtrl]);
+    angular.module('xenon.controllers').controller('AddCompanyCtrl', ["Page", "$rootScope", "CompanyDAO", "$formService", AddCompanyCtrl]);
 })();

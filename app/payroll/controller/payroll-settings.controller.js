@@ -1,6 +1,7 @@
 (function() {
-    function PayrollSettingsCtrl($rootScope, $scope, $http, $modal, $timeout, PayrollDAO, $filter) {
+    function PayrollSettingsCtrl($rootScope, $scope, $http, $modal, $timeout, PayrollDAO, $filter, Page) {
         var ctrl = this;
+        Page.setTitle("Payroll Settings");
         ctrl.payrollObj = {companyCode: ontimetest.company_code};
         ctrl.holidays = [{name: 'Christmas'}, {name: 'Columbus Day'}, {name: 'Independence Day'}, {name: 'Labor'}, {name: 'Memorial Day'}, {name: 'MLK Birthday'}, {name: 'New Year\'s Day'}, {name: 'Thanks giving Day'}, {name: 'Veterans Day'}, {name: 'Washington\'s Birthday'}];
         ctrl.initSettings = function() {
@@ -195,5 +196,5 @@
         ctrl.initSettings();
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollSettingsCtrl', ["$rootScope", "$scope", "$http", "$modal", "$timeout", "PayrollDAO", "$filter", PayrollSettingsCtrl]);
+    angular.module('xenon.controllers').controller('PayrollSettingsCtrl', ["$rootScope", "$scope", "$http", "$modal", "$timeout", "PayrollDAO", "$filter", "Page", PayrollSettingsCtrl]);
 })();

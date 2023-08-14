@@ -1,5 +1,5 @@
 (function() {
-    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO) {
+    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO, Page) {
         var ctrl = this;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear()+1900) - 10);
@@ -23,8 +23,10 @@
             if (isNaN(parseFloat($state.params.id))) {
                 $state.transitionTo(ontimetest.defaultState);
             }
+            Page.setTitle("Update Patient");
             ctrl.editMode = true;
         } else if ($state.current.name.indexOf('tab1') > -1) {
+            Page.setTitle("Add Patient");
             ctrl.editMode = false;
         } else {
             $state.transitionTo(ontimetest.defaultState);
@@ -566,5 +568,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", AddPatientCtrl]);
+    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", AddPatientCtrl]);
 })();

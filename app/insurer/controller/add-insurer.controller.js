@@ -1,5 +1,5 @@
 (function () {
-    function AddInsurerCtrl($scope, $rootScope, $state, $modal, $timeout, InsurerDAO, CareTypeDAO) {
+    function AddInsurerCtrl($scope, $rootScope, $state, $modal, $timeout, InsurerDAO, CareTypeDAO, Page) {
         var ctrl = this;
         ctrl.insurerObj = {insuranceCareTypeCollection: []};
         ctrl.selectedCareTypes = [];
@@ -25,9 +25,10 @@
             }
             ctrl.editMode = true;
             ctrl.displayCareTypeModal = false;
-
+            Page.setTitle("Update Insurance Provider");
         } else {
             ctrl.editMode = false;
+            Page.setTitle("Add Insurance Provider");
         }
 
         //funcions
@@ -305,5 +306,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('AddInsurerCtrl', ["$scope", "$rootScope", "$state", "$modal", "$timeout", "InsurerDAO", "CareTypeDAO", AddInsurerCtrl]);
+    angular.module('xenon.controllers').controller('AddInsurerCtrl', ["$scope", "$rootScope", "$state", "$modal", "$timeout", "InsurerDAO", "CareTypeDAO", "Page", AddInsurerCtrl]);
 })();

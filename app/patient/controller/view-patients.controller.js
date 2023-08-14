@@ -1,10 +1,11 @@
 (function() {
-    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout, EmployeeDAO, InsurerDAO) {
+    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout, EmployeeDAO, InsurerDAO, Page) {
         var ctrl = this;
         ctrl.datatableObj = {};
         $rootScope.selectPatientModel = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        Page.setTitle("View Patients");
         if ($stateParams.status !== 'active' && $stateParams.status !== 'discharged' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
         } else {
@@ -240,5 +241,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", ViewPatientsCtrl]);
+    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO","Page", ViewPatientsCtrl]);
 })();

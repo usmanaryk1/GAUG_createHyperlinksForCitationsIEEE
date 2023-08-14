@@ -1,6 +1,7 @@
 (function() {
-    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, $location) {
+    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, $location, Page) {
         var ctrl = this;
+        Page.setTitle("Employee Timesheet");
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.datatableObj = {};
@@ -206,5 +207,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", "$location", EmployeeTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", "$location", "Page", EmployeeTimeSheetCtrl]);
 })();

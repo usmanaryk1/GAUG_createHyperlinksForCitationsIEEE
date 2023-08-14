@@ -1,5 +1,5 @@
 (function () {
-    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, $state) {
+    function PayrollSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, EmployeeDAO, $state, Page) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
@@ -279,6 +279,7 @@
         ctrl.initSessions = function () {
             if ($state.params.id && $state.params.id !== '') {
                 ctrl.processdMode = true;
+                Page.setTitle("View Payroll Session");
                 ctrl.batchId = $state.params.id;
                 $rootScope.maskLoading();
                 PayrollDAO.getProcessedSessions({id: ctrl.batchId}).then(function (res) {
@@ -299,6 +300,7 @@
                     $rootScope.unmaskLoading();
                 });
             } else {
+                Page.setTitle("Payroll Session");
                 ctrl.processdMode = false;
             }
 
@@ -342,5 +344,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", PayrollSessionCtrl]);
+    angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", "Page", PayrollSessionCtrl]);
 })();

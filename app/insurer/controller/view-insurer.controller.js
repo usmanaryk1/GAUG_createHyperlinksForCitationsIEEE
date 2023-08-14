@@ -1,12 +1,12 @@
 (function() {
-    function ViewInsurersCtrl(InsurerDAO, $rootScope, $timeout, $state, $modal) {
+    function ViewInsurersCtrl(InsurerDAO, $rootScope, $timeout, $state, $modal, Page) {
         var ctrl = this;
         ctrl.datatableObj = {};
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-
+        Page.setTitle("View Insurance Providers");
         function retrieveInsurersData() {
             $rootScope.maskLoading();
             InsurerDAO.retrieveAll().then(function(res) {
@@ -105,5 +105,5 @@
         ctrl.retrieveInsurers();
     }
     ;
-    angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$timeout", "$state", "$modal", ViewInsurersCtrl]);
+    angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$timeout", "$state", "$modal", "Page", ViewInsurersCtrl]);
 })();

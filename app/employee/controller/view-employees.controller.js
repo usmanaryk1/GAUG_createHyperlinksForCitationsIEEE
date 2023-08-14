@@ -1,8 +1,9 @@
 (function() {
-    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, $scope, $compile, $timeout) {
+    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $compile, $timeout) {
         var ctrl = this;
         ctrl.datatableObj = {};
         $rootScope.selectEmployeeModel = {};
+        Page.setTitle("View Employees");
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
 
@@ -211,5 +212,5 @@
 //        });
     }
     ;
-    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "$scope", "$compile", "$timeout", ViewEmployeesCtrl]);
+    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$compile", "$timeout", ViewEmployeesCtrl]);
 })();
