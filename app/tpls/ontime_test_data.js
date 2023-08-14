@@ -305,7 +305,9 @@ ontimetest = {
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
     'company_code': "TRT",
-    'date_time_format':"yyyy/MM/dd hh:mm:ss aa"
+    'date_time_format':"yyyy/MM/dd hh:mm:ss aa",
+    amazonPublicUrl : "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
+    amazonSignatureUrl:"https://s3-us-west-1.amazonaws.com/test-employeedocuments/"
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },

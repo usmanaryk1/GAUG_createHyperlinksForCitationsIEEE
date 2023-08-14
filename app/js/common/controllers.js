@@ -1,28 +1,28 @@
 'use strict';
 
 angular.module('xenon.controllers', []).
-        controller('LoginCtrl', function($scope, $rootScope)
+        controller('LoginCtrl', function ($scope, $rootScope)
         {
             $rootScope.isLoginPage = true;
             $rootScope.isLightLoginPage = false;
             $rootScope.isLockscreenPage = false;
             $rootScope.isMainPage = false;
         }).
-        controller('LoginLightCtrl', function($scope, $rootScope)
+        controller('LoginLightCtrl', function ($scope, $rootScope)
         {
             $rootScope.isLoginPage = true;
             $rootScope.isLightLoginPage = true;
             $rootScope.isLockscreenPage = false;
             $rootScope.isMainPage = false;
         }).
-        controller('LockscreenCtrl', function($scope, $rootScope)
+        controller('LockscreenCtrl', function ($scope, $rootScope)
         {
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state)
+        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state)
         {
             var userName = getCookie("un");
             if (userName != null) {
@@ -30,12 +30,12 @@ angular.module('xenon.controllers', []).
                 $rootScope.startIdle();
             }
             $rootScope.serverPath = ontimetest.weburl;
-            $rootScope.validNumber=function(number){
+            $rootScope.validNumber = function (number) {
                 return !isNaN(number);
             };
             $rootScope.languages = {"En": "English", "Cr": "Creole", "Sp": "Spanish", "Ru": "Russian", "Fr": "French", "Hi": "Hindi", "Be": "Bengali", "Ma": "Mandarin", "Ko": "Korean", "Ar": "Arabic", "Fa": "Farsi", "Ur": "Urdu"};
-            $rootScope.amazonPublicUrl = "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/";
-            $rootScope.amazonSignatureUrl="https://s3-us-west-1.amazonaws.com/ontimepatientsign/";
+            $rootScope.amazonPublicUrl = ontimetest.amazonPublicUrl;
+            $rootScope.amazonSignatureUrl = ontimetest.amazonSignatureUrl;
             $rootScope.todayDate = new Date();
             $rootScope.isLoginPage = false;
             $rootScope.isLightLoginPage = false;
@@ -47,10 +47,10 @@ angular.module('xenon.controllers', []).
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
 
-            $rootScope.maskLoading = function() {
+            $rootScope.maskLoading = function () {
                 $("#mainDiv").loadmask("");
             };
-            $rootScope.unmaskLoading = function() {
+            $rootScope.unmaskLoading = function () {
                 $("#mainDiv").unmask();
             };
             $rootScope.payrollRates = [{key: 'R1', value: "Rate 1"}, {key: 'R2', value: "Rate 2"}];
@@ -166,11 +166,11 @@ angular.module('xenon.controllers', []).
             $layout.loadOptionsFromCookies(); // remove this line if you don't want to support cookies that remember layout changes
 
 
-            $scope.updatePsScrollbars = function()
+            $scope.updatePsScrollbars = function ()
             {
                 var $scrollbars = jQuery(".ps-scrollbar:visible");
 
-                $scrollbars.each(function(i, el)
+                $scrollbars.each(function (i, el)
                 {
                     if (typeof jQuery(el).data('perfectScrollbar') == 'undefined')
                     {
@@ -193,18 +193,18 @@ angular.module('xenon.controllers', []).
 
 
             // Other methods
-            $scope.setFocusOnSearchField = function()
+            $scope.setFocusOnSearchField = function ()
             {
                 public_vars.$body.find('.search-form input[name="s"]').focus();
 
-                setTimeout(function() {
+                setTimeout(function () {
                     public_vars.$body.find('.search-form input[name="s"]').focus()
                 }, 100);
             };
 
 
             // Watch changes to replace checkboxes
-            $scope.$watch(function()
+            $scope.$watch(function ()
             {
 //                cbr_replace();
 //                if (!$("input[type='radio']").parent().find("span").length) {
@@ -213,7 +213,7 @@ angular.module('xenon.controllers', []).
             });
 
             // Watch sidebar status to remove the psScrollbar
-            $rootScope.$watch('layoutOptions.sidebar.isCollapsed', function(newValue, oldValue)
+            $rootScope.$watch('layoutOptions.sidebar.isCollapsed', function (newValue, oldValue)
             {
                 if (newValue != oldValue)
                 {
@@ -237,11 +237,11 @@ angular.module('xenon.controllers', []).
 
 
             // Set Scroll to 0 When page is changed
-            $rootScope.$on('$stateChangeStart', function()
+            $rootScope.$on('$stateChangeStart', function ()
             {
                 var obj = {pos: jQuery(window).scrollTop()};
 
-                TweenLite.to(obj, .25, {pos: 0, ease: Power4.easeOut, onUpdate: function()
+                TweenLite.to(obj, .25, {pos: 0, ease: Power4.easeOut, onUpdate: function ()
                     {
                         $(window).scrollTop(obj.pos);
                     }});
@@ -252,7 +252,7 @@ angular.module('xenon.controllers', []).
             $scope.isFullscreenSupported = Fullscreen.isSupported();
             $scope.isFullscreen = Fullscreen.isEnabled() ? true : false;
 
-            $scope.goFullscreen = function()
+            $scope.goFullscreen = function ()
             {
                 if (Fullscreen.isEnabled())
                     Fullscreen.cancel();
@@ -263,7 +263,7 @@ angular.module('xenon.controllers', []).
             }
 
         }).
-        controller('SidebarMenuCtrl', function($scope, $rootScope, $menuItems, $timeout, $location, $state, $layout)
+        controller('SidebarMenuCtrl', function ($scope, $rootScope, $menuItems, $timeout, $location, $state, $layout)
         {
 
             // Menu Items
@@ -274,7 +274,7 @@ angular.module('xenon.controllers', []).
             // Set Active Menu Item
             $sidebarMenuItems.setActive($location.path());
 
-            $rootScope.$on('$stateChangeSuccess', function()
+            $rootScope.$on('$stateChangeSuccess', function ()
             {
                 $sidebarMenuItems.setActive($state.current.name);
             });
@@ -285,7 +285,7 @@ angular.module('xenon.controllers', []).
 
             ps_init(); // perfect scrollbar for sidebar
         }).
-        controller('HorizontalMenuCtrl', function($scope, $rootScope, $menuItems, $timeout, $location, $state)
+        controller('HorizontalMenuCtrl', function ($scope, $rootScope, $menuItems, $timeout, $location, $state)
         {
             var $horizontalMenuItems = $menuItems.instantiate();
 
@@ -294,7 +294,7 @@ angular.module('xenon.controllers', []).
             // Set Active Menu Item
             $horizontalMenuItems.setActive($location.path());
 
-            $rootScope.$on('$stateChangeSuccess', function()
+            $rootScope.$on('$stateChangeSuccess', function ()
             {
                 $horizontalMenuItems.setActive($state.current.name);
 
@@ -304,13 +304,13 @@ angular.module('xenon.controllers', []).
             // Trigger menu setup
             $timeout(setup_horizontal_menu, 1);
         }).
-        controller('SettingsPaneCtrl', function($rootScope)
+        controller('SettingsPaneCtrl', function ($rootScope)
         {
             // Define Settings Pane Public Variable
             public_vars.$settingsPane = public_vars.$body.find('.settings-pane');
             public_vars.$settingsPaneIn = public_vars.$settingsPane.find('.settings-pane-inner');
         }).
-        controller('ChatCtrl', function($scope, $element)
+        controller('ChatCtrl', function ($scope, $element)
         {
             var $chat = jQuery($element),
                     $chat_conv = $chat.find('.chat-conversation');
@@ -319,7 +319,7 @@ angular.module('xenon.controllers', []).
 
 
             // Chat Conversation Window (sample)
-            $chat.on('click', '.chat-group a', function(ev)
+            $chat.on('click', '.chat-group a', function (ev)
             {
                 ev.preventDefault();
 
@@ -332,17 +332,17 @@ angular.module('xenon.controllers', []).
                 }
             });
 
-            $chat_conv.on('click', '.conversation-close', function(ev)
+            $chat_conv.on('click', '.conversation-close', function (ev)
             {
                 ev.preventDefault();
 
                 $chat_conv.removeClass('is-open');
             });
         }).
-        controller('UIModalsCtrl', function($scope, $rootScope, $modal, $sce)
+        controller('UIModalsCtrl', function ($scope, $rootScope, $modal, $sce)
         {
             // Open Simple Modal
-            $scope.openModal = function(modal_id, modal_size, modal_backdrop)
+            $scope.openModal = function (modal_id, modal_size, modal_backdrop)
             {
                 $rootScope.currentModal = $modal.open({
                     templateUrl: modal_id,
@@ -353,17 +353,17 @@ angular.module('xenon.controllers', []).
             };
 
             // Loading AJAX Content
-            $scope.openAjaxModal = function(modal_id, url_location)
+            $scope.openAjaxModal = function (modal_id, url_location)
             {
                 $rootScope.currentModal = $modal.open({
                     templateUrl: modal_id,
                     keyboard: false,
                     resolve: {
-                        ajaxContent: function($http)
+                        ajaxContent: function ($http)
                         {
-                            return $http.get(url_location).then(function(response) {
+                            return $http.get(url_location).then(function (response) {
                                 $rootScope.modalContent = $sce.trustAsHtml(response.data);
-                            }, function(response) {
+                            }, function (response) {
                                 $rootScope.modalContent = $sce.trustAsHtml('<div class="label label-danger">Cannot load ajax content! Please check the given url.</div>');
                             });
                         }
@@ -373,17 +373,17 @@ angular.module('xenon.controllers', []).
                 $rootScope.modalContent = $sce.trustAsHtml('Modal content is loading...');
             }
         }).
-        controller('PaginationDemoCtrl', function($scope)
+        controller('PaginationDemoCtrl', function ($scope)
         {
             $scope.totalItems = 64;
             $scope.currentPage = 4;
 
-            $scope.setPage = function(pageNo)
+            $scope.setPage = function (pageNo)
             {
                 $scope.currentPage = pageNo;
             };
 
-            $scope.pageChanged = function()
+            $scope.pageChanged = function ()
             {
                 console.log('Page changed to: ' + $scope.currentPage);
             };
@@ -392,7 +392,7 @@ angular.module('xenon.controllers', []).
             $scope.bigTotalItems = 175;
             $scope.bigCurrentPage = 1;
         }).
-        controller('LayoutVariantsCtrl', function($scope, $layout, $cookies)
+        controller('LayoutVariantsCtrl', function ($scope, $layout, $cookies)
         {
             $scope.opts = {
                 sidebarType: null,
@@ -467,13 +467,13 @@ angular.module('xenon.controllers', []).
                 {value: ['sidebar.userProfile', true], text: 'Yes', selected: $layout.is('sidebar.userProfile', true)},
             ];
 
-            $scope.resetOptions = function()
+            $scope.resetOptions = function ()
             {
                 $layout.resetCookies();
                 window.location.reload();
             };
 
-            var setValue = function(val)
+            var setValue = function (val)
             {
                 if (val != null)
                 {
@@ -499,7 +499,7 @@ angular.module('xenon.controllers', []).
 
             $scope.$watch('opts.sidebarProfile', setValue);
         }).
-        controller('ThemeSkinsCtrl', function($scope, $layout)
+        controller('ThemeSkinsCtrl', function ($scope, $layout)
         {
             var $body = jQuery("body");
 
@@ -524,7 +524,7 @@ angular.module('xenon.controllers', []).
                 {value: 'lemonade', name: 'Lemonade', palette: ['#f5c150', '#ffeec9', '#FFFFFF', '#ffcf67', '#f5c150', '#d9a940']},
             ];
 
-            $scope.$watch('opts.sidebarSkin', function(val)
+            $scope.$watch('opts.sidebarSkin', function (val)
             {
                 if (val != null)
                 {
@@ -534,7 +534,7 @@ angular.module('xenon.controllers', []).
                 }
             });
 
-            $scope.$watch('opts.horizontalMenuSkin', function(val)
+            $scope.$watch('opts.horizontalMenuSkin', function (val)
             {
                 if (val != null)
                 {
@@ -544,7 +544,7 @@ angular.module('xenon.controllers', []).
                 }
             });
 
-            $scope.$watch('opts.userInfoNavbarSkin', function(val)
+            $scope.$watch('opts.userInfoNavbarSkin', function (val)
             {
                 if (val != null)
                 {
@@ -555,17 +555,17 @@ angular.module('xenon.controllers', []).
             });
         }).
         // Added in v1.3
-        controller('FooterChatCtrl', function($scope, $element)
+        controller('FooterChatCtrl', function ($scope, $element)
         {
             $scope.isConversationVisible = false;
 
-            $scope.toggleChatConversation = function()
+            $scope.toggleChatConversation = function ()
             {
                 $scope.isConversationVisible = !$scope.isConversationVisible;
 
                 if ($scope.isConversationVisible)
                 {
-                    setTimeout(function()
+                    setTimeout(function ()
                     {
                         var $el = $element.find('.ps-scrollbar');
 
