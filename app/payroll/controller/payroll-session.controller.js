@@ -34,7 +34,7 @@
 
         ctrl.processPayroll = function (checkDate) {
             if (checkDate) {
-                ctrl.searchParams.checkDate = checkDate;
+                ctrl.searchParamsAtReview.checkDate = checkDate;
             }
             $rootScope.maskLoading();
             angular.forEach(ctrl.payrollSessions, function (session) {
