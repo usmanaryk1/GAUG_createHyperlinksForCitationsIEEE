@@ -646,7 +646,27 @@
             }
         }
         ;
-
+        
+        ctrl.openSSNModal = function (employeeId)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'ssn-modal'),
+                size: "md",
+                backdrop: false,
+                keyboard: false,
+                controller: 'SsnCtrl as managessn',
+                resolve: {
+                    employeeId: function () {
+                        return employeeId;
+                    }
+                }
+            });
+            modalInstance.result.then(function (value) {
+                ctrl.employee.ssn = value;
+            }).catch(function () {
+                console.log("popup dismissed");
+            });
+        };
 
         //        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
         function setFormDynamicValidityMessages() {

@@ -126,6 +126,15 @@
                 transformResponse: function (data, headersGetter, status) {
                     return {data: JSON.parse(data)};
                 }
+            },
+            getSSN: {
+                method: 'GET',
+                transformResponse: function (data, headersGetter, status) {
+                    return {ssn: data};
+                }
+            },
+            updateSSN: {
+                method: 'POST'
             }
         });
         return {
@@ -210,6 +219,12 @@
             },
             checkFutureSchedules: function (data) {
                 return api.checkFutureSchedules({action: data.employeeId}, {}).$promise;
+            },
+            getSSN: function (data) {
+                return api.getSSN({action: data.employeeId, subAction: 'ssn'}).$promise;
+            },
+            updateSSN: function (data) {
+                return api.updateSSN({action: data.employeeId, subAction: 'ssn', subAction1: data.ssn}, data).$promise;
             }
         };
     };
