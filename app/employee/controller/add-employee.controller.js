@@ -922,10 +922,11 @@
             ctrl.formDirty = true;
             ctrl.profileUploadFile.headers.fileExt = file.getExtension();
             ctrl.employee.profileImage = null;
-            $("#cropper-example-2-modal").modal('show');
             if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.profileFileObj.errorMsg = "Please upload a valid file.";
                 return false;
+            } else {
+                $("#cropper-example-2-modal").modal('show');
             }
 
             ctrl.profileFileObj.errorMsg = null;
