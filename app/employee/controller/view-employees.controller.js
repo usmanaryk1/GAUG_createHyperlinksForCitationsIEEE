@@ -211,7 +211,6 @@
             $rootScope.deactivateEmployeeModel.employee = employee;
 
             EmployeeDAO.checkFutureSchedules({employeeId: employee.id}).then(function (res) {
-                console.log(res + '---')
                 if (res.data === true) {
                     $rootScope.deactivateEmployeeModel.showWarningMessage = true;
                 }
