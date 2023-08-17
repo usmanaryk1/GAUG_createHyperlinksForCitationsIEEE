@@ -222,6 +222,11 @@
         };
         ctrl.calculateTotalHours = function (payrollObj) {
             var totalHours = checkNull(payrollObj.hour1) + checkNull(payrollObj.hour2) + checkNull(payrollObj.otHours) + checkNull(payrollObj.hdHours) + checkNull(payrollObj.vacation) + checkNull(payrollObj.sick) + checkNull(payrollObj.personal);
+            if (payrollObj.vacation > 0 || payrollObj.personal > 0 || payrollObj.sick > 0) {
+                payrollObj.ptoAdded = true;
+            } else {
+                payrollObj.ptoAdded = false;
+            }
             return totalHours;
         };
 
@@ -314,6 +319,11 @@
 //                        payroll.firstName=ctrl.empMap[payroll.employeeId].fName;
 //                        payroll.lastName=ctrl.empMap[payroll.employeeId].lName;
                         ctrl.totalGrossPay += payroll.grossPay;
+                        if (payroll.vacation > 0 || payroll.personal > 0 || payroll.sick > 0) {
+                            payroll.ptoAdded = true;
+                        } else {
+                            payroll.ptoAdded = false;
+                        }
                     });
                     ctrl.processedSessionObj.sessionStartDate = Date.parse(ctrl.processedSessionObj.sessionStartDate);
                     ctrl.processedSessionObj.sessionEndDate = Date.parse(ctrl.processedSessionObj.sessionEndDate);
