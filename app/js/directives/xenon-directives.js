@@ -923,7 +923,7 @@ angular.module('xenon.directives', []).
                 scope: {minDate: "=", maxDate: "=", ngModel: "="},
                 link: function (scope, el, attr)
                 {
-                    $(el).attr('maxlength', '10');
+//                    $(el).attr('maxlength', '10');
 //                    $(el).mask("99/99/9999");
                     if (!jQuery.isFunction(jQuery.fn.datepicker))
                         return false;
@@ -1012,7 +1012,11 @@ angular.module('xenon.directives', []).
                             }
                             if (validDate) {
                                 $this.datepicker("setDate", new Date(scope.ngModel));
+                            }else{
+                                scope.ngModel = "";
                             }
+                        }else{
+                            scope.ngModel = "";
                         }
                     });
 
