@@ -139,7 +139,7 @@
                             <select class="form-control" id="State" name="State" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                     ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state"
                                     data-validate="required" data-message-required="Please select the state."
-                                    ng-options="state.abbreviation as state.abbreviation for state in states">
+                                    ng-options="state.abbreviation as state.name for state in states">
                                 <option value="">
                                     Select the state
                                 </option>
