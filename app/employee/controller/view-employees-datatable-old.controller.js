@@ -1,4 +1,4 @@
-(function () {
+(function() {
     function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $compile, $timeout) {
         var ctrl = this;
         ctrl.datatableObj = {};
@@ -17,29 +17,29 @@
 
         function retrieveEmployeesData() {
             $rootScope.maskLoading();
-            EmployeeDAO.retrieveAll({subAction: ctrl.viewType}).then(function (res) {
+            EmployeeDAO.retrieveAll({subAction: ctrl.viewType}).then(function(res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
                     }
                 }); // showLoadingBar
                 ctrl.employeeList = res;
                 if (res.length === 0) {
                     toastr.error("No data in the system.");
                 }
-            }).catch(function (data, status) {
+            }).catch(function(data, status) {
                 toastr.error("Failed to retrieve employees.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function () {
+                    finish: function() {
 
                     }
                 }); // showLoadingBar
 //                ctrl.employeeList = ontimetest.employees;
                 console.log('Error in retrieving data')
-            }).then(function () {
+            }).then(function() {
                 $rootScope.unmaskLoading();
             });
         }
@@ -49,7 +49,7 @@
         }
 
         ctrl.retrieveEmployees();
-        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -66,7 +66,7 @@
 
         };
 
-        ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deleteEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -76,9 +76,9 @@
             });
             $rootScope.deleteEmployeeModel.employee = employee;
 
-            $rootScope.deleteEmployeeModel.delete = function (employee) {
+            $rootScope.deleteEmployeeModel.delete = function(employee) {
                 $rootScope.maskLoading();
-                EmployeeDAO.delete({id: employee.id}).then(function (res) {
+                EmployeeDAO.delete({id: employee.id}).then(function(res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -90,32 +90,32 @@
                     ctrl.rerenderDataTable();
                     toastr.success("Employee deleted.");
                     $rootScope.deleteEmployeeModel.close();
-                }).catch(function (data, status) {
+                }).catch(function(data, status) {
                     toastr.error(data.data);
                     $rootScope.deleteEmployeeModel.close();
-                }).then(function () {
+                }).then(function() {
                     $rootScope.unmaskLoading();
                 });
             };
 
         };
-        ctrl.rerenderDataTable = function () {
-//            var pageInfo = ctrl.datatableObj.page.info();
+        ctrl.rerenderDataTable = function() {
+            var pageInfo = ctrl.datatableObj.page.info();
             var employeeList = angular.copy(ctrl.employeeList);
             ctrl.employeeList = [];
             $("#example-1_wrapper").remove();
-            $timeout(function () {
+            $timeout(function() {
                 ctrl.employeeList = employeeList;
-//                $timeout(function() {
-//                    var pageNo = Number(pageInfo.page);
-//                    if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
-//                        pageNo--;
-//                    }
-//                    ctrl.datatableObj.page(pageNo).draw(false);
-//                }, 20);
+                $timeout(function() {
+                    var pageNo = Number(pageInfo.page);
+                    if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
+                        pageNo--;
+                    }
+                    ctrl.datatableObj.page(pageNo).draw(false);
+                }, 20);
             });
         };
-        ctrl.openDeactivateModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeactivateModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deactivateEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -125,9 +125,9 @@
             });
             $rootScope.deactivateEmployeeModel.employee = employee;
 
-            $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
+            $rootScope.deactivateEmployeeModel.deactivate = function(employee) {
                 $rootScope.maskLoading();
-                EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function (res) {
+                EmployeeDAO.changestatus({id: employee.id, status: 'inactive'}).then(function(res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -144,15 +144,15 @@
                     toastr.success("Employee deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
                 }
-                ).catch(function (data, status) {
+                ).catch(function(data, status) {
                     toastr.error("Employee cannot be deactivated.");
                     $rootScope.deactivateEmployeeModel.close();
-                }).then(function () {
+                }).then(function() {
                     $rootScope.unmaskLoading();
                 });
             };
         };
-        ctrl.openActivateModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openActivateModal = function(employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.activateEmployeeModel = $modal.open({
                 templateUrl: modal_id,
@@ -162,9 +162,9 @@
             });
             $rootScope.activateEmployeeModel.employee = employee;
 
-            $rootScope.activateEmployeeModel.activate = function (employee) {
+            $rootScope.activateEmployeeModel.activate = function(employee) {
                 $rootScope.maskLoading();
-                EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
+                EmployeeDAO.changestatus({id: employee.id, status: 'active'}).then(function(res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -180,19 +180,19 @@
                     ctrl.rerenderDataTable();
                     toastr.success("Employee activated.");
                     $rootScope.activateEmployeeModel.close();
-                }).catch(function (data, status) {
+                }).catch(function(data, status) {
                     toastr.error("Employee cannot be activated.");
                     $rootScope.activateEmployeeModel.close();
-                }).then(function () {
+                }).then(function() {
                     $rootScope.unmaskLoading();
                 });
             };
         };
-        ctrl.getLanguagesFromCode = function (languageCodes) {
+        ctrl.getLanguagesFromCode = function(languageCodes) {
             if (languageCodes != null && languageCodes.length > 0) {
                 languageCodes = languageCodes.split(",");
                 var languageToDisplay = "";
-                angular.forEach(languageCodes, function (code, index) {
+                angular.forEach(languageCodes, function(code, index) {
                     languageToDisplay += $rootScope.languages[code];
                     if (index < languageCodes.length - 1) {
                         languageToDisplay += ", ";

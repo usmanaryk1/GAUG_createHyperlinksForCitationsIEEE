@@ -36,14 +36,14 @@
                 moduleTemplatesDir: 'app',
                 assetsDir: 'assets',
                 // Methods
-                viewTemplatePath: function(module, view_name) {
+                viewTemplatePath: function (module, view_name) {
                     return this.moduleTemplatesDir + '/' + module + '/views/' + view_name + '.html';
                 },
-                templatePath: function(view_name)
+                templatePath: function (view_name)
                 {
                     return this.templatesDir + '/' + view_name + '.html';
                 },
-                assetPath: function(file_path)
+                assetPath: function (file_path)
                 {
                     return this.assetsDir + '/' + file_path;
                 }
@@ -75,20 +75,20 @@
 
         </script>
         <div id="mainDiv" class="page-container" ui-view></div>
-<!--        <div class="page-loading-overlay">
-            <div class="loader-2"></div>
-        </div>-->
+        <!--        <div class="page-loading-overlay">
+                    <div class="loader-2"></div>
+                </div>-->
 
         <!-- Remove this code if you want to disable Loading Overlay in the beginning of document loading -->
-<!--        <div class="page-loading-overlay">
-            <div class="loader-2"></div>
-            <div class="loadr">
-                <svg viewbox="0 0 74.6 81">
-                <path d="M67.8,12.9C51.7,5.2,26.2,0.2,26.2,0.2c-10.9-1.8-9.3,11.4-9,20.2c0,0.7,0.1,1.4,0.1,2c7.8,1.5,19.7,4,29.2,7.4c11.4,4.1,9.6,8.3,9.2,16c-0.2,4.9-0.4,14,1.1,21.3c7.7,1.4,13.8,1.9,13.1-0.3c-6.3-7.2-0.1-29.6,1.8-34.2C73.3,28.7,79.3,18.4,67.8,12.9z">      </path>
-                <path d="M58.9,79.5c-6.5-5.6-6.2-23.6-5.8-31.3c0.4-7.7,2.1-11.9-9.2-16c-15.3-5.5-37.3-8.8-37.3-8.8c-9.1-1.1-6.6,8.4-5.5,15.1c1.7,10,5.4,22,7.9,27.8c2.8,6.5,8.9,7.3,8.9,7.3S65.4,85.1,58.9,79.5z"></path>
-                </svg>
-            </div>
-        </div>-->
+        <!--        <div class="page-loading-overlay">
+                    <div class="loader-2"></div>
+                    <div class="loadr">
+                        <svg viewbox="0 0 74.6 81">
+                        <path d="M67.8,12.9C51.7,5.2,26.2,0.2,26.2,0.2c-10.9-1.8-9.3,11.4-9,20.2c0,0.7,0.1,1.4,0.1,2c7.8,1.5,19.7,4,29.2,7.4c11.4,4.1,9.6,8.3,9.2,16c-0.2,4.9-0.4,14,1.1,21.3c7.7,1.4,13.8,1.9,13.1-0.3c-6.3-7.2-0.1-29.6,1.8-34.2C73.3,28.7,79.3,18.4,67.8,12.9z">      </path>
+                        <path d="M58.9,79.5c-6.5-5.6-6.2-23.6-5.8-31.3c0.4-7.7,2.1-11.9-9.2-16c-15.3-5.5-37.3-8.8-37.3-8.8c-9.1-1.1-6.6,8.4-5.5,15.1c1.7,10,5.4,22,7.9,27.8c2.8,6.5,8.9,7.3,8.9,7.3S65.4,85.1,58.9,79.5z"></path>
+                        </svg>
+                    </div>
+                </div>-->
 
         <!-- Angular App-->
         <script src="app/js/angular/angular.min.js"></script>
@@ -114,6 +114,7 @@
         <script src="app/js/common/factory.js"></script>
         <script src="app/js/directives/xenon-directives.js"></script>
         <script src="app/js/directives/file-upload-directive.js"></script>
+        <script src="app/js/directives/dirPagination.js"></script>
         <script src="app/js/filters/xenon-filters.js"></script>
 
         <!--Services-->

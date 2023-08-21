@@ -49,7 +49,7 @@
 //                                        });
                                     </script>
 
-                                    <table id="example-1" ng-if="viewEmployee.employeeList.length" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" datatable-obj="viewEmployee.datatableObj">
+                                    <table id="example-1" ng-if="viewEmployee.employeeList.length" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" datatable-obj="viewEmployee.datatableObj">
                                         <thead>
                                             <tr>
                                                 <th width="30%" colspan="1" rowspan="1" tabindex="0">Name & Role</th>
@@ -60,7 +60,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr pagination-id="drinksPagination" dir-paginate="emp in viewEmployee.employeeList| itemsPerPage: pageSize">
+                                            <tr ng-repeat="emp in viewEmployee.employeeList">
                                                 <th> 
                                         <div class="user_panel" ng-click="viewEmployee.openEditModal(emp, 'modal-5')" style="cursor: pointer">
                                             <div ng-if="emp.profileImage != null && emp.profileImage != ''" class="user_img"> 
@@ -93,16 +93,11 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="text-center">
-                                    <dir-pagination-controls boundary-links="true" 
-                                                             max-size="9"
-                                                             template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination"></dir-pagination-controls>
-                                </div>
                                 <script type="text/javascript">
                                     // This JavaScript Will Replace Checkboxes in dropdown toggles
-                                    jQuery(document).ready(function ($)
+                                    jQuery(document).ready(function($)
                                     {
-                                        setTimeout(function ()
+                                        setTimeout(function()
                                         {
                                             $(".checkbox-row input").addClass('cbr');
                                             cbr_replace();
@@ -123,7 +118,7 @@
     <div class="row">
     <div class="user_panel col-md-12">
     <div class="user_img"> 
-    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
+        <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
     <div class="emp_user_hd">
     <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
     <p>{{positions[selectEmployeeModel.employee.position]}}</p>

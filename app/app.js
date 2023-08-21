@@ -14,7 +14,8 @@ var app = angular.module('xenon-app', [
     // Added in v1.3
     'FBAngular',
     'flow',
-    'ngIdle'
+    'ngIdle',
+    'angularUtils.directives.dirPagination'
 ]);
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -38,12 +39,12 @@ function delete_cookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-app.run(function($rootScope, $modal, $state, Idle)
+app.run(function ($rootScope, $modal, $state, Idle)
 {
     // Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
 
-    jQuery(window).load(function()
+    jQuery(window).load(function ()
     {
         public_vars.$pageLoadingOverlay.addClass('loaded');
     })
@@ -56,7 +57,7 @@ app.run(function($rootScope, $modal, $state, Idle)
         }
     }
 
-    $rootScope.$on('IdleStart', function() {
+    $rootScope.$on('IdleStart', function () {
         closeModals();
         $rootScope.warning = $modal.open({
             templateUrl: 'warning-dialog.html',
@@ -65,28 +66,28 @@ app.run(function($rootScope, $modal, $state, Idle)
         });
     });
 
-    $rootScope.$on('IdleTimeout', function() {
+    $rootScope.$on('IdleTimeout', function () {
         closeModals();
         $rootScope.logout();
         Idle.unwatch();
     });
-    $rootScope.startIdle = function() {
+    $rootScope.startIdle = function () {
         closeModals();
         Idle.watch();
         $rootScope.started = true;
     };
 
-    $rootScope.stopIdle = function() {
+    $rootScope.stopIdle = function () {
         closeModals();
         Idle.unwatch();
         $rootScope.started = false;
 
     };
-    $rootScope.$on('IdleEnd', function() {
+    $rootScope.$on('IdleEnd', function () {
         closeModals();
     });
 
-    $rootScope.logout = function() {
+    $rootScope.logout = function () {
         delete_cookie("cc");
         delete_cookie("token");
         delete_cookie("un");
@@ -94,9 +95,10 @@ app.run(function($rootScope, $modal, $state, Idle)
         $state.transitionTo(ontimetest.defaultState);
     };
 
+
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
-            function(event, toState, toParams, fromState, fromParams) {
+            function (event, toState, toParams, fromState, fromParams) {
                 if (toState.url.indexOf("login") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
@@ -104,6 +106,8 @@ app.run(function($rootScope, $modal, $state, Idle)
                         $state.transitionTo(ontimetest.defaultState);
                     }
                 }
+                $rootScope.currentPage = 1;
+                $rootScope.pageSize = 10;
                 //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
                 if (toState.data && toState.data.tabNo) {
                     $rootScope.tabNo = toState.data.tabNo;
@@ -115,7 +119,7 @@ app.run(function($rootScope, $modal, $state, Idle)
 });
 
 
-app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
     IdleProvider.idle(900);
     IdleProvider.timeout(60);
     KeepaliveProvider.interval(10);
@@ -129,14 +133,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 abstract: true,
                 url: '/app',
                 templateUrl: appHelper.templatePath('layout/app-body'),
-                controller: function($rootScope) {
+                controller: function ($rootScope) {
                     $rootScope.isLoginPage = false;
                     $rootScope.isLightLoginPage = false;
                     $rootScope.isLockscreenPage = false;
                     $rootScope.isMainPage = true;
                 },
                 resolve: {
-                    resources: function($ocLazyLoad) {
+                    resources: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
@@ -377,13 +381,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard'),
                 controller: 'DashboardCtrl as dashboard',
                 resolve: {
-                    resources: function($ocLazyLoad) {
+                    resources: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             ASSETS.charts.dxGlobalize,
                             ASSETS.extra.toastr,
                         ]);
                     },
-                    dxCharts: function($ocLazyLoad) {
+                    dxCharts: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             ASSETS.charts.dxCharts,
                         ]);
@@ -1060,7 +1064,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                 templateUrl: appHelper.templatePath('lockscreen'),
                 controller: 'LockscreenCtrl',
                 resolve: {
-                    resources: function($ocLazyLoad) {
+                    resources: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
                             ASSETS.extra.toastr,
@@ -1068,9 +1072,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     },
                 }
             });
-    $httpProvider.interceptors.push(['$q', function($q) {
+    $httpProvider.interceptors.push(['$q', function ($q) {
             return {
-                request: function(config) {
+                request: function (config) {
                     config.headers = config.headers || {};
                     ontimetest.company_code = getCookie("cc");
                     if (ontimetest.company_code != null) {
@@ -1086,10 +1090,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASS
                     }
                     return config;
                 }, // optional method
-                'response': function(response) {
+                'response': function (response) {
                     return response;
                 },
-                'responseError': function(response) {
+                'responseError': function (response) {
                     var deferred = $q.defer();
                     if (response.status == 401) {
                         delete_cookie("cc");
