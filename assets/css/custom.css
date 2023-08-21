@@ -260,3 +260,6 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 .red-label{
     color: #CC3F44 !important;;
 }
+.no-padding-left{
+    padding-left: 0px;
+}

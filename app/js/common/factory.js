@@ -4,7 +4,7 @@ angular.module('xenon.factory').
         factory('Page', function () {
             return {
                 setTitle: function (newTitle) {
-                    document.title = newTitle;
+                    document.title = newTitle + " - OnTime";
                 }
             };
         }).

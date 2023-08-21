@@ -114,13 +114,17 @@
             }
         }
         ctrl.resetEmployeeTab2 = function () {
+            $formService.uncheckRadioValue('TaxStatus', ctrl.employee.taxStatus);
+            $formService.uncheckRadioValue('Wages', ctrl.employee.wages);
             ctrl.employee.taxStatus = 'W';
             ctrl.employee.wages = 'H';
             ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
-
             $timeout(function () {
+                $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
+                $formService.setRadioValues('Wages', ctrl.employee.wages);
                 $("#rate2").multiSelect('refresh');
                 $("#rate1").multiSelect('refresh');
+//                $formService.resetRadios();
             }, 100);
             $scope.resetForm = true;
         };
