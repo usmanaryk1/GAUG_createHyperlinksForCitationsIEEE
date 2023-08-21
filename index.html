@@ -27,6 +27,8 @@
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
 
+
+
         <script>
             var appData = {};
 
@@ -56,13 +58,12 @@
                 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-
     </head>
     <body class="page-body" ng-controller="MainCtrl" ng-class="{'settings-pane-open': layoutOptions.settingsPane.isOpen, 'chat-open': layoutOptions.chat.isOpen, 'login-page': isLoginPage && isMainPage == false, 'login-light': (isLoginPage || isLightLoginPage) && isMainPage == false, 'lockscreen-page': isLockscreenPage && isMainPage == false, 'right-sidebar': layoutOptions.sidebar.isRight, 'boxed-container': layoutOptions.container.isBoxed}">
-
+        
         <!-- 
         <settings-pane></settings-pane>
-
+    
         <horizontal-menu ng-if="layoutOptions.horizontalMenu.isVisible"></horizontal-menu>
         -->
         <script type="text/ng-template" id="warning-dialog.html">
@@ -74,6 +75,18 @@
             </div>
 
         </script>
+        <div ng-cloak style="{{paginationLoading==true?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
+            <div style="width: 80px;
+                margin: 0 auto;
+                padding: 4px 10px;
+                color: #ae6200;
+                font-weight: bold;
+                text-align: center;
+                background: #ffe7c2;
+                border: 2px solid #ff9d00;
+                border-top: 0;
+                box-shadow: 0 0 10px rgba(0,0,0,0.5);">Loading</div>
+        </div>
         <div id="mainDiv" class="page-container" ui-view></div>
         <!--        <div class="page-loading-overlay">
                     <div class="loader-2"></div>

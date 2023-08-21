@@ -5571,7 +5571,7 @@ blockquote small {
 .dataTables_wrapper tr .yadcf-filter-wrapper {
     position: relative;
     margin-top: 10px;
-    border-top: 1px solid #eee;
+    /*border-top: 1px solid #eee;*/
     margin-left: -15px;
     margin-right: -15px;
     display: block;

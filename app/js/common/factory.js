@@ -7,113 +7,184 @@ angular.module('xenon.factory').
                     document.title = newTitle + " - OnTime";
                 }
             };
-        }).
-        factory('$layoutToggles', function ($rootScope, $layout) {
+        }).factory('$debounce', function ($rootScope, $browser, $q, $exceptionHandler) {
+    var deferreds = {},
+            methods = {},
+            uuid = 0;
 
-            return {
-                initToggles: function ()
-                {
-                    // Sidebar Toggle
-                    $rootScope.sidebarToggle = function ()
-                    {
-                        $layout.setOptions('sidebar.isCollapsed', !$rootScope.layoutOptions.sidebar.isCollapsed);
-                    };
+    function debounce(fn, delay, invokeApply) {
+        var deferred = $q.defer(),
+                promise = deferred.promise,
+                skipApply = (angular.isDefined(invokeApply) && !invokeApply),
+                timeoutId, cleanup,
+                methodId, bouncing = false;
 
+        // check we dont have this method already registered
+        angular.forEach(methods, function (value, key) {
+            if (angular.equals(methods[key].fn, fn)) {
+                bouncing = true;
+                methodId = key;
+            }
+        });
 
-                    // Settings Pane
-                    $rootScope.settingsPaneToggle = function ()
-                    {
-                        var use_animation = $rootScope.layoutOptions.settingsPane.useAnimation && !isxs();
+        // not bouncing, then register new instance
+        if (!bouncing) {
+            methodId = uuid++;
+            methods[methodId] = {fn: fn};
+        } else {
+            // clear the old timeout
+            deferreds[methods[methodId].timeoutId].reject('bounced');
+            $browser.defer.cancel(methods[methodId].timeoutId);
+        }
 
-                        var scroll = {
-                            top: jQuery(document).scrollTop(),
-                            toTop: 0
-                        };
+        var debounced = function () {
+            // actually executing? clean method bank
+            delete methods[methodId];
 
-                        if (public_vars.$body.hasClass('settings-pane-open'))
-                        {
-                            scroll.toTop = scroll.top;
-                        }
+            try {
+                deferred.resolve(fn());
+            } catch (e) {
+                deferred.reject(e);
+                $exceptionHandler(e);
+            }
 
-                        TweenMax.to(scroll, (use_animation ? .1 : 0), {top: scroll.toTop, roundProps: ['top'], ease: scroll.toTop < 10 ? null : Sine.easeOut, onUpdate: function ()
-                            {
-                                jQuery(window).scrollTop(scroll.top);
-                            },
-                            onComplete: function ()
-                            {
-                                if (use_animation)
-                                {
-                                    // With Animation
-                                    public_vars.$settingsPaneIn.addClass('with-animation');
+            if (!skipApply)
+                $rootScope.$apply();
+        };
 
-                                    // Opening
-                                    if (!public_vars.$settingsPane.is(':visible'))
-                                    {
-                                        public_vars.$body.addClass('settings-pane-open');
+        timeoutId = $browser.defer(debounced, delay);
 
-                                        var height = public_vars.$settingsPane.outerHeight(true);
+        // track id with method
+        methods[methodId].timeoutId = timeoutId;
 
-                                        public_vars.$settingsPane.css({
-                                            height: 0
-                                        });
+        cleanup = function (reason) {
+            delete deferreds[promise.$$timeoutId];
+        };
 
-                                        TweenMax.to(public_vars.$settingsPane, .25, {css: {height: height}, ease: Circ.easeInOut, onComplete: function ()
-                                            {
-                                                public_vars.$settingsPane.css({height: ''});
-                                            }});
+        promise.$$timeoutId = timeoutId;
+        deferreds[timeoutId] = deferred;
+        promise.then(cleanup, cleanup);
 
-                                        public_vars.$settingsPaneIn.addClass('visible');
-                                    }
-                                    // Closing
-                                    else
-                                    {
-                                        public_vars.$settingsPaneIn.addClass('closing');
-
-                                        TweenMax.to(public_vars.$settingsPane, .25, {css: {height: 0}, delay: .15, ease: Power1.easeInOut, onComplete: function ()
-                                            {
-                                                public_vars.$body.removeClass('settings-pane-open');
-                                                public_vars.$settingsPane.css({height: ''});
-                                                public_vars.$settingsPaneIn.removeClass('closing visible');
-                                            }});
-                                    }
-                                }
-                                else
-                                {
-                                    // Without Animation
-                                    public_vars.$body.toggleClass('settings-pane-open');
-                                    public_vars.$settingsPaneIn.removeClass('visible');
-                                    public_vars.$settingsPaneIn.removeClass('with-animation');
-
-                                    $layout.setOptions('settingsPane.isOpen', !$rootScope.layoutOptions.settingsPane.isOpen);
-                                }
-                            }
-                        });
-                    };
+        return promise;
+    }
 
 
-                    // Chat Toggle
-                    $rootScope.chatToggle = function ()
-                    {
-                        $layout.setOptions('chat.isOpen', !$rootScope.layoutOptions.chat.isOpen);
-                    };
+    // similar to angular's $timeout cancel
+    debounce.cancel = function (promise) {
+        if (promise && promise.$$timeoutId in deferreds) {
+            deferreds[promise.$$timeoutId].reject('canceled');
+            return $browser.defer.cancel(promise.$$timeoutId);
+        }
+        return false;
+    };
 
+    return debounce;
+}).factory('$layoutToggles', function ($rootScope, $layout) {
 
-                    // Mobile Menu Toggle
-                    $rootScope.mobileMenuToggle = function ()
-                    {
-                        $layout.setOptions('sidebar.isMenuOpenMobile', !$rootScope.layoutOptions.sidebar.isMenuOpenMobile);
-                        $layout.setOptions('horizontalMenu.isMenuOpenMobile', !$rootScope.layoutOptions.horizontalMenu.isMenuOpenMobile);
-                    };
-
-
-                    // Mobile User Info Navbar Toggle
-                    $rootScope.mobileUserInfoToggle = function ()
-                    {
-                        $layout.setOptions('userInfoNavVisible', !$rootScope.layoutOptions.userInfoNavVisible);
-                    }
-                }
+    return {
+        initToggles: function ()
+        {
+            // Sidebar Toggle
+            $rootScope.sidebarToggle = function ()
+            {
+                $layout.setOptions('sidebar.isCollapsed', !$rootScope.layoutOptions.sidebar.isCollapsed);
             };
-        }).
+
+
+            // Settings Pane
+            $rootScope.settingsPaneToggle = function ()
+            {
+                var use_animation = $rootScope.layoutOptions.settingsPane.useAnimation && !isxs();
+
+                var scroll = {
+                    top: jQuery(document).scrollTop(),
+                    toTop: 0
+                };
+
+                if (public_vars.$body.hasClass('settings-pane-open'))
+                {
+                    scroll.toTop = scroll.top;
+                }
+
+                TweenMax.to(scroll, (use_animation ? .1 : 0), {top: scroll.toTop, roundProps: ['top'], ease: scroll.toTop < 10 ? null : Sine.easeOut, onUpdate: function ()
+                    {
+                        jQuery(window).scrollTop(scroll.top);
+                    },
+                    onComplete: function ()
+                    {
+                        if (use_animation)
+                        {
+                            // With Animation
+                            public_vars.$settingsPaneIn.addClass('with-animation');
+
+                            // Opening
+                            if (!public_vars.$settingsPane.is(':visible'))
+                            {
+                                public_vars.$body.addClass('settings-pane-open');
+
+                                var height = public_vars.$settingsPane.outerHeight(true);
+
+                                public_vars.$settingsPane.css({
+                                    height: 0
+                                });
+
+                                TweenMax.to(public_vars.$settingsPane, .25, {css: {height: height}, ease: Circ.easeInOut, onComplete: function ()
+                                    {
+                                        public_vars.$settingsPane.css({height: ''});
+                                    }});
+
+                                public_vars.$settingsPaneIn.addClass('visible');
+                            }
+                            // Closing
+                            else
+                            {
+                                public_vars.$settingsPaneIn.addClass('closing');
+
+                                TweenMax.to(public_vars.$settingsPane, .25, {css: {height: 0}, delay: .15, ease: Power1.easeInOut, onComplete: function ()
+                                    {
+                                        public_vars.$body.removeClass('settings-pane-open');
+                                        public_vars.$settingsPane.css({height: ''});
+                                        public_vars.$settingsPaneIn.removeClass('closing visible');
+                                    }});
+                            }
+                        }
+                        else
+                        {
+                            // Without Animation
+                            public_vars.$body.toggleClass('settings-pane-open');
+                            public_vars.$settingsPaneIn.removeClass('visible');
+                            public_vars.$settingsPaneIn.removeClass('with-animation');
+
+                            $layout.setOptions('settingsPane.isOpen', !$rootScope.layoutOptions.settingsPane.isOpen);
+                        }
+                    }
+                });
+            };
+
+
+            // Chat Toggle
+            $rootScope.chatToggle = function ()
+            {
+                $layout.setOptions('chat.isOpen', !$rootScope.layoutOptions.chat.isOpen);
+            };
+
+
+            // Mobile Menu Toggle
+            $rootScope.mobileMenuToggle = function ()
+            {
+                $layout.setOptions('sidebar.isMenuOpenMobile', !$rootScope.layoutOptions.sidebar.isMenuOpenMobile);
+                $layout.setOptions('horizontalMenu.isMenuOpenMobile', !$rootScope.layoutOptions.horizontalMenu.isMenuOpenMobile);
+            };
+
+
+            // Mobile User Info Navbar Toggle
+            $rootScope.mobileUserInfoToggle = function ()
+            {
+                $layout.setOptions('userInfoNavVisible', !$rootScope.layoutOptions.userInfoNavVisible);
+            }
+        }
+    };
+}).
         factory('$pageLoadingBar', function ($rootScope, $window) {
 
             return {

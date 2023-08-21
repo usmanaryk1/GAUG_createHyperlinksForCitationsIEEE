@@ -1,11 +1,15 @@
 (function () {
-    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $compile, $timeout) {
+    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout) {
         var ctrl = this;
         ctrl.datatableObj = {};
         $rootScope.selectEmployeeModel = {};
         Page.setTitle("View Employees");
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+
+        ctrl.reverseSort = true;
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
+        ctrl.employeeList = [];
 
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
             $state.transitionTo(ontimetest.defaultState);
@@ -15,18 +19,58 @@
         ctrl.retrieveEmployees = retrieveEmployeesData;
         ctrl.edit = edit;
 
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrieveEmployees();
+        };
+
+        ctrl.applySearch = function () {
+            ctrl.searchParams.pageNo = 1;
+            $debounce(retrieveEmployeesData, 500);
+        };
+
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrieveEmployees();
+        };
+
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
+        };
+
         function retrieveEmployeesData() {
-            $rootScope.maskLoading();
-            EmployeeDAO.retrieveAll({subAction: ctrl.viewType}).then(function (res) {
+            $rootScope.paginationLoading = true;
+            ctrl.searchParams.subAction = ctrl.viewType;
+            EmployeeDAO.retrieveAll(ctrl.searchParams).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
                     finish: function () {
                     }
                 }); // showLoadingBar
+                console.log(res);
                 ctrl.employeeList = res;
                 if (res.length === 0) {
-                    toastr.error("No data in the system.");
+                    $("#paginationButtons").remove();
+//                    toastr.error("No data in the system.");
                 }
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve employees.");
@@ -40,7 +84,7 @@
 //                ctrl.employeeList = ontimetest.employees;
                 console.log('Error in retrieving data')
             }).then(function () {
-                $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
             });
         }
 
@@ -100,20 +144,14 @@
 
         };
         ctrl.rerenderDataTable = function () {
-//            var pageInfo = ctrl.datatableObj.page.info();
-            var employeeList = angular.copy(ctrl.employeeList);
-            ctrl.employeeList = [];
-            $("#example-1_wrapper").remove();
-            $timeout(function () {
-                ctrl.employeeList = employeeList;
-//                $timeout(function() {
-//                    var pageNo = Number(pageInfo.page);
-//                    if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
-//                        pageNo--;
-//                    }
-//                    ctrl.datatableObj.page(pageNo).draw(false);
-//                }, 20);
-            });
+            if (ctrl.employeeList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
+                }
+//                ctrl.retrieveEmployees();
+            } else {
+                ctrl.retrieveEmployees();
+            }
         };
         ctrl.openDeactivateModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
@@ -212,5 +250,5 @@
 //        });
     }
     ;
-    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$compile", "$timeout", ViewEmployeesCtrl]);
+    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", ViewEmployeesCtrl]);
 })();

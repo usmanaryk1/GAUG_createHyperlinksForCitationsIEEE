@@ -106,8 +106,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                         $state.transitionTo(ontimetest.defaultState);
                     }
                 }
-                $rootScope.currentPage = 1;
-                $rootScope.pageSize = 10;
+                $rootScope.paginationLoading = false;
                 //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
                 if (toState.data && toState.data.tabNo) {
                     $rootScope.tabNo = toState.data.tabNo;
@@ -1072,7 +1071,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     },
                 }
             });
-    $httpProvider.interceptors.push(['$q', function ($q) {
+    $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
             return {
                 request: function (config) {
                     config.headers = config.headers || {};
@@ -1091,9 +1090,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     return config;
                 }, // optional method
                 'response': function (response) {
+                    if (response.headers().count) {
+                        $rootScope.totalRecords = response.headers().count;
+                    }
                     return response;
                 },
                 'responseError': function (response) {
+                    if (response.headers().count) {
+                        $rootScope.totalRecords = response.headers().count;
+                    }
                     var deferred = $q.defer();
                     if (response.status == 401) {
                         delete_cookie("cc");
