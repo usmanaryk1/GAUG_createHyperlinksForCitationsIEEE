@@ -50,6 +50,7 @@ ontime_data = {
     amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/",
     reportTypes: [
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
+        {id: 'employeelastpunchin', label: "Employee Last Punchin Date Report"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
 //        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
         {id: 'employeeothours', label: "Employee OT Hours Report"},
