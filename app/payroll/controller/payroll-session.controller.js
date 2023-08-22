@@ -38,7 +38,10 @@
             }
             $rootScope.maskLoading();
             angular.forEach(ctrl.payrollSessions, function (session) {
-                session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
+                session.totalHours = checkNull(session.hour1) + checkNull(session.hour2)
+                        + checkNull(session.otHours) + checkNull(session.hdHours)
+                        + checkNull(session.otHours2) + checkNull(session.hdHours2)
+                        + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
             });
             PayrollDAO.processSessions(ctrl.searchParamsAtReview, ctrl.payrollSessions).then(function (res) {
                 if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider !== null) {
@@ -217,11 +220,17 @@
             payrollObj.totalHours = ctrl.calculateTotalHours(payrollObj);
         };
         ctrl.calculateGrossPay = function (payrollObj) {
-            var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2)) + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * otHdConstant) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * otHdConstant) + checkNull(payrollObj.salary) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction) - checkNull(payrollObj.adp401kLoan) - checkNull(payrollObj.adp401kDeduction);
+            var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2))
+                    + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * otHdConstant) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * otHdConstant)
+                    + (checkNull(payrollObj.otRate2) * checkNull(payrollObj.otHours2) * otHdConstant) + (checkNull(payrollObj.hdRate2) * checkNull(payrollObj.hdHours2) * otHdConstant)
+                    + checkNull(payrollObj.salary) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction) - checkNull(payrollObj.adp401kLoan) - checkNull(payrollObj.adp401kDeduction);
             return grossPay;
         };
         ctrl.calculateTotalHours = function (payrollObj) {
-            var totalHours = checkNull(payrollObj.hour1) + checkNull(payrollObj.hour2) + checkNull(payrollObj.otHours) + checkNull(payrollObj.hdHours) + checkNull(payrollObj.vacation) + checkNull(payrollObj.sick) + checkNull(payrollObj.personal);
+            var totalHours = checkNull(payrollObj.hour1) + checkNull(payrollObj.hour2)
+                    + checkNull(payrollObj.otHours) + checkNull(payrollObj.hdHours)
+                    + checkNull(payrollObj.otHours2) + checkNull(payrollObj.hdHours2)
+                    + checkNull(payrollObj.vacation) + checkNull(payrollObj.sick) + checkNull(payrollObj.personal);
             if (payrollObj.vacation > 0 || payrollObj.personal > 0 || payrollObj.sick > 0) {
                 payrollObj.ptoAdded = true;
             } else {
@@ -275,11 +284,14 @@
 //                ctrl.employeeModalObj.salary = empObj.salary;
                 ctrl.setGrossPay(ctrl.employeeModalObj);
             } else {
-                ctrl.employeeModalObj.otRate = empObj.otRate;
-                ctrl.employeeModalObj.hdRate = empObj.hdRate;
+
                 EmployeeDAO.retrieveEmployeeCareRates({employee_id: empObj.id}).then(function (res) {
                     ctrl.employeeModalObj.rate1 = res.rate1.rate;
                     ctrl.employeeModalObj.rate2 = res.rate2.rate;
+                    ctrl.employeeModalObj.otRate = res.rate1.rate * ctrl.payrollSettings.otRateFactor;
+                    ctrl.employeeModalObj.hdRate = res.rate1.rate * ctrl.payrollSettings.hdRateFactor;
+                    ctrl.employeeModalObj.otRate2 = res.rate2.rate * ctrl.payrollSettings.otRateFactor;
+                    ctrl.employeeModalObj.hdRate2 = res.rate2.rate * ctrl.payrollSettings.hdRateFactor;
                     ctrl.setGrossPay(ctrl.employeeModalObj);
                 });
             }
