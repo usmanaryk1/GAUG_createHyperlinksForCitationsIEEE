@@ -1,141 +1,135 @@
-(function() {
+(function () {
     function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page) {
         var ctrl = this;
         Page.setTitle("Daily Attendance");
-        ctrl.datatableObj = {};
-        ctrl.viewRecords = 10;
-        ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontimetest.company_code;
-        ctrl.changeViewRecords = function() {
-            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
+
+        //method is called when page is changed
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrieveTimesheet();
         };
-        ctrl.resetFilters = function() {
+
+        //to apply sorting and manage variables
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrieveTimesheet();
+        };
+
+        //to maintain sorting class dynamically
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
+        };
+
+        ctrl.resetFilters = function () {
+            ctrl.searchParams = {limit: 10, pageNo: 1};
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.searchParams.staffingCordinatorId = null;
-            ctrl.selectedEmployee = null;
+            localStorage.removeItem('dailyAttendanceSearchParams');
             ctrl.attendanceList = [];
             ctrl.criteriaSelected = false;
-            ctrl.rerenderDataTable();
         };
-        ctrl.rerenderDataTable = function() {
-            var pageInfo;
-            if (ctrl.datatableObj.page != null) {
-                pageInfo = ctrl.datatableObj.page.info();
+
+        ctrl.rerenderDataTable = function () {
+            if (ctrl.attendanceList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
+                }
+            } else {
+                ctrl.retrieveTimesheet();
             }
-            ctrl.datatableObj = {};
-            var attendanceList = angular.copy(ctrl.attendanceList);
-            ctrl.attendanceList = [];
-            $("#example-1_wrapper").remove();
-            $timeout(function() {
-                ctrl.attendanceList = attendanceList;
-                if (pageInfo != null) {
-                    $timeout(function() {
-                        var pageNo = Number(pageInfo.page);
-                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
-                            pageNo--;
-                        }
-                        ctrl.datatableObj.page(pageNo).draw(false);
-                    }, 20);
-                }
-            });
-//            ctrl.datatableObj = {};
-//            var attendanceList = angular.copy(ctrl.attendanceList);
-//            ctrl.attendanceList = [];
-//            $("#example-1_wrapper").remove();
-//            $timeout(function() {
-//                ctrl.attendanceList = attendanceList;
-//            });
         };
-        ctrl.filterTimesheet = function() {
-//            if (ctrl.searchParams.staffingCordinatorId && ctrl.searchParams.staffingCordinatorId !== null) {
-                ctrl.cordinatorId = ctrl.searchParams.staffingCordinatorId;
-                if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
-                    ctrl.searchParams.startDate = null;
-                }
-                if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
-                    ctrl.searchParams.endDate = null;
-                }
-                if (ctrl.searchParams.startDate !== null) {
-                    ctrl.criteriaSelected = true;
-                    ctrl.retrieveTimesheet();
-                } else {
-                    ctrl.criteriaSelected = false;
-                    ctrl.attendanceList = [];
-                    ctrl.rerenderDataTable();
-                }
 
-//            } else {
-//                ctrl.cordinatorId = undefined;
-//                ctrl.attendanceList = [];
-//                ctrl.criteriaSelected = false;
-//                ctrl.rerenderDataTable();
-//            }
-
-//            if (ctrl.searchParams.startDate === "") {
-//                ctrl.searchParams.startDate = null;
-//            }
-//            if (ctrl.searchParams.endDate === "") {
-//                ctrl.searchParams.endDate = null;
-//            }
-//            ctrl.retrieveTimesheet();
-//            ctrl.datatableObj.fnDraw();
+        //this is called on review button click. As It is checking for mandatory fields and reinitialize the pageNo
+        ctrl.filterTimesheet = function () {
+            ctrl.searchParams.pageNo = 1;
+            if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
+                ctrl.searchParams.startDate = null;
+            }
+            if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
+                ctrl.searchParams.endDate = null;
+            }
+            if (ctrl.searchParams.startDate !== null) {
+                ctrl.criteriaSelected = true;
+                ctrl.retrieveTimesheet();
+            } else {
+                ctrl.criteriaSelected = false;
+                ctrl.attendanceList = [];
+                ctrl.dataRetrieved = false;
+            }
         }
         retrieveEmployeesData();
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveByPosition({'position': 'a,nc'}).then(function(res) {
+            $rootScope.maskLoading();
+            EmployeeDAO.retrieveByPosition({'position': 'a,nc'}).then(function (res) {
                 ctrl.employeeList = res;
-                var params = $location.search();
-                if (params != null && params.id != null) {
-                    ctrl.searchParams.staffingCordinatorId = Number(params.id);
-                    $timeout(function() {
-                        $("#sboxit-2").select2("val", params.id);
+                var params = localStorage.getItem('dailyAttendanceSearchParams');
+                if (params !== null) {
+                    ctrl.searchParams = JSON.parse(params);
+                    $timeout(function () {
+                        $("#sboxit-2").select2("val", ctrl.searchParams.staffingCordinatorId);
                     }, 300);
-                    if (params.from != null) {
-                        ctrl.searchParams.startDate = params.from;
-                    }
-                    if (params.to != null) {
-                        ctrl.searchParams.endDate = params.to;
-                    }
                     ctrl.filterTimesheet();
+                } else {
+                    ctrl.resetFilters();
+                    $rootScope.unmaskLoading();
                 }
-
-            }).catch(function(data, status) {
+            }).catch(function (data, status) {
                 toastr.error("Could not load Coordinators");
+                $rootScope.unmaskLoading();
 //                ctrl.employeeList = ontimetest.employees;
             });
         }
 
-        ctrl.retrieveTimesheet = function() {
-            $rootScope.maskLoading();
-            ctrl.dataRetrieved = false;
-            if (ctrl.searchParams.staffingCordinatorId != null && ctrl.searchParams.startDate != null) {
-                $location.search({id: ctrl.searchParams.staffingCordinatorId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
-            }
-            TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function(res) {
-                ctrl.attendanceList = res;
-                angular.forEach(ctrl.attendanceList, function(obj) {
+        ctrl.retrieveTimesheet = function () {
+
+            $rootScope.paginationLoading = true;
+            TimesheetDAO.retrieveAllDailyAttendance(ctrl.searchParams).then(function (res) {
+                ctrl.attendanceList = JSON.parse(res.data);
+                ctrl.totalRecords = Number(res.headers.count);
+                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                angular.forEach(ctrl.attendanceList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                 });
-                ctrl.rerenderDataTable();
-            }).catch(function() {
+                ctrl.dataRetrieved = true;
+            }).catch(function () {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 }); // showLoadingBar
                 toastr.error("Could not load Daily Attendance");
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
             });
 
         };
-        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop, tasks)
+        ctrl.openTaskListModal = function (modal_id, modal_size, modal_backdrop, tasks)
         {
             ctrl.taskListModalOpen = true;
             $rootScope.taskListModal = $modal.open({
@@ -149,7 +143,7 @@
 
         };
 
-        ctrl.openDeleteModal = function(punchObj, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (punchObj, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deletePunchModal = $modal.open({
                 templateUrl: modal_id,
@@ -159,31 +153,49 @@
             });
             $rootScope.deletePunchModal.punchObj = punchObj;
 
-            $rootScope.deletePunchModal.delete = function(punchObj) {
+            $rootScope.deletePunchModal.delete = function (punchObj) {
                 $rootScope.maskLoading();
-                TimesheetDAO.delete({id: punchObj.id}).then(function(res) {
-                    var length = ctrl.attendanceList.length;
+                if (punchObj.isMissedPunch) {
+                    TimesheetDAO.deleteMissedPunch({id: punchObj.id}).then(function (res) {
+                        var length = ctrl.attendanceList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.attendanceList[i].id === punchObj.id) {
-                            ctrl.attendanceList.splice(i, 1);
-                            break;
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.attendanceList[i].id === punchObj.id) {
+                                ctrl.attendanceList.splice(i, 1);
+                                break;
+                            }
                         }
-                    }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Punch record deleted.");
-                    $rootScope.deletePunchModal.close();
-                }).catch(function(data, status) {
-                    toastr.error("Failed to delete punch record.");
-                    $rootScope.deletePunchModal.close();
-                }).then(function() {
-                    $rootScope.unmaskLoading();
-                });
+                        ctrl.rerenderDataTable();
+                        toastr.success("Punch record deleted.");
+                        $rootScope.deletePunchModal.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to delete punch record.");
+                        $rootScope.deletePunchModal.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                } else {
+                    TimesheetDAO.delete({id: punchObj.id}).then(function (res) {
+                        var length = ctrl.attendanceList.length;
+
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.attendanceList[i].id === punchObj.id) {
+                                ctrl.attendanceList.splice(i, 1);
+                                break;
+                            }
+                        }
+                        ctrl.rerenderDataTable();
+                        toastr.success("Punch record deleted.");
+                        $rootScope.deletePunchModal.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to delete punch record.");
+                        $rootScope.deletePunchModal.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                }
             };
-
         };
-
-
     }
     ;
     angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", DailyAttendanceCtrl]);

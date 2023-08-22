@@ -2,8 +2,6 @@
     function PatientTimeSheetCtrl(Page, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location) {
         var ctrl = this;
         Page.setTitle("Patient Timesheet");
-        ctrl.datatableObj = {};
-        ctrl.searchParams = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.criteriaSelected = false;
         ctrl.viewRecords = 10;
@@ -39,40 +37,60 @@
         }).catch(function() {
             toastr.error("Failed to retrieve insurance provider list.");
         });
-        ctrl.changeViewRecords = function() {
-            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
+        //method is called when page is changed
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrieveTimesheet();
+        };
+
+        //to apply sorting and manage variables
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrieveTimesheet();
+        };
+
+        //to maintain sorting class dynamically
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
         };
         ctrl.resetFilters = function() {
+            ctrl.searchParams = {limit: 10, pageNo: 1};
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.selectedPatient = null;
             ctrl.searchParams.patientId = null;
             ctrl.criteriaSelected = false;
+            ctrl.formSubmitted = false;
+            localStorage.removeItem('patientTimesheetSearchParams');
             ctrl.timesheetList = [];
-            ctrl.rerenderDataTable();
         };
         ctrl.rerenderDataTable = function() {
-            var pageInfo;
-            if (ctrl.datatableObj.page != null) {
-                pageInfo = ctrl.datatableObj.page.info();
-            }
-            ctrl.datatableObj = {};
-            var timesheetList = angular.copy(ctrl.timesheetList);
-            ctrl.timesheetList = [];
-            $("#example-1_wrapper").remove();
-            $timeout(function() {
-                ctrl.timesheetList = timesheetList;
-                if (pageInfo != null) {
-                    $timeout(function() {
-                        var pageNo = Number(pageInfo.page);
-                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
-                            pageNo--;
-                        }
-                        ctrl.datatableObj.page(pageNo).draw(false);
-                    }, 20);
+            if (ctrl.timesheetList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
                 }
-            });
+            } else {
+                ctrl.retrieveTimesheet();
+            }
         };
         ctrl.filterTimesheet = function() {
             if (ctrl.searchParams.patientId && ctrl.searchParams.patientId !== null) {
@@ -88,42 +106,30 @@
                 } else {
                     ctrl.criteriaSelected = false;
                     ctrl.timesheetList = [];
-                    ctrl.rerenderDataTable();
+                    ctrl.dataRetrieved = false;
                 }
             } else {
                 ctrl.timesheetList = [];
                 ctrl.criteriaSelected = false;
-                ctrl.rerenderDataTable();
+                ctrl.dataRetrieved = false;
             }
 //            ctrl.datatableObj.fnDraw();
 
         };
         ctrl.retrieveTimesheet = function() {
-            $rootScope.maskLoading();
+            $rootScope.paginationLoading = true;
             if (ctrl.searchParams.patientId !== null) {
                 ctrl.selectedPatient = ctrl.patientIdMap[ctrl.searchParams.patientId];
             }
-            ctrl.dataRetrieved = false;
-            if (ctrl.searchParams.patientId != null && ctrl.searchParams.startDate != null) {
-                $location.search({id: ctrl.searchParams.patientId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
-            }
             TimesheetDAO.retrievePatientTimeSheet(ctrl.searchParams).then(function(res) {
                 ctrl.dataRetrieved = true;
-//                showLoadingBar({
-//                    delay: .5,
-//                    pct: 100,
-//                    finish: function() {
-//                        if (res) {
-//                            
-//                        }
-//                    }
-//                }); // showLoadingBar
-                ctrl.timesheetList = res;
+               ctrl.timesheetList = JSON.parse(res.data);
+                ctrl.totalRecords = Number(res.headers.count);
+                localStorage.setItem('patientTimesheetSearchParams', JSON.stringify(ctrl.searchParams));
                 angular.forEach(ctrl.timesheetList, function(obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                 });
-                ctrl.rerenderDataTable();
             }).catch(function() {
                 showLoadingBar({
                     delay: .5,
@@ -135,6 +141,7 @@
 //                ctrl.timesheetList = ontimetest.employeeTimesheet;
             }).then(function() {
                 $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
             });
         };
 
@@ -146,22 +153,22 @@
                 for (var i = 0; i < res.length; i++) {
                     ctrl.patientIdMap[res[i].id] = res[i];
                 }
-                var params = $location.search();
-                if (params != null && params.id != null) {
-                    ctrl.searchParams.patientId = Number(params.id);
-                    $timeout(function() {
-                        $("#sboxit-2").select2("val", params.id);
+                
+                
+                var params = localStorage.getItem('patientTimesheetSearchParams');
+                if (params !== null) {
+                    ctrl.searchParams = JSON.parse(params);
+                    $timeout(function () {
+                        $("#sboxit-2").select2("val", ctrl.searchParams.patientId);
                     }, 300);
-                    if (params.from != null) {
-                        ctrl.searchParams.startDate = params.from;
-                    }
-                    if (params.to != null) {
-                        ctrl.searchParams.endDate = params.to;
-                    }
                     ctrl.filterTimesheet();
+                } else {
+                    ctrl.resetFilters();
+                    $rootScope.unmaskLoading();
                 }
 
             }).catch(function(data, status) {
+                $rootScope.unmaskLoading();
 //                ctrl.patientList = ontimetest.patients;
             });
         }
@@ -191,26 +198,47 @@
             });
             $rootScope.deletePunchModal.punchObj = punchObj;
 
-            $rootScope.deletePunchModal.delete = function(punchObj) {
+            $rootScope.deletePunchModal.delete = function (punchObj) {
                 $rootScope.maskLoading();
-                TimesheetDAO.delete({id: punchObj.id}).then(function(res) {
-                    var length = ctrl.timesheetList.length;
+                if (punchObj.isMissedPunch) {
+                    TimesheetDAO.deleteMissedPunch({id: punchObj.id}).then(function (res) {
+                        var length = ctrl.timesheetList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.timesheetList[i].id === punchObj.id) {
-                            ctrl.timesheetList.splice(i, 1);
-                            break;
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.timesheetList[i].id === punchObj.id) {
+                                ctrl.timesheetList.splice(i, 1);
+                                break;
+                            }
                         }
-                    }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Punch record deleted.");
-                    $rootScope.deletePunchModal.close();
-                }).catch(function(data, status) {
-                    toastr.error("Failed to delete punch record.");
-                    $rootScope.deletePunchModal.close();
-                }).then(function() {
-                    $rootScope.unmaskLoading();
-                });
+                        ctrl.rerenderDataTable();
+                        toastr.success("Punch record deleted.");
+                        $rootScope.deletePunchModal.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to delete punch record.");
+                        $rootScope.deletePunchModal.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                } else {
+                    TimesheetDAO.delete({id: punchObj.id}).then(function (res) {
+                        var length = ctrl.timesheetList.length;
+
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.timesheetList[i].id === punchObj.id) {
+                                ctrl.timesheetList.splice(i, 1);
+                                break;
+                            }
+                        }
+                        ctrl.rerenderDataTable();
+                        toastr.success("Timesheet record deleted.");
+                        $rootScope.deletePunchModal.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to delete punch record.");
+                        $rootScope.deletePunchModal.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                }
             };
 
         };

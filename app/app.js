@@ -106,6 +106,28 @@ app.run(function ($rootScope, $modal, $state, Idle)
                         $state.transitionTo(ontimetest.defaultState);
                     }
                 }
+                console.log('----' + JSON.stringify(toParams))
+                if (toParams.lastPage) {
+                    if (toParams.lastPage !== "daily_attendance") {
+                        localStorage.removeItem('dailyAttendanceSearchParams');
+                    }
+                    if (toParams.lastPage !== "employee_timesheet") {
+                        localStorage.removeItem('employeeTimesheetSearchParams');
+                    }
+                    if (toParams.lastPage !== "patient_time_sheet") {
+                        localStorage.removeItem('patientTimesheetSearchParams');
+                    }
+                } else {
+                    if (toState.url.indexOf("daily_attendance") < 0) {
+                        localStorage.removeItem('dailyAttendanceSearchParams');
+                    } 
+                    if (toState.url.indexOf("employee_timesheet") < 0) {
+                        localStorage.removeItem('employeeTimesheetSearchParams');
+                    }
+                    if (toState.url.indexOf("patient_time_sheet") < 0) {
+                        localStorage.removeItem('patientTimesheetSearchParams');
+                    }
+                }
                 $rootScope.paginationLoading = false;
                 //setting this jobNo to select the tab by default, changes done in form-wizard directive too.
                 if (toState.data && toState.data.tabNo) {
@@ -251,19 +273,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // edit_timesheet
             state('app.edit_timesheet', {
-                url: '/edit_timesheet/:id?empId&patId',
+                url: '/edit_timesheet/:id?empId&patId&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
             }).
             // edit_missed_punch
             state('app.edit_missed_punch', {
-                url: '/edit_missed_punch/:id?empId&patId',
+                url: '/edit_missed_punch/:id?empId&patId&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
             }).
             // timesheet
             state('app.employee_timesheet', {
-                url: '/employee_timesheet?id&from&to',
+                url: '/employee_timesheet?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
                 controller: 'EmployeeTimeSheetCtrl as empTimesheet',
             }).
@@ -275,7 +297,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // manual_punch
             state('app.manual_punch_employee', {
-                url: '/manual_punch/employee/:id?from&to',
+                url: '/manual_punch/employee/:id?from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
             }).
@@ -287,13 +309,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
-                url: '/patient_time_sheet?id&from&to',
+                url: '/patient_time_sheet?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
                 controller: 'PatientTimeSheetCtrl as patTimesheet',
             }).
             // daily_attendance
             state('app.daily_attendance', {
-                url: '/daily_attendance?id&from&to',
+                url: '/daily_attendance?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
             }).

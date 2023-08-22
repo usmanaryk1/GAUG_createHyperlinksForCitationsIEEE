@@ -1,52 +1,72 @@
-(function() {
+(function () {
     function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, $location, Page) {
         var ctrl = this;
         Page.setTitle("Employee Timesheet");
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-        ctrl.datatableObj = {};
-        ctrl.viewRecords = 10;
-        ctrl.searchParams = {};
         ctrl.criteriaSelected = false;
         ctrl.employeeIdMap = {};
         ctrl.employeeList = [];
 
-        ctrl.changeViewRecords = function() {
-            ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
+        //method is called when page is changed
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrieveTimesheet();
         };
-        ctrl.resetFilters = function() {
+
+        //to apply sorting and manage variables
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrieveTimesheet();
+        };
+
+        //to maintain sorting class dynamically
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
+        };
+
+        ctrl.resetFilters = function () {
+            ctrl.searchParams = {limit: 10, pageNo: 1};
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.selectedEmployee = null;
+            ctrl.searchParams.employeeId = null;
+            localStorage.removeItem('employeeTimesheetSearchParams');
             ctrl.timesheetList = [];
             ctrl.criteriaSelected = false;
-            ctrl.searchParams.employeeId = null;
-            ctrl.rerenderDataTable();
+            ctrl.formSubmitted = false;
         };
-        ctrl.rerenderDataTable = function() {
-            var pageInfo;
-            if (ctrl.datatableObj.page != null) {
-                pageInfo = ctrl.datatableObj.page.info();
-            }
-            ctrl.datatableObj = {};
-            var timesheetList = angular.copy(ctrl.timesheetList);
-            ctrl.timesheetList = [];
-            $("#example-1_wrapper").remove();
-            $timeout(function() {
-                ctrl.timesheetList = timesheetList;
-                if (pageInfo != null) {
-                    $timeout(function() {
-                        var pageNo = Number(pageInfo.page);
-                        if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
-                            pageNo--;
-                        }
-                        ctrl.datatableObj.page(pageNo).draw(false);
-                    }, 20);
+
+        ctrl.rerenderDataTable = function () {
+            if (ctrl.timesheetList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
                 }
-            });
+            } else {
+                ctrl.retrieveTimesheet();
+            }
         };
-        ctrl.filterTimesheet = function() {
+
+        ctrl.filterTimesheet = function () {
             if (ctrl.searchParams.employeeId && ctrl.searchParams.employeeId !== null) {
                 if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
@@ -60,89 +80,74 @@
                 } else {
                     ctrl.criteriaSelected = false;
                     ctrl.timesheetList = [];
-                    ctrl.rerenderDataTable();
+                    ctrl.dataRetrieved = false;
                 }
             } else {
                 ctrl.timesheetList = [];
                 ctrl.criteriaSelected = false;
-                ctrl.rerenderDataTable();
+                ctrl.dataRetrieved = false;
             }
-            //            ctrl.datatableObj.fnDraw();
         };
-        ctrl.retrieveTimesheet = function() {
+        ctrl.retrieveTimesheet = function () {
             $scope.hideDefaultImage = false;
-            $rootScope.maskLoading();
-            ctrl.dataRetrieved = false;
-            if (ctrl.searchParams.employeeId != null && ctrl.searchParams.startDate != null) {
-                $location.search({id: ctrl.searchParams.employeeId, from: ctrl.searchParams.startDate, to: ctrl.searchParams.endDate});
-            }
+            $rootScope.paginationLoading = true;
             if (ctrl.searchParams.employeeId !== null) {
                 ctrl.selectedEmployee = ctrl.employeeIdMap[ctrl.searchParams.employeeId];
             }
-            TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function(res) {
+            TimesheetDAO.retrieveEmployeeTimeSheet(ctrl.searchParams).then(function (res) {
                 ctrl.dataRetrieved = true;
-                ctrl.timesheetList = res;
-                angular.forEach(ctrl.timesheetList, function(obj) {
+                ctrl.timesheetList = JSON.parse(res.data);
+                ctrl.totalRecords = Number(res.headers.count);
+                localStorage.setItem('employeeTimesheetSearchParams', JSON.stringify(ctrl.searchParams));
+                angular.forEach(ctrl.timesheetList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                 });
-                ctrl.rerenderDataTable();
-            }).catch(function() {
+            }).catch(function () {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 }); // showLoadingBar
                 //                ctrl.timesheetList = ontimetest.employeeTimesheet;
-            }).then(function() {
+            }).then(function () {
                 if (ctrl.searchParams.employeeId !== null) {
                     $scope.hideDefaultImage = true;
                 }
                 $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
             });
         };
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
-            EmployeeDAO.retrieveAll({subAction: 'all'}).then(function(res) {
+            $rootScope.maskLoading();
+            EmployeeDAO.retrieveAll({subAction: 'all'}).then(function (res) {
                 ctrl.employeeList = res;
                 ctrl.employeeIdMap = {};
                 for (var i = 0; i < res.length; i++) {
                     ctrl.employeeIdMap[res[i].id] = res[i];
                 }
-                var params = $location.search();
-                if (params != null && params.id != null) {
-                    ctrl.searchParams.employeeId = Number(params.id);
-                    $timeout(function() {
-                        $("#sboxit-2").select2("val", params.id);
+                var params = localStorage.getItem('employeeTimesheetSearchParams');
+                if (params !== null) {
+                    ctrl.searchParams = JSON.parse(params);
+                    $timeout(function () {
+                        $("#sboxit-2").select2("val", ctrl.searchParams.employeeId);
                     }, 300);
-                    if (params.from != null) {
-                        ctrl.searchParams.startDate = params.from;
-                    }
-                    if (params.to != null) {
-                        ctrl.searchParams.endDate = params.to;
-                    }
                     ctrl.filterTimesheet();
+                } else {
+                    ctrl.resetFilters();
+                    $rootScope.unmaskLoading();
                 }
-
-//                $('#sboxit-2').select2('destroy');
-//                $("#sboxit-2").select2({
-//                    placeholder: 'Select your country...',
-////                                                        minimumInputLength: 1,
-//                }).on('select2-open', function()
-//                {
-                //                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-//                });
-                //                $('#sboxit-2').select2();
-                //                ctrl.filterTimesheet();
-            }).catch(function(data, status) {
+            }).catch(function (data, status) {
+                $rootScope.unmaskLoading();
                 //                ctrl.employeeList = ontimetest.employees;
             });
         }
         ;
-        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop, tasks) {
+        ctrl.openTaskListModal = function (modal_id, modal_size, modal_backdrop, tasks) {
             ctrl.taskListModalOpen = true;
             $rootScope.taskListModal = $modal.open({
                 templateUrl: modal_id,
@@ -156,7 +161,7 @@
         };
 
 
-        ctrl.openDeleteModal = function(punchObj, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (punchObj, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deletePunchModal = $modal.open({
                 templateUrl: modal_id,
@@ -166,31 +171,52 @@
             });
             $rootScope.deletePunchModal.punchObj = punchObj;
 
-            $rootScope.deletePunchModal.delete = function(punchObj) {
+            $rootScope.deletePunchModal.delete = function (punchObj) {
                 $rootScope.maskLoading();
-                TimesheetDAO.delete({id: punchObj.id}).then(function(res) {
-                    var length = ctrl.timesheetList.length;
+                if (punchObj.isMissedPunch) {
+                    TimesheetDAO.deleteMissedPunch({id: punchObj.id}).then(function (res) {
+                        var length = ctrl.timesheetList.length;
 
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.timesheetList[i].id === punchObj.id) {
-                            ctrl.timesheetList.splice(i, 1);
-                            break;
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.timesheetList[i].id === punchObj.id) {
+                                ctrl.timesheetList.splice(i, 1);
+                                break;
+                            }
                         }
-                    }
-                    ctrl.rerenderDataTable();
-                    toastr.success("Punch record deleted.");
-                    $rootScope.deletePunchModal.close();
-                }).catch(function(data, status) {
-                    toastr.error("Failed to delete punch record.");
-                    $rootScope.deletePunchModal.close();
-                }).then(function() {
-                    $rootScope.unmaskLoading();
-                });
+                        ctrl.rerenderDataTable();
+                        toastr.success("Punch record deleted.");
+                        $rootScope.deletePunchModal.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to delete punch record.");
+                        $rootScope.deletePunchModal.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                } else {
+                    TimesheetDAO.delete({id: punchObj.id}).then(function (res) {
+                        var length = ctrl.timesheetList.length;
+
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.timesheetList[i].id === punchObj.id) {
+                                ctrl.timesheetList.splice(i, 1);
+                                break;
+                            }
+                        }
+                        ctrl.rerenderDataTable();
+                        toastr.success("Timesheet record deleted.");
+                        $rootScope.deletePunchModal.close();
+                    }).catch(function (data, status) {
+                        toastr.error("Failed to delete punch record.");
+                        $rootScope.deletePunchModal.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                }
             };
 
         };
 
-        ctrl.openEditModal = function(employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectEmployeeModel = $modal.open({
                 templateUrl: modal_id,

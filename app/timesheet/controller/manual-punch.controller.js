@@ -187,16 +187,13 @@
 
         ctrl.navigateToState = function () {
             var params = angular.copy(searchParams);
-            if (searchParams != null) {
-                if (searchParams.empId != null) {
-                    params.id = params.empId;
-                    $state.go('app.employee_timesheet', params);
-                } else if (searchParams.patId != null) {
-                    params.id = params.patId;
-                    $state.go('app.patient_time_sheet', params);
-                } else if (searchParams.cordinatorId != null) {
-                    params.id = params.cordinatorId;
-                    $state.go('app.daily_attendance', params);
+            if (searchParams !== null && searchParams.lastPage !== null) {
+                if (searchParams.lastPage.indexOf("employee_timesheet") >= 0) {
+                    $state.go('app.employee_timesheet');
+                } else if (searchParams.lastPage.indexOf("patient_time_sheet") >= 0) {
+                    $state.go('app.patient_time_sheet');
+                } else if (searchParams.lastPage.indexOf("daily_attendance") >= 0) {
+                    $state.go('app.daily_attendance');
                 }
             }
 
