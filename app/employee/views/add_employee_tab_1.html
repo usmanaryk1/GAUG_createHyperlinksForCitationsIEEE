@@ -159,10 +159,15 @@
                                 Social Security #
                             </label>
                             <div class="col-sm-9">
-                                <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':addEmployee.ssn.exists}" name="SocialSecurity" type="text" ng-model="addEmployee.employee.ssn"
+                                <div ng-if="!addEmployee.editMode">
+                                    <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':addEmployee.ssn.exists}" name="SocialSecurity" type="text" ng-model="addEmployee.employee.ssn"
                                        data-validate="required" data-message-required="Please enter Social Security." maxlength="9" 
                                        ng-blur="checkSsnNumber();" ng-change="addEmployee.ssn.exists = false;"/>
-                                <span ng-if="addEmployee.ssn.exists" class="validate-has-error">Social security number already exists.</span>
+                                    <span ng-if="addEmployee.ssn.exists" class="validate-has-error">Social security number already exists.</span>
+                                </div>
+                                <div ng-if="addEmployee.editMode">
+                                    <label class="control-label">{{addEmployee.employee.ssn}}</label>&nbsp;&nbsp;<span class="fa fa-search" style="cursor: pointer" ng-click="addEmployee.openSSNModal(addEmployee.employee.id)"></span>
+                                </div>                                
                             </div>
                         </div>
                         <div class="form-group-separator">
