@@ -1,15 +1,57 @@
 (function() {
-    function ViewInsurersCtrl(InsurerDAO, $rootScope, $timeout, $state, $modal, Page) {
+    function ViewInsurersCtrl(InsurerDAO, $rootScope, $debounce, $state, $modal, Page) {
         var ctrl = this;
-        ctrl.datatableObj = {};
+        $rootScope.maskLoading();
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         Page.setTitle("View Insurance Providers");
+
+        ctrl.insurerList = [];
+
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'insuranceName', order: 'asc', insuranceName: ''};
+        
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrieveInsurers();
+        };
+
+        ctrl.applySearch = function () {
+            ctrl.searchParams.pageNo = 1;
+            $debounce(retrieveInsurersData, 500);
+        };
+
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrieveInsurers();
+        };
+
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
+        };
+        
         function retrieveInsurersData() {
-            $rootScope.maskLoading();
-            InsurerDAO.retrieveAll().then(function(res) {
+            $rootScope.paginationLoading = true;
+            InsurerDAO.retrieveAll(ctrl.searchParams).then(function(res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -20,7 +62,8 @@
                 }); // showLoadingBar
                 ctrl.insurerList = res;
                 if (res.length === 0) {
-                    toastr.error("No data in the system.");
+//                    $("#paginationButtons").remove();
+//                    toastr.error("No data in the system.");
                 }
             }).catch(function(data, status) {
                 showLoadingBar({
@@ -34,6 +77,7 @@
 //                ctrl.insurerList = ontimetest.insuranceProviders;
             }).then(function() {
                 $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
             });
         }
 
@@ -75,20 +119,13 @@
 
         };
         ctrl.rerenderDataTable = function() {
-            var pageInfo = ctrl.datatableObj.page.info();
-            var insurerList = angular.copy(ctrl.insurerList);
-            ctrl.insurerList = [];
-            $("#example-1_wrapper").remove();
-            $timeout(function() {
-                ctrl.insurerList = insurerList;
-                $timeout(function() {
-                    var pageNo = Number(pageInfo.page);
-                    if (ctrl.datatableObj.page.info().pages <= pageInfo.page) {
-                        pageNo--;
-                    }
-                    ctrl.datatableObj.page(pageNo).draw(false);
-                }, 20);
-            });
+            if (ctrl.insurerList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
+                }
+            } else {
+                ctrl.retrievePatients();
+            }
         };
         ctrl.openEditModal = function(insurer, modal_id, modal_size, modal_backdrop)
         {
@@ -105,5 +142,5 @@
         ctrl.retrieveInsurers();
     }
     ;
-    angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$timeout", "$state", "$modal", "Page", ViewInsurersCtrl]);
+    angular.module('xenon.controllers').controller('ViewInsurersCtrl', ["InsurerDAO", "$rootScope", "$debounce", "$state", "$modal", "Page", ViewInsurersCtrl]);
 })();

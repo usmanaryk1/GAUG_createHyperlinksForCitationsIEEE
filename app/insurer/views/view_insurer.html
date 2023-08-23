@@ -11,189 +11,76 @@
     <!--PAGE TITLE END -->
 
     <!-- TABLE START HERE-->
-    <div class="panel panel-default">
-        <div class="panel-body">
-
-            <div class="dataTables_wrapper form-inline dt-bootstrap">
-                <div class="table-responsive scroll" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
-
-                    <script type="text/javascript">
-                        //                    jQuery(document).ready(function($)
-                        //                    {
-                        //                        $("#example-1").dataTable({
-                        //							aLengthMenu: [
-                        //								[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
-                        //							]
-                        //                        });
-                        //                    });
-                    </script>
-                    <table id="example-1" ng-if="viewInsurer.insurerList.length > 0" datatable-setup class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" datatable-obj="viewInsurer.datatableObj">
-                        <!--<thead>
-                                <tr>
-                                        <th width="20%">Name</th>
-                                        <th width="20%">Position</th>
-                                        <th width="19%">Office</th>
-                                        <th width="10%">Age</th>
-                                        <th width="20%">Start date</th>
-                                </tr>
-                        </thead>-->
-                        <thead>
-                            <tr>
-                                <th width="25%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Insurance Provider</th>
-                                <th width="15%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Billing ID</th>
-                                <th width="22%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Contact Name</th>
-                                <th width="18%" tabindex="0" aria-label="Position: activate to sort column ascending" aria-controls="example-1" class="sorting" rowspan="1" colspan="1">Expires</th>
-                                <th width="20%" data-priority="6" class='nosorting'>Actions</th>
-                            </tr>
-                        </thead>
-
-
-                        <tbody>
-                            <tr ng-repeat="insurer in viewInsurer.insurerList">
-                                <th ng-click="viewInsurer.openEditModal(insurer, 'modal-5')" style="cursor: pointer">{{insurer.insuranceName}}</th>
-                                <td>{{insurer.billingId}}</td>
-                                <td>{{insurer.contactName}}</td>
-                                <td>{{insurer.contractEndDate|date :dateFormat}}</td>
-                                <td>
-                                    <div class="center">
-                                        <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)" tooltip="Edit"><span class="ed_b"></span></a> 
-                                        <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')" tooltip="Delete"><span class="ed_b"></span></a> 
-                                        <a ng-if="insurer.contractFile" class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}?viewDownload=true" target="_blank" tooltip="Download Contract"><span class="ed_b"></span></a> 
-                                    </div>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-
-    <!--<div class="row">
-      <div class="col-sm-12">
+    <form class="form-horizontal">
         <div class="panel panel-default">
-          <div class="panel-body">
-            <form class="form-horizontal" role="form">
+            <div class="panel-body">
+                <div class="row">                            
+                    <div class="col-sm-12">
+                        <div class="form-group col-sm-6 pull-left">
+                            <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                            <div style="width:70px; float:left;">
+                                <select class="form-control input-sm" ng-model="viewInsurer.searchParams.limit">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div> 
+                        <div class="form-group col-md-3 col-sm-6 col-xs-12 pull-right">
+                            <input type="search" class="form-control input-sm" ng-model="viewInsurer.searchParams.insuranceName" placeholder="Search by Name" ng-change="viewInsurer.applySearch()">
+                        </div> 
 
-              <div class="row">
-                <div class="col-sm-12">
-                        <div class="col-sm-3 pad0">
-                        <div class="form-group">
-                                                                        <label for="field-2" class="col-sm-6 control-label">Show Entries</label>
-                        
-                                                                        <div class="col-sm-5">
-                                                                                <script type="text/javascript">
-                                                                                jQuery(document).ready(function($)
-                                                                                {
-                                                                                        $("#sboxit-1").selectBoxIt().on('open', function()
-                                                                                        {
-                                                                                                // Adding Custom Scrollbar
-                                                                                                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                                                                        });
-                                                                                });
-                                                                        </script>
-                                                                                <select class="form-control" id="sboxit-1">
-                                                                                <option value="al">10</option>
-                                                                                <option value="au">15</option>
-                                                                        </select>
-                                                                        </div>
-                                                                </div>
-                    </div>
-                
-                        <div class="col-sm-4 pull-right pad0 wd_full">
-                        <div class="form-group">
-                                                                        <label class="col-sm-3 control-label">Search</label>
-                        
-                                                                        <div class="col-sm-9">
-                                                                                <input type="text" class="form-control">
-                                                                        </div>
-                                                                </div>
                     </div>
                 </div>
-              </div>
+                <div class="row">  </div>
+                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="table-responsive scroll">
 
-              
-            </form>
-          </div>
-          <div class="panel-body pad_top0">
-            <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-              <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
-                <table cellspacing="0" class="table table-small-font table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th width="24%" colspan="1" rowspan="1" class="sorting" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0">Insurance Provider</th>
-                      <th width="13%" colspan="1" rowspan="1" class="sorting" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0">MDOL ID</th>
-                      <th width="28%" colspan="1" rowspan="1" class="sorting" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0">Contact Name</th>
-                      <th width="16%" colspan="1" rowspan="1" class="sorting" aria-controls="example-1"  aria-label="Position: activate to sort column ascending" tabindex="0">Expires</th>
-                      
-                      <th width="19%" data-priority="6">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th>Jennifer J. Jefferson</th>
-                      <td>10</td>
-                      <td>Social And Human Service</td>
-                      <td></td>
-                      <td><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                          <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                          <a class="btn icon-left fa fa-download download_bt" href="#"><span class="ed_b">Download</span></a> 
-                      </td>
-                    </tr>
-                    
-                    <tr>
-                      <th>Jennifer J. Jefferson</th>
-                      <td>10</td>
-                      <td>Social And Human Service</td>
-                      <td></td>
-                      <td><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                          <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                          <a class="btn icon-left fa fa-download download_bt" href="#"><span class="ed_b">Download</span></a>
-                      </td>
-                    </tr>
-                    
-                  </tbody>
-                </table>
-              </div>
-              <script type="text/javascript">
-                                                        // This JavaScript Will Replace Checkboxes in dropdown toggles
-                                                        jQuery(document).ready(function($)
-                                                        {
-                                                                setTimeout(function()
-                                                                {
-                                                                        $(".checkbox-row input").addClass('cbr');
-                                                                        cbr_replace();
-                                                                }, 0);
-                                                        });
-                                                        </script>
-              <div class="row">
-                
-                <div class="col-xs-12 pull-right">
-                  <div class="paging_simple_numbers" id="example-1_paginate">
-                    <ul class="pagination pull-right">
-                      <li class="paginate_button previous disabled" aria-controls="example-1" tabindex="0" id="example-1_previous"><a href="#">Previous</a></li>
-                      <li class="paginate_button active" aria-controls="example-1" tabindex="0"><a href="#">1</a></li>
-                      <li class="paginate_button " aria-controls="example-1" tabindex="0"><a href="#">2</a></li>
-                      <li class="paginate_button " aria-controls="example-1" tabindex="0"><a href="#">3</a></li>
-                      <li class="paginate_button " aria-controls="example-1" tabindex="0"><a href="#">4</a></li>
-                      <li class="paginate_button " aria-controls="example-1" tabindex="0"><a href="#">5</a></li>
-                      <li class="paginate_button " aria-controls="example-1" tabindex="0"><a href="#">6</a></li>
-                      <li class="paginate_button next" aria-controls="example-1" tabindex="0" id="example-1_next"><a href="#">Next</a></li>
-                    </ul>
-                  </div>
+                        <table id="example-1" ng-if="viewInsurer.insurerList.length > 0" class="table table-striped table-bordered table-small-font" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th width="25%" ng-class="viewInsurer.applySortingClass('insuranceName')" ng-click="viewInsurer.applySorting('insuranceName')" >Insurance Provider</th>
+                                    <th width="15%" ng-class="viewInsurer.applySortingClass('billingId')" ng-click="viewInsurer.applySorting('billingId')" >Billing ID</th>
+                                    <th width="22%" ng-class="viewInsurer.applySortingClass('contactName')" ng-click="viewInsurer.applySorting('contactName')" >Contact Name</th>
+                                    <th width="18%" ng-class="viewInsurer.applySortingClass('contractEndDate')" ng-click="viewInsurer.applySorting('contractEndDate')" >Expires</th>
+                                    <th width="20%">Actions</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                <tr pagination-id="viewInsurerPagination" dir-paginate="insurer in viewInsurer.insurerList| itemsPerPage: viewInsurer.searchParams.limit" 
+                                    total-items="totalRecords"
+                                    current-page="viewInsurer.searchParams.pageNo">
+                                    <th ng-click="viewInsurer.openEditModal(insurer, 'modal-5')" style="cursor: pointer">{{insurer.insuranceName}}</th>
+                                    <td>{{insurer.billingId}}</td>
+                                    <td>{{insurer.contactName}}</td>
+                                    <td>{{insurer.contractEndDate|date :dateFormat}}</td>
+                                    <td>
+                                        <div class="center">
+                                            <a href="" class="btn icon-left fa fa-pencil edit_button" ng-click="viewInsurer.edit(insurer)" tooltip="Edit"><span class="ed_b"></span></a> 
+                                            <a href="" class="btn icon-left fa fa-trash-o delete_button" ng-click="viewInsurer.openModal(insurer, 'modal-3')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                            <a ng-if="insurer.contractFile" class="btn icon-left fa fa-download download_bt" ng-href="{{viewInsurer.baseUrl}}file/download/{{viewInsurer.companyCode}}/i/{{insurer.contractFile}}?viewDownload=true" target="_blank" tooltip="Download Contract"><span class="ed_b"></span></a> 
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
-              </div>
+                <div ng-show="viewInsurer.insurerList.length">
+                    <div id="paginationButtons" class="text-right">
+                        <dir-pagination-controls boundary-links="true" 
+                                                 max-size="9"
+                                                 template-url="app/tpls/dirPagination.tpl.html" pagination-id="viewInsurerPagination" on-page-change="viewInsurer.pageChanged(newPageNumber)"></dir-pagination-controls>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- TABLE END HERE--> 
+    </form>
 
 </div>
 

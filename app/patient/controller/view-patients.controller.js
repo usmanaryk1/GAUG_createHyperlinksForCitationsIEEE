@@ -1,8 +1,7 @@
-(function() {
-    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $timeout, EmployeeDAO, InsurerDAO, Page) {
+(function () {
+    function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $debounce, EmployeeDAO, InsurerDAO, Page) {
         var ctrl = this;
-        ctrl.datatableObj = {};
-        $rootScope.selectPatientModel = {};
+        $rootScope.maskLoading();
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         Page.setTitle("View Patients");
@@ -11,46 +10,88 @@
         } else {
             ctrl.viewType = $stateParams.status;
         }
+        ctrl.patientList = [];
+
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.retrievePatients = retrievePatientsData;
         ctrl.edit = edit;
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
 
-        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
                 }
             }
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
                 }
             }
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");
         });
-        InsurerDAO.retrieveAll().then(function(res) {
+        InsurerDAO.retrieveAll().then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
                 }
             }
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
+
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrievePatients();
+        };
+
+        ctrl.applySearch = function () {
+            ctrl.searchParams.pageNo = 1;
+            $debounce(retrievePatientsData, 500);
+        };
+
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrievePatients();
+        };
+
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
+        };
+
         function retrievePatientsData() {
-            $rootScope.maskLoading();
-            PatientDAO.retrieveAll({status: ctrl.viewType}).then(function(res) {
+            $rootScope.paginationLoading = true;
+            ctrl.searchParams.subAction = ctrl.viewType;
+            PatientDAO.retrieveAll(ctrl.searchParams).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
 
@@ -58,22 +99,24 @@
                 if (res) {
                     ctrl.patientList = res;
                     if (res.length === 0) {
-                        toastr.error("No data in the system.");
+//                        $("#paginationButtons").remove();
+//                        toastr.error("No data in the system.");
                     }
                 }
 
-            }).catch(function(data, status) {
+            }).catch(function (data, status) {
                 toastr.error("Failed to retrieve patients.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 }); // showLoadingBar
 //                ctrl.patientList = ontimetest.patients;
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
             });
         }
 
@@ -82,7 +125,7 @@
         }
 
         ctrl.retrievePatients();
-        ctrl.openEditModal = function(patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectPatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -101,7 +144,7 @@
 
         };
 
-        ctrl.openDeleteModal = function(patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deletePatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -111,9 +154,9 @@
             });
             $rootScope.deletePatientModel.patient = patient;
 
-            $rootScope.deletePatientModel.delete = function(patient) {
+            $rootScope.deletePatientModel.delete = function (patient) {
                 $rootScope.maskLoading();
-                PatientDAO.delete({id: patient.id}).then(function(res) {
+                PatientDAO.delete({id: patient.id}).then(function (res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -125,16 +168,16 @@
                     toastr.success("Patient deleted.");
                     ctrl.rerenderDataTable();
                     $rootScope.deletePatientModel.close();
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error(data.data);
                     $rootScope.deletePatientModel.close();
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             };
         };
 
-        ctrl.openDischargeModal = function(patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openDischargeModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.dischargePatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -145,9 +188,9 @@
 
             $rootScope.dischargePatientModel.patient = patient;
 
-            $rootScope.dischargePatientModel.discharge = function(patient) {
+            $rootScope.dischargePatientModel.discharge = function (patient) {
                 $rootScope.maskLoading();
-                PatientDAO.changestatus({id: patient.id, status: 'discharged'}).then(function(res) {
+                PatientDAO.changestatus({id: patient.id, status: 'discharged'}).then(function (res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -163,16 +206,16 @@
                     toastr.success("Patient discharged.");
                     ctrl.rerenderDataTable();
                     $rootScope.dischargePatientModel.close();
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error("Patient cannot be discharged.");
                     $rootScope.dischargePatientModel.close();
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             };
         };
 
-        ctrl.openReadmitModal = function(patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openReadmitModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.readmitPatientModal = $modal.open({
                 templateUrl: modal_id,
@@ -183,8 +226,8 @@
 
             $rootScope.readmitPatientModal.patient = patient;
 
-            $rootScope.readmitPatientModal.readmit = function(patient) {
-                PatientDAO.changestatus({id: patient.id, status: 'active'}).then(function(res) {
+            $rootScope.readmitPatientModal.readmit = function (patient) {
+                PatientDAO.changestatus({id: patient.id, status: 'active'}).then(function (res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -200,35 +243,28 @@
                     toastr.success("Patient readmitted.");
                     ctrl.rerenderDataTable();
                     $rootScope.readmitPatientModal.close();
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     toastr.error("Patient cannot be readmitted.");
                     $rootScope.readmitPatientModal.close();
                 });
             };
         };
 
-        ctrl.rerenderDataTable = function() {
-            var pageInfo = ctrl.datatableObj.page.info();
-            var patientList = angular.copy(ctrl.patientList);
-            ctrl.patientList = [];
-            $("#example-4_wrapper").remove();
-            $timeout(function() {
-                ctrl.patientList = patientList;
-                $timeout(function(){
-                    var pageNo=Number(pageInfo.page);
-                    if(ctrl.datatableObj.page.info().pages<=pageInfo.page){
-                        pageNo--;
-                    }
-                    ctrl.datatableObj.page(pageNo).draw(false);
-                },20);                
-            });
+        ctrl.rerenderDataTable = function () {
+            if (ctrl.patientList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
+                }
+            } else {
+                ctrl.retrievePatients();
+            }
         };
 
-        ctrl.getLanguagesFromCode = function(languageCodes) {
+        ctrl.getLanguagesFromCode = function (languageCodes) {
             if (languageCodes != null && languageCodes.length > 0) {
                 languageCodes = languageCodes.split(",");
                 var languageToDisplay = "";
-                angular.forEach(languageCodes, function(code, index) {
+                angular.forEach(languageCodes, function (code, index) {
                     languageToDisplay += $rootScope.languages[code];
                     if (index < languageCodes.length - 1) {
                         languageToDisplay += ", ";
@@ -241,5 +277,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO","Page", ViewPatientsCtrl]);
+    angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$debounce", "EmployeeDAO", "InsurerDAO", "Page", ViewPatientsCtrl]);
 })();

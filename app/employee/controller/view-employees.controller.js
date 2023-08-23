@@ -1,13 +1,13 @@
 (function () {
     function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout) {
         var ctrl = this;
+        $rootScope.maskLoading();
         ctrl.datatableObj = {};
         $rootScope.selectEmployeeModel = {};
         Page.setTitle("View Employees");
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
 
-        ctrl.reverseSort = true;
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.employeeList = [];
 
@@ -69,7 +69,7 @@
                 console.log(res);
                 ctrl.employeeList = res;
                 if (res.length === 0) {
-                    $("#paginationButtons").remove();
+//                    $("#paginationButtons").remove();
 //                    toastr.error("No data in the system.");
                 }
             }).catch(function (data, status) {
@@ -84,6 +84,7 @@
 //                ctrl.employeeList = ontimetest.employees;
                 console.log('Error in retrieving data')
             }).then(function () {
+                $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
         }

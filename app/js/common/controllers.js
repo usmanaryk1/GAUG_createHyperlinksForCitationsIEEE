@@ -48,9 +48,11 @@ angular.module('xenon.controllers', []).
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
 
             $rootScope.maskLoading = function () {
+                $rootScope.maskLoadingRunning = true;
                 $("#mainDiv").loadmask("");
             };
             $rootScope.unmaskLoading = function () {
+                $rootScope.maskLoadingRunning = false;
                 $("#mainDiv").unmask();
             };
             $rootScope.payrollRates = [{key: 'R1', value: "Rate 1"}, {key: 'R2', value: "Rate 2"}];

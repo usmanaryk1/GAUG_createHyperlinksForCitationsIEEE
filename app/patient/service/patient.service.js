@@ -29,7 +29,7 @@
         });
         return {
             retrieveAll: function (data) {
-                return api.retrieveAll({subAction: data.status}).$promise;
+                return api.retrieveAll(data).$promise;
             },
             retrieveForSelect: function(filter) {
                 return api.retrieveForSelect(filter).$promise;

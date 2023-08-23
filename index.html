@@ -75,7 +75,7 @@
             </div>
 
         </script>
-        <div ng-cloak style="{{paginationLoading==true?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
+        <div ng-cloak style="{{(paginationLoading==true && !maskLoadingRunning)?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
             <div style="width: 80px;
                 margin: 0 auto;
                 padding: 4px 10px;
