@@ -217,8 +217,9 @@
         };
 
         //Check if ssn number is already present.
-        $scope.checkSsnNumber = function () {
+        $scope.checkSsnNumber = function (cmp) {
             if (ctrl.employee.ssn && ctrl.employee.ssn.trim().length > 0) {
+//                setValidationMessage(cmp);
                 EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
                         .then(function (res) {
                             if (res.data)
@@ -671,6 +672,7 @@
         //        These needs to be done for dynamic validations. It creates issue because of data-validate directive which applies to static form only
         function setFormDynamicValidityMessages() {
             $("#Salary-error").text('Please enter Salary.');
+            $("#SocialSecurity-error").text('Please enter Social Security.');
             $("#rate1-error").text('Please select Care Types.');
             $("#Rate1-error").text('Please enter Rate 1.');
             $("#OTRate-error").text('Please enter OT Rate.');
@@ -879,11 +881,12 @@
                 ctrl.employee = {};
             } else {
                 ctrl.editMode = true;
+                
             }
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-
+                    $("input[name='SocialSecurity']").attr('required', true);
                     if (!ctrl.employee.gender) {
                         ctrl.employee.gender = 'M';
                     }

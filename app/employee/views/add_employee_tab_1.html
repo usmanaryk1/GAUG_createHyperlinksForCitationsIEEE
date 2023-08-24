@@ -161,7 +161,8 @@
                             <div class="col-sm-9">
                                 <div ng-if="!addEmployee.editMode">
                                     <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':addEmployee.ssn.exists}" name="SocialSecurity" type="text" ng-model="addEmployee.employee.ssn"
-                                       data-validate="required" data-message-required="Please enter Social Security." maxlength="9" 
+                                       maxlength="9" 
+                                       onblur="setValidationMessage(this)" itemid="Social Security"
                                        ng-blur="checkSsnNumber();" ng-change="addEmployee.ssn.exists = false;"/>
                                     <span ng-if="addEmployee.ssn.exists" class="validate-has-error">Social security number already exists.</span>
                                 </div>
@@ -430,6 +431,11 @@
 <!-- FORM WIZARD WITH VALIDATION END HERE-->
 <script type="text/javascript">
     // validate
+    function setValidationMessage(element) {
+        var elementName = element.getAttribute("name") + "-error";
+        var itemId = element.getAttribute("itemid");
+        $("#" + elementName).text('Please enter ' + itemId + '.');
+    }
     var form_clean;
     customJqueryValidation();
     jQuery(document).ready(function ($) {
