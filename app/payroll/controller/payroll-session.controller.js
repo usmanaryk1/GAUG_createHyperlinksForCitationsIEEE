@@ -86,7 +86,12 @@
                     });
                     ctrl.rerenderDataTable();
                 }).catch(function (e) {
-                    toastr.error("Payroll sessions cannot be retrieved.");
+                    if (e.data != null) {
+                        toastr.error(e.data);
+                    } else {
+                        toastr.error("Payroll sessions cannot be retrieved.");
+                    }
+                    
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
