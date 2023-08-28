@@ -263,3 +263,60 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 .no-padding-left{
     padding-left: 0px;
 }
+
+.element-align {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* adjust width by overwriting it for two rate boxes*/
+#ms-rate1,
+#ms-rate2 {
+    width: 494px;
+}
+
+/* For Mobile and Tablets*/
+@media only screen and (max-width : 768px) {
+    .largebox-align {
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: 15px;       
+    }
+}
+
+/* Format Punch time textbox addon */
+.punch-time-input {
+    border: 1px solid #B0B0B0 !important;
+}
+.input-group-addon {
+    background-color: #f5f5f5 !important;
+    border: 1px solid #B0B0B0;
+}
+
+.custom-input-group-modal {
+    float: left !important;
+    padding-right: 30px !important;
+    padding-left: 15px !important;
+}
+
+.custom-input-group-modal .input-group-addon {
+    border: 1px solid #B0B0B0;
+}
+
+.custom-input-group-modal input {
+    padding: 5px !important;
+}
+
+@media only screen and (max-width : 768px) {
+    .add-padding-modal {
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+    }
+}
+
+/* Top buttons alignment in Billing session tabs*/
+@media only screen and (max-width: 380px) {
+     .btn-process {
+        padding: 10px 5px;
+     }
+}

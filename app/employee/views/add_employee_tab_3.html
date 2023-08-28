@@ -26,10 +26,10 @@
                             <div flow-init="addEmployee.applicationUploadFile" flow-file-added="addEmployee.applicationFileAdded($file, $flow)" flow-file-success="addEmployee.applicationFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.applicationFileSelected($file,$flow)" flow-file-error="addEmployee.applicationFileError( $file, $message, $flow )">
                                 <!--<input class="form-control" name="Application" type="file" data-message-required="Please upload Application."/>-->
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="Application" ng-model="addEmployee.employee.employeeDocumentId.application" style="margin-bottom:0px !important" flow-btn name="Application"  ng-disabled="addEmployee.disableApplicationUploadButton" >Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label">
                                             <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.employeeDocumentId.application}}">
                                                 application{{addEmployee.employee.employeeDocumentId.application|extension}}
@@ -64,10 +64,10 @@
                             <div flow-init="addEmployee.licenceUploadFile" flow-file-added="addEmployee.licenceFileAdded($file, $flow)" flow-file-success="addEmployee.licenceFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.licenceFileSelected($file,$flow)" flow-file-error="addEmployee.licenceFileError( $file, $message, $flow )">
                                 <!--<input class="form-control" name="Application" type="file" data-message-required="Please upload Application."/>-->
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="Licence" ng-model="addEmployee.employee.employeeDocumentId.licence" style="margin-bottom:0px !important" flow-btn name="Licence" ng-disabled="addEmployee.disableLicenceUploadButton">Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label">
                                             <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/l/{{addEmployee.employee.employeeDocumentId.licence}}">
                                                 license{{addEmployee.employee.employeeDocumentId.licence|extension}}
@@ -125,10 +125,10 @@
 
                             <div flow-init="addEmployee.i9eligibilityUploadFile" flow-file-added="addEmployee.i9eligibilityFileAdded($file, $flow)" flow-file-success="addEmployee.i9eligibilityFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.i9eligibilityFileSelected($file,$flow)" flow-file-error="addEmployee.i9eligibilityFileError( $file, $message, $flow )">
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="I9Eligibility" ng-model="addEmployee.employee.employeeDocumentId.i9" style="margin-bottom:0px !important" flow-btn name="I9Eligibility"  ng-disabled="addEmployee.disableI9ElgibilityUploadButton">Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/9/{{addEmployee.employee.employeeDocumentId.i9}}">
                                             i-9 eligibility{{addEmployee.employee.employeeDocumentId.i9|extension}}</a>
@@ -183,10 +183,10 @@
                                                                data-validate="required" data-message-required="Please upload W-4 or I9."/>-->
                             <div flow-init="addEmployee.w4UploadFile" flow-file-added="addEmployee.w4FileAdded($file, $flow)" flow-file-success="addEmployee.w4FileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.w4FileSelected($file,$flow)" flow-file-error="addEmployee.w4FileError( $file, $message, $flow )">
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="W2" ng-model="addEmployee.employee.employeeDocumentId.w4" style="margin-bottom:0px !important" flow-btn name="W2"  ng-disabled="addEmployee.disableW4UploadButton">Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/w/{{addEmployee.employee.employeeDocumentId.w4}}">
                                             w-4{{addEmployee.employee.employeeDocumentId.w4|extension}}</a>
@@ -221,10 +221,10 @@
                                                                data-message-required="Please upload References."/>-->
                             <div flow-init="addEmployee.referencesUploadFile" flow-file-added="addEmployee.referencesFileAdded($file, $flow)" flow-file-success="addEmployee.referencesFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.referencesFileSelected($file,$flow)" flow-file-error="addEmployee.referencesFileError( $file, $message, $flow )">
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="references" ng-model="addEmployee.employee.employeeDocumentId.references" flow-btn name="references" ng-disabled="addEmployee.disableReferencesUploadButton" style="margin-bottom:0px !important">Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/r/{{addEmployee.employee.employeeDocumentId.references}}">
                                             references{{addEmployee.employee.employeeDocumentId.references|extension}}</a>
@@ -260,10 +260,10 @@
                                                                data-message-required="Please upload Physical."/>-->
                             <div flow-init="addEmployee.physicalUploadFile" flow-file-added="addEmployee.physicalFileAdded($file, $flow)" flow-file-success="addEmployee.physicalFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.physicalFileSelected($file,$flow)" flow-file-error="addEmployee.physicalFileError( $file, $message, $flow )">
                                 <div class="row">
-                                    <div class="col-sm-2 ">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="Physical" ng-model="addEmployee.employee.employeeDocumentId.physical" flow-btn style="margin-bottom:0px !important" name="Physical" ng-disabled="addEmployee.disablePhysicalUploadButton">Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label">
                                         <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/z/{{addEmployee.employee.employeeDocumentId.physical}}">
                                             physical{{addEmployee.employee.employeeDocumentId.physical|extension}}</a>

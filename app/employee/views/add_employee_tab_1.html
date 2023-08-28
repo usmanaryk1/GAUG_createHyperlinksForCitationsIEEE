@@ -125,10 +125,10 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <button type='button' class='btn btn-single gray_bt' id="ProfileImage" style="margin-bottom:0px !important" ng-model="addEmployee.employee.profileImage" flow-btn name="ProfileImage" ng-disabled="addEmployee.disableProfileUploadButton">Choose File</button>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <label class="control-label" ng-show="addEmployee.employee.profileImage != null" >
                                             <a style="color: blue;text-decoration: underline" ng-href="{{amazonPublicUrl + addEmployee.companyCode}}/{{addEmployee.employee.profileImage}}">profile image{{addEmployee.employee.profileImage|extension}}</a>
                                             <a href=""><i class="fa fa-close" ng-click="addEmployee.clearProfileImage()"></i></a>
