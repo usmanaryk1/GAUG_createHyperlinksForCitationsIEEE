@@ -6,7 +6,7 @@
         ctrl.taskOptionsMap = {};
         var searchParams = $location.search();
         ctrl.todaysDate = new Date();
-        var timeFormat = 'hh:mm:ss a';
+        var timeFormat = 'HH:mm';
         ctrl.editTimesheet = null;
         ctrl.patientMandatory = true;
         ctrl.tasksErrorMsg = null;
@@ -147,10 +147,9 @@
                 ctrl.employeeList = ontimetest.employees;
             }).then(function () {
                 $rootScope.unmaskLoading();
-                retrievePatientsData();
             });
         }
-
+        retrievePatientsData();
         function retrievePatientsData() {
             $rootScope.maskLoading();
             PatientDAO.retrieveForSelect({}).then(function (res) {
@@ -168,13 +167,15 @@
             date = new Date(date);
             var hours = Number(time.match(/^(\d+)/)[1]);
             var minutes = Number(time.match(/:(\d+)/)[1]);
-            var seconds = time.substr(time.lastIndexOf(":") + 1, 2);
-            var AMPM = time.match(/\s(.*)$/)[1];
-            if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
-                hours = hours + 12;
-            if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
-                hours = hours - 12;
+            var seconds = 0;
+            console.log(hours + '-----' + minutes)
+//            var AMPM = time.match(/\s(.*)$/)[1];
+//            if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
+//                hours = hours + 12;
+//            if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
+//                hours = hours - 12;
             date.setHours(hours, minutes, seconds);
+            console.log('--------' + date)
             return $filter('date')(date, ontimetest.date_time_format);
         };
 
