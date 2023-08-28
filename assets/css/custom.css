@@ -263,3 +263,23 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 .no-padding-left{
     padding-left: 0px;
 }
+
+.element-align {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* adjust width by overwriting it for two rate boxes*/
+#ms-rate1,
+#ms-rate2 {
+    width: 494px;
+}
+
+/* For Mobile and Tablets*/
+@media only screen and (max-width : 768px) {
+    .largebox-align {
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: 15px;       
+    }
+}
