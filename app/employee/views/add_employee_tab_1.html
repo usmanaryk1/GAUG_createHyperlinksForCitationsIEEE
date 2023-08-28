@@ -167,7 +167,8 @@
                                     <span ng-if="addEmployee.ssn.exists" class="validate-has-error">Social security number already exists.</span>
                                 </div>
                                 <div ng-if="addEmployee.editMode">
-                                    <label class="control-label">{{addEmployee.employee.ssn}}</label>&nbsp;&nbsp;<span class="fa fa-search" style="cursor: pointer" ng-click="addEmployee.openSSNModal(addEmployee.employee.id)"></span>
+                                    <label class="control-label">{{addEmployee.employee.ssn}}</label>&nbsp;&nbsp;
+                                    <span ng-if="hasAccess('VIEW_SSN') || hasAccess('CREATE_EMPLOYEE')" class="fa fa-search" style="cursor: pointer" ng-click="addEmployee.openSSNModal(addEmployee.employee.id)"></span>
                                 </div>                                
                             </div>
                         </div>
