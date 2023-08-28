@@ -62,7 +62,11 @@
 
             }
             ctrl.attendanceObj.punchInDate = angular.copy(ctrl.attendanceObj.punchInTime);
-            ctrl.attendanceObj.punchOutDate = angular.copy(ctrl.attendanceObj.punchOutTime);
+            if (!ctrl.attendanceObj.punchOutTime || ctrl.attendanceObj.punchOutTime === null) {
+                ctrl.attendanceObj.punchOutDate = angular.copy(ctrl.attendanceObj.punchInTime);
+            } else {
+                ctrl.attendanceObj.punchOutDate = angular.copy(ctrl.attendanceObj.punchOutTime);
+            }
             if (ctrl.attendanceObj.punchInTime != null) {
                 ctrl.attendanceObj.punchInTime = $filter('date')(new Date(ctrl.attendanceObj.punchInTime).getTime(), timeFormat).toString();
             }
