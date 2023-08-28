@@ -18,6 +18,7 @@
                 ctrl.attendanceObj.punchInTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchOutTime = ctrl.currentTime;
                 ctrl.attendanceObj.punchInDate = null;
+                ctrl.attendanceObj.punchOutDate = null;
                 ctrl.attendanceObj.companyTaskIds = [];
                 ctrl.attendanceObj.taskIdValues = {};
             } else {
@@ -61,6 +62,7 @@
 
             }
             ctrl.attendanceObj.punchInDate = angular.copy(ctrl.attendanceObj.punchInTime);
+            ctrl.attendanceObj.punchOutDate = angular.copy(ctrl.attendanceObj.punchOutTime);
             if (ctrl.attendanceObj.punchInTime != null) {
                 ctrl.attendanceObj.punchInTime = $filter('date')(new Date(ctrl.attendanceObj.punchInTime).getTime(), timeFormat).toString();
             }
@@ -244,7 +246,7 @@
                     } else {
                         delete attendanceObjToSave.isMissedPunch;
                         attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchOutTime);
+                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
                         if (attendanceObjToSave.employeeId != null) {
                             attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }
@@ -295,7 +297,7 @@
                     } else {
                         delete attendanceObjToSave.isMissedPunch;
                         attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchOutTime);
+                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
                         if (attendanceObjToSave.employeeId != null) {
                             attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }
