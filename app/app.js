@@ -1,3 +1,5 @@
+/* global appHelper, state */
+
 'use strict';
 
 var app = angular.module('xenon-app', [
@@ -647,10 +649,41 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_BILLING_HISTORY'
                 }
             }).
+            state('app.billing_reconciliation', {
+                url: '/billing_reconciliation',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION'
+                }
+            }).
+            state('app.billing_reconciliation_list', {                
+                url: '/billing_reconciliation/list',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_list'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title:'View'
+                }
+            }).
+            state('app.billing_reconciliation_new', {                
+                url: '/billing_reconciliation/new',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title:'New'
+                }
+            }).
+            state('app.billing_reconciliation_view', {                
+                url: '/billing_reconciliation/view/:id',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title:'View'
+                }
+            }).
             state('app.location_lookup', {
                 url: '/location_lookup',
                 controller: 'LocationLookupCtrl as locationLookup',
-                templateUrl: appHelper.viewTemplatePath('billing', 'location_lookup'),
+                templateUrl: appHelper.viewTemplatePath('billing', 'location_lookup')
             }).
             state('app.resubmission_lookup', {
                 url: '/resubmission_lookup',

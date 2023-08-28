@@ -212,6 +212,7 @@
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
                     ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
+                    ctrl.billingClaimObj.paidAmount = ctrl.manualClaimObj.amountPaid;
                     ctrl.billingClaimObj.authorizedCodes = [];
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                         if (fromDate == null || new Date(serviceLine.serviceFromDate).getTime() <= new Date(fromDate).getTime()) {
