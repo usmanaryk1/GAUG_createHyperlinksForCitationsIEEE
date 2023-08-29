@@ -106,7 +106,6 @@ app.run(function ($rootScope, $modal, $state, Idle)
                         $state.transitionTo(ontimetest.defaultState);
                     }
                 }
-                console.log('----' + JSON.stringify(toParams))
                 if (toParams.lastPage) {
                     if (toParams.lastPage !== "daily_attendance") {
                         localStorage.removeItem('dailyAttendanceSearchParams');

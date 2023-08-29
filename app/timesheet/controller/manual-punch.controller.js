@@ -174,14 +174,12 @@
             var hours = Number(time.match(/^(\d+)/)[1]);
             var minutes = Number(time.match(/:(\d+)/)[1]);
             var seconds = 0;
-            console.log(hours + '-----' + minutes)
 //            var AMPM = time.match(/\s(.*)$/)[1];
 //            if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
 //                hours = hours + 12;
 //            if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
 //                hours = hours - 12;
             date.setHours(hours, minutes, seconds);
-            console.log('--------' + date)
             return $filter('date')(date, ontimetest.date_time_format);
         };
 
