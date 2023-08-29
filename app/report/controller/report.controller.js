@@ -1,5 +1,5 @@
 (function () {
-    function ReportCtrl(Page, $rootScope, EmployeeDAO, PatientDAO, $http) {
+    function ReportCtrl(Page, $rootScope, EmployeeDAO, PatientDAO, InsurerDAO, $http) {
         var ctrl = this;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
@@ -23,7 +23,9 @@
                     ctrl.verifyDates();
 
                 }
-                if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport' || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport') {
+                if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport'
+                        || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport'
+                        || ctrl.reportType == 'revenuereconciliationreport') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {
@@ -40,6 +42,9 @@
                         }
                     } else {
                         path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontime_data.company_code;
+                        if (ctrl.searchParams.id) {
+                            path = path + "&id=" + ctrl.searchParams.id;
+                        }
                     }
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
@@ -104,8 +109,14 @@
                 ctrl.patientList = res;
             });
         };
+        ctrl.retrieveAllInsuranceProviders = function () {
+        InsurerDAO.retrieveAll().then(function (res) {
+            ctrl.insuranceProviderList = res;
+        });
+    }
+    ctrl.retrieveAllInsuranceProviders();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPatients();
     }
-    angular.module('xenon.controllers').controller('ReportCtrl', ["Page", "$rootScope", "EmployeeDAO", "PatientDAO", "$http", ReportCtrl]);
+    angular.module('xenon.controllers').controller('ReportCtrl', ["Page", "$rootScope", "EmployeeDAO", "PatientDAO", "InsurerDAO", "$http", ReportCtrl]);
 })();
