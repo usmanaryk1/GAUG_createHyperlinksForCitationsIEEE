@@ -974,10 +974,10 @@
                     <div class=""><input type="text" ng-model="serviceLine.serviceUnits" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
-                    <div class=""><input type="text" numbers-only decimalallowed='2' ng-model="serviceLine.totalCharges" ng-blur="manualClaim.formatNumber($index, 'totalCharges')" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
+                    <div class=""><input type="text" numbers-only decimalallowed='2' ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
-                    <div class=""><input type="text" numbers-only decimalallowed='2' ng-model="serviceLine.nonCoveredCharges" ng-blur="manualClaim.formatNumber($index, 'nonCoveredCharges')" class="width_100"></div>
+                    <div class=""><input type="text" numbers-only decimalallowed='2' ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
                 </td>
                 <td class=" border_2" style="width: 3%;position: relative;">
                     <div class=""><input type="text" ng-model="serviceLine.field49" class="width_100"></div>
