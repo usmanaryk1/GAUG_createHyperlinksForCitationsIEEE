@@ -1,6 +1,7 @@
 (function () {
-    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, Page) {
+    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO) {
         var ctrl = this;
+        ctrl.staticPosition;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
@@ -17,6 +18,22 @@
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
+        ctrl.positionList = [];
+        PositionDAO.retrieveAll({}).then(function (res) {
+            ctrl.positionList = res;
+            if (ctrl.positionList && ctrl.positionList.length > 0) {
+                if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
+                    ctrl.employee.companyPositionId = ctrl.positionList[0].id;
+                }
+                for (var i = 0; i < ctrl.positionList.length; i++) {
+                    if (ctrl.positionList[i].position === "Personal Care") {
+                        ctrl.staticPosition = ctrl.positionList[i].id;
+                        break;
+                    }
+                }
+            }
+            $formService.resetRadios();
+        });
         ctrl.careTypeList = [];
         ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
         ctrl.applicationFileObj = {};
@@ -263,7 +280,7 @@
         function updateEmployee(reqParam, employeeToSave) {
             $rootScope.maskLoading();
             if (!ctrl.employee.id || ctrl.employee.id === null) {
-                if (ctrl.employee.position === 'pc') {
+                if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
                     employeeToSave.wages = 'H';
                     employeeToSave.taxStatus = 'W';
                     employeeToSave.otRate = 13.12;
@@ -275,10 +292,10 @@
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
                             //to set the default data in employee with position 'pc'
-                            if (ctrl.employee.position === 'pc') {
+                            if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
                                 var rate1CareTypes = ['Personal Care HHA Hourly', 'Personal Care HHA Live In', 'PCA/HHA - One Client', 'PCA/HHA - Live In One Client', "CDPAP - One Client", "CDPAP - Live In One Client"];
                                 var rate2CareTypes = ['Personal Care HHA Mutual', 'Personal Care HHA Live In-Mutual', "PCA/HHA - Mutual Care", "PCA/HHA - Live In Mutual Care", "CDPAP - Mutual Care", "CDPAP - Live In Mutual Care"];
-                                CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function (careTypes) {
+                                CareTypeDAO.retrieveAll({positionId: ctrl.employee.companyPositionId}).then(function (careTypes) {
                                     var careRateList = {employeeId: employeeRes.id};
                                     careRateList.rate1 = {rate: 10, careTypes: []};
                                     careRateList.rate2 = {rate: 10.7, careTypes: []};
@@ -511,7 +528,7 @@
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-                    CareTypeDAO.retrieveAll({position: ctrl.employee.position}).then(function (res) {
+                    CareTypeDAO.retrieveAll({positionId: ctrl.employee.companyPositionId}).then(function (res) {
                         ctrl.careTypeList2 = [];
                         ctrl.careTypeList1 = [];
                         ctrl.careTypeList = res;
@@ -573,8 +590,10 @@
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-                    if (!ctrl.employee.position || ctrl.employee.position === null) {
-                        ctrl.employee.position = 'pc';
+                    if (ctrl.positionList && ctrl.positionList.length > 0) {
+                        if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
+                            ctrl.employee.companyPositionId = ctrl.positionList[0].id;
+                        }
                     }
 //                    $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();
@@ -1016,5 +1035,5 @@
 //        ctrl.pageInitCall();
     }
     ;
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", AddEmployeeCtrl]);
 })();

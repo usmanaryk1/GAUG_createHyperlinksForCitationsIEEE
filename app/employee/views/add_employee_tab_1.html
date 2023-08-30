@@ -306,52 +306,14 @@
                             </label>
                             <div class="col-sm-9">
                                 <div class="form-block">
-                                    <label>
-                                        <input checked="true" class="cbr cbr-primary" id="Position" name="Position" value="pc" type="radio" ng-model="addEmployee.employee.position">
-                                        Personal Care
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" type="radio" value="nc" ng-model="addEmployee.employee.position">
-                                        Nursing Care
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" value="pt" type="radio" ng-model="addEmployee.employee.position">
-                                        Physical Therapist
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" value="ot" type="radio" ng-model="addEmployee.employee.position">
-                                        Occupational Therapist
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" value="nut" type="radio" ng-model="addEmployee.employee.position">
-                                        Nutritionist
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" value="st" type="radio" ng-model="addEmployee.employee.position">
-                                        Speech Therapist
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" value="a" type="radio" ng-model="addEmployee.employee.position">
-                                        Admin
-                                        </input>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        <input class="cbr cbr-primary" name="Position" value="mr" type="radio" ng-model="addEmployee.employee.position"/>
-                                        Market Rep.
-                                    </label>
+                                    <div ng-repeat="p in addEmployee.positionList">
+                                        <label>
+                                            <input id="Position" class="cbr cbr-primary" name="Position" ng-value="p.id" type="radio" ng-model="addEmployee.employee.companyPositionId">
+                                            {{p.position}}
+                                            </input>
+                                        </label>
+                                        <br>
+                                    </div>
                                 </div>
                             </div>
                         </div>
