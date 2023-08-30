@@ -147,7 +147,7 @@
 
         retrievePatientsData();
         function retrievePatientsData() {
-            PatientDAO.retrieveAll({status: 'all'}).then(function(res) {
+            PatientDAO.retrieveAll({subAction: 'all'}).then(function(res) {
                 ctrl.patientList = res;
                 ctrl.patientIdMap = {};
                 for (var i = 0; i < res.length; i++) {

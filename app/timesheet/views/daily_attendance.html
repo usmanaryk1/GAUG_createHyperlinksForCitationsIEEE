@@ -107,7 +107,9 @@
                             <div class="col-sm-12 pad0">
                                 <div class="col-sm-6 pull-right">
 
-                                    <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="dAttendance.searchParams.pageNo = 1;dAttendance.searchParams.sortBy = 'date';dAttendance.searchParams.order = 'desc';
+                                    <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="dAttendance.searchParams.pageNo = 1;
+                                        dAttendance.searchParams.sortBy = 'date';
+                                        dAttendance.searchParams.order = 'desc';
                                         dAttendance.filterTimesheet();
                                         dAttendance.formSubmitted = true">Review</button>
                                     <a href="#/app/manual_punch{{dAttendance.searchParams.staffingCordinatorId==null?'':'/employee/'+dAttendance.searchParams.staffingCordinatorId+'?lastPage=daily_attendance'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
@@ -127,11 +129,12 @@
                         <table id="example-1" class="table table-striped table-bordered  table-small-font" ng-if="dAttendance.attendanceList.length" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th width="16%" nowrap ng-class="dAttendance.applySortingClass('date')" ng-click="dAttendance.applySorting('date')" >Date</th>
-                                    <th width="17%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')" >Employee Name</th>
-                                    <th width="17%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>
-                                    <th width="12%" nowrap ng-class="dAttendance.applySortingClass('punchIn')" ng-click="dAttendance.applySorting('punchIn')" >Time In</th>
-                                    <th width="12%" nowrap ng-class="dAttendance.applySortingClass('punchOut')" ng-click="dAttendance.applySorting('punchOut')" >Time Out</th>
+                                    <th width="13%" nowrap ng-class="dAttendance.applySortingClass('punchIn')" ng-click="dAttendance.applySorting('punchIn')" >Date In</th>
+                                    <th width="13%" nowrap ng-class="dAttendance.applySortingClass('punchOut')" ng-click="dAttendance.applySorting('punchOut')" >Date Out</th>
+                                    <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')" >Employee Name</th>
+                                    <th width="16%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>
+                                    <th width="8%" nowrap >Time In</th>
+                                    <th width="8%" nowrap >Time Out</th>
                                     <th nowrap>Actions</th>
                                     <th nowrap>Signature</th>
                                 </tr>
@@ -143,8 +146,15 @@
                                     <th>
                                         {{timesheet.roundedPunchInTime|timesheetformat}} - {{timesheet.roundedPunchInTime|date :dateFormat}}
                                     </th>
-                                    <td>{{timesheet.employeeId.fName + " " + timesheet.employeeId.lName}}</td>
-                                    <td>{{timesheet.patientId.fName + " " + timesheet.patientId.lName}}</td>
+                                    <th>
+                                        {{timesheet.roundedPunchOutTime|timesheetformat}} - {{timesheet.roundedPunchOutTime|date :dateFormat}}
+                                    </th>
+                                    <td>
+                                        {{timesheet.employeeId.lName + ", " + timesheet.employeeId.fName + " " + timesheet.employeeId.middleInitial}}
+                                    </td>
+                                    <td>
+                                        {{timesheet.patientId.lName + ", " + timesheet.patientId.fName + " " + timesheet.patientId.middleInitial}}
+                                    </td>
                                     <td>
                                         <!--Display green dot for matched GPS location-->
                                         <!--<div class="green_dot"></div>-->

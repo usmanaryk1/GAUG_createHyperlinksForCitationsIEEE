@@ -158,11 +158,29 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="field-67">
-                                Date
+                                Punch In Date
                             </label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-67" ng-model='manualPunch.attendanceObj.punchInDate' name="Date" type="text" data-validate="required"  data-message-required="Please enter Date." max-date="manualPunch.todaysDate">
+                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-67" ng-model='manualPunch.attendanceObj.punchInDate' name="inDate" type="text" data-validate="required"  data-message-required="Please enter Punch In Date." max-date="manualPunch.attendanceObj.punchOutDate">
+                                    <div class="input-group-addon">
+                                        <a href="#">
+                                            <i class="linecons-calendar">
+                                            </i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="field-167">
+                                Punch Out Date
+                            </label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" id="field-167" ng-model='manualPunch.attendanceObj.punchOutDate' name="outDate" type="text" data-validate="required"  data-message-required="Please enter Punch Out Date." max-date="manualPunch.todaysDate" min-date="manualPunch.attendanceObj.punchInDate">
                                     <div class="input-group-addon">
                                         <a href="#">
                                             <i class="linecons-calendar">

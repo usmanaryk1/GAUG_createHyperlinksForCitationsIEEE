@@ -234,7 +234,7 @@
                         attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
-                            ctrl.resetManualPunch();
+//                            ctrl.resetManualPunch();
                             ctrl.formSubmitted = false;
                         }).catch(function (e) {
                             if (e.data != null) {
@@ -285,7 +285,7 @@
                         attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addMissedPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
-                            ctrl.resetManualPunch();
+//                            ctrl.resetManualPunch();
                             ctrl.formSubmitted = false;
                         }).catch(function (e) {
                             if (e.data != null) {

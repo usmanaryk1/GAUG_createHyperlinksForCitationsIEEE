@@ -120,10 +120,11 @@
                                 <table id="example-1" class="table table-striped table-bordered table-small-font" ng-if="patTimesheet.timesheetList.length" cellspacing="0" >
                                     <thead>
                                         <tr>
-                                            <th width="15%" nowrap ng-class="patTimesheet.applySortingClass('date')" ng-click="patTimesheet.applySorting('date')">Date</th>
-                                            <th width="12%" nowrap ng-class="patTimesheet.applySortingClass('punchIn')" ng-click="patTimesheet.applySorting('punchIn')">Time In</th>
-                                            <th width="12%" nowrap ng-class="patTimesheet.applySortingClass('punchOut')" ng-click="patTimesheet.applySorting('punchOut')">Time Out</th>
-                                            <th width="11%" nowrap>Hours</th>
+                                            <th width="12%" nowrap ng-class="patTimesheet.applySortingClass('punchIn')" ng-click="patTimesheet.applySorting('punchIn')">Date In</th>
+                                            <th width="12%" nowrap ng-class="patTimesheet.applySortingClass('punchOut')" ng-click="patTimesheet.applySorting('punchOut')">Date Out</th>
+                                            <th width="9%" nowrap >Time In</th>
+                                            <th width="9%" nowrap >Time Out</th>
+                                            <th width="9%" nowrap>Hours</th>
 
                                             <th width="20%" nowrap ng-class="patTimesheet.applySortingClass('employee')" ng-click="patTimesheet.applySorting('employee')">Employees Name</th>
                                             <th nowrap>Actions</th>
@@ -136,6 +137,9 @@
                                             current-page="patTimesheet.searchParams.pageNo">
                                             <th>
                                                 {{timesheet.roundedPunchInTime|date :dateFormat}}
+                                            </th>
+                                            <th>
+                                                {{timesheet.roundedPunchOutTime|date :dateFormat}}
                                             </th>
                                             <td>
                                                 <!--Display green dot for matched GPS location-->
@@ -160,7 +164,7 @@
                                             </td>
 
                                             <td>
-                                                {{timesheet.employeeId.fName + " " + timesheet.employeeId.lName}}
+                                                {{timesheet.employeeId.lName + ", " + timesheet.employeeId.fName + " " + timesheet.employeeId.middleInitial}}
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:120px;">
@@ -174,66 +178,6 @@
                                             <td><div ng-if="timesheet.isManualPunch === true">Admin Verified</div>
                                                 <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + patTimesheet.companyCode + '/' + timesheet.signature}}"></td>
                                         </tr>
-
-                                        <!--                                        <tr>
-                                                                                    <th>2008/11/28</th>
-                                                                                    <td><div class="green_dot"></div>
-                                                                                        09:20 AM</td>
-                                                                                    <td><div class="red_dot"></div>
-                                                                                        06:00 PM</td>
-                                                                                    <td>09:00</td>
-                                        
-                                                                                    <td>Capoblanco Anne</td>
-                                                                                    <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                                                            <a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
-                                                                                        </div></td>
-                                                                                    <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
-                                                                                </tr>
-                                        
-                                                                                <tr>
-                                                                                    <th>2008/11/28</th>
-                                                                                    <td><div class="black_dot"></div>
-                                                                                        09:00 AM</td>
-                                                                                    <td><div class="black_dot"></div>
-                                                                                        06:30 PM</td>
-                                                                                    <td>09:00</td>
-                                        
-                                                                                    <td>Capoblanco Anne</td>
-                                                                                    <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                                                            <a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
-                                                                                        </div></td>
-                                                       -                             <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th>2008/11/28</th>
-                                                                                    <td><div class="green_dot"></div>
-                                                                                        09:00 AM</td>
-                                                                                    <td><div class="green_dot"></div>
-                                                                                        06:00 PM</td>
-                                                                                    <td>09:00</td>
-                                        
-                                                                                    <td>Capoblanco Anne</td>
-                                                                                    <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                                                            <a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
-                                                                                        </div></td>
-                                                                                    <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th>2008/11/28</th>
-                                                                                    <td> 09:00 AM</td>
-                                                                                    <td> 06:00 PM</td>
-                                                                                    <td>09:00</td>
-                                        
-                                                                                    <td>Capoblanco Anne</td>
-                                                                                    <td><div style="float:left; min-width:170px;"><a class="btn icon-left fa fa-pencil edit_button" href="#"><span class="ed_b">Edit</span></a> 
-                                                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="#"><span class="ed_b">Dlt</span></a> 
-                                                                                            <a class=" btn fa fa-search view_task_button" onclick="showAjaxModal();" href="javascript:;"><span class="ed_b">Tasks </span></a>
-                                                                                        </div></td>
-                                                                                    <td><img width="58" height="34" alt="Signature" src="assets/images/Signature.png"></td>
-                                                                                </tr>-->
                                     </tbody>
                                 </table>
                                 <div ng-if="(patTimesheet.timesheetList == null || patTimesheet.timesheetList.length == 0) && patTimesheet.dataRetrieved && patTimesheet.criteriaSelected === true">
