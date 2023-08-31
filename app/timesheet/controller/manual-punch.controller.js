@@ -75,11 +75,27 @@
             }
         }
 
+        if ($state.params.id && $state.params.id !== '') {
+            if (isNaN(parseFloat($state.params.id))) {
+                $state.transitionTo(ontimetest.defaultState);
+            }
+            if ($state.current.name.indexOf('patient') > 0 || $state.current.name.indexOf('employee') > 0) {
+                //nothing to do
+            } else {
+                ctrl.editTimesheet = true;
+                if ($state.current.name.indexOf('edit_missed_punch') > 0) {
+                        ctrl.attendanceObj.isMissedPunch = true;
+                } else if ($state.current.name.indexOf('edit_timesheet') > 0) {
+                        ctrl.attendanceObj.isMissedPunch = false;
+                }
+            }
+        } else {
+            ctrl.editTimesheet = false;
+            ctrl.attendanceObj.isManualPunch = true;
+        }
+
         var initPage = function () {
             if ($state.params.id && $state.params.id !== '') {
-                if (isNaN(parseFloat($state.params.id))) {
-                    $state.transitionTo(ontimetest.defaultState);
-                }
                 var id = $state.params.id;
                 if ($state.current.name.indexOf('patient') > 0) {
                     ctrl.attendanceObj.patientId = Number(id);
@@ -146,25 +162,34 @@
 
         retrieveEmployeesData();
         function retrieveEmployeesData() {
+            ctrl.employeeListLoaded = false;
             $rootScope.maskLoading();
             EmployeeDAO.retrieveByPosition({}).then(function (res) {
                 ctrl.employeeList = res;
             }).catch(function (data, status) {
                 ctrl.employeeList = ontimetest.employees;
             }).then(function () {
-                $rootScope.unmaskLoading();
+                ctrl.employeeListLoaded = true;
+                if (ctrl.patientListLoaded) {
+                    $rootScope.unmaskLoading();
+                    initPage();
+                }
             });
         }
         retrievePatientsData();
         function retrievePatientsData() {
+            ctrl.patientListLoaded = false;
             $rootScope.maskLoading();
             PatientDAO.retrieveForSelect({}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
                 ctrl.patientList = ontimetest.patients;
             }).then(function () {
-                $rootScope.unmaskLoading();
-                initPage();
+                ctrl.patientListLoaded = true;
+                if (ctrl.employeeListLoaded) {
+                    $rootScope.unmaskLoading();
+                    initPage();
+                }
             });
         }
         ;
@@ -234,7 +259,7 @@
                         attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
-                            ctrl.resetManualPunch();
+//                            ctrl.resetManualPunch();
                             ctrl.formSubmitted = false;
                         }).catch(function (e) {
                             if (e.data != null) {
@@ -285,7 +310,7 @@
                         attendanceObjToSave.taskIdValues = JSON.stringify(attendanceObjToSave.taskIdValues);
                         TimesheetDAO.addMissedPunchRecord(attendanceObjToSave).then(function () {
                             toastr.success("Manual punch saved.");
-                            ctrl.resetManualPunch();
+//                            ctrl.resetManualPunch();
                             ctrl.formSubmitted = false;
                         }).catch(function (e) {
                             if (e.data != null) {

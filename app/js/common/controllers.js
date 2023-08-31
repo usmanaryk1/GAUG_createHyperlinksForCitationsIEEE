@@ -22,7 +22,7 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state)
+        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state,$document)
         {
             var userName = getCookie("un");
             if (userName != null) {
@@ -43,9 +43,29 @@ angular.module('xenon.controllers', []).
             $rootScope.isMainPage = true;
             $rootScope.dateFormat = "MM/dd/yyyy";
             $rootScope.dateFormatForDay = "EEE";
-            $rootScope.timeFormat = "HH:mm";
+            $rootScope.timeFormat = "hh:mm a";
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
+
+               $scope.showMenu = false;
+
+                $scope.openMenu = function($event) {
+                  $event.stopPropagation()
+                    if (!$scope.showMenu) {
+                        var closeMe = function() { 
+                          $scope.showMenu = false;
+                          $document.unbind('click', this);
+                        };
+                        $document.bind('click', function(event) {
+                        $scope.$apply(function(){
+                           closeMe($scope)
+                        })
+                          }); 
+                        $scope.showMenu = true;
+                    } else {
+                        $scope.showMenu = false;
+                    } 
+                };
 
             $rootScope.maskLoading = function () {
                 $rootScope.maskLoadingRunning = true;
