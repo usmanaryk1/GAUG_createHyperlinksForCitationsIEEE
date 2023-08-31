@@ -35,7 +35,14 @@
                 <form class="form-horizontal validate" novalidate="" id="billing_reconciliation_form" name="billing_reconciliation_form" role="form" ng-submit="manageBillingReconciliation.save()">
                     <accordion class="panel-group-joined" close-others="false">
                         <accordion-group heading="Customer Payment" is-open="true" class="expanded">
-                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" ng-show="manageBillingReconciliation.isViewOnly">
+                                    <button type="button" class="btn btn-info green_bt  pull-right col-md-2" ng-click="manageBillingReconciliation.update()"
+                                            style="margin-right: 0px">Save Changes</button>
+                                    <button class="btn btn-info btn-single gray_bt pull-right col-md-2" type="button" ui-sref="app.billing_reconciliation_list()">Cancel</button>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -75,7 +82,7 @@
                                                 <input class="form-control datepicker" max-date="manageBillingReconciliation.currentDate" data-format="mm/dd/yyyy" id="receivedDate" 
                                                        name="receivedDate" type="text" ng-model="manageBillingReconciliation.bill.receivedDate" 
                                                        data-validate="required,date" data-message-required="Please enter Received Date." required 
-                                                       ng-disabled="manageBillingReconciliation.isViewOnly"/>
+                                                       ng-disabled="false"/>
                                                 <div class="input-group-addon">
                                                     <a href="#">
                                                         <i class="linecons-calendar">
@@ -94,7 +101,7 @@
                                         <div class="col-sm-8">
                                             <select class="form-control" id="sboxit-1" name="paymentMethod"
                                                     data-validate="required" data-message-required="Please select Payment Method." ng-model="manageBillingReconciliation.bill.paymentMethod" required
-                                                    ng-disabled="manageBillingReconciliation.isViewOnly"
+                                                    ng-disabled="false"
                                                     ng-change="manageBillingReconciliation.bill.eftDate = null">
                                                 <option value="">
                                                     Select the Payment Method
@@ -121,7 +128,7 @@
                                                 <input class="form-control datepicker" max-date="manageBillingReconciliation.currentDate" data-format="mm/dd/yyyy" id="eftDate" 
                                                        name="eftDate" type="text" ng-model="manageBillingReconciliation.bill.eftDate" 
                                                        data-validate="required,date" data-message-required="Please enter EFT Date." required
-                                                       ng-disabled="manageBillingReconciliation.isViewOnly"/>
+                                                       ng-disabled="false"/>
                                                 <div class="input-group-addon">
                                                     <a href="#">
                                                         <i class="linecons-calendar">
@@ -138,7 +145,7 @@
                                         <div class="col-sm-8">
                                             <input class="form-control" id="referenceNumber" name="referenceNumber" type="text" maxlength="50"
                                                    ng-model="manageBillingReconciliation.bill.referenceNumber" data-validate="required" data-message-required="Please enter Reference #." required
-                                                   ng-disabled="manageBillingReconciliation.isViewOnly"/>
+                                                   ng-disabled="false"/>
                                         </div>
                                     </div>
                                 </div>    
@@ -149,14 +156,31 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label" for="patientIds">
+                                        <label class="col-sm-4 control-label" for="patientdropdownIds">
                                             Patient Name
                                         </label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" name ="patientId" id="patientId" ng-model="manageBillingReconciliation.searchParams.patientId" ng-options='patient.id as patient.label for patient in manageBillingReconciliation.patientList'>
-                                                <option value="" selected hidden></option>
+                                            <script type="text/javascript">
+                                                        jQuery(document).ready(function ($)
+                                                        {
+                                                            setTimeout(function () {
+                                                                $("#patientdropdownIds").select2({
+                                                                    // minimumResultsForSearch: -1,
+                                                                    placeholder: 'Search Patient...',
+                                                                    // minimumInputLength: 1,
+                                                                    // placeholder: 'Search',
+                                                                }).on('select2-open', function ()
+                                                                {
+                                                                    // Adding Custom Scrollbar
+                                                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                                });
+                                                            }, 200);
+                                                        });</script>
+                                            <select class="form-control" name="patientdropdownIds" ng-model="manageBillingReconciliation.searchParams.patientId" id="patientdropdownIds" ng-options='patient.id as patient.label for patient in manageBillingReconciliation.patientList'>
+                                                <option value="" selected>Select All</option>
                                             </select>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -224,22 +248,22 @@
                         </accordion-group>
                         <accordion-group heading="Claims" is-open="true" class="expanded" 
                                          ng-if="!manageBillingReconciliation.isViewOnly" 
-                                         ng-show="(manageBillingReconciliation.claims && manageBillingReconciliation.claims.length > 0) 
-                                                     || (manageBillingReconciliation.selectedClaims && manageBillingReconciliation.selectedClaims.length > 0)">
+                                         ng-show="(manageBillingReconciliation.claims && manageBillingReconciliation.claims.length > 0)
+                                                                 || (manageBillingReconciliation.selectedClaims && manageBillingReconciliation.selectedClaims.length > 0)">
                             <div class="row" style="margin-top: -3%;">                     
                                 <div class="input-group pull-right filter-font">
                                     <label class="cbr-inline">
                                         <input checked="true" type="radio" name="show" value='filtered' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show"
-                                               ng-click="manageBillingReconciliation.claimList.isSelected=false;manageBillingReconciliation.updateAllClaims()">                                        
+                                               ng-click="manageBillingReconciliation.claimList.isSelected = false;manageBillingReconciliation.updateAllClaims()">                                        
                                         Show Filtered </label>
                                     <label class="cbr-inline">
                                         <input type="radio" name="show"  value='selected' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show">
                                         Show Selected(<b>{{manageBillingReconciliation.selectedClaims ? manageBillingReconciliation.getlength(manageBillingReconciliation.selectedClaims) : 0}}</b>) </label>
                                 </div>
-<!--                                <div class="form-group">
-                                    <button type="button" class="btn btn-info green_bt pull-right" style="margin-right: 15px" ng-click="manageBillingReconciliation.openAdjustments()">Adjustment</button>
-                                    <button type="button" class="btn btn-info green_bt pull-right" style="margin-right: 15px" ng-click="manageBillingReconciliation.openCredits()">Credit</button>
-                                </div>-->
+                                <!--                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-info green_bt pull-right" style="margin-right: 15px" ng-click="manageBillingReconciliation.openAdjustments()">Adjustment</button>
+                                                                    <button type="button" class="btn btn-info green_bt pull-right" style="margin-right: 15px" ng-click="manageBillingReconciliation.openCredits()">Credit</button>
+                                                                </div>-->
                             </div>    
 
                             <div ng-if="manageBillingReconciliation.show === 'filtered'" style="margin-top: 10px;">
@@ -247,14 +271,14 @@
                                     <div class="form-group col-sm-6 pull-left">
                                         <span class="col-md-6">
                                             <span class="pull-left" style="min-width:50px;"><span style="float: right;margin-right: 5px;padding-top: 7px;">Show</span></span>
-                                        <div style="width:70px; float:left;">
-                                            <select class="form-control input-sm" ng-model="manageBillingReconciliation.searchParams.limit" ng-change="manageBillingReconciliation.filterClaims()">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </div>
+                                            <div style="width:70px; float:left;">
+                                                <select class="form-control input-sm" ng-model="manageBillingReconciliation.searchParams.limit" ng-change="manageBillingReconciliation.filterClaims()">
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>
+                                            </div>
                                             <span class="pull-left" style="min-width: 45px;"><span style="float: right;padding-top: 7px;">entries</span></span>
                                         </span>
                                     </div> 
@@ -298,14 +322,14 @@
                                                     <td>{{(claim.sessionStartDate| date:'MM/dd/yyyy') + '-' + (claim.sessionEndDate | date:'MM/dd/yyyy')}}</td>
                                                     <td class="text-center">{{claim.totalCosts| currency:'$':2}}</td>
                                                     <td class="text-center">{{(claim.totalCosts - claim.paidAmount)| currency:'$':2}}</td>
-                                                    <td>{{claim.creditUsed | currency:'$':2}}</td>
+                                                    <td>{{claim.creditUsed| currency:'$':2}}</td>
                                                     <td>
                                                         <input ng-disabled="!manageBillingReconciliation.selectedClaims[claim.id]" 
                                                                numbers-only="true" maxlength="10" class="form-control" 
                                                                name="totalCosts" type="text" decimalallowed
                                                                ng-model="claim.AmountPaid" data-validate="number" ng-change="manageBillingReconciliation.updateAmountPaid(claim.id, claim.AmountPaid)"
                                                                ng-required="(!claim.AmountPaid && !claim.creditUsed)"                                                               
-                                                               ng-class="{'border-red':(!claim.AmountPaid && !claim.creditUsed) && manageBillingReconciliation.selectedClaims[claim.id]===true && manageBillingReconciliation.formSubmitted}"/>
+                                                               ng-class="{'border-red':(!claim.AmountPaid && !claim.creditUsed) && manageBillingReconciliation.selectedClaims[claim.id] === true && manageBillingReconciliation.formSubmitted}"/>
                                                     </td>
                                                     <td>
                                                         <div class="center">
@@ -502,9 +526,6 @@
                                     No Reconciliation Details are available.
                                 </div>
                             </div>
-                            <button class="btn btn-info btn-single gray_bt pull-right col-md-2" type="button" 
-                                    ng-if="manageBillingReconciliation.isViewOnly && manageBillingReconciliation.bill.creditUsages.length === 0"
-                                    ui-sref="app.billing_reconciliation_list()">Cancel</button>
                         </accordion-group>
                         <accordion-group heading="Credits" is-open="true" class="expanded" ng-if="manageBillingReconciliation.isViewOnly && manageBillingReconciliation.bill.creditUsages.length > 0">
                             <div class="border0 table-responsive scroll">
@@ -528,7 +549,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button class="btn btn-info btn-single gray_bt pull-right col-md-2" type="button" ui-sref="app.billing_reconciliation_list()">Cancel</button>
                         </accordion-group>                            
                     </accordion>
                 </form>

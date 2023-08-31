@@ -10,7 +10,7 @@
         ctrl.currentDate = new Date();
         ctrl.viewRecords = 10;
         ctrl.filteredDatatableObj = {};
-        ctrl.bill = {creditUsages:[]};
+        ctrl.bill = {creditUsages: []};
         ctrl.claimList = {allSelected: false, setAmountDue: false};
         ctrl.navigateToTab = navigateToTab;
         function navigateToTab() {
@@ -34,7 +34,7 @@
             ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc', 'billingReconciliation': true};
             ctrl.selectedClaimsShow = [];
             ctrl.claims = [];
-            ctrl.selectedClaims = [];
+            ctrl.selectedClaims = {};
             ctrl.bill.reconciliationDetails = [];
         };
 
@@ -72,7 +72,7 @@
                     _.each(bill.reconciliationDetails, function (reconciliation) {
                         var claim = angular.copy(reconciliation.claim);
                         claim.paidAmount = reconciliation.paidAmount;
-                        claim.creditUsed = reconciliation.creditUsed;                        
+                        claim.creditUsed = reconciliation.creditUsed;
                         ctrl.reconciliationDetails.push(claim);
                     });
                 }
@@ -91,29 +91,29 @@
             if (ctrl.claims && ctrl.claims.length > 0)
                 ctrl.filterClaims();
         };
-        
-        ctrl.removeCreditUsage = function(credit){
-            _.remove(ctrl.bill.creditUsages,credit); 
+
+        ctrl.removeCreditUsage = function (credit) {
+            _.remove(ctrl.bill.creditUsages, credit);
             var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: credit.toClaimId});
-            if(selectedClaim){
+            if (selectedClaim) {
                 selectedClaim.creditUsed = selectedClaim.creditUsed - credit.usedAmount;
             }
-            if(selectedClaim.creditUsed === 0 && !selectedClaim.AmountPaid){
+            if (selectedClaim.creditUsed === 0 && !selectedClaim.AmountPaid) {
                 ctrl.selectedClaims[selectedClaim.id] = false;
             }
             ctrl.updateSelection();
         };
 
-        ctrl.updateSelection = function () {     
-            _.remove(ctrl.bill.creditUsages,function(credit){
+        ctrl.updateSelection = function () {
+            _.remove(ctrl.bill.creditUsages, function (credit) {
                 return ctrl.selectedClaims[credit.toClaimId] !== true;
-            });        
+            });
             _.each(ctrl.selectedClaimsShow, function (claim) {
                 if (ctrl.selectedClaims[claim.id] !== true)
                     claim.creditUsed = 0;
             });
             _.each(ctrl.selectedClaims, function (selected, selectedClaimId) {
-                var claim = _.find(ctrl.claims, {id: parseInt(selectedClaimId)});                
+                var claim = _.find(ctrl.claims, {id: parseInt(selectedClaimId)});
                 if (claim && !_.find(ctrl.selectedClaimsShow, {id: parseInt(selectedClaimId)}) && (selected === true)) {
                     if (ctrl.claimList.setAmountDue)
                         claim.AmountPaid = (claim.totalCosts - claim.paidAmount) > 0 ? parseFloat(claim.totalCosts - claim.paidAmount).toFixed(2) : 0;
@@ -122,7 +122,7 @@
                     delete claim.AmountPaid;
                     _.remove(ctrl.selectedClaimsShow, {id: parseInt(selectedClaimId)});
                 }
-            });            
+            });
             ctrl.getTotals();
             _.reverse(ctrl.selectedClaimsShow);
         };
@@ -156,7 +156,7 @@
         ctrl.removedSelection = function (claimId) {
             var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claimId});
             if (selectedClaim) {
-                delete selectedClaim.AmountPaid;                
+                delete selectedClaim.AmountPaid;
                 _.remove(ctrl.bill.creditUsages, {toClaimId: claimId});
                 selectedClaim.creditUsed = 0;
             }
@@ -165,12 +165,12 @@
 
         ctrl.updateAllClaims = function () {
             if (ctrl.claims && ctrl.claims.length > 0) {
-                ctrl.claims.forEach(function (claim) {                    
+                ctrl.claims.forEach(function (claim) {
                     var selectedClaim = _.find(ctrl.selectedClaimsShow, {id: claim.id});
                     if (selectedClaim) {
                         claim.AmountPaid = selectedClaim.AmountPaid;
                         claim.creditUsed = selectedClaim.creditUsed;
-                    } else{
+                    } else {
                         claim.creditUsed = 0;
                     }
                 });
@@ -178,9 +178,9 @@
         };
 
         ctrl.updateSelectedClaimsShow = function () {
-            if (ctrl.selectedClaimsShow && ctrl.selectedClaimsShow.length > 0) {
-                ctrl.selectedClaimsShow.forEach(function (claim) {
-                    if (claim) {
+            if (ctrl.claims && ctrl.claims.length > 0) {
+                ctrl.claims.forEach(function (claim) {
+                    if (claim && ctrl.selectedClaims[claim.id]) {
                         if (ctrl.claimList.setAmountDue === true) {
                             claim.AmountPaid = (claim.totalCosts - claim.paidAmount) > 0 ? parseFloat(claim.totalCosts - claim.paidAmount).toFixed(2) : 0;
                         } else {
@@ -241,14 +241,14 @@
                     creditUsages: function () {
                         return ctrl.bill.creditUsages ? angular.copy(ctrl.bill.creditUsages) : [];
                     },
-                    creditsAvailable: function() {
-                        return BillingDAO.getCreditsAvailable({insuranceProviderId: ctrl.bill.receivedBy}).then(function(credits){
-                            if(credits.length === 0){
+                    creditsAvailable: function () {
+                        return BillingDAO.getCreditsAvailable({insuranceProviderId: ctrl.bill.receivedBy}).then(function (credits) {
+                            if (credits.length === 0) {
                                 toastr.error('No credits available');
-                            } else{
+                            } else {
                                 return angular.copy(credits);
                             }
-                        },function(){
+                        }, function () {
                             console.log("Error retrieveing available credits");
                             toastr.error("Error retrieveing available credits");
                         });
@@ -260,10 +260,10 @@
             });
             modalInstance.result.then(function (creditUsages) {
                 var creditUsage = 0;
-                _.each(_.filter(creditUsages,{toClaimId:claimId}), function (credit) {
-                    creditUsage+= credit.usedAmount;
+                _.each(_.filter(creditUsages, {toClaimId: claimId}), function (credit) {
+                    creditUsage += credit.usedAmount;
                 });
-                var cliam = _.find(ctrl.claims,{id:claimId});
+                var cliam = _.find(ctrl.claims, {id: claimId});
                 cliam.creditUsed = creditUsage;
                 ctrl.bill.creditUsages = angular.copy(creditUsages);
                 ctrl.getTotals();
@@ -314,13 +314,38 @@
             }
         };
 
+        ctrl.update = function () {
+            ctrl.formSubmitted = true;
+            if ($('#billing_reconciliation_form')[0].checkValidity()) {
+                var billToSave = {
+                    'id': ctrl.bill.id,
+                    'eftDate': ctrl.bill.eftDate,
+                    'orgCode': ctrl.bill.orgCode,
+                    'paymentMethod': ctrl.bill.paymentMethod,
+                    'receivedDate': ctrl.bill.receivedDate,
+                    'referenceNumber': ctrl.bill.referenceNumber,
+                    'receivedFrom': ctrl.bill.receivedFrom
+                };
+
+                $rootScope.maskLoading();
+                BillingDAO.updateReconciliations(billToSave).then(function () {
+                    toastr.success("Reconciliation updated successfully.");
+                    $state.go('app.billing_reconciliation_list');
+                }).catch(function (data, status) {
+                    toastr.error("Reconciliation cannot be updated.");
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }
+        };
+
         ctrl.getTotals = function () {
             ctrl.totals = {AmountDue: 0, Applied: 0, Credits: 0};
             _.each(ctrl.selectedClaimsShow, function (claim) {
                 if (ctrl.selectedClaims[claim.id]) {
                     ctrl.totals.AmountDue = ctrl.totals.AmountDue + ((claim.totalCosts ? parseFloat(claim.totalCosts) : 0) - (claim.paidAmount ? parseFloat(claim.paidAmount) : 0));
-                    ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);                    
-                }                
+                    ctrl.totals.Applied = ctrl.totals.Applied + (claim.AmountPaid ? parseFloat(claim.AmountPaid) : 0);
+                }
             });
             _.each(ctrl.bill.creditUsages, function (credit) {
                 ctrl.totals.Credits = ctrl.totals.Credits + (credit.usedAmount ? parseFloat(credit.usedAmount) : 0);

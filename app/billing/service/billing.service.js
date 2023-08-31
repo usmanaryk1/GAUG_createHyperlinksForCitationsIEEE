@@ -98,6 +98,13 @@
                     action: 'reconciliations'
                 }
             },
+            updateReconciliations:{
+                method: 'PUT',
+                params: {
+                    action: 'reconciliations',
+                    
+                }
+            },
             deleteReconciliations:{
                 method: 'DELETE',
                 params: {
@@ -168,6 +175,9 @@
             },
             saveReconciliations: function (data) {
                 return api.saveReconciliations(data).$promise;
+            },
+            updateReconciliations: function (data) {
+                return api.updateReconciliations({'paramId':data.id}, data).$promise;
             },
             deleteReconciliations: function(data) {
                 return api.deleteReconciliations({paramId: data.id}).$promise;
