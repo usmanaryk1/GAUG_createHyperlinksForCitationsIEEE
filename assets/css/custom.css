@@ -313,3 +313,10 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
         padding-right: 30px !important;
     }
 }
+
+/* Top buttons alignment in Billing session tabs*/
+@media only screen and (max-width: 380px) {
+     .btn-process {
+        padding: 10px 5px;
+     }
+}
