@@ -139,7 +139,10 @@
                                                 {{timesheet.roundedPunchInTime|date :dateFormat}}
                                             </th>
                                             <th>
-                                                {{timesheet.roundedPunchOutTime|date :dateFormat}}
+                                                <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
+                                                    {{timesheet.roundedPunchOutTime|date :dateFormat}}
+                                                </span>
+                                                <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                             </th>
                                             <td>
                                                 <!--Display green dot for matched GPS location-->
