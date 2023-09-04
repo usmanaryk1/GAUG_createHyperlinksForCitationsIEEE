@@ -272,7 +272,7 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 /* adjust width by overwriting it for two rate boxes*/
 #ms-rate1,
 #ms-rate2 {
-    width: 494px;
+    width: auto;
 }
 
 /* For Mobile and Tablets*/
@@ -354,7 +354,11 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
         margin: 0;
     }
 }
-
+@media only screen and (max-width: 380px) and (orientation:portrait) {
+    .sm-radio-btn-align {
+        width: 50%;
+    }
+}
 @media only screen and (min-width: 970px) {
     .lg-layout-align-right {
         padding-right: 5px;
