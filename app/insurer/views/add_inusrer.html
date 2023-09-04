@@ -311,7 +311,7 @@
     <form class="validate form-horizontal" name="careTypeForm" id="care_type_form" >
     <div class="modal-header">
     <button type="button" class="close" ng-click="careTypeModel.cancel();" aria-hidden="true">&times;</button>
-    <h4 class="modal-title">Enter Billing Information</h4>
+    <h4 class="modal-title">{{careTypeModel.title}}</h4>
     </div>
 
     <div class="modal-body">
@@ -418,24 +418,8 @@
 
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="careTypeModel.cancel();">Close</button>
-    <button type="submit" class="btn btn-info" ng-click="careTypeModel.save();">Save changes</button>
+    <button type="button" class="btn btn-red" ng-show="careTypeModel.showRemove" ng-click="careTypeModel.remove();">Remove</button>
+    <button type="submit" class="btn btn-success" ng-click="careTypeModel.save();">Save changes</button>
     </div>
     </form>
-</script>
-
-<script type="text/ng-template" id="modal-3">
-    <div class="modal-header">
-    <h4 class="modal-title">{{unselectCareTypeModal.careTypeIdMap[unselectCareTypeModal.newDeselectedType[0]].careTypeTitle}}</h4>
-    </div>
-
-    <div class="modal-body">
-
-    "Are you sure you want to remove this caretype? All patients of this insurer will loose data for this caretype after saving the details."
-
-    </div>
-
-    <div class="modal-footer">
-    <button type="button" class="btn btn-success" ng-click="unselectCareTypeModal.confirm();">Yes</button>
-    <button type="button" class="btn btn-red" ng-click="unselectCareTypeModal.cancelDelete();">No</button>
-    </div>
 </script>

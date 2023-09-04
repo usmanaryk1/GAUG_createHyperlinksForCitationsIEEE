@@ -38,7 +38,7 @@
                                 });
                             </script>
                             <select class="form-control" id="CareTypes" multiple="multiple" name="CareTypes"
-                                    data-validate="required" data-message-required="Please select Care Type." ng-model="addPatient.patient.careTypes"
+                                    data-validate="required" data-message-required="Please select Care Type." ng-model="addPatient.careTypes"  ng-change="addPatient.displayCareTypeModal = true"
                                     ng-options='ct.id as ct.companyCaretypeId.careTypeTitle for ct in addPatient.careTypeList'>
                                 <!--                                <option ng-repeat="ct in addPatient.careTypeList" ng-value="{{ct.id}}">
                                                                     {{ct.careTypeTitle}}
@@ -271,3 +271,30 @@
 //
     });
 //</script>
+<script type="text/ng-template" id="modal-5">
+    <form class="validate form-horizontal" name="careTypeForm" id="care_type_form" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="careTypeModel.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">{{careTypeModel.title}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    <div class="row">
+    <label class="col-sm-4 control-label add-padding-modal" for="rate">
+    Authorized hours
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <input class="form-control" name="radioRate" maxlength="10" numbers-only="true" decimalallowed type="text" ng-model="careTypeModel.careTypeObj.authorizedHours"  data-validate="required"  data-message-required="Please enter Authorized Hours."> 
+
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="careTypeModel.cancel();">Close</button>
+    <button type="button" class="btn btn-red" ng-show="careTypeModel.showRemove" ng-click="careTypeModel.remove();">Remove</button>
+    <button type="submit" class="btn btn-success" ng-click="careTypeModel.save();">Save changes</button>
+    </div>
+    </form>
+</script>
