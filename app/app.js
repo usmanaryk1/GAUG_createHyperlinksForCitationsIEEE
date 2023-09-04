@@ -99,6 +99,12 @@ app.run(function ($rootScope, $modal, $state, Idle)
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
+                //this is to close any open popup while moving to other page.
+                $("[role=dialog]").each(function () {
+                    if ($(this).css('display') === 'block') { // Current display
+                        $(this).css('display', 'none');
+                    }
+                });
                 if (toState.url.indexOf("login") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
@@ -119,7 +125,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                 } else {
                     if (toState.url.indexOf("daily_attendance") < 0) {
                         localStorage.removeItem('dailyAttendanceSearchParams');
-                    } 
+                    }
                     if (toState.url.indexOf("employee_timesheet") < 0) {
                         localStorage.removeItem('employeeTimesheetSearchParams');
                     }
