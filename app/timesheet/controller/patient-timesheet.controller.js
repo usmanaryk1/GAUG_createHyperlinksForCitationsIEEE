@@ -147,6 +147,7 @@
 
         retrievePatientsData();
         function retrievePatientsData() {
+            $rootScope.maskLoading();
             PatientDAO.retrieveAll({subAction: 'all'}).then(function(res) {
                 ctrl.patientList = res;
                 ctrl.patientIdMap = {};
