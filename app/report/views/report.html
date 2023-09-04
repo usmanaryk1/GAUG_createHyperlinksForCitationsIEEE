@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="row" ng-if="report.reportType == 'revenuereconciliationreport'
-                                     || report.reportType == 'detailagingreport'" style="margin-top: 10px;">
+                                     || report.reportType == 'detailagingreport' || report.reportType == 'summaryagingreport'" style="margin-top: 10px;">
                                     <div class="">
                                         <div class="form-group sm-layout-align">
                                             <label class="control-label col-sm-3">Insurance Provider</label>
@@ -122,7 +122,8 @@
                                         || report.reportType == 'patienttimesheet' || report.reportType == 'employeetimesheet'
                                         || report.reportType == 'employeebenefits401k' || report.reportType == 'employeebenefitshealthcare'
                                         || report.reportType == 'loginactivityreport' || report.reportType == 'lossofhoursreport' 
-                                        || report.reportType == 'notesreport' || report.reportType == 'employeedeactivatereport' || report.reportType == 'detailagingreport'
+                                        || report.reportType == 'notesreport' || report.reportType == 'employeedeactivatereport' 
+                                        || report.reportType == 'detailagingreport' || report.reportType == 'summaryagingreport'
                                         || report.reportType == 'employeeothours' || report.reportType == 'revenuereconciliationreport'" style="margin-top: 10px;">
                             <div class="">
                                 <div class="col-sm-7 pull-right wd_full">
@@ -152,7 +153,7 @@
                             </div>
                         </div>
 
-                        <div class="row adjust-row-padding" ng-show="report.reportType == 'detailagingreport'" style="margin-top: 10px;">
+                        <div class="row adjust-row-padding" ng-show="report.reportType == 'detailagingreport' || report.reportType == 'summaryagingreport'" style="margin-top: 10px;">
                             <div class="col-sm-4 element-align sm-flex-align">
                             </div>
                             <div class="col-sm-8">  
@@ -161,7 +162,8 @@
                                             <label for="date" class="col-sm-3 control-label">Aging Date</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="date" name="date" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="report.searchParams.date" data-validate="required" data-message-required="Please select Date." ng-required="report.reportType == 'detailagingreport'"/>
+                                                    <input type="text" id="date" name="date" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="report.searchParams.date" data-validate="required" data-message-required="Please select Date." 
+                                                           ng-required="report.reportType == 'detailagingreport' || report.reportType == 'summaryagingreport'"/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
@@ -194,7 +196,8 @@
                                 <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patienttimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
                                 <button type="submit" ng-if="report.reportType && report.reportType != 'employeelastpunchin' &&
                                                 report.reportType != 'patientcensus' && report.reportType != 'employeecensus' && report.reportType != 'revenuereconciliationreport'
-                                                && report.reportType != 'lossofhoursreport' && report.reportType != 'notesreport' && report.reportType != 'detailagingreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
+                                                && report.reportType != 'lossofhoursreport' && report.reportType != 'notesreport' 
+                                                && report.reportType != 'detailagingreport' && report.reportType != 'summaryagingreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                             </div>
                         </div>
                     </form>

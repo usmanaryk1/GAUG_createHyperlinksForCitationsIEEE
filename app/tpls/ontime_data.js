@@ -49,7 +49,8 @@ ontime_data = {
     amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
     amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/",
     reportTypes: [
-        {id: 'detailagingreport', label: "Billing - Aging Report"},
+        {id: 'detailagingreport', label: "Billing - Detail Aging Report"},
+        {id: 'summaryagingreport', label: "Billing - Summary Aging Report"},
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
         {id: 'employeelastpunchin', label: "Employee Last Punchin Date Report"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
