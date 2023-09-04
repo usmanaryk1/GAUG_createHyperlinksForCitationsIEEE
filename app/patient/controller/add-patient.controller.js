@@ -36,12 +36,12 @@
             $state.transitionTo(ontimetest.defaultState);
         }
         var form_data;
-        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             ctrl.nursingCareList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             ctrl.staffCoordinatorList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");

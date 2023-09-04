@@ -1,5 +1,5 @@
 (function () {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page, PositionDAO) {
         var ctrl = this;
         Page.setTitle("Manual Punch");
         ctrl.taskList = [];
@@ -10,7 +10,14 @@
         ctrl.editTimesheet = null;
         ctrl.patientMandatory = true;
         ctrl.tasksErrorMsg = null;
-        ctrl.selectedPosition = '';
+        ctrl.officeStaffIds = [];
+        PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    ctrl.officeStaffIds.push(position.id)
+                });
+            }
+        });
         ctrl.resetManualPunch = function () {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
             if (ctrl.editTimesheet) {
@@ -84,9 +91,9 @@
             } else {
                 ctrl.editTimesheet = true;
                 if ($state.current.name.indexOf('edit_missed_punch') > 0) {
-                        ctrl.attendanceObj.isMissedPunch = true;
+                    ctrl.attendanceObj.isMissedPunch = true;
                 } else if ($state.current.name.indexOf('edit_timesheet') > 0) {
-                        ctrl.attendanceObj.isMissedPunch = false;
+                    ctrl.attendanceObj.isMissedPunch = false;
                 }
             }
         } else {
@@ -150,11 +157,10 @@
                     ctrl.attendanceObj.companyTaskIds = [];
                 }
                 ctrl.attendanceObj.taskIdValues = {};
-                ctrl.selectedPosition = res.position;
                 $timeout(function () {
                     $('#tasks').multiSelect('refresh');
                 }, 100);
-                if (res.position === 'a' || res.position === 'mr') {
+                if (res.companyPositionId && ctrl.officeStaffIds.indexOf(res.companyPositionId) > -1) {
                     ctrl.patientMandatory = false;
                 }
             });
@@ -410,5 +416,5 @@
             }
         }, true);
     }
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", "PositionDAO", ManualPunchCtrl]);
 })();

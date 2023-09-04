@@ -97,7 +97,7 @@
                                                 </div>
                                                 <div class="emp_user_hd">
                                                     <div class="emp_user_name">{{emp.lName}}, {{emp.fName}} {{emp.middleInitial}}</div>
-                                                    <p>{{positions[emp.position]}}</p>
+                                                    <p>{{positions[emp.companyPositionId]}}</p>
                                                 </div>
                                             </div>
                                             </th>
@@ -155,7 +155,7 @@
     <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
     <div class="emp_user_hd">
     <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
-    <p>{{positions[selectEmployeeModel.employee.position]}}</p>
+    <p>{{positions[selectEmployeeModel.employee.companyPositionId]}}</p>
     </div>
     <button type="button" class="close" ng-click="selectEmployeeModel.close();" aria-hidden="true">&times;</button>
     </div>
@@ -168,7 +168,7 @@
     <div class="form-group">
     <label for="field-1" class="control-label col-md-4"><strong>Position</strong></label>
     <div class="col-md-8">
-    {{positions[selectEmployeeModel.employee.position]}} 
+    {{positions[selectEmployeeModel.employee.companyPositionId]}} 
     </div>
     </div>	
 

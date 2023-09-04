@@ -82,7 +82,7 @@
         retrieveEmployeesData();
         function retrieveEmployeesData() {
             $rootScope.maskLoading();
-            EmployeeDAO.retrieveByPosition({'position': 'a,nc'}).then(function (res) {
+            EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR+","+ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
                 ctrl.employeeList = res;
                 var params = localStorage.getItem('dailyAttendanceSearchParams');
                 if (params !== null) {

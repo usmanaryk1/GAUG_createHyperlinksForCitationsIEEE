@@ -1,5 +1,5 @@
 (function () {
-    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout) {
+    function ViewEmployeesCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO) {
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.datatableObj = {};
@@ -7,7 +7,14 @@
         Page.setTitle("View Employees");
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-
+        $rootScope.positions = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    $rootScope.positions[position.id] = position.position;
+                });
+            }
+        });
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.employeeList = [];
 
@@ -251,5 +258,5 @@
 //        });
     }
     ;
-    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", ViewEmployeesCtrl]);
+    angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewEmployeesCtrl]);
 })();
