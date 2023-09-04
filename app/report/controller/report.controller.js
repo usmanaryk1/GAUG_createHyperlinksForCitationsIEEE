@@ -25,7 +25,7 @@
                 }
                 if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport'
                         || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport'
-                        || ctrl.reportType == 'revenuereconciliationreport') {
+                        || ctrl.reportType == 'revenuereconciliationreport' || ctrl.reportType == 'detailagingreport') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {
