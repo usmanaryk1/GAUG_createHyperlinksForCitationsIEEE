@@ -319,4 +319,50 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
      .btn-process {
         padding: 10px 5px;
      }
+     .btn-block-xs {
+        margin-bottom: 5px !important;
+        display: block;
+        width: 100% !important;
+        margin-left: 0 !important;
+     }
+}
+
+.sm-layout-align {
+    margin-bottom: 0;
+}
+
+.user-info h3{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.adjust-row-padding {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+@media only screen and (max-width: 380px), only screen and (max-width : 768px) {
+     .sm-layout-align {
+         margin-top: 10px;
+         margin-bottom:15px;
+     }
+     .sm-flex-align {
+        display: flex;
+     }
+     .clean-margin {
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 970px) {
+    .lg-layout-align-right {
+        padding-right: 5px;
+    }
+    .lg-layout-align-left {
+        padding-left: 5px;
+    }
+    .clean-margin {
+        margin: 0 !important;
+    }
 }
