@@ -52,6 +52,9 @@
                     if (ctrl.searchParams.year) {
                         path = path + "&year=" + ctrl.searchParams.year;
                     }
+                    if (ctrl.searchParams.date) {
+                        path = path + "&date=" + ctrl.searchParams.date;
+                    }
                     if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet')) {
                         $http.get(path).success(function (data) {
 //                            toastr.success('Generated report will be mailed to your email id');
