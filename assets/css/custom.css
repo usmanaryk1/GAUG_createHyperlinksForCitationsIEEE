@@ -370,3 +370,7 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
         margin: 0 !important;
     }
 }
+
+.collapsed .main-menu li:hover > ul {
+    display: block !important;
+}
