@@ -51,6 +51,7 @@ ontime_data = {
     reportTypes: [
         {id: 'detailagingreport', label: "Billing - Detail Aging Report"},
         {id: 'summaryagingreport', label: "Billing - Summary Aging Report"},
+        {id: 'billingmonitorreport', label: "Billing - Monitor Report"},
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
         {id: 'employeelastpunchin', label: "Employee Last Punchin Date Report"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},

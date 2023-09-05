@@ -26,7 +26,7 @@
                 if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport'
                         || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport'
                         || ctrl.reportType == 'revenuereconciliationreport' || ctrl.reportType == 'detailagingreport'
-                        || ctrl.reportType == 'summaryagingreport') {
+                        || ctrl.reportType == 'summaryagingreport' || ctrl.reportType == 'billingmonitorreport') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {
