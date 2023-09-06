@@ -84,7 +84,10 @@
                                         <th nowrap><span class="">Date Of Birth</span></th>
                                         <th nowrap width="20%" ><span class="">Service Date Range</span></th>
                                         <th nowrap><span class="">Billed</span></th>
-                                        <th nowrap class="text-center"><span class="">Authorized Codes</span></th>                                        
+                                        <th nowrap class="text-center"><span class="">Authorized Codes</span></th>              
+                                        <th nowrap class='nosorting text-center'>
+                                            <span class="">Actions</span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,7 +100,15 @@
                                         <td>{{session.patientBirthDate|date:dateFormat}}</td>
                                         <td><span ng-if="session.sessionStartDate && session.sessionEndDate">{{session.sessionStartDate|date:dateFormat}} - {{session.sessionEndDate|date:dateFormat}}</span></td>
                                         <td>${{session.totalCosts ? (session.totalCosts | number:2): 0}}</td>
-                                        <td class="text-center">{{session.authorizedCodes}}</td>                                                                               
+                                        <td class="text-center">{{session.authorizedCodes}}</td>       
+                                        <td class="text-center">
+                                            <div class="center">                                                
+                                                <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="session.isRejected !== true && hasAccess('DELETE_BILLING_CLAIM')" 
+                                                   ng-click="claimSearch.openRejectModal(session, $event)" tooltip="Reject"><span class="ed_b"></span></a>
+                                                <a class="btn icon-left fa fa-check edit_button" href="" ng-if="session.isRejected === true && hasAccess('DELETE_BILLING_CLAIM')" 
+                                                   ng-click="claimSearch.openRejectModal(session, $event)" tooltip="Open"><span class="ed_b"></span></a>                                                   
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

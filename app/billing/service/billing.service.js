@@ -131,6 +131,12 @@
                     action: 'claims',
                     paramId: 'credit'
                 }
+            },
+            setClaimStatus:{
+                method: 'POST',
+                params: {                    
+                    action: 'claims'
+                }
             }
         });
         return {
@@ -190,6 +196,9 @@
             },
             getCreditsAvailable: function (data) {
                 return api.getCreditsAvailable(data).$promise;
+            },
+            setClaimStatus: function (data) {
+                return api.setClaimStatus({paramId: data.claimId, paramId2: data.status}, data).$promise;
             }
         };
     };

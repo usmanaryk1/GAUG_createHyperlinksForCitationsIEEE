@@ -1,5 +1,7 @@
+/* global appHelper */
+
 (function () {
-    function ClaimSearchCtrl($rootScope, PatientDAO, BillingDAO, $state, Page) {
+    function ClaimSearchCtrl($rootScope, $modal, PatientDAO, BillingDAO, $state, Page) {
         var ctrl = this;
         Page.setTitle("Billing Session");
         ctrl.datatableObj = {};
@@ -85,6 +87,36 @@
                 newwindow.focus();
             }
         };
+        ctrl.openRejectModal = function (claim, e) {
+            e.stopPropagation();
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'open-reject-claim-modal'),
+                controller: 'OpenRejectModalController as openReject',
+                size: 'md',
+                resolve: {
+                    mode: function () {
+                        return claim.isRejected ? 'Open':'Reject';
+                    },
+                    claim: function () {
+                        return claim;
+                    }
+                }
+            });
+            modalInstance.result.then(function (claimDetails) {
+                console.log("claimDetails",claimDetails);                
+                $rootScope.maskLoading();
+                BillingDAO.setClaimStatus(claimDetails).then(function () {
+                    toastr.success("Billing claim "+(claim.isRejected ? 'Opened.':'Rejected.'));
+                    claim.isRejected = !claim.isRejected;
+                }).catch(function (data, status) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }, function () {
+            });
+
+        };
     }
-    angular.module('xenon.controllers').controller('ClaimSearchCtrl', ["$rootScope", "PatientDAO", "BillingDAO", "$state", "Page", ClaimSearchCtrl]);
+    angular.module('xenon.controllers').controller('ClaimSearchCtrl', ["$rootScope", "$modal", "PatientDAO", "BillingDAO", "$state", "Page", ClaimSearchCtrl]);
 })();
