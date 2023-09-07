@@ -230,7 +230,7 @@
                     Select a payor
                 </option>
             </select>
-            <span ng-if="manualClaim.claimId" class="text-danger pull-right" style="font-size: 16px; font-weight: 700;">Claim #{{manualClaim.claimId}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span ng-if="manualClaim.claimId" class="text-danger pull-right" style="font-size: 16px; font-weight: 700;">Claim #{{manualClaim.claimId}}{{manualClaim.isRejected?' - Rejected':''}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <span ng-if="!manualClaim.claimId" class="text-danger pull-right" style="font-size: 16px; font-weight: 700;">Claim Not Processed&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </div>
         <table cellspacing="0" class="width_100">

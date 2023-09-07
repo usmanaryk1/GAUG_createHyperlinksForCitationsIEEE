@@ -123,6 +123,7 @@
                 BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
                     $rootScope.unmaskLoading();
                     ctrl.claimId = res.id;
+                    ctrl.isRejected = res.isRejected;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
                     ctrl.calculateTotalCharges();
                     ctrl.unbindPatientCondition();
