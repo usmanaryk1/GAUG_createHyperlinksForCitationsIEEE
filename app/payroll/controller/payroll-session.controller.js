@@ -282,11 +282,12 @@
         };
 
         ctrl.initSessions = function () {
+            $rootScope.maskLoading();
             if ($state.params.id && $state.params.id !== '') {
                 ctrl.processdMode = true;
                 Page.setTitle("View Payroll Session");
                 ctrl.batchId = $state.params.id;
-                $rootScope.maskLoading();
+                
                 PayrollDAO.getProcessedSessions({id: ctrl.batchId}).then(function (res) {
                     ctrl.processedSessionObj = res;
                     ctrl.payrollSessions = res.payrollList;
