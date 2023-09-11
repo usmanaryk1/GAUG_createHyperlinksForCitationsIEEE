@@ -10,7 +10,9 @@ body {
 a {
 }
 
-
+.fa-umbrella:before {
+    margin: 0 0.2em 0 0.2em;
+}
 .green_bt{ background-color:#72a230; border:1px solid#72a230; margin-right:5px; width:120px !important;}
 .green_bt:hover{ background-color:#82b240; border:1px solid#5f8628;}
 
