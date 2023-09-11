@@ -188,6 +188,7 @@
                 ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 var claimCopy = angular.copy(ctrl.manualClaimObj);
+                ctrl.billingClaimObj.isRejected = false;    
                 //delete composite care type object
                 angular.forEach(claimCopy.serviceLines, function (serviceLine) {
                     delete serviceLine.selectedServiceCareType;
