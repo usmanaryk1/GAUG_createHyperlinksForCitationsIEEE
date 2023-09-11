@@ -19,7 +19,7 @@
                         </div>
                         
                         <div class="col-sm-4" ng-if="openReject.details.rejectionCodeValue==='Other'">
-                            <input class="form-control" name="rejectionCodeOtherValue" type="text" ng-model="addReferral.referral.rejectionCodeOtherValue" maxlength="255" required/>              
+                            <input class="form-control" name="rejectionCodeOtherValue" type="text" ng-model="openReject.details.rejectionCodeOtherValue" maxlength="255" required/>              
                             <div ng-messages="openReject.openRejectModal.rejectionCodeOtherValue.$error" ng-show='openReject.submitted
                                  && openReject.openRejectModal.rejectionCodeOtherValue.$invalid'>
                                 <span ng-message="required" class="validate-has-error">Please enter other reason.</span>
