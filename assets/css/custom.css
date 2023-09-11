@@ -376,3 +376,11 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 .collapsed .main-menu li:hover > ul {
     display: block !important;
 }
+.action-td {
+    width: 85px;
+    padding: 5px !important;
+}
+.action-btn {
+    min-width: 70px !important;
+    display: inline-block;
+}
