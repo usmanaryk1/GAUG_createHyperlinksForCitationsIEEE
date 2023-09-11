@@ -282,7 +282,6 @@
         };
 
         ctrl.initSessions = function () {
-            $rootScope.maskLoading();
             if ($state.params.id && $state.params.id !== '') {
                 ctrl.processdMode = true;
                 Page.setTitle("View Payroll Session");
@@ -317,8 +316,13 @@
                 }
             }).catch(function () {
                 console.log("Payroll settings cannot be retrieved.");
+            }).then(function(){
+                if (!$state.params.id || $state.params.id === '') {
+                    $rootScope.unmaskLoading();
+                }
             });
         };
+        $rootScope.maskLoading();
         EmployeeDAO.retrieveAll({subAction: 'all'}).then(function (res) {
             ctrl.employeeList = res;
             ctrl.empMap = {};
@@ -329,7 +333,7 @@
         }).catch(function (data, status) {
             console.log('Error in retrieving data')
         }).then(function () {
-            $rootScope.unmaskLoading();
+//            $rootScope.unmaskLoading();
         });
         ctrl.openDeleteModal = function (employee, modal_id, index)
         {

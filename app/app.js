@@ -92,7 +92,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
         delete_cookie("token");
         delete_cookie("un");
         $rootScope.stopIdle();
-        $state.transitionTo(ontimetest.defaultState);
+        window.location.hash = '#/app/login';
     };
 
 
