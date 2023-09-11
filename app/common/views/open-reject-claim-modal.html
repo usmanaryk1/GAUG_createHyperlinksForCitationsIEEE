@@ -1,18 +1,33 @@
-<form class="form-horizontal validate" role="form" name="openRejectModal" id="openRejectModal" >
+<form class="form-horizontal" role="form" name="openReject.openRejectModal" id="openRejectModal" novalidate>
     <div class="modal-header">		
         <h4 class="modal-title">{{openReject.mode}} Claim - {{openReject.details.claimId}}</h4>
     </div>
     <div class="modal-body">
         <div class="form-group" ng-if="openReject.claim.isRejected !== true">
             <label class="col-sm-2 control-label">Reason</label>
-            <div class="col-sm-10">
-                <select class="form-control" id="reason" name="reason"
-                        ng-model="openReject.details.rejectionCode" ng-options="code for code in openReject.codes" 
-                        data-validate="required" data-message-required="Please select reason." 
+                <div class="col-sm-5">
+                    
+                    <select class="form-control" id="reason" name="reason"
+                        ng-model="openReject.details.rejectionCodeValue" ng-options="code for code in openReject.codes" 
                         required="true">
                     <option value="">Select the reason</option>
+                    
                 </select>
-            </div>
+                    <div  ng-show='openReject.submitted && openReject.openRejectModal.reason.$error.required' ng-messages="openReject.openRejectModal.reason.$error">
+                                    <span ng-message="required" class="validate-has-error">Please select rejection code.</span>                            
+                                </div>
+                        </div>
+                        
+                        <div class="col-sm-4" ng-if="openReject.details.rejectionCodeValue==='Other'">
+                            <input class="form-control" name="rejectionCodeOtherValue" type="text" ng-model="addReferral.referral.rejectionCodeOtherValue" maxlength="255" required/>              
+                            <div ng-messages="openReject.openRejectModal.rejectionCodeOtherValue.$error" ng-show='openReject.submitted
+                                 && openReject.openRejectModal.rejectionCodeOtherValue.$invalid'>
+                                <span ng-message="required" class="validate-has-error">Please enter other reason.</span>
+                            </div>
+                        </div>
+                
+                
+                
         </div>
         <div class="form-group-separator" ng-if="openReject.claim.isRejected !== true"></div>
         <div class="form-group">
