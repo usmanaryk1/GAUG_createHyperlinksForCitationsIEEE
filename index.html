@@ -75,7 +75,8 @@
             </div>
 
         </script>
-        <div ng-cloak style="{{(paginationLoading==true && !maskLoadingRunning)?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
+        <div ng-cloak ng-show="{{(paginationLoading==true && !maskLoadingRunning)}}">
+        <div  style="display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;">
             <div style="width: 80px;
                 margin: 0 auto;
                 padding: 4px 10px;
@@ -86,6 +87,7 @@
                 border: 2px solid #ff9d00;
                 border-top: 0;
                 box-shadow: 0 0 10px rgba(0,0,0,0.5);">Loading</div>
+        </div>
         </div>
         <div id="mainDiv" class="page-container" ui-view></div>
         <!--        <div class="page-loading-overlay">
