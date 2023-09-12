@@ -995,27 +995,27 @@ angular.module('xenon.directives', []).
 
                     });
                     //changes to edit the date as currently editing the date is not working properly and we can not make it blank again.
-                    var dateWatch = scope.$watch("ngModel", function (value) {
-                        if (value != null && value.length >= 10) {
-                            $this.datepicker("setDate", new Date(value));
-//                            dateWatch();
-                        }
-                    });
+//                    scope.$watch("ngModel", function (value) {
+//                        if (value != null && value.length >= 10 && new Date(value).toString() !== "Invalid Date") {
+//                            $this.datepicker("setDate", new Date(value));
+////                            dateWatch();
+//                        }
+//                    });
                     $(el).blur(function (e) {
-                        if (new Date(scope.ngModel).toString() !== "Invalid Date") {
+                        if (scope.ngModel!==null && new Date(scope.ngModel).toString() !== "Invalid Date") {
                             var validDate = true;
-                            if (scope.maxDate && scope.maxDate < new Date(scope.ngModel)) {
+                            if (scope.maxDate && new Date(scope.maxDate) < new Date(scope.ngModel)) {
                                 validDate = false;
                             }
-                            if (scope.minDate && scope.minDate > new Date(scope.ngModel)) {
+                            if (scope.minDate && new Date(scope.minDate) > new Date(scope.ngModel)) {
                                 validDate = false;
                             }
                             if (validDate) {
                                 $this.datepicker("setDate", new Date(scope.ngModel));
-                            }else{
+                            } else {
                                 scope.ngModel = "";
                             }
-                        }else{
+                        } else {
                             scope.ngModel = "";
                         }
                     });
