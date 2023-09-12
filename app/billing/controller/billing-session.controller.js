@@ -121,6 +121,7 @@
             var payload = angular.copy(ctrl.billingSessions);
             angular.forEach(payload, function (billingObj) {
                 billingObj.patientBirthDate = $filter('date')(billingObj.patientBirthDate, $rootScope.dateFormat);
+                billingObj.isRejected = false
                 delete billingObj.uniqueId;
             });
             ctrl.reviewedFilters.processedOn = $filter('date')(new Date(), $rootScope.dateFormat);

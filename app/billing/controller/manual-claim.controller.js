@@ -231,6 +231,7 @@
                 }
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
+                ctrl.billingClaimObj.isRejected = false;
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
