@@ -994,15 +994,19 @@ angular.module('xenon.directives', []).
                         }
 
                     });
+                    var modelUpdated = false;
                     //changes to edit the date as currently editing the date is not working properly and we can not make it blank again.
-//                    scope.$watch("ngModel", function (value) {
-//                        if (value != null && value.length >= 10 && new Date(value).toString() !== "Invalid Date") {
-//                            $this.datepicker("setDate", new Date(value));
-////                            dateWatch();
-//                        }
-//                    });
+                    scope.$watch("ngModel", function (value) {
+                        if (!modelUpdated && value != null) {
+                            if (value.length >= 10 && new Date(value).toString() !== "Invalid Date") {
+                                $this.datepicker("setDate", new Date(value));
+//                            dateWatch();
+                            }
+                            modelUpdated = true;
+                        }
+                    });
                     $(el).blur(function (e) {
-                        if (scope.ngModel!==null && new Date(scope.ngModel).toString() !== "Invalid Date") {
+                        if (scope.ngModel !== null && new Date(scope.ngModel).toString() !== "Invalid Date") {
                             var validDate = true;
                             if (scope.maxDate && new Date(scope.maxDate) < new Date(scope.ngModel)) {
                                 validDate = false;
