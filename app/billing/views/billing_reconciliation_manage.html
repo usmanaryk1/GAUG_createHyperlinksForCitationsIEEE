@@ -366,6 +366,7 @@
                                            cellspacing="0" datatable-setup display-print="false">                                    
                                         <thead>
                                             <tr>
+                                                <th nowrap ng-hide="true"><span class="">Patient Name</span></th>
                                                 <th nowrap><span class=""></span></th>
                                                 <th nowrap><span class="">Billed Date</span></th>
                                                 <th nowrap><span class="">Patient Name</span></th>
@@ -379,6 +380,7 @@
                                         </thead>
                                         <tbody>
                                             <tr style="cursor: pointer" ng-repeat="claim in manageBillingReconciliation.selectedClaimsShow">
+                                                <td ng-hide="true">{{claim.patientName}}</td>
                                                 <td>
                                                     <input type="checkbox" ng-model="manageBillingReconciliation.selectedClaims[claim.id]" ng-change="manageBillingReconciliation.removedSelection(claim.id)">
                                                 </td>
@@ -497,6 +499,7 @@
                                        cellspacing="0" ng-if="manageBillingReconciliation.reconciliationDetails.length" datatable-setup display-print="false">                                    
                                     <thead>
                                         <tr>
+                                            <th nowrap ng-hide="true"><span class="">Patient Name</span></th>
                                             <th nowrap><span class="">Billed Date</span></th>
                                             <th nowrap><span class="">Patient Name</span></th>
                                             <th nowrap><span class="">DOB</span></th>
@@ -510,6 +513,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="claim in manageBillingReconciliation.reconciliationDetails">
+                                            <td ng-hide='true'>{{claim.patientName}}</td>
                                             <td>{{claim.billedDate}}</td>
                                             <td>{{claim.patientName}}</td>
                                             <td>{{claim.patientBirthDate}}</td>
