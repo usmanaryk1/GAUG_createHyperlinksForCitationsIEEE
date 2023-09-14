@@ -173,8 +173,8 @@
                                         </span>
                                         <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                     </td>
-                                    <td>
-                                        <div style="float:left; min-width:100px;">
+                                    <td class="action-td">
+                                        <div class="action-btn">
                                             <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=daily_attendance" tooltip="Edit"><span class="ed_b"></span></a> 
                                             <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                             <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
