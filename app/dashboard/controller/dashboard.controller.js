@@ -6,6 +6,7 @@
 //        $rootScope.isAdminPortal = false;
         var tasks = JSON.parse(localStorage.getItem("tasksArray"));
         ctrl.weatherIcons = {'clear-day': 'meteocons-sun', 'clear-night': 'meteocons-moon', 'rain': 'meteocons-rain', 'snow': 'meteocons-snow', 'sleet': 'meteocons-rain', 'wind': 'meteocons-wind', 'fog': 'meteocons-fog', 'cloudy': 'meteocons-cloud', 'partly-cloudy-day': 'meteocons-cloud-sun', 'partly-cloudy-night': 'meteocons-cloud-moon'}
+        ctrl.currentDate= $filter('date')(new Date(), $rootScope.dateFormat);
         if (tasks != null && tasks[$rootScope.currentUser.userName] != null) {
             //this flag is used to hide the flickering from normal checkbox to theme checkbox
             ctrl.inProgress = true;

@@ -30,17 +30,17 @@
         </a>
     </div>
     <div class="col-sm-3">
-
-        <div class="xe-widget xe-counter xe-counter-info"  data-count=".num" data-from="0" data-to="dashboard.dischargedPatientsCount" data-duration="5" data-easing="true" data-delay="1">
-            <div class="xe-icon">
-                <i><img alt="patient discharge" class="img-cirlce img-responsive" src="assets/images/dashboard/patient discharge.png"></i>
+        <a ng-href="{{serverPath}}dashboard/dischargedpatients/download?currentDate={{dashboard.currentDate}}&companyCode={{dashboard.companyCode}}">
+            <div class="xe-widget xe-counter xe-counter-info"  data-count=".num" data-from="0" data-to="dashboard.dischargedPatientsCount" data-duration="5" data-easing="true" data-delay="1">
+                <div class="xe-icon">
+                    <i><img alt="patient discharge" class="img-cirlce img-responsive" src="assets/images/dashboard/patient discharge.png"></i>
+                </div>
+                <div class="xe-label">
+                    <strong class="num">0</strong>
+                    <span>Discharged Patients</span>
+                </div>
             </div>
-            <div class="xe-label">
-                <strong class="num">0</strong>
-                <span>Discharged Patients</span>
-            </div>
-        </div>
-
+        </a>
     </div>
     <div class="col-sm-3">
         <a ng-href="#/app/patient-calendar/?lastPage=dashboard">
