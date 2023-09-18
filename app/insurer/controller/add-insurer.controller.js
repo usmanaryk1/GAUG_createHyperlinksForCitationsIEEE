@@ -6,6 +6,8 @@
         ctrl.fileObj = {};
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.unselecteModalOpen = false;
+        ctrl.insuranceCareTypeMap = {};
         ctrl.planTypes = [{label: "Medicaid", value: "mcd"}, {label: "Medicare", value: "mcr"}, {label: "Tricare Champus", value: "tc"}, {label: "ChampVA", value: "cva"}, {label: "Group Healthplan", value: "gh"}, {label: "Feca Black Lung", value: "fbl"}, {label: "Blue Cross", value: "bc"}, {label: "Blue Shield", value: "bs"}, {label: "Blue Cross/Blue Sheild (BCBS)", value: "bcb"}, {label: "Other", value: "oth"}];
         ctrl.initForm = function () {
             $("#add_inusrer_form input:text, #add_inusrer_form textarea").first().focus();
@@ -65,10 +67,11 @@
                     reqParam = 'update';
                     var length = ctrl.insurerObj.insuranceCareTypeCollection.length;
                     var finalCareTypeCollection = [];
-                    for (var i = 0; i < length; i++) {
-                        for (var j = 0; j < ctrl.selectedCareTypes.length; j++) {
-                            if (ctrl.selectedCareTypes[j] === ctrl.insurerObj.insuranceCareTypeCollection[i].companyCaretypeId.id) {
-                                finalCareTypeCollection.push(angular.copy(ctrl.insurerObj.insuranceCareTypeCollection[i]));
+                    for (var j = 0; j < ctrl.selectedCareTypes.length; j++) {
+                        //to get the latest one
+                        for (var i = length; i > 0; i--) {
+                            if (ctrl.selectedCareTypes[j] === ctrl.insurerObj.insuranceCareTypeCollection[i - 1].companyCaretypeId.id) {
+                                finalCareTypeCollection.push(angular.copy(ctrl.insurerObj.insuranceCareTypeCollection[i - 1]));
                                 break;
                             }
                         }
@@ -136,7 +139,10 @@
                         ctrl.insurerObj.insuranceCareTypeCollection = [];
                     } else {
                         angular.forEach(ctrl.insurerObj.insuranceCareTypeCollection, function (obj) {
-                            ctrl.selectedCareTypes.push(obj.companyCaretypeId.id);
+                            if (ctrl.selectedCareTypes.indexOf(Number(obj.companyCaretypeId.id))) {
+                                ctrl.selectedCareTypes.push(Number(obj.companyCaretypeId.id));
+                            }
+                            ctrl.insuranceCareTypeMap[obj.companyCaretypeId.id] = obj;
                         });
                     }
                     ctrl.retrivalRunning = false;
@@ -157,36 +163,107 @@
         }
 
 // Open Simple Modal
-        ctrl.openModal = function (modal_id, modal_size, modal_backdrop)
+        ctrl.openModal = function (modal_id, modal_size, modal_backdrop, selection)
         {
-            ctrl.selecteModalOpen = true;
+            //use the same pop up modal based on selection true/false
             $rootScope.careTypeModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.careTypeModel.careTypeObj = {};
-            $rootScope.careTypeModel.careTypeObj.unit = "unit";
+            //to not open the popup for changes done in this modals
+            if (selection) {
+                ctrl.selecteModalOpen = true;
+                $rootScope.careTypeModel.title = ctrl.careTypeIdMap[ctrl.newSelectedType].careTypeTitle;
+            } else {
+                //for remove button in unselection
+                $rootScope.careTypeModel.showRemove = true;
+                ctrl.unselecteModalOpen = true;
+                $rootScope.careTypeModel.title = ctrl.careTypeIdMap[ctrl.newDeselectedType[0]].careTypeTitle;
+            }
+            //initialize or copy the careTypeObj
+            if (selection) {
+                $rootScope.careTypeModel.careTypeObj = {};
+                $rootScope.careTypeModel.careTypeObj.unit = "unit";
+            } else {
+                $rootScope.careTypeModel.careTypeObj = angular.copy(ctrl.insuranceCareTypeMap[ctrl.newDeselectedType[0]]);
+                if ($rootScope.careTypeModel.careTypeObj.modifiers != null) {
+                    $rootScope.careTypeModel.careTypeObj.modifiers = JSON.parse($rootScope.careTypeModel.careTypeObj.modifiers);
+                }
+            }
+            //to make the radio buttons selected, theme bug
             setTimeout(function () {
                 cbr_replace();
             }, 100);
             $rootScope.careTypeModel.save = function () {
                 $timeout(function () {
                     if ($('#care_type_form')[0].checkValidity()) {
-                        $rootScope.careTypeModel.dismiss();
-                        $rootScope.careTypeModel.careTypeObj.companyCaretypeId = ctrl.careTypeIdMap[ctrl.newSelectedType];
-                        ctrl.insurerObj.insuranceCareTypeCollection.push($rootScope.careTypeModel.careTypeObj);
                         if ($rootScope.careTypeModel.careTypeObj.modifiers != null) {
                             $rootScope.careTypeModel.careTypeObj.modifiers = JSON.stringify($rootScope.careTypeModel.careTypeObj.modifiers);
                         }
+                        if (selection) {
+                            $rootScope.careTypeModel.careTypeObj.companyCaretypeId = ctrl.careTypeIdMap[ctrl.newSelectedType];
+                            ctrl.insuranceCareTypeMap[ctrl.newSelectedType] = $rootScope.careTypeModel.careTypeObj;
+                            var pushed = false;
+                            //to not make a new entry if it is selected again(exists in a list.)
+                            for (var i = 0; i < ctrl.insurerObj.insuranceCareTypeCollection.length; i++) {
+                                if (ctrl.insurerObj.insuranceCareTypeCollection[i].companyCaretypeId.id === Number(ctrl.newSelectedType)) {
+                                    pushed = true;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].rate = $rootScope.careTypeModel.careTypeObj.rate;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].unit = $rootScope.careTypeModel.careTypeObj.unit;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].modifiers = $rootScope.careTypeModel.careTypeObj.modifiers;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].billingCode = $rootScope.careTypeModel.careTypeObj.billingCode;
+                                }
+                            }
+                            if (!pushed) {
+                                ctrl.insurerObj.insuranceCareTypeCollection.push($rootScope.careTypeModel.careTypeObj);
+                            }
+                        } else {
+                            //for edit part
+                            ctrl.insuranceCareTypeMap[Number(ctrl.newDeselectedType[0])] = $rootScope.careTypeModel.careTypeObj;
+                            for (var i = 0; i < ctrl.insurerObj.insuranceCareTypeCollection.length; i++) {
+                                if (ctrl.insurerObj.insuranceCareTypeCollection[i].companyCaretypeId.id === Number(ctrl.newDeselectedType[0])) {
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].rate = $rootScope.careTypeModel.careTypeObj.rate;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].unit = $rootScope.careTypeModel.careTypeObj.unit;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].modifiers = $rootScope.careTypeModel.careTypeObj.modifiers;
+                                    ctrl.insurerObj.insuranceCareTypeCollection[i].billingCode = $rootScope.careTypeModel.careTypeObj.billingCode;
+                                }
+                            }
+                            ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
+                        }
+
                     }
-                    ctrl.selecteModalOpen = false;
+                    $rootScope.careTypeModel.dismiss();
+                    if (selection) {
+                        //make this false when selection process should end casually.
+                        ctrl.selecteModalOpen = false;
+                    } else {
+                        $timeout(function () {
+                            $("#multi-select").multiSelect('refresh');
+                        });
+                    }
+                });
+            };
+
+            $rootScope.careTypeModel.remove = function () {
+                $timeout(function () {
+                    //make this false when unselection process should end casually.
+                    ctrl.unselecteModalOpen = false;
+                    $rootScope.careTypeModel.dismiss();
                 });
             };
 
             $rootScope.careTypeModel.cancel = function () {
-                ctrl.selectedCareTypes.splice(ctrl.selectedCareTypes.indexOf(ctrl.newSelectedType), 1);
+                //reverse the action.
+                if (selection) {
+                    ctrl.selectedCareTypes.splice(ctrl.selectedCareTypes.indexOf(ctrl.newSelectedType), 1);
+                } else {
+                    if ($rootScope.careTypeModel.careTypeObj.modifiers != null) {
+                        $rootScope.careTypeModel.careTypeObj.modifiers = JSON.stringify($rootScope.careTypeModel.careTypeObj.modifiers);
+                    }
+                    ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
+                }
                 $timeout(function () {
                     $("#multi-select").multiSelect('refresh');
                 });
@@ -195,32 +272,6 @@
 
         };
 
-        ctrl.openUnselectCareTypeModal = function (modal_id, modal_size, modal_backdrop)
-        {
-            ctrl.unselecteModalOpen = true;
-            $rootScope.unselectCareTypeModal = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-            $rootScope.unselectCareTypeModal.careTypeIdMap = ctrl.careTypeIdMap;
-            $rootScope.unselectCareTypeModal.confirm = function () {
-                $timeout(function () {
-                    ctrl.unselecteModalOpen = false;
-                    $rootScope.unselectCareTypeModal.dismiss();
-                });
-            };
-
-            $rootScope.unselectCareTypeModal.cancelDelete = function () {
-                ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
-                $timeout(function () {
-                    $("#multi-select").multiSelect('refresh');
-                });
-                $rootScope.unselectCareTypeModal.close();
-            };
-
-        };
         ctrl.pageInitCall();
 
         $scope.$watch(function () {
@@ -231,20 +282,19 @@
             });
             if (ctrl.displayCareTypeModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
                 if (!ctrl.unselecteModalOpen) {
-                    ctrl.openModal('modal-5', 'md', 'static');
                     if (oldValue == null) {
                         ctrl.newSelectedType = newValue;
                     } else {
                         ctrl.newSelectedType = arr_diff(newValue, oldValue);
                     }
+                    ctrl.openModal('modal-5', 'md', 'static', true);
                 } else {
                     ctrl.unselecteModalOpen = false;
                 }
             } else if (oldValue !== null && newValue.length < oldValue.length) {
                 if (!ctrl.selecteModalOpen) {
                     ctrl.newDeselectedType = arr_diff(oldValue, newValue);
-                    ctrl.openUnselectCareTypeModal('modal-3', 'md', 'static');
-                    $rootScope.unselectCareTypeModal.newDeselectedType = ctrl.newDeselectedType;
+                    ctrl.openModal('modal-5', 'md', 'static', false);
                 } else {
                     ctrl.selecteModalOpen = false;
                 }
