@@ -206,7 +206,7 @@
                                                     <a ng-if="hasAccess('VIEW_PATIENT_TASKS')" class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
-                                            <td><div ng-if="timesheet.isManualPunch === true">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}/div>
+                                            <td><div ng-if="timesheet.isManualPunch === true">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
                                                 <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + patTimesheet.companyCode + '/' + timesheet.signature}}"></td>
                                         </tr>
                                     </tbody>
