@@ -293,7 +293,8 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="holidayRateModal.cancel();">Close</button>
-    <button type="submit" class="btn btn-info" ng-click="holidayRateModal.save();">Save</button>
+    <button type="button" class="btn btn-red" ng-show="holidayRateModal.showRemove" ng-click="holidayRateModal.remove();">Remove</button>
+    <button type="submit" class="btn btn-success" ng-click="holidayRateModal.save();">Save</button>
     </div>
     </form>
 </script>

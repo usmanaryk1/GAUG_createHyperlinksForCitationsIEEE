@@ -257,7 +257,13 @@
             $rootScope.careTypeModel.cancel = function () {
                 //reverse the action.
                 if (selection) {
-                    ctrl.selectedCareTypes.splice(ctrl.selectedCareTypes.indexOf(ctrl.newSelectedType), 1);
+                    var careTypes = [];
+                    for (var i = 0; i < ctrl.selectedCareTypes.length; i++) {
+                        if (ctrl.selectedCareTypes[i].toString() !== ctrl.newSelectedType.toString()) {
+                            careTypes.push(ctrl.selectedCareTypes[i]);
+                        }
+                    }
+                    ctrl.selectedCareTypes = careTypes;
                 } else {
                     if ($rootScope.careTypeModel.careTypeObj.modifiers != null) {
                         $rootScope.careTypeModel.careTypeObj.modifiers = JSON.stringify($rootScope.careTypeModel.careTypeObj.modifiers);
@@ -266,8 +272,8 @@
                 }
                 $timeout(function () {
                     $("#multi-select").multiSelect('refresh');
+                    $rootScope.careTypeModel.close();
                 });
-                $rootScope.careTypeModel.close();
             };
 
         };
