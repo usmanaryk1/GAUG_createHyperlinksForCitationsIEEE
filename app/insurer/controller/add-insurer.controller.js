@@ -232,9 +232,8 @@
                             }
                             ctrl.selectedCareTypes.push(Number(ctrl.newDeselectedType[0]));
                         }
-
+                        $rootScope.careTypeModel.dismiss();
                     }
-                    $rootScope.careTypeModel.dismiss();
                     if (selection) {
                         //make this false when selection process should end casually.
                         ctrl.selecteModalOpen = false;

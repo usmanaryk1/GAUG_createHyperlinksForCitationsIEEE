@@ -1,8 +1,8 @@
-(function() {
-    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO, Page) {
+(function () {
+    function AddPatientCtrl($formService, $state, PatientDAO, $timeout, $scope, $rootScope, CareTypeDAO, EmployeeDAO, InsurerDAO, Page, $modal) {
         var ctrl = this;
         ctrl.currentDate = new Date();
-        ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear()+1900) - 10);
+        ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
@@ -11,8 +11,12 @@
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
-        ctrl.refreshLanguages = function() {
-            $timeout(function() {
+        ctrl.careTypes = [];
+        ctrl.patientCareTypeMap = {};
+        ctrl.careTypeIdMap = {};
+        ctrl.unselecteModalOpen = false;
+        ctrl.refreshLanguages = function () {
+            $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.patient.otherLanguages);
             });
         };
@@ -32,19 +36,19 @@
             $state.transitionTo(ontimetest.defaultState);
         }
         var form_data;
-        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function (res) {
             ctrl.nursingCareList = res;
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function (res) {
             ctrl.staffCoordinatorList = res;
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");
         });
-        InsurerDAO.retrieveAll().then(function(res) {
+        InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
         //funcions
@@ -58,7 +62,7 @@
         ctrl.navigateToTab = navigateToTab;
         ctrl.setBillingAddress = setBillingAddress;
         ctrl.setBillingAddressRadioButton = setBillingAddressRadioButton;
-        ctrl.resetPatient = function() {
+        ctrl.resetPatient = function () {
             if (ctrl.patient.authorization != null) {
                 ctrl.patient.authorization = null;
             }
@@ -66,10 +70,10 @@
                 ctrl.fileObj.flowObj.cancel();
             }
         };
-        ctrl.setFromNext = function(tab) {
+        ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
-        ctrl.isValidAutorization = function(formValidity) {
+        ctrl.isValidAutorization = function (formValidity) {
             var validAuthorization = true;
             if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && formValidity) {
                 ctrl.fileObj.errorMsg = "Please upload Authorization Document.";
@@ -115,7 +119,7 @@
 //                    patientToSave.authorizationEndDate = new Date(patientToSave.authorizationEndDate);
 //                }
                 patientToSave.languagesSpoken = [];
-                angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                angular.forEach(ctrl.languagesKeyValue, function (obj) {
                     if (obj.value == true) {
                         patientToSave.languagesSpoken.push(obj.key);
                     }
@@ -125,13 +129,21 @@
                 var reqParam;
                 if (ctrl.patient.id && ctrl.patient.id !== null) {
                     reqParam = 'update';
-                    delete patientToSave.careTypes;
-                    if (ctrl.patient.careTypes && ctrl.patient.careTypes !== null) {
-                        patientToSave.patientCareTypeCollection = [];
-                        for (var i = 0; i < ctrl.patient.careTypes.length; i++) {
-                            var patientCareType = {'insuranceCareTypeId': {'id': Number(ctrl.patient.careTypes[i])}};
-                            patientToSave.patientCareTypeCollection.push(patientCareType);
+                    if (ctrl.careTypes && ctrl.careTypes !== null) {
+                        var finalCareTypeCollection = [];
+                        if (!ctrl.patient.patientCareTypeCollection) {
+                            ctrl.patient.patientCareTypeCollection = [];
                         }
+                        patientToSave.patientCareTypeCollection = [];
+                        for (var j = 0; j < ctrl.careTypes.length; j++) {
+                            for (var i = ctrl.patient.patientCareTypeCollection.length; i > 0; i--) {
+                                if (ctrl.careTypes[j] === ctrl.patient.patientCareTypeCollection[i - 1].insuranceCareTypeId.id) {
+                                    finalCareTypeCollection.push(angular.copy(ctrl.patient.patientCareTypeCollection[i - 1]));
+                                    break;
+                                }
+                            }
+                        }
+                        patientToSave.patientCareTypeCollection = finalCareTypeCollection;
                     }
                 } else {
                     ctrl.patient.orgCode = ontimetest.company_code;
@@ -141,7 +153,7 @@
                 $rootScope.maskLoading();
                 console.log(patientToSave);
                 PatientDAO.update({action: reqParam, data: patientToSave})
-                        .then(function(res) {
+                        .then(function (res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
 
@@ -153,21 +165,19 @@
                             }
                             ctrl.patient = res;
                             if (res.patientCareTypeCollection) {
-                                var careTypesSelected = [];
                                 var length = res.patientCareTypeCollection.length;
                                 for (var i = 0; i < length; i++) {
-                                    careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
+                                    ctrl.patientCareTypeMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id] = res.patientCareTypeCollection[i];
                                 }
-                                ctrl.patient.careTypes = careTypesSelected;
                             }
-                            delete ctrl.patient.patientCareTypeCollection;
+//                            delete ctrl.patient.patientCareTypeCollection;
                             toastr.success("Patient saved.");
                         })
-                        .catch(function() {
+                        .catch(function () {
                             //exception logic
                             toastr.error("Patient cannot be saved.");
                             console.log('Patient Object : ' + JSON.stringify(patientToSave));
-                        }).then(function() {
+                        }).then(function () {
                     $rootScope.unmaskLoading();
                 });
 
@@ -178,11 +188,11 @@
         function pageInit() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
-                PatientDAO.get({id: $state.params.id}).then(function(res) {
+                PatientDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.patient = res;
                     if (res.languagesSpoken != null) {
                         var languages = res.languagesSpoken;
-                        angular.forEach(ctrl.languagesKeyValue, function(obj) {
+                        angular.forEach(ctrl.languagesKeyValue, function (obj) {
                             if (languages.indexOf(obj.key) >= 0) {
                                 obj.value = true;
                             }
@@ -196,25 +206,26 @@
                         var careTypesSelected = [];
                         var length = res.patientCareTypeCollection.length;
                         for (var i = 0; i < length; i++) {
+                            ctrl.patientCareTypeMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id] = res.patientCareTypeCollection[i];
                             careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
                         }
-                        ctrl.patient.careTypes = careTypesSelected;
-                        delete ctrl.patient.patientCareTypeCollection;
+                        ctrl.careTypes = careTypesSelected;
+//                        delete ctrl.patient.patientCareTypeCollection;
                         console.log(JSON.stringify(ctrl.patient))
                     }
                     ctrl.retrivalRunning = false;
-                }).catch(function(data, status) {
+                }).catch(function (data, status) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
-                        finish: function() {
+                        finish: function () {
                         }
                     }); // showLoadingBar
                     ctrl.patient = ontimetest.patients[($state.params.id - 1)];
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.patient));
                     toastr.error("Failed to retrieve patient");
-                }).then(function() {
+                }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             } else {
@@ -232,7 +243,7 @@
             } else {
                 ctrl.editMode = true;
             }
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
                     if (!ctrl.patient.gender) {
@@ -248,7 +259,7 @@
         function tab2DataInit() {
             ctrl.formDirty = false;
             $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     googleMapFunctions(ctrl.patient.locationLatitude, ctrl.patient.locationLongitude);
                     form_data = $('#add_patient_form').serialize();
@@ -261,7 +272,7 @@
         function tab3DataInit() {
             ctrl.formDirty = false;
             $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     //to select gender radio by default in angular. It was having issue due to cbr theme.
                     if (!ctrl.patient.isSubscriber && ctrl.patient.isSubscriber !== false) {
@@ -279,16 +290,19 @@
         function tab4DataInit() {
             ctrl.formDirty = false;
             $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (ctrl.patient.insuranceProviderId && ctrl.patient.insuranceProviderId !== null) {
-                        CareTypeDAO.retrieveForInsurer({insurer_id: ctrl.patient.insuranceProviderId}).then(function(res) {
+                        CareTypeDAO.retrieveForInsurer({insurer_id: ctrl.patient.insuranceProviderId}).then(function (res) {
                             ctrl.careTypeList = res;
-                            $timeout(function() {
+                            angular.forEach(ctrl.careTypeList, function (careType) {
+                                ctrl.careTypeIdMap[careType.id] = careType;
+                            })
+                            $timeout(function () {
                                 $('#CareTypes').multiSelect('refresh');
                                 form_data = $('#add_patient_form').serialize();
                             }, 400);
-                        }).catch(function() {
+                        }).catch(function () {
                             toastr.error("Failed to retrieve care types.");
                             form_data = $('#add_patient_form').serialize();
                         });
@@ -304,7 +318,7 @@
         function tab5DataInit() {
             ctrl.formDirty = false;
             $("#add_patient_form input:text, #add_patient_form textarea, #add_patient_form select").first().focus();
-            $timeout(function() {
+            $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     if (!ctrl.patient.subscriberInfo || ctrl.patient.subscriberInfo === null
                             || ctrl.patient.subscriberInfo.length === 0) {
@@ -390,9 +404,147 @@
         }
 
         ctrl.pageInitCall();
+
+        function arr_diff(a1, a2)
+        {
+            var a = [], diff = [];
+            for (var i = 0; i < a1.length; i++)
+                a[a1[i]] = true;
+            for (var i = 0; i < a2.length; i++)
+                if (a[a2[i]])
+                    delete a[a2[i]];
+                else
+                    a[a2[i]] = true;
+            for (var k in a)
+                diff.push(k);
+            return diff;
+        }
+
+        // Open Simple Modal
+        ctrl.openModal = function (modal_id, modal_size, modal_backdrop, selection)
+        {
+            //use the same pop up modal based on selection true/false
+            $rootScope.careTypeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            //to not open the popup for changes done in this modals
+            if (selection) {
+                ctrl.selecteModalOpen = true;
+                $rootScope.careTypeModel.title = ctrl.careTypeIdMap[ctrl.newSelectedType].companyCaretypeId.careTypeTitle;
+            } else {
+                //for remove button in unselection
+                $rootScope.careTypeModel.showRemove = true;
+                ctrl.unselecteModalOpen = true;
+                $rootScope.careTypeModel.title = ctrl.careTypeIdMap[ctrl.newDeselectedType[0]].companyCaretypeId.careTypeTitle;
+            }
+            //initialize or copy the careTypeObj
+            if (selection) {
+                $rootScope.careTypeModel.careTypeObj = {};
+            } else {
+                $rootScope.careTypeModel.careTypeObj = angular.copy(ctrl.patientCareTypeMap[ctrl.newDeselectedType[0]]);
+            }
+            $rootScope.careTypeModel.save = function () {
+                $timeout(function () {
+                    if ($('#care_type_form')[0].checkValidity()) {
+                        if (selection) {
+                            $rootScope.careTypeModel.careTypeObj.insuranceCareTypeId = ctrl.careTypeIdMap[ctrl.newSelectedType];
+                            ctrl.patientCareTypeMap[ctrl.newSelectedType] = $rootScope.careTypeModel.careTypeObj;
+                            var pushed = false;
+                            //to not make a new entry if it is selected again(exists in a list.)
+                            for (var i = 0; i < ctrl.patient.patientCareTypeCollection.length; i++) {
+                                if (ctrl.patient.patientCareTypeCollection[i].insuranceCareTypeId.id === Number(ctrl.newSelectedType)) {
+                                    pushed = true;
+                                    ctrl.patient.patientCareTypeCollection[i].authorizedHours = $rootScope.careTypeModel.careTypeObj.authorizedHours;
+                                }
+                            }
+                            if (!pushed) {
+                                ctrl.patient.patientCareTypeCollection.push($rootScope.careTypeModel.careTypeObj);
+                            }
+                        } else {
+                            //for edit part
+                            ctrl.patientCareTypeMap[Number(ctrl.newDeselectedType[0])] = $rootScope.careTypeModel.careTypeObj;
+                            for (var i = 0; i < ctrl.patient.patientCareTypeCollection.length; i++) {
+                                if (ctrl.patient.patientCareTypeCollection[i].insuranceCareTypeId.id === Number(ctrl.newDeselectedType[0])) {
+                                    ctrl.patient.patientCareTypeCollection[i].authorizedHours = $rootScope.careTypeModel.careTypeObj.authorizedHours;
+                                }
+                            }
+                            ctrl.careTypes.push(Number(ctrl.newDeselectedType[0]));
+                        }
+                        $rootScope.careTypeModel.dismiss();
+                    }
+                    if (selection) {
+                        //make this false when selection process should end casually.
+                        ctrl.selecteModalOpen = false;
+                    } else {
+                        $timeout(function () {
+                            $("#CareTypes").multiSelect('refresh');
+                        });
+                    }
+                });
+            };
+
+            $rootScope.careTypeModel.remove = function () {
+                $timeout(function () {
+                    //make this false when unselection process should end casually.
+                    ctrl.unselecteModalOpen = false;
+                    $rootScope.careTypeModel.dismiss();
+                });
+            };
+
+            $rootScope.careTypeModel.cancel = function () {
+                //reverse the action.
+                if (selection) {
+                    var careTypes = [];
+                    for (var i = 0; i < ctrl.careTypes.length; i++) {
+                        if (ctrl.careTypes[i].toString() !== ctrl.newSelectedType.toString()) {
+                            careTypes.push(ctrl.careTypes[i]);
+                        }
+                    }
+                    ctrl.careTypes = careTypes;
+                } else {
+                    ctrl.careTypes.push(Number(ctrl.newDeselectedType[0]));
+                }
+                $timeout(function () {
+                    $("#CareTypes").multiSelect('refresh');
+                    $rootScope.careTypeModel.close();
+                });
+            };
+
+        };
+
+        $scope.$watch(function () {
+            return ctrl.careTypes;
+        }, function (newValue, oldValue) {
+            $timeout(function () {
+                $("#CareTypes").multiSelect('refresh');
+            });
+            if (ctrl.displayCareTypeModal && newValue != null && (oldValue == null || newValue.length > oldValue.length)) {
+                if (!ctrl.unselecteModalOpen) {
+                    if (oldValue == null) {
+                        ctrl.newSelectedType = newValue;
+                    } else {
+                        ctrl.newSelectedType = arr_diff(newValue, oldValue);
+                    }
+                    ctrl.openModal('modal-5', 'md', 'static', true);
+                } else {
+                    ctrl.unselecteModalOpen = false;
+                }
+            } else if (oldValue !== null && newValue.length < oldValue.length) {
+                if (!ctrl.selecteModalOpen) {
+                    ctrl.newDeselectedType = arr_diff(oldValue, newValue);
+                    ctrl.openModal('modal-5', 'md', 'static', false);
+                } else {
+                    ctrl.selecteModalOpen = false;
+                }
+            }
+        }, true);
+
         function googleMapFunctions(latitude, longitude) {
 
-            loadGoogleMaps(3).done(function()
+            loadGoogleMaps(3).done(function ()
             {
 
                 var map;
@@ -451,14 +603,14 @@
 //                        animation: google.maps.Animation.DROP
                     });
 
-                    google.maps.event.addListener(marker, 'drag', function(event) {
+                    google.maps.event.addListener(marker, 'drag', function (event) {
                         $('#GPSLocation').val(event.latLng);
                         $('#GPSLocation').blur();
                         ctrl.patient.locationLatitude = event.latLng.lat();
                         ctrl.patient.locationLongitude = event.latLng.lng();
                     });
 
-                    google.maps.event.addListener(marker, 'dragend', function(event) {
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
                         $('#GPSLocation').val(event.latLng);
                         $('#GPSLocation').blur();
                         ctrl.patient.locationLatitude = event.latLng.lat();
@@ -473,7 +625,7 @@
                 }
 
                 initialize();
-                $("#address-search").click(function(ev)
+                $("#address-search").click(function (ev)
                 {
                     ev.preventDefault();
 
@@ -484,7 +636,7 @@
 
                     if (address.length != 0)
                     {
-                        geocoder.geocode({'address': address}, function(results, status)
+                        geocoder.geocode({'address': address}, function (results, status)
                         {
                             // $inp.prev().find('i').removeClass('fa-spinner fa-spin');
 
@@ -522,13 +674,13 @@
             }
         };
         //When file is selected from browser file picker
-        ctrl.fileSelected = function(file, flow) {
+        ctrl.fileSelected = function (file, flow) {
             ctrl.fileObj.flowObj = flow;
             ctrl.fileObj.selectedFile = file;
             ctrl.fileObj.flowObj.upload();
         };
         //When file is uploaded this method will be called.
-        ctrl.fileUploaded = function(response, file, flow) {
+        ctrl.fileUploaded = function (response, file, flow) {
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
@@ -538,7 +690,7 @@
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
         };
-        ctrl.fileError = function($file, $message, $flow) {
+        ctrl.fileError = function ($file, $message, $flow) {
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableUploadButton = false;
@@ -548,7 +700,7 @@
             ctrl.fileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
-        ctrl.fileAdded = function(file, flow) { //It will allow all types of attachments'
+        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
             ctrl.formDirty = true;
             ctrl.patient.authorization = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
@@ -568,5 +720,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", AddPatientCtrl]);
+    angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
 })();
