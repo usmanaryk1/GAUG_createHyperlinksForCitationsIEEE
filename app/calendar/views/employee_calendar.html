@@ -113,10 +113,15 @@
 
             </div>
             <div class="row">
-                <div class="col-md-4" ng-if='calendar.isEmployeeSearchPage'>
+                <div class="col-md-2" ng-if='calendar.isEmployeeSearchPage'>
                     <label>Distance in Miles</label>
                     <input class="form-control" placeholder="Distance" name="Distance" type="text" maxlength="20" 
                            ng-model="calendar.searchParams.distance" numbers-only negativeallowed="false" decimalallowed="true" ng-blur="calendar.distanceChanged()"/>
+                </div>
+                <div class="col-md-2" ng-if='calendar.isEmployeeSearchPage'>
+                    <label>Available Time</label>
+                    <input class="form-control" placeholder="Available Time" name="AvailableTime" type="text" maxlength="20" 
+                           ng-model="calendar.searchParams.availableTime" numbers-only negativeallowed="false" decimalallowed="true" ng-blur="calendar.availableTimeChanged()"/>
                 </div>
                 <div class="col-md-4" ng-if='!calendar.isEmployeeSearchPage'>
                     <label>Employees</label>

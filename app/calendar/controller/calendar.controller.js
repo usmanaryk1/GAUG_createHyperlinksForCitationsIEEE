@@ -1187,6 +1187,16 @@
                 markers = [];
             }
 
+            ctrl.availableTimeChanged = function () {
+                if (ctrl.searchParams.availableTime) {
+                    ctrl.searchParams.availableStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                    ctrl.searchParams.availableEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+                } else {
+                    delete ctrl.searchParams.availableStartDate;
+                    delete ctrl.searchParams.availableEndDate;
+                }
+            };
+
             ctrl.patientChanged = function (patient) {
                 ctrl.selectedPatient = patient;
                 ctrl.searchParams.patientId = patient.id;
