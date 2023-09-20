@@ -503,6 +503,32 @@
             ctrl.attendanceObj.employeeId = null;
             $("#sboxit-2").select2("val", null);
         };
+        ctrl.onCareTypeChange = function () {
+            if (ctrl.attendanceObj.careTypeId && ctrl.attendanceObj.isManualPunch) {
+                $rootScope.maskLoading();
+                EmployeeDAO.retrieveByPosition({careTypeId: ctrl.attendanceObj.careTypeId}).then(function (res) {
+                    ctrl.employeeList = res;
+                    var employeeExists = false;
+                    for (var i = 0; i < res.length; i++) {
+                        if (res[i].id === ctrl.attendanceObj.employeeId) {
+                            employeeExists = true;
+                        }
+                    }
+                    if (!employeeExists) {
+                        ctrl.attendanceObj.employeeId = null;
+                        $("#sboxit-2").select2("val", null);
+                        ctrl.taskList = [];
+                        $timeout(function () {
+                            $('#tasks').multiSelect('refresh');
+                        }, 100);
+                    }
+                }).catch(function (data, status) {
+//                ctrl.employeeList = ontime_data.employees;
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }
+        }
         ctrl.retrieveWorkSites = function () {
             WorksiteDAO.retreveWorksiteNames().then(function (res) {
                 ctrl.workSiteList = res;

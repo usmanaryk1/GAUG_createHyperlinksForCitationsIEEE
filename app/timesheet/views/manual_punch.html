@@ -126,7 +126,8 @@
                                 <label class="col-sm-3 control-label">Care Type</label>
 
                                 <div class="col-sm-9">
-                                    <select class="form-control" id="care" name="care" ng-model="manualPunch.attendanceObj.careTypeId" ng-options="care.id as care.careTypeTitle for care in manualPunch.careTypes" data-validate="required" data-message-required="Please select care type.">
+                                    <select class="form-control" id="care" name="care" ng-model="manualPunch.attendanceObj.careTypeId" ng-options="care.id as care.careTypeTitle for care in manualPunch.careTypes" 
+                                            data-validate="required" data-message-required="Please select care type." ng-change="manualPunch.onCareTypeChange()">
                                         <option value="">Select the care type</option>
                                     </select>
                                 </div>
@@ -157,7 +158,12 @@
 
                                     });
                                 </script>
-                                <select ng-show="manualPunch.attendanceObj.isManualPunch" ng-change="manualPunch.retrieveEmployee(true)" class="form-control" id="sboxit-2" name="EmployeeName" ng-model="manualPunch.attendanceObj.employeeId" ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList track by emp.id">
+                                <select ng-disabled="!manualPunch.attendanceObj.isWorksitePunch && manualPunch.attendanceObj.careTypeId==null"
+                                        ng-show="manualPunch.attendanceObj.isManualPunch" 
+                                        ng-change="manualPunch.retrieveEmployee(true)" 
+                                        class="form-control" id="sboxit-2" name="EmployeeName" 
+                                        ng-model="manualPunch.attendanceObj.employeeId" 
+                                        ng-options="emp.id as (emp.label) for emp in manualPunch.employeeList track by emp.id">
                                     <option value="" selected hidden />
                                 </select>
 
