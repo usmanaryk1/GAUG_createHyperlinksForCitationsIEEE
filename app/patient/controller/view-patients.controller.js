@@ -19,7 +19,7 @@
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
 
-        EmployeeDAO.retrieveByPosition({'position': 'nc'}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
@@ -28,7 +28,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': 'a'}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;

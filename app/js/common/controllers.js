@@ -77,15 +77,15 @@ angular.module('xenon.controllers', []).
             };
             $rootScope.payrollRates = [{key: 'R1', value: "Rate 1"}, {key: 'R2', value: "Rate 2"}];
 //            $rootScope.states = ['UT', 'TX', 'NY'];
-            $rootScope.positions = {
-                'pc': 'Personal Care',
-                'nc': 'Nursing Care',
-                'pt': 'PT',
-                'ot': 'OT',
-                'nut': 'NUT',
-                'a': 'Admin',
-                'mr': 'Market Rep.'
-            };
+//            $rootScope.positions = {
+//                'pc': 'Personal Care',
+//                'nc': 'Nursing Care',
+//                'pt': 'PT',
+//                'ot': 'OT',
+//                'nut': 'NUT',
+//                'a': 'Admin',
+//                'mr': 'Market Rep.'
+//            };
             $rootScope.states = [
                 {name: 'AL - ALABAMA', abbreviation: 'AL'},
                 {name: 'AK - ALASKA', abbreviation: 'AK'},

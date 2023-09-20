@@ -1,5 +1,5 @@
 (function () {
-    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, $location, Page) {
+    function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, PositionDAO, Page) {
         var ctrl = this;
         Page.setTitle("Employee Timesheet");
         ctrl.companyCode = ontimetest.company_code;
@@ -8,6 +8,14 @@
         ctrl.employeeIdMap = {};
         ctrl.employeeList = [];
 
+        $rootScope.positions = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    $rootScope.positions[position.id] = position.position;
+                });
+            }
+        });
         //method is called when page is changed
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -233,5 +241,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", "$location", "Page", EmployeeTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('EmployeeTimeSheetCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$timeout", "PositionDAO", "Page", EmployeeTimeSheetCtrl]);
 })();

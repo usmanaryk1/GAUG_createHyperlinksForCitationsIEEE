@@ -30,7 +30,7 @@ ontimedata = {
             careCordinatorContact: '(130) 400-8000',
             insuranceProvider: 'National Insurance.',
             insuranceId: '1223343',
-            status:'d',
+            status: 'd',
             subscriberInfo: {
                 FName: 'Aichael',
                 middleInitial: 'ami',
@@ -51,7 +51,7 @@ ontimedata = {
             staffingCordinatorId: '1',
             nurseCaseManagerId: '1',
             careCordinatorId: '1',
-             status:'a',
+            status: 'a',
             addressDataId: {
                 address1: 'Avenue #1',
                 address2: 'Newyork',
@@ -88,7 +88,7 @@ ontimedata = {
             dateOfBirth: '05/12/1984',
             gender: 'M',
             phone: '2304008002',
-             status:'d',
+            status: 'd',
             addressDataId: {
                 address1: 'Avenue #1',
                 address2: 'Newyork',
@@ -289,7 +289,7 @@ ontimedata = {
             "contactEmail": "h@f",
             "contractStartDate": "2015-06-01T18:30:00.000Z",
             "contractEndDate": "2015-06-03T18:29:59.999Z",
-            "contractFile":"Contract File",
+            "contractFile": "Contract File",
             "careTypes": ["1"]
         }
     ]
@@ -305,25 +305,30 @@ ontimetest = {
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
     'company_code': "TRT",
-    'date_time_format':"yyyy/MM/dd hh:mm:ss aa",
-    amazonPublicUrl : "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
-    amazonSignatureUrl:"https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/"
+    positionGroups: {
+        'NURSING_CARE_COORDINATOR': "NCC",
+        'STAFFING_COORDINATOR': "SC",
+        'OFFICE_STAFF': "OS"
+    },
+    'date_time_format': "yyyy/MM/dd hh:mm:ss aa",
+    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
+    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/"
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },
 };
 
 function arr_diff(a1, a2)
-        {
-            var a = [], diff = [];
-            for (var i = 0; i < a1.length; i++)
-                a[a1[i]] = true;
-            for (var i = 0; i < a2.length; i++)
-                if (a[a2[i]])
-                    delete a[a2[i]];
-                else
-                    a[a2[i]] = true;
-            for (var k in a)
-                diff.push(k);
-            return diff;
-        }
+{
+    var a = [], diff = [];
+    for (var i = 0; i < a1.length; i++)
+        a[a1[i]] = true;
+    for (var i = 0; i < a2.length; i++)
+        if (a[a2[i]])
+            delete a[a2[i]];
+        else
+            a[a2[i]] = true;
+    for (var k in a)
+        diff.push(k);
+    return diff;
+}
