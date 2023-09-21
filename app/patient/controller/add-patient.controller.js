@@ -718,6 +718,12 @@
                     $scope.fileObj = {};
                     $scope.careObj = {};
 
+                        for(var i=0; i<ctrl.insuranceProviderList.length; i++){
+                            if(ctrl.insuranceProviderList[i].id === ctrl.patient.insuranceProviderId){
+                                $scope.careObj.insuranceProviderName = ctrl.insuranceProviderList[i].insuranceName;
+                                break;
+                            }
+                        }
                     $scope.uploadFile = {
                         target: ontime_data.weburl + 'file/upload',
                         chunkSize: 1024 * 1024 * 1024,

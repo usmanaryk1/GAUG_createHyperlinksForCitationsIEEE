@@ -396,6 +396,13 @@
     <form class="form-horizontal validate" role="form" novalidate="" name="authorizationDoc" id="authorizationDoc" ng-submit="saveAuthorizationDocument();">
     <div class="modal-body" style="padding-bottom:0;">
     <div class="form-group">
+    <label class="col-sm-4 control-label" for="insuranceProviderName" >Insurance Provider</label>
+    <label class="col-sm-8 control-label ng-binding" style="">
+    <span class="pull-left">{{careObj.insuranceProviderName}}</span>
+    </label>
+    </div>
+    <div class="form-group-separator"></div>
+    <div class="form-group">
     <label class="col-sm-4 control-label" for="careTypes" style="margin-top:15px;">Care Type</label>
     <div class="col-sm-8">
     <select class="form-control" style="margin-top:15px;" name ="careTypes" id="careTypes" ng-model="careObj.careType" ng-options='ct as ct.companyCaretypeId.careTypeTitle for ct in careTypeList' data-message-required="Please select care type." required data-validate="required" ng-change="careObj.errorMsg = null;">
