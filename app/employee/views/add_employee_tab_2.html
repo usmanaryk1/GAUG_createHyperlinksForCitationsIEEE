@@ -47,15 +47,30 @@
                         <label class="col-sm-2 control-label" for="authorizedHours">
                             Authorized hours
                         </label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-4">
                             <div class="input-group">
-                                <input class="form-control" name="authorizedHours" maxlength="5" numbers-only="true" decimalallowed type="text" ng-model="addEmployee.employee.authorizedHours" 
-                                       data-validate="required"  data-message-required="Please enter Authorized Hours."> 
+                                <input class="form-control" name="authorizedHours" maxlength="5" numbers-only="true" decimalallowed type="text" ng-model="addEmployee.employee.authorizedHours"> 
                                 <span class="input-group-addon">
                                     <i>per week</i>
                                 </span>
                                 </input>
                             </div>
+                        </div>
+                        <label class="col-sm-2 control-label" for="authorizedHoursExpiryDate"
+                               ng-if="addEmployee.employee.authorizedHours != null && addEmployee.employee.authorizedHours!=0">
+                            Authorization Expiry
+                        </label>
+                        <div class="col-sm-4" ng-if="addEmployee.employee.authorizedHours!=null && addEmployee.employee.authorizedHours!=0">
+                            <div class="input-group">
+                                    <input class="form-control datepicker" data-format="mm/dd/yyyy" name="authorizedHoursExpiryDate" type="text" ng-model="addEmployee.employee.authorizedHoursExpiryDate"
+                                           required/>
+                                    <div class="input-group-addon">
+                                        <a href="#">
+                                            <i class="linecons-calendar">
+                                            </i>
+                                        </a>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                     <div class="form-group-separator"></div>
