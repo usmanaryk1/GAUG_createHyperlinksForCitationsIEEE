@@ -107,7 +107,7 @@
                                         patTimesheet.searchParams.order = 'desc';
                                         patTimesheet.filterTimesheet();
                                         patTimesheet.formSubmitted = true">Review</button>
-                                    <a href="#/app/manual_punch{{patTimesheet.searchParams.patientId==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?lastPage=patient_time_sheet}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
+                                    <a href="#/app/manual_punch{{patTimesheet.searchParams.patientId==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?lastPage=patient_time_sheet'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
                                     </button>
@@ -171,7 +171,7 @@
                                             </td>
                                             <td>
                                                 <div style="float:left; min-width:120px;">
-                                                    <a ng-if="timesheet.isEdited == true && patTimesheet.selectedPatient.status != 'd'" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=patient_time_sheet'" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                    <a ng-if="timesheet.isEdited == true && patTimesheet.selectedPatient.status != 'd'" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.id}}?lastPage=patient_time_sheet" tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a ng-if="timesheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="patTimesheet.openDeleteModal(timesheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
                                                     <!--<a class="btn icon-left fa fa-search view_task_button" href="#"><span class="ed_b">Tasks </span></a>-->
 
