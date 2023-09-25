@@ -78,6 +78,13 @@
             },
             readNotes: {
                 method: 'PUT'
+            },
+            rejectCareGivers: {
+                method: 'PUT'
+            },
+            rejectedCareGivers: {
+                method: 'GET',
+                isArray: true
             }
         });
         return {
@@ -127,6 +134,12 @@
             },
             readNotes: function (params) {
                 return api.readNotes({action: params.userId, subAction: 'notes', subAction1: 'read'},{}).$promise;
+            },
+            rejectCareGivers: function (data) {
+                return api.rejectCareGivers({action: data.patientId, subAction: 'caregivers'}, data.employeeIds).$promise;
+            },
+            rejectedCareGivers: function (data) {
+                return api.rejectedCareGivers({action: data.patientId, subAction: 'caregivers'}).$promise;
             }
         };
     };

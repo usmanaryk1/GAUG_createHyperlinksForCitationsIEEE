@@ -299,7 +299,32 @@
                 console.log("popup closed");
             });
         };
-        
+        EmployeeDAO.retrieveByPosition().then(function (res) {
+            ctrl.employee_list = res;
+        }).catch(function (data) {
+            console.log();
+        });
+        ctrl.openRejectEmployeesModal = function (patientId, modal_id, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'reject-employee-modal'),
+                size: "lg",
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'RejectEmployeeModalController as RejectEmployee',
+                resolve: {
+                    patientId: function () {
+                        return patientId;
+                    },
+                    employees: function () {
+                        return ctrl.employee_list;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };        
 
         ctrl.getLanguagesFromCode = function (languageCodes) {
             if (languageCodes != null && languageCodes.length > 0) {

@@ -104,6 +104,9 @@
                                                                 <a ng-if="patient.authorization" class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}?viewDownload=true" target="_blank" tooltip="Download Authorization"><span class="ed_b"></span></a>
                                                                 <a ng-if="(viewPatient.validAuthorizationDate(patient.authorizationEndDate) || viewPatient.viewType==='discharged') && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id:patient.id})" tooltip="Calendar"><span class="ed_b"></span></a> 
                                                                 <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="patient.newNotification=false;viewPatient.openNotesModal(patient.id)" tooltip="Notes" ng-class="{'has-newNotification':patient.newNotification}"><span class="ed_b"></span></a>
+                                                                <a class="btn icon-left fa fa-ban delete_button" 
+                                                                    ng-click="viewPatient.openRejectEmployeesModal(patient.id);" 
+                                                                    tooltip="Rejected Caregivers"><span class="ed_b"></span></a>
                                                             </div>
                                                         </td>
                                                     </tr>
