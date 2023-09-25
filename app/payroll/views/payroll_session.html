@@ -549,3 +549,29 @@
     <button type="button" class="btn btn-red" ng-click="deleteEmployeeModel.dismiss();">No</button>
     </div>
 </script>
+<script type="text/ng-template" id="check-date">
+    <form class="validate form-horizontal" name="checkDateForm" id="checkDateForm" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="checkDateModal.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">{{checkDateModal.title}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    <div class="row">
+    <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-3">
+    <div id="checkDate" style="margin-left:25px"></div>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="checkDateModal.cancel();">Close</button>
+    <button type="submit" class="btn btn-success" ng-click="checkDateModal.save();">Save changes</button>
+    </div>
+    </form>
+</script>

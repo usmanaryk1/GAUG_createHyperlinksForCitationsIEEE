@@ -17,25 +17,40 @@
         };
         ctrl.processSessions = function () {
             ctrl.processClicked = true;
+            var adpRunProvider = false;
+            if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider === 'ADP - Run') {
+                adpRunProvider = true;
+            }
             if (ctrl.payrollSessions != null && ctrl.payrollSessions.length > 0) {
-                $rootScope.maskLoading();
-                angular.forEach(ctrl.payrollSessions, function (session) {
-                    session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
-                });
-                PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function (res) {
-                    if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider === "ADP - Work Force Now") {
-                        window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
-                    }
-                    console.log(res);
-                    $state.go('app.batch_session', {id: res.id});
-                }).catch(function (e) {
-                    toastr.error("Payroll sessions cannot be processed.");
-                }).then(function () {
-                    ctrl.processClicked = false;
-                    $rootScope.unmaskLoading();
-                });
+                if (adpRunProvider) {
+                    ctrl.openModal('check-date', 'md', 'static');
+                } else {
+                    ctrl.processPayroll();
+                }
             }
         };
+
+        ctrl.processPayroll = function (checkDate) {
+            if(checkDate){
+                ctrl.searchParams.checkDate=checkDate;
+            }
+            $rootScope.maskLoading();
+            angular.forEach(ctrl.payrollSessions, function (session) {
+                session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
+            });
+            PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function (res) {
+                if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider === "ADP - Work Force Now") {
+                    window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
+                }
+                console.log(res);
+                $state.go('app.batch_session', {id: res.id});
+            }).catch(function (e) {
+                toastr.error("Payroll sessions cannot be processed.");
+            }).then(function () {
+                ctrl.processClicked = false;
+                $rootScope.unmaskLoading();
+            });
+        }
 
         ctrl.filterSessions = function () {
             if (!ctrl.searchParams.fromDate || ctrl.searchParams.fromDate == "") {
@@ -91,7 +106,7 @@
                     } else {
                         toastr.error("Payroll sessions cannot be retrieved.");
                     }
-                    
+
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
@@ -286,7 +301,7 @@
                 ctrl.processdMode = true;
                 Page.setTitle("View Payroll Session");
                 ctrl.batchId = $state.params.id;
-                
+
                 PayrollDAO.getProcessedSessions({id: ctrl.batchId}).then(function (res) {
                     ctrl.processedSessionObj = res;
                     ctrl.payrollSessions = res.payrollList;
@@ -316,7 +331,7 @@
                 }
             }).catch(function () {
                 console.log("Payroll settings cannot be retrieved.");
-            }).then(function(){
+            }).then(function () {
                 if (!$state.params.id || $state.params.id === '') {
                     $rootScope.unmaskLoading();
                 }
@@ -352,7 +367,43 @@
 
         };
 
+        // Open Simple Modal
+        ctrl.openModal = function (modal_id, modal_size, modal_backdrop)
+        {
+            //use the same pop up modal based on selection true/false
+            $rootScope.checkDateModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.checkDateModal.title = 'Enter Check Date'
+            $timeout(function () {
+                $('#checkDate').datepicker()
+                        .on('changeDate', function (ev) {
+                            $rootScope.checkDateModal.checkDate = $filter('date')(ev.date, $rootScope.dateFormat);
+                        });
+            }, 150);
+            $rootScope.checkDateModal.checkDate = $filter('date')(new Date(), $rootScope.dateFormat);
+            $rootScope.checkDateModal.save = function () {
+                $timeout(function () {
+                    if ($('#checkDateForm')[0].checkValidity()) {
+                        ctrl.processPayroll($rootScope.checkDateModal.checkDate);
+                        $rootScope.checkDateModal.dismiss();
+                    }
+                });
+            };
+
+            $rootScope.checkDateModal.remove = function () {
+                ctrl.processClicked = false;
+                $rootScope.checkDateModal.dismiss();
+            };
+
+            $rootScope.checkDateModal.cancel = function () {
+                ctrl.processClicked = false;
+                $rootScope.checkDateModal.dismiss();
+            };
+        }
     }
-    ;
     angular.module('xenon.controllers').controller('PayrollSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "EmployeeDAO", "$state", "Page", PayrollSessionCtrl]);
 })();
