@@ -10,8 +10,8 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
             hasRetrieve: "=?",
             canDelete: "=?",
             canEdit: "=?",
-            type:'=?',
-            readNotes:'=?'
+            type: '=?',
+            readNotes: '=?'
         },
         link: function (scope) {
             var FeatureDAO;
@@ -20,21 +20,26 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
             } else {
                 FeatureDAO = EmployeeDAO;
             }
-            
+
             function readNotes() {
                 FeatureDAO.readNotes({userId: scope.userId}).then(function (res) {
-                  console.log("read documents",res);
+                    console.log("read documents", res);
                 });
             }
-            
+
             function initData() {
                 scope.notes = [];
                 scope.allLoaded = false;
                 scope.data = {note: ""};
+                if (scope.type === 'patient') {
+                    scope.noteTypes = ['Communication', 'Falls', 'Accidents/Incidents'];
+                } else {
+                    scope.noteTypes = ['Disciplinary'];
+                }
                 scope.searchParams = {userId: scope.userId, pageNo: 1, limit: 10, action: scope.userId, subAction: 'notes'};
                 if (scope.hasRetrieve) {
                     scope.rerenderDataTable();
-                    if(scope.readNotes)
+                    if (scope.readNotes)
                         readNotes();
                 } else {
                     $rootScope.unmaskLoading();
@@ -69,10 +74,10 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     $rootScope.maskLoading();
                     FeatureDAO.addNotes(
                             {userId: scope.userId,
-                                note: {note: scope.data.note}}).then(function (res) {
+                                note: {note: scope.data.note, type: scope.data.type}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
-                        delete scope.data.note;
+                        scope.data = {note: ""};
                         toastr.success("Note added.");
                     }
                     ).catch(function (data, status) {
@@ -89,7 +94,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     FeatureDAO.updateNotes(
                             {userId: scope.userId,
                                 noteId: scope.data.id,
-                                note: {note: scope.data.note}}).then(function (res) {
+                                note: {note: scope.data.note, type: scope.data.type}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};
