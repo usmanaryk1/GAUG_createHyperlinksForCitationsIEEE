@@ -254,6 +254,9 @@
                 }
             });
             employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
+            if(employeeToSave.preferredCounties){
+                employeeToSave.preferredCounties = employeeToSave.preferredCounties.toString();
+            }
 
             if (ctrl.benefitPackages && (ctrl.benefitPackages.length > 0) && employeeToSave.employeeBenefitDetails) {
                 if (employeeToSave.employeeBenefitDetails.benefitPackageId) {
@@ -607,6 +610,11 @@
                             }
                         });
                     }
+                    if (res.preferredCounties != null) {
+                        res.preferredCounties = res.preferredCounties.split(",");
+                    } else {
+                        res.preferredCounties = [];
+                    }
                     if (ctrl.employee.otherLanguages != null && ctrl.employee.otherLanguages != '') {
                         ctrl.otherLanguageCheckbox = true;
                         ctrl.refreshLanguages();
@@ -778,7 +786,9 @@
                 if (!ctrl.retrivalRunning) {
                     googleMapFunctions(ctrl.employee.locationLatitude, ctrl.employee.locationLongitude);
                     form_data = $('#add_employee_form').serialize();
-
+                    $timeout(function () {
+                            $('#PreferredCounties').trigger('change.select2');
+                        }, 100);
                 } else {
                     ctrl.tab3DataInit();
                 }

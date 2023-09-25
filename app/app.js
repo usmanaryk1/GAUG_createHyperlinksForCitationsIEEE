@@ -384,6 +384,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     tabNo: 3,
                     feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
+                },
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.select2
+                        ]);
+                    }
                 }
             }).
             // add_employee_tab_4

@@ -26,7 +26,7 @@
             <div class="mwl-right col-md-7 col-sm-12 no-padding">
                 <div class='col-md-6 col-sm-12 form-group' ng-if='calendar.isEmployeeSearchPage' ng-class="{ 'validate-has-error':calendar.searchParams.patientId == null && calendar.dispatchClicked}">    
                     <script type="text/javascript">
-                                jQuery(document).ready(function ($)
+                        jQuery(document).ready(function ($)
                         {
                         setTimeout(function () {
                         $("#patientDropdown").select2({
@@ -41,7 +41,7 @@
                         });
                         }, 200);
                         });</script>
-                    <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.patientObj" ng-options='pat as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.patientChanged(calendar.patientObj)">
+                    <select class="form-control" name ="patientDropdown" id="patientDropdown" ng-model="calendar.patientObj" ng-options='pat as (pat.lName + ", " + pat.fName + " " + pat.middleInitial) for pat in calendar.patientList track by pat.id' ng-change="calendar.patientChanged(calendar.patientObj)">
                         <option value="" selected hidden />
                     </select>       
                     <div ng-show='calendar.searchParams.patientId == null && calendar.dispatchClicked'>
@@ -85,7 +85,7 @@
                     <div class="col-md-5" style="padding-right:0px;">
                         <div class="pull-right col-md-12" style="padding:0;">
                             <script type="text/javascript">
-                                        jQuery(document).ready(function ($)
+                                jQuery(document).ready(function ($)
                                 {
                                 setTimeout(function () {
                                 $("#employeedropdownIds").select2({
@@ -127,19 +127,19 @@
                     <label>Employees</label>
                     <script type="text/javascript">
                         jQuery(document).ready(function ($)
-                            {
-                                setTimeout(function () {
-                                    $("#employeeIds").select2({
+                        {
+                        setTimeout(function () {
+                        $("#employeeIds").select2({
                         // minimumResultsForSearch: -1,
                         placeholder: 'Select Employee...',
                                 // minimumInputLength: 1,
                                 // placeholder: 'Search',
-                                    }).on('select2-open', function ()
-                                    {
-                                        // Adding Custom Scrollbar
-                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                    });
-                            }, 200);
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
                         });</script>
                     <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as emp.label for emp in calendar.employeeList'>
                         <option value="" selected hidden />
@@ -148,7 +148,7 @@
                 <div class="col-md-4">
                     <label>Position</label>
                     <script type="text/javascript">
-                                jQuery(document).ready(function ($)
+                        jQuery(document).ready(function ($)
                         {
                         setTimeout(function () {
                         $("#positions").select2({
@@ -166,7 +166,7 @@
                 <div class="col-md-4">
                     <label>Languages</label>
                     <script type="text/javascript">
-                                jQuery(document).ready(function ($)
+                        jQuery(document).ready(function ($)
                         {
                         setTimeout(function () {
                         $("#languages").select2({
@@ -182,22 +182,46 @@
                     </select>
                 </div>
             </div>
-            <div class="row" ng-if="calendar.calendarView == 'week'">
-                <div ng-class='{"col-md-2":calendar.isEmployeeSearchPage,"col-md-4":!calendar.isEmployeeSearchPage}'>
+            <div class="row" ng-if="!calendar.isEmployeeSearchPage">
+                <div class="col-md-4">
                     <label>Available From</label>
                     <div class="input-group">
                         <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableStartDate" max-date="calendar.searchParams.availableEndDate">
                         <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div ng-class='{"col-md-2":calendar.isEmployeeSearchPage,"col-md-4":!calendar.isEmployeeSearchPage}'>
+                <div class="col-md-4">
                     <label>Available To</label>
                     <div class="input-group">
                         <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableEndDate" min-date="calendar.searchParams.availableStartDate">
                         <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div class="col-md-4" ng-if='calendar.isEmployeeSearchPage'>
+                <div class="col-md-4 filter-checkbox row" style="padding-top:20px;">
+                    <div class="col-md-4" >
+                        <label>Live In</label>
+                        <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row" ng-if="calendar.isEmployeeSearchPage">
+                <div class="col-md-2">
+                    <label>Available From</label>
+                    <div class="input-group">
+                        <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableStartDate" max-date="calendar.searchParams.availableEndDate">
+                        <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>Available To</label>
+                    <div class="input-group">
+                        <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableEndDate" min-date="calendar.searchParams.availableStartDate">
+                        <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
                     <label>Gender</label>
                     <div>
                         <select name ="languages" id="languages" class="form-control" ng-model="calendar.searchParams.sex">
@@ -207,34 +231,55 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4 filter-checkbox row" style="padding-top:20px;">
-                    <div class="col-md-4" >
-                        <label>Live In</label>
-                        <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
-                    </div>
-                    <div class="col-md-8 pad_lf0 pad_rg0">
-                        <button type="button" class="btn btn-info green_bt pull-right" ng-click="calendar.applySearch()" style="width:75px !important; margin: 0px">Submit</button>
-                        <button class="btn btn-info btn-single gray_bt pull-right" type="button" style="width:95px !important;" ng-click="calendar.resetFilters()">
-                            Reset Filters
-                        </button>                        
+                <div class="col-md-2" style="padding-top:20px;">
+                    <label>Live In</label>
+                    <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
+                </div>
+                <div class="col-md-4">
+                    <label>Preferred Counties</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                        setTimeout(function () {
+                        $("#PreferredCounties").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Preferred Counties...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="PreferredCounties" id="PreferredCounties" 
+                            ng-model="calendar.searchParams.preferredCounties" ng-options='county as county for county in nyStateCountyList'>
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+            </div>
+            <div class="row" ng-if="calendar.calendarView == 'week'" style="padding-top:10px;">
+                <div class="form-group col-md-3">
+                    <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
+                    <div style="width:70px; float:left;">
+                        <select class="form-control input-sm" ng-model="calendar.searchParams.limit" ng-change="calendar.applySearch()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </div>
                 </div>
-                <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
-                    <div class="form-group col-sm-3">
-                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
-                        <div style="width:70px; float:left;">
-                            <select class="form-control input-sm" ng-model="calendar.searchParams.limit" ng-change="calendar.applySearch()">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3" style="padding-top: 7px;">
-                        <label>Show Time</label>
-                        <input type="checkbox" name="livein" ng-model="calendar.forShowTime">
-                    </div>
+                <div class="col-md-3" style="padding-top: 7px;">
+                    <label>Show Time</label>
+                    <input type="checkbox" name="livein" ng-model="calendar.forShowTime">
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info green_bt pull-right" ng-click="calendar.applySearch()" >Submit</button>
+                    <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="calendar.resetFilters()">
+                        Reset Filters
+                    </button>                        
                 </div>
             </div>
         </div>
@@ -248,7 +293,7 @@
                 <div class="col-md-4">
                     <label>Worksite</label>
                     <script type="text/javascript">
-                                jQuery(document).ready(function ($)
+                        jQuery(document).ready(function ($)
                         {
                         setTimeout(function () {
                         $("#worksiteDropdown").select2({
@@ -267,7 +312,7 @@
                 <div class="col-md-4">
                     <label>Employees</label>
                     <script type="text/javascript">
-                                jQuery(document).ready(function ($)
+                        jQuery(document).ready(function ($)
                         {
                         setTimeout(function () {
                         $("#employeeIds").select2({
@@ -289,7 +334,7 @@
                 <div class="col-md-4">
                     <label>Languages</label>
                     <script type="text/javascript">
-                                jQuery(document).ready(function ($)
+                        jQuery(document).ready(function ($)
                         {
                         setTimeout(function () {
                         $("#languages").select2({
