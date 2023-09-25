@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="pull-right col-sm-7 pad0" ng-if="payrollSession.processdMode">
-                                <div >
+                                <div ng-if="payrollSession.payrollSettings.payrollProvider && payrollSession.payrollSettings.payrollProvider !== null">
                                     <a style="margin-left: 10px" ng-href="{{serverPath + 'payrolls/sessions/' + payrollSession.processedSessionObj.id + '/download'}}" type="button" class="btn btn-info green_bt  pull-right" >Download CSV</a>
                                 </div>
                                 <div class="text-right">

@@ -39,7 +39,7 @@
                 session.totalHours = checkNull(session.hour1) + checkNull(session.hour2) + checkNull(session.otHours) + checkNull(session.hdHours) + checkNull(session.vacation) + checkNull(session.sick) + checkNull(session.personal);
             });
             PayrollDAO.processSessions(ctrl.searchParams, ctrl.payrollSessions).then(function (res) {
-                if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider === "ADP - Work Force Now") {
+                if (ctrl.payrollSettings.payrollProvider && ctrl.payrollSettings.payrollProvider !== null) {
                     window.location.href = $rootScope.serverPath + 'payrolls/sessions/' + res.id + '/download';
                 }
                 console.log(res);
