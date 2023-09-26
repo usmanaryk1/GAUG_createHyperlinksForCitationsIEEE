@@ -1,5 +1,5 @@
 (function () {
-    var RejectEmployeeModalController = function ($modalInstance, $rootScope, patientId, employees, PatientDAO) {
+    var RejectEmployeeModalController = function ($modalInstance, $rootScope, patientId, employees, PatientDAO, $timeout) {
         var ctrl = this;
         ctrl.details = { patientId: patientId, employeeIds: [] };
         ctrl.employeeList = employees;
@@ -7,6 +7,9 @@
         $rootScope.maskLoading();
         PatientDAO.rejectedCareGivers({ patientId: patientId }).then(function (res) {
             ctrl.details.employeeIds = res;
+            $timeout(function () {
+                            $('#employeeIds').trigger('change.select2');
+                        }, 100);
         }).catch(function (data) {
             console.log('Error retrieving current rejections');
         }).then(function () {
@@ -31,5 +34,5 @@
             $modalInstance.dismiss('cancel');
         };
     };
-    angular.module('xenon.controllers').controller('RejectEmployeeModalController', ['$modalInstance', '$rootScope', 'patientId', 'employees', 'PatientDAO', RejectEmployeeModalController]);
+    angular.module('xenon.controllers').controller('RejectEmployeeModalController', ['$modalInstance', '$rootScope', 'patientId', 'employees', 'PatientDAO', '$timeout', RejectEmployeeModalController]);
 })();
