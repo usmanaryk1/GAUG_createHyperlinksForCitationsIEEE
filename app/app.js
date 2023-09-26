@@ -824,6 +824,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     }
                 }
             }).
+            state('admin.event-notifications', {
+                url: '/event-notifications',
+                templateUrl: appHelper.viewTemplatePath('eventNotifications', 'view_event_notifications'),
+                controller: 'EventNotificationsCtrl as eventNotifications',
+                data: {
+                    feature: 'VIEW_ROLE'
+                }
+            }).
             state('admin.caretype-list', {
                 url: '/caretype-list',
                 templateUrl: appHelper.viewTemplatePath('caretype', 'view_caretype'),

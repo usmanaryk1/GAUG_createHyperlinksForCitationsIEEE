@@ -194,6 +194,8 @@ angular.module('xenon.factory').
                     $state.go('admin.benefits');
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_ROLE') > -1) {
                     $state.go('admin.role-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_ROLE') > -1) {
+                    $state.go('admin.event-notifications');
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_POSITION') > -1) {
                     $state.go('admin.position-list');
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_CARETYPE') > -1) {
