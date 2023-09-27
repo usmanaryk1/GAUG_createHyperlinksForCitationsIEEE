@@ -417,7 +417,8 @@
                                 <!--                                <button ng-if="addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addEmployee.navigateToTab($event, 'tab2')">
                                                                     Next »
                                                                 </button>-->
-                                <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')">
+                                <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')"
+                                        ng-hide="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))}}">
                                     Next »
                                 </button>
                             </div>

@@ -209,7 +209,7 @@
             }
             var fileUploadValid = ctrl.checkFileUploadValidity();
             if (($('#add_employee_form').valid() && fileUploadValid) || !ctrl.formDirty) {
-                if (ctrl.editMode) {
+                if (ctrl.editMode && ($rootScope.hasAccess('HR_EDIT_EMPLOYEE') || $rootScope.hasAccess('CREATE_EMPLOYEE'))) {
                     $state.go('^.' + state, {id: $state.params.id});
                 }
             }
@@ -1422,7 +1422,9 @@
         };
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE') === -1) {
+            if (isNaN(parseFloat($state.params.id)) 
+                    || ($rootScope.currentUser.allowedFeature.indexOf('HR_EDIT_EMPLOYEE') === -1
+                    && $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE_DEMO') === -1)) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
