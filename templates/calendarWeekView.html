@@ -1,0 +1,79 @@
+<div class="cal-week-box" ng-class="{'cal-day-box': showTimes}">
+  <div class="cal-row-fluid cal-row-head">
+
+    <div
+      class="cal-cell1"
+      ng-repeat="day in view.days track by $index"
+      ng-class="{
+        'cal-day-weekend': day.isWeekend,
+        'cal-day-past': day.isPast,
+        'cal-day-today': day.isToday,
+        'cal-day-future': day.isFuture}"
+      mwl-element-dimensions="dayColumnDimensions">
+
+      <span ng-bind="day.weekDayLabel"></span>
+      <br>
+<!--       <small>
+        <span
+          data-cal-date
+          ng-click="calendarCtrl.drillDown(day.date)"
+          class="pointer"
+          ng-bind="day.dayLabel">
+        </span>
+      </small> -->
+
+    </div>
+
+  </div>
+
+  <div class="cal-day-panel clearfix" ng-style="{height: showTimes ? (dayViewHeight + 'px') : 'auto'}">
+<!-- 
+    <mwl-calendar-hour-list
+      day-view-start="dayViewStart"
+      day-view-end="dayViewEnd"
+      day-view-split="dayViewSplit"
+      current-day="currentDay"
+      on-timespan-click="onTimespanClick"
+      ng-if="showTimes">
+    </mwl-calendar-hour-list> -->
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div
+          class="cal-row-fluid "
+          ng-repeat="event in view.events track by event.$id">
+          <div
+            ng-class="'cal-cell' + (showTimes ? 1 : event.daySpan) + (showTimes ? '' : ' cal-offset' + event.dayOffset) + ' day-highlight dh-event-' + event.type + ' ' + event.cssClass"
+            ng-style="{
+              top: showTimes ? ((event.top + 2) + 'px') : 'auto',
+              position: showTimes ? 'absolute' : 'inherit',
+              width: showTimes ? (dayColumnDimensions.width + 'px') : '',
+              left: showTimes ? (dayColumnDimensions.width * event.dayOffset) + 15 + 'px' : ''
+            }"
+            data-event-class
+            mwl-draggable="event.draggable === true"
+            axis="showTimes ? 'xy' : 'x'"
+            snap-grid="showTimes ? {x: dayColumnDimensions.width, y: 30} : {x: dayColumnDimensions.width}"
+            on-drag="tempTimeChanged(event, y)"
+            on-drag-end="weekDragged(event, x, y)"
+            mwl-resizable="event.resizable === true && event.endsAt && !showTimes"
+            resize-edges="{left: true, right: true}"
+            on-resize-end="weekResized(event, edge, x)">
+            <strong ng-bind="(event.tempStartsAt || event.startsAt) | calendarDate:'time':true" ng-show="showTimes"></strong>
+            <a
+              href="javascript:;"
+              ng-click="onEventClick({calendarEvent: event})"
+              class="event-item"
+              ng-bind-html="$sce.trustAsHtml(event.title)"
+              uib-tooltip-html="event.title | calendarTrustAsHtml"
+              tooltip-placement="left"
+              tooltip-append-to-body="true">
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
