@@ -365,7 +365,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_1'),
                 data: {
                     tabNo: 1,
-                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,HR_EDIT_EMPLOYEE,EDIT_EMPLOYEE_DEMO'
                 }
             }).
             // add_employee_tab_2
@@ -374,7 +374,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
                 data: {
                     tabNo: 2,
-                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,HR_EDIT_EMPLOYEE'
                 }
             }).
             // add_employee_tab_3
@@ -383,7 +383,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
                 data: {
                     tabNo: 3,
-                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,HR_EDIT_EMPLOYEE'
                 },
                 resolve: {
                     resources: function ($ocLazyLoad) {
@@ -399,7 +399,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_4'),
                 data: {
                     tabNo: 4,
-                    feature: 'CREATE_EMPLOYEE,EDIT_EMPLOYEE'
+                    feature: 'CREATE_EMPLOYEE,HR_EDIT_EMPLOYEE'
                 }
             }).
             //view employees single page

@@ -47,7 +47,8 @@
                 </a>
             </li>
             <li class="{{tabNo==2?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab2')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab2')" 
+                   style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-credit-card"></i></div> 
                     <div class="hidden-xs">Compensation & Benefits</div>
                     
@@ -57,7 +58,8 @@
                 </a>
             </li>
             <li class="{{tabNo==3?'active':''}}">
-                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab3')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab3')" 
+                   style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
                     <div class="hidden-xs">Location Information</div>
                     <span>
@@ -66,7 +68,8 @@
                 </a>
             </li>
             <li class="{{tabNo==4?'active':''}}">
-                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab4')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab4')" 
+                   style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
                     <div class="hidden-xs">Upload Employee Documents</div>
                     <span>
