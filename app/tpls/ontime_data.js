@@ -60,6 +60,7 @@ ontime_data = {
         {id: 'employeeothours', label: "Employee OT Hours Report"},
         {id: 'ptoreport', label: "Employee PTO Report"},
         {id: 'employeetimesheet', label: "Employee Time Sheet"},
+        {id: 'employeeutilization', label: "Employee Utilization Report"},
         {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
         {id: 'wppreport', label: "Employee WPP Report"},
         {id: 'workedhours', label: "Worked Hours"},
