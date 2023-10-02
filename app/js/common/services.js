@@ -85,7 +85,7 @@ angular.module('xenon.services', []).
                 var billing = this.addItem('Billing', '/app', 'linecons-money');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet');
                 var company = this.addItem('Company', '/app', 'linecons-key');
-                var calendar = this.addItem('Calendar', '/calendar', 'linecons-cog');
+                var calendar = this.addItem('Calendar', '/app/calendar', 'linecons-cog');
 
                 // Subitems of Dashboard
                 // dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
