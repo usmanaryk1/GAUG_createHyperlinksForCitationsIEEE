@@ -1014,9 +1014,11 @@ angular.module('xenon.directives', []).
                                 $this.datepicker("setDate", new Date(scope.ngModel));
                             } else {
                                 scope.ngModel = "";
+                                $this.val('');
                             }
                         } else {
                             scope.ngModel = "";
+                            $this.val('');
                         }
                     });
 

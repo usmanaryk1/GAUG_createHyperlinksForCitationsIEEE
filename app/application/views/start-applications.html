@@ -1,0 +1,120 @@
+<div class="login-container">
+    <div class="row" style="max-width:500px; margin:auto;">
+        <div class="col-sm-12"> 
+            <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            // Reveal Login form
+                            setTimeout(function () {
+                                $(".fade-in-effect").addClass('in');
+                            }, 1);
+
+
+                            // Validation and Ajax action
+                            $("form#login").validate({
+                                rules: {
+                                    email: {
+                                        required: true
+                                    },
+
+                                    ssn: {
+                                        required: true
+                                    },
+                                    dob: {
+                                        required: true
+                                    }
+                                },
+
+                                messages: {
+                                    email: {
+                                        required: 'Please enter your email.'
+                                    },
+
+                                    ssn: {
+                                        required: 'Please enter your last 4 digits of ssn.'
+                                    },
+                                    dob: {
+                                        required: ''
+                                    }
+                                },
+
+                            });
+
+                            // Set Form focus
+                            $("form#login .form-group:has(.form-control):first .form-control").focus();
+                        });
+            </script> 
+
+            <!-- Errors container -->
+            <div class="errors-container"> </div>
+            <div class="login-form fade-in-effect " ng-cloak>
+                <div class="login-header" style="margin-bottom: 20px!important"> 
+
+                    <h2><a href="#" class="logo" style="color: #29b94e; text-align: center"><img src="assets/images/logo-white-bg@2x.png" alt="" width="80" /></a></h2> 
+
+                </div>
+
+
+                <div ng-show='application.firstTime === null' style="text-align: center">
+                    <h3 style="cursor: pointer" ng-click="application.firstTimeApplication()">Create New Application</h3>
+                    <h4>or</h4>
+                    <h3 style="cursor: pointer" ng-click="application.existingApplication()">Modify Existing Application</h3>
+                </div>
+
+
+                <div ng-show='application.firstTime !== null'>
+                    <!-- Add class "fade-in-effect" for login form effect -->
+                    <form method="post" role="form" id="login" name='loginForm' class="validate" ng-submit='application.submitApplicationRetrieve();'>
+
+                        <div class="info-links">
+                            <p><i>All information learned from this application process is privileged and is not for public disclosure. 
+                                    This information is solely used for hiring purposes and will be kept confidential.</i></p>
+                            <!--<a href="#">ToS</a> - <a href="#">Privacy Policy</a>--> 
+
+                            <p> Please provide below details to {{application.firstTime===true?'initiate your application.':'retrieve your existing application.'}}
+                        </div>
+                        <div class="form-group">
+                            <!--<label class="control-label" for="username">Username</label>-->
+                            <input type="email" class="form-control" ng-keyup="$event.keyCode == 13 && application.submitApplicationRetrieve()"
+                                   placeholder="Email" name="email" id="email" autocomplete="off" ng-model='application.applicationData.email'  />
+                        </div>
+                        <div class="form-group">
+                            <!--<label class="control-label" for="password">Password</label>-->
+                            <input type="text" class="form-control" ng-keyup="$event.keyCode == 13 && application.submitApplicationRetrieve()"
+                                   placeholder="Last 4 digits of SSN" name="ssn" id="ssn" autocomplete="off" ng-model='application.applicationData.ssn' 
+                                   maxlength="4"  numbers-only="true" minlength="4"/>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="input-group">
+                                <input class="form-control datepicker" max-date="application.maxBirthDate" data-format="mm/dd/yyyy" name="dob" type="text"
+                                       ng-model="application.applicationData.dateOfBirth"
+                                       placeholder="Select Date of Birth" 
+                                       data-validate="required,date" data-message-required="Please enter Date of Birth."
+                                       autocomplete="off"/>
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary  btn-block text-left" >{{application.firstTime===true?'Start Application':'Retrieve Application'}} <i class="fa-arrow-circle-right"></i></button>
+                        </div>
+
+                    </form>
+
+                    <div class="login-footer"> 
+                        <a style="cursor: pointer" ng-click="application.firstTimeApplication()" ng-show='application.firstTime === false'>Create new application?</a>
+                            <a style="cursor: pointer" ng-click="application.existingApplication()" ng-show='application.firstTime === true'>Edit existing application?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

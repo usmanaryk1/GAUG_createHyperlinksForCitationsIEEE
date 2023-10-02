@@ -112,7 +112,8 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                         $(this).css('display', 'none');
                     }
                 });
-                if (toState.url.indexOf("login") < 0 && toState.url.indexOf("forgotpassword") < 0) {
+                if (toState.url.indexOf("login") < 0 && toState.url.indexOf("forgotpassword") < 0
+                        && toState.name.indexOf("applications") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
                         event.preventDefault();
@@ -171,7 +172,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                             if ($('form').dirtyForms('isDirty') || $rootScope.isFormDirty) {
                                 if (!confirm("You've made changes on this page which aren't saved. If you leave you will lose these changes.\n\nAre you sure you want to leave this page?")) {
                                     event.preventDefault();
-                                }else{
+                                } else {
                                     $rootScope.isFormDirty = false;
                                 }
                             }
@@ -271,14 +272,57 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         return verifyModuleAllocated(UserDAO, $rootScope, $q, $timeout);
                     }
                 }
-            }).
+            })
             // Login
-            state('login', {
+            .state('login', {
                 url: '/login',
                 templateUrl: appHelper.templatePath('login'),
                 controller: 'LoginCtrl',
-            }).
-            state('forgotpassword', {
+            })
+            // Application
+            .state('applications', {
+                url: '/applications',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
+                controller: 'ApplicationCtrl as application',
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.forms.formDirty,
+                            ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
+                            ASSETS.forms.tagsinput,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker,
+                            ASSETS.forms.select2,
+                            ASSETS.tables.datatables
+                        ]);
+                    }
+                }
+            })
+            // application start
+            .state('applications.new', {
+                url: '/new',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications')
+            })
+            // application retrieve
+            .state('applications.existing', {
+                url: '/existing',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications')
+            })
+            // application edit
+            .state('applications-edit', {
+                abstract: true,
+                url: '/applications-edit',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
+                controller: 'AddApplicationCtrl as addEmployee'
+            })
+            // application retrieve
+            .state('applications-edit.details', {
+                url: '/details/:id',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1')
+            })
+            .state('forgotpassword', {
                 url: '/forgotpassword',
                 templateUrl: appHelper.templatePath('forgot_password'),
                 controller: 'ForgotPasswordCtrl as forgotPwd',
@@ -663,28 +707,28 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'MANAGE_BILLING_RECONCILIATION'
                 }
             }).
-            state('app.billing_reconciliation_list', {                
+            state('app.billing_reconciliation_list', {
                 url: '/billing_reconciliation/list',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_list'),
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
-                    title:'View'
+                    title: 'View'
                 }
             }).
-            state('app.billing_reconciliation_new', {                
+            state('app.billing_reconciliation_new', {
                 url: '/billing_reconciliation/new',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
-                    title:'New'
+                    title: 'New'
                 }
             }).
-            state('app.billing_reconciliation_view', {                
+            state('app.billing_reconciliation_view', {
                 url: '/billing_reconciliation/view/:id',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
-                    title:'View'
+                    title: 'View'
                 }
             }).
             state('app.location_lookup', {
@@ -974,13 +1018,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'CREATE_BENEFIT,EDIT_BENEFIT'
                 }
             }).state('admin.employee-adjustments', {
-                url: '/employee-adjustments/:status',
-                templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
-                controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
-                data: {
-                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
-                }
-            }).
+        url: '/employee-adjustments/:status',
+        templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
+        controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
+        data: {
+            feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+        }
+    }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
