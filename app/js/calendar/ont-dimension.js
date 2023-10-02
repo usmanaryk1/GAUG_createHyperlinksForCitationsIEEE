@@ -1,6 +1,5 @@
 	angular
 	  .module('mwl.calendar')
-	  //.controller('MwlElementDimensionsCtrl', )
 	  .directive('mwlElementDimensions', function() {
 	  	var controller = ["$element", "$scope", "$parse", "$attrs", function($element, $scope, $parse, $attrs) {
 

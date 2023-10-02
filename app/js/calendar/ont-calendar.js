@@ -1,6 +1,5 @@
 	angular
 	  .module('mwl.calendar')
-	  //.controller('MwlCalendarCtrl', )
 	  .directive('mwlCalendar',function() {
 
 	  	var controller  = ["$scope", "$log", "$timeout", "$attrs", "$locale", "moment", "calendarTitle", function($scope, $log, $timeout, $attrs, $locale, moment, calendarTitle) {

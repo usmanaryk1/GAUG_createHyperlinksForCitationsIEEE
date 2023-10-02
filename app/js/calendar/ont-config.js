@@ -8,13 +8,13 @@
 	          hour: 'ha',
 	          day: 'd MMM',
 	          month: 'MMMM',
-	          weekDay: 'EEE',
+	          weekDay: 'EEE d/M',
 	          time: 'HH:mm',
 	          datetime: 'MMM d, h:mm a'
 	        },
 	        title: {
 	          day: 'EEE d MMMM, yyyy',
-	          week: 'Week {week} of {year}',
+	          week: '{month} {startDate} - {endDate}, {year}',
 	          month: 'MMMM yyyy',
 	          year: 'yyyy'
 	        }

@@ -1,6 +1,5 @@
 angular
 	  .module('mwl.calendar')
-	 // .controller('MwlCalendarMonthCtrl', )
 	  .directive('mwlCalendarMonth',function() {
 
 	  	var controller = ["$scope", "moment", "calendarHelper", "calendarConfig", function($scope, moment, calendarHelper, calendarConfig) {

@@ -1,10 +1,9 @@
 	angular
 	  .module('mwl.calendar')
-	  .factory('calendarHelper', ["dateFilter", "moment", "calendarConfig", function(dateFilter, moment, calendarConfig) {
-
+	  .factory('calendarHelper', ["$filter", "moment", "calendarConfig", function($filter, moment, calendarConfig) {
 	    function formatDate(date, format) {
 	      if (calendarConfig.dateFormatter === 'angular') {
-	        return dateFilter(moment(date).toDate(), format);
+	        return $filter('date')(moment(date).toDate(), format);
 	      } else if (calendarConfig.dateFormatter === 'moment') {
 	        return moment(date).format(format);
 	      }

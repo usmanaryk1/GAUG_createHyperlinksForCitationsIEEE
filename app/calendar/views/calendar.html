@@ -1,4 +1,127 @@
-<div style="background:white;padding:20px;">
+<style type="text/css">
+    .mwl-toolbar {
+        padding: 20px 10px 10px 10px;
+        min-height: 70px;
+    }
+    .mwl-toolbar .mwl-left h2:before {
+        content: '\f133';
+        font-family: fontawesome;
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .mwl-toolbar .mwl-left,
+    .mwl-panel-filter .mwl-left  {
+        float: left;
+    }
+    .mwl-toolbar .mwl-right,
+    .mwl-panel-filter .mwl-right {
+        float: right;
+    }
+    .mwl-toolbar .mwl-right {
+        margin-top: 5px;
+    }
+    .mwl-toolbar .mwl-button {
+        border: 0;
+        background: 0 0;
+        padding: 0 10px;
+        margin: 0;
+        height: auto;
+        position: relative;
+        outline: 0;
+        color: #979898;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+    .mwl-state-active {
+        color: #2c2e2f !important;
+    }
+    .mwl-button-group .mwl-month-button:after,
+    .mwl-agendaWeek-button:after,
+    .mwl-prev-button:after {
+        content: '';
+        display: block;
+        position: absolute;
+        right: -1px;
+        top: 25%;
+        bottom: 25%;
+        width: 1px;
+        background: #eee;
+    }
+    .mwl-button-group {
+        display: inline-block;
+    }
+    .mwl-panel-filter {
+        background-color: #EEE;
+        display: inline-block;
+        padding: 20px 10px 20px 10px;
+        margin-bottom: 10px;
+    }
+    .mwl-panel-filter .mwl-left h2,
+    .mwl-toolbar .mwl-left h2 {
+        margin: 0;
+    }
+    .mwl-panel-filter .mwl-right {
+        padding-right: 0;
+    }
+    .mwl-next-button.mwl-button.mwl-state-default.mwl-corner-right
+    {
+        padding-right: 5px;
+    }
+    .cal-context {
+        padding: 10px;
+    }
+    @media screen and (max-width: 380px) {
+        .mwl-panel-filter .mwl-right {
+            padding-right: 0;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+    }
+</style>
+<div class="page-title full-width ng-scope" ng-if="layoutOptions.pageTitles" title="Calendar" description="Events management calendar">
+    <div class="title-env">
+        <h1 class="title ng-binding">Calendar</h1>
+        <p class="description ng-binding">Events management calendar</p>
+    </div>
+</div>
+
+<div style="background:white;">
+
+    <div class="mwl-toolbar">
+       <div class="mwl-left">
+          <h2>{{ calendar.calendarTitle }}</h2>
+       </div>
+       <div class="mwl-right">
+            <div class="mwl-button-group">
+                <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{'mwl-state-active': calendar.calendarView == 'month'}">month</button>
+                <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{'mwl-state-active': calendar.calendarView == 'week'}">week</button>
+            </div>
+            <div class="mwl-button-group">
+                <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left"><span class="mwl-icon mwl-icon-prev fa-angle-left"></span></button>
+                <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
+            </div>
+       </div>
+       <div class="mwl-center"></div>
+       <div class="mwl-clear"></div>
+    </div>
+
+    <div class="mwl-panel-filter">
+        <div class="mwl-left">
+            <h2>Karl Pear <small>Designation</small></h2>
+        </div>
+        <div class="mwl-right col-md-4">
+            <div>
+                <div class="input-group input-group-minimal">
+                    <input type="email" class="form-control" placeholder="Search for something…">
+                    <span class="input-group-addon">
+                        <i class="linecons-search"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
           <mwl-calendar
             events="calendar.events"
             view="calendar.calendarView"
