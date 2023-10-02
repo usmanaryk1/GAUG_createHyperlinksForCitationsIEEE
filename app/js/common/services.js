@@ -205,11 +205,11 @@ angular.module('xenon.services', []).
                 var worksite = this.addItem('Worksites', '/admin', 'fa-building', 'CREATE_WORKSITE,EDIT_WORKSITE,VIEW_WORKSITE');
                 var benefits = this.addItem('Benefits', '/admin', 'fa-usd', 'CREATE_BENEFIT,EDIT_BENEFIT,VIEW_BENEFIT,EMPLOYEE_BENEFIT_ADJUSTMENT');
                 var roles = this.addItem('Roles', '/admin/role-list', 'fa-tasks', 'CREATE_ROLE,EDIT_ROLE,VIEW_ROLE');
-                var events = this.addItem('Event Notifications', '/admin/event-notifications', 'fa-envelope', 'CREATE_ROLE,EDIT_ROLE,VIEW_ROLE');
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
                 var languages = this.addItem('Languages', './admin/language-list', 'fa-language', 'UPDATE_LANGUAGE,VIEW_LANGUAGE');
                 var tasks = this.addItem('Tasks', './admin/task-list', 'fa-tasks', 'CREATE_TASK,UPDATE_TASK,VIEW_TASK');
+                var events = this.addItem('Event Notifications', '/admin/event-notifications', 'fa-envelope', 'EVENT_NOTIFICATIONS');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
                 var company = this.addItem('Company', '/admin/company_information', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
 
