@@ -46,7 +46,7 @@
                     </span>
                 </a>
             </li>
-            <li class="{{tabNo==2?'active':''}}">
+            <li class="{{tabNo==2?'active':''}}" ng-if="hasAccess('VIEW_EMPLOYEE_WAGES')">
                 <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab2')" 
                    style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-credit-card"></i></div> 
@@ -63,7 +63,7 @@
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
                     <div class="hidden-xs">Location Information</div>
                     <span>
-                        3
+                        {{hasAccess('VIEW_EMPLOYEE_WAGES')?3:2}}
                     </span>
                 </a>
             </li>
@@ -73,7 +73,7 @@
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
                     <div class="hidden-xs">Upload Employee Documents</div>
                     <span>
-                        4
+                        {{hasAccess('VIEW_EMPLOYEE_WAGES')?4:3}}
                     </span>
                 </a>
             </li>

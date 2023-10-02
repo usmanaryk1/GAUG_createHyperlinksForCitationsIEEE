@@ -406,7 +406,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
                 data: {
                     tabNo: 2,
-                    feature: 'CREATE_EMPLOYEE,HR_EDIT_EMPLOYEE'
+                    feature: 'VIEW_EMPLOYEE_WAGES'
                 }
             }).
             // add_employee_tab_3

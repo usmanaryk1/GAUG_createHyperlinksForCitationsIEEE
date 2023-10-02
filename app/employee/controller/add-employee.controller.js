@@ -20,7 +20,7 @@
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         };
-        
+
         var employeeAttachmentTypes = {
             'CHRC': 'CHRC Forms',
             'HCR': 'HCR',
@@ -33,13 +33,13 @@
             'OPSearch': 'OP Search',
             'License': 'License'
         };
-        
+
         ctrl.subTypes = ['Pre – Employment Medical Documents',
-                'Physical', 'TB Testing',
-                'Chest X-Ray', 'TB Questionnaire',
-                'Habituation', 'Flu Shot'];
-            
-            
+            'Physical', 'TB Testing',
+            'Chest X-Ray', 'TB Questionnaire',
+            'Habituation', 'Flu Shot'];
+
+
         var MappingForDownload = {
             'Initial Application Packet': 'InitialApplicationPacket',
             'Initial Application Packet Nursing': 'InitialApplicationPacketNursing',
@@ -63,9 +63,9 @@
             'Habituation': 'Habituation',
             'Flu Shot': 'FluShot',
             'Drug Test': 'DrugTest'
-        };     
-        
-        
+        };
+
+
         ctrl.positionList = [];
         PositionDAO.retrieveAll({}).then(function (res) {
             ctrl.positionList = res;
@@ -254,7 +254,7 @@
                 }
             });
             employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
-            if(employeeToSave.preferredCounties){
+            if (employeeToSave.preferredCounties) {
                 employeeToSave.preferredCounties = employeeToSave.preferredCounties.toString();
             }
 
@@ -415,18 +415,18 @@
             result.count = result.data.length;
 
             result.data = result.data.concat(_.filter(filteredAttachments, function (applicationEmployeeAttachment) {
-                return _.findIndex(result.data,{id:applicationEmployeeAttachment.id,
-                                                    attachmentType : applicationEmployeeAttachment.attachmentType}) === -1;
+                return _.findIndex(result.data, {id: applicationEmployeeAttachment.id,
+                    attachmentType: applicationEmployeeAttachment.attachmentType}) === -1;
             }));
             return result;
         };
 
         var getFilteredAttachments = function () {
             if (ctrl.actualAttachments) {
-                var employeeEligibilities = [];                                       
-                _.each(_.filter(ctrl.actualAttachments, function(attachment){
-                        return attachment.type === 'med' && (['Pre – Employment Medical Documents','Physical'].indexOf(attachment.attachmentType) > -1)
-                    }), function (medicalDocument) {
+                var employeeEligibilities = [];
+                _.each(_.filter(ctrl.actualAttachments, function (attachment) {
+                    return attachment.type === 'med' && (['Pre – Employment Medical Documents', 'Physical'].indexOf(attachment.attachmentType) > -1)
+                }), function (medicalDocument) {
                     var extrafield = JSON.parse(medicalDocument.extraFields);
                     var rowToPush = {
                         modified: true,
@@ -438,63 +438,63 @@
                         name: medicalDocument.name,
                         type: medicalDocument.type
                     };
-                    if(medicalDocument.attachmentType === 'Pre – Employment Medical Documents'){                                                
-                        if(extrafield.physicalExpirationDate){
+                    if (medicalDocument.attachmentType === 'Pre – Employment Medical Documents') {
+                        if (extrafield.physicalExpirationDate) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Physical',
-                                expiryDate:extrafield.physicalExpirationDate,
+                                expiryDate: extrafield.physicalExpirationDate,
                                 extraFields: JSON.stringify({})
                             }));
-                        } 
-                        if (extrafield.tbTesting){
+                        }
+                        if (extrafield.tbTesting) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'TB Testing',
-                                expiryDate:extrafield.physicalExpirationDate,
+                                expiryDate: extrafield.physicalExpirationDate,
                                 extraFields: JSON.stringify({
                                     tbTesting: extrafield.tbTesting,
-                                    isPositive : extrafield.isPositive,
-                                    chestXRayExpiration : extrafield.chestXRayExpiration,
+                                    isPositive: extrafield.isPositive,
+                                    chestXRayExpiration: extrafield.chestXRayExpiration,
                                     tbQuestionnaire: extrafield.tbQuestionnaire,
-                                    TBtestingExpirationDate : extrafield.tbTestingExpirationDate
+                                    TBtestingExpirationDate: extrafield.tbTestingExpirationDate
                                 })
-                            }));                            
+                            }));
                         }
-                        if(extrafield.chestXRayExpiration){
+                        if (extrafield.chestXRayExpiration) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Chest X-Ray',
-                                expiryDate:extrafield.chestXRayExpiration,
+                                expiryDate: extrafield.chestXRayExpiration,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.tbQuestionnaire){
+                        if (extrafield.tbQuestionnaire) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'TB Questionnaire',
-                                expiryDate:extrafield.tbQuestionnaire,
+                                expiryDate: extrafield.tbQuestionnaire,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.habituation){
+                        if (extrafield.habituation) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Habituation',
-                                expiryDate:extrafield.habituation,
+                                expiryDate: extrafield.habituation,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.fluShotDate){
+                        if (extrafield.fluShotDate) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Flu Shot',
-                                expiryDate:extrafield.fluShotDate,
+                                expiryDate: extrafield.fluShotDate,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.drugTestDate){
+                        if (extrafield.drugTestDate) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Drug Test',
-                                expiryDate:extrafield.drugTestDate,
+                                expiryDate: extrafield.drugTestDate,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                    } else if(medicalDocument.attachmentType === 'Physical'){
+                    } else if (medicalDocument.attachmentType === 'Physical') {
                         employeeEligibilities.push(_.extend({}, rowToPush, {
                             attachmentType: 'Habituation',
                             expiryDate: medicalDocument.expiryDate,
@@ -502,17 +502,17 @@
                         }));
                     }
                 });
-                
-                
-                _.each(_.filter(ctrl.actualAttachments, function(attachment){
-                        return attachment.type === 'aed' && (['Initial Application Packet','Initial Application Packet Nursing'].indexOf(attachment.attachmentType) > -1);
-                    }), function (intialApplicationPacket) {
+
+
+                _.each(_.filter(ctrl.actualAttachments, function (attachment) {
+                    return attachment.type === 'aed' && (['Initial Application Packet', 'Initial Application Packet Nursing'].indexOf(attachment.attachmentType) > -1);
+                }), function (intialApplicationPacket) {
                     var extrafield = JSON.parse(intialApplicationPacket.extraFields);
-                    if(extrafield.subtypes){
+                    if (extrafield.subtypes) {
                         _.each(extrafield.subtypes, function (exists, type) {
                             if (exists === true && employeeAttachmentTypes[type]) {
                                 var rowToPush = {
-                                    modified:true,
+                                    modified: true,
                                     attachmentType: employeeAttachmentTypes[type],
                                     dateInserted: intialApplicationPacket.dateInserted,
                                     dateUpdated: intialApplicationPacket.dateUpdated,
@@ -523,7 +523,7 @@
                                     type: intialApplicationPacket.type,
                                     extraFields: {}
                                 };
-                                
+
                                 if (['HCR', 'References', 'CompetencyExam',
                                     'Certificate', 'OPSearch', 'InfectionControl'].indexOf(type) > -1) {
                                     rowToPush['expiryDate'] = extrafield.eligibilityExpDate;
@@ -540,7 +540,7 @@
                         });
                     }
                     employeeEligibilities.push({
-                        modified:true,
+                        modified: true,
                         attachmentType: 'Employment Eligibility (I-9)',
                         dateInserted: intialApplicationPacket.dateInserted,
                         dateUpdated: intialApplicationPacket.dateUpdated,
@@ -552,7 +552,7 @@
                         expiryDate: extrafield.eligibilityExpDate
                     });
                 });
-                ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);                
+                ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);
                 ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments, function (attachment) {
                     return attachment.expiryDate ? new Date(attachment.expiryDate) : new Date(1970, 1, 1);
                 }, ['desc']);
@@ -567,18 +567,18 @@
                 ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
             }
         };
-        
-        ctrl.getAttachmentName = function(attachment){
-            var fileName = attachment.filePath;                                    
-            return ctrl.employee.lName 
-                    + ' ' + 
+
+        ctrl.getAttachmentName = function (attachment) {
+            var fileName = attachment.filePath;
+            return ctrl.employee.lName
+                    + ' ' +
                     ctrl.employee.fName
                     + '-' +
-                    (MappingForDownload[attachment.attachmentType]?MappingForDownload[attachment.attachmentType]:attachment.attachmentType)
+                    (MappingForDownload[attachment.attachmentType] ? MappingForDownload[attachment.attachmentType] : attachment.attachmentType)
                     + '-' +
                     moment(attachment.dateInserted).format("MMDDYYYYHHmm")
                     + '.' +
-                    fileName.substring(fileName.lastIndexOf('.') + 1);            
+                    fileName.substring(fileName.lastIndexOf('.') + 1);
         };
 
         //function called on page initialization.
@@ -596,7 +596,7 @@
                         ctrl.hideLoadingImage = false;
                     } else {
                         ctrl.hideLoadingImage = true;
-                    }                    
+                    }
                     ctrl.employee = res;
                     ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                     getFilteredAttachments();
@@ -655,7 +655,7 @@
             }
         }
         ;
-        
+
         ctrl.openSSNModal = function (employeeId)
         {
             var modalInstance = $modal.open({
@@ -787,8 +787,8 @@
                     googleMapFunctions(ctrl.employee.locationLatitude, ctrl.employee.locationLongitude);
                     form_data = $('#add_employee_form').serialize();
                     $timeout(function () {
-                            $('#PreferredCounties').trigger('change.select2');
-                        }, 100);
+                        $('#PreferredCounties').trigger('change.select2');
+                    }, 100);
                 } else {
                     ctrl.tab3DataInit();
                 }
@@ -891,7 +891,7 @@
                 ctrl.employee = {};
             } else {
                 ctrl.editMode = true;
-                
+
             }
             //to set radio buttons on tab init..
             $timeout(function () {
@@ -1374,10 +1374,10 @@
                     attachmentInfo: function () {
                         return mode === 'Edit' ? angular.copy(attachmentToEdit) : {employeeId: ctrl.employee.id, type: attachmentToEdit};
                     },
-                    employee: function (){
+                    employee: function () {
                         return ctrl.employee;
                     },
-                    filename: function(){
+                    filename: function () {
                         return mode === 'Edit' ? ctrl.getAttachmentName(attachmentToEdit) : null;
                     }
                 }
@@ -1422,10 +1422,14 @@
         };
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id)) 
+            if (isNaN(parseFloat($state.params.id))
                     || ($rootScope.currentUser.allowedFeature.indexOf('HR_EDIT_EMPLOYEE') === -1
-                    && $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE_DEMO') === -1)) {
+                            && $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE_DEMO') === -1)) {
                 $state.transitionTo(ontime_data.defaultState);
+            } else if ($state.current.name.indexOf('tab2') > -1) {
+                if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_EMPLOYEE_WAGES') === -1) {
+                    $state.transitionTo(ontime_data.defaultState);
+                }
             }
             ctrl.editMode = true;
             Page.setTitle("Update Employee");

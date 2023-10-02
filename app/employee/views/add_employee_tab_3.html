@@ -157,7 +157,7 @@
                             <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab4')">
                                 Next »
                             </button>
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="hasAccess('VIEW_EMPLOYEE_WAGES') ? addEmployee.setFromNext('tab2'):addEmployee.setFromNext('tab1')">
                                 « Previous
                             </button>
                         </div>
