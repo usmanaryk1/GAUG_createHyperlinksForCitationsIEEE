@@ -118,6 +118,14 @@
                     action: 'reconciliations'
                 }
             },
+            getReconciliationByGuid: {
+                method: 'GET',
+                isArray: false,
+                params: {
+                    action: 'edi',
+                    paramId: 'data'
+                }
+            },
             deleteClaim:{
                 method: 'DELETE',
                 params: {
@@ -205,6 +213,9 @@
             },
             getReconciliation: function(data) {
                 return api.getReconciliation({paramId: data.id}).$promise;
+            },
+            getReconciliationByGuid: function(data) {
+                return api.getReconciliationByGuid({paramId2: data.guid}).$promise;
             },
             deleteClaim: function(data) {
                 return api.deleteClaim(data).$promise;

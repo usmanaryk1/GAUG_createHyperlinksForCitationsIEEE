@@ -171,7 +171,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                             if ($('form').dirtyForms('isDirty') || $rootScope.isFormDirty) {
                                 if (!confirm("You've made changes on this page which aren't saved. If you leave you will lose these changes.\n\nAre you sure you want to leave this page?")) {
                                     event.preventDefault();
-                                }else{
+                                } else {
                                     $rootScope.isFormDirty = false;
                                 }
                             }
@@ -655,42 +655,51 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'VIEW_BILLING_HISTORY'
                 }
-            }).state('app.bill_reader', {
+            }).
+            state('app.bill_reader', {
                 url: '/bill_reader',
                 controller: 'EdiReaderCtrl as ediReader',
                 templateUrl: appHelper.viewTemplatePath('billing', 'edi_reader'),
                 data: {
-                    feature: 'VIEW_BILLING_HISTORY'
-                }
-            }).state('app.billing_reconciliation', {
-                url: '/billing_reconciliation',
-                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
-                data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION'
                 }
-            }).
-            state('app.billing_reconciliation_list', {                
+            }).state('app.billing_reconciliation', {
+        url: '/billing_reconciliation',
+        templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
+        data: {
+            feature: 'MANAGE_BILLING_RECONCILIATION'
+        }
+    }).
+            state('app.billing_reconciliation_list', {
                 url: '/billing_reconciliation/list',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_list'),
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
-                    title:'View'
+                    title: 'View'
                 }
             }).
-            state('app.billing_reconciliation_new', {                
+            state('app.billing_reconciliation_new', {
                 url: '/billing_reconciliation/new',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
-                    title:'New'
+                    title: 'New'
                 }
             }).
-            state('app.billing_reconciliation_view', {                
+            state('app.billing_reconciliation_view', {
                 url: '/billing_reconciliation/view/:id',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
-                    title:'View'
+                    title: 'View'
+                }
+            }).
+            state('app.billing_reconciliation_edi_read', {
+                url: '/billing_reconciliation/edi_read/:dataId',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title: 'EdiRead'
                 }
             }).
             state('app.location_lookup', {
@@ -980,13 +989,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'CREATE_BENEFIT,EDIT_BENEFIT'
                 }
             }).state('admin.employee-adjustments', {
-                url: '/employee-adjustments/:status',
-                templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
-                controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
-                data: {
-                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
-                }
-            }).
+        url: '/employee-adjustments/:status',
+        templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
+        controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
+        data: {
+            feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+        }
+    }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',

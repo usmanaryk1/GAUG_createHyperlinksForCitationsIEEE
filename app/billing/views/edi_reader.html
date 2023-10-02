@@ -34,7 +34,7 @@
                                     }, 200);
                                 });</script>
                             <select class="form-control" id="insuranceProviderId1" name="insuranceProviderId1" ng-model="ediReader.ediUploadData.insuranceProviderId"
-                                    ng-disabled="ediReader.ediUploadData.fileName!=null"
+                                    ng-disabled="ediReader.ediUploadData.fileName != null"
                                     ng-options='ins.id as (ins.insuranceName) for ins in ediReader.insuranceProviderList'>
                                 <option value="">
                                     Select the insurance provider
@@ -172,12 +172,11 @@
                                         <td>{{data.paymentDate}}</td>
                                         <td>${{data.totalAmount ? (data.totalAmount | number:2): 0}}</td>
                                         <td class="text-center">
-<!--                                            <div class="center">                                                
-                                                <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="session.isRejected !== true && hasAccess('DELETE_BILLING_CLAIM')" 
-                                                   ng-click="claimSearch.openRejectModal(session, $event)" tooltip="Reject"><span class="ed_b"></span></a>
-                                                <a class="btn icon-left fa fa-check edit_button" href="" ng-if="session.isRejected === true && hasAccess('DELETE_BILLING_CLAIM')" 
-                                                   ng-click="claimSearch.openRejectModal(session, $event)" tooltip="Open"><span class="ed_b"></span></a>                                                   
-                                            </div>-->
+                                            <div class="center">
+                                                <a class="btn icon-left fa fa-pencil edit_button" 
+                                                   ng-if="hasAccess('MANAGE_BILLING_RECONCILIATION') && data.status=='MAPPED'" 
+                                                   ui-sref="app.billing_reconciliation_edi_read({dataId: data.ediDataGuid})" tooltip="Edit"><span class="ed_b"></span></a> 
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>

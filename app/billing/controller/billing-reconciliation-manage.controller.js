@@ -5,6 +5,7 @@
         var ctrl = this;
         ctrl.title = $state.current.data.title;
         ctrl.isViewOnly = $state.current.data.title === 'View' ? true : false;
+        ctrl.isEdiRead = $state.current.data.title === 'EdiRead' ? true : false;
         ctrl.show = 'filtered';
         ctrl.selectedClaims = {};
         ctrl.currentDate = new Date();
@@ -298,7 +299,11 @@
                             billToSave.reconciliationDetails.push({claimId: claim.id, paidAmount: claim.AmountPaid, creditUsed: claim.creditUsed});
                     });
                 }
-                if (billToSave.reconciliationDetails.length === 0 && (!billToSave.creditUsages || billToSave.creditUsages.length === 0)) {
+                if (!billToSave.creditUsages) {
+                    billToSave.creditUsages = [];
+                }
+//                delete billToSave.ediDataGuid;
+                if (billToSave.reconciliationDetails.length === 0 && (billToSave.creditUsages.length === 0)) {
                     toastr.warning("Please add valid claims to save.");
                     return;
                 }
@@ -352,6 +357,32 @@
             });
         };
 
+        if (ctrl.isEdiRead) {
+            BillingDAO.getReconciliationByGuid({guid: $state.params.dataId}).then(function (bill) {
+                ctrl.selectedClaimsShow = [];
+                ctrl.claims = [];
+                if (bill.reconciliationDetails) {
+                    _.each(bill.reconciliationDetails, function (reconciliation) {
+                        var claim = angular.copy(reconciliation.claim);
+                        claim.AmountPaid = reconciliation.paidAmount;
+                        ctrl.selectedClaimsShow.push(claim);
+                        ctrl.claims.push(claim);
+                        ctrl.selectedClaims[claim.id] = true;
+                    });
+                }
+                ctrl.show = 'selected';
+                ctrl.bill = {};
+                ctrl.bill.ediDataGuid = bill.ediDataGuid;
+                ctrl.bill.eftDate = bill.eftDate;
+                ctrl.bill.orgCode = bill.orgCode;
+                ctrl.bill.receivedBy = bill.receivedFrom;
+                ctrl.bill.paymentAmount = bill.paymentAmount;
+                ctrl.bill.paymentMethod = bill.paymentMethod;
+                ctrl.bill.receivedDate = bill.receivedDate;
+                ctrl.bill.referenceNumber = bill.referenceNumber;
+                ctrl.updateSelection();
+            });
+        }
     }
     angular.module('xenon.controllers')
             .controller('ManageBillingReconciliationCtrl', ["$state", "$timeout", "$modal", "$rootScope", "InsurerDAO", "PatientDAO", "BillingDAO", ManageBillingReconciliationCtrl])
