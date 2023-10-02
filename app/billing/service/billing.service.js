@@ -137,6 +137,13 @@
                 params: {                    
                     action: 'claims'
                 }
+            },
+            saveEdiSequence:{
+                method: 'POST',
+                params: {                    
+                    action: 'edi',
+                    paramId2: 'data'
+                }
             }
         });
         return {
@@ -199,6 +206,9 @@
             },
             setClaimStatus: function (data) {
                 return api.setClaimStatus({paramId: data.claimId, paramId2: data.status}, data).$promise;
+            },
+            saveEdiSequence: function (data) {
+                return api.saveEdiSequence({paramId: data.sequenceId}).$promise;
             }
         };
     };

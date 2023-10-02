@@ -655,8 +655,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'VIEW_BILLING_HISTORY'
                 }
-            }).
-            state('app.billing_reconciliation', {
+            }).state('app.bill_reader', {
+                url: '/bill_reader',
+                controller: 'EdiReaderCtrl as ediReader',
+                templateUrl: appHelper.viewTemplatePath('billing', 'edi_reader'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY'
+                }
+            }).state('app.billing_reconciliation', {
                 url: '/billing_reconciliation',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
                 data: {
