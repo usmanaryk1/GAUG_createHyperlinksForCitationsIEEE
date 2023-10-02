@@ -11,6 +11,7 @@ var app = angular.module('xenon-app', [
     'xenon.factory',
     'xenon.services',
     'xenon.filter',
+    'mwl.calendar',
     // Added in v1.3
     'FBAngular',
     'flow',
@@ -425,6 +426,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/company_information',
                 templateUrl: appHelper.viewTemplatePath('company', 'company_information'),
                 controller: 'AddCompanyCtrl as addCompany',
+            }).
+            /////Calendar
+            state('app.calendar', {
+                url: '/calendar',
+                templateUrl: appHelper.viewTemplatePath('calendar', 'calendar'),
+                controller: 'CalendarCtrl as calendar',
             }).
             // Update Highlights
 //            state('app.update-highlights', {

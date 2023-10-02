@@ -1,0 +1,19 @@
+<div style="background:white;padding:20px;">
+          <mwl-calendar
+            events="calendar.events"
+            view="calendar.calendarView"
+            view-title="calendar.calendarTitle"
+            current-day="calendar.calendarDay"
+            on-event-click="eventClicked(calendarEvent)"
+            on-event-times-changed="eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+            edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+            delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+            on-edit-event-click="eventEdited(calendarEvent)"
+            on-delete-event-click="eventDeleted(calendarEvent)"
+            auto-open="true"
+            day-view-start="06:00"
+            day-view-end="22:00"
+            day-view-split="30"
+            cell-modifier="modifyCell(calendarCell)">
+          </mwl-calendar>
+</div>
