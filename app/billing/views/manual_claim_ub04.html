@@ -240,34 +240,59 @@
     <!--PAGE TITLE END -->
 
     <div class="clearfix"></div>
-    <div class="col-sm-7 pull-right" ng-if="!manualClaim.reviewMode">
+    <div class="col-sm-6" ng-if="!manualClaim.reviewMode">
+        <label class="col-sm-4 control-label text-right" style="margin-top:7px;">
+            Insurer Claim Number
+        </label>
+        <div class="col-sm-8" >
+            <div class="input-group">
+
+                <input id="insurerClaimNumber" name="insurerClaimNumber" class="form-control" 
+                       type="text" ng-model="manualClaim.insurerClaimNumber"/>
+                <span class="input-group-addon" style="padding: 0px!important;">
+                    <button type="button" class="btn btn-info btn-single green_bt" ng-click="manualClaim.getClaimDataByInsuranceClaimNumber(manualClaim.insurerClaimNumber);" 
+                            ng-disabled="!manualClaim.insurerClaimNumber" style="margin: 0px!important; width:auto!important;" >Load</button>                   
+                    <!--<i>Load</i>-->
+                </span>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="col-sm-6" ng-if="!manualClaim.reviewMode">
         <label class="col-sm-3 control-label text-right" style="margin-top:7px;">
             Patient Name
         </label>
         <div class="col-sm-9" >
-            <script type="text/javascript">
-                jQuery(document).ready(function ($)
-                {
-                    setTimeout(function () {
-                        $("#sboxit-1").select2({
+            <div class="input-group">
+                <script type="text/javascript">
+                    jQuery(document).ready(function ($)
+                    {
+                        setTimeout(function () {
+                            $("#sboxit-1").select2({
 //                                                        minimumResultsForSearch: -1,
-                            placeholder: 'Select Patient...',
+                                placeholder: 'Select Patient...',
 //                                                        minimumInputLength: 1,
 //                                                        placeholder: 'Search',
-                        }).on('select2-open', function ()
-                        {
-                            // Adding Custom Scrollbar
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                    }, 200);
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        }, 200);
 
-                });
-            </script>
-            <select id="sboxit-1" name="PatientName" 
-                    ng-change="manualClaim.getPatientDetail(manualClaim.patientId);" ng-model="manualClaim.patientId" ng-options="pat.id as (pat.label) for pat in manualClaim.patientList track by pat.id" >
-                <option value="" selected hidden />
-            </select>
-            <div class="text-danger" ng-if="manualClaim.showPatientError && (!manualClaim.patientId || manualClaim.patientId === '')">Please select a patient to proceed.</div>
+                    });
+                </script>
+                <select id="sboxit-1" name="PatientName" 
+                        ng-model="manualClaim.patientId" ng-options="pat.id as (pat.label) for pat in manualClaim.patientList track by pat.id" >
+                    <option value="" selected hidden />
+                </select>
+                <span class="input-group-addon"  style="padding: 0px!important;">
+                    <button type="button" class="btn btn-info btn-single green_bt " ng-click="manualClaim.getPatientDetail(manualClaim.patientId);"
+                            ng-disabled="!manualClaim.patientId" style="margin: 0px!important; width:auto!important;" >Load</button>                   
+                </span>
+            </div>
+
         </div>
     </div>
 

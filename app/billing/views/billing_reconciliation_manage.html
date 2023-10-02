@@ -243,13 +243,18 @@
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="manageBillingReconciliation.resetFilters()">
                                         Reset
                                     </button>
+                                    <div class="input-group pull-right">
+                                        <button type="button" class="btn btn-info pull-right" 
+                                                ng-if="manageBillingReconciliation.claimsNotMapped.length != 0"
+                                                ng-click="manageBillingReconciliation.openNonMatchedClaims()">non-matched claims</button>
+                                    </div>
                                 </div>
                             </div>
                         </accordion-group>
                         <accordion-group heading="Claims" is-open="true" class="expanded" 
                                          ng-if="!manageBillingReconciliation.isViewOnly" 
                                          ng-show="(manageBillingReconciliation.claims && manageBillingReconciliation.claims.length > 0)
-                                                                 || (manageBillingReconciliation.selectedClaims && manageBillingReconciliation.selectedClaims.length > 0)">
+                                                                 || (manageBillingReconciliation.selectedClaims && manageBillingReconciliation.selectedClaimsShow.length > 0)">
                             <div class="row" style="margin-top: -3%;">                     
                                 <div class="input-group pull-right filter-font">
                                     <label class="cbr-inline">
@@ -409,7 +414,7 @@
                             </div>
                             <div class="clearfix"></div>
                             <div>&nbsp;</div>
-                            <div class="row" ng-if="manageBillingReconciliation.claims.length">
+                            <div class="row" ng-if="manageBillingReconciliation.claims.length || manageBillingReconciliation.selectedClaimsShow.length">
                                 <div class="col-sm-7" style="margin-top: -22px">
                                     <div>
                                         <div class="row" style="margin-left: 0px">
@@ -438,7 +443,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    <tr ng-if="manageBillingReconciliation.bill.creditUsages.length === 0">
+                                                    <tr ng-if="!manageBillingReconciliation.bill.creditUsages.length">
                                                         <td colspan="4" style="text-align: center;">
                                                             No records found
                                                         </td>

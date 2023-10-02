@@ -1,7 +1,6 @@
 /* global appHelper, state */
 
 'use strict';
-
 var app = angular.module('xenon-app', [
     'ngCookies',
     'ngResource',
@@ -46,9 +45,8 @@ function delete_cookie(name) {
 
 app.run(function ($rootScope, $modal, $state, Idle, $http)
 {
-    // Page Loading Overlay
+// Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
-
     jQuery(window).load(function ()
     {
         public_vars.$pageLoadingOverlay.addClass('loaded');
@@ -70,7 +68,6 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             keyboard: false
         });
     });
-
     $rootScope.$on('IdleTimeout', function () {
         closeModals();
         $rootScope.logout();
@@ -81,17 +78,14 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
         Idle.watch();
         $rootScope.started = true;
     };
-
     $rootScope.stopIdle = function () {
         closeModals();
         Idle.unwatch();
         $rootScope.started = false;
-
     };
     $rootScope.$on('IdleEnd', function () {
         closeModals();
     });
-
     $rootScope.logout = function () {
         $http.get(ontime_data.weburl + 'logout').success(function (response) {
             delete_cookie("cc");
@@ -101,8 +95,6 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             window.location.hash = '#/app/login';
         });
     };
-
-
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
@@ -159,7 +151,6 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                 }
             })
             ;
-
     $rootScope.$on('$locationChangeStart',
             function (event, newUrl, oldUrl) {
                 var pattern = /(#\/app)\/([^\/]+)[$|\/]?/;
@@ -213,12 +204,10 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
 
             });
 });
-
 app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
     IdleProvider.idle(900);
     IdleProvider.timeout(60);
     KeepaliveProvider.interval(10);
-
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
     var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout) {
@@ -239,7 +228,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             });
         }
         return deferred.promise;
-
     }
     $stateProvider.
             // Main Layout Structure
@@ -699,7 +687,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'VIEW_BILLING_HISTORY'
                 }
-            }).
+            }).state('app.bill_reader', {
+        url: '/bill_reader',
+        controller: 'EdiReaderCtrl as ediReader',
+        templateUrl: appHelper.viewTemplatePath('billing', 'edi_reader'),
+        data: {
+            feature: 'EDI_DATA_READER'
+        }
+    }).
             state('app.billing_reconciliation', {
                 url: '/billing_reconciliation',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
@@ -729,6 +724,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'MANAGE_BILLING_RECONCILIATION',
                     title: 'View'
+                }
+            }).
+            state('app.billing_reconciliation_edi_read', {
+                url: '/billing_reconciliation/edi_read/:dataId',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_manage'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title: 'EdiRead'
                 }
             }).
             state('app.location_lookup', {
@@ -1024,8 +1027,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
         data: {
             feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
         }
+    }).state('admin.benifit-payouts', {
+        url: '/benifit-payouts/:status',
+        templateUrl: appHelper.viewTemplatePath('benefits', 'benifit-payouts'),
+        controller: 'BenefitPayoutCtrl as benefitPayoutCtrl',
+        data: {
+            feature: 'EMPLOYEE_BENEFIT_PAYOUT'
+        }
     }).
-            // Update Highlights
+// Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
 //                templateUrl: appHelper.templatePath('update-highlights'),
@@ -1705,7 +1715,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         if (!config.params) {
                             config.params = {};
                         }
-                        config.params['version'] = '@$4.6.3$@';
+                        config.params['version'] = '@$5.0.2$@';
                     }
                     ontime_data.company_code = getCookie("cc");
                     if (ontime_data.company_code != null) {
@@ -1740,10 +1750,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         window.location.hash = '#/app/login';
                         toastr.clear();
                         return deferred.promise;
-
 //                        return $q.when(response);
                     }
-                    // do something on success
+// do something on success
                     return $q.reject(response);
                 }
 

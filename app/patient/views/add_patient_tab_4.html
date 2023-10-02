@@ -185,6 +185,7 @@
                                             <tr>
 
                                                 <th class="hidden-xs text-center">ID</th>
+                                                <th class="text-center">Insurance Provider</th>
                                                 <th class="text-center">Care Type</th>
                                                 <th class="text-center">Authorization Hours</th>
                                                 <th class="text-center">Authorization Number</th>
@@ -196,9 +197,10 @@
                                         <tbody>
                                             <tr ng-repeat="authDocument in addPatient.authorizationDocuments">
                                                 <td class="hidden-xs text-center">{{$index + 1}}</td>
-                                                <td align="center" tooltip="{{addPatient.careTypeIdMap[authDocument.careType].billingCode!=null?'Billing Code: '+addPatient.careTypeIdMap[authDocument.careType].billingCode:''}}" tooltip-append-to-body="true">{{authDocument.careTypeTitle}}</td>
+                                                <td>{{authDocument.insuranceProviderName}}</td>
+                                                <td tooltip="{{addPatient.careTypeIdMap[authDocument.careType].billingCode!=null?'Billing Code: '+addPatient.careTypeIdMap[authDocument.careType].billingCode:''}}" tooltip-append-to-body="true">{{authDocument.careTypeTitle}}</td>
                                                 <td align="center">{{authDocument.authorizedHours}}</td>
-                                                <td align="center">
+                                                <td>
                                                     {{authDocument.authorizationNumber}}                                                    
                                                 </td> 
                                                 <td align="center"><span ng-if="authDocument.startDate != null">{{authDocument.startDate|date:dateFormat}} -</span> {{authDocument.expiryDate|date:dateFormat}}</td> 

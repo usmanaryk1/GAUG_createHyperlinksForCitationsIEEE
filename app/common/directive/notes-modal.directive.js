@@ -32,9 +32,9 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                 scope.allLoaded = false;
                 scope.data = {note: ""};
                 if (scope.type === 'patient') {
-                    scope.noteTypes = ['Communication', 'Falls', 'Accidents/Incidents'];
+                    scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls', 'MLTC Update'];
                 } else {
-                    scope.noteTypes = ['Disciplinary'];
+                    scope.noteTypes = ['Case Refusal', 'Company Outreach', 'Compliance', 'Disciplinary', 'Employee Message', 'Miscellaneous', 'Proxy Communication', 'Standard Communication'];
                 }
                 scope.searchParams = {userId: scope.userId, pageNo: 1, limit: 10, action: scope.userId, subAction: 'notes'};
                 if (scope.hasRetrieve) {
@@ -74,7 +74,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     $rootScope.maskLoading();
                     FeatureDAO.addNotes(
                             {userId: scope.userId,
-                                note: {note: scope.data.note, type: scope.data.type}}).then(function (res) {
+                                note: {note: scope.data.note, noteType: scope.data.type}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};
@@ -94,7 +94,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     FeatureDAO.updateNotes(
                             {userId: scope.userId,
                                 noteId: scope.data.id,
-                                note: {note: scope.data.note, type: scope.data.type}}).then(function (res) {
+                                note: {note: scope.data.note, noteType: scope.data.type}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};

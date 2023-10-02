@@ -123,6 +123,7 @@ angular.module('xenon.services', []).
                 billing.addItem('Billing History', './biling_history', 'VIEW_BILLING_HISTORY');
                 billing.addItem('Billing Setting', './biling_setting', 'CREATE_BILLING_SETTING');
                 billing.addItem('Search Claim', './claim_search', 'VIEW_BILLING_HISTORY');
+                billing.addItem('EDI Reader', './bill_reader', 'EDI_DATA_READER');
                 billing.addItem('Billing Reconciliation', './billing_reconciliation', 'MANAGE_BILLING_RECONCILIATION');
                 billing.addItem('Manual Claim 1500', './manual_claim', 'CREATE_MANUAL_CLAIM');
                 billing.addItem('Manual Claim UB04', './manual_claim_ub04', 'CREATE_MANUAL_CLAIM');
@@ -225,6 +226,7 @@ angular.module('xenon.services', []).
                 benefits.addItem('Add Benefit', './benefits/', 'CREATE_BENEFIT');
                 benefits.addItem('View Benefit', './benefits', 'VIEW_BENEFIT');
                 benefits.addItem('Benefit Adjustments', './employee-adjustments/active', 'EMPLOYEE_BENEFIT_ADJUSTMENT');
+                benefits.addItem('Benefit Payouts', './benifit-payouts/active', 'EMPLOYEE_BENEFIT_PAYOUT');
                 // Subitems of company
 //                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 

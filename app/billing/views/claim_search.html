@@ -19,7 +19,7 @@
                 <div class="panel-body">
                     <div style="color:#2c2e2f" ng-form='claimSearchForm'>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label>Patient Name</label>
                                 <script type="text/javascript">
                                     jQuery(document).ready(function ($)
@@ -38,11 +38,15 @@
                                     <option value="" selected hidden />
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label>Insurer Claim Number</label>
+                                <input ng-model="claimSearch.searchParams.insurerClaimNumber" type="text" class="form-control"/>
+                            </div>
+                            <div class="col-md-3">
                                 <label>Batch Number</label>
                                 <input numbers-only="true" ng-model="claimSearch.searchParams.batchId" type="text" class="form-control"/>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label>Claim Number</label>
                                 <input numbers-only="true" ng-model="claimSearch.searchParams.claimId" type="text" class="form-control"/>
                             </div>
@@ -78,8 +82,9 @@
                             <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="claimSearch.claims.length">
                                 <thead>
                                     <tr>
-                                        <th nowrap><span class="">Batch Number</span></th>
-                                        <th nowrap><span class="">Claim Number</span></th>
+                                        <th nowrap><span class="">Batch<br/>Number</span></th>
+                                        <th nowrap><span class="">Claim<br/>Number</span></th>
+                                        <th nowrap><span class="">Insurer<br/>Claim Number</span></th>
                                         <th nowrap><span class="">Patient Name</span></th>
                                         <th nowrap><span class="">Date Of Birth</span></th>
                                         <th nowrap width="20%" ><span class="">Service Date Range</span></th>
@@ -96,6 +101,7 @@
                                         current-page="claimSearch.searchParams.pageNo" >
                                         <td style="cursor: pointer" ng-click="claimSearch.reviewClaims(session.billingSessionId)"><b>{{session.billingSessionId}}</b></td>
                                         <td style="cursor: pointer" ng-click="claimSearch.openClaim1500(session);"><b>{{session.id}}</b></td>
+                                        <td>{{session.insurerClaimNumber}}</td> 
                                         <td>{{session.patientName}}</td>                                        
                                         <td>{{session.patientBirthDate|date:dateFormat}}</td>
                                         <td><span ng-if="session.sessionStartDate && session.sessionEndDate">{{session.sessionStartDate|date:dateFormat}} - {{session.sessionEndDate|date:dateFormat}}</span></td>

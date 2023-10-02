@@ -138,9 +138,9 @@
                     }
                 });
                 patientToSave.languagesSpoken = patientToSave.languagesSpoken.toString();
-                
+
                 patientToSave.aideSkills = [];
-                angular.forEach(ctrl.aideSkills, function (value,key) {
+                angular.forEach(ctrl.aideSkills, function (value, key) {
                     if (value === true) {
                         patientToSave.aideSkills.push(key);
                     }
@@ -273,15 +273,15 @@
                             }
                         });
                     }
-                    
+
                     if (res.aideSkills != null) {
                         var aideSkills = res.aideSkills.split(',');
                         angular.forEach(aideSkills, function (skillId) {
                             ctrl.aideSkills[skillId] = true;
                         });
                     }
-                    
-                    
+
+
                     if (ctrl.patient.otherLanguages != null && ctrl.patient.otherLanguages != '') {
                         ctrl.otherLanguageCheckbox = true;
                         ctrl.refreshLanguages();
@@ -718,12 +718,16 @@
                     $scope.fileObj = {};
                     $scope.careObj = {};
 
-                        for(var i=0; i<ctrl.insuranceProviderList.length; i++){
-                            if(ctrl.insuranceProviderList[i].id === ctrl.patient.insuranceProviderId){
+                    if (ctrl.currentAuthorizationDocument) {
+
+                    } else {
+                        for (var i = 0; i < ctrl.insuranceProviderList.length; i++) {
+                            if (ctrl.insuranceProviderList[i].id === ctrl.patient.insuranceProviderId) {
                                 $scope.careObj.insuranceProviderName = ctrl.insuranceProviderList[i].insuranceName;
                                 break;
                             }
                         }
+                    }
                     $scope.uploadFile = {
                         target: ontime_data.weburl + 'file/upload',
                         chunkSize: 1024 * 1024 * 1024,
@@ -865,6 +869,7 @@
                             authorizedHours: $scope.careObj.authorizedHours,
                             filePath: $scope.careObj.filePath,
                             name: $scope.fileName,
+                            insuranceProviderName: $scope.careObj.insuranceProviderName,
                             expiryDate: $scope.careObj.expiryDate,
                             previousExpiryDate: $scope.careObj.previousExpiryDate,
                             changeSchedule: $scope.careObj.changeSchedule,
@@ -878,6 +883,7 @@
                             }
                             $scope.addPatient.authorizationDocuments[$scope.addPatient.currentAuthorizationDocumentIndex] = authObj;
                         } else {
+                            authObj['insuranceProviderId'] = ctrl.patient.insuranceProviderId;
                             $scope.addPatient.authorizationDocuments.push(authObj);
                         }
                         $scope.addPatient.authorizationDocuments.sort(function (a, b) {
@@ -911,6 +917,7 @@
                     if ($scope.addPatient.currentAuthorizationDocument) {
                         $scope.viewEditFileMode = true;
                         $scope.careObj.careType = addPatient.careTypeIdMap[$scope.addPatient.currentAuthorizationDocument.careType];
+                        $scope.careObj.insuranceProviderName = $scope.addPatient.currentAuthorizationDocument.insuranceProviderName;
                         $scope.careObj.authorizedHours = $scope.addPatient.currentAuthorizationDocument.authorizedHours;
                         $scope.careObj.expiryDate = $scope.addPatient.currentAuthorizationDocument.expiryDate;
                         $scope.careObj.startDate = $scope.addPatient.currentAuthorizationDocument.startDate;
@@ -1229,20 +1236,20 @@
         ctrl.existingSchedule = undefined;
         if ($state.params.id != '') {
             PatientDAO.checkSchedule({patientId: $state.params.id})
-                .then(function (res) {
-                    if (res && res.data) {
-                        var checkSchedule = JSON.parse(res.data);
-                        ctrl.existingSchedule = checkSchedule.careTypeScheduleCheckMap;
-                        ctrl.scheduleAssociation = checkSchedule.careTypeScheduleAssociationMap;
-                    }
-                });
+                    .then(function (res) {
+                        if (res && res.data) {
+                            var checkSchedule = JSON.parse(res.data);
+                            ctrl.existingSchedule = checkSchedule.careTypeScheduleCheckMap;
+                            ctrl.scheduleAssociation = checkSchedule.careTypeScheduleAssociationMap;
+                        }
+                    });
         }
-        
-        ctrl.getWarnings = function(){
-            if (ctrl.scheduleAssociation && _.isObject(ctrl.scheduleAssociation) && (_.keys(ctrl.scheduleAssociation).length > 0) && ctrl.careTypeList && (ctrl.careTypeList.length > 0)) {                
+
+        ctrl.getWarnings = function () {
+            if (ctrl.scheduleAssociation && _.isObject(ctrl.scheduleAssociation) && (_.keys(ctrl.scheduleAssociation).length > 0) && ctrl.careTypeList && (ctrl.careTypeList.length > 0)) {
                 ctrl.warningList = [];
-                _.each(ctrl.scheduleAssociation, function (value, key) {                    
-                    if (value === true && ctrl.careTypeList[key] && ctrl.careTypes && (ctrl.careTypes.indexOf(ctrl.careTypeList[key].id) === -1)) {                        
+                _.each(ctrl.scheduleAssociation, function (value, key) {
+                    if (value === true && ctrl.careTypeList[key] && ctrl.careTypes && (ctrl.careTypes.indexOf(ctrl.careTypeList[key].id) === -1)) {
                         ctrl.warningList.push(ctrl.careTypeList[key].companyCaretypeId.careTypeTitle);
                     }
                 });

@@ -238,7 +238,6 @@
                             </div>
                         </div>
                         <div class="form-group-separator"></div>
-                        
                         <div class="form-group">
                             <label class="col-sm-3 control-label" >
                                 PTO Utilization
@@ -255,6 +254,27 @@
                                 <select class="form-control" ng-model="addCompany.companyObj.ptoUtilizationDay" 
                                         name="utilizationDay" data-validate="required"  data-message-required="Please enter PTO Utilization Date." ng-required='true'
                                         ng-options="day for day in addCompany.utilizationDays">
+                                    <option value="" class="">Day</option>                            
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" >
+                                PTO Apply Before
+                            </label>
+                            <div class="col-sm-3">
+                                <select class="form-control" ng-model="addCompany.companyObj.ptoApplyMonth"
+                                        name="applyMonth" data-validate="required"  data-message-required="Please enter PTO Apply Month." ng-required='true' 
+                                        ng-options="month.id as month.label for month in addCompany.months"
+                                        ng-change="addCompany.changeDays('apply', addCompany.companyObj.ptoApplyMonth, addCompany.companyObj.ptoApplyDay)">
+                                    <option value="" class="">Month</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" ng-model="addCompany.companyObj.ptoApplyDay" 
+                                        name="applyDay" data-validate="required"  data-message-required="Please enter PTO Apply Date." ng-required='true'
+                                        ng-options="day for day in addCompany.applyDays">
                                     <option value="" class="">Day</option>                            
                                 </select>
                             </div>

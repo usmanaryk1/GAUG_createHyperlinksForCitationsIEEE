@@ -52,6 +52,13 @@
                     action: 'manualclaim'
                 }
             },
+            getClaimByInsuranceClaimNumber: {
+                method: 'GET',
+                params: {
+                    action: 'manualclaim',
+                    paramId2 : 'load'
+                }
+            },
             processManualClaim: {
                 method: 'POST',
                 params: {
@@ -118,6 +125,14 @@
                     action: 'reconciliations'
                 }
             },
+            getReconciliationByGuid: {
+                method: 'GET',
+                isArray: false,
+                params: {
+                    action: 'edi',
+                    paramId: 'data'
+                }
+            },
             deleteClaim:{
                 method: 'DELETE',
                 params: {
@@ -136,6 +151,28 @@
                 method: 'POST',
                 params: {                    
                     action: 'claims'
+                }
+            },
+            saveEdiSequence:{
+                method: 'POST',
+                params: {                    
+                    action: 'edi',
+                    paramId2: 'data'
+                }
+            },
+            deleteEdi:{
+                method: 'DELETE',
+                params: {
+                    action: 'edi',
+                    paramId2: 'data'
+                }             
+            },
+            searchEdiData: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'edi',
+                    paramId: 'data'
                 }
             }
         });
@@ -164,6 +201,9 @@
             getPatientDetails: function(param) {
                 return api.getPatientDetails(param).$promise;
             },
+            getClaimByInsuranceClaimNumber: function(param) {
+                return api.getClaimByInsuranceClaimNumber(param).$promise;
+            },
             processManualClaim: function(param, data) {
                 return api.processManualClaim(param, data).$promise;
             },
@@ -191,6 +231,9 @@
             getReconciliation: function(data) {
                 return api.getReconciliation({paramId: data.id}).$promise;
             },
+            getReconciliationByGuid: function(data) {
+                return api.getReconciliationByGuid({paramId2: data.guid}).$promise;
+            },
             deleteClaim: function(data) {
                 return api.deleteClaim(data).$promise;
             },
@@ -199,6 +242,15 @@
             },
             setClaimStatus: function (data) {
                 return api.setClaimStatus({paramId: data.claimId, paramId2: data.status}, data).$promise;
+            },
+            saveEdiSequence: function (data) {
+                return api.saveEdiSequence({paramId: data.sequenceId}).$promise;
+            },
+            deleteEdi: function(data) {
+                return api.deleteEdi(data).$promise;
+            },
+            searchEdiData: function(param) {
+                return api.searchEdiData(param).$promise;
             }
         };
     };

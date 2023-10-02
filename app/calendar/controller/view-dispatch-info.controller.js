@@ -104,7 +104,7 @@
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'employee-info'),
-                size: modal_size,
+                size: 'lg',
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false,
                 controller: 'EmployeeInfoCtrl as employeeinfo',

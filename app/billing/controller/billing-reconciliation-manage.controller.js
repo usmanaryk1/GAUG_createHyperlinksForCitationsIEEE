@@ -1,16 +1,17 @@
 /* global ontime_data, _, appHelper, parseFloat */
 
 (function () {
-    function ManageBillingReconciliationCtrl($state, $timeout, $modal, $rootScope, InsurerDAO, PatientDAO, BillingDAO) {
+    function ManageBillingReconciliationCtrl($formService, $state, $timeout, $modal, $rootScope, InsurerDAO, PatientDAO, BillingDAO) {
         var ctrl = this;
         ctrl.title = $state.current.data.title;
         ctrl.isViewOnly = $state.current.data.title === 'View' ? true : false;
-        ctrl.show = 'filtered';
+        ctrl.isEdiRead = $state.current.data.title === 'EdiRead' ? true : false;
         ctrl.selectedClaims = {};
         ctrl.currentDate = new Date();
         ctrl.viewRecords = 10;
         ctrl.filteredDatatableObj = {};
         ctrl.bill = {creditUsages: []};
+        ctrl.claimsNotMapped = [];
         ctrl.claimList = {allSelected: false, setAmountDue: false};
         ctrl.navigateToTab = navigateToTab;
         function navigateToTab() {
@@ -272,6 +273,19 @@
             });
         };
 
+        ctrl.openNonMatchedClaims = function () {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('billing', 'non_matched_claims_modal'),
+                controller: 'NonMatchedClaimCtrl as nonMatchedClaimCtrl',
+                size: 'lg',
+                resolve: {
+                    claimsNotMapped: function () {
+                        return ctrl.claimsNotMapped;
+                    }
+                }
+            });
+        };
+
         ctrl.save = function () {
             ctrl.formSubmitted = true;
             var isValid = true;
@@ -298,7 +312,11 @@
                             billToSave.reconciliationDetails.push({claimId: claim.id, paidAmount: claim.AmountPaid, creditUsed: claim.creditUsed});
                     });
                 }
-                if (billToSave.reconciliationDetails.length === 0 && (!billToSave.creditUsages || billToSave.creditUsages.length === 0)) {
+                if (!billToSave.creditUsages) {
+                    billToSave.creditUsages = [];
+                }
+//                delete billToSave.ediDataGuid;
+                if (billToSave.reconciliationDetails.length === 0 && (billToSave.creditUsages.length === 0)) {
                     toastr.warning("Please add valid claims to save.");
                     return;
                 }
@@ -352,9 +370,43 @@
             });
         };
 
+        if (ctrl.isEdiRead) {
+            BillingDAO.getReconciliationByGuid({guid: $state.params.dataId}).then(function (bill) {
+                ctrl.selectedClaimsShow = [];
+                ctrl.claims = [];
+                if (bill.reconciliationDetails) {
+                    _.each(bill.reconciliationDetails, function (reconciliation) {
+                        var claim = angular.copy(reconciliation.claim);
+                        claim.AmountPaid = reconciliation.paidAmount;
+                        ctrl.selectedClaimsShow.push(claim);
+                        ctrl.selectedClaims[claim.id] = true;
+                    });
+                }
+                $timeout(function () {
+                    ctrl.show = 'selected';
+                    $formService.setRadioValues('show', 'selected');
+                }, 500);
+                ctrl.bill = {};
+                ctrl.bill.ediDataGuid = bill.ediDataGuid;
+                ctrl.bill.eftDate = bill.eftDate;
+                ctrl.bill.orgCode = bill.orgCode;
+                ctrl.bill.receivedBy = bill.receivedFrom;
+                ctrl.bill.paymentAmount = bill.paymentAmount;
+                ctrl.bill.paymentMethod = bill.paymentMethod;
+                ctrl.bill.receivedDate = bill.receivedDate;
+                ctrl.bill.referenceNumber = bill.referenceNumber;
+                if (bill.ediClaimData) {
+                    ctrl.claimsNotMapped = bill.ediClaimData;
+                }
+                ctrl.updateSelection();
+            });
+        } else {
+            ctrl.show = 'filtered';
+        }
+
     }
     angular.module('xenon.controllers')
-            .controller('ManageBillingReconciliationCtrl', ["$state", "$timeout", "$modal", "$rootScope", "InsurerDAO", "PatientDAO", "BillingDAO", ManageBillingReconciliationCtrl])
+            .controller('ManageBillingReconciliationCtrl', ["$formService", "$state", "$timeout", "$modal", "$rootScope", "InsurerDAO", "PatientDAO", "BillingDAO", ManageBillingReconciliationCtrl])
             .config(['$provide', function ($provide) {
                     $provide.decorator('$locale', ['$delegate', function ($delegate) {
                             if ($delegate.id == 'en-us') {
