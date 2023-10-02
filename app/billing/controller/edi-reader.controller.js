@@ -1,20 +1,25 @@
 /* global ontime_data, _, appHelper, parseFloat */
 
 (function () {
-    function EdiReaderCtrl(Page, InsurerDAO, BillingDAO) {
+    function EdiReaderCtrl(Page, InsurerDAO, BillingDAO, $rootScope) {
         var ctrl = this;
         ctrl.ediUploadData = {};
         Page.setTitle("EDI reader");
         ctrl.datatableObj = {};
         ctrl.limit = 10;
+        ctrl.ediData = [];
         ctrl.viewRecords = 10;
         var defaultSearchParams = {limit: 10, pageNo: 1, sortBy: 'id', order: 'desc'};
         ctrl.searchParams = angular.copy(defaultSearchParams);
         ctrl.criteriaSelected = false;
         ctrl.errorMsg = {};
         ctrl.insuranceProviderList = [];
+        ctrl.insuranceProviderMap = {};
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
+            angular.forEach(res, function (insuranceProvier) {
+                ctrl.insuranceProviderMap[insuranceProvier.id] = insuranceProvier.insuranceName;
+            });
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
@@ -23,35 +28,35 @@
         };
         ctrl.pageChanged = function (pagenumber) {
             ctrl.searchParams.pageNo = pagenumber;
-            ctrl.retrieveSessions();
+            ctrl.retrieveEdiDatas();
         };
         ctrl.resetFilters = function () {
-            ctrl.claims = [];
+            ctrl.ediData = [];
             ctrl.criteriaSelected = false;
             ctrl.searchParams = angular.copy(defaultSearchParams);
             $("#insuranceProviderId").select2("val", null);
         };
-        ctrl.filterSessions = function () {
+        ctrl.filterEdiDatas = function () {
             ctrl.errorMsg = {};
             ctrl.searchParams.pageNo = 1;
-            if (ctrl.searchParams.insuranceProviderId != null || ctrl.searchParams.batchId != null || ctrl.searchParams.fileName != null) {
+            if (ctrl.searchParams.insuranceProviderId != null || ctrl.searchParams.ediDataSequenceId != null || ctrl.searchParams.fileName != null) {
                 ctrl.criteriaSelected = true;
-                ctrl.retrieveSessions();
+                ctrl.retrieveEdiDatas();
             }
         };
-        ctrl.retrieveSessions = function () {
+        ctrl.retrieveEdiDatas = function () {
             if (ctrl.criteriaSelected) {
                 $rootScope.paginationLoading = true;
                 $rootScope.maskLoading();
                 ctrl.dataRetrieved = false;
-                BillingDAO.searchClaims(ctrl.searchParams).then(function (res) {
+                BillingDAO.searchEdiData(ctrl.searchParams).then(function (res) {
                     ctrl.dataRetrieved = true;
-                    ctrl.claims = res;
+                    ctrl.ediData = res;
                 }).catch(function (e) {
                     if (e.data != null) {
                         toastr.error(e.data);
                     } else {
-                        toastr.error("Claims cannot be retrieved.");
+                        toastr.error("EDI data cannot be retrieved.");
                     }
                 }).then(function () {
                     $rootScope.paginationLoading = false;
@@ -74,7 +79,7 @@
                 BillingDAO.saveEdiSequence({sequenceId: ctrl.ediUploadData.sequenceId}).then(function () {
                     ctrl.resetUploadData();
                     toastr.success("EDI batch is created, search proposed reconciliation and start creating billing reconciliation.");
-                }).catch(function(){
+                }).catch(function () {
                     toastr.error("Error in saving EDI batch.");
                 });
             }
@@ -126,7 +131,7 @@
                 return false;
             }
             ctrl.uploadFile.headers.insuranceProviderId = ctrl.ediUploadData.insuranceProviderId;
-            if (file.getExtension() !== 'txt' && file.getExtension() !== '835') {
+            if (file.getExtension() !== 'edi' && file.getExtension() !== 'txt' && file.getExtension() !== '835') {
                 ctrl.fileObj.errorMsg = "Please upload a valid text file.";
                 return false;
             }
@@ -143,5 +148,5 @@
 
     }
     angular.module('xenon.controllers')
-            .controller('EdiReaderCtrl', ["Page", "InsurerDAO", "BillingDAO", EdiReaderCtrl])
+            .controller('EdiReaderCtrl', ["Page", "InsurerDAO", "BillingDAO", "$rootScope", EdiReaderCtrl])
 })();

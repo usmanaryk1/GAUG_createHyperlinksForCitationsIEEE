@@ -144,6 +144,14 @@
                     action: 'edi',
                     paramId2: 'data'
                 }
+            },
+            searchEdiData: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'edi',
+                    paramId: 'data'
+                }
             }
         });
         return {
@@ -209,6 +217,9 @@
             },
             saveEdiSequence: function (data) {
                 return api.saveEdiSequence({paramId: data.sequenceId}).$promise;
+            },
+            searchEdiData: function(param) {
+                return api.searchEdiData(param).$promise;
             }
         };
     };
