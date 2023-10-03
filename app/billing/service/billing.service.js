@@ -153,6 +153,13 @@
                     paramId2: 'data'
                 }
             },
+            deleteEdi:{
+                method: 'DELETE',
+                params: {
+                    action: 'edi',
+                    paramId2: 'data'
+                }             
+            },
             searchEdiData: {
                 method: 'GET',
                 isArray: true,
@@ -228,6 +235,9 @@
             },
             saveEdiSequence: function (data) {
                 return api.saveEdiSequence({paramId: data.sequenceId}).$promise;
+            },
+            deleteEdi: function(data) {
+                return api.deleteEdi(data).$promise;
             },
             searchEdiData: function(param) {
                 return api.searchEdiData(param).$promise;

@@ -1,7 +1,7 @@
 /* global ontime_data, _, appHelper, parseFloat */
 
 (function () {
-    function EdiReaderCtrl(Page, InsurerDAO, BillingDAO, $rootScope) {
+    function EdiReaderCtrl(Page, InsurerDAO, BillingDAO, $rootScope, $modal) {
         var ctrl = this;
         ctrl.ediUploadData = {};
         Page.setTitle("EDI reader");
@@ -85,68 +85,124 @@
             }
         }
 
-        ctrl.fileObj = {};
+        function uploadPopup() {
+            $rootScope.uploadEDIModel = $modal.open({
+                templateUrl: 'uploadEDIModel'
+            });
 
-        // for file upload
-        ctrl.uploadFile = {
-            target: ontime_data.weburl + 'billing/edi/upload',
-            chunkSize: 1024 * 1024 * 1024,
-            testChunks: false,
-            fileParameterName: "fileUpload",
-            singleFile: true,
-            headers: {
-                company_code: ontime_data.company_code,
-                requestToken: getCookie('taken'),
-                userName: getCookie('un')
+            $rootScope.uploadEDIModel.ediUploadData = {};
+            $rootScope.uploadEDIModel.insuranceProviderList = angular.copy(ctrl.insuranceProviderList);
+
+            setTimeout(function () {
+                $("#insuranceProviderId1").select2({
+                    placeholder: 'Select Insurer...',
+                }).on('select2-open', function ()
+                {
+                    // Adding Custom Scrollbar
+                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                });
+            }, 100);
+
+            $rootScope.uploadEDIModel.fileObj = {};
+
+            // for file upload
+            $rootScope.uploadEDIModel.uploadFile = {
+                target: ontime_data.weburl + 'billing/edi/upload',
+                chunkSize: 1024 * 1024 * 1024,
+                testChunks: false,
+                fileParameterName: "fileUpload",
+                singleFile: true,
+                headers: {
+                    company_code: ontime_data.company_code,
+                    requestToken: getCookie('taken'),
+                    userName: getCookie('un')
+                }
+            };
+            //When file is selected from browser file picker
+            $rootScope.uploadEDIModel.fileSelected = function (file, flow) {
+                $rootScope.uploadEDIModel.fileObj.flowObj = flow;
+                $rootScope.uploadEDIModel.fileObj.flowObj.upload();
+            };
+            //When file is uploaded this method will be called.
+            $rootScope.uploadEDIModel.fileUploaded = function (response, file, flow) {
+                $rootScope.uploadEDIModel.ediUploadData.fileName = file.name;
+                $rootScope.uploadEDIModel.ediUploadData.sequenceId = response;
+                $rootScope.uploadEDIModel.fileObj.flowObj.cancel();
+            };
+            $rootScope.uploadEDIModel.fileError = function ($file, $message, $flow) {
+                $flow.cancel();
+                delete $rootScope.uploadEDIModel.ediUploadData.fileName;
+                delete $rootScope.uploadEDIModel.ediUploadData.sequenceId;
+                $rootScope.uploadEDIModel.fileObj.errorMsg = "File cannot be uploaded";
+            };
+            //When file is added in file upload
+            $rootScope.uploadEDIModel.fileAdded = function (file, flow) { //It will allow all types of attachments'
+                if ($rootScope.uploadEDIModel.ediUploadData.insuranceProviderId == null) {
+                    $rootScope.uploadEDIModel.fileObj.errorMsg = "Please select insurance provider and then try again.";
+                    return false;
+                }
+                if (file.getExtension() !== 'edi' && file.getExtension() !== 'txt' && file.getExtension() !== '835') {
+                    $rootScope.uploadEDIModel.fileObj.errorMsg = "Please upload a valid text file.";
+                    return false;
+                }
+                $rootScope.uploadEDIModel.uploadFile.headers.insuranceProviderId = $rootScope.uploadEDIModel.ediUploadData.insuranceProviderId;
+                delete $rootScope.uploadEDIModel.ediUploadData.sequenceId;
+                $rootScope.uploadEDIModel.showfileProgress = true;
+                delete $rootScope.uploadEDIModel.fileObj.errorMsg;
+                $rootScope.uploadEDIModel.fileObj.flow = flow;
+                $rootScope.uploadEDIModel.ediUploadData.fileName = file.name;
+                return true;
+            };
+
+
+            $rootScope.uploadEDIModel.closePopup = function () {
+                $rootScope.uploadEDIModel.close();
             }
-        };
-        //When file is selected from browser file picker
-        ctrl.fileSelected = function (file, flow) {
-            ctrl.fileObj.flowObj = flow;
-            ctrl.fileObj.selectedFile = file;
-            ctrl.fileObj.flowObj.upload();
-        };
-        //When file is uploaded this method will be called.
-        ctrl.fileUploaded = function (response, file, flow) {
-            ctrl.ediUploadData.fileName = file.name;
-            if (response != null) {
-                ctrl.ediUploadData.sequenceId = response;
+
+            $rootScope.uploadEDIModel.saveEDIData = function () {
+                if ($rootScope.uploadEDIModel.uploadEDIForm.$valid) {
+                    BillingDAO.saveEdiSequence({sequenceId: $rootScope.uploadEDIModel.ediUploadData.sequenceId}).then(function () {
+                        toastr.success("EDI batch is created, search proposed reconciliation and start creating billing reconciliation.");
+                        $rootScope.uploadEDIModel.close();
+                    }).catch(function () {
+                        toastr.error("Error in saving EDI batch.");
+                    });
+                }
             }
-            ctrl.fileObj.flowObj.cancel();
-            ctrl.disableSaveButton = false;
-            ctrl.disableUploadButton = false;
-        };
-        ctrl.fileError = function ($file, $message, $flow) {
-            $flow.cancel();
-            ctrl.disableSaveButton = false;
-            ctrl.disableUploadButton = false;
-            ctrl.ediUploadData.fileName = null;
-            ctrl.fileExt = "";
-            ctrl.fileObj.errorMsg = "File cannot be uploaded";
-        };
-        //When file is added in file upload
-        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
-            if (ctrl.ediUploadData.insuranceProviderId == null) {
-                ctrl.fileObj.errorMsg = "Please select insurance provider and then try again.";
-                return false;
-            }
-            ctrl.uploadFile.headers.insuranceProviderId = ctrl.ediUploadData.insuranceProviderId;
-            if (file.getExtension() !== 'edi' && file.getExtension() !== 'txt' && file.getExtension() !== '835') {
-                ctrl.fileObj.errorMsg = "Please upload a valid text file.";
-                return false;
-            }
-            ctrl.disableSaveButton = true;
-            ctrl.disableUploadButton = true;
-            ctrl.showfileProgress = true;
-            ctrl.fileObj.errorMsg = null;
-            ctrl.fileObj.flow = flow;
-            ctrl.ediUploadData.fileName = file.name;
-            ctrl.fileExt = "";
-            ctrl.fileExt = file.getExtension();
-            return true;
-        };
+        }
+
+        ctrl.uploadPopup = uploadPopup;
+
+        function deletePopup() {
+            $rootScope.deleteEDIModel = $modal.open({
+                templateUrl: 'deleteEDIModel'
+            });
+
+            setTimeout(function () {
+                cbr_replace();
+            }, 100);
+
+            $rootScope.deleteEDIModel.deleteData = {};
+
+            $rootScope.deleteEDIModel.closePopup = function () {
+                $rootScope.deleteEDIModel.close();
+            };
+
+            $rootScope.deleteEDIModel.deleteEDIData = function () {
+                if ($rootScope.deleteEDIModel.deleteEDIForm.$valid) {
+                    BillingDAO.deleteEdi($rootScope.deleteEDIModel.deleteData).then(function () {
+                        toastr.success("EDI batch is deleted.");
+                        $rootScope.deleteEDIModel.close();
+                    }).catch(function () {
+                        toastr.error("Error in deleting EDI batch.");
+                    });
+                }
+            };
+        }
+
+        ctrl.deletePopup = deletePopup;
 
     }
     angular.module('xenon.controllers')
-            .controller('EdiReaderCtrl', ["Page", "InsurerDAO", "BillingDAO", "$rootScope", EdiReaderCtrl])
+            .controller('EdiReaderCtrl', ["Page", "InsurerDAO", "BillingDAO", "$rootScope", "$modal", EdiReaderCtrl])
 })();
