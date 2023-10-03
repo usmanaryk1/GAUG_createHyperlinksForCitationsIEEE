@@ -625,6 +625,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
                 controller: 'ManualClaimCtrl as manualClaim'
             }).
+            state('app.manual_claim_edit', {
+                url: '/manual_claim/:id/edit',
+                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
+                controller: 'ManualClaimCtrl as manualClaim'
+            }).
             state('app.manual_claim_ub04', {
                 url: '/manual_claim_ub04',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
@@ -635,6 +640,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             state('app.manual_claim_ub04_review', {
                 url: '/manual_claim_ub04/:id',
+                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
+                controller: 'ManualClaimUB04Ctrl as manualClaim'
+            }).
+                    state('app.manual_claim_ub04_edit', {
+                url: '/manual_claim_ub04/:id/edit',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
                 controller: 'ManualClaimUB04Ctrl as manualClaim'
             }).
@@ -789,6 +799,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'PatientCalendarCtrl as patientcalendar',
                 data: {
                     feature: 'VIEW_PATIENT_SCHEDULE'
+                }
+            }).
+                    // coordinator calendar
+                    state('app.coordinator-calendar', {
+                url: '/coordinator-calendar/:id?lastPage',
+                templateUrl: appHelper.viewTemplatePath('calendar', 'coordinator_calendar'),
+                controller: 'CoordinatorCalendarCtrl as coordinatorcalendar',
+                data: {
+                    feature: 'VIEW_COORDINATOR_SCHEDULE'
                 }
             }).
             // Report
@@ -1715,7 +1734,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         if (!config.params) {
                             config.params = {};
                         }
-                        config.params['version'] = '@$5.0.2$@';
+                        config.params['version'] = '@$5.1.0$@';
                     }
                     ontime_data.company_code = getCookie("cc");
                     if (ontime_data.company_code != null) {

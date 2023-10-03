@@ -90,7 +90,7 @@ angular.module('xenon.services', []).
                 'VIEW_BILLING_SESSION,VIEW_BILLING_HISTORY,CREATE_BILLING_SETTING,CREATE_MANUAL_CLAIM,MANAGE_BILLING_RECONCILIATION');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
                 var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 
-                'VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
+                'VIEW_COORDINATOR_SCHEDULE,VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
                 var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
 
                 // Subitems of Dashboard
@@ -139,6 +139,7 @@ angular.module('xenon.services', []).
                 // Subitems of calendar
                 calendar.addItem('Employee', './employee-calendar/', 'VIEW_EMPLOYEE_SCHEDULE');
                 calendar.addItem('Patient', './patient-calendar/', 'VIEW_PATIENT_SCHEDULE');
+                calendar.addItem('Coordinator', './coordinator-calendar/', 'VIEW_COORDINATOR_SCHEDULE');
                 calendar.addItem('Worksite', './worksite-schedule/', 'WORKSITE_SCHEDULE');
                 calendar.addItem('Search Employee', './search-employee-calendar/', 'SEARCH_EMPLOYEE');
                 calendar.addItem('View Dispatch', './dispatch-list/active', 'VIEW_DISPATCH');

@@ -24,9 +24,9 @@ angular
                         $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                     };
                     $scope.dayClicked = function (date) {
-                        if($rootScope.currentUser.allowedFeature.indexOf('ADD_SCHEDULE') === -1){
+                        if ($rootScope.currentUser.allowedFeature.indexOf('ADD_SCHEDULE') === -1) {
                             return;
-                        }                        
+                        }
                         if (!$scope.eventClickCalled) {
                             var eventCell;
                             var day = new Date(date.date);
@@ -56,23 +56,31 @@ angular
                     };
                     $scope.getToolTipToDisplay = function (eventObj) {
                         if (eventObj.worksiteSchedule) {
-                            return "<div>Name:" + eventObj.workSite.name 
-                                    + "<br> Phone Number:" + $filter("tel")(eventObj.workSite.phone) 
-                                    + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime) 
-                                    + "<br> Supervisor: "+eventObj.coordinatorName
+                            return "<div>Name:" + eventObj.workSite.name
+                                    + "<br> Phone Number:" + $filter("tel")(eventObj.workSite.phone)
+                                    + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime)
+                                    + "<br> Supervisor: " + eventObj.coordinatorName
                                     + "<br> Address: " + eventObj.workSite.address1 + (eventObj.workSite.address2 != null ? "<br>" + eventObj.workSite.address2 : '') + "<br>" + eventObj.workSite.city + ', ' + eventObj.workSite.state + '- ' + eventObj.workSite.zipcode;
                         } else {
                             if ($scope.type == 'patient') {
-                                return "<div>Name:" + eventObj.employee.lName + "," + eventObj.employee.fName 
-                                        + "<br> Phone Number:" + $filter("tel")(eventObj.employee.phone) 
-                                        + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime) 
+                                return "<div>Name:" + eventObj.employee.lName + "," + eventObj.employee.fName
+                                        + "<br> Phone Number:" + $filter("tel")(eventObj.employee.phone)
+                                        + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime)
                                         + "<br> Address: " + eventObj.employee.address1 + (eventObj.employee.address2 != null ? "<br>" + eventObj.employee.address2 : '') + "<br>" + eventObj.employee.city + ', ' + eventObj.employee.state + '- ' + eventObj.employee.zipcode;
+                            } else if ($scope.type == 'coordinator') {
+                                return "<div><b>Patient Details</b>"
+                                        + "<br> Name:" + eventObj.patient.lName + "," + eventObj.patient.fName
+                                        + "<br> Phone Number:" + $filter("tel")(eventObj.patient.phone)
+                                        + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime)
+                                        + "<br> Coordinator: " + eventObj.coordinatorName
+                                        + "<br> Address: " + eventObj.patient.patientAddress.address1
+                                        + "<br>" + eventObj.patient.patientAddress.city + ', ' + eventObj.patient.patientAddress.state + '- ' + eventObj.patient.patientAddress.zipcode;
                             } else {
-                                return "<div>Name:" + eventObj.patient.lName + "," + eventObj.patient.fName 
-                                        + "<br> Phone Number:" + $filter("tel")(eventObj.patient.phone) 
-                                        + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime) 
-                                        + "<br> Coordinator: "+eventObj.coordinatorName
-                                        + "<br> Address: " + eventObj.patient.patientAddress.address1 
+                                return "<div>Name:" + eventObj.patient.lName + "," + eventObj.patient.fName
+                                        + "<br> Phone Number:" + $filter("tel")(eventObj.patient.phone)
+                                        + "<br> Schedule Time:" + $filter("ampm")(eventObj.startTime) + " - " + $filter("ampm")(eventObj.endTime)
+                                        + "<br> Coordinator: " + eventObj.coordinatorName
+                                        + "<br> Address: " + eventObj.patient.patientAddress.address1
                                         + "<br>" + eventObj.patient.patientAddress.city + ', ' + eventObj.patient.patientAddress.state + '- ' + eventObj.patient.patientAddress.zipcode;
                             }
                         }
@@ -91,6 +99,7 @@ angular
                     cellEventsTemplateUrl: '@',
                     typeId: '=',
                     type: '=',
+                    showTime: '=',
                     eventClickCallback: '='
                 },
                 controller: controller

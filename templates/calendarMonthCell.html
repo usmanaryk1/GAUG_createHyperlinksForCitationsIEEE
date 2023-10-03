@@ -1,5 +1,6 @@
 <div class="cal-month-day {{ day.cssClass }}"
   ng-class="{
+      'cal-day-box': showTime,
             'cal-day-outmonth': !day.inMonth,
             'cal-day-inmonth': day.inMonth,
             'cal-day-past': day.isPast,

@@ -18,7 +18,8 @@
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.employeeList = [];
 
-        if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
+        if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive'
+                && $stateParams.status !== 'all' && $stateParams.status !== 'terminated') {
             $state.transitionTo(ontime_data.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
@@ -65,6 +66,12 @@
         function retrieveEmployeesData() {
             $rootScope.paginationLoading = true;
             ctrl.searchParams.subAction = ctrl.viewType;
+            if (ctrl.viewType === 'inactive') {
+                ctrl.searchParams.terminated = false;
+            } else if (ctrl.viewType === 'terminated') {
+                ctrl.searchParams.terminated = true;
+                ctrl.searchParams.subAction = 'inactive';
+            }
             EmployeeDAO.retrieveAll(ctrl.searchParams).then(function (res) {
                 showLoadingBar({
                     delay: .5,

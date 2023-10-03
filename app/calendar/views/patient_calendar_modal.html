@@ -6,10 +6,10 @@
             <!--Display dispatch button for open cases-->
             <i ng-if="hasAccess('SEARCH_EMPLOYEE') && patientPopup.isOpenCase && patientPopup.data.dispatchStatus == 'active' && patientPopup.data.dispatchId != null" ui-sref="app.dispatch-info({id:patientPopup.data.dispatchId})" tooltip="Go To Dispatch" class="fa fa-wifi pull-right pointer" style='margin-top:20px;margin-right:-12px'></i>
             <button ng-if="hasAccess('SEARCH_EMPLOYEE') && !patientPopup.data.isPastEvent && patientPopup.isOpenCase && (patientPopup.data.dispatchStatus == 'inactive' || patientPopup.data.dispatchId == null)" type="button" class="btn btn-success pull-right" ng-click="patientPopup.dispatchBtnClick()" style='margin-top:20px;margin-right:-12px'>Dispatch</button>
-            <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
-            <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
+            <span ng-if="patientPopup.isNew && (patientPopup.calendarView == 'week' || patientPopup.coordinatorPage==true) && patientPopup.showPatient">Add Event</span>
+            <span ng-if="!patientPopup.isNew || (patientPopup.calendarView == 'month' && !patientPopup.coordinatorPage) || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
         </h4>
-        <h6 ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month'">DOB : {{patientPopup.patient.dateOfBirth|date :dateFormat}}</h6>
+        <h6 ng-if="!patientPopup.isNew || (patientPopup.calendarView == 'month' && !patientPopup.coordinatorPage)">DOB : {{patientPopup.patient.dateOfBirth|date :dateFormat}}</h6>
     </div>
     <div>
         <img alt="user" class="img-cirlce img-responsive" ng-show="patientPopup.showLoadingImage" src="assets/images/loading.gif"/>
@@ -43,14 +43,14 @@
     <div ng-if="patientPopup.data.eventType == 'S'">
         <form class="form-horizontal validate" role="form" name="popuppatients" id="popuppatients" >
             <div class="modal-body">
-                <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient">
+                <div class="form-group" ng-show="(patientPopup.calendarView == 'week' || patientPopup.coordinatorPage==true) && patientPopup.isNew && patientPopup.showPatient">
                     <div class="form-group-separator"></div>
                     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
                     <div class="col-sm-10">
                         <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" 
                                 ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" 
                                 ng-options='patient.id as (patient.lName + ", " + patient.fName + " " + patient.middleInitial) for patient in patientPopup.patientList' 
-                                data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient" 
+                                data-message-required="Please select patient." ng-required="(patientPopup.calendarView == 'week' || patientPopup.coordinatorPage==true) && patientPopup.isNew && patientPopup.showPatient" 
                                 data-validate="required">
                             <option value="" selected hidden />
                         </select>

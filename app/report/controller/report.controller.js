@@ -4,12 +4,12 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         ctrl.reportTypeList = angular.copy(ontime_data.reportTypes);
-        if($rootScope.currentUser.allowedFeature.indexOf('VIEW_EMPLOYEE_WAGES') > -1){
+        if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_EMPLOYEE_WAGES') > -1) {
             ctrl.reportTypeList.push({id: 'employeewages', label: "Employee Wages Report"});
         }
         ctrl.reportTypeList = _(ctrl.reportTypeList).chain()
-                        .sortBy('label')
-                        .value();
+                .sortBy('label')
+                .value();
         ctrl.reportSubTypeList = ontime_data.reportSubTypes;
         ctrl.searchParams = {};
         ctrl.maxDate = angular.copy($rootScope.todayDate);
@@ -30,7 +30,7 @@
 
                 }
                 if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport'
-                 || ctrl.reportType == 'totalworkedhours'
+                        || ctrl.reportType == 'totalworkedhours' || ctrl.reportType == 'eventactivityreport' || ctrl.reportType == 'missedpunchreport'
                         || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport'
                         || ctrl.reportType == 'revenuereconciliationreport' || ctrl.reportType == 'detailagingreport'
                         || ctrl.reportType == 'summaryagingreport' || ctrl.reportType == 'billingmonitorreport' || ctrl.reportType == 'claimrejectionreport') {
@@ -43,7 +43,8 @@
                 if (valid) {
                     $rootScope.maskLoading();
                     var path;
-                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet' || ctrl.reportType == 'totalworkedhours')) {
+                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
+                            || ctrl.reportType == 'totalworkedhours') || ctrl.reportType == 'missedpunchreport') {
                         path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/email?format=' + format + "&companyCode=" + ontime_data.company_code;
                         if (ctrl.searchParams.id) {
                             path = path + "&id=" + ctrl.searchParams.id;
@@ -63,7 +64,8 @@
                     if (ctrl.searchParams.date) {
                         path = path + "&date=" + ctrl.searchParams.date;
                     }
-                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet' || ctrl.reportType == 'totalworkedhours')) {
+                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
+                            || ctrl.reportType == 'totalworkedhours') || ctrl.reportType == 'missedpunchreport') {
                         $http.get(path).success(function (data) {
 //                            toastr.success('Generated report will be mailed to your email id');
                         }).error(function (data) {
@@ -121,11 +123,11 @@
             });
         };
         ctrl.retrieveAllInsuranceProviders = function () {
-        InsurerDAO.retrieveAll().then(function (res) {
-            ctrl.insuranceProviderList = res;
-        });
-    }
-    ctrl.retrieveAllInsuranceProviders();
+            InsurerDAO.retrieveAll().then(function (res) {
+                ctrl.insuranceProviderList = res;
+            });
+        }
+        ctrl.retrieveAllInsuranceProviders();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPatients();
     }

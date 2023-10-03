@@ -46,7 +46,7 @@
 
                                                 });
                                             </script>
-                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.lName+", "+pat.fName+" "+pat.middleInitial) for pat in patTimesheet.patientList track by pat.id'>
+                                            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patTimesheet.searchParams.patientId" ng-options='pat.id as (pat.lName + ", " + pat.fName + " " + pat.middleInitial) for pat in patTimesheet.patientList track by pat.id'>
                                                 <option value="" selected hidden />
                                             </select>
                                             <div ng-show='patTimesheet.searchParams.patientId == null && patTimesheet.formSubmitted'>
@@ -107,7 +107,7 @@
                                         patTimesheet.searchParams.order = 'desc';
                                         patTimesheet.filterTimesheet();
                                         patTimesheet.formSubmitted = true">Review</button>
-                                    <a href="#/app/manual_punch{{patTimesheet.selectedPatient==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?lastPage=patient_time_sheet'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5" ng-disabled="patTimesheet.selectedPatient.status==='d'">Manual Punch</a>
+                                    <a href="#/app/manual_punch{{patTimesheet.selectedPatient==null?'':'/patient/'+patTimesheet.searchParams.patientId+'?lastPage=patient_time_sheet'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5" ng-disabled="patTimesheet.selectedPatient.status === 'd'">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="patTimesheet.resetFilters()">
                                         Reset Filters
                                     </button>
@@ -206,8 +206,11 @@
                                                     <a ng-if="hasAccess('VIEW_PATIENT_TASKS')" class=" btn fa fa-search view_task_button" ng-click="patTimesheet.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
-                                            <td><div ng-if="timesheet.isManualPunch === true">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
-                                                <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + patTimesheet.companyCode + '/' + timesheet.signature}}"></td>
+                                            <td>
+                                                <div ng-if="timesheet.isManualPunch === true">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
+                                                <div ng-if="timesheet.isManualPunch !== true && timesheet.signature === null">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
+                                                <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + patTimesheet.companyCode + '/' + timesheet.signature}}">
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

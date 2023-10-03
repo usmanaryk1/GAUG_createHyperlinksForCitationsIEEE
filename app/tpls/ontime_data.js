@@ -63,6 +63,8 @@ ontime_data = {
         {id: 'employeeutilization', label: "Employee Utilization Report"},
         {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
         {id: 'wppreport', label: "Employee WPP Report"},
+        {id: 'eventactivityreport', label: "Event Logs Report"},
+        {id: 'missedpunchreport', label: "Missed Punch Report"},
         {id: 'totalworkedhours', label: "Total Patient Worked Hours Summary"},
         {id: 'workedhours', label: "Worked Hours"},
         {id: 'notesreport', label: "Employee/Patient Notes"},

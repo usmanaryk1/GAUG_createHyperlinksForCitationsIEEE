@@ -72,6 +72,8 @@ angular
                         var month_events = _.filter(events, function (data) {
                             return data.employeeId == id
                         })
+                    } else if (type == "coordinator") {
+                        var month_events = events;
                     } else {
                         var month_events = _.filter(events, function (data) {
                             return data.patientId == id
@@ -142,10 +144,16 @@ angular
                                 return data.employeeId == n.id
                             })
                         })
-                    } else {
+                    } else if(type == "patient"){
                         _.each(list, function (n) {
                             n.temp_events = _.filter(events, function (data) {
                                 return data.patientId == n.id
+                            })
+                        })
+                    } else {
+                        _.each(list, function (n) {
+                            n.temp_events = _.filter(events, function (data) {
+                                return true
                             })
                         })
                     }
