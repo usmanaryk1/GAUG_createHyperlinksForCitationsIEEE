@@ -425,7 +425,7 @@
                 </div>
                 <div ng-show="employeePopup.data.isPaid">
                     <div class="col-sm-4" ng-if="employeePopup.data.leaveYear || employeePopup.showSingleBox">
-                        <div class="col-sm-6 no-pad" ng-if="employeePopup.data.leaveYear2">
+                        <div class="col-sm-6 no-pad" ng-if="employeePopup.data.leaveYear2 && employeePopup.canApplyPreviousYearLeaves">
                             <label class="control-label">
                                 Previous Year
                             </label>
@@ -439,7 +439,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4" ng-if="employeePopup.data.leaveYear2">
+                    <div class="col-sm-4" ng-if="employeePopup.data.leaveYear2 && employeePopup.canApplyPreviousYearLeaves">
                         <div class="col-sm-6 no-pad"><label class="control-label">This Year</label></div>
                         <div class="input-group col-sm-6 no-pad">
                             <input class="form-control  punch-time-input" ng-model='employeePopup.data.noOfHours2' ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" 

@@ -422,6 +422,10 @@
                                 if (res.utilizationDate) {
                                     $rootScope.employeePopup.utilizationDate = new Date(res.utilizationDate);
                                 }
+                                $rootScope.employeePopup.canApplyPreviousYearLeaves = true;
+                                if (res.applyDate) {
+                                    $rootScope.employeePopup.canApplyPreviousYearLeaves = new Date(res.applyDate) > new Date();
+                                }
 
                                 if ($rootScope.employeePopup.availablityDetails.timeAvailabilityMap) {
                                     _.each($rootScope.employeePopup.availablityDetails.timeAvailabilityMap, function (year, details) {
@@ -679,7 +683,7 @@
                     if ($rootScope.employeePopup.utilizationDate) {
                         var years = _.keys(validationHours ? validationHours : {});
 
-                        if ((moment($rootScope.employeePopup.utilizationDate).toDate() >= moment(new Date($rootScope.employeePopup.data.startDate)).toDate())
+                        if ($rootScope.employeePopup.canApplyPreviousYearLeaves && (moment($rootScope.employeePopup.utilizationDate).toDate() >= moment(new Date($rootScope.employeePopup.data.startDate)).toDate())
                                 && (moment($rootScope.employeePopup.utilizationDate).toDate() >= moment(new Date($rootScope.employeePopup.data.endDate)).toDate())) {
                             if (years && years.length > 0) {
                                 $rootScope.employeePopup.data.leaveYear = years[0];
@@ -700,8 +704,8 @@
                                 delete $rootScope.employeePopup.hoursData.noOfAllowedHours;
                                 delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
                             }
-                        } else if ((moment($rootScope.employeePopup.utilizationDate).toDate() < moment(new Date($rootScope.employeePopup.data.startDate)).toDate())
-                                && (moment($rootScope.employeePopup.utilizationDate).toDate() < moment(new Date($rootScope.employeePopup.data.endDate)).toDate())) {
+                        } else if (!$rootScope.employeePopup.canApplyPreviousYearLeaves || (moment($rootScope.employeePopup.utilizationDate).toDate() < moment(new Date($rootScope.employeePopup.data.startDate)).toDate()
+                                && moment($rootScope.employeePopup.utilizationDate).toDate() < moment(new Date($rootScope.employeePopup.data.endDate)).toDate())) {
                             delete $rootScope.employeePopup.data.leaveYear2;
                             delete $rootScope.employeePopup.hoursData.noOfAllowedHours2;
                             if (years && years.length > 0) {
