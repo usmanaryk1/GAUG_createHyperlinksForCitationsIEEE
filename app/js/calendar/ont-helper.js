@@ -78,7 +78,7 @@
 	      var weekdays = [];
 	      var count = 0;
 	      while (count < 7) {
-	        weekdays.push(formatDate(moment().weekday(count++), calendarConfig.dateFormats.weekDay));
+	        weekdays.push(formatDate(moment().weekday(count++), calendarConfig.dateFormats.monthDay));
 	      }
 	      return weekdays;
 	    }

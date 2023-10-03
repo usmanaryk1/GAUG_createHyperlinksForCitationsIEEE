@@ -9,6 +9,7 @@
 	          day: 'd MMM',
 	          month: 'MMMM',
 	          weekDay: 'EEE d/M',
+	          monthDay: 'EEE',
 	          time: 'HH:mm',
 	          datetime: 'MMM d, h:mm a'
 	        },
