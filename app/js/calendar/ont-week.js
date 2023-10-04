@@ -6,8 +6,9 @@ angular
 	  	var controller =  ["$scope", "$sce", "moment", "calendarHelper", "calendarConfig", function($scope, $sce, moment, calendarHelper, calendarConfig) {
 
 	    //var $scope = this;
-	    $scope.showTimes = calendarConfig.showTimesOnWeekView;
+	    $scope.showTimes = true;
 	    $scope.$sce = $sce;
+	    $scope.hours = [{'name':'Jayesh'},{'name':'Yash'}]
 
 	    $scope.$on('calendar.refreshView', function() {
 	      $scope.dayViewSplit = $scope.dayViewSplit || 30;
@@ -16,17 +17,17 @@ angular
 	        $scope.dayViewEnd,
 	        $scope.dayViewSplit
 	      );
-	      if ($scope.showTimes) {
-	        $scope.view = calendarHelper.getWeekViewWithTimes(
-	          $scope.events,
-	          $scope.currentDay,
-	          $scope.dayViewStart,
-	          $scope.dayViewEnd,
-	          $scope.dayViewSplit
-	        );
-	      } else {
+	      // if ($scope.showTimes) {
+	      //   $scope.view = calendarHelper.getWeekViewWithTimes(
+	      //     $scope.events,
+	      //     $scope.currentDay,
+	      //     $scope.dayViewStart,
+	      //     $scope.dayViewEnd,
+	      //     $scope.dayViewSplit
+	      //   );
+	      // } else {
 	        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay);
-	      }
+	      // }
 	    });
 
 	    $scope.weekDragged = function(event, daysDiff, minuteChunksMoved) {

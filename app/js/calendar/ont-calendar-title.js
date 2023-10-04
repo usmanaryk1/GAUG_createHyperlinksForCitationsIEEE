@@ -10,7 +10,7 @@
 	    	//return calendarHelper.formatDate(currentDay, calendarConfig.titleFormats.week);
 	      var weekTitleLabel = calendarConfig.titleFormats.week;
 	      return weekTitleLabel.replace('{month}', moment(currentDay).format('MMM'))
-	      						.replace('{startDate}', moment(currentDay).format('D'))
+	      						.replace('{startDate}', moment(currentDay).weekday(0).format('D'))
 	      						.replace('{endDate}', moment(currentDay).weekday(6).format('D'))
 	      						.replace('{year}', moment(currentDay).format('YYYY'));
 	    }

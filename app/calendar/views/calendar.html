@@ -1,84 +1,3 @@
-<style type="text/css">
-    .mwl-toolbar {
-        padding: 20px 10px 10px 10px;
-        min-height: 70px;
-    }
-    .mwl-toolbar .mwl-left h2:before {
-        content: '\f133';
-        font-family: fontawesome;
-        display: inline-block;
-        margin-right: 10px;
-    }
-    .mwl-toolbar .mwl-left,
-    .mwl-panel-filter .mwl-left  {
-        float: left;
-    }
-    .mwl-toolbar .mwl-right,
-    .mwl-panel-filter .mwl-right {
-        float: right;
-    }
-    .mwl-toolbar .mwl-right {
-        margin-top: 5px;
-    }
-    .mwl-toolbar .mwl-button {
-        border: 0;
-        background: 0 0;
-        padding: 0 10px;
-        margin: 0;
-        height: auto;
-        position: relative;
-        outline: 0;
-        color: #979898;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        box-shadow: none;
-    }
-    .mwl-state-active {
-        color: #2c2e2f !important;
-    }
-    .mwl-button-group .mwl-month-button:after,
-    .mwl-agendaWeek-button:after,
-    .mwl-prev-button:after {
-        content: '';
-        display: block;
-        position: absolute;
-        right: -1px;
-        top: 25%;
-        bottom: 25%;
-        width: 1px;
-        background: #eee;
-    }
-    .mwl-button-group {
-        display: inline-block;
-    }
-    .mwl-panel-filter {
-        background-color: #EEE;
-        display: inline-block;
-        padding: 20px 10px 20px 10px;
-        margin-bottom: 10px;
-    }
-    .mwl-panel-filter .mwl-left h2,
-    .mwl-toolbar .mwl-left h2 {
-        margin: 0;
-    }
-    .mwl-panel-filter .mwl-right {
-        padding-right: 0;
-    }
-    .mwl-next-button.mwl-button.mwl-state-default.mwl-corner-right
-    {
-        padding-right: 5px;
-    }
-    .cal-context {
-        padding: 10px;
-    }
-    @media screen and (max-width: 380px) {
-        .mwl-panel-filter .mwl-right {
-            padding-right: 0;
-            padding-left: 0;
-            margin-top: 10px;
-        }
-    }
-</style>
 <div class="page-title full-width ng-scope" ng-if="layoutOptions.pageTitles" title="Calendar" description="Events management calendar">
     <div class="title-env">
         <h1 class="title ng-binding">Calendar</h1>
@@ -89,8 +8,11 @@
 <div style="background:white;">
 
     <div class="mwl-toolbar">
-       <div class="mwl-left">
-          <h2>{{ calendar.calendarTitle }}</h2>
+       <div class="mwl-left input-group btn-date-group">
+            <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="calendar.showDatepicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+            <h2>{{ calendar.calendarTitle }}</h2>
+            <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{'show':calendar.isOpen,'hide':!calendar.isOpen}"></datepicker>
+            
        </div>
        <div class="mwl-right">
             <div class="mwl-button-group">
@@ -98,15 +20,60 @@
                 <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{'mwl-state-active': calendar.calendarView == 'week'}">week</button>
             </div>
             <div class="mwl-button-group">
-                <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left"><span class="mwl-icon mwl-icon-prev fa-angle-left"></span></button>
-                <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
+                <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left"><span class="mwl-icon mwl-icon-prev fa-angle-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"></span></button>
+                <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right" mwl-date-modifier date="calendar.calendarDay" increment="calendar.calendarView"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
             </div>
        </div>
        <div class="mwl-center"></div>
        <div class="mwl-clear"></div>
     </div>
 
-    <div class="mwl-panel-filter">
+    <div class="mwl-panel-filter row" ng-if="calendar.calendarView == 'week'">
+        <div class="col-md-4">
+            <label>Employees</label>
+            <select class="form-control">
+                <option>Employee1</option>
+                <option>Employee2</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Position</label>
+            <select class="form-control">
+                <option>Position1</option>
+                <option>Position2</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Languages</label>
+            <select class="form-control">
+                <option>Language1</option>
+                <option>Language2</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>From</label>
+            <select class="form-control">
+                <option>From</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>To</label>
+            <select class="form-control">
+                <option>To</option>
+            </select>
+        </div>
+        <div class="col-md-4 filter-checkbox">
+            <div class="col-md-6">
+                <label>Live In</label>
+                <input type="checkbox" name="livein">
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success pull-right">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
         <div class="mwl-left">
             <h2>Karl Pierre <small>Designation</small></h2>
         </div>
