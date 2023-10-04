@@ -36,6 +36,7 @@
                     }
                     ctrl.changeDays('expiration', res.ptoExpirationMonth, res.ptoExpirationDay);
                     ctrl.changeDays('utilization', res.ptoUtilizationMonth, res.ptoUtilizationDay);
+                    ctrl.changeDays('apply', res.ptoApplyMonth, res.ptoApplyDay);
                 }
 
             }).catch(function () {
@@ -61,6 +62,8 @@
                         ctrl.expirationDays = days31;
                     } else if (fieldDesc === 'utilization') {
                         ctrl.utilizationDays = days31;
+                    } else if (fieldDesc === 'apply') {
+                        ctrl.applyDays = days31;
                     }
                 } else {
                     if (fieldDesc === 'expiration') {
@@ -71,8 +74,11 @@
                         ctrl.utilizationDays = (month == 2) ? days29 : days30;
                         if (dayOfMonth == 31 || (month == 2 && dayOfMonth == 30))
                             ctrl.companyObj.ptoUtilizationDay = null;
+                    } else if (fieldDesc === 'apply') {
+                        ctrl.applyDays = (month == 2) ? days29 : days30;
+                        if (dayOfMonth == 31 || (month == 2 && dayOfMonth == 30))
+                            ctrl.companyObj.ptoApplyDay = null;
                     }
-
                 }
             } else {
                 if (fieldDesc === 'expiration') {
@@ -81,6 +87,9 @@
                 } else if (fieldDesc === 'utilization') {
                     ctrl.utilizationDays = [];
                     ctrl.companyObj.ptoUtilizationDay = null;
+                } else if (fieldDesc === 'apply') {
+                    ctrl.applyDays = [];
+                    ctrl.companyObj.ptoApplyDay = null;
                 }
             }
         };
