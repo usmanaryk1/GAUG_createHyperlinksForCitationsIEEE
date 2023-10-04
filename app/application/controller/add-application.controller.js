@@ -20,7 +20,7 @@
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         };
-        
+
         var employeeAttachmentTypes = {
             'CHRC': 'CHRC Forms',
             'HCR': 'HCR',
@@ -33,13 +33,13 @@
             'OPSearch': 'OP Search',
             'License': 'License'
         };
-        
+
         ctrl.subTypes = ['Pre – Employment Medical Documents',
-                'Physical', 'TB Testing',
-                'Chest X-Ray', 'TB Questionnaire',
-                'Habituation', 'Flu Shot'];
-            
-            
+            'Physical', 'TB Testing',
+            'Chest X-Ray', 'TB Questionnaire',
+            'Habituation', 'Flu Shot'];
+
+
         var MappingForDownload = {
             'Initial Application Packet': 'InitialApplicationPacket',
             'Initial Application Packet Nursing': 'InitialApplicationPacketNursing',
@@ -63,9 +63,9 @@
             'Habituation': 'Habituation',
             'Flu Shot': 'FluShot',
             'Drug Test': 'DrugTest'
-        };     
-        
-        
+        };
+
+
         ctrl.positionList = [];
 //        PositionDAO.retrieveAll({}).then(function (res) {
 //            ctrl.positionList = res;
@@ -83,7 +83,6 @@
 //            $formService.resetRadios();
 //        });
         ctrl.careTypeList = [];
-        ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
         ctrl.applicationFileObj = {};
         ctrl.w4FileObj = {};
         ctrl.ssn = {};
@@ -152,22 +151,6 @@
                 ctrl.profileFileObj.flowObj.cancel();
             }
         }
-        ctrl.resetEmployeeTab2 = function () {
-            $formService.uncheckRadioValue('TaxStatus', ctrl.employee.taxStatus);
-            $formService.uncheckRadioValue('Wages', ctrl.employee.wages);
-            ctrl.employee.taxStatus = 'W';
-            ctrl.employee.wages = 'H';
-            ctrl.employee.payrollGroup = 'A';
-            ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
-            $timeout(function () {
-                $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
-                $formService.setRadioValues('Wages', ctrl.employee.wages);
-                $("#rate2").multiSelect('refresh');
-                $("#rate1").multiSelect('refresh');
-//                $formService.resetRadios();
-            }, 100);
-            $scope.resetForm = true;
-        };
 
         ctrl.saveEmployee = saveEmployeeData;
         ctrl.pageInitCall = pageInit;
@@ -254,34 +237,15 @@
                 }
             });
             employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
-            if(employeeToSave.preferredCounties){
+            if (employeeToSave.preferredCounties) {
                 employeeToSave.preferredCounties = employeeToSave.preferredCounties.toString();
             }
 
-            if (ctrl.benefitPackages && (ctrl.benefitPackages.length > 0) && employeeToSave.employeeBenefitDetails) {
-                if (employeeToSave.employeeBenefitDetails.benefitPackageId) {
-                    var lineTypes = ctrl.benefitPackageWiseLineTypes[employeeToSave.employeeBenefitDetails.benefitPackageId];
-                    if (lineTypes.indexOf('HEC') === -1) {
-                        employeeToSave.employeeBenefitDetails.employeeContributionHealthcare = null;
-                    }
-                    if (lineTypes.indexOf('401') === -1) {
-                        employeeToSave.employeeBenefitDetails.employeeContribution401k = null;
-                    }
-                    if (lineTypes.indexOf('WFC') === -1) {
-                        employeeToSave.employeeBenefitDetails.employeeContributionWpp = null;
-                    }
-                } else {
-                    employeeToSave.employeeBenefitDetails.employeeContributionHealthcare = null;
-                    employeeToSave.employeeBenefitDetails.employeeContribution401k = null;
-                    employeeToSave.employeeBenefitDetails.employeeContributionWpp = null;
-                }
-            }
+            
 //            if (!ctrl.employee.application || ctrl.employee.application === null) {
 //                delete employeeToSave.employeeDocumentId;
 //            } else {
 //            }
-            delete employeeToSave.careRatesList;
-            delete employeeToSave.employeeCareRatesList;
             delete employeeToSave.employeeAttachments;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 //Check if ssn number is already present
@@ -295,19 +259,7 @@
                                 var reqParam;
                                 if (ctrl.employee.id && ctrl.employee.id !== null) {
                                     reqParam = 'updateemployee';
-                                    if (ctrl.employee.careRatesList && ctrl.employee.careRatesList !== null) {
-                                        var careRateList = angular.copy(ctrl.employee.careRatesList);
-                                        careRateList.employeeId = ctrl.employee.id;
-                                        EmployeeDAO.updateCareRates(careRateList)
-                                                .then(function () {
-                                                    updateEmployee(reqParam, employeeToSave);
-                                                })
-                                                .catch(function () {
-                                                    console.log(JSON.stringify(careRateList));
-                                                });
-                                    } else {
-                                        updateEmployee(reqParam, employeeToSave);
-                                    }
+                                    updateEmployee(reqParam, employeeToSave);
                                 } else {
                                     employeeToSave.orgCode = ontime_data.company_code;
                                     ctrl.employee.orgCode = ontime_data.company_code;
@@ -323,50 +275,15 @@
 
         function updateEmployee(reqParam, employeeToSave) {
             $rootScope.maskLoading();
-            if (!ctrl.employee.id || ctrl.employee.id === null) {
-                if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
-                    employeeToSave.wages = 'H';
-                    employeeToSave.payrollGroup = 'A';
-                    employeeToSave.taxStatus = 'W';
-                    employeeToSave.otRate = 13.12;
-                    employeeToSave.hdRate = 13.12;
-                }
-            }
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
                             ctrl.editMode = true;
                             ctrl.employee.id = employeeRes.id;
                             ctrl.employee.status = employeeRes.status;
-                            ctrl.employee.employeeBenefitDetails = employeeRes.employeeBenefitDetails;
-                            //to set the default data in employee with position 'pc'
-                            if (ctrl.staticPosition && ctrl.employee.companyPositionId === ctrl.staticPosition) {
-                                var rate1CareTypes = ['Personal Care HHA Hourly', 'Personal Care HHA Live In', 'PCA/HHA - One Client', 'PCA/HHA - Live In One Client', "CDPAP - One Client", "CDPAP - Live In One Client"];
-                                var rate2CareTypes = ['Personal Care HHA Mutual', 'Personal Care HHA Live In-Mutual', "PCA/HHA - Mutual Care", "PCA/HHA - Live In Mutual Care", "CDPAP - Mutual Care", "CDPAP - Live In Mutual Care"];
-                                CareTypeDAO.retrieveAll({positionId: ctrl.employee.companyPositionId}).then(function (careTypes) {
-                                    var careRateList = {employeeId: employeeRes.id};
-                                    careRateList.rate1 = {rate: 10, careTypes: []};
-                                    careRateList.rate2 = {rate: 10.7, careTypes: []};
-                                    angular.forEach(careTypes, function (obj) {
-                                        if (rate1CareTypes.indexOf(obj.careTypeTitle) >= 0) {
-                                            careRateList.rate1.careTypes.push(obj.id);
-                                        }
-                                        if (rate2CareTypes.indexOf(obj.careTypeTitle) >= 0) {
-                                            careRateList.rate2.careTypes.push(obj.id);
-                                        }
-                                    });
-                                    EmployeeDAO.updateCareRates(careRateList)
-                                            .then(function () {
-                                                retrieveEmployeeCareTypeAfterSave(employeeRes);
-                                            })
-                                            .catch(function () {
-                                                console.log(JSON.stringify(careRateList));
-                                            });
-                                });
-                            }
-                        } else {
-                            retrieveEmployeeCareTypeAfterSave(employeeRes);
                         }
+                        ctrl.employee = employeeRes;
+                        ctrl.displayDocumentsByPosition();
                         if ($rootScope.tabNo == 4) {
                             $state.go('app.employee-list', {status: "active"});
                         } else {
@@ -389,18 +306,6 @@
             });
         }
 
-        function retrieveEmployeeCareTypeAfterSave(employeeRes) {
-            EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function (res) {
-                ctrl.employee = employeeRes;
-                ctrl.displayDocumentsByPosition();
-                ctrl.employee.careRatesList = res;
-                $timeout(function () {
-                    $("#rate2").multiSelect('refresh');
-                    $("#rate1").multiSelect('refresh');
-                }, 100);
-            });
-        }
-
         var getUnique = function (attachment) {
             return attachment.attachmentType;
         };
@@ -415,18 +320,18 @@
             result.count = result.data.length;
 
             result.data = result.data.concat(_.filter(filteredAttachments, function (applicationEmployeeAttachment) {
-                return _.findIndex(result.data,{id:applicationEmployeeAttachment.id,
-                                                    attachmentType : applicationEmployeeAttachment.attachmentType}) === -1;
+                return _.findIndex(result.data, {id: applicationEmployeeAttachment.id,
+                    attachmentType: applicationEmployeeAttachment.attachmentType}) === -1;
             }));
             return result;
         };
 
         var getFilteredAttachments = function () {
             if (ctrl.actualAttachments) {
-                var employeeEligibilities = [];                                       
-                _.each(_.filter(ctrl.actualAttachments, function(attachment){
-                        return attachment.type === 'med' && (['Pre – Employment Medical Documents','Physical'].indexOf(attachment.attachmentType) > -1)
-                    }), function (medicalDocument) {
+                var employeeEligibilities = [];
+                _.each(_.filter(ctrl.actualAttachments, function (attachment) {
+                    return attachment.type === 'med' && (['Pre – Employment Medical Documents', 'Physical'].indexOf(attachment.attachmentType) > -1)
+                }), function (medicalDocument) {
                     var extrafield = JSON.parse(medicalDocument.extraFields);
                     var rowToPush = {
                         modified: true,
@@ -438,63 +343,63 @@
                         name: medicalDocument.name,
                         type: medicalDocument.type
                     };
-                    if(medicalDocument.attachmentType === 'Pre – Employment Medical Documents'){                                                
-                        if(extrafield.physicalExpirationDate){
+                    if (medicalDocument.attachmentType === 'Pre – Employment Medical Documents') {
+                        if (extrafield.physicalExpirationDate) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Physical',
-                                expiryDate:extrafield.physicalExpirationDate,
+                                expiryDate: extrafield.physicalExpirationDate,
                                 extraFields: JSON.stringify({})
                             }));
-                        } 
-                        if (extrafield.tbTesting){
+                        }
+                        if (extrafield.tbTesting) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'TB Testing',
-                                expiryDate:extrafield.physicalExpirationDate,
+                                expiryDate: extrafield.physicalExpirationDate,
                                 extraFields: JSON.stringify({
                                     tbTesting: extrafield.tbTesting,
-                                    isPositive : extrafield.isPositive,
-                                    chestXRayExpiration : extrafield.chestXRayExpiration,
+                                    isPositive: extrafield.isPositive,
+                                    chestXRayExpiration: extrafield.chestXRayExpiration,
                                     tbQuestionnaire: extrafield.tbQuestionnaire,
-                                    TBtestingExpirationDate : extrafield.tbTestingExpirationDate
+                                    TBtestingExpirationDate: extrafield.tbTestingExpirationDate
                                 })
-                            }));                            
+                            }));
                         }
-                        if(extrafield.chestXRayExpiration){
+                        if (extrafield.chestXRayExpiration) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Chest X-Ray',
-                                expiryDate:extrafield.chestXRayExpiration,
+                                expiryDate: extrafield.chestXRayExpiration,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.tbQuestionnaire){
+                        if (extrafield.tbQuestionnaire) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'TB Questionnaire',
-                                expiryDate:extrafield.tbQuestionnaire,
+                                expiryDate: extrafield.tbQuestionnaire,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.habituation){
+                        if (extrafield.habituation) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Habituation',
-                                expiryDate:extrafield.habituation,
+                                expiryDate: extrafield.habituation,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.fluShotDate){
+                        if (extrafield.fluShotDate) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Flu Shot',
-                                expiryDate:extrafield.fluShotDate,
+                                expiryDate: extrafield.fluShotDate,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                        if(extrafield.drugTestDate){
+                        if (extrafield.drugTestDate) {
                             employeeEligibilities.push(_.extend({}, rowToPush, {
                                 attachmentType: 'Drug Test',
-                                expiryDate:extrafield.drugTestDate,
+                                expiryDate: extrafield.drugTestDate,
                                 extraFields: JSON.stringify({})
                             }));
                         }
-                    } else if(medicalDocument.attachmentType === 'Physical'){
+                    } else if (medicalDocument.attachmentType === 'Physical') {
                         employeeEligibilities.push(_.extend({}, rowToPush, {
                             attachmentType: 'Habituation',
                             expiryDate: medicalDocument.expiryDate,
@@ -502,17 +407,17 @@
                         }));
                     }
                 });
-                
-                
-                _.each(_.filter(ctrl.actualAttachments, function(attachment){
-                        return attachment.type === 'aed' && (['Initial Application Packet','Initial Application Packet Nursing'].indexOf(attachment.attachmentType) > -1);
-                    }), function (intialApplicationPacket) {
+
+
+                _.each(_.filter(ctrl.actualAttachments, function (attachment) {
+                    return attachment.type === 'aed' && (['Initial Application Packet', 'Initial Application Packet Nursing'].indexOf(attachment.attachmentType) > -1);
+                }), function (intialApplicationPacket) {
                     var extrafield = JSON.parse(intialApplicationPacket.extraFields);
-                    if(extrafield.subtypes){
+                    if (extrafield.subtypes) {
                         _.each(extrafield.subtypes, function (exists, type) {
                             if (exists === true && employeeAttachmentTypes[type]) {
                                 var rowToPush = {
-                                    modified:true,
+                                    modified: true,
                                     attachmentType: employeeAttachmentTypes[type],
                                     dateInserted: intialApplicationPacket.dateInserted,
                                     dateUpdated: intialApplicationPacket.dateUpdated,
@@ -523,7 +428,7 @@
                                     type: intialApplicationPacket.type,
                                     extraFields: {}
                                 };
-                                
+
                                 if (['HCR', 'References', 'CompetencyExam',
                                     'Certificate', 'OPSearch', 'InfectionControl'].indexOf(type) > -1) {
                                     rowToPush['expiryDate'] = extrafield.eligibilityExpDate;
@@ -540,7 +445,7 @@
                         });
                     }
                     employeeEligibilities.push({
-                        modified:true,
+                        modified: true,
                         attachmentType: 'Employment Eligibility (I-9)',
                         dateInserted: intialApplicationPacket.dateInserted,
                         dateUpdated: intialApplicationPacket.dateUpdated,
@@ -552,7 +457,7 @@
                         expiryDate: extrafield.eligibilityExpDate
                     });
                 });
-                ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);                
+                ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);
                 ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments, function (attachment) {
                     return attachment.expiryDate ? new Date(attachment.expiryDate) : new Date(1970, 1, 1);
                 }, ['desc']);
@@ -567,18 +472,18 @@
                 ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
             }
         };
-        
-        ctrl.getAttachmentName = function(attachment){
-            var fileName = attachment.filePath;                                    
-            return ctrl.employee.lName 
-                    + ' ' + 
+
+        ctrl.getAttachmentName = function (attachment) {
+            var fileName = attachment.filePath;
+            return ctrl.employee.lName
+                    + ' ' +
                     ctrl.employee.fName
                     + '-' +
-                    (MappingForDownload[attachment.attachmentType]?MappingForDownload[attachment.attachmentType]:attachment.attachmentType)
+                    (MappingForDownload[attachment.attachmentType] ? MappingForDownload[attachment.attachmentType] : attachment.attachmentType)
                     + '-' +
                     moment(attachment.dateInserted).format("MMDDYYYYHHmm")
                     + '.' +
-                    fileName.substring(fileName.lastIndexOf('.') + 1);            
+                    fileName.substring(fileName.lastIndexOf('.') + 1);
         };
 
         //function called on page initialization.
@@ -596,7 +501,7 @@
                         ctrl.hideLoadingImage = false;
                     } else {
                         ctrl.hideLoadingImage = true;
-                    }                    
+                    }
                     ctrl.employee = res;
                     ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                     getFilteredAttachments();
@@ -620,22 +525,6 @@
                         ctrl.refreshLanguages();
                     }
                     ctrl.retrivalRunning = false;
-                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function (res) {
-                        ctrl.employee.careRatesList = res;
-                        $timeout(function () {
-                            $("#rate2").multiSelect('refresh');
-                            $("#rate1").multiSelect('refresh');
-                        }, 200);
-                        ctrl.retrivalRunning = false;
-                        if (ctrl.employee.careRatesList.rate1 != null && ctrl.employee.careRatesList.rate1.rate != null) {
-                            ctrl.employee.careRatesList.rate1.rate = ctrl.employee.careRatesList.rate1.rate.toFixed(2);
-                        }
-                        if (ctrl.employee.careRatesList.rate2 != null && ctrl.employee.careRatesList.rate2.rate != null) {
-                            ctrl.employee.careRatesList.rate2.rate = ctrl.employee.careRatesList.rate2.rate.toFixed(2);
-                        }
-                    }).catch(function () {
-                        toastr.error("Failed to retrieve employee care rates.");
-                    });
                 }).catch(function (data, status) {
                     toastr.error("Failed to retrieve employee.");
                     ctrl.retrivalRunning = false;
@@ -655,7 +544,7 @@
             }
         }
         ;
-        
+
         ctrl.openSSNModal = function (employeeId)
         {
             var modalInstance = $modal.open({
@@ -722,63 +611,6 @@
             setValidationsForTab2(newVal);
         });
 
-        $scope.$watch(function () {
-            if (!ctrl.employee.careRatesList) {
-                ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
-            }
-            return ctrl.employee.careRatesList.rate1.careTypes;
-        }, function (newVal, oldValue) {
-            if (ctrl.careTypeList2) {
-                var newCareTypes2 = [];
-                angular.forEach(ctrl.careTypeList, function (obj) {
-                    if (newVal.indexOf(obj.id) < 0) {
-                        newCareTypes2.push(obj);
-                    }
-                });
-                ctrl.careTypeList2 = newCareTypes2;
-                $timeout(function () {
-                    $('#rate2').multiSelect('refresh');
-                }, 100);
-            }
-        });
-        $scope.$watch(function () {
-            if (!ctrl.employee.careRatesList) {
-                ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
-            }
-            return ctrl.employee.careRatesList.rate2.careTypes;
-        }, function (newVal, oldValue) {
-            if (ctrl.careTypeList1) {
-                var newCareTypes1 = [];
-                angular.forEach(ctrl.careTypeList, function (obj) {
-                    if (newVal.indexOf(obj.id) < 0) {
-                        newCareTypes1.push(obj);
-                    }
-                });
-                ctrl.careTypeList1 = newCareTypes1;
-                $timeout(function () {
-                    $('#rate1').multiSelect('refresh');
-                }, 100);
-            }
-        });
-
-        function setValidationsForTab2(wages) {
-            if (wages && wages === 'S') {
-                $("input[name='Salary']").attr('required', true);
-                $("select[name='rate1']").attr('required', false);
-                $("input[name='Rate1']").attr('required', false);
-                $("input[name='OTRate']").attr('required', false);
-                $("input[name='HDRate']").attr('required', false);
-                $("input[name='WHRate']").attr('required', false);
-            } else {
-                $("input[name='Salary']").attr('required', false);
-                $("select[name='rate1']").attr('required', true);
-                $("input[name='Rate1']").attr('required', true);
-                $("input[name='OTRate']").attr('required', true);
-                $("input[name='HDRate']").attr('required', true);
-                $("input[name='WHRate']").attr('required', true);
-            }
-        }
-
         ctrl.tab3DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea, #add_employee_form select").first().focus();
@@ -787,8 +619,8 @@
                     googleMapFunctions(ctrl.employee.locationLatitude, ctrl.employee.locationLongitude);
                     form_data = $('#add_employee_form').serialize();
                     $timeout(function () {
-                            $('#PreferredCounties').trigger('change.select2');
-                        }, 100);
+                        $('#PreferredCounties').trigger('change.select2');
+                    }, 100);
                 } else {
                     ctrl.tab3DataInit();
                 }
@@ -812,76 +644,6 @@
 
         };
 
-        ctrl.tab2DataInit = function () {
-            ctrl.formDirty = false;
-            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
-            //to set radio buttons on tab init..
-            $timeout(function () {
-                if (!ctrl.retrivalRunning) {
-                    CareTypeDAO.retrieveAll({positionId: ctrl.employee.companyPositionId}).then(function (res) {
-                        ctrl.careTypeList2 = [];
-                        ctrl.careTypeList1 = [];
-                        ctrl.careTypeList = res;
-                        var selectedCareTypes1 = [];
-                        angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function (obj) {
-                            selectedCareTypes1.push(obj);
-                        });
-                        var selectedCareTypes2 = [];
-                        angular.forEach(ctrl.employee.careRatesList.rate2.careTypes, function (obj) {
-                            selectedCareTypes2.push(obj);
-                        });
-                        angular.forEach(res, function (obj) {
-                            if (selectedCareTypes1.indexOf(obj.id) < 0) {
-                                ctrl.careTypeList2.push(obj);
-                            }
-                            if (selectedCareTypes2.indexOf(obj.id) < 0) {
-                                ctrl.careTypeList1.push(obj);
-                            }
-                        });
-                        $timeout(function () {
-                            $('#rate1').multiSelect('refresh');
-                            $('#rate2').multiSelect('refresh');
-                            form_data = $('#add_employee_form').serialize();
-                        }, 200);
-                    }).catch(function () {
-                        toastr.error("Failed to retrieve care types.");
-                        form_data = $('#add_employee_form').serialize();
-                    });
-
-                    BenefitDAO.retrieveAll({subAction: "active", linesRequired: true}).then(function (benefitPackages) {
-                        ctrl.benefitPackages = [];
-                        ctrl.benefitPackageWiseLineTypes = {};
-                        _.each(benefitPackages, function (benefitPackage) {
-                            ctrl.benefitPackages.push({id: benefitPackage.id, packageName: benefitPackage.packageName});
-                            ctrl.benefitPackageWiseLineTypes[benefitPackage.id] = _.map(benefitPackage.benefitPackageLineSet, "lineType");
-                        });
-                    }).catch(function () {
-                        toastr.error("Failed to benefits packages.");
-                    });
-
-                    if (!ctrl.employee.taxStatus || ctrl.employee.taxStatus === null) {
-                        ctrl.employee.taxStatus = 'W';
-                    }
-                    if (!ctrl.employee.wages || ctrl.employee.wages === null) {
-                        ctrl.employee.wages = 'H';
-                    }
-                    if (!ctrl.employee.payrollGroup || ctrl.employee.payrollGroup === null) {
-                        ctrl.employee.payrollGroup = 'A';
-                    }
-                    $formService.resetRadios();
-//                    if (!ctrl.employee.salaryFrequency || ctrl.employee.salaryFrequency === null) {
-//                        ctrl.employee.salaryFrequency = '1W';
-//                    }
-                    setValidationsForTab2(ctrl.employee.wages);
-//                    $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
-//                    $formService.setRadioValues('Wages', ctrl.employee.wages);
-                    form_data = $('#add_employee_form').serialize();
-                } else {
-                    ctrl.tab2DataInit();
-                }
-            }, 300);
-
-        };
         ctrl.tab1DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
@@ -891,7 +653,7 @@
                 ctrl.employee = {};
             } else {
                 ctrl.editMode = true;
-                
+
             }
             //to set radio buttons on tab init..
             $timeout(function () {
@@ -1325,23 +1087,6 @@
             $image.cropper('reset');
         };
 
-//        $scope.$watch(function() {
-//            return ctrl.employee.position;
-//        }, function(newVal, oldValue) {
-//            $formService.setRadioValues('Position', newVal);
-//        });
-//        $scope.$watch(function() {
-//            return ctrl.employee.Wages;
-//        }, function(newVal, oldValue) {
-//            $formService.setRadioValues('Wages', newVal);
-//        });
-//        $scope.$watch(function() {
-//            return ctrl.employee.TaxStatus;
-//        }, function(newVal, oldValue) {
-//            $formService.setRadioValues('TaxStatus', newVal);
-//        });
-
-//        ctrl.pageInitCall();
         ctrl.deleteAttachment = function (attachment) {
             $rootScope.maskLoading();
             EmployeeDAO.deleteAttachment(attachment).then(function () {
@@ -1374,10 +1119,10 @@
                     attachmentInfo: function () {
                         return mode === 'Edit' ? angular.copy(attachmentToEdit) : {employeeId: ctrl.employee.id, type: attachmentToEdit};
                     },
-                    employee: function (){
+                    employee: function () {
                         return ctrl.employee;
                     },
-                    filename: function(){
+                    filename: function () {
                         return mode === 'Edit' ? ctrl.getAttachmentName(attachmentToEdit) : null;
                     }
                 }
@@ -1422,9 +1167,9 @@
         };
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id)) 
+            if (isNaN(parseFloat($state.params.id))
                     || ($rootScope.currentUser.allowedFeature.indexOf('HR_EDIT_EMPLOYEE') === -1
-                    && $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE_DEMO') === -1)) {
+                            && $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE_DEMO') === -1)) {
                 $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
