@@ -292,11 +292,18 @@ ontimedata = {
             "contractFile": "Contract File",
             "careTypes": ["1"]
         }
-    ]
+    ],
+    reasons: [
+        "reason 1", "reason 2", "reason 3"
+    ],
+    eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
+    recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"}
+
 };
 
 ontimetest = {
-    'weburl': 'http://demotrt.com:8080/ontime/api/',
+    'weburl': 'http://localhost:8080/ontime/api/',
+//    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'login',
     'homepage': 'app.dashboard',
     'patients': ontimedata.patients,
@@ -304,6 +311,9 @@ ontimetest = {
     'dailyAttendance': ontimedata.dailyAttendance,
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
+    'reasons': ontimedata.reasons,
+    'recurranceTypes': ontimedata.recurranceTypes,
+    'eventTypes': ontimedata.eventTypes,
     'company_code': "TRT",
     positionGroups: {
         'NURSING_CARE_COORDINATOR': "NCC",

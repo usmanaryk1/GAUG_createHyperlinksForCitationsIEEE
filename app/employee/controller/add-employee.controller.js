@@ -1,5 +1,5 @@
 (function () {
-    function AddEmployeeCtrl($scope, CareTypeDAO, $state, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO) {
+    function AddEmployeeCtrl($scope, CareTypeDAO, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
         var ctrl = this;
         ctrl.staticPosition;
         ctrl.retrivalRunning = true;
@@ -1033,7 +1033,198 @@
 //        });
 
 //        ctrl.pageInitCall();
+
+//     POPUP INTEGRATION....REMOVE IT LATER
+        var timeFormat = 'HH:mm';
+        ctrl.saveEmployeePopupChanges = function (data) {
+            $rootScope.maskLoading();
+            var obj = {action: data.eventType, data: data}
+            EventTypeDAO.saveForEventType(obj).then(function (res) {
+                $state.go('app.batch_session', {id: res.id});
+            }).catch(function (e) {
+                toastr.error("Changes cannot be saved.");
+            }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+        };
+        ctrl.savePatientPopupChanges = function (data) {
+        };
+        ctrl.editEmployeePopup = function (data) {
+            $rootScope.maskLoading();
+            var obj = {action: data.eventType, id: data.id};
+            EventTypeDAO.retrieveEventType(obj).then(function (res) {
+                $state.go('app.batch_session', {id: res.id});
+            }).catch(function (e) {
+                toastr.error("Information cannot be retrieved.");
+            }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+        };
+        ctrl.openModalEmployee = function (data, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.employeePopup = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            // api call
+            $rootScope.employeePopup.patients = [{id: 1, fName: 'patient 1'}, {id: 2, fName: 'patient 2'}];
+            $rootScope.employeePopup.reasons = ontimetest.reasons;
+            $rootScope.employeePopup.eventTypes = ontimetest.eventTypes;
+            $rootScope.employeePopup.recurranceTypes = ontimetest.recurranceTypes;
+            // static set
+            $rootScope.employeePopup.employee = {id: 1, fName: "Mansi", lName: "Parekh"};
+            if (data == null) {
+                $rootScope.employeePopup.employee.isNew = true;
+            } else {
+                $rootScope.employeePopup.employee.isNew = false;
+                $rootScope.employeePopup.data = data;
+            }
+            //to make the radio buttons selected, theme bug
+            setTimeout(function () {
+                cbr_replace();
+            }, 100);
+
+            var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+            if (!angular.isDefined($rootScope.employeePopup.data)) {
+                $rootScope.employeePopup.data = {eventType: "A", recurranceType: "D", startTime: currentTime, endTime: currentTime, forLiveIn: false};
+            }
+            $rootScope.employeePopup.save = function () {
+                $timeout(function () {
+                    $rootScope.employeePopup.valid = true;
+                    if ($('#popupemployee')[0].checkValidity()) {
+                        var a = moment(new Date($rootScope.employeePopup.data.startDate));
+                        var b = moment(new Date($rootScope.employeePopup.data.endDate));
+                        var diff = b.diff(a, 'days');
+                        if (diff == 6) {
+                            $rootScope.employeePopup.valid = false;
+//                        ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
+//                        $rootScope.employeePopup.dismiss();
+                        } else {
+                        }
+                    } else {
+                        console.log("invalid")
+                    }
+                });
+            };
+            $rootScope.employeePopup.changed = function (form, event) {
+                if (event != 'repeat') {
+                    var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                    var old = $rootScope.employeePopup.data.eventType;
+                    $rootScope.employeePopup.data = {eventType: old, recurranceType: "D"};
+                    if (old == 'S') {
+                        $rootScope.employeePopup.data.forLiveIn = false;
+                    }
+                    if (old != 'U') {
+                        $rootScope.employeePopup.data.startTime = currentTime;
+                        $rootScope.employeePopup.data.endTime = currentTime;
+                    }
+                    if (old == 'U') {
+                        $rootScope.employeePopup.data.isPaid = false;
+                    }
+                    setTimeout(function () {
+                        cbr_replace();
+                    }, 100);
+                }
+            };
+        };
+        ctrl.openModalPatient = function (data, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.patientPopup = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.patientPopup.careTypes = [];
+            $rootScope.patientPopup.reasons = ontimetest.reasons;
+            $rootScope.patientPopup.employees = [];
+            $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
+            $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
+            // static set
+            $rootScope.patientPopup.patient = {id: 14, insuranceProviderId: 1, fName: "Mansi", lName: "Parekh"};
+            if (data == null) {
+                $rootScope.patientPopup.patient.isNew = true;
+            } else {
+                $rootScope.patientPopup.patient.isNew = false;
+                $rootScope.patientPopup.data = data;
+            }
+            // no need to retrieve patient object if you already have, just get all careTypes of patient's insuranceProviderId
+            PatientDAO.get({id: $rootScope.patientPopup.patient.id}).then(function (res) {
+                if (res.patientCareTypeCollection) {
+                    CareTypeDAO.retrieveForInsurer({insurer_id: $rootScope.patientPopup.patient.insuranceProviderId}).then(function (res1) {
+                        ctrl.careTypeList = res1;
+                        ctrl.careTypeIdMap = {};
+                        angular.forEach(ctrl.careTypeList, function (careType) {
+                            ctrl.careTypeIdMap[careType.id] = careType;
+                        });
+                        var careTypesSelected = [];
+                        var length = res.patientCareTypeCollection.length;
+                        for (var i = 0; i < length; i++) {
+                            careTypesSelected.push(ctrl.careTypeIdMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id]);
+                        }
+                        $rootScope.patientPopup.careTypes = careTypesSelected;
+                    }).catch(function () {
+                    });
+                }
+            });
+            //to make the radio buttons selected, theme bug
+            setTimeout(function () {
+                cbr_replace();
+            }, 100);
+
+            var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+            if (!angular.isDefined($rootScope.patientPopup.data))
+                $rootScope.patientPopup.data = {eventType: "S", recurranceType: "D", forLiveIn: false, startTime: currentTime, endTime: currentTime};
+            $rootScope.patientPopup.save = function () {
+                $rootScope.patientPopup.valid = true;
+                $timeout(function () {
+                    if ($('#popuppatient')[0].checkValidity()) {
+                        var a = moment(new Date($rootScope.patientPopup.data.startDate));
+                        var b = moment(new Date($rootScope.patientPopup.data.endDate));
+                        var diff = b.diff(a, 'days');
+                        if (diff == 6) {
+                            $rootScope.patientPopup.valid = false;
+//                        ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+//                        $rootScope.patientPopup.dismiss();
+                        } else {
+                        }
+                    } else {
+                        console.log("invalid")
+                    }
+                });
+            };
+            $rootScope.patientPopup.changed = function (event) {
+                if (event != 'repeat') {
+                    var old = $rootScope.patientPopup.data.eventType;
+                    $rootScope.patientPopup.data = {eventType: old, recurranceType: "D"};
+                    var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                    if (old == 'S') {
+                        $rootScope.patientPopup.data.forLiveIn = false;
+                        $rootScope.patientPopup.data.startTime = currentTime;
+                        $rootScope.patientPopup.data.endTime = currentTime;
+                    }
+                    if (old == 'U') {
+                        $rootScope.patientPopup.data.isPaid = false;
+                    }
+                    setTimeout(function () {
+                        cbr_replace();
+                    }, 100);
+                }
+            };
+            $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
+                delete $rootScope.patientPopup.data.employeeId;
+                EmployeeDAO.retrieveEmployee($rootScope.patientPopup.data.care).then(function (res) {
+                    $rootScope.patientPopup.employees = res;
+                }).catch(function (e) {
+                    toastr.error("Employees cannot be retrieved.");
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            }
+        };
     }
     ;
-    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", AddEmployeeCtrl]);
+    angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddEmployeeCtrl]);
 })();
