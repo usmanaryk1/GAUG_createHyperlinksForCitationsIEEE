@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('xenon.filter', [])
-        .filter('tel', function() {
-            return function(tel) {
+        .filter('tel', function () {
+            return function (tel) {
                 if (!tel) {
                     return '';
                 }
@@ -46,8 +46,8 @@ angular.module('xenon.filter', [])
 
                 return (country + " (" + city + ") " + number).trim();
             };
-        }).filter('ssn', function() {
-    return function(ssn) {
+        }).filter('ssn', function () {
+    return function (ssn) {
         if (!ssn) {
             return '';
         }
@@ -63,8 +63,45 @@ angular.module('xenon.filter', [])
         return ssn.trim();
     };
 })
-        .filter('duration', function() {
-            return function(earlierdate, laterdate) {
+        .filter('timecount', function () {
+            return function (earlierdate, laterdate) {
+                if (earlierdate != null && laterdate != null) {
+                    var valid1 = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/.test(earlierdate);
+                    var valid2 = /^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/.test(laterdate);
+                    if (valid1 && valid2) {
+                        var d1 = earlierdate.split(":");
+                        var d2 = laterdate.split(":");
+                        var d12 = Number(d1[1]);
+                        var d22 = Number(d2[1]);
+                        var d11 = Number(d1[0]);
+                        var d21 = Number(d2[0]);
+                        var value;
+                        var min;
+                        var minus = 0;
+                        var hr;
+                        if (d22 >= d12) {
+                            min = d22 - d12;
+                        } else {
+                            minus = 1;
+                            min = (60 - d12) + d22;
+                        }
+                        if (d21 >= d11) {
+                            if (d21 == d11 && minus != 0) {
+                                hr = 24 - d11 + d21 - minus;
+                            } else {
+                                hr = d21 - d11 - minus;
+                            }
+                        } else {
+                            hr = (24 - d11) + d21 - minus;
+                        }
+                        value = hr + " hr " + min + " min";
+                        return value;
+                    }
+                }
+            };
+        })
+        .filter('duration', function () {
+            return function (earlierdate, laterdate) {
                 earlierdate = new Date(earlierdate);
                 laterdate = new Date(laterdate);
                 var difference = laterdate.getTime() - earlierdate.getTime();
@@ -88,26 +125,26 @@ angular.module('xenon.filter', [])
                 return hoursDifference + ":" + minutesDifference;
             };
         })
-        .filter('timesheetformat', function() {
-            return function(input) {
+        .filter('timesheetformat', function () {
+            return function (input) {
                 var weekDays = ['Sn', 'Mn', 'Tu', 'Wd', 'Th', 'Fr', 'St'];
                 return weekDays[new Date(input).getDay()];
             };
         })
-        .filter('extension', function() {
-            return function(input) {
-                if(input && input!==null){
+        .filter('extension', function () {
+            return function (input) {
+                if (input && input !== null) {
                     return input.substring(input.lastIndexOf("."))
-                }else{
+                } else {
                     return input;
                 }
                 return weekDays[new Date(input).getDay()];
             };
         })
-        .filter('durationtotal', ['$filter', function($filter) {
-                return function(objList) {
+        .filter('durationtotal', ['$filter', function ($filter) {
+                return function (objList) {
                     var durationSum = 0;
-                    angular.forEach(objList, function(obj) {
+                    angular.forEach(objList, function (obj) {
                         if (!isNaN(obj.roundedPunchOutTime) && !isNaN(obj.roundedPunchInTime) != null) {
                             var earlierdate = new Date(obj.roundedPunchInTime);
                             var laterdate = new Date(obj.roundedPunchOutTime);
