@@ -13,7 +13,7 @@
         </div>
         <div class="title-env" style="width:30%" >
             <a class="btn btn-secondary pull-right" ng-click="ediReader.uploadPopup()" style="margin-top: 10px;">Upload EDI</a>
-            <a class="btn btn-info pull-right" ng-click="ediReader.deletePopup()" style="margin-right: 15px;margin-top: 10px;">Delete EDI</a>
+            <a class="btn btn-red pull-right" ng-click="ediReader.deletePopup()" style="margin-right: 15px;margin-top: 10px;">Delete EDI</a>
         </div>
     </div>    
 
@@ -92,7 +92,8 @@
                                         <th nowrap><span class="">Insurer Name</span></th>
                                         <th nowrap><span class="">File Name</span></th>
                                         <th nowrap><span class="">Payment Date</span></th>
-                                        <th nowrap><span class="">Total amount paid</span></th>
+                                        <th nowrap><span class="">Mapped<br>Claim<br>Count</span></th>
+                                        <th nowrap><span class="">Total Amount<br>Paid</span></th>
                                         <th nowrap class='nosorting text-center'>
                                             <span class="">Actions</span>
                                         </th>
@@ -106,6 +107,7 @@
                                         <td ><b>{{ediReader.insuranceProviderMap[data.insuranceProviderId]}}</b></td>
                                         <td>{{data.fileName}}</td>                                        
                                         <td>{{data.paymentDate}}</td>
+                                        <td>{{data.claimCount}}</td>
                                         <td>${{data.totalAmount ? (data.totalAmount | number:2): 0}}</td>
                                         <td class="text-center">
                                             <div class="center">

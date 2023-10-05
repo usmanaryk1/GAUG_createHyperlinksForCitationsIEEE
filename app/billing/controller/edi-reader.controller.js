@@ -190,11 +190,18 @@
 
             $rootScope.deleteEDIModel.deleteEDIData = function () {
                 if ($rootScope.deleteEDIModel.deleteEDIForm.$valid) {
+                    $rootScope.maskLoading();
                     BillingDAO.deleteEdi($rootScope.deleteEDIModel.deleteData).then(function () {
-                        toastr.success("EDI batch is deleted.");
+                        toastr.success("EDI data batch deleted.");
                         $rootScope.deleteEDIModel.close();
-                    }).catch(function () {
-                        toastr.error("Error in deleting EDI batch.");
+                    }).catch(function (data) {
+                        if (data.status === 400) {
+                            toastr.error(data.data);
+                        } else {
+                            toastr.error("Someting went wrong on server")
+                        }
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
                     });
                 }
             };
