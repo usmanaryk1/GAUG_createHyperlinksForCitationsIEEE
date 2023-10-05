@@ -226,6 +226,7 @@ angular.module('xenon.services', []).
                 benefits.addItem('Add Benefit', './benefits/', 'CREATE_BENEFIT');
                 benefits.addItem('View Benefit', './benefits', 'VIEW_BENEFIT');
                 benefits.addItem('Benefit Adjustments', './employee-adjustments/active', 'EMPLOYEE_BENEFIT_ADJUSTMENT');
+                benefits.addItem('Benefit Payouts', './benifit-payouts/active', 'EMPLOYEE_BENEFIT_ADJUSTMENT');
                 // Subitems of company
 //                company.addItem('Company Information', './company_information', 'CREATE_COMPANY_INFORMATION');
 

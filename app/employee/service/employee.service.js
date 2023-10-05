@@ -103,6 +103,19 @@
                     action: 'offset'
                 }
             },
+            retrievePayouts: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'payout'
+                }
+            },
+            savePayouts: {
+                method: 'POST',
+                params: {
+                    action: 'payout'
+                }
+            },
             readNotes: {
                 method: 'PUT'
             },
@@ -204,6 +217,12 @@
             },
             saveSettings: function (data) {
                 return api.saveSettings(data).$promise;
+            },
+            retrievePayouts: function (filter) {
+                return api.retrievePayouts(filter).$promise;
+            },
+            savePayouts: function (data) {
+                return api.savePayouts(data).$promise;
             },
             readNotes: function (params) {
                 return api.readNotes({action: params.userId, subAction: 'notes', subAction1: 'read'},{}).$promise;
