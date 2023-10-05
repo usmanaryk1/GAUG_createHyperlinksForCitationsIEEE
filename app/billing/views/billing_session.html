@@ -100,11 +100,13 @@
                     </div>
                     <div class="pull-right col-sm-9 pad0" ng-if="billingSession.processdMode">
                         <div>
-                            <a style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                            <a style="margin-left: 0px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download">Download EDI</a>
-                            <a ng-if="billingSession.anyClaimResubmitted === true" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                            <a ng-if="billingSession.anyClaimResubmitted === true" style="margin-left: 0px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download?editedOnly=true">Edited Claim EDI</a>
-                            <a ng-if="billingSession.billingSessions[0].claimType == 'UB04'" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                            <a ng-if="billingSession.anyClaimResubmitted === true && hasAccess('RESET_BILLING_BATCH')" style="margin-left: 0px" type="button" class="btn btn-info green_bt  pull-right" 
+                               ng-click="billingSession.openResetModal($event)">Reset Batch</a>
+                            <a ng-if="billingSession.billingSessions[0].claimType == 'UB04'" style="margin-left: 0px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/download/batch/{{billingSession.sessionId}}" download>Download UB04</a>
                         </div>
                         <div class="text-left">
