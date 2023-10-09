@@ -661,7 +661,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'EdiReaderCtrl as ediReader',
                 templateUrl: appHelper.viewTemplatePath('billing', 'edi_reader'),
                 data: {
-                    feature: 'MANAGE_BILLING_RECONCILIATION'
+                    feature: 'EDI_DATA_READER'
                 }
             }).state('app.billing_reconciliation', {
         url: '/billing_reconciliation',
