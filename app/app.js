@@ -989,13 +989,20 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'CREATE_BENEFIT,EDIT_BENEFIT'
                 }
             }).state('admin.employee-adjustments', {
-        url: '/employee-adjustments/:status',
-        templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
-        controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
-        data: {
-            feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
-        }
-    }).
+                url: '/employee-adjustments/:status',
+                templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
+                controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
+                data: {
+                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+                }
+            }).state('admin.benifit-payouts', {
+                url: '/benifit-payouts/:status',
+                templateUrl: appHelper.viewTemplatePath('benefits', 'benifit-payouts'),
+                controller: 'BenefitPayoutCtrl as benefitPayoutCtrl',
+                data: {
+                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+                }
+            }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
