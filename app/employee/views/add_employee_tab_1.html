@@ -416,8 +416,8 @@
                             <div class="form-group-separator"></div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name="fromDate" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
 
                                         <div class="input-group-addon">
@@ -426,8 +426,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" id="toDate" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name='toDate' data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'S'">
 
                                         <div class="input-group-addon">
@@ -441,7 +441,7 @@
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Time</label>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
                                         <input class="form-control punch-time-input" ng-disabled="!employeePopup.employee.isNew" ng-model='employeePopup.data.startTime' id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'S'"/>
 
@@ -451,7 +451,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
                                         <input class="form-control punch-time-input" ng-disabled="!employeePopup.employee.isNew" ng-model='employeePopup.data.endTime' id="endTime" name="endTime" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'S'"/>
 
@@ -571,8 +571,8 @@
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name="fromDate1" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
 
                                         <div class="input-group-addon">
@@ -581,8 +581,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" ng-disabled="!employeePopup.employee.isNew" class="form-control datepicker" name='toDate1' data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'A'">
 
                                         <div class="input-group-addon">
@@ -596,7 +596,7 @@
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Time</label>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
                                         <input class="form-control  punch-time-input" ng-disabled="!employeePopup.employee.isNew"  ng-model='employeePopup.data.startTime' id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'A'"/>
 
@@ -606,7 +606,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
                                         <input class="form-control  punch-time-input" ng-disabled="!employeePopup.employee.isNew"  ng-model='employeePopup.data.endTime' id="endTime1" name="endTime2" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'A'"/>
 
@@ -699,7 +699,7 @@
                                 <label class="col-sm-2 control-label">Reason</label>
 
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="reason" name="reason" ng-model="employeePopup.data.sick" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in employeePopup.reasons" ng-required="employeePopup.data.eventType == 'U'">
+                                    <select class="form-control" id="reason" name="reason" ng-model="employeePopup.data.reason" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in employeePopup.reasons" ng-required="employeePopup.data.eventType == 'U'">
                                         <option value="">Select the reason</option>
                                     </select>
                                 </div>
@@ -710,7 +710,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Paid per Hrs.</label>
 
-                                <div class="col-sm-2" style="width:7%;padding-right:0;">
+                                <div class="col-sm-2" style="width:10%;padding-right:0;">
                             <label class="no-padding-left checkbox" >
                                     <input type="checkbox" class="cbr" id="paid" name="paid" ng-model="employeePopup.data.isPaid">
 Paid
@@ -725,8 +725,8 @@ Paid
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" class="form-control datepicker" name="fromDate2" ng-disabled="!employeePopup.employee.isNew" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'U'">
 
                                         <div class="input-group-addon">
@@ -735,8 +735,8 @@ Paid
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" id="toDate2" class="form-control datepicker" name='toDate2' ng-disabled="!employeePopup.employee.isNew" data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'U'">
 
                                         <div class="input-group-addon">
@@ -790,7 +790,7 @@ Paid
                 <div class="modal-header">
                     <button type="button" class="close" ng-click="patientPopup.close();" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</h4>
-                    <h6>{{patientPopup.patient.dob}}</h6>
+                    <h6>{{patientPopup.patient.dob|date :dateFormat}}</h6>
                 </div>
 
                 <!-- schedule-->
@@ -837,7 +837,7 @@ Paid
                                 <label class="col-sm-2 control-label">Employee</label>
 
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="employee" name="employee" ng-model="patientPopup.data.employeeId" data-validate="required"  data-message-required="Please select employee." ng-options="employee.id as (employee.fName+' '+employee.middleInitial) for employee in patientPopup.employees" required>
+                                    <select class="form-control" id="employee" name="employee" ng-model="patientPopup.data.employeeId" data-validate="required"  data-message-required="Please select employee." ng-options="employee.id as (employee.fName+' '+employee.middleInitial) for employee in patientPopup.employees">
                                         <option value="">Select the employee</option>
                                     </select>
                                 </div>
@@ -847,8 +847,8 @@ Paid
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
 
                                         <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" id="fromDate3" name="fromDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
@@ -858,8 +858,8 @@ Paid
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" id="toDate3" name="toDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
 
                                         <div class="input-group-addon">
@@ -873,7 +873,7 @@ Paid
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Time</label>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
                                         <input class="form-control punch-time-input" ng-disabled="!patientPopup.patient.isNew" ng-model='patientPopup.data.startTime' id="startTime3" name="startTime3" type="text" data-validate='required,time' data-message-required='Please enter start Time.'/>
 
@@ -883,7 +883,7 @@ Paid
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
                                         <input class="form-control punch-time-input" ng-disabled="!patientPopup.patient.isNew" ng-model="patientPopup.data.endTime" id="endTime3" name="endTime3" type="text" data-validate='required,time' data-message-required='Please enter end Time.'/>
 
@@ -982,7 +982,7 @@ Paid
                                 <label class="col-sm-2 control-label">Reason</label>
 
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="reason" name="reason" ng-model="patientPopup.data.sick" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in patientPopup.reasons">
+                                    <select class="form-control" id="reason" name="reason" ng-model="patientPopup.data.reason" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in patientPopup.reasons">
                                         <option value="">Select the reason</option>
                                     </select>
                                 </div>
@@ -992,8 +992,8 @@ Paid
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" id="fromDate" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" name="fromDate" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
                                         <div class="input-group-addon">
@@ -1002,8 +1002,8 @@ Paid
                                     </div>
                                 </div>
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-2">
-                                    <div class="input-group">
+                                <div class="col-sm-4">
+                                    <div class="input-group" style="z-index:1060">
                                         <input type="text" id="toDate" class="form-control datepicker" name="toDate" ng-disabled="!patientPopup.patient.isNew"  data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
 
                                         <div class="input-group-addon">
@@ -1073,14 +1073,14 @@ Paid
                                         <td class="middle-align">Employee</td>
                                         <td>
                                             <a href="" ng-click="addEmployee.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add</a>
-                                            <a href="" ng-click="addEmployee.openModalEmployee({id: 1, eventType: 'U', recurranceType: 'D',startDate:'01/01/2016',endDate:'01/01/2016',note:'test',isPaid:true,noOfHours:5}, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
+                                            <a href="" ng-click="addEmployee.openModalEmployee({employeeId: 1, eventType: 'U', recurranceType: 'D',startDate:'01/01/2016',endDate:'01/01/2016',note:'test',isPaid:true,noOfHours:5,reason:'reason 2'}, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="middle-align">Patient</td>
                                         <td>
                                             <a href="" ng-click="addEmployee.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add</a>
-                                            <a href="" ng-click="addEmployee.openModalPatient({id: 14, eventType: 'S', recurranceType: 'W',startDate:'01/01/2016',endDate:'01/01/2016',startTime:'10:10',endTime:'10:40',care:4,employeeId:9}, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
+                                            <a href="" ng-click="addEmployee.openModalPatient({patientId: 14, eventType: 'S', recurranceType: 'W',startDate:'01/01/2016',endDate:'01/01/2016',startTime:'10:10',endTime:'10:40',care:4,employeeId:11}, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                 </tbody>

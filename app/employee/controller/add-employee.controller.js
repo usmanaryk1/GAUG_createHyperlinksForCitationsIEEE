@@ -1037,25 +1037,53 @@
 //     POPUP INTEGRATION....REMOVE IT LATER
         var timeFormat = 'HH:mm';
         ctrl.saveEmployeePopupChanges = function (data) {
-            $rootScope.maskLoading();
-            var obj = {action: data.eventType, data: data}
-            EventTypeDAO.saveForEventType(obj).then(function (res) {
-                $state.go('app.batch_session', {id: res.id});
-            }).catch(function (e) {
-                toastr.error("Changes cannot be saved.");
-            }).then(function () {
-                $rootScope.unmaskLoading();
-            });
+            if ($rootScope.employeePopup.employee.isNew) {
+                $rootScope.maskLoading();
+                var data1 = angular.copy(data);
+                data1.startDate = moment(new Date(data1.startDate)).format($rootScope.employeePopup.dateFormat);
+                data1.endDate = moment(new Date(data1.endDate)).format($rootScope.employeePopup.dateFormat);
+                var obj = {action: data1.eventType, data: data1};
+                console.log("employee data :: " + JSON.stringify(data1));
+                EventTypeDAO.saveForEventType(obj).then(function (res) {
+                    toastr.success("Saved successfully.");
+                    $state.go('app.employee.tab1', {id: res.id});
+                }).catch(function (data) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            } else {
+                $rootScope.employeePopup.dismiss();
+            }
         };
         ctrl.savePatientPopupChanges = function (data) {
+            if ($rootScope.patientPopup.patient.isNew) {
+                $rootScope.maskLoading();
+                var data1 = angular.copy(data);
+                delete data1.care;
+                data1.startDate = moment(new Date(data1.startDate)).format($rootScope.patientPopup.dateFormat);
+                data1.endDate = moment(new Date(data1.endDate)).format($rootScope.patientPopup.dateFormat);
+                console.log("patient data :: " + JSON.stringify(data1));
+                var obj = {action: data1.eventType, data: data1}
+                EventTypeDAO.saveForEventType(obj).then(function (res) {
+                    toastr.success("Saved successfully.");
+                    $state.go('app.employee.tab1', {id: res.id});
+                }).catch(function (data) {
+                    toastr.error(data.data);
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            } else {
+                $rootScope.patientPopup.dismiss();
+            }
         };
         ctrl.editEmployeePopup = function (data) {
             $rootScope.maskLoading();
-            var obj = {action: data.eventType, id: data.id};
+            var obj = {action: data.eventType, employeeId: data.id};
             EventTypeDAO.retrieveEventType(obj).then(function (res) {
-                $state.go('app.batch_session', {id: res.id});
-            }).catch(function (e) {
-                toastr.error("Information cannot be retrieved.");
+                $state.go('app.employee.tab1', {id: res.id});
+            }).catch(function (data) {
+                toastr.error(data.data);
             }).then(function () {
                 $rootScope.unmaskLoading();
             });
@@ -1068,12 +1096,13 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            $rootScope.employeePopup.dateFormat = "MM/DD/YYYY";
             // api call
             var str = "4"; //caretype
             PatientDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
                 $rootScope.employeePopup.patients = res;
-            }).catch(function (data, status) {
-                toastr.error("Failed to retrieve patients.");
+            }).catch(function (data) {
+                toastr.error(data.data);
             }).then(function () {
             });
 
@@ -1107,9 +1136,7 @@
                         if (diff > 6) {
                             toastr.error("Date range should be no more of 7 days.");
                         } else {
-                            console.log("save employee modal data :: " + JSON.stringify($rootScope.employeePopup.data));
-//                        ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
-//                        $rootScope.employeePopup.dismiss();
+                            ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
                         }
                     } else {
                         console.log("invalid form");
@@ -1147,13 +1174,14 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.patientPopup.dateFormat = "MM/DD/YYYY";
                 $rootScope.patientPopup.careTypes = [];
                 $rootScope.patientPopup.reasons = ontimetest.reasons;
                 $rootScope.patientPopup.employees = [];
                 $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
                 $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
                 // static set
-                $rootScope.patientPopup.patient = {id: 14, insuranceProviderId: 1, fName: "FirstName", lName: "LastName"};
+                $rootScope.patientPopup.patient = {id: 14, insuranceProviderId: 1, fName: "FirstName", lName: "LastName", dob: '01/01/2000'};
                 if (data == null) {
                     $rootScope.patientPopup.patient.isNew = true;
                 } else {
@@ -1169,7 +1197,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "D", forLiveIn: false, startTime: currentTime, endTime: currentTime};
+                    $rootScope.patientPopup.data = {patientId: dummy.id, eventType: "S", recurranceType: "D", forLiveIn: false, startTime: currentTime, endTime: currentTime};
                 }
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {
@@ -1181,9 +1209,7 @@
                             if (diff > 6) {
                                 toastr.error("Date range should be no more of 7 days.");
                             } else {
-                                console.log("save patient modal data :: " + JSON.stringify($rootScope.patientPopup.data));
-//                                ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
-//                        $rootScope.patientPopup.dismiss();
+                                ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
                             }
                         } else {
                             console.log("invalid form")
@@ -1212,8 +1238,12 @@
                     delete $rootScope.patientPopup.data.employeeId;
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.care];
                 };
+                if (!$rootScope.patientPopup.patient.isNew) {
+                    $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.care];
+                }
             }
             // no need to retrieve patient object if you already have, just get all careTypes of patient's insuranceProviderId
+            $rootScope.maskLoading();
             PatientDAO.get({id: dummy.id}).then(function (res) {
                 if (res.patientCareTypeCollection) {
                     //companyCareTypes
@@ -1246,9 +1276,10 @@
                                     dummy.careEmployeeMap[item1.companyCaretypeId.id] = temp;
                                 });
                             });
-                        }).catch(function (data, status) {
-                            toastr.error("Failed to retrieve employees.");
+                        }).catch(function (data) {
+                            toastr.error(data.data);
                         }).then(function () {
+                            $rootScope.unmaskLoading();
                             open();
                         });
 

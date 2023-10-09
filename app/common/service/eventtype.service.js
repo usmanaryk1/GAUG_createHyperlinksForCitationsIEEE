@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var EventTypeDAO = function (resource) {
-        var api = resource(ontimetest.weburl + 'eventTypes/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontimetest.weburl + 'events/:action/:subAction/:subAction1', {}, {
             retrieveEventType: {
                 method: 'GET',
                 isArray: false
