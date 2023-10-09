@@ -77,10 +77,10 @@
                                     }
                                 });
                                 console.log(JSON.stringify(data))
-                                if (data.applicationId == null || data.applicationId == '') {
+                                if (data.value == null || data.value == '') {
                                     toastr.error("No application exists with these identification details.");
                                 }
-                                ctrl.sendUserToApplication(data.applicationId);
+                                ctrl.sendUserToApplication(data.value);
                             });
                 }
 

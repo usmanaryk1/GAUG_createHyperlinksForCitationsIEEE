@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var ApplicationDAO = function(resource) {
-        var api = resource(ontime_data.weburl + 'public/applications/:action/:subAction/:subAction1/:companyCode', {}, {
+        var api = resource(ontime_data.weburl + 'public/applications/:action/:subAction/:id/:companyCode', {}, {
             retrieveByApplicationId: {
                 method: 'GET'
             },
@@ -12,9 +12,6 @@
                 method: "POST",
                 params: {
                     action: "verify"
-                },
-                transformResponse: function (res) {
-                    return {'applicationId': res};
                 }
             }
         });
@@ -26,7 +23,7 @@
                 return api.verifyExistingApplication(data).$promise;
             },
             retrieveByApplicationId: function(data) {
-                return api.retrieveByCompanyCode(data).$promise;
+                return api.retrieveByApplicationId(data).$promise;
             }
         };
     };

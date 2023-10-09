@@ -1,7 +1,7 @@
 /* global appHelper, ontime_data, _ */
 
 (function () {
-    function AddApplicationCtrl($scope, CareTypeDAO, BenefitDAO, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
+    function AddApplicationCtrl($scope, CareTypeDAO, BenefitDAO, $state, $modal, $filter, EmployeeDAO, ApplicationDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
         var ctrl = this;
         ctrl.staticPosition;
         ctrl.retrivalRunning = true;
@@ -490,7 +490,7 @@
         function pageInit() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
-                EmployeeDAO.get({id: $state.params.id, includeAttachment: true}).then(function (res) {
+                ApplicationDAO.retrieveByApplicationId({id: $state.params.id, includeAttachment: true}).then(function (res) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
@@ -597,18 +597,6 @@
             } else {
                 $("input[name='TBTestingExpirationDate']").attr('required', false);
             }
-        });
-
-        $scope.$watch(function () {
-            return ctrl.employee.wages;
-        }, function (newVal, oldValue) {
-            setValidationsForTab2(newVal);
-        });
-
-        $scope.$watch(function () {
-            return ctrl.employee.wages;
-        }, function (newVal, oldValue) {
-            setValidationsForTab2(newVal);
         });
 
         ctrl.tab3DataInit = function () {
@@ -1167,11 +1155,6 @@
         };
 
         if ($state.params.id && $state.params.id !== '') {
-            if (isNaN(parseFloat($state.params.id))
-                    || ($rootScope.currentUser.allowedFeature.indexOf('HR_EDIT_EMPLOYEE') === -1
-                            && $rootScope.currentUser.allowedFeature.indexOf('EDIT_EMPLOYEE_DEMO') === -1)) {
-                $state.transitionTo(ontime_data.defaultState);
-            }
             ctrl.editMode = true;
             Page.setTitle("Update Employee");
         } else if ($state.current.name.indexOf('tab1') > -1) {
@@ -1265,5 +1248,5 @@
             });
         }
     }
-    angular.module('xenon.controllers').controller('AddApplicationCtrl', ["$scope", "CareTypeDAO", "BenefitDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddApplicationCtrl]);
+    angular.module('xenon.controllers').controller('AddApplicationCtrl', ["$scope", "CareTypeDAO", "BenefitDAO", "$state", "$modal", "$filter", "EmployeeDAO", "ApplicationDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddApplicationCtrl]);
 })();
