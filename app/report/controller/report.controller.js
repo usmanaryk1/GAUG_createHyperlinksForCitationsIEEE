@@ -25,7 +25,7 @@
                 ctrl.dateMessage = null;
                 if (ctrl.reportType == 'employeeworkedhoursbycounty' || ctrl.reportType == 'workedhours'
                         || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
-                        || ctrl.reportType == 'wppreport' || ctrl.reportType == 'employeeothours') {
+                        || ctrl.reportType == 'wppreport' || ctrl.reportType == 'employeeothours' || ctrl.reportType == 'weeklyotanalysis') {
                     ctrl.verifyDates();
 
                 }

@@ -31,7 +31,7 @@
             {{temp_event.reasonDisplay}}
         </span>                
     </div>
-    <div ng-if="day.events.length - 2 > 0 && type == 'employee'" ng-click="toggleEvent($event)" data-placement="bottom">+ {{day.events.length - 2}} more</div>
+    <div ng-if="day.events.length - 2 > 0 && type == 'employee'" ng-click="toggleEvent($event)" data-placement="bottom" class="event-pointer event-style">+ {{day.events.length - 2}} more</div>
 
     <div class="eventstoload" ng-if="type == 'employee'">
         <div 
@@ -100,7 +100,7 @@
             {{temp_event.reasonDisplay}}
         </span>                
     </div>
-    <div ng-if="day.events.length - 2 > 0 && type == 'patient'" ng-click="toggleEvent($event)" data-placement="bottom">+ {{day.events.length - 2}} more</div>
+    <div ng-if="day.events.length - 2 > 0 && type == 'patient'" ng-click="toggleEvent($event)" data-placement="bottom" class="event-pointer event-style">+ {{day.events.length - 2}} more</div>
 
     <div class="eventstoload" ng-if="type == 'patient'">
         <div 
@@ -161,7 +161,7 @@
                         <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime| ampmshort}}{{" - "}}{{temp_event.endTime| ampmshort}}</span>
         </span>
     </div>
-    <div ng-if="day.events.length - 2 > 0 && type == 'coordinator'" ng-click="toggleEvent($event)" data-placement="bottom">+ {{day.events.length - 2}} more</div>
+    <div ng-if="day.events.length - 2 > 0 && type == 'coordinator'" ng-click="toggleEvent($event)" data-placement="bottom" class="event-pointer event-style">+ {{day.events.length - 2}} more</div>
 
     <div class="eventstoload" ng-if="type == 'coordinator'">
         <div 
