@@ -1000,7 +1000,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('benefits', 'benifit-payouts'),
                 controller: 'BenefitPayoutCtrl as benefitPayoutCtrl',
                 data: {
-                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+                    feature: 'EMPLOYEE_BENEFIT_PAYOUT'
                 }
             }).
             // Update Highlights
