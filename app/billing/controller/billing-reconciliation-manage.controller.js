@@ -366,7 +366,6 @@
                         var claim = angular.copy(reconciliation.claim);
                         claim.AmountPaid = reconciliation.paidAmount;
                         ctrl.selectedClaimsShow.push(claim);
-                        ctrl.claims.push(claim);
                         ctrl.selectedClaims[claim.id] = true;
                     });
                 }

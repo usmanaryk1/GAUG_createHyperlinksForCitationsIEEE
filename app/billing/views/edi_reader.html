@@ -73,7 +73,7 @@
                     <div class="form-group col-sm-5 pull-left" ng-if="ediReader.ediData.length">
                         <label class="control-label pull-left" style="min-width:110px;margin-top: 7px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left">
-                            <select class="form-control input-sm" ng-model="ediReader.ediData.limit">
+                            <select class="form-control input-sm" ng-model="ediReader.searchParams.limit">
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -113,7 +113,7 @@
                                             <div class="center">
                                                 <a class="btn icon-left fa fa-pencil edit_button" 
                                                    ng-if="hasAccess('MANAGE_BILLING_RECONCILIATION') && data.status == 'MAPPED'" 
-                                                   ui-sref="app.billing_reconciliation_edi_read({dataId: data.ediDataGuid})" tooltip="Edit"><span class="ed_b"></span></a> 
+                                                   ui-sref="app.billing_reconciliation_edi_read({dataId: data.ediDataGuid})" tooltip="Initiate reconciliation"><span class="ed_b"></span></a> 
                                             </div>
                                         </td>
                                     </tr>
