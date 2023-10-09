@@ -1069,12 +1069,19 @@
                 keyboard: false
             });
             // api call
-            $rootScope.employeePopup.patients = [{id: 1, fName: 'patient 1'}, {id: 2, fName: 'patient 2'}];
+            var str = "4"; //caretype
+            PatientDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
+                $rootScope.employeePopup.patients = res;
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve patients.");
+            }).then(function () {
+            });
+
             $rootScope.employeePopup.reasons = ontimetest.reasons;
             $rootScope.employeePopup.eventTypes = ontimetest.eventTypes;
             $rootScope.employeePopup.recurranceTypes = ontimetest.recurranceTypes;
             // static set
-            $rootScope.employeePopup.employee = {id: 1, fName: "Mansi", lName: "Parekh"};
+            $rootScope.employeePopup.employee = {id: 1, fName: "FirstName", lName: "LastName"};
             if (data == null) {
                 $rootScope.employeePopup.employee.isNew = true;
             } else {
@@ -1092,19 +1099,20 @@
             }
             $rootScope.employeePopup.save = function () {
                 $timeout(function () {
-                    $rootScope.employeePopup.valid = true;
-                    if ($('#popupemployee')[0].checkValidity()) {
+                    var name = '#' + "popupemployee" + $rootScope.employeePopup.data.eventType.toLowerCase();
+                    if ($(name)[0].checkValidity()) {
                         var a = moment(new Date($rootScope.employeePopup.data.startDate));
                         var b = moment(new Date($rootScope.employeePopup.data.endDate));
                         var diff = b.diff(a, 'days');
-                        if (diff == 6) {
-                            $rootScope.employeePopup.valid = false;
+                        if (diff > 6) {
+                            toastr.error("Date range should be no more of 7 days.");
+                        } else {
+                            console.log("save employee modal data :: " + JSON.stringify($rootScope.employeePopup.data));
 //                        ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
 //                        $rootScope.employeePopup.dismiss();
-                        } else {
                         }
                     } else {
-                        console.log("invalid")
+                        console.log("invalid form");
                     }
                 });
             };
@@ -1131,29 +1139,85 @@
         };
         ctrl.openModalPatient = function (data, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.patientPopup = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-            $rootScope.patientPopup.careTypes = [];
-            $rootScope.patientPopup.reasons = ontimetest.reasons;
-            $rootScope.patientPopup.employees = [];
-            $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
-            $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
-            // static set
-            $rootScope.patientPopup.patient = {id: 14, insuranceProviderId: 1, fName: "Mansi", lName: "Parekh"};
-            if (data == null) {
-                $rootScope.patientPopup.patient.isNew = true;
-            } else {
-                $rootScope.patientPopup.patient.isNew = false;
-                $rootScope.patientPopup.data = data;
+            var dummy = {id: 14, insuranceProviderId: 1, fName: "FirstName", lName: "LastName"};
+            function open() {
+                $rootScope.patientPopup = $modal.open({
+                    templateUrl: modal_id,
+                    size: modal_size,
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false
+                });
+                $rootScope.patientPopup.careTypes = [];
+                $rootScope.patientPopup.reasons = ontimetest.reasons;
+                $rootScope.patientPopup.employees = [];
+                $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
+                $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
+                // static set
+                $rootScope.patientPopup.patient = {id: 14, insuranceProviderId: 1, fName: "FirstName", lName: "LastName"};
+                if (data == null) {
+                    $rootScope.patientPopup.patient.isNew = true;
+                } else {
+                    $rootScope.patientPopup.patient.isNew = false;
+                    $rootScope.patientPopup.data = data;
+                }
+                $rootScope.patientPopup.careEmployeeMap = dummy.careEmployeeMap;
+                $rootScope.patientPopup.careTypes = dummy.careTypes;
+                //to make the radio buttons selected, theme bug
+                setTimeout(function () {
+                    cbr_replace();
+                }, 100);
+
+                var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                if (!angular.isDefined($rootScope.patientPopup.data)) {
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "D", forLiveIn: false, startTime: currentTime, endTime: currentTime};
+                }
+                $rootScope.patientPopup.save = function () {
+                    $timeout(function () {
+                        var name = '#' + "popuppatient" + $rootScope.patientPopup.data.eventType.toLowerCase();
+                        if ($(name)[0].checkValidity()) {
+                            var a = moment(new Date($rootScope.patientPopup.data.startDate));
+                            var b = moment(new Date($rootScope.patientPopup.data.endDate));
+                            var diff = b.diff(a, 'days');
+                            if (diff > 6) {
+                                toastr.error("Date range should be no more of 7 days.");
+                            } else {
+                                console.log("save patient modal data :: " + JSON.stringify($rootScope.patientPopup.data));
+//                                ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+//                        $rootScope.patientPopup.dismiss();
+                            }
+                        } else {
+                            console.log("invalid form")
+                        }
+                    });
+                };
+                $rootScope.patientPopup.changed = function (event) {
+                    if (event != 'repeat') {
+                        var old = $rootScope.patientPopup.data.eventType;
+                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "D"};
+                        var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                        if (old == 'S') {
+                            $rootScope.patientPopup.data.forLiveIn = false;
+                            $rootScope.patientPopup.data.startTime = currentTime;
+                            $rootScope.patientPopup.data.endTime = currentTime;
+                        }
+                        if (old == 'U') {
+                            $rootScope.patientPopup.data.isPaid = false;
+                        }
+                        setTimeout(function () {
+                            cbr_replace();
+                        }, 100);
+                    }
+                };
+                $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
+                    delete $rootScope.patientPopup.data.employeeId;
+                    $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.care];
+                };
             }
             // no need to retrieve patient object if you already have, just get all careTypes of patient's insuranceProviderId
-            PatientDAO.get({id: $rootScope.patientPopup.patient.id}).then(function (res) {
+            PatientDAO.get({id: dummy.id}).then(function (res) {
                 if (res.patientCareTypeCollection) {
-                    CareTypeDAO.retrieveForInsurer({insurer_id: $rootScope.patientPopup.patient.insuranceProviderId}).then(function (res1) {
+                    //companyCareTypes
+                    CareTypeDAO.retrieveForInsurer({insurer_id: dummy.insuranceProviderId}).then(function (res1) {
                         ctrl.careTypeList = res1;
                         ctrl.careTypeIdMap = {};
                         angular.forEach(ctrl.careTypeList, function (careType) {
@@ -1161,68 +1225,38 @@
                         });
                         var careTypesSelected = [];
                         var length = res.patientCareTypeCollection.length;
+                        var str = "";
                         for (var i = 0; i < length; i++) {
                             careTypesSelected.push(ctrl.careTypeIdMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id]);
+                            if (str.length > 0) {
+                                str = str + ",";
+                            }
+                            str = str + res.patientCareTypeCollection[i].insuranceCareTypeId.id;
                         }
-                        $rootScope.patientPopup.careTypes = careTypesSelected;
+                        dummy.careTypes = careTypesSelected;
+                        EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
+                            dummy.careEmployeeMap = {};
+                            angular.forEach(res, function (item) {
+                                angular.forEach(item.employeeCareRatesList, function (item1) {
+                                    var temp = dummy.careEmployeeMap[item1.companyCaretypeId.id];
+                                    if (temp == null) {
+                                        temp = [];
+                                    }
+                                    temp.push(item);
+                                    dummy.careEmployeeMap[item1.companyCaretypeId.id] = temp;
+                                });
+                            });
+                        }).catch(function (data, status) {
+                            toastr.error("Failed to retrieve employees.");
+                        }).then(function () {
+                            open();
+                        });
+
                     }).catch(function () {
                     });
                 }
             });
-            //to make the radio buttons selected, theme bug
-            setTimeout(function () {
-                cbr_replace();
-            }, 100);
 
-            var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
-            if (!angular.isDefined($rootScope.patientPopup.data))
-                $rootScope.patientPopup.data = {eventType: "S", recurranceType: "D", forLiveIn: false, startTime: currentTime, endTime: currentTime};
-            $rootScope.patientPopup.save = function () {
-                $rootScope.patientPopup.valid = true;
-                $timeout(function () {
-                    if ($('#popuppatient')[0].checkValidity()) {
-                        var a = moment(new Date($rootScope.patientPopup.data.startDate));
-                        var b = moment(new Date($rootScope.patientPopup.data.endDate));
-                        var diff = b.diff(a, 'days');
-                        if (diff == 6) {
-                            $rootScope.patientPopup.valid = false;
-//                        ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
-//                        $rootScope.patientPopup.dismiss();
-                        } else {
-                        }
-                    } else {
-                        console.log("invalid")
-                    }
-                });
-            };
-            $rootScope.patientPopup.changed = function (event) {
-                if (event != 'repeat') {
-                    var old = $rootScope.patientPopup.data.eventType;
-                    $rootScope.patientPopup.data = {eventType: old, recurranceType: "D"};
-                    var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
-                    if (old == 'S') {
-                        $rootScope.patientPopup.data.forLiveIn = false;
-                        $rootScope.patientPopup.data.startTime = currentTime;
-                        $rootScope.patientPopup.data.endTime = currentTime;
-                    }
-                    if (old == 'U') {
-                        $rootScope.patientPopup.data.isPaid = false;
-                    }
-                    setTimeout(function () {
-                        cbr_replace();
-                    }, 100);
-                }
-            };
-            $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
-                delete $rootScope.patientPopup.data.employeeId;
-                EmployeeDAO.retrieveEmployee($rootScope.patientPopup.data.care).then(function (res) {
-                    $rootScope.patientPopup.employees = res;
-                }).catch(function (e) {
-                    toastr.error("Employees cannot be retrieved.");
-                }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
-            }
         };
     }
     ;
