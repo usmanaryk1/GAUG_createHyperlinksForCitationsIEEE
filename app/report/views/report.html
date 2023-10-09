@@ -144,7 +144,7 @@
                                             <label for="todate" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
-                                                    <input type="text" id="todate" name="todate" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="report.searchParams.toDate" min-date="report.searchParams.fromDate" max-date='todayDate' ng-change="report.setMaxDate()" data-validate="required" data-message-required="Please select To Date." ng-required="report.reportType == 'workedhours'"/>
+                                                    <input type="text" id="todate" name="todate" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="report.searchParams.toDate" min-date="report.searchParams.fromDate" max-date='report.todayDate' ng-change="report.setMaxDate()" data-validate="required" data-message-required="Please select To Date." ng-required="report.reportType == 'workedhours'"/>
                                                     <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                                                 </div>
                                             </div>
