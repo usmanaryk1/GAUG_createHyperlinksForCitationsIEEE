@@ -1,39 +1,110 @@
+<div class="mwl-panel-filter row">
+    <div class="row">
+        <div class="col-md-4">
+            <label>Employees</label>
+            <script type="text/javascript">
+                jQuery(document).ready(function ($)
+                {
+                setTimeout(function () {
+                $("#sboxit-2").select2({
+                // minimumResultsForSearch: -1,
+                placeholder: 'Select Employee...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                }).on('select2-open', function ()
+                {
+                // Adding Custom Scrollbar
+                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                });
+                }, 200);
+                });</script>
+            <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeeList track by emp.id' ng-change="applySearch()">
+                <option value="" selected hidden />
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Position</label>
+            <select class="form-control" ng-model="searchParams.positionIds" ng-options='position.id as position.position for position in positions track by position.id' ng-change="applySearch()">
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Languages</label>
+            <select class="form-control" ng-model="searchParams.languages" ng-change="applySearch()" ng-options="key as value for (key,value) in languages">
+                <option>Language1</option>
+                <option>Language2</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-4">
+        <label>From</label>
+        <select class="form-control">
+            <option>From</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>To</label>
+        <select class="form-control">
+            <option>To</option>
+        </select>
+    </div>
+    <div class="col-md-4 filter-checkbox">
+        <div class="col-md-6">
+            <label>Live In</label>
+            <input type="checkbox" name="livein">
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-success pull-right">Submit</button>
+        </div>
+    </div>
+    </div>
+</div>
+
 <div class="cal-week-box" ng-class="{'cal-day-box': showTimes}">
-  <div class="cal-row-fluid cal-row-head-week row-heading">
-    <div class="cal-cell1weekempl col-heading">Employees</div>
-    <div
-      class="cal-cell1week"
-      ng-repeat="day in view.days track by $index"
-      ng-class="{
+    <div class="cal-row-fluid cal-row-head-week row-heading">
+        <div class="cal-cell1weekempl col-heading">Employees</div>
+        <div
+            class="cal-cell1week"
+            ng-repeat="day in view.days track by $index"
+            ng-class="{
         'cal-day-weekend': day.isWeekend,
-        'cal-day-past': day.isPast,
-        'cal-day-today': day.isToday,
+        'cal-day - past': day.isPast,
+        'cal-day- today': day.isToday,
         'cal-day-future': day.isFuture}"
-      mwl-element-dimensions="dayColumnDimensions">
+            mwl-element-dimensions="dayColumnDimensions">
 
-      <span ng-bind="day.weekDayLabel" class="col-heading"></span>
-      <br>
-    </div>
-  </div>
-
-  <div class="cal-row-fluid cal-row-head-week row-data" ng-repeat="hour in hours track by $index">
-    <div class="cal-cell1weekempl col-data col-data-empl">{{hour.name}}</div>
-    <div
-      class="cal-cell1week col-data"
-      ng-repeat="day in view.days track by $index"
-      ng-class="{
-        'cal-day-weekend': day.isWeekend,
-        'cal-day-past': day.isPast,
-        'cal-day-today': day.isToday,
-        'cal-day-future': day.isFuture}"
-      mwl-element-dimensions="dayColumnDimensions">
-
-      <span class="col-data">test</span>
-      <span class="col-data">test</span>
-      <span class="col-data">test</span>
-      <br>
+            <span ng-bind="day.weekDayLabel" class="col-heading"></span>
+            <br>
+        </div>
     </div>
 
-  </div>
+    <div class="cal-row-fluid cal-row-head-week row-data"  pagination-id="drinksPagination" dir-paginate="hour in hours | itemsPerPage: 10" 
+         total-items="totalRecords"
+         current-page="searchParams.pageNo">
+        <div class="cal-cell1weekempl col-data col-data-empl">{{hour.fName + ' ' + hour.lName}}</div>
+        <div 
+            class="cal-cell1week col-data"
+            ng-repeat="day in view.days track by $index"
+            ng-class="{
+        'cal-day-weekend': day.isWeekend,
+        'cal-day - past': day.isPast,
+        'cal-day- today': day.isToday,
+        'cal-day-future': day.isFuture}"
+            mwl-element-dimensions="dayColumnDimensions">
 
+            <span class="col-data">test</span>
+            <span class="col-data">test</span>
+            <span class="col-data">test</span>
+            <br>
+        </div>
+
+    </div>
+
+</div>
+<div>
+    <div id="paginationButtons" class="text-right">
+        <dir-pagination-controls boundary-links="true" 
+                                 max-size="9"
+                                 template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination" on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+    </div>
 </div>

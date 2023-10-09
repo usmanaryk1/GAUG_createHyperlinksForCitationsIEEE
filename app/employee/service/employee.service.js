@@ -38,6 +38,13 @@
             },
             changestatus: {
                 method: 'GET'
+            },
+            getEmployeesForSchedule: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'forschedule'
+                }
             }
         });
         return {
@@ -68,6 +75,9 @@
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             },
+            getEmployeesForSchedule: function (data) {
+                return api.getEmployeesForSchedule(data).$promise;
+            }
         };
     };
     angular.module("xenon.factory").factory('EmployeeDAO', ['$resource', EmployeeDAO]);

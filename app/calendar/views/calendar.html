@@ -8,13 +8,13 @@
 <div style="background:white;">
 
     <div class="mwl-toolbar">
-       <div class="mwl-left input-group btn-date-group">
+        <div class="mwl-left input-group btn-date-group">
             <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="calendar.showDatepicker()"><i class="glyphicon glyphicon-calendar"></i></button>
-            <h2>{{ calendar.calendarTitle }}</h2>
+            <h2>{{ calendar.calendarTitle}}</h2>
             <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{'show':calendar.isOpen,'hide':!calendar.isOpen}"></datepicker>
-            
-       </div>
-       <div class="mwl-right">
+
+        </div>
+        <div class="mwl-right">
             <div class="mwl-button-group">
                 <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{'mwl-state-active': calendar.calendarView == 'month'}">month</button>
                 <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{'mwl-state-active': calendar.calendarView == 'week'}">week</button>
@@ -23,55 +23,11 @@
                 <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left"><span class="mwl-icon mwl-icon-prev fa-angle-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"></span></button>
                 <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right" mwl-date-modifier date="calendar.calendarDay" increment="calendar.calendarView"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
             </div>
-       </div>
-       <div class="mwl-center"></div>
-       <div class="mwl-clear"></div>
+        </div>
+        <div class="mwl-center"></div>
+        <div class="mwl-clear"></div>
     </div>
 
-    <div class="mwl-panel-filter row" ng-if="calendar.calendarView == 'week'">
-        <div class="col-md-4">
-            <label>Employees</label>
-            <select class="form-control">
-                <option>Employee1</option>
-                <option>Employee2</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label>Position</label>
-            <select class="form-control">
-                <option>Position1</option>
-                <option>Position2</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label>Languages</label>
-            <select class="form-control">
-                <option>Language1</option>
-                <option>Language2</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label>From</label>
-            <select class="form-control">
-                <option>From</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label>To</label>
-            <select class="form-control">
-                <option>To</option>
-            </select>
-        </div>
-        <div class="col-md-4 filter-checkbox">
-            <div class="col-md-6">
-                <label>Live In</label>
-                <input type="checkbox" name="livein">
-            </div>
-            <div class="col-md-6">
-                <button type="submit" class="btn btn-success pull-right">Submit</button>
-            </div>
-        </div>
-    </div>
 
     <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
         <div class="mwl-left">
@@ -89,21 +45,21 @@
         </div>
     </div>
 
-          <mwl-calendar
-            events="calendar.events"
-            view="calendar.calendarView"
-            view-title="calendar.calendarTitle"
-            current-day="calendar.calendarDay"
-            on-event-click="eventClicked(calendarEvent)"
-            on-event-times-changed="eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
-            edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
-            delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
-            on-edit-event-click="eventEdited(calendarEvent)"
-            on-delete-event-click="eventDeleted(calendarEvent)"
-            auto-open="true"
-            day-view-start="06:00"
-            day-view-end="22:00"
-            day-view-split="30"
-            cell-modifier="modifyCell(calendarCell)">
-          </mwl-calendar>
+    <mwl-calendar
+        events="calendar.events"
+        view="calendar.calendarView"
+        view-title="calendar.calendarTitle"
+        current-day="calendar.calendarDay"
+        on-event-click="eventClicked(calendarEvent)"
+        on-event-times-changed="eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+        edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+        delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+        on-edit-event-click="eventEdited(calendarEvent)"
+        on-delete-event-click="eventDeleted(calendarEvent)"
+        auto-open="true"
+        day-view-start="06:00"
+        day-view-end="22:00"
+        day-view-split="30"
+        cell-modifier="modifyCell(calendarCell)">
+    </mwl-calendar>
 </div>
