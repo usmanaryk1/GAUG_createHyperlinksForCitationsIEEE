@@ -6,16 +6,22 @@
                 method: 'GET',
                 isArray: false
             },
-            saveForEventType: {
+            saveEventType: {
                 method: 'POST'
+            },
+            updateEventType: {
+                method: 'PUT'
             }
         });
         return {
             retrieveEventType: function (data) {
-                return api.retrieveEventType({'action': data.eventType, 'subAction': data.id}).$promise;
+                return api.retrieveEventType(data).$promise;
             },
-            saveForEventType: function (data) {
-                return api.saveForEventType({action: data.action}, data.data).$promise;
+            saveEventType: function (data) {
+                return api.saveEventType({action: data.action}, data.data).$promise;
+            },
+            updateEventType: function (data) {
+                return api.updateEventType({action: data.action,subAction: data.subAction}, data.data).$promise;
             }
         };
     };

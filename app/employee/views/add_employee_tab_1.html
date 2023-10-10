@@ -480,10 +480,10 @@
                                 <label class="col-sm-2 control-label"></label>
                                 <div class="col-sm-3">
                                     <div class="form-block">
-                                     <label class="no-padding-left checkbox" >
-                                    <input type="checkbox" class="cbr" id="livein" name="livein" ng-model="employeePopup.data.forLiveIn">
-                            Available for Live In
-            </label>
+                                        <label class="no-padding-left checkbox" >
+                                            <input type="checkbox" class="cbr" id="livein" name="livein" ng-model="employeePopup.data.forLiveIn">
+                                            Available for Live In
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -515,6 +515,31 @@
                                 <div ng-if="!employeePopup.employee.isNew">
                                     <div class="col-sm-2">
                                         {{employeePopup.recurranceTypes[employeePopup.data.recurranceType]}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-separator" ng-if="!employeePopup.employee.isNew"></div>
+
+                            <div class="form-group" ng-if="!employeePopup.employee.isNew">
+                                <label class="col-sm-2 control-label" for="field-2" style="padding-top:0;">Apply To</label>
+                                <div>
+                                    <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+                                            <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
+                                            Down
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+                                            <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
+                                            Sequence
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+                                            <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+                                            Single
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -654,6 +679,31 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group-separator" ng-if="!employeePopup.employee.isNew"></div>
+
+                            <div class="form-group" ng-if="!employeePopup.employee.isNew">
+                                <label class="col-sm-2 control-label" for="field-2" style="padding-top:0;">Apply To</label>
+                                <div>
+            <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+                                            <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
+                                            Down
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+                                            <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
+                                            Sequence
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+                                            <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+                                            Single
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
@@ -694,7 +744,8 @@
                                         {{employeePopup.eventTypes[employeePopup.data.eventType]}}
                                     </div>
                                 </div>
-                            </div>                                            <div class="form-group-separator"></div>
+                            </div>   
+                            <div class="form-group-separator"></div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Reason</label>
 
@@ -711,10 +762,10 @@
                                 <label class="col-sm-2 control-label">Paid per Hrs.</label>
 
                                 <div class="col-sm-2" style="width:10%;padding-right:0;">
-                            <label class="no-padding-left checkbox" >
-                                    <input type="checkbox" class="cbr" id="paid" name="paid" ng-model="employeePopup.data.isPaid">
-Paid
-            </label>
+                                    <label class="no-padding-left checkbox" >
+                                        <input type="checkbox" class="cbr" id="paid" name="paid" ng-model="employeePopup.data.isPaid">
+                                        Paid
+                                    </label>
                                 </div>
                                 <div class="col-sm-2" style="margin-top:-5px;">
                                     <input type="text" class="form-control" id="field-1" ng-model="employeePopup.data.noOfHours" placeholder="Hours">
@@ -787,268 +838,293 @@ Paid
 
                 <!--Patient Modal-->
                 <script type="text/ng-template" id="patient-modal" >
-                <div class="modal-header">
+                    <div class="modal-header">
                     <button type="button" class="close" ng-click="patientPopup.close();" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</h4>
                     <h6>{{patientPopup.patient.dob|date :dateFormat}}</h6>
-                </div>
+                    </div>
 
-                <!-- schedule-->
-                <div ng-if="patientPopup.data.eventType == 'S'">
+                    <!-- schedule-->
+                    <div ng-if="patientPopup.data.eventType == 'S'">
                     <form class="form-horizontal validate" role="form" name="popuppatients" id="popuppatients" >
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Availability</label>
-                                <div  ng-if="patientPopup.patient.isNew">
+                    <div class="modal-body">
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Availability</label>
+                    <div  ng-if="patientPopup.patient.isNew">
 
-                                    <div class="col-sm-2">
-                                        <label class="cbr-inline" ng-click="patientPopup.changed()">
-                                            <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="S">
-                                            Schedule
+                    <div class="col-sm-2">
+                    <label class="cbr-inline" ng-click="patientPopup.changed()">
+                    <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="S">
+                    Schedule
+                    </label>
+                    </div>
+                    <div class="col-sm-2">
+                    <label class="cbr-inline" ng-click="patientPopup.changed()">
+                    <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="U">
+                    Unavailable
+                    </label>
+                    </div>
+                    </div>
+                    <div  ng-if="!patientPopup.patient.isNew">
+                    <div class="col-sm-2">
+                    {{patientPopup.eventTypes[patientPopup.data.eventType]}}
+                    </div>
+                    </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label">Care</label>
+
+                    <div class="col-sm-10">
+                    <select class="form-control" id="care" name="care" ng-model="patientPopup.data.care" data-validate="required"  data-message-required="Please select care." ng-options="care.id as care.companyCaretypeId.careTypeTitle for care in patientPopup.careTypes" required ng-change="patientPopup.retrieveEmployeeBasedOnCare()">
+                    <option value="">Select the care</option>
+                    </select>
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label">Employee</label>
+
+                    <div class="col-sm-10">
+                    <select class="form-control" id="employee" name="employee" ng-model="patientPopup.data.employeeId" data-validate="required"  data-message-required="Please select employee." ng-options="employee.id as (employee.fName+' '+employee.middleInitial) for employee in patientPopup.employees">
+                    <option value="">Select the employee</option>
+                    </select>
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Date</label>
+                    <div class="col-sm-4">
+                    <div class="input-group" style="z-index:1060">
+
+                    <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" id="fromDate3" name="fromDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+
+                    <div class="input-group-addon">
+                    <a href=""><i class="linecons-calendar"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
+                    <div class="col-sm-4">
+                    <div class="input-group" style="z-index:1060">
+                    <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" id="toDate3" name="toDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+
+                    <div class="input-group-addon">
+                    <a href=""><i class="linecons-calendar"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Time</label>
+                    <div class="col-sm-3">
+                    <div class="input-group input-group-minimal">
+                    <input class="form-control punch-time-input" ng-disabled="!patientPopup.patient.isNew" ng-model='patientPopup.data.startTime' id="startTime3" name="startTime3" type="text" data-validate='required,time' data-message-required='Please enter start Time.'/>
+
+                    <div class="input-group-addon">
+                    <a href=""><i class="linecons-clock"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
+                    <div class="col-sm-3">
+                    <div class="input-group input-group-minimal">
+                    <input class="form-control punch-time-input" ng-disabled="!patientPopup.patient.isNew" ng-model="patientPopup.data.endTime" id="endTime3" name="endTime3" type="text" data-validate='required,time' data-message-required='Please enter end Time.'/>
+
+                    <div class="input-group-addon">
+                    <a href=""><i class="linecons-clock"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="col-sm-3">
+                    {{patientPopup.data.startTime| timecount : patientPopup.data.endTime}}
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+
+                    <div class="col-sm-3">
+
+                    <div class="form-block">
+                    <label class="no-padding-left checkbox" >
+                    <input type="checkbox" class="cbr" id="livein" name="livein" ng-model="patientPopup.data.forLiveIn">
+                    Available for Live In
+                    </label>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Note</label>
+                    <div class="col-sm-10">
+                    <textarea class="form-control" ng-model="patientPopup.data.note" cols="5" id="note" name="note" placeholder="Enter note for this scheduled event."></textarea>
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
+                    <div  ng-if="patientPopup.patient.isNew">
+                    <div class="col-sm-2">
+                    <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+                    Daily
+                    </div>
+                    <div class="col-sm-2">
+                    <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+                    Weekly
+                    </div>
+                    </div>
+                    <div  ng-if="!patientPopup.patient.isNew">
+                    <div class="col-sm-2">
+                    {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
+                    </div>
+                    </div>
+                    </div>
+                    </div>  
+            <div class="form-group-separator" ng-if="!patientPopup.patient.isNew"></div>
+
+                            <div class="form-group" ng-if="!patientPopup.patient.isNew">
+                                <label class="col-sm-2 control-label" for="field-2" style="padding-top:0;">Apply To</label>
+                                <div>
+            <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+                                            <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="DOW">
+                                            Down
                                         </label>
                                     </div>
                                     <div class="col-sm-2">
-                                        <label class="cbr-inline" ng-click="patientPopup.changed()">
-                                            <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="U">
-                                            Unavailable
+                                        <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+                                            <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SEQ">
+                                            Sequence
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+                                            <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SINGLE">
+                                            Single
                                         </label>
                                     </div>
                                 </div>
-                                <div  ng-if="!patientPopup.patient.isNew">
-                                    <div class="col-sm-2">
-                                       {{patientPopup.eventTypes[patientPopup.data.eventType]}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group-separator"></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Care</label>
-
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="care" name="care" ng-model="patientPopup.data.care" data-validate="required"  data-message-required="Please select care." ng-options="care.id as care.companyCaretypeId.careTypeTitle for care in patientPopup.careTypes" required ng-change="patientPopup.retrieveEmployeeBasedOnCare()">
-                                        <option value="">Select the care</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Employee</label>
-
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="employee" name="employee" ng-model="patientPopup.data.employeeId" data-validate="required"  data-message-required="Please select employee." ng-options="employee.id as (employee.fName+' '+employee.middleInitial) for employee in patientPopup.employees">
-                                        <option value="">Select the employee</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-4">
-                                    <div class="input-group" style="z-index:1060">
-
-                                        <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" id="fromDate3" name="fromDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
-
-                                        <div class="input-group-addon">
-                                            <a href=""><i class="linecons-calendar"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-4">
-                                    <div class="input-group" style="z-index:1060">
-                                        <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" id="toDate3" name="toDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
-
-                                        <div class="input-group-addon">
-                                            <a href=""><i class="linecons-calendar"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-2">Time</label>
-                                <div class="col-sm-3">
-                                    <div class="input-group input-group-minimal">
-                                        <input class="form-control punch-time-input" ng-disabled="!patientPopup.patient.isNew" ng-model='patientPopup.data.startTime' id="startTime3" name="startTime3" type="text" data-validate='required,time' data-message-required='Please enter start Time.'/>
-
-                                        <div class="input-group-addon">
-                                            <a href=""><i class="linecons-clock"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-3">
-                                    <div class="input-group input-group-minimal">
-                                        <input class="form-control punch-time-input" ng-disabled="!patientPopup.patient.isNew" ng-model="patientPopup.data.endTime" id="endTime3" name="endTime3" type="text" data-validate='required,time' data-message-required='Please enter end Time.'/>
-
-                                        <div class="input-group-addon">
-                                            <a href=""><i class="linecons-clock"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    {{patientPopup.data.startTime| timecount : patientPopup.data.endTime}}
-                                </div>
-                            </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label"></label>
-
-                                <div class="col-sm-3">
-
-                                    <div class="form-block">
-                                        <label class="no-padding-left checkbox" >
-                                            <input type="checkbox" class="cbr" id="livein" name="livein" ng-model="patientPopup.data.forLiveIn">
-                                            Available for Live In
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-2">Note</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" ng-model="patientPopup.data.note" cols="5" id="note" name="note" placeholder="Enter note for this scheduled event."></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
-                                <div  ng-if="patientPopup.patient.isNew">
-                                    <div class="col-sm-2">
-                                        <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
-                                        Daily
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
-                                        Weekly
-                                    </div>
-                                </div>
-                                <div  ng-if="!patientPopup.patient.isNew">
-                                    <div class="col-sm-2">
-                                        {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-white" ng-click="patientPopup.close();">Close</button>
-                            <button type="submit" class="btn btn-success" ng-click="patientPopup.save();">Save changes</button>
                         </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-white" ng-click="patientPopup.close();">Close</button>
+                    <button type="submit" class="btn btn-success" ng-click="patientPopup.save();">Save changes</button>
+                    </div>
                     </form>
-                </div>
+                    </div>
 
-                <!-- unavailable-->
-                <div  ng-if="patientPopup.data.eventType == 'U'">
+                    <!-- unavailable-->
+                    <div  ng-if="patientPopup.data.eventType == 'U'">
                     <form class="form-horizontal validate" role="form" name="popuppatientu" id="popuppatientu" >
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Availability</label>
-                                <div  ng-if="patientPopup.patient.isNew">
+                    <div class="modal-body">
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Availability</label>
+                    <div  ng-if="patientPopup.patient.isNew">
 
-                                    <div class="col-sm-2">
-                                        <label class="cbr-inline" ng-click="patientPopup.changed()">
-                                            <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="S">
-                                            Schedule
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <label class="cbr-inline" ng-click="patientPopup.changed()">
-                                            <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="U">
-                                            Unavailable
-                                        </label>
-                                    </div>
-                                </div>
-                                <div  ng-if="!patientPopup.patient.isNew">
-                                <div class="col-sm-2">
-                                    {{patientPopup.eventTypes[patientPopup.data.eventType]}}
-                                </div>
-                                </div>
-                            </div>
-                            <div class="form-group-separator"></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Reason</label>
+                    <div class="col-sm-2">
+                    <label class="cbr-inline" ng-click="patientPopup.changed()">
+                    <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="S">
+                    Schedule
+                    </label>
+                    </div>
+                    <div class="col-sm-2">
+                    <label class="cbr-inline" ng-click="patientPopup.changed()">
+                    <input type="radio" name="radio-3" class="cbr cbr-primary" ng-model="patientPopup.data.eventType" value="U">
+                    Unavailable
+                    </label>
+                    </div>
+                    </div>
+                    <div  ng-if="!patientPopup.patient.isNew">
+                    <div class="col-sm-2">
+                    {{patientPopup.eventTypes[patientPopup.data.eventType]}}
+                    </div>
+                    </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label">Reason</label>
 
-                                <div class="col-sm-10">
-                                    <select class="form-control" id="reason" name="reason" ng-model="patientPopup.data.reason" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in patientPopup.reasons">
-                                        <option value="">Select the reason</option>
-                                    </select>
-                                </div>
-                            </div>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="reason" name="reason" ng-model="patientPopup.data.reason" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in patientPopup.reasons">
+                    <option value="">Select the reason</option>
+                    </select>
+                    </div>
+                    </div>
 
-                            <div class="form-group-separator"></div>
+                    <div class="form-group-separator"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-2">Date</label>
-                                <div class="col-sm-4">
-                                    <div class="input-group" style="z-index:1060">
-                                        <input type="text" id="fromDate" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" name="fromDate" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Date</label>
+                    <div class="col-sm-4">
+                    <div class="input-group" style="z-index:1060">
+                    <input type="text" id="fromDate" class="form-control datepicker" ng-disabled="!patientPopup.patient.isNew" name="fromDate" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
-                                        <div class="input-group-addon">
-                                            <a href=""><i class="linecons-calendar"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
-                                <div class="col-sm-4">
-                                    <div class="input-group" style="z-index:1060">
-                                        <input type="text" id="toDate" class="form-control datepicker" name="toDate" ng-disabled="!patientPopup.patient.isNew"  data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+                    <div class="input-group-addon">
+                    <a href=""><i class="linecons-calendar"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
+                    <div class="col-sm-4">
+                    <div class="input-group" style="z-index:1060">
+                    <input type="text" id="toDate" class="form-control datepicker" name="toDate" ng-disabled="!patientPopup.patient.isNew"  data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
 
-                                        <div class="input-group-addon">
-                                            <a href=""><i class="linecons-calendar"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="input-group-addon">
+                    <a href=""><i class="linecons-calendar"></i></a>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
 
-                            <div class="form-group-separator"></div>
+                    <div class="form-group-separator"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-2">Note</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" ng-model="patientPopup.data.note" cols="5" id="note" name="note" placeholder="Enter note for this scheduled event."></textarea>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Note</label>
+                    <div class="col-sm-10">
+                    <textarea class="form-control" ng-model="patientPopup.data.note" cols="5" id="note" name="note" placeholder="Enter note for this scheduled event."></textarea>
+                    </div>
+                    </div>
 
-                            <div class="form-group-separator"></div>
+                    <div class="form-group-separator"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
-                                <div  ng-if="patientPopup.patient.isNew" >
-                                    <div class="col-sm-2">
-                                        <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
-                                        Daily
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
-                                        Weekly
-                                    </div>
-                                </div>
-                                <div  ng-if="!patientPopup.patient.isNew" >
-                                    <div class="col-sm-2">
-                                        {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-white" ng-click="patientPopup.close();">Close</button>
-                            <button type="submit" class="btn btn-success" ng-click="patientPopup.save();">Save changes</button>
-                        </div>
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
+                    <div  ng-if="patientPopup.patient.isNew" >
+                    <div class="col-sm-2">
+                    <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+                    Daily
+                    </div>
+                    <div class="col-sm-2">
+                    <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+                    Weekly
+                    </div>
+                    </div>
+                    <div  ng-if="!patientPopup.patient.isNew" >
+                    <div class="col-sm-2">
+                    {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-white" ng-click="patientPopup.close();">Close</button>
+                    <button type="submit" class="btn btn-success" ng-click="patientPopup.save();">Save changes</button>
+                    </div>
                     </form>
-                </div>
+                    </div>
                 </script>
 
 
@@ -1073,14 +1149,14 @@ Paid
                                         <td class="middle-align">Employee</td>
                                         <td>
                                             <a href="" ng-click="addEmployee.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add</a>
-                                            <a href="" ng-click="addEmployee.openModalEmployee({employeeId: 1, eventType: 'U', recurranceType: 'D',startDate:'01/01/2016',endDate:'01/01/2016',note:'test',isPaid:true,noOfHours:5,reason:'reason 2'}, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
+                                            <a href="" ng-click="addEmployee.openModalEmployee({eventType: 'A', id: 1}, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="middle-align">Patient</td>
                                         <td>
                                             <a href="" ng-click="addEmployee.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add</a>
-                                            <a href="" ng-click="addEmployee.openModalPatient({patientId: 14, eventType: 'S', recurranceType: 'W',startDate:'01/01/2016',endDate:'01/01/2016',startTime:'10:10',endTime:'10:40',care:4,employeeId:11}, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
+                                            <a href="" ng-click="addEmployee.openModalPatient({patientId: 14, eventType: 'U', id: 2}, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                 </tbody>
