@@ -251,6 +251,11 @@
                                          ng-show="(manageBillingReconciliation.claims && manageBillingReconciliation.claims.length > 0)
                                                                  || (manageBillingReconciliation.selectedClaims && manageBillingReconciliation.selectedClaimsShow.length > 0)">
                             <div class="row" style="margin-top: -3%;">                     
+                                <div class="input-group pull-right">
+                                    <button type="button" class="btn btn-info pull-right" 
+                                            ng-if="manageBillingReconciliation.claimsNotMapped.length!=0"
+                                            ng-click="manageBillingReconciliation.openNonMatchedClaims()">non-matched claims</button>
+                                </div>
                                 <div class="input-group pull-right filter-font">
                                     <label class="cbr-inline">
                                         <input checked="true" type="radio" name="show" value='filtered' class="cbr cbr-primary" ng-model="manageBillingReconciliation.show"
@@ -352,7 +357,6 @@
 
                                 </div>
                                 <div ng-show="manageBillingReconciliation.claims.length">
-                                    ---{{manageBillingReconciliation.claims}}
                                     <div id="paginationButtons" class="text-right">
                                         <dir-pagination-controls 
                                             boundary-links="true" 

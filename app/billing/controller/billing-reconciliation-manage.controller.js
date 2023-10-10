@@ -12,6 +12,7 @@
         ctrl.viewRecords = 10;
         ctrl.filteredDatatableObj = {};
         ctrl.bill = {creditUsages: []};
+        ctrl.claimsNotMapped = [];
         ctrl.claimList = {allSelected: false, setAmountDue: false};
         ctrl.navigateToTab = navigateToTab;
         function navigateToTab() {
@@ -273,6 +274,19 @@
             });
         };
 
+        ctrl.openNonMatchedClaims = function () {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('billing', 'non_matched_claims_modal'),
+                controller: 'NonMatchedClaimCtrl as nonMatchedClaimCtrl',
+                size: 'lg',
+                resolve: {
+                    claimsNotMapped: function () {
+                        return ctrl.claimsNotMapped;
+                    }
+                }
+            });
+        };
+
         ctrl.save = function () {
             ctrl.formSubmitted = true;
             var isValid = true;
@@ -379,6 +393,9 @@
                 ctrl.bill.paymentMethod = bill.paymentMethod;
                 ctrl.bill.receivedDate = bill.receivedDate;
                 ctrl.bill.referenceNumber = bill.referenceNumber;
+                if (bill.ediClaimData) {
+                    ctrl.claimsNotMapped = bill.ediClaimData;
+                }
                 ctrl.updateSelection();
             });
         }
