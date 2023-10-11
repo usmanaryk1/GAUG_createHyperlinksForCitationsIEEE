@@ -46,7 +46,7 @@
             </div>
         </div>
         <div ng-if="employeeAttachment.attachment.attachmentType === 'Pre – Employment Medical Documents'
-                      || employeeAttachment.attachment.attachmentType === 'TB Testing'">
+                        || employeeAttachment.attachment.attachmentType === 'TB Testing'">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="TbTesting">
@@ -117,8 +117,8 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="employeeAttachment.attachment.extraFields.tbTesting && 
-                                            employeeAttachment.attachment.extraFields.isPositive === 'false'">                 
+            <div ng-if="employeeAttachment.attachment.extraFields.tbTesting &&
+                            employeeAttachment.attachment.extraFields.isPositive === 'false'">                 
                 <div class="form-group-separator"></div>                 
                 <div class="form-group">                     
                     <label class="col-sm-4 control-label add-padding-modal" for="tbTestingExpirationDate">                         
@@ -159,7 +159,7 @@
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal">
-<!--Renamed                    Vaccinations-->
+                    <!--Renamed                    Vaccinations-->
                     Titers
                 </label>
                 <div class="col-sm-8 add-padding-modal">
@@ -258,10 +258,10 @@
                 </div>
             </div>
         </div>        
-                
+
         <div ng-if="['Physical', 'Chest X-Ray', 'TB Questionnaire', 'Habituation',
-                            'Employment Eligibility (I-9)', 'HCR', 'References', 'Competency Exam', 'Certificate/License',
-                            'OP Search', 'License', 'Infection Control', 'Drug Test'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
+                    'Employment Eligibility (I-9)', 'HCR', 'References', 'Competency Exam', 'Certificate/License',
+                    'OP Search', 'License', 'Infection Control', 'Drug Test'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="expiryDate">
@@ -278,7 +278,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div ng-if="employeeAttachment.attachment.attachmentType === 'Physical'">
             <div class="form-group-separator"></div>
             <div class="form-group">
@@ -612,6 +612,115 @@
             </div>
         </div>
 
+        <div ng-show="employeeAttachment.attachment.attachmentType === 'Disciplinary Action'">
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label add-padding-modal" for="dateOfDa">
+                    Date of DA
+                </label>
+                <div class="col-sm-8 add-padding-modal">
+                    <div class="input-group" style="z-index:1060">
+                        <input type="text" class="form-control datepicker" id="dateOfDa" name="dateOfDa" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.dateOfDa" 
+                               data-validate="required,date"  data-message-required="Please select Date of DA." ng-required="employeeAttachment.attachment.attachmentType === 'Disciplinary Action'">
+                        <div class="input-group-addon">
+                            <a href=""><i class="linecons-calendar"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label add-padding-modal" for="preparedBy">
+                    Prepared By
+                </label>
+                <div class="col-sm-8 add-padding-modal">
+
+                    <input charactersonly class="form-control" name="preparedBy" id="preparedBy" type="text" maxlength="300" 
+                           ng-model="employeeAttachment.attachment.extraFields.preparedBy"/>
+                </div>
+            </div>
+
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label add-padding-modal" for="ViolationType">
+                    Violation Type
+                </label>
+                <div class="col-sm-8 add-padding-modal">
+                    <select class="form-control" name ="ViolationType" id="ViolationType" ng-model="employeeAttachment.attachment.extraFields.violationType" 
+                            ng-options='violationType as violationType for violationType in ["Attendance", "Carelessness", "Safety", "Disobedience", "Tardiness", "Work Quality", "OMIG", "Other"]' 
+                            data-message-required="Please select Violation Type." data-validate="required" ng-required="employeeAttachment.attachment.attachmentType === 'Disciplinary Action'">
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label add-padding-modal" for="warnigLevel">
+                    Warning Level
+                </label>
+                <div class="col-sm-8 add-padding-modal">
+                    <select class="form-control" name ="warnigLevel" id="warnigLevel" ng-model="employeeAttachment.attachment.extraFields.warnigLevel" 
+                            ng-options='warnigLevel as warnigLevel for warnigLevel in ["1st warning - verbal", "2nd warning - written", "3rd warning - written", "Suspension", "Termination"]' 
+                            ng-change="employeeAttachment.attachment.extraFields.startDate=nul;employeeAttachment.attachment.extraFields.endDate=null;employeeAttachment.attachment.extraFields.terminationDate=null;"
+                            data-message-required="Please select Warning Level." data-validate="required" ng-required="employeeAttachment.attachment.attachmentType === 'Disciplinary Action'">
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+            </div>
+
+            <div ng-show="employeeAttachment.attachment.extraFields.warnigLevel === 'Suspension'">
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label add-padding-modal" for="startDate">
+                        Start Date
+                    </label>
+                    <div class="col-sm-8 add-padding-modal">
+                        <div class="input-group" style="z-index:1060">
+                            <input type="text" class="form-control datepicker" id="startDate" name="startDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.startDate" 
+                                   data-validate="required,date"  data-message-required="Please select Start Date." ng-required="employeeAttachment.attachment.extraFields.warnigLevel === 'Suspension'">
+                            <div class="input-group-addon">
+                                <a href=""><i class="linecons-calendar"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label add-padding-modal" for="endDate">
+                        End Date
+                    </label>
+                    <div class="col-sm-8 add-padding-modal">
+                        <div class="input-group" style="z-index:1060">
+                            <input type="text" class="form-control datepicker" id="endDate" name="endDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.endDate" 
+                                   data-validate="required,date"  data-message-required="Please select End Date." ng-required="employeeAttachment.attachment.extraFields.warnigLevel === 'Suspension'">
+                            <div class="input-group-addon">
+                                <a href=""><i class="linecons-calendar"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div ng-show="employeeAttachment.attachment.extraFields.warnigLevel === 'Termination'">
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label add-padding-modal" for="terminationDate">
+                        Termination Date
+                    </label>
+                    <div class="col-sm-8 add-padding-modal">
+                        <div class="input-group" style="z-index:1060">
+                            <input type="text" class="form-control datepicker" id="terminationDate" name="terminationDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.terminationDate" 
+                                   data-validate="required,date"  data-message-required="Please select Termination Date." ng-required="employeeAttachment.attachment.extraFields.warnigLevel === 'Termination'">
+                            <div class="input-group-addon">
+                                <a href=""><i class="linecons-calendar"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div ng-if="employeeAttachment.attachment.attachmentType">
             <div class="form-group-separator" ng-if="employeeAttachment.showUpload === true"></div>

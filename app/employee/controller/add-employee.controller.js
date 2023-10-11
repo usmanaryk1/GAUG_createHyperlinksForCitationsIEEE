@@ -558,6 +558,21 @@
                 });
                 ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);
                 ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments, function (attachment) {
+                    if(attachment.type==='aed' && attachment.attachmentType==='Disciplinary Action'){
+//                        if(attachment.extraFields.warnigLevel === '1st warning - verbal'){
+//                            return 1;
+//                        } else if(attachment.extraFields.warnigLevel === '2nd warning - written'){
+//                            return 2;
+//                        } else if(attachment.extraFields.warnigLevel === '3rd warning - written'){
+//                            return 3;
+//                        } else if(attachment.extraFields.warnigLevel === 'Suspension'){
+//                            return 4;
+//                        } else if(attachment.extraFields.warnigLevel === 'Termination'){
+//                            return 5;
+//                        }
+                        var extraFields = JSON.parse(attachment.extraFields);
+                        return extraFields.dateOfDa ? new Date(extraFields.dateOfDa) : new Date(1970, 1, 1);
+                    }
                     return attachment.expiryDate ? new Date(attachment.expiryDate) : new Date(1970, 1, 1);
                 }, ['desc']);
                 ctrl.attachmentCount = {};
@@ -1388,6 +1403,13 @@
             });
             modalInstance.result.then(function (updatedAttachment) {
                 if (updatedAttachment) {
+                    if(updatedAttachment.type==='aed' && updatedAttachment.attachmentType==='Disciplinary Action'){
+                        var extraFields = JSON.parse(updatedAttachment.extraFields);
+                        if(extraFields.warnigLevel === 'Termination' && extraFields.terminationDate !== null) {
+                            ctrl.employee.terminationDate = extraFields.terminationDate;
+                        }
+                    }
+                    
                     if (mode === 'Create') {
                         ctrl.actualAttachments.push(updatedAttachment);
                     } else {
