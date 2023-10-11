@@ -1,12 +1,11 @@
 /* global ontime_data, _, appHelper, parseFloat */
 
 (function () {
-    function ManageBillingReconciliationCtrl($state, $timeout, $modal, $rootScope, InsurerDAO, PatientDAO, BillingDAO) {
+    function ManageBillingReconciliationCtrl($formService, $state, $timeout, $modal, $rootScope, InsurerDAO, PatientDAO, BillingDAO) {
         var ctrl = this;
         ctrl.title = $state.current.data.title;
         ctrl.isViewOnly = $state.current.data.title === 'View' ? true : false;
         ctrl.isEdiRead = $state.current.data.title === 'EdiRead' ? true : false;
-        ctrl.show = 'filtered';
         ctrl.selectedClaims = {};
         ctrl.currentDate = new Date();
         ctrl.viewRecords = 10;
@@ -383,7 +382,10 @@
                         ctrl.selectedClaims[claim.id] = true;
                     });
                 }
-                ctrl.show = 'selected';
+                $timeout(function () {
+                    ctrl.show = 'selected';
+                    $formService.setRadioValues('show', 'selected');
+                }, 500);
                 ctrl.bill = {};
                 ctrl.bill.ediDataGuid = bill.ediDataGuid;
                 ctrl.bill.eftDate = bill.eftDate;
@@ -398,10 +400,13 @@
                 }
                 ctrl.updateSelection();
             });
+        } else {
+            ctrl.show = 'filtered';
         }
+
     }
     angular.module('xenon.controllers')
-            .controller('ManageBillingReconciliationCtrl', ["$state", "$timeout", "$modal", "$rootScope", "InsurerDAO", "PatientDAO", "BillingDAO", ManageBillingReconciliationCtrl])
+            .controller('ManageBillingReconciliationCtrl', ["$formService", "$state", "$timeout", "$modal", "$rootScope", "InsurerDAO", "PatientDAO", "BillingDAO", ManageBillingReconciliationCtrl])
             .config(['$provide', function ($provide) {
                     $provide.decorator('$locale', ['$delegate', function ($delegate) {
                             if ($delegate.id == 'en-us') {

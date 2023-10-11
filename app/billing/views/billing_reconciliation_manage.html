@@ -414,7 +414,7 @@
                             </div>
                             <div class="clearfix"></div>
                             <div>&nbsp;</div>
-                            <div class="row" ng-if="manageBillingReconciliation.claims.length">
+                            <div class="row" ng-if="manageBillingReconciliation.claims.length || manageBillingReconciliation.selectedClaimsShow.length">
                                 <div class="col-sm-7" style="margin-top: -22px">
                                     <div>
                                         <div class="row" style="margin-left: 0px">
@@ -443,7 +443,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    <tr ng-if="manageBillingReconciliation.bill.creditUsages.length === 0">
+                                                    <tr ng-if="!manageBillingReconciliation.bill.creditUsages.length">
                                                         <td colspan="4" style="text-align: center;">
                                                             No records found
                                                         </td>
