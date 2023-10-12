@@ -303,12 +303,37 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 abstract: true,
                 url: '/applications-edit',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
-                controller: 'AddApplicationCtrl as addEmployee'
+                controller: 'AddApplicationCtrl as addEmployee',
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.forms.formDirty,
+                            ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
+                            ASSETS.forms.tagsinput,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker,
+                            ASSETS.forms.select2,
+                            ASSETS.tables.datatables
+                        ]);
+                    }
+                }
             })
             // application retrieve
-            .state('applications-edit.details', {
-                url: '/details/:id',
-                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1')
+            .state('applications-edit.tab1', {
+                url: '/:id/details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
+                data: {
+                    tabNo: 1
+                }
+            })
+            .state('applications-edit.tab2', {
+                url: '/:id/location-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
+                data: {
+                    tabNo: 2
+                }
             })
             .state('forgotpassword', {
                 url: '/forgotpassword',

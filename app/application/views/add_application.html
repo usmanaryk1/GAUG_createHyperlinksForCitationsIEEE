@@ -1,34 +1,43 @@
 <div class="page-body" ng-init="addEmployee.pageInitCall()">
     <!--PAGE TITLE START -->
-    <div class="page-title">
+    <div class="page-title" style="background-color: black !important; color: white;
+                 z-index: 10000; position: sticky; top: 0px; width: 100%">
         <div class="title-env">
-            <h1 class="title">
-                {{addEmployee.editMode?'Update Employee':'Add Employee'}}
-            </h1>
-            <p class="description">
-                {{addEmployee.editMode?'Update An Employee Record By Entering Employee Information':'Create An Employee Record By Entering Employee Information'}}
-            </p>
+            <div class="row" style="background-color: black !important; color: white; padding: 5px;"> 
+            <div class="col-md-6 pull-right">
+                <img src="assets/images/logo@2x.png" alt="" width="130" style="
+                     align-content: right;
+                     float: right;
+                     padding: 10px;
+                     ">
+            </div>
+            <div class="col-md-6 pull-left">
+                <h3>
+                    Application Details
+                </h3>
+            </div>
+            </div>
         </div>
     </div>
     <!--PAGE TITLE END -->
     <!-- FORM WIZARD WITH VALIDATION START HERE-->
     <script type="text/javascript">
-        jQuery(document).ready(function($)
+        jQuery(document).ready(function ($)
         {
             $(".multi-select").multiSelect({
-                afterInit: function()
+                afterInit: function ()
                 {
                     // Add alternative scrollbar to list
                     this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
                 },
-                afterSelect: function()
+                afterSelect: function ()
                 {
                     // Update scrollbar size
                     this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
                 }
             });
 
-            $(".selectboxit").selectBoxIt().on('open', function()
+            $(".selectboxit").selectBoxIt().on('open', function ()
             {
                 // Adding Custom Scrollbar
                 $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
@@ -38,42 +47,32 @@
     <form class="form-wizard" dirty="addEmployee.formDirty" selectedtab="tabNo" novalidate="" role="form">
         <ul class="tabs">
             <li class="{{tabNo==1?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab1')" style="{{!addEmployee.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event, 'tab1')" 
+                   style="{{tabNo<=1?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa-user"></i></div> 
-                    <div class="hidden-xs">Employee Details</div>
+                    <div class="hidden-xs">Personal Details</div>
                     <span>
                         1
                     </span>
                 </a>
             </li>
             <li class="{{tabNo==2?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addEmployee.navigateToTab($event,'tab2')" 
-                   style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
-                    <div class="visible-xs"><i class="fa fa-credit-card"></i></div> 
-                    <div class="hidden-xs">Compensation & Benefits</div>
-                    
+                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event, 'tab2')" 
+                   style="{{tabNo<=2?'pointer-events: none':''}}">
+                    <div class="visible-xs"><i class="fa fa-upload"></i></div> 
+                    <div class="hidden-xs">Location Information</div>
                     <span>
                         2
                     </span>
                 </a>
             </li>
             <li class="{{tabNo==3?'active':''}}">
-                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab3')" 
-                   style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
+                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event, 'tab4')" 
+                   style='pointer-events: none'>
                     <div class="visible-xs"><i class="fa fa-upload"></i></div> 
-                    <div class="hidden-xs">Location Information</div>
+                    <div class="hidden-xs">Upload Documents</div>
                     <span>
                         3
-                    </span>
-                </a>
-            </li>
-            <li class="{{tabNo==4?'active':''}}">
-                <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab4')" 
-                   style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
-                    <div class="visible-xs"><i class="fa fa-upload"></i></div> 
-                    <div class="hidden-xs">Upload Employee Documents</div>
-                    <span>
-                        4
                     </span>
                 </a>
             </li>
@@ -90,8 +89,8 @@
 <script type="text/javascript">
     // validate
     customJqueryValidation();
-    jQuery(document).ready(function($) {
-        setTimeout(function() {
+    jQuery(document).ready(function ($) {
+        setTimeout(function () {
             $(".fade-in-effect").addClass('in');
         }, 1);
 

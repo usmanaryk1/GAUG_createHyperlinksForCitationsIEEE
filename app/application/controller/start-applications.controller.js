@@ -33,9 +33,9 @@
             $state.go('applications.existing');
             $("form#login").trigger('reset');
         };
-        
-        ctrl.sendUserToApplication = function (applicationId){
-            $state.go('applications-edit.details', {'id': applicationId});
+
+        ctrl.sendUserToApplication = function (applicationId) {
+            $state.go('applications-edit.tab1', {'id': applicationId});
         }
 
         ctrl.submitApplicationRetrieve = function () {
@@ -96,5 +96,6 @@
 
     }
     ;
+
     angular.module('xenon.controllers').controller('ApplicationCtrl', ["$scope", "$rootScope", "$http", "$state", "Page", "ApplicationDAO", ApplicationCtrl]);
 })();

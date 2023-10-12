@@ -11,7 +11,7 @@
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="addEmployee.hideLoadingImage && !addEmployee.disableProfileUploadButton" imageonload="addEmployee.hideLoadingImage" ng-src="{{(addEmployee.employee.profileImage != null && addEmployee.employee.profileImage != '') ? (amazonPublicUrl + addEmployee.companyCode + '/' + addEmployee.employee.profileImage) : ('assets/images/user-5.png')}}"/>
                                         <img alt="user" class="img-cirlce img-responsive" ng-show="!addEmployee.hideLoadingImage || addEmployee.disableProfileUploadButton" src="assets/images/loading.gif"/>
                                     </div>
-                                    <div class="user_p_hd" ng-if="addEmployee.editMode">
+                                    <div class="user_p_hd">
                                         <h1>
                                             {{addEmployee.employee.fName}}
                                         </h1>
@@ -159,17 +159,11 @@
                                 Social Security #
                             </label>
                             <div class="col-sm-9">
-                                <div ng-if="!addEmployee.editMode">
                                     <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':addEmployee.ssn.exists}" name="SocialSecurity" type="text" ng-model="addEmployee.employee.ssn"
                                        maxlength="9" 
                                        onblur="setValidationMessage(this)" itemid="Social Security"
                                        ng-blur="checkSsnNumber();" ng-change="addEmployee.ssn.exists = false;"/>
                                     <span ng-if="addEmployee.ssn.exists" class="validate-has-error">Social security number already exists.</span>
-                                </div>
-                                <div ng-if="addEmployee.editMode">
-                                    <label class="control-label">{{addEmployee.employee.ssn}}</label>&nbsp;&nbsp;
-                                    <span ng-if="hasAccess('VIEW_SSN') || hasAccess('CREATE_EMPLOYEE')" class="fa fa-search" style="cursor: pointer" ng-click="addEmployee.openSSNModal(addEmployee.employee.id)"></span>
-                                </div>                                
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -352,25 +346,6 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">
-                                Position
-                            </label>
-                            <div class="col-sm-9">
-                                <div class="form-block">
-                                    <div ng-repeat="p in addEmployee.positionList">
-                                        <label>
-                                            <input id="Position" class="cbr cbr-primary" name="Position" ng-value="p.id" type="radio" ng-model="addEmployee.employee.companyPositionId">
-                                            {{p.position}}
-                                            </input>
-                                        </label>
-                                        <br>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">
                                 Languages Spoken
                             </label>
                             <div class="col-sm-9">
@@ -414,11 +389,7 @@
                         </div>
                         <div class="row" >
                             <div class="col-sm-12">
-                                <!--                                <button ng-if="addEmployee.editMode" class="btn btn-info green_bt pull-right" style="width:auto;" type="button" ng-click="addEmployee.navigateToTab($event, 'tab2')">
-                                                                    Next »
-                                                                </button>-->
-                                <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')"
-                                        ng-hide="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))}}">
+                                <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')">
                                     Next »
                                 </button>
                             </div>

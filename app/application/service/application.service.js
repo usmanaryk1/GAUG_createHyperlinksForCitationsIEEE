@@ -13,6 +13,9 @@
                 params: {
                     action: "verify"
                 }
+            },
+            updateApplication: {
+                method: 'PUT'
             }
         });
         return {
@@ -24,6 +27,9 @@
             },
             retrieveByApplicationId: function(data) {
                 return api.retrieveByApplicationId(data).$promise;
+            },
+            updateApplication: function (data) {
+                return api.updateApplication({action: data.applicationId}, data).$promise;
             }
         };
     };

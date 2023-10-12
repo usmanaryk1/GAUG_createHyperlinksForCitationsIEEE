@@ -192,9 +192,7 @@
             }
             var fileUploadValid = ctrl.checkFileUploadValidity();
             if (($('#add_employee_form').valid() && fileUploadValid) || !ctrl.formDirty) {
-                if (ctrl.editMode && ($rootScope.hasAccess('HR_EDIT_EMPLOYEE') || $rootScope.hasAccess('CREATE_EMPLOYEE'))) {
-                    $state.go('^.' + state, {id: $state.params.id});
-                }
+                $state.go('^.' + state, {id: $state.params.id});
             }
             event.stopPropagation();
         };
@@ -241,7 +239,7 @@
                 employeeToSave.preferredCounties = employeeToSave.preferredCounties.toString();
             }
 
-            
+
 //            if (!ctrl.employee.application || ctrl.employee.application === null) {
 //                delete employeeToSave.employeeDocumentId;
 //            } else {
@@ -249,45 +247,23 @@
             delete employeeToSave.employeeAttachments;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
                 //Check if ssn number is already present
-                EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
-                        .then(function (res) {
-                            if (res.data) {
-                                ctrl.ssn.exists = true;
-                                $('#SocialSecurity').focus();
-                            } else {
-                                ctrl.ssn.exists = false;
-                                var reqParam;
-                                if (ctrl.employee.id && ctrl.employee.id !== null) {
-                                    reqParam = 'updateemployee';
-                                    updateEmployee(reqParam, employeeToSave);
-                                } else {
-                                    employeeToSave.orgCode = ontime_data.company_code;
-                                    ctrl.employee.orgCode = ontime_data.company_code;
-                                    reqParam = 'saveemployee';
-                                    updateEmployee(reqParam, employeeToSave);
-                                }
-                            }
-                        })
-                        .catch(function () {
-                        });
+                ctrl.ssn.exists = false;
+                var reqParam;
+                reqParam = 'updateemployee';
+                updateEmployee(reqParam, employeeToSave);
             }
         }
 
         function updateEmployee(reqParam, employeeToSave) {
             $rootScope.maskLoading();
-            EmployeeDAO.update({action: reqParam, data: employeeToSave})
+            ApplicationDAO.updateApplication(employeeToSave)
                     .then(function (employeeRes) {
-                        if (!ctrl.employee.id || ctrl.employee.id === null) {
-                            ctrl.editMode = true;
-                            ctrl.employee.id = employeeRes.id;
-                            ctrl.employee.status = employeeRes.status;
-                        }
                         ctrl.employee = employeeRes;
                         ctrl.displayDocumentsByPosition();
                         if ($rootScope.tabNo == 4) {
                             $state.go('app.employee-list', {status: "active"});
                         } else {
-                            $state.go('^.' + ctrl.nextTab, {id: employeeRes.id});
+                            $state.go('^.' + ctrl.nextTab, {id: employeeRes.applicationId});
                         }
                         toastr.success("Employee saved.");
                         //Reset dirty status of form
@@ -488,60 +464,49 @@
 
         //function called on page initialization.
         function pageInit() {
-            if (ctrl.editMode) {
-                $rootScope.maskLoading();
-                ApplicationDAO.retrieveByApplicationId({id: $state.params.id, includeAttachment: true}).then(function (res) {
-                    showLoadingBar({
-                        delay: .5,
-                        pct: 100,
-                        finish: function () {
-                        }
-                    }); // showLoadingBar
-                    if (res.profileImage != null && res.profileImage != '') {
-                        ctrl.hideLoadingImage = false;
-                    } else {
-                        ctrl.hideLoadingImage = true;
+            $rootScope.maskLoading();
+            ApplicationDAO.retrieveByApplicationId({id: $state.params.id, includeAttachment: true}).then(function (res) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
                     }
-                    ctrl.employee = res;
-                    ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
-                    getFilteredAttachments();
+                }); // showLoadingBar
+                if (res.profileImage != null && res.profileImage != '') {
+                    ctrl.hideLoadingImage = false;
+                } else {
+                    ctrl.hideLoadingImage = true;
+                }
+                ctrl.employee = res;
+                ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
+                getFilteredAttachments();
 
-                    ctrl.displayDocumentsByPosition();
-                    if (res.languageSpoken != null) {
-                        var languages = res.languageSpoken;
-                        angular.forEach(ctrl.languagesKeyValue, function (obj) {
-                            if (languages.indexOf(obj.key) >= 0) {
-                                obj.value = true;
-                            }
-                        });
-                    }
-                    if (res.preferredCounties != null) {
-                        res.preferredCounties = res.preferredCounties.split(",");
-                    } else {
-                        res.preferredCounties = [];
-                    }
-                    if (ctrl.employee.otherLanguages != null && ctrl.employee.otherLanguages != '') {
-                        ctrl.otherLanguageCheckbox = true;
-                        ctrl.refreshLanguages();
-                    }
-                    ctrl.retrivalRunning = false;
-                }).catch(function (data, status) {
-                    toastr.error("Failed to retrieve employee.");
-                    ctrl.retrivalRunning = false;
-                    console.log(JSON.stringify(ctrl.employee))
-                }).then(function () {
-                    setTimeout(function () {
-                        //Reset dirty status of form
-                        if ($.fn.dirtyForms) {
-                            $('form').dirtyForms('setClean');
-                            $('.dirty').removeClass('dirty');
+                ctrl.displayDocumentsByPosition();
+                if (res.languageSpoken != null) {
+                    var languages = res.languageSpoken;
+                    angular.forEach(ctrl.languagesKeyValue, function (obj) {
+                        if (languages.indexOf(obj.key) >= 0) {
+                            obj.value = true;
                         }
-                    }, 100);
-                    $rootScope.unmaskLoading();
-                });
-            } else {
+                    });
+                }
+
+
                 ctrl.retrivalRunning = false;
-            }
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve employee.");
+                ctrl.retrivalRunning = false;
+                console.log(JSON.stringify(ctrl.employee))
+            }).then(function () {
+                setTimeout(function () {
+                    //Reset dirty status of form
+                    if ($.fn.dirtyForms) {
+                        $('form').dirtyForms('setClean');
+                        $('.dirty').removeClass('dirty');
+                    }
+                }, 100);
+                $rootScope.unmaskLoading();
+            });
         }
         ;
 
@@ -599,18 +564,23 @@
             }
         });
 
-        ctrl.tab3DataInit = function () {
+        ctrl.tab2DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea, #add_employee_form select").first().focus();
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     googleMapFunctions(ctrl.employee.locationLatitude, ctrl.employee.locationLongitude);
                     form_data = $('#add_employee_form').serialize();
+                    if (ctrl.employee.preferredCounties != null) {
+                        ctrl.employee.preferredCounties = ctrl.employee.preferredCounties.split(",");
+                    } else {
+                        ctrl.employee.preferredCounties = [];
+                    }
                     $timeout(function () {
                         $('#PreferredCounties').trigger('change.select2');
                     }, 100);
                 } else {
-                    ctrl.tab3DataInit();
+                    ctrl.tab2DataInit();
                 }
             }, 100);
         }
@@ -635,14 +605,6 @@
         ctrl.tab1DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
-            //to set edit mode in tab change
-            if (!$state.params.id || $state.params.id === '') {
-                ctrl.editMode = false;
-                ctrl.employee = {};
-            } else {
-                ctrl.editMode = true;
-
-            }
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
@@ -654,6 +616,10 @@
                         if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
                             ctrl.employee.companyPositionId = ctrl.positionList[0].id;
                         }
+                    }
+                    if (ctrl.employee.otherLanguages != null && ctrl.employee.otherLanguages != '') {
+                        ctrl.otherLanguageCheckbox = true;
+                        ctrl.refreshLanguages();
                     }
 //                    $formService.setRadioValues('Position', ctrl.employee.position);
                     form_data = $('#add_employee_form').serialize();
@@ -1154,20 +1120,6 @@
             }
         };
 
-        if ($state.params.id && $state.params.id !== '') {
-            ctrl.editMode = true;
-            Page.setTitle("Update Employee");
-        } else if ($state.current.name.indexOf('tab1') > -1) {
-            if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_EMPLOYEE') === -1) {
-                $state.transitionTo(ontime_data.defaultState);
-            }
-            ctrl.employee = {}
-            ctrl.editMode = false;
-            Page.setTitle("Add Employee");
-
-        } else {
-            $state.transitionTo(ontime_data.defaultState);
-        }
         function googleMapFunctions(latitude, longitude) {
             loadGoogleMaps(3).done(function ()
             {
