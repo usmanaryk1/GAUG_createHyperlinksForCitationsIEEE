@@ -34,6 +34,7 @@
                                 <th nowrap><span class="">Date of Service</span></th>
                                 <th nowrap><span class="">Total Cost</span></th>
                                 <th nowrap><span class="">Paid Amount</span></th>
+                                <th nowrap><span class="">OrgCode</span></th>
                             </tr>
                         </thead>
                         <tbody>                            
@@ -43,6 +44,7 @@
                                 <td>{{claim.dateOfService}}</td>
                                 <td>{{claim.claimCharge| currency:'$':2}}</td>
                                 <td>{{claim.claimPayment| currency:'$':2}}</td>
+                                <td>{{claim.orgCode}}</td>
                             </tr>
                             <tr ng-if="nonMatchedClaimCtrl.claimsNotMapped.length === 0">
                                 <td colspan="6" style="text-align: center;">

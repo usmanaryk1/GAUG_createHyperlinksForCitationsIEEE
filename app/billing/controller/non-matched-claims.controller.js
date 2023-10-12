@@ -9,5 +9,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('NonMatchedClaimCtrl', ["claimsNotMapped", NonMatchedClaimCtrl]);
+    angular.module('xenon.controllers').controller('NonMatchedClaimCtrl', ["claimsNotMapped", "$modalInstance", NonMatchedClaimCtrl]);
 })();
