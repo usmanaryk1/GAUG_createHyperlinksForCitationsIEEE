@@ -4,6 +4,7 @@
     function AddApplicationCtrl($scope, CareTypeDAO, BenefitDAO, $state, $modal, $filter, EmployeeDAO, ApplicationDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
         var ctrl = this;
         ctrl.staticPosition;
+        $rootScope.isLoginPage = false;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
