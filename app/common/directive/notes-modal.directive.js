@@ -32,9 +32,9 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                 scope.allLoaded = false;
                 scope.data = {note: ""};
                 if (scope.type === 'patient') {
-                    scope.noteTypes = ['Communication', 'Falls', 'Accidents/Incidents'];
+                    scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls'];
                 } else {
-                    scope.noteTypes = ['Disciplinary'];
+                    scope.noteTypes = ['Case Refusal', 'Company Outreach', 'Compliance', 'Disciplinary', 'Employee Message', 'Miscellaneous', 'Proxy Communication', 'Standard Communication'];
                 }
                 scope.searchParams = {userId: scope.userId, pageNo: 1, limit: 10, action: scope.userId, subAction: 'notes'};
                 if (scope.hasRetrieve) {
