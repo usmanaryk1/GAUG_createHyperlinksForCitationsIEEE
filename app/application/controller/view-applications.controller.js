@@ -129,11 +129,11 @@
 
             $rootScope.deleteApplicationModel.delete = function (application) {
                 $rootScope.maskLoading();
-                ApplicationDAO.delete({id: application.id}).then(function (res) {
+                ApplicationDAO.delete({id: application.applicationId}).then(function (res) {
                     var length = ctrl.applicationList.length;
 
                     for (var i = 0; i < length; i++) {
-                        if (ctrl.applicationList[i].id === application.id) {
+                        if (ctrl.applicationList[i].applicationId === application.applicationId) {
                             ctrl.applicationList.splice(i, 1);
                             break;
                         }

@@ -113,7 +113,7 @@
                                                     <td>
                                                         <div class="center">
                                                             <a class="btn fa fa-search view_task_button" href="" ng-click="viewApplication.openApplicationViewOnly(application.applicationId)" tooltip="View Application"><span class="ed_b"></span></a> 
-                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewApplication.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewApplication.openDeleteModal(application, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="application.newNotification = false;viewApplication.openNotesModal(application.id)" tooltip="Notes" ng-class="{'has-newNotification':application.newNotification}"><span class="ed_b"></span></a>
                                                             <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewApplication.openSettingsModal(application.id)" tooltip="Application Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && application.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
@@ -218,24 +218,6 @@
     <div class="modal-footer">
     <button type="submit" class="btn btn-success" ng-click="deactivateEmployeeModel.deactivate(deactivateEmployeeModel.employee);">Deactivate</button>
     <button type="button" class="btn btn-red" ng-click="deactivateEmployeeModel.dismiss();">Cancel</button>
-    </div>
-    </form>
-</script>
-<script type="text/ng-template" id="activateModel">
-    <form class="form-horizontal validate" role="form" name="popupActEmployees" id="popup_act_employees" >     
-    <div class="modal-header">		
-    <h4 class="modal-title">{{activateEmployeeModel.employee.lName}} {{activateEmployeeModel.employee.fName}} {{activateEmployeeModel.employee.middleInitial}}</h4>
-    </div>
-
-   <div class="modal-body">
-
-   Are you sure you want to reactivate this Application?
-
-   </div>
-
-   <div class="modal-footer">
-    <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Activate</button>
-    <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">Cancel</button>
     </div>
     </form>
 </script>
