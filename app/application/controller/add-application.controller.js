@@ -1,7 +1,7 @@
 /* global appHelper, ontime_data, _ */
 
 (function () {
-    function AddApplicationCtrl($scope, CareTypeDAO, BenefitDAO, $state, $modal, $filter, EmployeeDAO, ApplicationDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
+    function AddApplicationCtrl($scope, CareTypeDAO, $stateParams, $state, $modal, $filter, EmployeeDAO, ApplicationPublicDAO, $timeout, $formService, $rootScope, Page, PositionDAO, EventTypeDAO, PatientDAO, moment) {
         var ctrl = this;
         ctrl.staticPosition;
         $rootScope.isLoginPage = false;
@@ -9,6 +9,10 @@
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.employee = {employeeAttachments: []};
+        ctrl.viewOnly = false;
+        if($state.current.data.viewOnly && $state.current.data.viewOnly===true){
+            ctrl.viewOnly = true;
+        }
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
@@ -218,6 +222,10 @@
 
         //function to save the employee data
         function saveEmployeeData() {
+            if(ctrl.viewOnly===true){
+                $state.go('^.' + ctrl.nextTab, {id: $state.params.id});
+                return;
+            }
             $scope.resetForm = false;
             ctrl.formSubmitted = true;
             setFormDynamicValidityMessages();
@@ -257,7 +265,7 @@
 
         function updateEmployee(reqParam, employeeToSave) {
             $rootScope.maskLoading();
-            ApplicationDAO.updateApplication(employeeToSave)
+            ApplicationPublicDAO.updateApplication(employeeToSave)
                     .then(function (employeeRes) {
                         ctrl.employee = employeeRes;
                         ctrl.displayDocumentsByPosition();
@@ -466,7 +474,7 @@
         //function called on page initialization.
         function pageInit() {
             $rootScope.maskLoading();
-            ApplicationDAO.retrieveByApplicationId({id: $state.params.id, includeAttachment: true}).then(function (res) {
+            ApplicationPublicDAO.retrieveByApplicationId({id: $state.params.id, includeAttachment: true}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -1201,5 +1209,5 @@
             });
         }
     }
-    angular.module('xenon.controllers').controller('AddApplicationCtrl', ["$scope", "CareTypeDAO", "BenefitDAO", "$state", "$modal", "$filter", "EmployeeDAO", "ApplicationDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddApplicationCtrl]);
+    angular.module('xenon.controllers').controller('AddApplicationCtrl', ["$scope", "CareTypeDAO", "$stateParams", "$state", "$modal", "$filter", "EmployeeDAO", "ApplicationPublicDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddApplicationCtrl]);
 })();

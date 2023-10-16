@@ -1,0 +1,328 @@
+(function () {
+    function ViewApplicationsCtrl(ApplicationDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO) {
+        var ctrl = this;
+        $rootScope.maskLoading();
+        ctrl.datatableObj = {};
+        Page.setTitle("View Applications");
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
+        $rootScope.positions = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    $rootScope.positions[position.id] = position.position;
+                });
+            }
+        });
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
+        ctrl.applicationList = [];
+
+        if ($stateParams.status !== 'inprogress' && $stateParams.status !== 'submitted'
+                && $stateParams.status !== 'all' && $stateParams.status !== 'accepted') {
+            $state.transitionTo(ontime_data.defaultState);
+        } else {
+            ctrl.viewType = $stateParams.status;
+        }
+        ctrl.retrieveApplications = retrieveApplicationsData;
+
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.retrieveApplications();
+        };
+
+        ctrl.applySearch = function () {
+            ctrl.searchParams.pageNo = 1;
+            $debounce(retrieveApplicationsData, 500);
+        };
+
+        ctrl.applySorting = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                ctrl.searchParams.sortBy = sortBy;
+                ctrl.searchParams.order = "asc";
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    ctrl.searchParams.order = "asc";
+                } else {
+                    ctrl.searchParams.order = "desc";
+                }
+            }
+            ctrl.retrieveApplications();
+        };
+
+        ctrl.applySortingClass = function (sortBy) {
+            if (ctrl.searchParams.sortBy !== sortBy) {
+                return 'sorting';
+            } else {
+                if (ctrl.searchParams.order === "desc") {
+                    return 'sorting_desc';
+                } else {
+                    return 'sorting_asc';
+                }
+            }
+        };
+
+        function retrieveApplicationsData() {
+            $rootScope.paginationLoading = true;
+            ctrl.searchParams.subAction = ctrl.viewType;
+            ApplicationDAO.retrieveAll(ctrl.searchParams).then(function (res) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+                    }
+                }); // showLoadingBar
+                ctrl.applicationList = res;
+                if (res.length === 0) {
+//                    $("#paginationButtons").remove();
+//                    toastr.error("No data in the system.");
+                }
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve applications.");
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+
+                    }
+                }); // showLoadingBar
+                console.log('Error in retrieving data')
+            }).then(function () {
+                $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
+            });
+        }
+
+        ctrl.retrieveApplications();
+        
+        ctrl.openNotesModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'notes-modal'),
+                size: "lg",
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'NotesCtrl as notes',
+                resolve: {
+                    userId: function () {
+                        return employeeId;
+                    },
+                    type: function () {
+                        return 'employee';
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
+            });
+        };
+
+        ctrl.openDeleteModal = function (application, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.deleteApplicationModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.deleteApplicationModel.application = application;
+
+            $rootScope.deleteApplicationModel.delete = function (application) {
+                $rootScope.maskLoading();
+                ApplicationDAO.delete({id: application.id}).then(function (res) {
+                    var length = ctrl.applicationList.length;
+
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.applicationList[i].id === application.id) {
+                            ctrl.applicationList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    ctrl.rerenderDataTable();
+                    toastr.success("Application deleted.");
+                    $rootScope.deleteApplicationModel.close();
+                }).catch(function (data, status) {
+                    toastr.error(data.data);
+                    $rootScope.deleteApplicationModel.close();
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            };
+
+        };
+        ctrl.rerenderDataTable = function () {
+            if (ctrl.applicationList.length === 0) {
+                if (ctrl.searchParams.pageNo > 1) {
+                    ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
+                }
+//                ctrl.retrieveApplications();
+            } else {
+                ctrl.retrieveApplications();
+            }
+        };
+        ctrl.openDeactivateModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.deactivateEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.deactivateEmployeeModel.employee = employee;
+
+            ApplicationDAO.checkFutureSchedules({employeeId: employee.id}).then(function (res) {
+                if (res.data === true) {
+                    $rootScope.deactivateEmployeeModel.showWarningMessage = true;
+                }
+            });
+
+            $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
+
+                if ($('#popup_dea_employees')[0].checkValidity()) {
+                    $rootScope.maskLoading();
+                    ApplicationDAO.changestatus({id: employee.id, status: 'inactive',
+                        reason: $rootScope.deactivateEmployeeModel.reason,
+                        note: $rootScope.deactivateEmployeeModel.note,
+                        terminationDate: $rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
+                        var length = ctrl.applicationList.length;
+
+                        for (var i = 0; i < length; i++) {
+                            if (ctrl.applicationList[i].id === employee.id) {
+                                if (ctrl.viewType !== 'all') {
+                                    ctrl.applicationList.splice(i, 1);
+                                } else {
+                                    ctrl.applicationList[i].status = 'i';
+                                }
+                                break;
+                            }
+                        }
+                        ctrl.rerenderDataTable();
+                        toastr.success("Application deactivated.");
+                        $rootScope.deactivateEmployeeModel.close();
+                    }
+                    ).catch(function (data, status) {
+                        toastr.error("Application cannot be deactivated.");
+                        $rootScope.deactivateEmployeeModel.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+
+                }
+
+            };
+        };
+        ctrl.openActivateModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.activateEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.activateEmployeeModel.employee = employee;
+
+            $rootScope.activateEmployeeModel.activate = function (employee) {
+
+                $rootScope.maskLoading();
+                ApplicationDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
+                    var length = ctrl.applicationList.length;
+
+                    for (var i = 0; i < length; i++) {
+                        if (ctrl.applicationList[i].id === employee.id) {
+                            if (ctrl.viewType !== 'all') {
+                                ctrl.applicationList.splice(i, 1);
+                            } else {
+                                ctrl.applicationList[i].status = 'a';
+                            }
+                            break;
+                        }
+                    }
+                    ctrl.rerenderDataTable();
+                    toastr.success("Application activated.");
+                    $rootScope.activateEmployeeModel.close();
+                }).catch(function (data, status) {
+                    toastr.error("Application cannot be activated.");
+                    $rootScope.activateEmployeeModel.close();
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            };
+        };
+
+        ctrl.openNotes = function (employee, modal_id, modal_size, modal_backdrop) {
+
+            $rootScope.employeeNotesModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+
+            $rootScope.employeeNotesModel.addNote = function () {
+
+                if ($('#NotesData')[0].checkValidity()) {
+                    $rootScope.maskLoading();
+                    ApplicationDAO.addNotes(
+                            {employeeId: employee.id,
+                                note: {note: $rootScope.employeeNotesModel.note}}).then(function (res) {
+                        ctrl.rerenderDataTable();
+                        toastr.success("Note added.");
+                        $rootScope.employeeNotesModel.close();
+                    }
+                    ).catch(function (data, status) {
+                        toastr.error("Note cannot be added.");
+                        $rootScope.employeeNotesModel.close();
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+
+                }
+            };
+
+            $rootScope.employeeNotesModel.dismiss = function () {
+                $rootScope.employeeNotesModel.close();
+            };
+        };
+
+
+        ctrl.openApplicationViewOnly = function (applicationId) {
+            var url = $state.href('application-viewonly.tab1', {id: applicationId});
+            var params = [
+                'height=' + screen.height,
+                'width=' + screen.width,
+                'location=0',
+                'fullscreen=yes' // only works in IE, but here for completeness
+            ].join(',');
+            var newwindow = window.open(url, applicationId, params);
+            if (window.focus) {
+                newwindow.moveTo(0, 0);
+                newwindow.focus();
+            }
+        }
+
+        ctrl.getLanguagesFromCode = function (languageCodes) {
+            if (languageCodes != null && languageCodes.length > 0) {
+                languageCodes = languageCodes.split(",");
+                var languageToDisplay = "";
+                angular.forEach(languageCodes, function (code, index) {
+                    languageToDisplay += $rootScope.languages[code];
+                    if (index < languageCodes.length - 1) {
+                        languageToDisplay += ", ";
+                    }
+                });
+                return languageToDisplay;
+            } else {
+                return "N/A";
+            }
+        };
+//        
+//        $scope.$watch(function() {
+//            return ctrl.viewType;
+//        }, function(newVal, oldValue) {
+//            ctrl.applicationList = [];
+//            ctrl.retrieveApplications();
+        //        });
+    }
+    ;
+    angular.module('xenon.controllers').controller('ViewApplicationsCtrl', ["ApplicationDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewApplicationsCtrl]);
+})();

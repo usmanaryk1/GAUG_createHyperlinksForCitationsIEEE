@@ -2,7 +2,7 @@
 /* global _ */
 
 (function () {
-    function ApplicationCtrl($scope, $rootScope, $http, $state, Page, ApplicationDAO) {
+    function ApplicationCtrl($scope, $rootScope, $http, $state, Page, ApplicationPublicDAO) {
 
         var ctrl = this;
 
@@ -45,7 +45,7 @@
                 $rootScope.maskLoading();
 
                 if (ctrl.firstTime === true) {
-                    ApplicationDAO.saveApplication(ctrl.applicationData)
+                    ApplicationPublicDAO.saveApplication(ctrl.applicationData)
                             .catch(function (data, status) {
                                 if (data.status || data.status === 409) {
                                     toastr.error(data.data);
@@ -64,7 +64,7 @@
                                 ctrl.sendUserToApplication(data.applicationId);
                             });
                 } else {
-                    ApplicationDAO.verifyExistingApplication(ctrl.applicationData)
+                    ApplicationPublicDAO.verifyExistingApplication(ctrl.applicationData)
                             .catch(function (data, status) {
                                 toastr.error("Something went wrong, please contact administrator.");
                             })
@@ -97,5 +97,5 @@
     }
     ;
 
-    angular.module('xenon.controllers').controller('ApplicationCtrl', ["$scope", "$rootScope", "$http", "$state", "Page", "ApplicationDAO", ApplicationCtrl]);
+    angular.module('xenon.controllers').controller('ApplicationCtrl', ["$scope", "$rootScope", "$http", "$state", "Page", "ApplicationPublicDAO", ApplicationCtrl]);
 })();

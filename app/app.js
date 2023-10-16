@@ -229,6 +229,34 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
         }
         return deferred.promise;
     }
+    
+    var applicationRootConfig = {
+                abstract: true,
+                url: '/applications-edit',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
+                controller: 'AddApplicationCtrl as addEmployee',
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.forms.formDirty,
+                            ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
+                            ASSETS.forms.tagsinput,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker,
+                            ASSETS.forms.select2,
+                            ASSETS.tables.datatables
+                        ]);
+                    }
+                }
+            };
+            
+            var viewOnlyApplicationConfig = function(){
+                var config = angular.copy(applicationRootConfig);
+                config['url'] = '/applications';
+                return config;
+            }
     $stateProvider.
             // Main Layout Structure
             state('app', {
@@ -299,27 +327,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('application', 'start-applications')
             })
             // application edit
-            .state('applications-edit', {
-                abstract: true,
-                url: '/applications-edit',
-                templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
-                controller: 'AddApplicationCtrl as addEmployee',
-                resolve: {
-                    resources: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.forms.formDirty,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.inputmask,
-                            ASSETS.forms.tagsinput,
-                            ASSETS.core.moment,
-                            ASSETS.forms.daterangepicker,
-                            ASSETS.forms.select2,
-                            ASSETS.tables.datatables
-                        ]);
-                    }
-                }
-            })
+            .state('applications-edit', applicationRootConfig)
             // application retrieve
             .state('applications-edit.tab1', {
                 url: '/:id/details',
@@ -333,6 +341,26 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
                 data: {
                     tabNo: 2
+                }
+            })
+            // employee creation page
+            .state('application-viewonly', viewOnlyApplicationConfig())
+            // add_application_tab_1
+            .state('application-viewonly.tab1', {
+                url: '/:id/details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
+                data: {
+                    tabNo: 1,
+                    viewOnly : true
+                }
+            })
+            // add_application_tab_2
+            .state('application-viewonly.tab2', {
+                url: '/:id/location-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
+                data: {
+                    tabNo: 2,
+                    viewOnly : true
                 }
             })
             .state('forgotpassword', {
@@ -464,6 +492,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/employee-list/:status',
                 templateUrl: appHelper.viewTemplatePath('employee', 'view_employee'),
                 controller: 'ViewEmployeesCtrl as viewEmployee',
+                data: {
+                    feature: 'VIEW_EMPLOYEE'
+                }
+            }).
+            //view applications single page
+            state('app.application-list', {
+                url: '/application-list/:status',
+                templateUrl: appHelper.viewTemplatePath('application', 'view_application'),
+                controller: 'ViewApplicationsCtrl as viewApplication',
                 data: {
                     feature: 'VIEW_EMPLOYEE'
                 }
