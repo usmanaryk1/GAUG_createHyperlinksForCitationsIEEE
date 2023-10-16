@@ -23,15 +23,22 @@
             delete: {
                 method: 'GET'
             },
-            changestatus:{
+            changestatus: {
                 method: 'GET'
+            },
+            forscheduler: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'forschedule'
+                }
             }
         });
         return {
             retrieveAll: function (data) {
                 return api.retrieveAll(data).$promise;
             },
-            retrieveForSelect: function(filter) {
+            retrieveForSelect: function (filter) {
                 return api.retrieveForSelect(filter).$promise;
             },
             get: function (params) {
@@ -44,8 +51,11 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action:'changestatus', subAction:data.id, status:data.status}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             },
+            forscheduler: function (data) {
+                return api.forscheduler(data).$promise;
+            }
         };
     };
     angular.module("xenon.factory").factory('PatientDAO', ['$resource', PatientDAO]);

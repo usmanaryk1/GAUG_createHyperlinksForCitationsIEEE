@@ -411,17 +411,17 @@
                                 </div>
                             </div>   
                     </form>
-                            <!-- scheduled-->
-
-                <div ng-if="employeePopup.data.eventType == 'S'">
-                    <form class="form-horizontal validate" role="form" name="popupemployees" id="popupemployees" >
+            
+                            <!-- available-->
+                <div ng-if="employeePopup.data.eventType == 'A'">
+                    <form class="form-horizontal validate" role="form" name="popupemployeea" id="popupemployeea" >
                         <div class="modal-body">
                             <div class="form-group-separator"></div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                                 <div class="col-sm-4">
                                     <div class="input-group" style="z-index:1060">
-                                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name="fromDate" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
+                                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name="fromDate" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-calendar"></i></a>
@@ -431,7 +431,7 @@
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
                                 <div class="col-sm-4">
                                     <div class="input-group" style="z-index:1060">
-                                        <input type="text" id="toDate" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name='toDate' data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'S'">
+                                        <input type="text" id="toDate" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name='toDate' data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'A'">
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-calendar"></i></a>
@@ -446,7 +446,7 @@
                                 <label class="col-sm-2 control-label" for="field-2">Time</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
-                                        <input class="form-control punch-time-input" ng-disabled="!employeePopup.employee.isNew" ng-model='employeePopup.data.startTime' id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'S'"/>
+                                        <input class="form-control punch-time-input" ng-disabled="!employeePopup.employee.isNew" ng-model='employeePopup.data.startTime' id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'A'"/>
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-clock"></i></a>
@@ -456,7 +456,7 @@
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
-                                        <input class="form-control punch-time-input" ng-disabled="!employeePopup.employee.isNew" ng-model='employeePopup.data.endTime' id="endTime" name="endTime" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'S'"/>
+                                        <input class="form-control punch-time-input" ng-disabled="!employeePopup.employee.isNew" ng-model='employeePopup.data.endTime' id="endTime" name="endTime" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'A'"/>
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-clock"></i></a>
@@ -554,15 +554,28 @@
                     </form>
                 </div>
 
-                <!-- available-->
-                <div ng-if="employeePopup.data.eventType == 'A'">
-                    <form class="form-horizontal validate" role="form" name="popupemployeea" id="popupemployeea" >
+                <!-- schedule-->
+                <div ng-if="employeePopup.data.eventType == 'S'">
+                    <form class="form-horizontal validate" role="form" name="popupemployees" id="popupemployees" >
                         <div class="modal-body">
                             <div class="form-group-separator"></div>
+                    
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label">Care</label>
+
+                    <div class="col-sm-10">
+                    <select class="form-control" id="care" name="care" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S'">
+                    <option value="">Select the care</option>
+                    </select>
+                    </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Patient</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="patient" name="patient" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.fName+' '+patient.middleInitial) for patient in employeePopup.patients" ng-required="employeePopup.data.eventType == 'A'">
+                                    <select class="form-control" id="patient" name="patient" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.fName+' '+patient.middleInitial) for patient in employeePopup.patients" ng-required="employeePopup.data.eventType == 'S'">
                                         <option value="">Select the patient</option>
                                     </select>
                                 </div>
@@ -574,7 +587,7 @@
                                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                                 <div class="col-sm-4">
                                     <div class="input-group" style="z-index:1060">
-                                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name="fromDate1" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
+                                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.employee.isNew" name="fromDate1" data-format="D, dd MM yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-calendar"></i></a>
@@ -584,7 +597,7 @@
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
                                 <div class="col-sm-4">
                                     <div class="input-group" style="z-index:1060">
-                                        <input type="text" ng-disabled="!employeePopup.employee.isNew" class="form-control datepicker" name='toDate1' data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'A'">
+                                        <input type="text" ng-disabled="!employeePopup.employee.isNew" class="form-control datepicker" name='toDate1' data-format="D, dd MM yyyy" ng-model="employeePopup.data.endDate" min-date="employeePopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." ng-required="employeePopup.data.eventType == 'S'">
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-calendar"></i></a>
@@ -599,7 +612,7 @@
                                 <label class="col-sm-2 control-label" for="field-2">Time</label>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
-                                        <input class="form-control  punch-time-input" ng-disabled="!employeePopup.employee.isNew"  ng-model='employeePopup.data.startTime' id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'A'"/>
+                                        <input class="form-control  punch-time-input" ng-disabled="!employeePopup.employee.isNew"  ng-model='employeePopup.data.startTime' id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'S'"/>
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-clock"></i></a>
@@ -609,7 +622,7 @@
                                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
                                 <div class="col-sm-3">
                                     <div class="input-group input-group-minimal">
-                                        <input class="form-control  punch-time-input" ng-disabled="!employeePopup.employee.isNew"  ng-model='employeePopup.data.endTime' id="endTime1" name="endTime2" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'A'"/>
+                                        <input class="form-control  punch-time-input" ng-disabled="!employeePopup.employee.isNew"  ng-model='employeePopup.data.endTime' id="endTime1" name="endTime2" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'S'"/>
 
                                         <div class="input-group-addon">
                                             <a href=""><i class="linecons-clock"></i></a>
@@ -758,31 +771,6 @@
                                     <textarea class="form-control" cols="5" id="note" name="note" ng-model="employeePopup.data.note" placeholder="Enter note for this scheduled event."></textarea>
                                 </div>
                             </div>
-
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
-                                <div  ng-if="employeePopup.employee.isNew">
-                                    <div class="col-sm-2">
-                                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="D">
-                                        Daily
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="W">
-                                        Weekly
-                                    </div>
-                            <div class="col-sm-2">
-                                        <input type="radio" name="radio-6" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="N">
-                                        None
-                                    </div>
-                                </div>
-                                <div  ng-if="!employeePopup.employee.isNew">
-                                    <div class="col-sm-2">
-                                        {{employeePopup.recurranceTypes[employeePopup.data.recurranceType]}}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
@@ -835,7 +823,7 @@
                     <label class="col-sm-2 control-label">Care</label>
 
                     <div class="col-sm-10">
-                    <select class="form-control" id="care" name="care" ng-model="patientPopup.data.care" data-message-required="Please select care." ng-options="care.id as care.companyCaretypeId.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()">
+                    <select class="form-control" id="care" name="care" ng-model="patientPopup.data.companyCareTypeId" data-message-required="Please select care." ng-options="care.id as care.companyCaretypeId.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()">
                     <option value="">Select the care</option>
                     </select>
                     </div>
@@ -1093,14 +1081,14 @@
                                         <td class="middle-align">Employee</td>
                                         <td>
                                             <a href="" ng-click="addEmployee.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add</a>
-                                            <a href="" ng-click="addEmployee.openModalEmployee({eventType: 'A', id: 1}, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
+                                            <a href="" ng-click="addEmployee.openModalEmployee({eventType: 'A', id: 821}, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="middle-align">Patient</td>
                                         <td>
                                             <a href="" ng-click="addEmployee.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Add</a>
-                                            <a href="" ng-click="addEmployee.openModalPatient({patientId: 14, eventType: 'U', id: 2}, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
+                                            <a href="" ng-click="addEmployee.openModalPatient({patientId: 14, eventType: 'U', id: 3}, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                 </tbody>
