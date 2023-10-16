@@ -1,34 +1,37 @@
 <div class="cal-context" ng-switch="view">
-  <div class="alert alert-danger" ng-switch-default>The value passed to the view attribute of the calendar is not set</div>
+    <div class="alert alert-danger" ng-switch-default>The value passed to the view attribute of the calendar is not set</div>
 
-  <div class="alert alert-danger" ng-hide="currentDay">The value passed to current-day attribute of the calendar is not set</div>
+    <div class="alert alert-danger" ng-hide="currentDay">The value passed to current-day attribute of the calendar is not set</div>
 
-  <mwl-calendar-month
-    events="events"
-    current-day="currentDay"
-    on-event-click="onEventClick"
-    on-event-times-changed="onEventTimesChanged"
-    on-edit-event-click="onEditEventClick"
-    on-delete-event-click="onDeleteEventClick"
-    on-timespan-click="onTimespanClick"
-    edit-event-html="editEventHtml"
-    delete-event-html="deleteEventHtml"
-    cell-is-open="cellIsOpen"
-    cell-modifier="cellModifier"
-    cell-template-url="{{ monthCellTemplateUrl }}"
-    cell-events-template-url="{{ monthCellEventsTemplateUrl }}"
-    ng-switch-when="month"
-    ></mwl-calendar-month>
+    <mwl-calendar-month
+        events="events"
+        current-day="currentDay"
+        on-event-click="onEventClick"
+        on-event-times-changed="onEventTimesChanged"
+        on-edit-event-click="onEditEventClick"
+        on-delete-event-click="onDeleteEventClick"
+        on-timespan-click="onTimespanClick"
+        edit-event-html="editEventHtml"
+        delete-event-html="deleteEventHtml"
+        cell-is-open="cellIsOpen"
+        cell-modifier="cellModifier"
+        cell-template-url="{{ monthCellTemplateUrl}}"
+        cell-events-template-url="{{ monthCellEventsTemplateUrl}}"
+        ng-switch-when="month"
+        ></mwl-calendar-month>
 
-  <mwl-calendar-week
-    events="events"
-    current-day="currentDay"
-    on-event-click="onEventClick"
-    on-event-times-changed="onEventTimesChanged"
-    day-view-start="dayViewStart"
-    day-view-end="dayViewEnd"
-    day-view-split="dayViewSplit"
-    on-timespan-click="onTimespanClick"
-    ng-switch-when="week"
-    ></mwl-calendar-week>
+    <mwl-calendar-week
+        events="events"
+        current-day="currentDay"
+        on-event-click="onEventClick"
+        on-event-times-changed="onEventTimesChanged"
+        day-view-start="dayViewStart"
+        day-view-end="dayViewEnd"
+        day-view-split="dayViewSplit"
+        on-timespan-click="onTimespanClick"
+        ng-switch-when="week"
+        hours="hours"
+        total-items="totalItems"
+        current-page="currentPage">
+        ></mwl-calendar-week>
 </div>

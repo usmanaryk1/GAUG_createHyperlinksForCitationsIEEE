@@ -141,7 +141,11 @@
 	        dayViewEnd: '@',
 	        dayViewSplit: '@',
 	        monthCellTemplateUrl: '@',
-	        monthCellEventsTemplateUrl: '@'
+	        monthCellEventsTemplateUrl: '@',
+                hours:'=',
+                totalItems:'=',
+                currentPage:'='
+                
 	      },
 	      controller: controller
 	    };
