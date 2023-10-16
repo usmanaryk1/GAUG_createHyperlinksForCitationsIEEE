@@ -105,7 +105,10 @@ angular
 	        onTimespanClick: '=',
 	        cellModifier: '=',
 	        cellTemplateUrl: '@',
-	        cellEventsTemplateUrl: '@'
+	        cellEventsTemplateUrl: '@',
+                hours:"=",
+                totalItems:'=',
+                currentPage:'='
 	      },
 	      controller: controller,
 	      link: function(scope, element, attrs, calendarCtrl) {

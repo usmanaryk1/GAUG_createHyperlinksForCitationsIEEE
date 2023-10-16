@@ -45,6 +45,68 @@
         </div>
     </div>
 
+    <div class="mwl-panel-filter row" ng-if="calendar.calendarView == 'week'">
+        <div class="row">
+            <div class="col-md-4">
+                <label>Employees</label>
+                <script type="text/javascript">
+                    jQuery(document).ready(function ($)
+                    {
+                        setTimeout(function () {
+                            $("#sboxit-2").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Employee...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        }, 200);
+                    });</script>
+                <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList track by emp.id' ng-change="calendar.applySearch()">
+                    <option value="" selected hidden />
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Position</label>
+                <select class="form-control" ng-model="searchParams.positionIds" ng-options='position.id as position.position for position in calendar.positions track by position.id' ng-change="calendar.applySearch()">
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Languages</label>
+                <select class="form-control" ng-model="searchParams.languages" ng-change="applySearch()" ng-options="key as value for (key,value) in languages">
+                    <option>Language1</option>
+                    <option>Language2</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label>From</label>
+                <select class="form-control">
+                    <option>From</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>To</label>
+                <select class="form-control">
+                    <option>To</option>
+                </select>
+            </div>
+            <div class="col-md-4 filter-checkbox">
+                <div class="col-md-6">
+                    <label>Live In</label>
+                    <input type="checkbox" name="livein">
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <mwl-calendar
         events="calendar.events"
         view="calendar.calendarView"
@@ -60,6 +122,16 @@
         day-view-start="06:00"
         day-view-end="22:00"
         day-view-split="30"
-        cell-modifier="modifyCell(calendarCell)">
+        cell-modifier="modifyCell(calendarCell)"
+        hours="calendar.hours"
+        total-items="calendar.totalRecords"
+        current-page="calendar.pageNo">
     </mwl-calendar>
+    <div ng-if="calendar.calendarView == 'week'">
+        <div id="paginationButtons" class="text-right">
+            <dir-pagination-controls boundary-links="true" 
+                                     max-size="9"
+                                     template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination" on-page-change="calendar.pageChanged(newPageNumber)"></dir-pagination-controls>
+        </div>
+    </div>
 </div>
