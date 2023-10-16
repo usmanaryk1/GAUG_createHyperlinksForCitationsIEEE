@@ -1056,7 +1056,12 @@
                 });
             } else {
                 obj.action = ontimetest.eventTypes[obj.action].toLowerCase();
-                obj.subAction = obj.data.availabilityId;
+                if (obj.data.availabilityId)
+                    obj.subAction = obj.data.availabilityId;
+                if (obj.data.scheduleId)
+                    obj.subAction = obj.data.scheduleId;
+                if (obj.data.unavailabilityId)
+                    obj.subAction = obj.data.unavailabilityId;
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Updated successfully.");
                     $state.go('app.employee.tab2', {id: res.id});
@@ -1086,7 +1091,10 @@
                 });
             } else {
                 obj.action = ontimetest.eventTypes[obj.action].toLowerCase();
-                obj.subAction = data.unavailabilityId;
+                if (obj.data.scheduleId)
+                    obj.subAction = obj.data.scheduleId;
+                if (obj.data.unavailabilityId)
+                    obj.subAction = obj.data.unavailabilityId;
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $state.go('app.employee.tab2', {id: res.id});
@@ -1167,7 +1175,7 @@
                     $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
                 };
                 if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.employee.isNew) {
-                    $rootScope.employeePopup.employees = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
+                    $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
                 }
                 $rootScope.employeePopup.changed = function (form, event) {
                     if (event != 'repeat') {
@@ -1205,33 +1213,23 @@
                     var careTypesSelected = [];
                     if (employeeObj.employeeCareRatesList) {
                         var length = employeeObj.employeeCareRatesList.length;
-                        var str = "";
+                        carePatientMap = {};
+                        var next = 0;
                         for (var i = 0; i < length; i++) {
                             careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
-                            if (str.length > 0) {
-                                str = str + ",";
-                            }
-                            str = str + employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
-                        }
-                        careTypes = careTypesSelected;
-                        PatientDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
-                            carePatientMap = {};
-                            angular.forEach(res, function (item) {
-                                angular.forEach(item.employeeCareRatesList, function (item1) {
-                                    var temp = carePatientMap[item1.companyCaretypeId.id];
-                                    if (temp == null) {
-                                        temp = [];
-                                    }
-                                    temp.push(item);
-                                    carePatientMap[item1.companyCaretypeId.id] = temp;
-                                });
+                            var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
+                            PatientDAO.retrieveAll({companyCareTypes: id, subAction: "active"}).then(function (res) {
+                                carePatientMap[employeeObj.employeeCareRatesList[next].companyCaretypeId.id] = res;
+                                next++;
+                            }).catch(function (data) {
+                                toastr.error(data.data);
+                            }).then(function () {
+                                if (next === (length - 1)) {
+                                    careTypes = careTypesSelected;
+                                    open();
+                                }
                             });
-                        }).catch(function (data) {
-                            toastr.error(data.data);
-                        }).then(function () {
-                            $rootScope.unmaskLoading();
-                            open();
-                        });
+                        }
                     } else {
                         open();
                     }
