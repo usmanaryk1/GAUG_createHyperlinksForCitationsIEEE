@@ -214,6 +214,7 @@ angular.module('xenon.services', []).
                 var events = this.addItem('Event Notifications', '/admin/event-notifications', 'fa-envelope', 'EVENT_NOTIFICATIONS');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
                 var company = this.addItem('Company', '/admin/company_information', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
+                var applications = this.addItem('Applications', '/admin/application-list/inprogress', 'fa-address-card', 'VIEW_APPLICATION_LIST');
 
                 // Subitems of users
                 users.addItem('Add User', './user/', 'CREATE_USER');

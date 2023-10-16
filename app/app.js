@@ -255,6 +255,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             var viewOnlyApplicationConfig = function(){
                 var config = angular.copy(applicationRootConfig);
                 config['url'] = '/applications';
+                config['data']= {'feature':'VIEW_APPLICATION_LIST'};
                 return config;
             }
     $stateProvider.
@@ -497,12 +498,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 }
             }).
             //view applications single page
-            state('app.application-list', {
+            state('admin.application-list', {
                 url: '/application-list/:status',
                 templateUrl: appHelper.viewTemplatePath('application', 'view_application'),
                 controller: 'ViewApplicationsCtrl as viewApplication',
                 data: {
-                    feature: 'VIEW_EMPLOYEE'
+                    feature: 'VIEW_APPLICATION_LIST'
                 }
             }).
             // edit_timesheet
