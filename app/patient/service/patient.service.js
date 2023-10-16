@@ -9,6 +9,19 @@
                     action: 'view'
                 }
             },
+            retrieveForCareType: {
+                method: 'GET',
+                isArray: false,
+                params: {
+                    action: 'view'
+                },
+                transformResponse: function (data, headers) {
+                    var response = {};
+                    response.data = JSON.parse(data);
+                    response.headers = headers();
+                    return response;
+                }
+            },
             retrieveForSelect: {
                 method: 'GET',
                 isArray: true,
@@ -37,6 +50,9 @@
         return {
             retrieveAll: function (data) {
                 return api.retrieveAll(data).$promise;
+            },
+            retrieveForCareType: function (data) {
+                return api.retrieveForCareType(data).$promise;
             },
             retrieveForSelect: function (filter) {
                 return api.retrieveForSelect(filter).$promise;

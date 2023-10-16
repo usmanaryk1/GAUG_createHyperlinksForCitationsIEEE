@@ -1218,8 +1218,8 @@
                         for (var i = 0; i < length; i++) {
                             careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
                             var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
-                            PatientDAO.retrieveAll({companyCareTypes: id, subAction: "active"}).then(function (res) {
-                                carePatientMap[employeeObj.employeeCareRatesList[next].companyCaretypeId.id] = res;
+                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active"}).then(function (res) {
+                                carePatientMap[res.headers.careid] = res.data;
                                 next++;
                             }).catch(function (data) {
                                 toastr.error(data.data);
