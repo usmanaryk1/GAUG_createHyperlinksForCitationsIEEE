@@ -95,7 +95,7 @@
 
         ctrl.retrieveApplications();
         
-        ctrl.openNotesModal = function (employeeId, modal_id, modal_size, modal_backdrop)
+        ctrl.openNotesModal = function (applicationId, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'notes-modal'),
@@ -105,10 +105,10 @@
                 controller: 'NotesCtrl as notes',
                 resolve: {
                     userId: function () {
-                        return employeeId;
+                        return applicationId;
                     },
                     type: function () {
-                        return 'employee';
+                        return 'application';
                     }
                 }
             });
@@ -248,42 +248,6 @@
                 });
             };
         };
-
-        ctrl.openNotes = function (employee, modal_id, modal_size, modal_backdrop) {
-
-            $rootScope.employeeNotesModel = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-
-            $rootScope.employeeNotesModel.addNote = function () {
-
-                if ($('#NotesData')[0].checkValidity()) {
-                    $rootScope.maskLoading();
-                    ApplicationDAO.addNotes(
-                            {employeeId: employee.id,
-                                note: {note: $rootScope.employeeNotesModel.note}}).then(function (res) {
-                        ctrl.rerenderDataTable();
-                        toastr.success("Note added.");
-                        $rootScope.employeeNotesModel.close();
-                    }
-                    ).catch(function (data, status) {
-                        toastr.error("Note cannot be added.");
-                        $rootScope.employeeNotesModel.close();
-                    }).then(function () {
-                        $rootScope.unmaskLoading();
-                    });
-
-                }
-            };
-
-            $rootScope.employeeNotesModel.dismiss = function () {
-                $rootScope.employeeNotesModel.close();
-            };
-        };
-
 
         ctrl.openApplicationViewOnly = function (applicationId) {
             var url = $state.href('application-viewonly.tab1', {id: applicationId});

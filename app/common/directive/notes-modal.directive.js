@@ -1,6 +1,6 @@
 /* global _, appHelper */
 
-angular.module('xenon.directives').directive('notesDirective', function ($compile, $rootScope, EmployeeDAO, PatientDAO) {
+angular.module('xenon.directives').directive('notesDirective', function ($compile, $rootScope, EmployeeDAO, PatientDAO, ApplicationDAO) {
     return {
         restrict: 'E',
         scope: {
@@ -17,6 +17,8 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
             var FeatureDAO;
             if (scope.type === 'patient') {
                 FeatureDAO = PatientDAO;
+            } else if (scope.type === 'application') {
+                FeatureDAO = ApplicationDAO;
             } else {
                 FeatureDAO = EmployeeDAO;
             }
@@ -33,6 +35,8 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                 scope.data = {note: ""};
                 if (scope.type === 'patient') {
                     scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls', 'MLTC Update'];
+                } else if (scope.type === 'application') {
+                    scope.noteTypes = ['Missing Data', 'Suspecious', 'Other'];
                 } else {
                     scope.noteTypes = ['Case Refusal', 'Company Outreach', 'Compliance', 'Disciplinary', 'Employee Message', 'Miscellaneous', 'Proxy Communication', 'Standard Communication'];
                 }
