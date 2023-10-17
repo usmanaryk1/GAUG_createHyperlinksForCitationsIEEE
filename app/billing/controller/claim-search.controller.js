@@ -34,7 +34,7 @@
         ctrl.filterSessions = function () {
             ctrl.errorMsg = {};
             ctrl.searchParams.pageNo = 1;
-            if (ctrl.searchParams.patientId != null || ctrl.searchParams.batchId != null || ctrl.searchParams.claimId != null) {
+            if (ctrl.searchParams.patientId != null || ctrl.searchParams.batchId != null || ctrl.searchParams.claimId != null || ctrl.searchParams.insurerClaimNumber != null) {
                 ctrl.criteriaSelected = true;
                 ctrl.retrieveSessions();
             }
