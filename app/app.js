@@ -229,35 +229,35 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
         }
         return deferred.promise;
     }
-    
+
     var applicationRootConfig = {
-                abstract: true,
-                url: '/applications-edit',
-                templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
-                controller: 'AddApplicationCtrl as addEmployee',
-                resolve: {
-                    resources: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.forms.formDirty,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.inputmask,
-                            ASSETS.forms.tagsinput,
-                            ASSETS.core.moment,
-                            ASSETS.forms.daterangepicker,
-                            ASSETS.forms.select2,
-                            ASSETS.tables.datatables
-                        ]);
-                    }
-                }
-            };
-            
-            var viewOnlyApplicationConfig = function(){
-                var config = angular.copy(applicationRootConfig);
-                config['url'] = '/applications';
-                config['data']= {'feature':'VIEW_APPLICATION_LIST'};
-                return config;
+        abstract: true,
+        url: '/applications-edit',
+        templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
+        controller: 'AddApplicationCtrl as addEmployee',
+        resolve: {
+            resources: function ($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    ASSETS.forms.jQueryValidate,
+                    ASSETS.forms.formDirty,
+                    ASSETS.extra.toastr,
+                    ASSETS.forms.inputmask,
+                    ASSETS.forms.tagsinput,
+                    ASSETS.core.moment,
+                    ASSETS.forms.daterangepicker,
+                    ASSETS.forms.select2,
+                    ASSETS.tables.datatables
+                ]);
             }
+        }
+    };
+
+    var viewOnlyApplicationConfig = function () {
+        var config = angular.copy(applicationRootConfig);
+        config['url'] = '/applications';
+        config['data'] = {'feature': 'VIEW_APPLICATION_LIST'};
+        return config;
+    }
     $stateProvider.
             // Main Layout Structure
             state('app', {
@@ -352,7 +352,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
                 data: {
                     tabNo: 1,
-                    viewOnly : true
+                    viewOnly: true
                 }
             })
             // add_application_tab_2
@@ -361,7 +361,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
                 data: {
                     tabNo: 2,
-                    viewOnly : true
+                    viewOnly: true
                 }
             })
             .state('forgotpassword', {
@@ -706,7 +706,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
                 controller: 'ManualClaimUB04Ctrl as manualClaim'
             }).
-                    state('app.manual_claim_ub04_edit', {
+            state('app.manual_claim_ub04_edit', {
                 url: '/manual_claim_ub04/:id/edit',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
                 controller: 'ManualClaimUB04Ctrl as manualClaim'
@@ -864,8 +864,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_PATIENT_SCHEDULE'
                 }
             }).
-                    // coordinator calendar
-                    state('app.coordinator-calendar', {
+            // coordinator calendar
+            state('app.coordinator-calendar', {
                 url: '/coordinator-calendar/:id?lastPage',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'coordinator_calendar'),
                 controller: 'CoordinatorCalendarCtrl as coordinatorcalendar',
@@ -1826,11 +1826,20 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     }
                     var deferred = $q.defer();
                     if (response.status == 401) {
-                        delete_cookie("cc");
-                        delete_cookie("token");
-                        delete_cookie("un");
-                        window.location.hash = '#/app/login';
-                        toastr.clear();
+                        if (response.config.url.indexOf("app/") >= 0) {
+                            delete_cookie("cc");
+                            delete_cookie("token");
+                            delete_cookie("un");
+                            window.location.hash = '#/app/login';
+                            toastr.clear();
+                        } else {
+                            delete_cookie("cc");
+                            delete_cookie("token");
+                            delete_cookie("un");
+                            window.location.hash = '#/applications/new';
+                            toastr.clear();
+                        }
+
                         return deferred.promise;
 //                        return $q.when(response);
                     }

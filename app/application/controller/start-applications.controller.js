@@ -77,10 +77,14 @@
                                     }
                                 });
                                 console.log(JSON.stringify(data))
-                                if (data.value == null || data.value == '') {
+                                if (data.applicationId == null || data.applicationId == '') {
                                     toastr.error("No application exists with these identification details.");
+                                } else {
+                                    setCookie("token", data.refreshToken, 7);
+                                    setCookie("un", data.applicationId, 7);
+                                    setCookie("cc", data.orgCode, 7);
+                                    ctrl.sendUserToApplication(data.applicationId);
                                 }
-                                ctrl.sendUserToApplication(data.value);
                             });
                 }
 
