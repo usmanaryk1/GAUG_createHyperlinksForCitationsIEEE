@@ -20,7 +20,7 @@
                 <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{'mwl-state-active': calendar.calendarView == 'week'}">week</button>
             </div>
             <div class="mwl-button-group">
-                <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left"><span class="mwl-icon mwl-icon-prev fa-angle-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"></span></button>
+                <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"><span class="mwl-icon mwl-icon-prev fa-angle-left" ></span></button>
                 <button type="button" class="mwl-next-button mwl-button mwl-state-default mwl-corner-right" mwl-date-modifier date="calendar.calendarDay" increment="calendar.calendarView"><span class="mwl-icon mwl-icon-next fa-angle-right"></span></button>
             </div>
         </div>

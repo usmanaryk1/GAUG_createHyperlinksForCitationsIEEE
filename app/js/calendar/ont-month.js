@@ -4,7 +4,6 @@ angular
 
 	  	var controller = ["$scope", "moment", "calendarHelper", "calendarConfig", function($scope, moment, calendarHelper, calendarConfig) {
 
-	    //var $scope = this;
 	    $scope.calendarConfig = calendarConfig;
 	    $scope.openRowIndex = null;
 
@@ -70,22 +69,6 @@ angular
 
 	    };
 
-	    $scope.handleEventDrop = function(event, newDayDate) {
-
-	      var newStart = moment(event.startsAt)
-	        .date(moment(newDayDate).date())
-	        .month(moment(newDayDate).month());
-
-	      var newEnd = calendarHelper.adjustEndDateFromStartDiff(event.startsAt, newStart, event.endsAt);
-
-	      $scope.onEventTimesChanged({
-	        calendarEvent: event,
-	        calendarDate: newDayDate,
-	        calendarNewEventStart: newStart.toDate(),
-	        calendarNewEventEnd: newEnd ? newEnd.toDate() : null
-	      });
-	    };
-
 	  }];
 
 	    return {
@@ -106,9 +89,9 @@ angular
 	        cellModifier: '=',
 	        cellTemplateUrl: '@',
 	        cellEventsTemplateUrl: '@',
-                hours:"=",
-                totalItems:'=',
-                currentPage:'='
+            hours:"=",
+            totalItems:'=',
+            currentPage:'='
 	      },
 	      controller: controller,
 	      link: function(scope, element, attrs, calendarCtrl) {

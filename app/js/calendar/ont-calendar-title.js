@@ -7,12 +7,21 @@
 	    }
 
 	    function week(currentDay) {
-	    	//return calendarHelper.formatDate(currentDay, calendarConfig.titleFormats.week);
 	      var weekTitleLabel = calendarConfig.titleFormats.week;
-	      return weekTitleLabel.replace('{month}', moment(currentDay).format('MMM'))
+
+	        if(moment(currentDay).weekday(0).format('MMM') == moment(currentDay).weekday(6).format('MMM')) {
+	      		return weekTitleLabel.replace('{month}', moment(currentDay).format('MMM'))
 	      						.replace('{startDate}', moment(currentDay).weekday(0).format('D'))
+	      						.replace('{month2}', '')
 	      						.replace('{endDate}', moment(currentDay).weekday(6).format('D'))
 	      						.replace('{year}', moment(currentDay).format('YYYY'));
+	      	} else {
+	      		return weekTitleLabel.replace('{month}', moment(currentDay).weekday(0).format('MMM'))
+	      						.replace('{startDate}', moment(currentDay).weekday(0).format('D'))
+	      						.replace('{month2}', moment(currentDay).weekday(6).format('MMM'))
+	      						.replace('{endDate}', moment(currentDay).weekday(6).format('D'))
+	      						.replace('{year}', moment(currentDay).format('YYYY'));
+	      	}
 	    }
 
 	    function month(currentDay) {

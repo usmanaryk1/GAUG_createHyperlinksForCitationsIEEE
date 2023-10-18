@@ -15,7 +15,7 @@
 	        },
 	        title: {
 	          day: 'EEE d MMMM, yyyy',
-	          week: '{month} {startDate} - {endDate}, {year}',
+	          week: '{month} {startDate} - {month2} {endDate}, {year}',
 	          month: 'MMMM yyyy',
 	          year: 'yyyy'
 	        }

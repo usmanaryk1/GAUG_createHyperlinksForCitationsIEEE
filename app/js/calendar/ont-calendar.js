@@ -4,8 +4,6 @@
 
 	  	var controller  = ["$scope", "$log", "$timeout", "$attrs", "$locale", "moment", "calendarTitle", function($scope, $log, $timeout, $attrs, $locale, moment, calendarTitle) {
 
-	    //var $scope = this;
-
 	    $scope.events = $scope.events || [];
 
 	    $scope.changeView = function(view, newDay) {
