@@ -74,7 +74,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     $rootScope.maskLoading();
                     FeatureDAO.addNotes(
                             {userId: scope.userId,
-                                note: {note: scope.data.note, type: scope.data.type}}).then(function (res) {
+                                note: {note: scope.data.note, noteType: scope.data.type}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};
@@ -94,7 +94,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     FeatureDAO.updateNotes(
                             {userId: scope.userId,
                                 noteId: scope.data.id,
-                                note: {note: scope.data.note, type: scope.data.type}}).then(function (res) {
+                                note: {note: scope.data.note, noteType: scope.data.type}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};

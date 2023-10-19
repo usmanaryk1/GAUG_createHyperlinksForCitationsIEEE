@@ -33,8 +33,8 @@
                 <tr>
                     <th style="width: 15%">Created By</th>
                     <th style="width: 12%">Created On</th>
-                    <th style="width: 13%">Type</th>
-                    <th style="width: 50%">Notes</th>
+                    <th style="width: 23%">Type</th>
+                    <th style="width: 40%">Notes</th>
                     <th style="width: 10%">Actions</th>
                 </tr>
             </thead>
@@ -45,8 +45,8 @@
                     <tr ng-repeat="note in notes|orderBy: 'id':true">                                                   
                         <td width="15%">{{note.createdByName}}</td>
                         <td width="12%">{{note.dateInserted|date:dateFormat}}</td>
-                        <td width="13%">{{note.type}}</td>
-                        <td width="50%">{{note.note}}</td>
+                        <td width="23%">{{note.noteType}}</td>
+                        <td width="40%">{{note.note}}</td>
                         <td width="10%">
                             <a class="btn icon-left fa fa-pencil edit_button" ng-if="canEdit && note.type!=='Deactivation'"  
                                href="" ng-click="editNote(note)" tooltip="Edit"><span class="ed_b"></span></a> 
