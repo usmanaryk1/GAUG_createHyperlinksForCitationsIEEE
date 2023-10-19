@@ -94,7 +94,7 @@
         }
 
         ctrl.retrieveApplications();
-        
+
         ctrl.openNotesModal = function (applicationId, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
@@ -279,13 +279,24 @@
                 return "N/A";
             }
         };
-//        
-//        $scope.$watch(function() {
-//            return ctrl.viewType;
-//        }, function(newVal, oldValue) {
-//            ctrl.applicationList = [];
-//            ctrl.retrieveApplications();
-        //        });
+
+        ctrl.openApproveApplicationModal = function (application) {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('application', 'application-approve'),
+                size: "lg",
+                backdrop: false,
+                keyboard: false,
+                controller: 'ApplicationApproveCtrl as applicationApprove',
+                resolve: {
+                    application: function () {
+                        return application;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                ctrl.rerenderDataTable();
+            });
+        };
     }
     ;
     angular.module('xenon.controllers').controller('ViewApplicationsCtrl', ["ApplicationDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewApplicationsCtrl]);

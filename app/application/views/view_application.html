@@ -116,6 +116,8 @@
                                                             <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_APPLICATION')" 
                                                                href="" ng-click="viewApplication.openDeleteModal(application, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="application.newNotification = false;viewApplication.openNotesModal(application.id)" tooltip="Notes" ng-class="{'has-newNotification':application.newNotification}"><span class="ed_b"></span></a>
+                                                            <a ng-if="viewApplication.viewType=='submitted'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openApproveApplicationModal(application)"
+                                                               tooltip="Approve Application"><span class="ed_b"></span></a> 
                                                             <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewApplication.openSettingsModal(application.id)" tooltip="Application Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && application.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
                                                     </td>
@@ -167,58 +169,4 @@
     <button type="button" class="btn btn-success" ng-click="deleteApplicationModel.delete(deleteApplicationModel.application);">Yes</button>
     <button type="button" class="btn btn-red" ng-click="deleteApplicationModel.dismiss();">No</button>
     </div>
-</script>
-<script type="text/ng-template" id="deactivateModel">
-    <form class="form-horizontal validate" role="form" name="popupemployees" id="popup_dea_employees" >     
-    <div class="modal-header">
-    <h4 class="modal-title">Deactivate {{deactivateEmployeeModel.employee.lName}}, {{deactivateEmployeeModel.employee.fName}} {{deactivateEmployeeModel.employee.middleInitial}}</h4>
-    </div>
-
-    <div class="modal-body">
-
-    <div class="form-group">
-    <label class="col-sm-3 control-label">Deactivate Reason</label>
-    <div class="col-sm-9">
-    <select class="form-control" name ="reason" id="daReason" ng-model="deactivateEmployeeModel.reason" data-validate="required" data-message-required="Please select Discharge Reason." ng-init="deactivateEmployeeModel.reason='Leave of Absence'" >
-    <option value="Leave of Absence">Leave of Absence</option>
-    <option value="Out of Compliance">Out of Compliance</option>
-    <option value="Terminated">Terminated</option>
-    <option value="In-active">In-active</option>
-    </select>
-    </div>
-    </div>
-
-    <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'Terminated'"></div>
-    <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'Terminated'">
-    <label class="col-sm-3 control-label">Termination Date</label>
-    <div class="col-sm-9">
-    <div class="input-group" style="z-index:1060">
-    <input class="datepicker form-control" data-format="mm/dd/yyyy" id="terDate" name="terminationDateDate" type="text" ng-model="deactivateEmployeeModel.terminationDate" 
-    data-validate="required,date" data-message-required="Please enter Date of Termination." required/>
-    <div class="input-group-addon">
-    <a href="">
-    <i class="linecons-calendar">
-    </i>
-    </a>
-    </div>
-    </div>
-    </div>
-    </div>
-
-    <div class="form-group-separator" ></div>
-    <div class="form-group">
-    <label class="col-sm-3 control-label">Note</label>
-    <div class="col-sm-9">
-    <textarea ng-model="deactivateEmployeeModel.note" class="form-control" name="note" placeholder="Add note for deactivation..." rows="2"></textarea>
-    </div>
-    </div>
-        <span ng-if="deactivateEmployeeModel.showWarningMessage" class="text-warning">{{deactivateEmployeeModel.employee.lName}}, {{deactivateEmployeeModel.employee.fName}} {{deactivateEmployeeModel.employee.middleInitial}} 
-                    has future schedules associated, so please reassign them before deactivating.</span>
-    </div>
-
-    <div class="modal-footer">
-    <button type="submit" class="btn btn-success" ng-click="deactivateEmployeeModel.deactivate(deactivateEmployeeModel.employee);">Deactivate</button>
-    <button type="button" class="btn btn-red" ng-click="deactivateEmployeeModel.dismiss();">Cancel</button>
-    </div>
-    </form>
 </script>

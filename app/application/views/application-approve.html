@@ -1,0 +1,74 @@
+<style>
+    .no-error{
+        border-color: #B0B0B0!important;
+    }
+    .hide-error #FluShotDate-error{
+        display: none
+    }
+</style>
+<form class="validate form-horizontal" name="approve_employee_popup" id="approve_employee_popup" role="form"
+       ng-submit="applicationApprove.approveApplication();">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="applicationApprove.close();" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Approve Application</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                Social Security #
+            </label> 
+            <div class="col-sm-9">
+                <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':applicationApprove.ssn.exists}" name="SocialSecurity" type="text"
+                       ng-model="applicationApprove.applicationAdditionalDetail.ssn"
+                       maxlength="9" 
+                       ng-change="applicationApprove.ssn.exists = false;"
+                       required="true"/>
+                <span ng-if="applicationApprove.ssn.exists" class="validate-has-error">Social security number already exists.</span>
+            </div>
+        </div>
+        <div class="form-group-separator">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                Hire Date
+            </label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input class="form-control datepicker" data-format="mm/dd/yyyy" name="StartDate" type="text"
+                           data-validate="required,date" data-message-required="Please enter Hire Date" ng-model="applicationApprove.applicationAdditionalDetail.hireDate">
+                    <div class="input-group-addon">
+                        <a href="#">
+                            <i class="linecons-calendar">
+                            </i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group-separator">
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                Position
+            </label>
+            <div class="col-sm-9">
+                <div class="form-block">
+                    <div ng-repeat="p in applicationApprove.positionList">
+                        <label>
+                            <input id="Position" class="cbr cbr-primary" name="Position" ng-value="p.id" type="radio" ng-model="applicationApprove.applicationAdditionalDetail.companyPositionId">
+                            {{p.position}}
+                            </input>
+                        </label>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="applicationApprove.close();">Close</button>
+        <button type="submit" class="btn btn-success">Approve Application</button>
+    </div>
+</form>

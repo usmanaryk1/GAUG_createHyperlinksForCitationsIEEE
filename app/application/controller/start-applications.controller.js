@@ -46,13 +46,6 @@
 
                 if (ctrl.firstTime === true) {
                     ApplicationPublicDAO.saveApplication(ctrl.applicationData)
-                            .catch(function (data, status) {
-                                if (data.status || data.status === 409) {
-                                    toastr.error(data.data);
-                                } else {
-                                    toastr.error("Application cannot be initiated.");
-                                }
-                            })
                             .then(function (data, status, headers, config) {
                                 showLoadingBar({
                                     delay: .5,
@@ -61,13 +54,19 @@
                                         $rootScope.unmaskLoading();
                                     }
                                 });
+                                setCookie("token", data.refreshToken, 7);
+                                setCookie("un", data.applicationId, 7);
+                                setCookie("cc", data.orgCode, 7);
                                 ctrl.sendUserToApplication(data.applicationId);
-                            });
+                            }).catch(function (data, status) {
+                        if (data.status || data.status === 409) {
+                            toastr.error(data.data);
+                        } else {
+                            toastr.error("Application cannot be initiated.");
+                        }
+                    });
                 } else {
                     ApplicationPublicDAO.verifyExistingApplication(ctrl.applicationData)
-                            .catch(function (data, status) {
-                                toastr.error("Something went wrong, please contact administrator.");
-                            })
                             .then(function (data) {
                                 showLoadingBar({
                                     delay: .5,
@@ -85,6 +84,9 @@
                                     setCookie("cc", data.orgCode, 7);
                                     ctrl.sendUserToApplication(data.applicationId);
                                 }
+                            })
+                            .catch(function (data, status) {
+                                toastr.error("Something went wrong, please contact administrator.");
                             });
                 }
 

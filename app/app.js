@@ -1826,7 +1826,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     }
                     var deferred = $q.defer();
                     if (response.status == 401) {
-                        if (response.config.url.indexOf("app/") >= 0) {
+                        if (response.config.url.indexOf("app/") >= 0 || response.config.url.indexOf("admin/") >= 0) {
                             delete_cookie("cc");
                             delete_cookie("token");
                             delete_cookie("un");

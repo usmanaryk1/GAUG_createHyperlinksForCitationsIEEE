@@ -30,6 +30,9 @@
             },
             readNotes: {
                 method: 'PUT'
+            },
+            approveApplication: {
+                method: 'PUT'
             }
         });
         return {
@@ -44,6 +47,9 @@
             },
             updateNotes: function (data) {
                 return api.updateNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, data.note).$promise;
+            },
+            approveApplication: function (data) {
+                return api.approveApplication({action: data.applicationId, subAction: 'approve'}, data.additionalDetails).$promise;
             },
             deleteNotes: function (data) {
                 return api.deleteNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;
