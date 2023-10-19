@@ -1,29 +1,29 @@
 (function () {
     function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce) {
         var ctrl = this;
-        ctrl.hours = [];
+        
+        ctrl.employee_list = [];
 
         Page.setTitle("Calendar");
 
-        this.calendarView = 'month';
-        this.isOpen = false;
-        this.calendarDay = new Date();
+        ctrl.calendarView = 'month';
+        ctrl.isOpen = false;
+        ctrl.calendarDay = new Date();
 
-        this.changeToMonth = function () {
-            this.calendarView = 'month';
+        ctrl.changeToMonth = function () {
+            ctrl.calendarView = 'month';
         }
 
-        this.showDatepicker = function () {
-            console.log(this.isOpen);
-            if (this.isOpen) {
-                this.isOpen = false;
+        ctrl.showDatepicker = function () {
+            if (ctrl.isOpen) {
+                ctrl.isOpen = false;
             } else {
-                this.isOpen = true;
+                ctrl.isOpen = true;
             }
         }
 
-        this.changeToWeek = function () {
-            this.calendarView = 'week';
+        ctrl.changeToWeek = function () {
+            ctrl.calendarView = 'week';
         }
         ctrl.searchParams = {skip: 0, limit: 10};
         ctrl.pageChanged = function (pagenumber) {
@@ -42,7 +42,7 @@
                 ctrl.searchParams.skip = 0;
             }
             EmployeeDAO.getEmployeesForSchedule(ctrl.searchParams).then(function (res) {
-                ctrl.hours = res;
+                ctrl.employee_list = res;
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
@@ -59,8 +59,6 @@
         ctrl.retrieveEmployees();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPositions();
-
-//        ctrl.hours = [{'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}, {'name': 'Jayesh'}, {'name': 'Yash'}]
     }
 
     angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", CalendarCtrl]);

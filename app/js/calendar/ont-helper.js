@@ -83,7 +83,7 @@
 	      return weekdays;
 	    }
 
-	    function getMonthView(events, currentDay, cellModifier) {
+	    function getMonthView(events, currentDay) {
 
 	      var startOfMonth = moment(currentDay).startOf('month');
 	      var day = startOfMonth.clone().startOf('week');
@@ -117,7 +117,7 @@
 	          badgeTotal: getBadgeTotal(monthEvents)
 	        };
 
-	        cellModifier({calendarCell: cell});
+	        //cellModifier({calendarCell: cell});
 
 	        view.push(cell);
 

@@ -1,18 +1,10 @@
-<div
-  class="cal-month-day {{ day.cssClass }}"
+<div class="cal-month-day {{ day.cssClass }}"
   ng-class="{
             'cal-day-outmonth': !day.inMonth,
             'cal-day-inmonth': day.inMonth,
             'cal-day-past': day.isPast,
             'cal-day-future': day.isFuture
           }">
-
-<!--   <small
-    class="cal-events-num badge badge-important pull-left"
-    ng-show="day.badgeTotal > 0"
-    ng-bind="day.badgeTotal">
-  </small> -->
-
   <span
     class="pull-right"
     data-cal-date
@@ -26,9 +18,4 @@
   </div>
 
   <ng-include src="'templates/calendarMonthCellEvents.html'"></ng-include>
-
-  <div id="cal-week-box" ng-if="$first && rowHovered">
-    {{ calendarConfig.i18nStrings.weekNumber.replace('{week}', day.date.week()) }}
-  </div>
-
 </div>

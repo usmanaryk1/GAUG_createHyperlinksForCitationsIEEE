@@ -36,7 +36,7 @@ angular
 	        dayViewEnd: '=',
 	        dayViewSplit: '=',
 	        onTimespanClick: '=',
-            hours:'=',
+            list:'=',
             totalItems:'=',
             currentPage:'='
 	      },

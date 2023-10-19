@@ -1,36 +1,15 @@
-
 <div class="cal-week-box" ng-class="{'cal-day-box': showTimes}">
     <div class="cal-row-fluid cal-row-head-week row-heading">
         <div class="cal-cell1weekempl col-heading">Employees</div>
-        <div
-            class="cal-cell1week"
-            ng-repeat="day in view.days track by $index"
-            ng-class="{
-        'cal-day-weekend': day.isWeekend,
-        'cal-day - past': day.isPast,
-        'cal-day- today': day.isToday,
-        'cal-day-future': day.isFuture}"
-            mwl-element-dimensions="dayColumnDimensions">
-
+        <div class="cal-cell1week" ng-repeat="day in view.days track by $index" mwl-element-dimensions="dayColumnDimensions">
             <span ng-bind="day.weekDayLabel" class="col-heading"></span>
             <br>
         </div>
     </div>
 
-    <div class="cal-row-fluid cal-row-head-week row-data"  pagination-id="drinksPagination" dir-paginate="hour in hours | itemsPerPage: 10" 
-         total-items="totalItems"
-         current-page="searchParams.pageNo">
-        <div class="cal-cell1weekempl col-data col-data-empl">{{hour.fName + ' ' + hour.lName}}</div>
-        <div 
-            class="cal-cell1week col-data"
-            ng-repeat="day in view.days track by $index"
-            ng-class="{
-        'cal-day-weekend': day.isWeekend,
-        'cal-day - past': day.isPast,
-        'cal-day- today': day.isToday,
-        'cal-day-future': day.isFuture}"
-            mwl-element-dimensions="dayColumnDimensions">
-
+    <div class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
+        <div class="cal-cell1weekempl col-data col-data-empl">{{map.fName + ' ' + map.lName}}</div>
+        <div class="cal-cell1week col-data" ng-repeat="day in view.days track by $index" mwl-element-dimensions="dayColumnDimensions">
             <span class="col-data">test</span>
             <span class="col-data">test</span>
             <span class="col-data">test</span>

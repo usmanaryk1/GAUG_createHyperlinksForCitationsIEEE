@@ -1,6 +1,8 @@
 <div class="cal-row-fluid cal-row-head">
-  <div class="cal-cell1" ng-repeat="day in weekDays track by $index" ng-bind="day"></div>
-
+  <div class="cal-cell1" 
+       ng-repeat="day in weekDays track by $index" 
+       ng-bind="day">
+  </div>
 </div>
 <div class="cal-month-box">
   <div ng-repeat="rowOffset in monthOffsets track by rowOffset">

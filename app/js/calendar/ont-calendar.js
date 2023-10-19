@@ -11,16 +11,6 @@
 	      $scope.currentDay = newDay;
 	    };
 
-	    $scope.drillDown = function(date) {
-
-	      var rawDate = moment(date).toDate();
-
-	      if ($scope.onDrillDownClick({calendarDate: rawDate, calendarNextView: nextView[$scope.view]}) !== false) {
-	        $scope.changeView(nextView[$scope.view], rawDate);
-	      }
-
-	    };
-
 		var previousDate = moment($scope.currentDay);
 	    var previousView = $scope.view;
 
@@ -125,25 +115,12 @@
 	        view: '=',
 	        viewTitle: '=?',
 	        currentDay: '=',
-	        editEventHtml: '=',
-	        deleteEventHtml: '=',
-	        cellIsOpen: '=',
 	        onEventClick: '&',
-	        onEventTimesChanged: '&',
-	        onEditEventClick: '&',
-	        onDeleteEventClick: '&',
-	        onTimespanClick: '&',
-	        onDrillDownClick: '&',
-	        cellModifier: '&',
-	        dayViewStart: '@',
-	        dayViewEnd: '@',
-	        dayViewSplit: '@',
 	        monthCellTemplateUrl: '@',
 	        monthCellEventsTemplateUrl: '@',
-                hours:'=',
-                totalItems:'=',
-                currentPage:'='
-                
+            list:'=',
+            totalItems:'=',
+            currentPage:'='    
 	      },
 	      controller: controller
 	    };

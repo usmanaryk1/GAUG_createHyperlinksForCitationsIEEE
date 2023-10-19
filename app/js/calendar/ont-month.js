@@ -11,7 +11,7 @@ angular
 
 	      $scope.weekDays = calendarHelper.getWeekDayNames();
 
-	      $scope.view = calendarHelper.getMonthView($scope.events, $scope.currentDay, $scope.cellModifier);
+	      $scope.view = calendarHelper.getMonthView($scope.events, $scope.currentDay);
 	      var rows = Math.floor($scope.view.length / 7);
 	      $scope.monthOffsets = [];
 	      for (var i = 0; i < rows; i++) {
@@ -55,20 +55,6 @@ angular
 
 	    };
 
-	    $scope.highlightEvent = function(event, shouldAddClass) {
-
-	      $scope.view.forEach(function(day) {
-	        delete day.highlightClass;
-	        if (shouldAddClass) {
-	          var dayContainsEvent = day.events.indexOf(event) > -1;
-	          if (dayContainsEvent) {
-	            day.highlightClass = 'day-highlight dh-event-' + event.type;
-	          }
-	        }
-	      });
-
-	    };
-
 	  }];
 
 	    return {
@@ -79,18 +65,8 @@ angular
 	        events: '=',
 	        currentDay: '=',
 	        onEventClick: '=',
-	        onEditEventClick: '=',
-	        onDeleteEventClick: '=',
-	        onEventTimesChanged: '=',
-	        editEventHtml: '=',
-	        deleteEventHtml: '=',
-	        cellIsOpen: '=',
-	        onTimespanClick: '=',
-	        cellModifier: '=',
 	        cellTemplateUrl: '@',
 	        cellEventsTemplateUrl: '@',
-            hours:"=",
-            totalItems:'=',
             currentPage:'='
 	      },
 	      controller: controller,

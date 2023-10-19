@@ -5,8 +5,6 @@
     ng-click="onEventClick({calendarEvent: event})"
     class="pull-left event"
     ng-class="'event-' + event.type + ' ' + event.cssClass"
-    ng-mouseenter="highlightEvent(event, true)"
-    ng-mouseleave="highlightEvent(event, false)"
     tooltip-append-to-body="true"
     uib-tooltip-html="((event.startsAt | calendarDate:'time':true) + (calendarConfig.displayEventEndTimes && event.endsAt ? ' - ' + (event.endsAt | calendarDate:'time':true) : '') + ' - ' + event.title) | calendarTrustAsHtml"
     drop-data="{event: event}">
