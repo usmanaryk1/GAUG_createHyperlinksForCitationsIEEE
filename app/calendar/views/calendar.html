@@ -52,7 +52,7 @@
                     jQuery(document).ready(function ($)
                     {
                         setTimeout(function () {
-                            $("#sboxit-2").select2({
+                            $("#employeeIds").select2({
                                 // minimumResultsForSearch: -1,
                                 placeholder: 'Select Employee...',
                                 // minimumInputLength: 1,
@@ -64,43 +64,75 @@
                             });
                         }, 200);
                     });</script>
-                <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList track by emp.id' ng-change="calendar.applySearch()">
+                <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
                     <option value="" selected hidden />
                 </select>
             </div>
             <div class="col-md-4">
                 <label>Position</label>
-                <select class="form-control" ng-model="searchParams.positionIds" ng-options='position.id as position.position for position in calendar.positions track by position.id' ng-change="calendar.applySearch()">
+                 <script type="text/javascript">
+                    jQuery(document).ready(function ($)
+                    {
+                        setTimeout(function () {
+                            $("#positions").select2({
+                                
+                                placeholder: 'Select Position...',
+                                
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        }, 200);
+                    });</script>
+                <select multiple class="form-control" name ="positions" id="positions" ng-model="calendar.searchParams.positionIds" ng-options='position.id as position.position for position in calendar.positions'>
                 </select>
             </div>
             <div class="col-md-4">
                 <label>Languages</label>
-                <select class="form-control" ng-model="searchParams.languages" ng-change="applySearch()" ng-options="key as value for (key,value) in languages">
-                    <option>Language1</option>
-                    <option>Language2</option>
+                       <script type="text/javascript">
+                    jQuery(document).ready(function ($)
+                    {
+                        setTimeout(function () {
+                            $("#languages").select2({
+                                
+                                placeholder: 'Select Language...',
+                                
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        }, 200);
+                    });</script>
+                <select multiple name ="languages" id="languages" class="form-control" ng-model="calendar.searchParams.languages" ng-options="key as value for (key,value) in languages">
                 </select>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
                 <label>From</label>
-                <select class="form-control">
-                    <option>From</option>
-                </select>
+                <div class="input-group">
+                    <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableStartDate" max-date="calendar.searchParams.availableEndDate">
+                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                </div>
             </div>
             <div class="col-md-4">
                 <label>To</label>
-                <select class="form-control">
-                    <option>To</option>
-                </select>
+                <div class="input-group">
+                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableEndDate" min-date="calendar.searchParams.availableStartDate">
+                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                </div>
             </div>
             <div class="col-md-4 filter-checkbox">
                 <div class="col-md-6">
                     <label>Live In</label>
-                    <input type="checkbox" name="livein">
+                    <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
                 </div>
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+
+                    <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
+                    <button style="margin-right: 10px" class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="calendar.resetFilters()">Reset Filters</button>
                 </div>
             </div>
         </div>

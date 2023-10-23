@@ -1,7 +1,7 @@
 (function () {
     function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce) {
         var ctrl = this;
-        
+
         ctrl.employee_list = [];
 
         Page.setTitle("Calendar");
@@ -35,13 +35,32 @@
             ctrl.pageNo = 1;
             $debounce(ctrl.retrieveEmployees, 500);
         };
+        ctrl.resetFilters = function () {
+            ctrl.searchParams = {limit: 10, skip: 0};
+            ctrl.searchParams.availableStartDate = null;
+            ctrl.searchParams.availableStartDate = null;
+            $('#employeeIds').select2('val', null);
+            $('#positions').select2('val', null);
+            $('#languages').select2('val', null);
+            ctrl.applySearch();
+        };
         ctrl.retrieveEmployees = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
             } else {
                 ctrl.searchParams.skip = 0;
             }
-            EmployeeDAO.getEmployeesForSchedule(ctrl.searchParams).then(function (res) {
+            var searchParams = angular.copy(ctrl.searchParams);
+            if (searchParams.employeeIds != null) {
+                searchParams.employeeIds = searchParams.employeeIds.toString();
+            }
+            if (searchParams.positionIds != null) {
+                searchParams.positionIds = searchParams.positionIds.toString();
+            }
+            if (searchParams.languages != null) {
+                searchParams.languages = searchParams.languages.toString();
+            }
+            EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
