@@ -57,6 +57,7 @@
                 search['insuranceProviderId'] = ctrl.bill.receivedBy;
             }
             search['populateInsuranceId'] = true;
+            search['status'] = 'all';
             PatientDAO.retrieveForSelect(search).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function () {

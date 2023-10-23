@@ -80,7 +80,7 @@
             }
         } else {
             $rootScope.maskLoading();
-            PatientDAO.retrieveForSelect({'billingType': 'UB04'}).then(function (res) {
+            PatientDAO.retrieveForSelect({'billingType': 'UB04', 'status': 'all'}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
 //                ctrl.patientList = ontime_data.patients;
