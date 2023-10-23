@@ -3,7 +3,13 @@
         var ctrl = this;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
-        ctrl.reportTypeList = ontime_data.reportTypes;
+        ctrl.reportTypeList = angular.copy(ontime_data.reportTypes);
+        if($rootScope.currentUser.allowedFeature.indexOf('VIEW_EMPLOYEE_WAGES') > -1){
+            ctrl.reportTypeList.push({id: 'employeewages', label: "Employee Wages Report"});
+        }
+        ctrl.reportTypeList = _(ctrl.reportTypeList).chain()
+                        .sortBy('label')
+                        .value();
         ctrl.reportSubTypeList = ontime_data.reportSubTypes;
         ctrl.searchParams = {};
         ctrl.maxDate = angular.copy($rootScope.todayDate);
