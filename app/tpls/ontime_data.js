@@ -58,6 +58,7 @@ ontime_data = {
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
 //        {id: 'employeebenefits401k', label: "Employee 401k benefits Report"},
         {id: 'employeeothours', label: "Employee OT Hours Report"},
+        {id: 'employeewages', label: "Employee Wages Report"},
         {id: 'ptoreport', label: "Employee PTO Report"},
         {id: 'employeetimesheet', label: "Employee Time Sheet"},
         {id: 'employeeutilization', label: "Employee Utilization Report"},
