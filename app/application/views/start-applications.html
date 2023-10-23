@@ -81,11 +81,11 @@
                         <div class="form-group">
                             <!--<label class="control-label" for="password">Password</label>-->
                             <input type="text" class="form-control" ng-keyup="$event.keyCode == 13 && application.submitApplicationRetrieve()"
-                                   placeholder="Last 4 digits of SSN" name="ssn" id="ssn" autocomplete="off" ng-model='application.applicationData.ssn' 
-                                   maxlength="4"  numbers-only="true" minlength="4"/>
+                                   placeholder="SSN" name="ssn" id="ssn" autocomplete="off" ng-model='application.applicationData.ssn' 
+                                   maxlength="9"  numbers-only="true" minlength="9"/>
                         </div>
 
-                        <div class="form-group">
+<!--                        <div class="form-group">
 
                             <div class="input-group">
                                 <input class="form-control datepicker" max-date="application.maxBirthDate" data-format="mm/dd/yyyy" name="dob" type="text"
@@ -100,7 +100,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary  btn-block text-left" >{{application.firstTime===true?'Start Application':'Retrieve Application'}} <i class="fa-arrow-circle-right"></i></button>
                         </div>

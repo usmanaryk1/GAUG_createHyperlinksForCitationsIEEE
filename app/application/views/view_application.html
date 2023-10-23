@@ -12,22 +12,22 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-tabs">
-                <li ui-sref="admin.application-list({status:'inprogress'})" class="{{viewApplication.viewType=='inprogress'?'active':''}}">
+                <li ui-sref="app.application-list({status:'inprogress'})" class="{{viewApplication.viewType=='inprogress'?'active':''}}">
                     <a href="" data-toggle="tab">
                         <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">In Progress</span> 
                     </a>
                 </li>
-                <li ui-sref="admin.application-list({status:'submitted'})" class="{{viewApplication.viewType=='submitted'?'active':''}}">
+                <li ui-sref="app.application-list({status:'submitted'})" class="{{viewApplication.viewType=='submitted'?'active':''}}">
                     <a href="" data-toggle="tab">
                         <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Submitted</span> 
                     </a>
                 </li>
-                <li ui-sref="admin.application-list({status:'accepted'})" class="{{viewApplication.viewType=='accepted'?'active':''}}">
+                <li ui-sref="app.application-list({status:'accepted'})" class="{{viewApplication.viewType=='accepted'?'active':''}}">
                     <a href="" data-toggle="tab">
                         <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Accepted</span> 
                     </a>
                 </li>
-                <li ui-sref="admin.application-list({status:'all'})" class="{{viewApplication.viewType=='all'?'active':''}}">
+                <li ui-sref="app.application-list({status:'all'})" class="{{viewApplication.viewType=='all'?'active':''}}">
                     <a href="" data-toggle="tab">
                         <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">All</span> 
                     </a>

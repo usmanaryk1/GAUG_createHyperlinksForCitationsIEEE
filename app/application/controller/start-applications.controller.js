@@ -47,13 +47,7 @@
                 if (ctrl.firstTime === true) {
                     ApplicationPublicDAO.saveApplication(ctrl.applicationData)
                             .then(function (data, status, headers, config) {
-                                showLoadingBar({
-                                    delay: .5,
-                                    pct: 100,
-                                    finish: function () {
-                                        $rootScope.unmaskLoading();
-                                    }
-                                });
+
                                 setCookie("token", data.refreshToken, 7);
                                 setCookie("un", data.applicationId, 7);
                                 setCookie("cc", data.orgCode, 7);
@@ -64,6 +58,14 @@
                         } else {
                             toastr.error("Application cannot be initiated.");
                         }
+                    }).then(function () {
+                        showLoadingBar({
+                            delay: .5,
+                            pct: 100,
+                            finish: function () {
+                                $rootScope.unmaskLoading();
+                            }
+                        });
                     });
                 } else {
                     ApplicationPublicDAO.verifyExistingApplication(ctrl.applicationData)
@@ -87,6 +89,15 @@
                             })
                             .catch(function (data, status) {
                                 toastr.error("Something went wrong, please contact administrator.");
+                            })
+                            .then(function () {
+                                showLoadingBar({
+                                    delay: .5,
+                                    pct: 100,
+                                    finish: function () {
+                                        $rootScope.unmaskLoading();
+                                    }
+                                });
                             });
                 }
 

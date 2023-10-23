@@ -351,8 +351,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/:id/details',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
                 data: {
-                    tabNo: 1,
-                    viewOnly: true
+                    tabNo: 1
                 }
             })
             // add_application_tab_2
@@ -360,8 +359,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/:id/location-details',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
                 data: {
-                    tabNo: 2,
-                    viewOnly: true
+                    tabNo: 2
                 }
             })
             .state('forgotpassword', {
@@ -498,7 +496,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 }
             }).
             //view applications single page
-            state('admin.application-list', {
+            state('app.application-list', {
                 url: '/application-list/:status',
                 templateUrl: appHelper.viewTemplatePath('application', 'view_application'),
                 controller: 'ViewApplicationsCtrl as viewApplication',
