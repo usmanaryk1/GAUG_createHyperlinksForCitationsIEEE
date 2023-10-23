@@ -16,6 +16,9 @@
             },
             updateApplication: {
                 method: 'PUT'
+            },
+            submitApplication: {
+                method: 'PUT'
             }
         });
         return {
@@ -30,6 +33,9 @@
             },
             updateApplication: function (data) {
                 return api.updateApplication({action: data.applicationId}, data).$promise;
+            },
+            submitApplication: function (data) {
+                return api.submitApplication({action: data.applicationId, subAction: 'submit'}, {}).$promise;
             }
         };
     };

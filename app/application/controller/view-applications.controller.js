@@ -262,6 +262,12 @@
                 newwindow.moveTo(0, 0);
                 newwindow.focus();
             }
+            newwindow.onunload = function () {
+                if (newwindow.location != "about:blank") {
+                    $rootScope.maskLoading();
+                    ctrl.rerenderDataTable();
+                }
+            };
         }
 
         ctrl.getLanguagesFromCode = function (languageCodes) {

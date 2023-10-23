@@ -24,11 +24,14 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 pull-right"  ng-if="!addEmployee.viewOnly">
-                                    <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.setFromNext('tab1')">
+                                    <button class="btn btn-success mar_rg5 mar_lf5 mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('tab1')">
                                         Save Changes
                                     </button>
-                                    <button class="btn btn-info btn-single gray_bt pull-right" type="reset"  ng-click="addEmployee.resetEmployeeTab1()">
-                                        Reset To Default
+                                    <button class="btn btn-white mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('close')">
+                                        Save & Close
+                                    </button>
+                                    <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status!=null && addEmployee.employee.status!=='submitted'" ng-click="addEmployee.setFromNext('submit')">
+                                        Submit Application
                                     </button>
                                 </div>
                             </div>

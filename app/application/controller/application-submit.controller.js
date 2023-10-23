@@ -1,0 +1,26 @@
+/* global _, ontime_data */
+
+(function () {
+    function ApplicationSubmitCtrl($rootScope, application, $modalInstance, ApplicationPublicDAO) {
+        var ctrl = this;
+
+        ctrl.close = function () {
+            $modalInstance.close();
+        };
+
+        ctrl.submitApplication = function () {
+            ApplicationPublicDAO.submitApplication({'applicationId': application.applicationId})
+                    .then(function (res) {
+                        $modalInstance.close('submitted');
+                        toastr.success('Application is sumitted for review');
+                    })
+                    .catch(function (res) {
+                        toastr.error('Something went wrong');
+                    }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+        };
+    }
+    ;
+    angular.module('xenon.controllers').controller('ApplicationSubmitCtrl', ["$rootScope", "application", "$modalInstance", "ApplicationPublicDAO", ApplicationSubmitCtrl]);
+})();

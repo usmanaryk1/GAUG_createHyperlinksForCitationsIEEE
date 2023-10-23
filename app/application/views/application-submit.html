@@ -1,0 +1,24 @@
+<style>
+    .no-error{
+        border-color: #B0B0B0!important;
+    }
+    .hide-error #FluShotDate-error{
+        display: none
+    }
+</style>
+<form class="validate form-horizontal" name="submit_employee_popup" id="submit_employee_popup" role="form"
+       ng-submit="applicationSubmit.submitApplication();">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="applicationSubmit.close();" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Submit Application</h4>
+    </div>
+
+    <div class="modal-body">
+        Are you sure you want to submit this application? Once submitted, application will move to review phase.
+    </div>      
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="applicationSubmit.close();">Close</button>
+        <button type="submit" class="btn btn-success">Submit Application</button>
+    </div>
+</form>

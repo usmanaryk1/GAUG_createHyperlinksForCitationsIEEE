@@ -10,7 +10,7 @@
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.employee = {employeeAttachments: []};
         ctrl.viewOnly = false;
-        if($state.current.data.viewOnly && $state.current.data.viewOnly===true){
+        if ($state.current.data.viewOnly && $state.current.data.viewOnly === true) {
             ctrl.viewOnly = true;
         }
         ctrl.refreshLanguages = function () {
@@ -24,6 +24,30 @@
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
+        };
+
+        var closeWindow = function () {
+            window.close();
+        }
+
+        var openSubmitApplicationModal = function (application) {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('application', 'application-submit'),
+                size: "md",
+                backdrop: false,
+                keyboard: false,
+                controller: 'ApplicationSubmitCtrl as applicationSubmit',
+                resolve: {
+                    application: function () {
+                        return application;
+                    }
+                }
+            });
+            modalInstance.result.then(function (status) {
+                if (status) {
+                    ctrl.employee.status = status;
+                }
+            });
         };
 
         var employeeAttachmentTypes = {
@@ -222,7 +246,7 @@
 
         //function to save the employee data
         function saveEmployeeData() {
-            if(ctrl.viewOnly===true){
+            if (ctrl.viewOnly === true) {
                 $state.go('^.' + ctrl.nextTab, {id: $state.params.id});
                 return;
             }
@@ -269,12 +293,17 @@
                     .then(function (employeeRes) {
                         ctrl.employee = employeeRes;
                         ctrl.displayDocumentsByPosition();
-                        if ($rootScope.tabNo == 4) {
-                            $state.go('app.employee-list', {status: "active"});
+                        if (ctrl.nextTab === 'close') {
+                            toastr.success("Application saved.");
+                            setTimeout(function () {
+                                closeWindow();
+                            }, 300);
+                        } else if (ctrl.nextTab === 'submit') {
+                            openSubmitApplicationModal(employeeRes);
                         } else {
                             $state.go('^.' + ctrl.nextTab, {id: employeeRes.applicationId});
+                            toastr.success("Application saved.");
                         }
-                        toastr.success("Employee saved.");
                         //Reset dirty status of form
                         if ($.fn.dirtyForms) {
                             $('form').dirtyForms('setClean');
