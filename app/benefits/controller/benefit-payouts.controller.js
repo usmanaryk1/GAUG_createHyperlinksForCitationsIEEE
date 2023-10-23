@@ -3,19 +3,20 @@
 (function () {
     function BenefitPayoutCtrl(EmployeeDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, BenefitDAO) {
         var ctrl = this;
-        ctrl.datatableObj = {};        
+        ctrl.datatableObj = {};
         Page.setTitle("Employee Benefit Payouts");
         ctrl.showCount = 0;
         ctrl.companyCode = ontime_data.company_code;
-        ctrl.baseUrl = ontime_data.weburl;     
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.employeeList = [];
         ctrl.payouts = {};
+        ctrl.rates = {};
         ctrl.yearList = [];
         for (var currentYear = new Date().getFullYear(); currentYear >= 2015; currentYear--) {
             ctrl.yearList.push(currentYear);
         }
-        
+
         function setObjects() {
             _.each(ctrl.payouts, function (value, key) {
                 if (!value.object) {
@@ -24,20 +25,21 @@
                     });
                 }
             });
-        };
+        }
+        ;
 
         if ($stateParams.status !== 'active' && $stateParams.status !== 'inactive' && $stateParams.status !== 'all') {
             $state.transitionTo(ontime_data.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
         }
-        
-        BenefitDAO.retrieveAll({subAction: "all",linesRequired: true}).then(function (res) {
+
+        BenefitDAO.retrieveAll({subAction: "all", linesRequired: true}).then(function (res) {
             ctrl.benefitList = res;
         }).catch(function (data, status) {
             toastr.error("Failed to retrieve Benefits.");
         });
-        
+
         ctrl.retrieveEmployees = retrieveEmployeesData;
 
         ctrl.pageChanged = function (pagenumber) {
@@ -79,7 +81,7 @@
 
         function retrieveEmployeesData(changedFilters) {
             $rootScope.paginationLoading = true;
-            
+
             if (changedFilters) {
                 ctrl.payouts = {};
                 var selectedPackage = _.find(ctrl.benefitList, {id: ctrl.searchParams.benefitPackageId});
@@ -90,7 +92,7 @@
                 ctrl.year = ctrl.searchParams.year;
                 $rootScope.isFormDirty = false;
                 ctrl.showCount = 0;
-            }            
+            }
             setObjects();
             ctrl.searchParams.subAction = ctrl.viewType;
             EmployeeDAO.retrievePayouts(ctrl.searchParams).then(function (settings) {
@@ -100,15 +102,21 @@
                     finish: function () {
                     }
                 }); // showLoadingBar
-                _.each(settings,function(setting){
-                    if(!ctrl.payouts[setting.employeeId] && (setting.sickTimePayout !== null || setting.vacationTimePayout !== null || setting.personalTimePayout !== null)){
+                _.each(settings, function (setting) {
+                    if (!ctrl.payouts[setting.employeeId] && (setting.sickTimePayout !== null || setting.vacationTimePayout !== null || setting.personalTimePayout !== null)) {
                         ctrl.payouts[setting.employeeId] = {};
-                        if(setting.sickTimePayout !== null)
+                        if (setting.sickTimePayout !== null)
                             ctrl.payouts[setting.employeeId].sickTimePayout = setting.sickTimePayout;
-                        if(setting.vacationTimePayout !== null)
-                        ctrl.payouts[setting.employeeId].vacationTimePayout = setting.vacationTimePayout;
-                        if(setting.personalTimePayout !== null)
-                        ctrl.payouts[setting.employeeId].personalTimePayout = setting.personalTimePayout;
+                        if (setting.vacationTimePayout !== null)
+                            ctrl.payouts[setting.employeeId].vacationTimePayout = setting.vacationTimePayout;
+                        if (setting.personalTimePayout !== null)
+                            ctrl.payouts[setting.employeeId].personalTimePayout = setting.personalTimePayout;
+                        if (setting.sickTimeRate !== null)
+                            ctrl.payouts[setting.employeeId].sickTimeRate = setting.sickTimeRate;
+                        if (setting.vacationTimeRate !== null)
+                            ctrl.payouts[setting.employeeId].vacationTimeRate = setting.vacationTimeRate;
+                        if (setting.personalTimeRate !== null)
+                            ctrl.payouts[setting.employeeId].personalTimeRate = setting.personalTimeRate;
                     }
                 });
                 ctrl.employeeList = angular.copy(settings);
@@ -127,28 +135,31 @@
                 $rootScope.paginationLoading = false;
             });
         }
-        
-        ctrl.savePayouts = function(){
+
+        ctrl.savePayouts = function () {
             setObjects();
             var listToSave = [];
-            
+
             _.each(ctrl.payouts, function (value, key) {
                 if (value.object) {
                     var isEdited = false;
-                    if (value.object.sickTimePayout !== value.sickTimePayout){
+                    if (value.object.sickTimePayout !== value.sickTimePayout || value.object.sickTimeRate !== value.sickTimeRate) {
                         isEdited = true;
                         value.object.sickTimePayout = value.sickTimePayout;
-                    }                  
-                    if (value.object.vacationTimePayout !== value.vacationTimePayout){
+                        value.object.sickTimeRate = value.sickTimeRate;
+                    }
+                    if (value.object.vacationTimePayout !== value.vacationTimePayout || value.object.vacationTimeRate !== value.vacationTimeRate) {
                         isEdited = true;
                         value.object.vacationTimePayout = value.vacationTimePayout;
-                    }                  
-                    if (value.object.personalTimePayout !== value.personalTimePayout){
+                        value.object.vacationTimeRate = value.vacationTimeRate;
+                    }
+                    if (value.object.personalTimePayout !== value.personalTimePayout || value.object.personalTimeRate !== value.personalTimeRate) {
                         isEdited = true;
                         value.object.personalTimePayout = value.personalTimePayout;
-                    }                  
-                    
-                    if(isEdited)
+                        value.object.personalTimeRate = value.personalTimeRate;
+                    }
+
+                    if (isEdited)
                         listToSave.push(value.object);
                 }
             });
@@ -188,12 +199,12 @@
                 ctrl.retrieveEmployees();
             }
         };
-        
+
         ctrl.onBlur = function (employee, type) {
-            if (employee[type+'Available'] 
-                    && ctrl.payouts[employee.employeeId][type+'Payout'] 
-                    && (employee[type+'Available'] < ctrl.payouts[employee.employeeId][type+'Payout'])) {
-                ctrl.payouts[employee.employeeId][type+'Payout'] = employee[type+'Payout'];
+            if (employee[type + 'Available']
+                    && ctrl.payouts[employee.employeeId][type + 'Payout']
+                    && (employee[type + 'Available'] < ctrl.payouts[employee.employeeId][type + 'Payout'])) {
+                ctrl.payouts[employee.employeeId][type + 'Payout'] = employee[type + 'Payout'];
                 toastr.warning("Payout can not be more then available amount");
             }
             var showCount = 0;
@@ -202,31 +213,35 @@
             _.each(copiedPayouts, function (value) {
                 if (value.object) {
                     var isEdited = false;
-                    if (value.object.sickTimePayout !== value.sickTimePayout) {
+                    if (value.object.sickTimePayout !== value.sickTimePayout || value.object.sickTimeRate !== value.sickTimeRate) {
                         isEdited = true;
                         value.object.sickTimePayout = value.sickTimePayout;
+                        value.object.sickTimeRate = value.sickTimeRate;
                     }
-                    if (value.object.vacationTimePayout !== value.vacationTimePayout) {
+                    if (value.object.vacationTimePayout !== value.vacationTimePayout || value.object.vacationTimeRate !== value.vacationTimeRate) {
                         isEdited = true;
                         value.object.vacationTimePayout = value.vacationTimePayout;
+                        value.object.vacationTimeRate = value.vacationTimeRate;
                     }
-                    if (value.object.personalTimePayout !== value.personalTimePayout) {
+                    if (value.object.personalTimePayout !== value.personalTimePayout || value.object.personalTimeRate !== value.personalTimeRate) {
                         isEdited = true;
                         value.object.personalTimePayout = value.personalTimePayout;
+                        value.object.personalTimeRate = value.personalTimeRate;
                     }
 
                     if (isEdited)
                         showCount++;
                 }
-            });            
+            });
             ctrl.showCount = showCount;
-            if(showCount){
+            if (showCount) {
                 $rootScope.isFormDirty = true;
-            }else{
+            } else {
                 $rootScope.isFormDirty = false;
             }
         };
-        
-    };
+
+    }
+    ;
     angular.module('xenon.controllers').controller('BenefitPayoutCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "BenefitDAO", BenefitPayoutCtrl]);
 })();

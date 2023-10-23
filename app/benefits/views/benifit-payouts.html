@@ -80,17 +80,20 @@
                                     <thead>
                                         <tr>
                                             <th rowspan="2" class="text-center" style="vertical-align: bottom;">Employee Name</th>
-                                            <th colspan="2" class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('SIT') > -1">Sick Time</th>                                            
-                                            <th colspan="2" class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">Vacation Time</th>
-                                            <th colspan="2" class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">Personal Time</th>
+                                            <th colspan="3" class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('SIT') > -1">Sick Time</th>                                            
+                                            <th colspan="3" class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">Vacation Time</th>
+                                            <th colspan="3" class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">Personal Time</th>
                                         </tr>
                                         <tr>
                                             <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('SIT') > -1">Available</th>                                            
                                             <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('SIT') > -1">Payout</th>
+                                            <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('SIT') > -1">Rate</th>
                                             <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">Available</th>                                            
                                             <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">Payout</th>
+                                            <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">Rate</th>
                                             <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">Available</th>                                            
                                             <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">Payout</th>
+                                            <th class="text-center" ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">Rate</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -103,15 +106,26 @@
                                                 <input type="number" ng-model="benefitPayoutCtrl.payouts[emp.employeeId]['sickTimePayout']" 
                                                        style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp, 'sickTime')">
                                             </td>
+                                            <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('SIT') > -1">
+                                                <input type="number" ng-model="benefitPayoutCtrl.payouts[emp.employeeId]['sickTimeRate']" 
+                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp, 'sickTime')">
+                                            </td>
                                             <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">{{emp.vacationTimeAvailable}}</td>
                                             <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">
                                                 <input type="number" ng-model="benefitPayoutCtrl.payouts[emp.employeeId]['vacationTimePayout']" 
-                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp.vacationTimeAvailable,benefitPayoutCtrl.payouts[emp.employeeId]['vacationTimePayout'])">
-                                            </td>                                            
+                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp, 'vacationTime')">
+                                            </td>   
+                                            <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('VCT') > -1">
+                                                <input type="number" ng-model="benefitPayoutCtrl.payouts[emp.employeeId]['vacationTimeRate']" 
+                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp, 'vacationTime')">
+                                            </td>   
                                             <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">{{emp.personalTimeAvailable}}</td>
                                             <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">
                                                 <input type="number" ng-model="benefitPayoutCtrl.payouts[emp.employeeId]['personalTimePayout']" 
-                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp.personalTimeAvailable,benefitPayoutCtrl.payouts[emp.employeeId]['personalTimePayout'])">
+                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp, 'personalTime')">
+                                            <td ng-if="benefitPayoutCtrl.lineTypes.indexOf('PRT') > -1">
+                                                <input type="number" ng-model="benefitPayoutCtrl.payouts[emp.employeeId]['personalTimeRate']" 
+                                                       style="width: 100%;" ng-blur="benefitPayoutCtrl.onBlur(emp, 'personalTime')">
                                             </td>
                                         </tr>
                                     </tbody>
