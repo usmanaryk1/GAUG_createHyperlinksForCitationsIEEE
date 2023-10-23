@@ -1337,7 +1337,7 @@
 
                 // no need to retrieve patient object if you already have, just get all careTypes of patient's insuranceProviderId
                 $rootScope.maskLoading();
-                PatientDAO.forscheduler({patientIds: dummy.id}).then(function (res2) {
+                PatientDAO.getPatientsForSchedule({patientIds: dummy.id}).then(function (res2) {
                     var res = res2[0];
                     patientObj = res;
                     if (res.patientCareTypeCollection) {

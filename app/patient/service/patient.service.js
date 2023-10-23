@@ -39,7 +39,7 @@
             changestatus: {
                 method: 'GET'
             },
-            forscheduler: {
+            getPatientsForSchedule: {
                 method: 'GET',
                 isArray: true,
                 params: {
@@ -69,8 +69,8 @@
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
             },
-            forscheduler: function (data) {
-                return api.forscheduler(data).$promise;
+            getPatientsForSchedule: function (data) {
+                return api.getPatientsForSchedule(data).$promise;
             }
         };
     };
