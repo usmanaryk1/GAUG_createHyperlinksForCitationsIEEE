@@ -3,9 +3,10 @@
         var ctrl = this;
 
         ctrl.employee_list = [];
+        //ctrl.events  = [];
         var timeFormat = 'HH:mm';
 
-        Page.setTitle("Calendar");
+        Page.setTitle("Employee Calendar");
 
         ctrl.calendarView = 'month';
         ctrl.isOpen = false;
@@ -45,6 +46,7 @@
             $('#languages').select2('val', null);
             ctrl.applySearch();
         };
+        ctrl.viewEmployee;
         ctrl.retrieveEmployees = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
@@ -63,11 +65,38 @@
             }
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
+                if (!ctrl.viewEmployee) {
+                    ctrl.viewEmployee = res[0];
+                }
+                delete res.$promise;
+                delete res.$resolved;
+                var ids = (_.map(ctrl.employee_list, 'id')).toString();
+                ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
+        ctrl.positionMap = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    ctrl.positionMap[position.id] = position.position;
+                });
+            }
+        });
+        ctrl.loadEvents = function () {
+            ctrl.pageNo = 0;
+            ctrl.searchParams.limit = 10;
+            ctrl.retrieveEmployees();
+        };
+        ctrl.getAllEvents = function (ids) {
+            EventTypeDAO.retireveBySchedule({employeeIds: ids}).then(function (res) {
+                delete res.$promise;
+                delete res.$resolved;
+                ctrl.events = res;
+            });
+        }
         ctrl.retrieveAllEmployees = function () {
-            EmployeeDAO.retrieveAll({subAction: 'all'}).then(function (res) {
+            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function (res) {
                 ctrl.employeeList = res;
             });
         };
@@ -77,7 +106,7 @@
             });
         };
 
-        ctrl.openModalEmployee = function (data1, modal_id, modal_size, modal_backdrop)
+        $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
         {
             var data;
             var employeeObj;
@@ -102,6 +131,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
                 $rootScope.employeePopup.dateFormat = "MM/DD/YYYY";
                 $rootScope.employeePopup.patients = patients;
@@ -109,12 +139,11 @@
                 $rootScope.employeePopup.eventTypes = ontimetest.eventTypes;
                 $rootScope.employeePopup.recurranceTypes = ontimetest.recurranceTypes;
                 $rootScope.employeePopup.employee = angular.copy(employeeObj);
-                $rootScope.employeePopup.carePatientMap = carePatientMap;
-                $rootScope.employeePopup.careTypes = careTypes;
+
                 if (data == null) {
-                    $rootScope.employeePopup.employee.isNew = true;
+                    $rootScope.employeePopup.isNew = true;
                 } else {
-                    $rootScope.employeePopup.employee.isNew = false;
+                    $rootScope.employeePopup.isNew = false;
                     $rootScope.employeePopup.data = data;
                     if (data.eventType != 'U')
                         $rootScope.employeePopup.data.applyTo = "DOW";
@@ -149,141 +178,143 @@
                     delete $rootScope.employeePopup.data.patientId;
                     $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
                 };
-                if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.employee.isNew) {
-                    $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
-                }
                 $rootScope.employeePopup.changed = function (form, event) {
                     if (event != 'repeat') {
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
                         $rootScope.employeePopup.data = {eventType: old, recurranceType: "N"};
                         if (old == 'S') {
-                            $rootScope.employeePopup.data.forLiveIn = false;
+                            if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
+                                $rootScope.employeePopup.data.forLiveIn = false;
                         }
                         if (old != 'U') {
                             $rootScope.employeePopup.data.startTime = currentTime;
                             $rootScope.employeePopup.data.endTime = currentTime;
                         }
                         if (old == 'U') {
-                            $rootScope.employeePopup.data.isPaid = false;
+                            if (!angular.isDefined($rootScope.employeePopup.data.isPaid))
+                                $rootScope.employeePopup.data.isPaid = false;
                         }
                         setTimeout(function () {
+                            $("#eventEmployeeIds").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Employee...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
                             cbr_replace();
-                        }, 100);
+                        }, 200);
                     }
                 };
-                $rootScope.employeePopup.employeeChanged = function (empId) {
-                    EmployeeDAO.getEmployeesForSchedule({employeeIds: empId}).then(function (res) {
-                        employeeObj = res[0];
-                    }).catch(function (data, status) {
-                        toastr.error("Failed to retrieve employee.");
-                    }).then(function () {
-
-                        function open1() {
-
-                            ctrl.careTypeIdMap = {};
-                            var careTypesSelected = [];
-                            if (employeeObj.employeeCareRatesList) {
-                                var length = employeeObj.employeeCareRatesList.length;
-                                carePatientMap = {};
-                                var next = 0;
-                                for (var i = 0; i < length; i++) {
-                                    careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
-                                    var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
-                                    PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active"}).then(function (res) {
-                                        carePatientMap[res.headers.careid] = res.data;
-                                        next++;
-                                    }).catch(function (data) {
-                                        toastr.error(data.data);
-                                    }).then(function () {
-                                        if (next === (length - 1)) {
-                                            careTypes = careTypesSelected;
-//                                            open();
-                                        }
-                                    });
-                                }
-                            } else {
-//                                open();
+                $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
+                    if ($rootScope.employeePopup.data.eventType == 'S' && !editMode) {
+                        delete $rootScope.employeePopup.data.companyCareTypeId;
+                        delete $rootScope.employeePopup.data.patientId;
+                        $rootScope.employeePopup.carePatientMap = {};
+                        $rootScope.employeePopup.careTypes = [];
+                    }
+                    if (!($rootScope.employeePopup.data.eventType != 'S' && !editMode && !viewMode)) {
+                        $rootScope.employeePopup.showLoadingImage = true;
+                        EmployeeDAO.getEmployeesForSchedule({employeeIds: empId}).then(function (res) {
+                            employeeObj = res[0];
+                            if (ctrl.calendarView == 'month' || !$rootScope.employeePopup.isNew) {
+                                $rootScope.employeePopup.employee = angular.copy(employeeObj);
                             }
-                        }
-                        if (data1 != null) {
-                            var obj = {action: ontimetest.eventTypes[data1.eventType].toLowerCase(), subAction: data1.id};
-                            EventTypeDAO.retrieveEventType(obj).then(function (res) {
-                                data = angular.copy(res);
-                            }).catch(function (data) {
-                                toastr.error("Failed to retrieve data");
-                            }).then(function () {
+                        }).catch(function (data, status) {
+                            toastr.error("Failed to retrieve employee.");
+                        }).then(function () {
+
+                            function open1() {
+                                if ($rootScope.employeePopup.data.eventType == 'S' || viewMode) {
+                                    ctrl.careTypeIdMap = {};
+                                    var careTypesSelected = [];
+                                    if (employeeObj && employeeObj.employeeCareRatesList && employeeObj.employeeCareRatesList.length > 0) {
+                                        var length = employeeObj.employeeCareRatesList.length;
+                                        carePatientMap = {};
+                                        var next = 0;
+                                        for (var i = 0; i < length; i++) {
+                                            careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
+                                            var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
+                                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active"}).then(function (res) {
+                                                carePatientMap[res.headers.careid] = res.data;
+                                                next++;
+                                            }).catch(function (data) {
+                                                toastr.error(data.data);
+                                            }).then(function () {
+                                                if (next === (length - 1)) {
+                                                    $rootScope.employeePopup.showLoadingImage = false;
+                                                    careTypes = careTypesSelected;
+                                                    $rootScope.employeePopup.carePatientMap = carePatientMap;
+                                                    $rootScope.employeePopup.careTypes = careTypes;
+                                                    if (editMode) {
+                                                        $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } else if (!employeeObj) {
+                                        $rootScope.employeePopup.showLoadingImage = false;
+                                        employeeObj = {};
+                                        $rootScope.unmaskLoading();
+                                        toastr.error("Failed to retrieve employee.");
+                                    } else if (employeeObj && employeeObj.employeeCareRatesList && employeeObj.employeeCareRatesList.length === 0) {
+                                        $rootScope.employeePopup.showLoadingImage = false;
+                                    }
+                                } else {
+                                    $rootScope.employeePopup.showLoadingImage = false;
+                                }
+                            }
+                            if (data != null) {
+                                var id;
+                                if (data.availabilityId)
+                                    id = data.availabilityId;
+                                if (data.scheduleId)
+                                    id = data.scheduleId;
+                                if (data.unavailabilityId)
+                                    id = data.unavailabilityId;
+                                var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
+                                EventTypeDAO.retrieveEventType(obj).then(function (res) {
+                                    data = angular.copy(res);
+                                    data.applyTo = "DOW";
+                                    $rootScope.employeePopup.data = angular.copy(data);
+                                }).catch(function (data) {
+                                    toastr.error("Failed to retrieve data");
+                                }).then(function () {
+                                    open1();
+                                });
+                            } else {
                                 open1();
-                            });
-                        } else {
-                            open1();
-                        }
-                    });
+                            }
+                        });
+                    }
                 };
+                if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
+                    $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true);
+                }
+                if (ctrl.calendarView == 'month') {
+                    $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
+                }
             }
             $rootScope.maskLoading();
             var careTypes;
             var carePatientMap;
             employeeObj = {};
             open();
-//            EmployeeDAO.getEmployeesForSchedule({employeeIds: "444"}).then(function (res) {
-//                employeeObj = res[0];
-//            }).catch(function (data, status) {
-//                toastr.error("Failed to retrieve employee.");
-//            }).then(function () {
-//
-//                function open1() {
-//
-//                    ctrl.careTypeIdMap = {};
-//                    var careTypesSelected = [];
-//                    if (employeeObj.employeeCareRatesList) {
-//                        var length = employeeObj.employeeCareRatesList.length;
-//                        carePatientMap = {};
-//                        var next = 0;
-//                        for (var i = 0; i < length; i++) {
-//                            careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
-//                            var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
-//                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active"}).then(function (res) {
-//                                carePatientMap[res.headers.careid] = res.data;
-//                                next++;
-//                            }).catch(function (data) {
-//                                toastr.error(data.data);
-//                            }).then(function () {
-//                                if (next === (length - 1)) {
-//                                    careTypes = careTypesSelected;
-//                                    open();
-//                                }
-//                            });
-//                        }
-//                    } else {
-//                        open();
-//                    }
-//                }
-//                if (data1 != null) {
-//                    var obj = {action: ontimetest.eventTypes[data1.eventType].toLowerCase(), subAction: data1.id};
-//                    EventTypeDAO.retrieveEventType(obj).then(function (res) {
-//                        data = angular.copy(res);
-//                    }).catch(function (data) {
-//                        toastr.error("Failed to retrieve data");
-//                    }).then(function () {
-//                        open1();
-//                    });
-//                } else {
-//                    open1();
-//                }
-//            });
         };
         ctrl.saveEmployeePopupChanges = function (data) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);
-            data1.startDate = moment(new Date(data1.startDate)).format($rootScope.employeePopup.dateFormat);
-            data1.endDate = moment(new Date(data1.endDate)).format($rootScope.employeePopup.dateFormat);
             var obj = {action: data1.eventType, data: data1};
             console.log("employee data :: " + JSON.stringify(data1));
-            if ($rootScope.employeePopup.employee.isNew) {
+            if ($rootScope.employeePopup.isNew) {
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.employeePopup.close();
+                    ctrl.loadEvents();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -310,7 +341,6 @@
         ctrl.retrieveEmployees();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPositions();
-
     }
 
     angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", CalendarCtrl]);

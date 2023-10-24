@@ -278,12 +278,10 @@ span[data-cal-date]:hover {
     background-color: #EEE;
     display: inline-block;
     padding: 20px 10px 20px 10px;
-    margin-bottom: 10px;
 }
 .mwl-panel-filter {
     background-color: #EEE;
-    padding: 20px 10px 20px 10px;
-    margin-bottom: 10px;
+    padding: 20px 17px 20px 10px;
 }
 .mwl-panel-filter.row .col-md-4 {
     margin-bottom: 5px;
@@ -340,4 +338,16 @@ span[data-cal-date]:hover {
 }
 .row-data .col-data {
   min-height: 60px;
+}
+.event-green {
+  background: #8dc95d;
+}
+.event-grey {
+  background: #7D7D7D;
+}
+.event-black {
+  background: #000;
+}
+.event-pointer {
+  cursor:pointer;
 }

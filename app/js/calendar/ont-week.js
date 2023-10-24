@@ -1,49 +1,35 @@
 angular
-	  .module('mwl.calendar')
+        .module('mwl.calendar')
 	  .directive('mwlCalendarWeek', function() {
 
-	  	var controller =  ["$scope", "$sce", "moment", "calendarHelper", "calendarConfig", function($scope, $sce, moment, calendarHelper, calendarConfig) {
+	  	var controller =  ["$scope", "$sce", "moment", "calendarHelper", "calendarConfig", "$rootScope", function($scope, $sce, moment, calendarHelper, calendarConfig, $rootScope) {
 
-	    $scope.showTimes = true;
-	    $scope.$sce = $sce;
-            
-	    $scope.$on('calendar.refreshView', function() {
-	      $scope.dayViewSplit = $scope.dayViewSplit || 30;
-	      $scope.dayViewHeight = calendarHelper.getDayViewHeight(
-	        $scope.dayViewStart,
-	        $scope.dayViewEnd,
-	        $scope.dayViewSplit
-	      );
-	        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay);
-	    });
+                    $scope.$sce = $sce;
 
-	    $scope.tempTimeChanged = function(event, minuteChunksMoved) {
-	      var minutesDiff = minuteChunksMoved * $scope.dayViewSplit;
-	      event.tempStartsAt = moment(event.startsAt).add(minutesDiff, 'minutes').toDate();
-	    };
+                    $scope.$on('calendar.refreshView', function () {
+                        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list);
+                    });
+                    $scope.onEventClick = function (eventCell, dayClickedFirstRun, $event) {
+                        $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                    };
 
-	  }];
-	    return {
-	      templateUrl: 'templates/calendarWeekView.html',
-	      restrict: 'EA',
-	      require: '^mwlCalendar',
-	      scope: {
-	        events: '=',
-	        currentDay: '=',
-	        onEventClick: '=',
-	        onEventTimesChanged: '=',
-	        dayViewStart: '=',
-	        dayViewEnd: '=',
-	        dayViewSplit: '=',
-	        onTimespanClick: '=',
-            list:'=',
-            totalItems:'=',
-            currentPage:'='
-	      },
-	      controller: controller,
+                }];
+            return {
+                templateUrl: 'templates/calendarWeekView.html',
+                restrict: 'EA',
+                require: '^mwlCalendar',
+                scope: {
+                events: '=',
+                currentDay: '=',
+                onEventClick: '=',
+                list:'=',
+                totalItems:'=',
+                currentPage:'='
+                },
+                controller: controller,
 	      link: function(scope, element, attrs, calendarCtrl) {
-	        //scope.$scope.calendarCtrl = calendarCtrl;
-	      }
-	    };
+                    //scope.$scope.calendarCtrl = calendarCtrl;
+                }
+            };
 
-	  });
+        });

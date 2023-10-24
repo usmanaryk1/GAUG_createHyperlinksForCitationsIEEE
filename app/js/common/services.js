@@ -85,7 +85,7 @@ angular.module('xenon.services', []).
                 var billing = this.addItem('Billing', '/app', 'linecons-money');
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet');
                 var company = this.addItem('Company', '/app', 'linecons-key');
-                var calendar = this.addItem('Calendar', '/app/calendar', 'linecons-cog');
+                var calendar = this.addItem('Calendar', '/app', 'linecons-cog');
 
                 // Subitems of Dashboard
                 // dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
@@ -127,6 +127,10 @@ angular.module('xenon.services', []).
                 // Subitems of company
                 company.addItem('Company Information', './company_information');
 
+                // Subitems of calendar
+                calendar.addItem('Employee', './employee-calendar');
+                calendar.addItem('Patient', './patient-calendar');
+
                 return this;
             };
 
@@ -138,6 +142,7 @@ angular.module('xenon.services', []).
                 var timeSheet = this.addItem('Time Sheet', '/app', 'linecons-clock');
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella');
                 var billing = this.addItem('Billing', '/app', 'linecons-user');
+                var calendar = this.addItem('Calendar', '/app', 'linecons-user');
 
                 // var dashboard    = this.addItem('Dashboard', 		'/app/dashboard', 			'linecons-cog');
                 // var employee      = this.addItem('Employee',	'/app/layout-and-skins',	'linecons-desktop');
@@ -171,6 +176,9 @@ angular.module('xenon.services', []).
                 billing.addItem('Billing Session', './billing_tab_1');
                 billing.addItem('Billing History', './biling_history');
 
+                // Subitems of calendar
+                calendar.addItem('Employee', './employee_calendar');
+                calendar.addItem('Patient', './patient_calendar');
 
                 return this;
             }
@@ -235,7 +243,7 @@ angular.module('xenon.services', []).
                 $("input[name='" + name + "'][value='" + newVal + "']").attr('checked', 'checked');
                 $("input[name='" + name + "'][value='" + newVal + "']").parent().parent().addClass('cbr-checked');
             };
-            
+
             this.uncheckRadioValue = function (name, newVal) {
                 $("input[name='" + name + "'][value='" + newVal + "']").removeAttr('checked');
                 $("input[name='" + name + "'][value='" + newVal + "']").parent().parent().removeClass('cbr-checked');
