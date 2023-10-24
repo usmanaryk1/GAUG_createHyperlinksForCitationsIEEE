@@ -4,23 +4,12 @@ angular
 
 	  	var controller =  ["$scope", "$sce", "moment", "calendarHelper", "calendarConfig", function($scope, $sce, moment, calendarHelper, calendarConfig) {
 
-	    $scope.showTimes = true;
 	    $scope.$sce = $sce;
             
 	    $scope.$on('calendar.refreshView', function() {
-	      $scope.dayViewSplit = $scope.dayViewSplit || 30;
-	      $scope.dayViewHeight = calendarHelper.getDayViewHeight(
-	        $scope.dayViewStart,
-	        $scope.dayViewEnd,
-	        $scope.dayViewSplit
-	      );
-	        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay);
+	    	console.log($scope.list);
+	        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay,$scope.list);
 	    });
-
-	    $scope.tempTimeChanged = function(event, minuteChunksMoved) {
-	      var minutesDiff = minuteChunksMoved * $scope.dayViewSplit;
-	      event.tempStartsAt = moment(event.startsAt).add(minutesDiff, 'minutes').toDate();
-	    };
 
 	  }];
 	    return {
@@ -31,11 +20,6 @@ angular
 	        events: '=',
 	        currentDay: '=',
 	        onEventClick: '=',
-	        onEventTimesChanged: '=',
-	        dayViewStart: '=',
-	        dayViewEnd: '=',
-	        dayViewSplit: '=',
-	        onTimespanClick: '=',
             list:'=',
             totalItems:'=',
             currentPage:'='

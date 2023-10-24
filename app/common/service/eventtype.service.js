@@ -11,6 +11,13 @@
             },
             updateEventType: {
                 method: 'PUT'
+            },
+            retireveBySchedule :{
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'all'
+                }
             }
         });
         return {
@@ -22,6 +29,9 @@
             },
             updateEventType: function (data) {
                 return api.updateEventType({action: data.action,subAction: data.subAction}, data.data).$promise;
+            },
+            retireveBySchedule: function (data) {
+                return api.retireveBySchedule(data).$promise;
             }
         };
     };

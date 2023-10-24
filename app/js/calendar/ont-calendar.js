@@ -15,22 +15,22 @@
 	    var previousView = $scope.view;
 
 	    function eventIsValid(event) {
-	      if (!event.startsAt) {
-	        $log.warn('Bootstrap calendar: ', 'Event is missing the startsAt field', event);
-	      }
+	      // if (!event.startsAt) {
+	      //   $log.warn('Bootstrap calendar: ', 'Event is missing the startsAt field', event);
+	      // }
 
-	      if (!angular.isDate(event.startsAt)) {
-	        $log.warn('Bootstrap calendar: ', 'Event startsAt should be a javascript date object', event);
-	      }
+	      // if (!angular.isDate(event.startsAt)) {
+	      //   $log.warn('Bootstrap calendar: ', 'Event startsAt should be a javascript date object', event);
+	      // }
 
-	      if (angular.isDefined(event.endsAt)) {
-	        if (!angular.isDate(event.endsAt)) {
-	          $log.warn('Bootstrap calendar: ', 'Event endsAt should be a javascript date object', event);
-	        }
-	        if (moment(event.startsAt).isAfter(moment(event.endsAt))) {
-	          $log.warn('Bootstrap calendar: ', 'Event cannot start after it finishes', event);
-	        }
-	      }
+	      // if (angular.isDefined(event.endsAt)) {
+	      //   if (!angular.isDate(event.endsAt)) {
+	      //     $log.warn('Bootstrap calendar: ', 'Event endsAt should be a javascript date object', event);
+	      //   }
+	      //   if (moment(event.startsAt).isAfter(moment(event.endsAt))) {
+	      //     $log.warn('Bootstrap calendar: ', 'Event cannot start after it finishes', event);
+	      //   }
+	      // }
 
 	      return true;
 	    }
@@ -76,7 +76,7 @@
 	      if (!eventsWatched) {
 	        eventsWatched = true;
 	        //need to deep watch events hence why it isn't included in the watch group
-	        $scope.$watch('vm.events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
+	        $scope.$watch('events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
 	      } else {
 	        refreshCalendar();
 	      }
@@ -88,7 +88,7 @@
 	      if (!eventsWatched) {
 	        eventsWatched = true;
 	        //need to deep watch events hence why it isn't included in the watch group
-	        $scope.$watch('vm.events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
+	        $scope.$watch('events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
 	      } else {
 	        refreshCalendar();
 	      }
@@ -100,7 +100,7 @@
 	      if (!eventsWatched) {
 	        eventsWatched = true;
 	        //need to deep watch events hence why it isn't included in the watch group
-	        $scope.$watch('vm.events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
+	        $scope.$watch('events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
 	      } else {
 	        refreshCalendar();
 	      }

@@ -7,13 +7,13 @@
         </div>
     </div>
 
-    <div class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
+    <div class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
         <div class="cal-cell1weekempl col-data col-data-empl">{{map.fName + ' ' + map.lName}}</div>
-        <div class="cal-cell1week col-data" ng-repeat="day in view.days track by $index" mwl-element-dimensions="dayColumnDimensions">
-            <span class="col-data">test</span>
-            <span class="col-data">test</span>
-            <span class="col-data">test</span>
-            <br>
+        
+        <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" mwl-element-dimensions="dayColumnDimensions">
+            <div ng-repeat="temp_event in temp_day.events" ng-if="temp_day.events.length" style="background:#8dc95d;border-radius:5px;color:white;margin:2px;">
+                <span>{{temp_event.eventType}}</span>
+            </div>
         </div>
 
     </div>

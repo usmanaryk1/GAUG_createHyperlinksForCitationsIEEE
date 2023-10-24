@@ -128,12 +128,12 @@
 
 	    }
 
-	    function getWeekView(events, currentDay) {
-
+	    function getWeekView(events, currentDay,list) {
 	      var startOfWeek = moment(currentDay).startOf('week');
 	      var endOfWeek = moment(currentDay).endOf('week');
 	      var dayCounter = startOfWeek.clone();
 	      var days = [];
+	      var eventdays = [];
 	      var today = moment().startOf('day');
 	      while (days.length < 7) {
 	        days.push({
@@ -147,74 +147,35 @@
 	        });
 	        dayCounter.add(1, 'day');
 	      }
+	      eventdays = days;
+	      console.log(events);
+	      _.each(list, function (n){
+	      	 	n.temp_events = _.filter(events, function (data){
+	      	 		return data.employeeId == n.id
+	      	 	})
+	     	})
 
-	      var eventsSorted = filterEventsInPeriod(events, startOfWeek, endOfWeek).map(function(event) {
+	        _.each(list, function (n) {
+	        	n.days = [];
+	        	_.each(eventdays, function (f) {
+	        		var e = {};
+	        		angular.copy(f,e);
+	        		e.events = _.filter(n.temp_events, function (content){
+	        							return moment(f.date).isSame(moment(new Date(content.startDate)));
+	        					})
+	        		n.days.push(e);
+	        	})
+	        })
+	        console.log(list);
 
-	        var eventStart = moment(event.startsAt).startOf('day');
-	        var eventEnd = moment(event.endsAt || event.startsAt).startOf('day');
-	        var weekViewStart = moment(startOfWeek).startOf('day');
-	        var weekViewEnd = moment(endOfWeek).startOf('day');
-	        var offset, span;
+	      return {days: days, list:list};
 
-	        if (eventStart.isBefore(weekViewStart) || eventStart.isSame(weekViewStart)) {
-	          offset = 0;
-	        } else {
-	          offset = eventStart.diff(weekViewStart, 'days');
-	        }
-
-	        if (eventEnd.isAfter(weekViewEnd)) {
-	          eventEnd = weekViewEnd;
-	        }
-
-	        if (eventStart.isBefore(weekViewStart)) {
-	          eventStart = weekViewStart;
-	        }
-
-	        span = moment(eventEnd).diff(eventStart, 'days') + 1;
-
-	        event.daySpan = span;
-	        event.dayOffset = offset;
-
-	        return event;
-	      });
-
-	      return {days: days, events: eventsSorted};
-
-	    }
-
-	    function getWeekViewWithTimes(events, currentDay, dayViewStart, dayViewEnd, dayViewSplit) {
-	      var weekView = getWeekView(events, currentDay);
-	      var newEvents = [];
-	      weekView.days.forEach(function(day) {
-	        var dayEvents = weekView.events.filter(function(event) {
-	          return moment(event.startsAt).startOf('day').isSame(moment(day.date).startOf('day'));
-	        });
-	        var newDayEvents = getDayView(
-	          dayEvents,
-	          day.date,
-	          dayViewStart,
-	          dayViewEnd,
-	          dayViewSplit
-	        );
-	        newEvents = newEvents.concat(newDayEvents);
-	      });
-	      weekView.events = newEvents;
-	      return weekView;
-	    }
-
-	    function getDayViewHeight(dayViewStart, dayViewEnd, dayViewSplit) {
-	      var dayViewStartM = moment(dayViewStart || '00:00', 'HH:mm');
-	      var dayViewEndM = moment(dayViewEnd || '23:00', 'HH:mm');
-	      var hourHeight = (60 / dayViewSplit) * 30;
-	      return ((dayViewEndM.diff(dayViewStartM, 'hours') + 1) * hourHeight) + 2;
 	    }
 
 	    return {
 	      getWeekDayNames: getWeekDayNames,
 	      getMonthView: getMonthView,
 	      getWeekView: getWeekView,
-	      getWeekViewWithTimes: getWeekViewWithTimes,
-	      getDayViewHeight: getDayViewHeight,
 	      adjustEndDateFromStartDiff: adjustEndDateFromStartDiff,
 	      formatDate: formatDate,
 	      eventIsInPeriod: eventIsInPeriod //expose for testing only

@@ -3,6 +3,7 @@
         var ctrl = this;
 
         ctrl.employee_list = [];
+        //ctrl.events  = [];
         var timeFormat = 'HH:mm';
 
         Page.setTitle("Calendar");
@@ -63,9 +64,21 @@
             }
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
+                delete res.$promise;
+                delete res.$resolved;
+                var ids = (_.map(ctrl.employee_list, 'id')).toString();
+                ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
+        ctrl.getAllEvents = function(ids) {
+            EventTypeDAO.retireveBySchedule({employeeIds: ids}).then(function (res) {
+                delete res.$promise;
+                delete res.$resolved;
+                ctrl.events = res;
+                console.log(ctrl.events);
+            });
+        }
         ctrl.retrieveAllEmployees = function () {
             EmployeeDAO.retrieveAll({subAction: 'all'}).then(function (res) {
                 ctrl.employeeList = res;
@@ -262,7 +275,6 @@
         ctrl.retrieveEmployees();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPositions();
-
     }
 
     angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", CalendarCtrl]);
