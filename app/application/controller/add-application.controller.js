@@ -297,6 +297,7 @@
                             toastr.success("Application saved.");
                             setTimeout(function () {
                                 closeWindow();
+                                $state.go('applications');
                             }, 300);
                         } else if (ctrl.nextTab === 'submit') {
                             openSubmitApplicationModal(employeeRes);
