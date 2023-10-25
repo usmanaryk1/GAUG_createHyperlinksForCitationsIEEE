@@ -32,7 +32,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                 scope.allLoaded = false;
                 scope.data = {note: ""};
                 if (scope.type === 'patient') {
-                    scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls'];
+                    scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls', 'MLTC Update'];
                 } else {
                     scope.noteTypes = ['Case Refusal', 'Company Outreach', 'Compliance', 'Disciplinary', 'Employee Message', 'Miscellaneous', 'Proxy Communication', 'Standard Communication'];
                 }
