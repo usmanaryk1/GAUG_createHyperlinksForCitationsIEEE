@@ -229,6 +229,26 @@
                     delete $rootScope.patientPopup.data.employeeId;
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
                 };
+                $rootScope.patientPopup.deleteSchedule = function () {
+                    var obj = $rootScope.patientPopup.data;
+                    var id;
+                    if (obj.availabilityId)
+                        id = obj.availabilityId;
+                    if (obj.scheduleId)
+                        id = obj.scheduleId;
+                    if (obj.unavailabilityId)
+                        id = obj.unavailabilityId;
+                    $rootScope.maskLoading();
+                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo}).then(function (res) {
+                        ctrl.retrievePatients();
+                        toastr.success("Event deleted.");
+                        $rootScope.patientPopup.close();
+                    }).catch(function (data, status) {
+                        toastr.error(data.data);
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                }
                 $rootScope.patientPopup.patientChanged = function (patientId, editMode, viewMode) {
                     if ($rootScope.patientPopup.data.eventType == 'S' && !editMode) {
                         delete $rootScope.patientPopup.data.companyCareTypeId;

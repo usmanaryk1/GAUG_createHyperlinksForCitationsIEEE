@@ -210,6 +210,26 @@
                         }, 200);
                     }
                 };
+                $rootScope.employeePopup.deleteSchedule = function () {
+                    var obj = $rootScope.employeePopup.data;
+                    var id;
+                    if (obj.availabilityId)
+                        id = obj.availabilityId;
+                    if (obj.scheduleId)
+                        id = obj.scheduleId;
+                    if (obj.unavailabilityId)
+                        id = obj.unavailabilityId;
+                    $rootScope.maskLoading();
+                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo}).then(function (res) {
+                        ctrl.retrieveEmployees();
+                        toastr.success("Event deleted.");
+                        $rootScope.employeePopup.close();
+                    }).catch(function (data, status) {
+                        toastr.error(data.data);
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                }
                 $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
                     if ($rootScope.employeePopup.data.eventType == 'S' && !editMode) {
                         delete $rootScope.employeePopup.data.companyCareTypeId;
