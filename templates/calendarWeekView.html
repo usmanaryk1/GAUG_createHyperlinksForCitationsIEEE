@@ -12,14 +12,31 @@
         
         <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" mwl-element-dimensions="dayColumnDimensions">
             <div 
-                ng-repeat="temp_event in temp_day.events" 
+                ng-repeat="temp_event in temp_day.events | limitTo: 1:0" 
                 ng-if="temp_day.events.length" 
                 ng-class="{'event-green':temp_event.eventType == 'A','event-grey':temp_event.eventType == 'S', 'event-black':temp_event.eventType == 'U'}" 
                 style="border-radius:5px;color:white;margin:2px;">
-                <span>{{temp_event.eventType}}</span>
+                <span>{{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}</span>                
+            </div>
+            <span ng-if="temp_day.events.length - 1 > 0" onclick="hide(this);" data-placement="bottom">+ {{temp_day.events.length - 1}} more</span>
+            <div class="eventstoload" style="display:none;">
+            <div 
+                ng-repeat="temp_event in temp_day.events | limitTo: temp_day.events.length - 1:1" 
+                ng-class="{'event-green':temp_event.eventType == 'A','event-grey':temp_event.eventType == 'S', 'event-black':temp_event.eventType == 'U'}">
+                <span>{{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}</span>
+            </div>
             </div>
         </div>
 
     </div>
 
 </div>
+<script type="text/javascript">
+    function hide(obj) {
+        $(obj).next().popover('show');
+        $(obj).popover({
+            content: $(obj).next().html(),
+            html: true
+        })
+    }
+</script>
