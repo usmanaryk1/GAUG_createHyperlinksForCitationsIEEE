@@ -166,6 +166,8 @@
                                         <th ng-click="payrollSession.showAddEmployeeModal(session, $index)">
                                             <span class="fa-calendar-o" tooltip="Includes PTO" 
                                                   ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" ng-if="session.ptoAdded"></span>
+                                            <span class="fa-money" tooltip="Includes Payout" 
+                                                  ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" ng-if="session.hasPayout"></span>
                                             <span class="fa-user" tooltip="Manually Added" ng-if="session.manuallyAdded"></span>
                                             <span ng-click="payrollSession.showMissedPunchModal(session, $index, $event)" class="fa-calendar" tooltip="Missed Punch Affected" ng-if="session.missedPunchAffected"></span> 
                                             {{payrollSession.empMap[session.employeeId].lName}}</th>
@@ -677,6 +679,56 @@
     <input class="form-control" id="advanceDeduction" ng-disabled="payrollModal.processdMode" name="advanceDeduction" type="text" ng-model="payrollModal.payrollObj.advanceDeduction" maxlength="10" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>
     </div>
+    <div class="form-group" ng-if='payrollModal.payrollObj.sickPayoutHours>0'>
+    <label class="col-sm-3 control-label" for="sickPayoutHours">
+    Sick Hours Payout
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="sickPayoutHours" disabled name="sickPayoutHours" type="text" ng-model="payrollModal.payrollObj.sickPayoutHours" maxlength="5"
+    numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="sickPayoutRate">
+    Sick Payout Rate
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="sickPayoutRate" disabled name="sickPayoutRate" type="text" ng-model="payrollModal.payrollObj.sickPayoutRate" maxlength="5"
+    numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group" ng-if='payrollModal.payrollObj.vacationPayoutHours>0'>
+    <label class="col-sm-3 control-label" for="vacationPayoutHours">
+    Vacation Hours Payout
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="vacationPayoutHours" disabled name="vacationPayoutHours" type="text" ng-model="payrollModal.payrollObj.vacationPayoutHours" maxlength="5"
+    numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="vacationPayoutRate">
+    Vacation Payout Rate
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="vacationPayoutRate" disabled name="vacationPayoutRate" type="text" ng-model="payrollModal.payrollObj.vacationPayoutRate" maxlength="5"
+    numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+    <div class="form-group" ng-if='payrollModal.payrollObj.personalPayoutHours>0'>
+    <label class="col-sm-3 control-label" for="personalPayoutHours">
+    Personal Hours Payout
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="personalPayoutHours" disabled name="personalPayoutHours" type="text" ng-model="payrollModal.payrollObj.personalPayoutHours" maxlength="5"
+    numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="personalPayoutRate">
+    Personal Payout Rate
+    </label>
+    <div class="col-sm-3">
+    <input class="form-control" id="personalPayoutRate" disabled name="personalPayoutRate" type="text" ng-model="payrollModal.payrollObj.personalPayoutRate" maxlength="5"
+    numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    </div>
+
+
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="payrollModal.cancel();">Close</button>

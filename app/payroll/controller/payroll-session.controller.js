@@ -105,6 +105,9 @@
                         ctrl.setRates('personal', 'personalRate', payrollObj);
                         payrollObj.grossPay = ctrl.calculateGrossPay(payrollObj);
                         payrollObj.totalHours = ctrl.calculateTotalHours(payrollObj);
+                        if (payrollObj.sickPayoutHours > 0 || payrollObj.vacationPayoutHours > 0 || payrollObj.personalPayoutHours > 0) {
+                            payrollObj.hasPayout = true;
+                        }
                     });
                     ctrl.rerenderDataTable();
                 }).catch(function (e) {
@@ -223,7 +226,11 @@
             var grossPay = (checkNull(payrollObj.rate1) * checkNull(payrollObj.hour1)) + (checkNull(payrollObj.rate2) * checkNull(payrollObj.hour2))
                     + (checkNull(payrollObj.otRate) * checkNull(payrollObj.otHours) * otHdConstant) + (checkNull(payrollObj.hdRate) * checkNull(payrollObj.hdHours) * otHdConstant)
                     + (checkNull(payrollObj.otRate2) * checkNull(payrollObj.otHours2) * otHdConstant) + (checkNull(payrollObj.hdRate2) * checkNull(payrollObj.hdHours2) * otHdConstant)
-                    + checkNull(payrollObj.salary) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate)) + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate)) + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction) - checkNull(payrollObj.adp401kLoan) - checkNull(payrollObj.adp401kDeduction);
+                    + checkNull(payrollObj.salary) + (checkNull(payrollObj.vacation) * checkNull(payrollObj.vacationRate))
+                    + (checkNull(payrollObj.sick) * checkNull(payrollObj.sickRate)) + (checkNull(payrollObj.personal) * checkNull(payrollObj.personalRate))
+                    + checkNull(payrollObj.bonusEarnings) + checkNull(payrollObj.miscEarnings) + (checkNull(payrollObj.sickPayoutHours) * checkNull(payrollObj.sickPayoutRate))
+                    + (checkNull(payrollObj.personalPayoutHours) * checkNull(payrollObj.personalPayoutRate)) + (checkNull(payrollObj.vacationPayoutHours) * checkNull(payrollObj.vacationPayoutRate))
+                    - checkNull(payrollObj.miscDeduction) - checkNull(payrollObj.loan) - checkNull(payrollObj.advanceDeduction) - checkNull(payrollObj.adp401kLoan) - checkNull(payrollObj.adp401kDeduction);
             return grossPay;
         };
         ctrl.calculateTotalHours = function (payrollObj) {
