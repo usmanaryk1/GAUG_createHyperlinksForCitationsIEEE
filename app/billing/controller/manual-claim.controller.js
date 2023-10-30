@@ -163,26 +163,48 @@
             $("#manual_claim_form :input").css('background-color', '#fff');
         };
 
+        var formatBillingClaim = function (res) {
+            if (res && res.claim1500Data) {
+                ctrl.patientIdSelected = res.patientId;
+                ctrl.billingClaimObj = res;
+                ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                ctrl.calculateTotalCharges();
+//                    console.log(JSON.stringify(ctrl.billingClaimObj));
+                ctrl.unbindPatientCondition();
+                if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                    angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        if (serviceLine.serviceFromDate)
+                            serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
+                        if (serviceLine.serviceToDate)
+                            serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                    });
+                }
+            }
+        }
+
         ctrl.getPatientDetail = function (patientId) {
             $rootScope.paginationLoading = true;
             BillingDAO.getPatientDetails({patientId: patientId, paramId: '1500'}).then(function (res) {
-                if (res && res.claim1500Data) {
-                    ctrl.billingClaimObj = res;
-                    ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
-                    ctrl.calculateTotalCharges();
-//                    console.log(JSON.stringify(ctrl.billingClaimObj));
-                    ctrl.unbindPatientCondition();
-                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                            if (serviceLine.serviceFromDate)
-                                serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
-                            if (serviceLine.serviceToDate)
-                                serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
-                        });
-                    }
-                }
+                formatBillingClaim(res);
             }).catch(function () {
                 toastr.error("Failed to retrieve patients.");
+            }).then(function () {
+                $rootScope.paginationLoading = false;
+            });
+        };
+
+        ctrl.getClaimDataByInsuranceClaimNumber = function (insurerClaimNumber) {
+            $rootScope.paginationLoading = true;
+            BillingDAO.getClaimByInsuranceClaimNumber({insurerClaimNumber: insurerClaimNumber, paramId: '1500'}).then(function (res) {
+                delete res.id;
+                formatBillingClaim(res);
+            }).catch(function (data) {
+                if (data.status === 404) {
+                    toastr.error("No claim exists by provided Insurance claim number.");
+                } else {
+                    toastr.error("Failed to retrieve patients.");
+                }
+
             }).then(function () {
                 $rootScope.paginationLoading = false;
             });
@@ -200,10 +222,6 @@
 
         ctrl.processManualClaim = function () {
             var fromDate, toDate;
-            if (!ctrl.patientId || ctrl.patientId === '') {
-                ctrl.showPatientError = true;
-                return;
-            }
             if ($('#manual_claim_form')[0].checkValidity()) {
 //                console.log('valid');
                 if (!ctrl.manualClaimObj.serviceLines || ctrl.manualClaimObj.serviceLines.length === 0) {
@@ -213,7 +231,7 @@
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
                     ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
-                    ctrl.billingClaimObj.paidAmount = ctrl.manualClaimObj.amountPaid ? ctrl.manualClaimObj.amountPaid :0;
+                    ctrl.billingClaimObj.paidAmount = ctrl.manualClaimObj.amountPaid ? ctrl.manualClaimObj.amountPaid : 0;
                     ctrl.billingClaimObj.authorizedCodes = [];
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                         if (fromDate == null || new Date(serviceLine.serviceFromDate).getTime() <= new Date(fromDate).getTime()) {
@@ -232,7 +250,7 @@
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.isRejected = false;
-                BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
+                BillingDAO.processManualClaim({patientId: ctrl.patientIdSelected, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
                             window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';

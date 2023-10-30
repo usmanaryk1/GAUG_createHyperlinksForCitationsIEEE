@@ -52,6 +52,13 @@
                     action: 'manualclaim'
                 }
             },
+            getClaimByInsuranceClaimNumber: {
+                method: 'GET',
+                params: {
+                    action: 'manualclaim',
+                    paramId2 : 'load'
+                }
+            },
             processManualClaim: {
                 method: 'POST',
                 params: {
@@ -193,6 +200,9 @@
             },
             getPatientDetails: function(param) {
                 return api.getPatientDetails(param).$promise;
+            },
+            getClaimByInsuranceClaimNumber: function(param) {
+                return api.getClaimByInsuranceClaimNumber(param).$promise;
             },
             processManualClaim: function(param, data) {
                 return api.processManualClaim(param, data).$promise;

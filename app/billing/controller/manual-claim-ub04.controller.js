@@ -87,37 +87,66 @@
             $("#manual_claim_form :input").css('background-color', '#fff');
         };
 
-        ctrl.getPatientDetail = function (patientId) {
-            $rootScope.paginationLoading = true;
-            BillingDAO.getPatientDetails({patientId: patientId, paramId: 'UB04'}).then(function (res) {
-                if (res && res.claim1500Data) {
-                    ctrl.billingClaimObj = res;
-                    ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
-                    ctrl.calculateTotalCharges();
+        var formatBillingClaim = function (res) {
+            if (res && res.claim1500Data) {
+                ctrl.patientIdSelected = res.patientId;
+                ctrl.billingClaimObj = res;
+                ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                ctrl.calculateTotalCharges();
+
+                ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                $rootScope.paginationLoading = true;
+                InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
+                    ctrl.insurerObj = res;
+                    if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
+                        ctrl.insurerObj.insuranceCareTypeCollection = [];
+                    }
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                            if (serviceLine.serviceDate)
+                            if (serviceLine.serviceDate) {
                                 serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
+                            }
+
+                            serviceLine.selectedServiceCareType = _.find(ctrl.insurerObj.insuranceCareTypeCollection, function (insuranceCareType) {
+                                return insuranceCareType.serviceDescription === serviceLine.serviceDescription;
+                            })
+
                         });
                     } else {
                         ctrl.manualClaimObj.serviceLines = [{}];
                     }
-                    ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
-                    $rootScope.paginationLoading = true;
-                    InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
-                        ctrl.insurerObj = res;
 
-                        if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
-                            ctrl.insurerObj.insuranceCareTypeCollection = [];
-                        }
-                    }).catch(function (data, status) {
-                        toastr.error("Failed to retrieve insurance provider.");
-                    }).then(function () {
-                        $rootScope.paginationLoading = false;
-                    });
-                }
+
+                }).catch(function (data, status) {
+                    toastr.error("Failed to retrieve insurance provider.");
+                }).then(function () {
+                    $rootScope.paginationLoading = false;
+                });
+            }
+        }
+
+        ctrl.getPatientDetail = function (patientId) {
+            $rootScope.paginationLoading = true;
+            BillingDAO.getPatientDetails({patientId: patientId, paramId: 'UB04'}).then(function (res) {
+                formatBillingClaim(res);
             }).catch(function () {
                 toastr.error("Failed to retrieve patient details.");
+            }).then(function () {
+                $rootScope.paginationLoading = false;
+            });
+        };
+
+        ctrl.getClaimDataByInsuranceClaimNumber = function (insurerClaimNumber) {
+            $rootScope.paginationLoading = true;
+            BillingDAO.getClaimByInsuranceClaimNumber({insurerClaimNumber: insurerClaimNumber, paramId: 'UB04'}).then(function (res) {
+                delete res.id;
+                formatBillingClaim(res);
+            }).catch(function (data) {
+                if (data.status === 404) {
+                    toastr.error("No claim exists by provided Insurance claim number.");
+                } else {
+                    toastr.error("Failed to retrieve patients.");
+                }
             }).then(function () {
                 $rootScope.paginationLoading = false;
             });
@@ -157,10 +186,6 @@
 
         ctrl.processManualClaim = function () {
             var fromDate, toDate;
-            if (!ctrl.patientId || ctrl.patientId === '') {
-                ctrl.showPatientError = true;
-                return;
-            }
             if ($('#manual_claim_form')[0].checkValidity()) {
 //                console.log('valid');
                 if (!ctrl.manualClaimObj.serviceLines || ctrl.manualClaimObj.serviceLines.length === 0) {
@@ -188,13 +213,13 @@
                 ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 var claimCopy = angular.copy(ctrl.manualClaimObj);
-                ctrl.billingClaimObj.isRejected = false;    
+                ctrl.billingClaimObj.isRejected = false;
                 //delete composite care type object
                 angular.forEach(claimCopy.serviceLines, function (serviceLine) {
                     delete serviceLine.selectedServiceCareType;
                 });
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(claimCopy);
-                BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
+                BillingDAO.processManualClaim({patientId: ctrl.patientIdSelected, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
                         .then(function (res) {
                             toastr.success("Manual claim processed.");
                             window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
