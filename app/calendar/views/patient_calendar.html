@@ -1,6 +1,6 @@
 <div class="page-title full-width" ng-if="layoutOptions.pageTitles" title="Calendar" description="Events management calendar">
     <div class="title-env">
-        <h1 class="title">Calendar</h1>
+        <h1 class="title">Patient Calendar</h1>
         <p class="description">Events management calendar</p>
     </div>
 </div>
@@ -30,25 +30,30 @@
     <div class="mwl-panel-filter">
 
         <div class="mwl-panel-search" ng-if="patientcalendar.calendarView == 'month'">
-            <div class="mwl-left">
-                <h2>Karl Pierre <small>Designation</small></h2>
-            </div>
-            <div class="mwl-right col-md-4">
-                <div>
-                    <div class="input-group input-group-minimal">
-                        <input type="email" class="form-control" placeholder="Search for something…">
-                        <span class="input-group-addon">
-                            <i class="linecons-search"></i>
-                        </span>
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="mwl-left">
+                        <h2>Karl Pierre <small>Designation</small></h2>
                     </div>
+                    <div class="col-md-6 pull-right">
+                        <div>
+                            <div class="input-group input-group-minimal">
+                                <input type="email" class="form-control" placeholder="Search for something…">
+                                <span class="input-group-addon">
+                                    <i class="linecons-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>           
                 </div>
+                <a href="" ng-click="patientcalendar.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
         </div>
-        <div class="mwl-panel-filter row">
+        <div class="mwl-panel-filter row" ng-if="patientcalendar.calendarView == 'week'">
             <div class="row">
                 <a href="" ng-click="patientcalendar.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
-            <div class="row" ng-if="patientcalendar.calendarView == 'week'">
+            <div class="row">
                 <div class="col-md-4">
                     <label>Patients</label>
                     <script type="text/javascript">
@@ -354,6 +359,16 @@
             <div  ng-if="patientPopup.data.eventType == 'U'">
             <form class="form-horizontal validate" role="form" name="popuppatientu" id="popuppatientu" >
             <div class="modal-body">
+           <div class="form-group" ng-show="patientPopup.calendarView == 'week'">
+                           <div class="form-group-separator"></div>
+ <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
+            <div class="col-sm-10">
+            <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week'" data-validate="required">
+            <option value="" selected hidden />
+            </select>
+            </div>
+            </div>
+
             <div class="form-group-separator"></div>
             <div class="form-group">
             <label class="col-sm-2 control-label">Reason</label>

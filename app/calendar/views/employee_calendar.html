@@ -1,6 +1,6 @@
 <div class="page-title full-width" ng-if="layoutOptions.pageTitles" title="Calendar" description="Events management calendar">
     <div class="title-env">
-        <h1 class="title">Calendar</h1>
+        <h1 class="title">Employee Calendar</h1>
         <p class="description">Events management calendar</p>
     </div>
 </div>
@@ -11,12 +11,18 @@
         <div class="mwl-left input-group btn-date-group">
             <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="calendar.showDatepicker()"><i class="glyphicon glyphicon-calendar"></i></button>
             <h2>{{ calendar.calendarTitle}}</h2>
-            <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{'show':calendar.isOpen,'hide':!calendar.isOpen}"></datepicker>
+            <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{
+                    'show'
+                    :calendar.isOpen, 'hide':!calendar.isOpen}"></datepicker>
         </div>
         <div class="mwl-right">
             <div class="mwl-button-group">
-                <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{'mwl-state-active': calendar.calendarView == 'month'}">month</button>
-                <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{'mwl-state-active': calendar.calendarView == 'week'}">week</button>
+                <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
+                        'mwl-state-active'
+                        : calendar.calendarView == 'month'}">month</button>
+                <button type="button" class="mwl-agendaWeek-button mwl-button mwl-state-default" ng-click="calendar.changeToWeek()" ng-class="{
+                        'mwl-state-active'
+                        : calendar.calendarView == 'week'}">week</button>
             </div>
             <div class="mwl-button-group">
                 <button type="button" class="mwl-prev-button mwl-button mwl-state-default mwl-corner-left" mwl-date-modifier date="calendar.calendarDay" decrement="calendar.calendarView"><span class="mwl-icon mwl-icon-prev fa-angle-left" ></span></button>
@@ -28,122 +34,127 @@
     </div>
 
     <div class="mwl-panel-filter">
-    <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
-        <div class="mwl-left">
-            <h2>Karl Pierre <small>Designation</small></h2>
-        </div>
-        <div class="mwl-right col-md-4">
-            <div>
-                <div class="input-group input-group-minimal">
-                    <input type="email" class="form-control" placeholder="Search for something…">
-                    <span class="input-group-addon">
-                        <i class="linecons-search"></i>
-                    </span>
+        <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="mwl-left">
+                        <h2>Karl Pierre <small>Designation</small></h2>
+                    </div>
+                    <div class="col-md-6 pull-right">
+                        <div>
+                            <div class="input-group input-group-minimal">
+                                <input type="email" class="form-control" placeholder="Search for something…">
+                                <span class="input-group-addon">
+                                    <i class="linecons-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="mwl-panel-filter row">
-        <div class="row">
-            <a href="" ng-click="calendar.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
-        </div>
-        <div class="row" ng-if="calendar.calendarView == 'week'">
-            <div class="col-md-4">
-                <label>Employees</label>
-                <script type="text/javascript">
-                    jQuery(document).ready(function ($)
-                    {
-                        setTimeout(function () {
-                            $("#employeeIds").select2({
-                                // minimumResultsForSearch: -1,
-                                placeholder: 'Select Employee...',
-                                // minimumInputLength: 1,
-                                // placeholder: 'Search',
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                        }, 200);
-                    });</script>
-                <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
-                    <option value="" selected hidden />
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label>Position</label>
-                <script type="text/javascript">
-                    jQuery(document).ready(function ($)
-                    {
-                        setTimeout(function () {
-                            $("#positions").select2({
-                                placeholder: 'Select Position...',
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                        }, 200);
-                    });</script>
-                <select multiple class="form-control" name ="positions" id="positions" ng-model="calendar.searchParams.positionIds" ng-options='position.id as position.position for position in calendar.positions'>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label>Languages</label>
-                <script type="text/javascript">
-                    jQuery(document).ready(function ($)
-                    {
-                        setTimeout(function () {
-                            $("#languages").select2({
-                                placeholder: 'Select Language...',
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                        }, 200);
-                    });</script>
-                <select multiple name ="languages" id="languages" class="form-control" ng-model="calendar.searchParams.languages" ng-options="key as value for (key,value) in languages">
-                </select>
+                <a href="" ng-click="calendar.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <label>From</label>
-                <div class="input-group">
-                    <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableStartDate" max-date="calendar.searchParams.availableEndDate">
-                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+        <div class="mwl-panel-filter row" ng-if="calendar.calendarView == 'week'">
+            <div class="row">
+                <a href="" ng-click="calendar.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Employees</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            setTimeout(function () {
+                                $("#employeeIds").select2({
+                                    // minimumResultsForSearch: -1,
+                                    placeholder: 'Select Employee...',
+                                    // minimumInputLength: 1,
+                                    // placeholder: 'Search',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                            }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Position</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            setTimeout(function () {
+                                $("#positions").select2({
+                                    placeholder: 'Select Position...',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                            }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="positions" id="positions" ng-model="calendar.searchParams.positionIds" ng-options='position.id as position.position for position in calendar.positions'>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Languages</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                            setTimeout(function () {
+                                $("#languages").select2({
+                                    placeholder: 'Select Language...',
+                                }).on('select2-open', function ()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                            }, 200);
+                        });</script>
+                    <select multiple name ="languages" id="languages" class="form-control" ng-model="calendar.searchParams.languages" ng-options="key as value for (key,value) in languages">
+                    </select>
                 </div>
             </div>
-            <div class="col-md-4">
-                <label>To</label>
-                <div class="input-group">
-                    <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableEndDate" min-date="calendar.searchParams.availableStartDate">
-                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+            <div class="row" ng-if="calendar.calendarView == 'week'">
+                <div class="col-md-4">
+                    <label>From</label>
+                    <div class="input-group">
+                        <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableStartDate" max-date="calendar.searchParams.availableEndDate">
+                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4 filter-checkbox">
-                <div class="col-md-6">
-                    <label>Live In</label>
-                    <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
+                <div class="col-md-4">
+                    <label>To</label>
+                    <div class="input-group">
+                        <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="calendar.searchParams.availableEndDate" min-date="calendar.searchParams.availableStartDate">
+                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4 filter-checkbox">
+                    <div class="col-md-6">
+                        <label>Live In</label>
+                        <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
+                    </div>
+                    <div class="col-md-6">
 
-                    <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
-                    <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="calendar.resetFilters()">Reset Filters</button>
+                        <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
+                        <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="calendar.resetFilters()">Reset Filters</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <!-- Employee Modal : it's like 3 different modal code inside main modal--> 
         <script type="text/ng-template" id="employee-modal">
             <div class="modal-header">
             <button type="button" class="close" ng-click="employeePopup.close();" aria-hidden="true">&times;</button>
             <h4 class="modal-title">
-<span ng-if="employeePopup.isNew && employeePopup.calendarView == 'week'">Add Event</span>
+            <span ng-if="employeePopup.isNew && employeePopup.calendarView == 'week'">Add Event</span>
             <span ng-if="!employeePopup.isNew || employeePopup.calendarView == 'month'">{{employeePopup.employee.lName}}, {{employeePopup.employee.fName}}</span>
-                        </h4>
+            </h4>
             </div>
             <form class="form-horizontal" role="form" name="popuptest" id="popuptest" >
             <div class="form-group">
@@ -180,6 +191,15 @@
             <div ng-if="employeePopup.data.eventType == 'A'">
             <form class="form-horizontal validate" role="form" name="popupemployeea" id="popupemployeea" >
             <div class="modal-body">
+            <div class="form-group" ng-show="employeePopup.calendarView == 'week'">
+            <div class="form-group-separator"></div>
+            <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
+            <div class="col-sm-10">
+            <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
+            <option value="" selected hidden />
+            </select>
+            </div>
+            </div>
             <div class="form-group-separator"></div>
             <div class="form-group">
             <label class="col-sm-2 control-label" for="field-2">Date</label>
@@ -322,15 +342,15 @@
             <div ng-if="employeePopup.data.eventType == 'S'">
             <form class="form-horizontal validate" role="form" name="popupemployees" id="popupemployees" >
             <div class="modal-body">
- <div class="form-group" ng-show="employeePopup.calendarView == 'week'">
-                                     <div class="form-group-separator"></div>
-              <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
-                                <option value="" selected hidden />
-                            </select>
-                        </div>
-                        </div>
+            <div class="form-group" ng-show="employeePopup.calendarView == 'week'">
+            <div class="form-group-separator"></div>
+            <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
+            <div class="col-sm-10">
+            <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
+            <option value="" selected hidden />
+            </select>
+            </div>
+            </div>
             <div class="form-group-separator"></div>
 
             <div class="form-group">
@@ -484,6 +504,15 @@
             <div ng-if="employeePopup.data.eventType == 'U'">
             <form class="form-horizontal validate" role="form" name="popupemployeeu" id="popupemployeeu" >
             <div class="modal-body">
+            <div class="form-group" ng-show="employeePopup.calendarView == 'week'">
+            <div class="form-group-separator"></div>
+            <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
+            <div class="col-sm-10">
+            <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
+            <option value="" selected hidden />
+            </select>
+            </div>
+            </div>
             <div class="form-group-separator"></div>
             <div class="form-group">
             <label class="col-sm-2 control-label">Reason</label>
