@@ -3,7 +3,7 @@
         var ctrl = this;
         ctrl.patient_list = [];
         var timeFormat = 'HH:mm';
-        Page.setTitle("Calendar");
+        Page.setTitle("Patient Calendar");
         ctrl.calendarView = 'month';
         ctrl.isOpen = false;
         ctrl.calendarDay = new Date();
@@ -58,11 +58,22 @@
             }
             PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
                 ctrl.patient_list = res;
+                delete res.$promise;
+                delete res.$resolved;
+                var ids = (_.map(ctrl.patient_list, 'id')).toString();
+                ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
+        ctrl.getAllEvents = function (ids) {
+            EventTypeDAO.retireveBySchedule({patientIds: ids}).then(function (res) {
+                delete res.$promise;
+                delete res.$resolved;
+                ctrl.events = res;
+            });
+        };
         ctrl.retrieveAllPatients = function () {
-            PatientDAO.retrieveAll({subAction: 'all'}).then(function (res) {
+            PatientDAO.retrieveAll({subAction: 'active'}).then(function (res) {
                 ctrl.patientList = res;
             });
         };
@@ -84,7 +95,7 @@
             data1.endDate = moment(new Date(data1.endDate)).format($rootScope.patientPopup.dateFormat);
             console.log("patient data :: " + JSON.stringify(data1));
             var obj = {action: data1.eventType, data: data1}
-            if ($rootScope.patientPopup.patient.isNew) {
+            if ($rootScope.patientPopup.isNew) {
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $state.go('app.patient-calendar', {id: res.id});
@@ -115,9 +126,9 @@
             var patientObj;
             var data;
             var employees;
+
             function open() {
                 $rootScope.unmaskLoading();
-//                               1028985023
                 setTimeout(function () {
                     $("#eventPatientIds").select2({
                         // minimumResultsForSearch: -1,
@@ -136,6 +147,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
                 $rootScope.patientPopup.dateFormat = "MM/DD/YYYY";
                 $rootScope.patientPopup.reasons = ontimetest.reasons;
@@ -144,9 +156,9 @@
                 $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                 if (data1 == null) {
-                    $rootScope.patientPopup.patient.isNew = true;
+                    $rootScope.patientPopup.isNew = true;
                 } else {
-                    $rootScope.patientPopup.patient.isNew = false;
+                    $rootScope.patientPopup.isNew = false;
                     $rootScope.patientPopup.data = data1;
                     $rootScope.patientPopup.patient = angular.copy(data1.patient);
                     if (data1.eventType != 'U')
@@ -192,74 +204,101 @@
                             $rootScope.patientPopup.data.isPaid = false;
                         }
                         setTimeout(function () {
+                            $("#eventPatientIds").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
                             cbr_replace();
-                        }, 100);
+                        }, 200);
                     }
                 };
                 $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
                     delete $rootScope.patientPopup.data.employeeId;
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
                 };
-                if ($rootScope.patientPopup.patient && !$rootScope.patientPopup.patient.isNew) {
+                if ($rootScope.patientPopup.patient && !$rootScope.patientPopup.isNew) {
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
                 }
-                $rootScope.patientPopup.patientChanged = function (empId) {
-                    PatientDAO.getPatientsForSchedule({patientIds: empId}).then(function (res) {
-                        patientObj = res[0];
-                    }).catch(function (data, status) {
-                        toastr.error("Failed to retrieve patient.");
-                    }).then(function () {
-                        function open1() {
-
-                            // no need to retrieve patient object if you already have, just get all careTypes of patient's insuranceProviderId
-                            $rootScope.maskLoading();
-                            if (patientObj.patientCareTypeCollection) {
-                                var careTypesSelected = [];
-                                var length = patientObj.patientCareTypeCollection.length;
-                                var str = "";
-                                for (var i = 0; i < length; i++) {
-                                    careTypesSelected.push(patientObj.patientCareTypeCollection[i].insuranceCareTypeId);
-                                    if (str.length > 0) {
-                                        str = str + ",";
-                                    }
-                                    str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.id;
-                                }
-                                careTypes = careTypesSelected;
-                                EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
-                                    careEmployeeMap = {};
-                                    angular.forEach(res, function (item) {
-                                        angular.forEach(item.employeeCareRatesList, function (item1) {
-                                            var temp = careEmployeeMap[item1.companyCaretypeId.id];
-                                            if (temp == null) {
-                                                temp = [];
-                                            }
-                                            temp.push(item);
-                                            careEmployeeMap[item1.companyCaretypeId.id] = temp;
-                                        });
-                                    });
-                                    $rootScope.patientPopup.careEmployeeMap = careEmployeeMap;
-                                    $rootScope.patientPopup.careTypes = careTypes;
-                                }).catch(function (data) {
-                                    toastr.error(data.data);
-                                }).then(function () {
-                                    $rootScope.unmaskLoading();
-                                });
+                $rootScope.patientPopup.patientChanged = function (patientId) {
+                    if ($rootScope.patientPopup.data.eventType == 'S') {
+                        delete $rootScope.patientPopup.data.companyCareTypeId;
+                        delete $rootScope.patientPopup.data.employeeId;
+                        $rootScope.patientPopup.carePatientMap = {};
+                        $rootScope.patientPopup.careTypes = [];
+                        PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
+                            patientObj = res[0];
+                            if (ctrl.calendarView == 'month') {
+                                $rootScope.patientPopup.patient = angular.copy(patientObj);
                             }
-                        }
-                        if (data1 != null) {
-                            var obj = {action: ontimetest.eventTypes[data1.eventType].toLowerCase(), subAction: data1.id};
-                            EventTypeDAO.retrieveEventType(obj).then(function (res) {
-                                data1 = angular.copy(res);
-                            }).catch(function (data) {
-                                toastr.error("Failed to retrieve data");
-                            }).then(function () {
+                        }).catch(function (data, status) {
+                            toastr.error("Failed to retrieve patient.");
+                        }).then(function () {
+                            function open1() {
+
+                                // no need to retrieve patient object if you already have, just get all careTypes of patient's insuranceProviderId
+                                $rootScope.maskLoading();
+                                if (patientObj && patientObj.patientCareTypeCollection) {
+                                    var careTypesSelected = [];
+                                    var length = patientObj.patientCareTypeCollection.length;
+                                    var str = "";
+                                    for (var i = 0; i < length; i++) {
+                                        careTypesSelected.push(patientObj.patientCareTypeCollection[i].insuranceCareTypeId);
+                                        if (str.length > 0) {
+                                            str = str + ",";
+                                        }
+                                        str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.id;
+                                    }
+                                    careTypes = careTypesSelected;
+                                    EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
+                                        careEmployeeMap = {};
+                                        angular.forEach(res, function (item) {
+                                            angular.forEach(item.employeeCareRatesList, function (item1) {
+                                                var temp = careEmployeeMap[item1.companyCaretypeId.id];
+                                                if (temp == null) {
+                                                    temp = [];
+                                                }
+                                                temp.push(item);
+                                                careEmployeeMap[item1.companyCaretypeId.id] = temp;
+                                            });
+                                        });
+                                        $rootScope.patientPopup.careEmployeeMap = careEmployeeMap;
+                                        $rootScope.patientPopup.careTypes = careTypes;
+                                    }).catch(function (data) {
+                                        toastr.error(data.data);
+                                    }).then(function () {
+                                        $rootScope.unmaskLoading();
+                                    });
+                                } else if (!patientObj) {
+                                    patientObj = {};
+                                    $rootScope.unmaskLoading();
+                                    toastr.error("Failed to retrieve patient.");
+                                }
+                            }
+                            if (data1 != null) {
+                                var obj = {action: ontimetest.eventTypes[data1.eventType].toLowerCase(), subAction: data1.id};
+                                EventTypeDAO.retrieveEventType(obj).then(function (res) {
+                                    data1 = angular.copy(res);
+                                }).catch(function (data) {
+                                    toastr.error("Failed to retrieve data");
+                                }).then(function () {
+                                    open1();
+                                });
+                            } else {
                                 open1();
-                            });
-                        } else {
-                            open1();
-                        }
-                    });
+                            }
+                        });
+                    }
                 };
+                if (ctrl.calendarView == 'month') {
+                    //static id for month view...change it later
+                    $rootScope.patientPopup.patientChanged(2);
+                }
             }
             $rootScope.maskLoading();
             var careTypes;
