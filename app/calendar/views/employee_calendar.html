@@ -51,12 +51,12 @@
                         </div>
                     </div>
                 </div>
-                <a href="" ng-click="calendar.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
+                <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
         </div>
         <div class="mwl-panel-filter row" ng-if="calendar.calendarView == 'week'">
             <div class="row">
-                <a href="" ng-click="calendar.openModalEmployee(null, 'employee-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
+                <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -148,7 +148,7 @@
         </div>
 
         <!-- Employee Modal : it's like 3 different modal code inside main modal--> 
-        <script type="text/ng-template" id="employee-modal">
+        <script type="text/ng-template" id="calendar-modal">
             <div class="modal-header">
             <button type="button" class="close" ng-click="employeePopup.close();" aria-hidden="true">&times;</button>
             <h4 class="modal-title">
