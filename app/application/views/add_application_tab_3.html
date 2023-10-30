@@ -1,0 +1,50 @@
+<div class="row"  ng-init="addEmployee.tab2DataInit()">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal validate" id="add_employee_form" novalidate="" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
+                    <fieldset ng-disabled="addEmployee.viewOnly">
+                        <div class="row"  ng-if="!addEmployee.viewOnly">
+                            <div class="col-sm-12">
+                                <button class="btn btn-success mar_rg5 mar_lf5 mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('tab3')">
+                                    Save Changes
+                                </button>
+                                <button class="btn btn-white mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('close')">
+                                    Save & Close
+                                </button>
+                                <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'submitted'" ng-click="addEmployee.setFromNext('submit')">
+                                    Submit Application
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        
+                        <div class="form-group-separator">
+                        </div>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-white pull-right" type="submit" ng-click="addEmployee.setFromNext('close')">
+                                    Save & Close
+                                </button>
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')">
+                                « Previous
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // validate
+    customJqueryValidation();
+    jQuery(document).ready(function ($) {
+        setTimeout(function () {
+            $(".fade-in-effect").addClass('in');
+        }, 1);
+    });
+</script>

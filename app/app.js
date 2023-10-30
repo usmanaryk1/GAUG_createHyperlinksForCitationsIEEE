@@ -344,6 +344,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     tabNo: 2
                 }
             })
+            .state('applications-edit.tab3', {
+                url: '/:id/document-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_3'),
+                data: {
+                    tabNo: 3
+                }
+            })
             // employee creation page
             .state('application-viewonly', viewOnlyApplicationConfig())
             // add_application_tab_1
@@ -360,6 +367,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
                 data: {
                     tabNo: 2
+                }
+            })
+            .state('application-viewonly.tab3', {
+                url: '/:id/document-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_3'),
+                data: {
+                    tabNo: 3
                 }
             })
             .state('forgotpassword', {
