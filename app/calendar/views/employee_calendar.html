@@ -15,7 +15,7 @@
 
 <div style="background:white;">
     <div class="mwl-toolbar">
-        <div class="mwl-left input-group col-sm-12 col-md-5" style="padding-top:5px;">
+        <div class="mwl-left input-group col-sm-12 col-md-4" style="padding-top:5px;">
 
             <h2><button type="button" class="btn btn-default btn-sm btn-date"  ng-click="calendar.showDatepicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>{{ calendar.calendarTitle}}</h2>
             <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-click="calendar.selectDate($event)" ng-class="{
@@ -23,8 +23,8 @@
                             :calendar.isOpen, 'hide':!calendar.isOpen}"></datepicker>
         </div>
         <form>
-            <div class="mwl-right col-md-7 col-sm-12 no-padding">
-                <div class='col-md-6 col-sm-12 form-group' ng-if='calendar.isEmployeeSearchPage' ng-class="{ 'validate-has-error':calendar.searchParams.patientId == null && calendar.dispatchClicked}">    
+            <div class="mwl-right col-md-8 col-sm-12 no-padding">
+                <div class='col-md-4 col-sm-12 form-group' ng-if='calendar.isEmployeeSearchPage' ng-class="{ 'validate-has-error':calendar.searchParams.patientId == null && calendar.dispatchClicked}">    
                     <script type="text/javascript">
                         jQuery(document).ready(function ($)
                         {
@@ -48,8 +48,13 @@
                         <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient to issue dispatch.</span>
                     </div>
                 </div>
+                <div ng-if='calendar.isEmployeeSearchPage' class='col-sm-12 col-md-3 pad_top5'>
+                    <input type="checkbox" name="showPatientsVyDistance" ng-model="calendar.showPatientsVyDistance"
+                           ng-change="calendar.onChangeShowPatientsByDistnace()" class="ng-pristine ng-valid">
+                    <label>Show Patients</label>
+                </div>
 
-                <div class='col-sm-12 col-md-6 text-right pad0 pull-right'>
+                <div class='col-sm-12 col-md-5 text-right pad0 pull-right'>
                     <a ng-if="!calendar.isEmployeeSearchPage && hasAccess('ADD_SCHEDULE')" href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
                     <a ng-if='calendar.isEmployeeSearchPage' href="" ng-click="calendar.dispatchConfirmModal()" class="btn btn-success btn-single btn-sm" style="">Dispatch</a>
                     <div class="mwl-button-group" ng-if='!calendar.isWorksiteSchedulePage'>
@@ -262,6 +267,30 @@
                         });</script>
                     <select multiple class="form-control" name ="PreferredCounties" id="PreferredCounties" 
                             ng-model="calendar.searchParams.preferredCounties" ng-options='county as county for county in nyStateCountyList'>
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4" ng-if='!calendar.isEmployeeSearchPage'>
+                    <label>Patient' compatibility</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                        setTimeout(function () {
+                        $("#patientIdsForCompatibility").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="patientIdsForCompatibility" id="patientIdsForCompatibility" ng-model="calendar.searchParams.patientIdsForCompatibility" ng-options='pat.id as (pat.lName + ", " + pat.fName + " " + pat.middleInitial) for pat in calendar.patientList'>
                         <option value="" selected hidden />
                     </select>
                 </div>
