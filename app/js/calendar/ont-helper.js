@@ -148,7 +148,7 @@
 	        dayCounter.add(1, 'day');
 	      }
 	      eventdays = days;
-	      console.log(events);
+
 	      _.each(list, function (n){
 	      	 	n.temp_events = _.filter(events, function (data){
 	      	 		return data.employeeId == n.id
@@ -163,11 +163,26 @@
 	        		e.events = _.filter(n.temp_events, function (content){
 	        							return moment(f.date).isSame(moment(new Date(content.startDate)));
 	        					})
+	        		_.each(e.events, function (d) {
+	        			var startDate = moment(new Date(d.startDate));
+	        			var endDate = moment(new Date(d.endDate));
+	        			if(moment(endDate).isSameOrBefore(moment(days[6].date)))
+	        			{
+		                    var diff = endDate.diff(startDate,'days');
+			        	    d.daySpan = diff+1;
+			        	    console.log(diff);
+	        			} else {
+	        				//var date = moment(days[6])
+	        				//console.log(moment(days[6].date));
+	        				var diff = moment(days[6].date).diff(startDate,'days');
+			        		d.daySpan = diff+1;
+			        		console.log(diff);
+	        			}
+	        		})
 	        		n.days.push(e);
 	        	})
 	        })
 	        console.log(list);
-
 	      return {days: days, list:list};
 
 	    }

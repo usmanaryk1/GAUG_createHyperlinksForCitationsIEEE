@@ -19,12 +19,12 @@ angular
                 restrict: 'EA',
                 require: '^mwlCalendar',
                 scope: {
-                    events: '=',
-                    currentDay: '=',
-                    onEventClick: '=',
-            list:'=',
-            totalItems:'=',
-            currentPage:'='
+                events: '=',
+                currentDay: '=',
+                onEventClick: '=',
+                list:'=',
+                totalItems:'=',
+                currentPage:'='
                 },
                 controller: controller,
 	      link: function(scope, element, attrs, calendarCtrl) {
