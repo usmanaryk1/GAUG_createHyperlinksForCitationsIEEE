@@ -93,7 +93,7 @@
                 ctrl.positions = res;
             });
         };
-   
+
         $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
         {
             var data;
@@ -172,14 +172,16 @@
                         var old = $rootScope.employeePopup.data.eventType;
                         $rootScope.employeePopup.data = {eventType: old, recurranceType: "N"};
                         if (old == 'S') {
-                            $rootScope.employeePopup.data.forLiveIn = false;
+                            if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
+                                $rootScope.employeePopup.data.forLiveIn = false;
                         }
                         if (old != 'U') {
                             $rootScope.employeePopup.data.startTime = currentTime;
                             $rootScope.employeePopup.data.endTime = currentTime;
                         }
                         if (old == 'U') {
-                            $rootScope.employeePopup.data.isPaid = false;
+                            if (!angular.isDefined($rootScope.employeePopup.data.isPaid))
+                                $rootScope.employeePopup.data.isPaid = false;
                         }
                         setTimeout(function () {
                             $("#eventEmployeeIds").select2({
@@ -196,8 +198,8 @@
                         }, 200);
                     }
                 };
-                $rootScope.employeePopup.employeeChanged = function (empId, editMode) {
-                    if ($rootScope.employeePopup.data.eventType == 'S') {
+                $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
+                    if ($rootScope.employeePopup.data.eventType == 'S' && !editMode) {
                         delete $rootScope.employeePopup.data.companyCareTypeId;
                         delete $rootScope.employeePopup.data.patientId;
                         $rootScope.employeePopup.carePatientMap = {};
@@ -213,7 +215,7 @@
                     }).then(function () {
 
                         function open1() {
-                            if ($rootScope.employeePopup.data.eventType == 'S') {
+                            if ($rootScope.employeePopup.data.eventType == 'S' || viewMode) {
                                 ctrl.careTypeIdMap = {};
                                 var careTypesSelected = [];
                                 if (employeeObj && employeeObj.employeeCareRatesList) {
@@ -233,11 +235,11 @@
                                                 careTypes = careTypesSelected;
                                                 $rootScope.employeePopup.carePatientMap = carePatientMap;
                                                 $rootScope.employeePopup.careTypes = careTypes;
+                                                if (editMode) {
+                                                    $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
+                                                }
                                             }
                                         });
-                                    }
-                                    if (editMode) {
-                                        $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
                                     }
                                 } else if (!employeeObj) {
                                     employeeObj = {};
@@ -246,7 +248,27 @@
                                 }
                             }
                         }
-                        open1();
+                        if (data != null) {
+                            var id;
+                            if (data.availabilityId)
+                                id = data.availabilityId;
+                            if (data.scheduleId)
+                                id = data.scheduleId;
+                            if (data.unavailabilityId)
+                                id = data.unavailabilityId;
+                            var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
+                            EventTypeDAO.retrieveEventType(obj).then(function (res) {
+                                data = angular.copy(res);
+                                data.applyTo = "DOW";
+                                $rootScope.employeePopup.data = angular.copy(data);
+                            }).catch(function (data) {
+                                toastr.error("Failed to retrieve data");
+                            }).then(function () {
+                                open1();
+                            });
+                        } else {
+                            open1();
+                        }
                     });
                 };
                 if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
@@ -254,7 +276,7 @@
                 }
                 if (ctrl.calendarView == 'month') {
                     //static id for month view...change it later
-                    $rootScope.employeePopup.employeeChanged(4);
+                    $rootScope.employeePopup.employeeChanged(4, false, true);
                 }
             }
             $rootScope.maskLoading();
