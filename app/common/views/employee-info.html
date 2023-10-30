@@ -23,7 +23,7 @@
             <div class="user_panel col-md-12">
                 <div class="user_img"> 
                     <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(employeeinfo.employee.profileImage != null && employeeinfo.employee.profileImage != '') ? (amazonPublicUrl + employeeinfo.companyCode + '/' + employeeinfo.employee.profileImage) : ('assets/images/user-5.png')}}"> </div>
-                    <div class="emp_user_hd" style="width: 77%;">
+                <div class="emp_user_hd" style="width: 77%;">
                     <div class="emp_user_name">{{employeeinfo.employee.lName}}, {{employeeinfo.employee.fName}} {{employeeinfo.employee.middleInitial}}</div>
                     <p>{{positions[employeeinfo.employee.companyPositionId]}}</p>
                 </div>
@@ -40,7 +40,7 @@
         <hr/>
         <div ng-show="!isProfile">
             <notes-directive user-id="employeeinfo.employeeId" has-create="true" has-retrieve="true" can-edit="true"
-                     can-delete="true" read-notes="false"></notes-directive>
+                             can-delete="true" read-notes="false"></notes-directive>
         </div>
         <div ng-show="isProfile">
             <div class="row">
@@ -122,6 +122,18 @@
                         <label for="field-1" class="control-label col-md-5"><strong>Date Of Birth</strong></label>
                         <div class="col-md-7">
                             {{employeeinfo.employee.dateOfBirth|date :dateFormat}} 
+                        </div>
+                    </div>	
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-5"><strong>Gender</strong></label>
+                        <div class="col-md-7">
+                            {{employeeinfo.employee.gender}} 
                         </div>
                     </div>	
 
