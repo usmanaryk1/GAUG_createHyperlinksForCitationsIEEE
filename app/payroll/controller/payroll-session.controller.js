@@ -343,6 +343,9 @@
                         } else {
                             payroll.ptoAdded = false;
                         }
+                        if (payroll.sickPayoutHours > 0 || payroll.vacationPayoutHours > 0 || payroll.personalPayoutHours > 0) {
+                            payroll.hasPayout = true;
+                        }
                     });
                     ctrl.processedSessionObj.sessionStartDate = Date.parse(ctrl.processedSessionObj.sessionStartDate);
                     ctrl.processedSessionObj.sessionEndDate = Date.parse(ctrl.processedSessionObj.sessionEndDate);
