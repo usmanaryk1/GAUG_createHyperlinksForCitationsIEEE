@@ -31,14 +31,17 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
 
             function initData() {
                 scope.notes = [];
+                scope.noteTypeCategoriesMap = {'Case Offered': ['Accepted', 'Not Available', 'Declined']};
+                scope.noteCategories = [];
                 scope.allLoaded = false;
                 scope.data = {note: ""};
                 if (scope.type === 'patient') {
-                    scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls', 'MLTC Update'];
+                    scope.noteTypes = ['Accidents/Incidents', 'Communication', 'Falls', 'Schedule', 'MLTC Update'];
                 } else if (scope.type === 'application') {
                     scope.noteTypes = ['Missing Data', 'Suspecious', 'Other'];
                 } else {
-                    scope.noteTypes = ['Case Refusal', 'Company Outreach', 'Compliance', 'Disciplinary', 'Employee Message', 'Miscellaneous', 'Proxy Communication', 'Standard Communication'];
+                    scope.noteTypes = ['Case Offered', 'Company Outreach', 'Compliance', 'Disciplinary',
+                        'Employee Message', 'Miscellaneous', 'Proxy Communication', 'Schedule', 'Standard Communication'];
                 }
                 scope.searchParams = {userId: scope.userId, pageNo: 1, limit: 10, action: scope.userId, subAction: 'notes'};
                 if (scope.hasRetrieve) {
@@ -47,6 +50,15 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                         readNotes();
                 } else {
                     $rootScope.unmaskLoading();
+                }
+            }
+
+            scope.onNoteTypeChange = function () {
+                if (scope.noteTypeCategoriesMap[scope.data.noteType]) {
+                    scope.noteCategories = scope.noteTypeCategoriesMap[scope.data.noteType];
+                } else {
+                    scope.noteCategories = [];
+                    delete scope.data.noteCategory;
                 }
             }
 
@@ -78,7 +90,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     $rootScope.maskLoading();
                     FeatureDAO.addNotes(
                             {userId: scope.userId,
-                                note: {note: scope.data.note, noteType: scope.data.type}}).then(function (res) {
+                                note: {note: scope.data.note, noteType: scope.data.noteType, noteCategory: scope.data.noteCategory}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};
@@ -98,7 +110,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
                     FeatureDAO.updateNotes(
                             {userId: scope.userId,
                                 noteId: scope.data.id,
-                                note: {note: scope.data.note, noteType: scope.data.type}}).then(function (res) {
+                                note: {note: scope.data.note, noteType: scope.data.noteType, noteCategory: scope.data.noteCategory}}).then(function (res) {
                         if (scope.hasRetrieve)
                             initData();
                         scope.data = {note: ""};
@@ -130,6 +142,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
 
             scope.editNote = function (note) {
                 scope.data = angular.copy(note);
+                scope.onNoteTypeChange();
             };
             scope.loadMoreNotes = function () {
                 if (scope.loading !== true && scope.allLoaded !== true) {
