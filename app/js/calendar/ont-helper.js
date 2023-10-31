@@ -170,13 +170,9 @@
 	        			{
 		                    var diff = endDate.diff(startDate,'days');
 			        	    d.daySpan = diff+1;
-			        	    console.log(diff);
 	        			} else {
-	        				//var date = moment(days[6])
-	        				//console.log(moment(days[6].date));
 	        				var diff = moment(days[6].date).diff(startDate,'days');
 			        		d.daySpan = diff+1;
-			        		console.log(diff);
 	        			}
 	        		})
 	        		n.days.push(e);
