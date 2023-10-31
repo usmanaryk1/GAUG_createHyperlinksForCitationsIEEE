@@ -200,7 +200,7 @@
                 formatBillingClaim(res);
             }).catch(function (data) {
                 if (data.status === 404) {
-                    toastr.error("No claim exists by provided Insurance claim number.");
+                    toastr.error("No claim exists by provided Insurance or Billing claim number.");
                 } else {
                     toastr.error("Failed to retrieve patients.");
                 }
