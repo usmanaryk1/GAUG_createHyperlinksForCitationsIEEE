@@ -173,6 +173,7 @@
                 ctrl.unbindPatientCondition();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        ctrl.parseModifiers(serviceLine);
                         if (serviceLine.serviceFromDate)
                             serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
                         if (serviceLine.serviceToDate)
