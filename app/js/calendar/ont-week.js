@@ -10,7 +10,7 @@ angular
                         $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list);
                     });
                     $scope.onEventClick = function (eventCell, dayClickedFirstRun, $event) {
-                        $rootScope.openModalCalendar(eventCell, 'calendar-modal', 'lg', 'static');
+                        $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                     };
 
                 }];

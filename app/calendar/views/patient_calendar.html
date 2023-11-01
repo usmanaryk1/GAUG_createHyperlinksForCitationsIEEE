@@ -46,12 +46,12 @@
                         </div>
                     </div>           
                 </div>
-                <a href="" ng-click="patientcalendar.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
+                <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
         </div>
         <div class="mwl-panel-filter row" ng-if="patientcalendar.calendarView == 'week'">
             <div class="row">
-                <a href="" ng-click="patientcalendar.openModalPatient(null, 'patient-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
+                <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm pull-right" style="margin-right: 10px">Add New Event</a>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -149,7 +149,7 @@
         </div>
 
         <!--Patient Modal-->
-        <script type="text/ng-template" id="patient-modal" >
+        <script type="text/ng-template" id="calendar-modal" >
             <div class="modal-header">
             <button type="button" class="close" ng-click="patientPopup.close();" aria-hidden="true">&times;</button>
             <h4 class="modal-title">
@@ -158,6 +158,9 @@
             </h4>
             <h6>{{patientPopup.patient.dob|date :dateFormat}}</h6>
             </div>
+     <div>
+                                        <img alt="user" class="img-cirlce img-responsive" ng-show="patientPopup.showLoadingImage" src="assets/images/loading.gif"/>
+                                    </div>
             <form class="form-horizontal" role="form" name="popuptest" id="popuptest" >
             <div class="form-group">
             <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Availability</label>
@@ -202,7 +205,7 @@
             <label class="col-sm-2 control-label">Care</label>
 
             <div class="col-sm-10">
-            <select class="form-control" id="care" name="care" ng-model="patientPopup.data.companyCareTypeId" data-message-required="Please select care." ng-options="care.id as care.companyCaretypeId.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()">
+            <select class="form-control" id="care" name="care" ng-model="patientPopup.data.companyCareTypeId" data-message-required="Please select care." ng-options="care.id as care.companyCaretypeId.careTypeTitle for care in patientPopup.careTypes" ng-change="patientPopup.retrieveEmployeeBasedOnCare()"  data-message-required="Please select care." ng-required="patientPopup.calendarView == 'week'" data-validate="required">
             <option value="">Select the care</option>
             </select>
             </div>
@@ -214,7 +217,7 @@
             <label class="col-sm-2 control-label">Employee</label>
 
             <div class="col-sm-10">
-            <select class="form-control" id="employee" name="employee" ng-model="patientPopup.data.employeeId" data-message-required="Please select employee." ng-options="employee.id as (employee.fName+' '+employee.middleInitial) for employee in patientPopup.employees">
+            <select class="form-control" id="employee" name="employee" ng-model="patientPopup.data.employeeId" data-message-required="Please select employee." ng-options="employee.id as (employee.fName+' '+employee.middleInitial) for employee in patientPopup.careEmployeeMap[patientPopup.data.companyCareTypeId]">
             <option value="">Select the employee</option>
             </select>
             </div>
@@ -226,7 +229,7 @@
             <label class="col-sm-2 control-label" for="field-2">Date</label>
             <div class="col-sm-4">
             <div class="input-group" style="z-index:1060">
-            <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="fromDate3" name="fromDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+            <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="fromDate3" name="fromDate3" data-format="dd/mm/yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
             <div class="input-group-addon">
             <a href=""><i class="linecons-calendar"></i></a>
@@ -236,7 +239,7 @@
             <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
             <div class="col-sm-4">
             <div class="input-group" style="z-index:1060">
-            <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="toDate3" name="toDate3" data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+            <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="toDate3" name="toDate3" data-format="dd/mm/yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
 
             <div class="input-group-addon">
             <a href=""><i class="linecons-calendar"></i></a>
@@ -304,16 +307,22 @@
             <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
             <div  ng-if="patientPopup.isNew">
             <div class="col-sm-2">
-            <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+                      <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+  <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
             Daily
+    </label>
             </div>
             <div class="col-sm-2">
-            <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+   <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
             Weekly
+    </label>
             </div>
             <div class="col-sm-2">
-            <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
+                                             <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+       <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
             None
+    </label>
             </div>
             </div>
             <div  ng-if="!patientPopup.isNew">
@@ -386,7 +395,7 @@
             <label class="col-sm-2 control-label" for="field-2">Date</label>
             <div class="col-sm-4">
             <div class="input-group" style="z-index:1060">
-            <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="D, dd MM yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+            <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="dd/mm/yyyy" ng-model="patientPopup.data.startDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
             <div class="input-group-addon">
             <a href=""><i class="linecons-calendar"></i></a>
@@ -396,7 +405,7 @@
             <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
             <div class="col-sm-4">
             <div class="input-group" style="z-index:1060">
-            <input type="text" id="toDate" class="form-control datepicker" name="toDate" data-format="D, dd MM yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+            <input type="text" id="toDate" class="form-control datepicker" name="toDate" data-format="dd/mm/yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
 
             <div class="input-group-addon">
             <a href=""><i class="linecons-calendar"></i></a>
@@ -420,16 +429,22 @@
             <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
             <div  ng-if="patientPopup.isNew" >
             <div class="col-sm-2">
-            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
-            Daily
+                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+    <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+    Daily
+    </label>
             </div>
             <div class="col-sm-2">
-            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+  <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
             Weekly
+    </label>
             </div>
             <div class="col-sm-2">
-            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
+                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+  <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
             None
+    </label>
             </div>
             </div>
             <div  ng-if="!patientPopup.isNew" >
