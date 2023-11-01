@@ -7,17 +7,15 @@
 
 <div style="background:white;">
     <div class="mwl-toolbar">
-        <div class="mwl-left input-group btn-date-group">
+        <div class="mwl-left input-group btn-date-group" style="padding-top:5px;">
             <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="calendar.showDatepicker()"><i class="glyphicon glyphicon-calendar"></i></button>
             <h2>{{ calendar.calendarTitle}}</h2>
             <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{
                     'show'
                     :calendar.isOpen, 'hide':!calendar.isOpen}"></datepicker>
         </div>
-        
-            <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="margin-left:50px;">Add New Event</a>
-        
         <div class="mwl-right">
+            <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>
             <div class="mwl-button-group">
                 <button type="button" class="mwl-month-button mwl-button mwl-state-default" ng-click="calendar.changeToMonth()" ng-class="{
                         'mwl-state-active'

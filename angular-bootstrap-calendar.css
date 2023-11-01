@@ -229,7 +229,7 @@ span[data-cal-date]:hover {
 /* Custom CSS for filters and navigation */
 
 .mwl-toolbar {
-    padding: 20px 10px 10px 10px;
+    padding: 16px 10px 10px 10px;
     min-height: 70px;
 }
 .mwl-toolbar .mwl-left,

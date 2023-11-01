@@ -32,26 +32,26 @@ angular
 
 	    $scope.dayClicked = function(day, dayClickedFirstRun, $event) {
 
-	      if (!dayClickedFirstRun) {
-	        $scope.onTimespanClick({
-	          calendarDate: day.date.toDate(),
-	          $event: $event
-	        });
-	        if ($event && $event.defaultPrevented) {
-	          return;
-	        }
-	      }
+	      // if (!dayClickedFirstRun) {
+	      //   $scope.onTimespanClick({
+	      //     calendarDate: day.date.toDate(),
+	      //     $event: $event
+	      //   });
+	      //   if ($event && $event.defaultPrevented) {
+	      //     return;
+	      //   }
+	      // }
 
-	      $scope.openRowIndex = null;
-	      var dayIndex = $scope.view.indexOf(day);
-	      if (dayIndex === $scope.openDayIndex) { //the day has been clicked and is already open
-	        $scope.openDayIndex = null; //close the open day
-	        $scope.cellIsOpen = false;
-	      } else {
-	        $scope.openDayIndex = dayIndex;
-	        $scope.openRowIndex = Math.floor(dayIndex / 7);
-	        $scope.cellIsOpen = true;
-	      }
+	      // $scope.openRowIndex = null;
+	      // var dayIndex = $scope.view.indexOf(day);
+	      // if (dayIndex === $scope.openDayIndex) { //the day has been clicked and is already open
+	      //   $scope.openDayIndex = null; //close the open day
+	      //   $scope.cellIsOpen = false;
+	      // } else {
+	      //   $scope.openDayIndex = dayIndex;
+	      //   $scope.openRowIndex = Math.floor(dayIndex / 7);
+	      //   $scope.cellIsOpen = true;
+	      // }
 
 	    };
 
