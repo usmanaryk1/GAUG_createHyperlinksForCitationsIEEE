@@ -21,6 +21,19 @@
             ctrl.nextTab = tab;
         };
 
+        var buildEmptyRateLists = function () {
+            return {rate1: {careTypes: []}, rate2: {careTypes: []}, rate3: {careTypes: []},
+                rate4: {careTypes: []}, rate5: {careTypes: []}};
+        }
+
+        var refreshRates = function () {
+            $("#rate5").multiSelect('refresh');
+            $("#rate4").multiSelect('refresh');
+            $("#rate3").multiSelect('refresh');
+            $("#rate2").multiSelect('refresh');
+            $("#rate1").multiSelect('refresh');
+        }
+
         var employeeAttachmentTypes = {
             'CHRC': 'CHRC Forms',
             'HCR': 'HCR',
@@ -83,7 +96,7 @@
             $formService.resetRadios();
         });
         ctrl.careTypeList = [];
-        ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
+        ctrl.employee.careRatesList = buildEmptyRateLists();
         ctrl.applicationFileObj = {};
         ctrl.w4FileObj = {};
         ctrl.ssn = {};
@@ -158,12 +171,11 @@
             ctrl.employee.taxStatus = 'W';
             ctrl.employee.wages = 'H';
             ctrl.employee.payrollGroup = 'A';
-            ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
+            ctrl.employee.careRatesList = buildEmptyRateLists();
             $timeout(function () {
                 $formService.setRadioValues('TaxStatus', ctrl.employee.taxStatus);
                 $formService.setRadioValues('Wages', ctrl.employee.wages);
-                $("#rate2").multiSelect('refresh');
-                $("#rate1").multiSelect('refresh');
+                refreshRates();
 //                $formService.resetRadios();
             }, 100);
             $scope.resetForm = true;
@@ -332,7 +344,7 @@
                     employeeToSave.hdRate = 13.12;
                 }
             }
-            if(employeeToSave.authorizedHours==null){
+            if (employeeToSave.authorizedHours == null) {
                 employeeToSave.authorizedHoursReason = null;
                 employeeToSave.authorizedHoursExpiryDate = null;
             }
@@ -399,8 +411,7 @@
                 ctrl.displayDocumentsByPosition();
                 ctrl.employee.careRatesList = res;
                 $timeout(function () {
-                    $("#rate2").multiSelect('refresh');
-                    $("#rate1").multiSelect('refresh');
+                    refreshRates();
                 }, 100);
             });
         }
@@ -558,7 +569,7 @@
                 });
                 ctrl.employee.employeeAttachments = ctrl.actualAttachments.concat(employeeEligibilities);
                 ctrl.employee.employeeAttachments = _.orderBy(ctrl.employee.employeeAttachments, function (attachment) {
-                    if(attachment.type==='aed' && attachment.attachmentType==='Disciplinary Action'){
+                    if (attachment.type === 'aed' && attachment.attachmentType === 'Disciplinary Action') {
 //                        if(attachment.extraFields.warnigLevel === '1st warning - verbal'){
 //                            return 1;
 //                        } else if(attachment.extraFields.warnigLevel === '2nd warning - written'){
@@ -642,8 +653,7 @@
                     EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.employee.id}).then(function (res) {
                         ctrl.employee.careRatesList = res;
                         $timeout(function () {
-                            $("#rate2").multiSelect('refresh');
-                            $("#rate1").multiSelect('refresh');
+                            refreshRates();
                         }, 200);
                         ctrl.retrivalRunning = false;
                         if (ctrl.employee.careRatesList.rate1 != null && ctrl.employee.careRatesList.rate1.rate != null) {
@@ -651,6 +661,15 @@
                         }
                         if (ctrl.employee.careRatesList.rate2 != null && ctrl.employee.careRatesList.rate2.rate != null) {
                             ctrl.employee.careRatesList.rate2.rate = ctrl.employee.careRatesList.rate2.rate.toFixed(2);
+                        }
+                        if (ctrl.employee.careRatesList.rate3 != null && ctrl.employee.careRatesList.rate3.rate != null) {
+                            ctrl.employee.careRatesList.rate3.rate = ctrl.employee.careRatesList.rate3.rate.toFixed(2);
+                        }
+                        if (ctrl.employee.careRatesList.rate4 != null && ctrl.employee.careRatesList.rate4.rate != null) {
+                            ctrl.employee.careRatesList.rate4.rate = ctrl.employee.careRatesList.rate4.rate.toFixed(2);
+                        }
+                        if (ctrl.employee.careRatesList.rate5 != null && ctrl.employee.careRatesList.rate5.rate != null) {
+                            ctrl.employee.careRatesList.rate5.rate = ctrl.employee.careRatesList.rate5.rate.toFixed(2);
                         }
                     }).catch(function () {
                         toastr.error("Failed to retrieve employee care rates.");
@@ -741,44 +760,69 @@
             setValidationsForTab2(newVal);
         });
 
-        $scope.$watch(function () {
-            if (!ctrl.employee.careRatesList) {
-                ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
-            }
-            return ctrl.employee.careRatesList.rate1.careTypes;
-        }, function (newVal, oldValue) {
-            if (ctrl.careTypeList2) {
-                var newCareTypes2 = [];
-                angular.forEach(ctrl.careTypeList, function (obj) {
-                    if (newVal.indexOf(obj.id) < 0) {
-                        newCareTypes2.push(obj);
-                    }
-                });
-                ctrl.careTypeList2 = newCareTypes2;
+        ctrl.buildCareTypesList = function () {
+            
+            var selectedCareTypesAll = [];
+            angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function (obj) {
+                selectedCareTypesAll.push(obj);
+            });
+            angular.forEach(ctrl.employee.careRatesList.rate2.careTypes, function (obj) {
+                selectedCareTypesAll.push(obj);
+            });
+            angular.forEach(ctrl.employee.careRatesList.rate3.careTypes, function (obj) {
+                selectedCareTypesAll.push(obj);
+            });
+            angular.forEach(ctrl.employee.careRatesList.rate4.careTypes, function (obj) {
+                selectedCareTypesAll.push(obj);
+            });
+            angular.forEach(ctrl.employee.careRatesList.rate5.careTypes, function (obj) {
+                selectedCareTypesAll.push(obj);
+            });
+            ctrl.careTypeList5 = [];
+            ctrl.careTypeList4 = [];
+            ctrl.careTypeList3 = [];
+            ctrl.careTypeList2 = [];
+            ctrl.careTypeList1 = [];
+
+            angular.forEach(ctrl.careTypeList, function (obj) {
+                if (selectedCareTypesAll.indexOf(obj.id) < 0 || ctrl.employee.careRatesList.rate1.careTypes.indexOf(obj.id) >= 0) {
+                    ctrl.careTypeList1.push(obj);
+                }
+                if (selectedCareTypesAll.indexOf(obj.id) < 0 || ctrl.employee.careRatesList.rate2.careTypes.indexOf(obj.id) >= 0) {
+                    ctrl.careTypeList2.push(obj);
+                }
+                if (selectedCareTypesAll.indexOf(obj.id) < 0 || ctrl.employee.careRatesList.rate3.careTypes.indexOf(obj.id) >= 0) {
+                    ctrl.careTypeList3.push(obj);
+                }
+                if (selectedCareTypesAll.indexOf(obj.id) < 0 || ctrl.employee.careRatesList.rate4.careTypes.indexOf(obj.id) >= 0) {
+                    ctrl.careTypeList4.push(obj);
+                }
+                if (selectedCareTypesAll.indexOf(obj.id) < 0 || ctrl.employee.careRatesList.rate5.careTypes.indexOf(obj.id) >= 0) {
+                    ctrl.careTypeList5.push(obj);
+                }
+            });
+            $timeout(function () {
+                refreshRates();
+            }, 200);
+        }
+
+        var buildCareTypesExceptGiven = function (newCareTypeList) {
+            var newCareTypes2 = [];
+            angular.forEach(ctrl.careTypeList, function (obj) {
+                if (newCareTypeList.indexOf(obj.id) < 0) {
+                    newCareTypes2.push(obj);
+                }
+            });
+        }
+        var rebuildCareTypeList = function (otherCareTypeList, newList, idName) {
+            if (otherCareTypeList) {
+                otherCareTypeList = buildCareTypesExceptGiven(newList);
                 $timeout(function () {
-                    $('#rate2').multiSelect('refresh');
+                    $(idName).multiSelect('refresh');
                 }, 100);
             }
-        });
-        $scope.$watch(function () {
-            if (!ctrl.employee.careRatesList) {
-                ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
-            }
-            return ctrl.employee.careRatesList.rate2.careTypes;
-        }, function (newVal, oldValue) {
-            if (ctrl.careTypeList1) {
-                var newCareTypes1 = [];
-                angular.forEach(ctrl.careTypeList, function (obj) {
-                    if (newVal.indexOf(obj.id) < 0) {
-                        newCareTypes1.push(obj);
-                    }
-                });
-                ctrl.careTypeList1 = newCareTypes1;
-                $timeout(function () {
-                    $('#rate1').multiSelect('refresh');
-                }, 100);
-            }
-        });
+            return otherCareTypeList;
+        }
 
         function setValidationsForTab2(wages) {
             if (wages && wages === 'S') {
@@ -838,30 +882,13 @@
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
                     CareTypeDAO.retrieveAll({positionId: ctrl.employee.companyPositionId}).then(function (res) {
-                        ctrl.careTypeList2 = [];
-                        ctrl.careTypeList1 = [];
                         ctrl.careTypeList = res;
-                        var selectedCareTypes1 = [];
-                        angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function (obj) {
-                            selectedCareTypes1.push(obj);
-                        });
-                        var selectedCareTypes2 = [];
-                        angular.forEach(ctrl.employee.careRatesList.rate2.careTypes, function (obj) {
-                            selectedCareTypes2.push(obj);
-                        });
-                        angular.forEach(res, function (obj) {
-                            if (selectedCareTypes1.indexOf(obj.id) < 0) {
-                                ctrl.careTypeList2.push(obj);
-                            }
-                            if (selectedCareTypes2.indexOf(obj.id) < 0) {
-                                ctrl.careTypeList1.push(obj);
-                            }
-                        });
-                        $timeout(function () {
-                            $('#rate1').multiSelect('refresh');
-                            $('#rate2').multiSelect('refresh');
-                            form_data = $('#add_employee_form').serialize();
-                        }, 200);
+                        ctrl.buildCareTypesList();
+                        
+            $timeout(function () {
+                refreshRates();
+                form_data = $('#add_employee_form').serialize();
+            }, 200);
                     }).catch(function () {
                         toastr.error("Failed to retrieve care types.");
                         form_data = $('#add_employee_form').serialize();
@@ -1403,13 +1430,13 @@
             });
             modalInstance.result.then(function (updatedAttachment) {
                 if (updatedAttachment) {
-                    if(updatedAttachment.type==='aed' && updatedAttachment.attachmentType==='Disciplinary Action'){
+                    if (updatedAttachment.type === 'aed' && updatedAttachment.attachmentType === 'Disciplinary Action') {
                         var extraFields = JSON.parse(updatedAttachment.extraFields);
-                        if(extraFields.warnigLevel === 'Termination' && extraFields.terminationDate !== null) {
+                        if (extraFields.warnigLevel === 'Termination' && extraFields.terminationDate !== null) {
                             ctrl.employee.terminationDate = extraFields.terminationDate;
                         }
                     }
-                    
+
                     if (mode === 'Create') {
                         ctrl.actualAttachments.push(updatedAttachment);
                     } else {

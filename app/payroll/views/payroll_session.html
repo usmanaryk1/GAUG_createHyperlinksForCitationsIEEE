@@ -321,7 +321,7 @@
                             <input class="form-control" id="hours1" name="hours1" type="text" ng-model="payrollSession.employeeModalObj.hour1" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                        
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.rate2">
                         <label class="col-sm-3 control-label" for="rate2">
                             Rate 2
                         </label>
@@ -333,6 +333,50 @@
                         </label>
                         <div class="col-sm-3">
                             <input class="form-control" id="hours2" name="hours2" type="text" ng-model="payrollSession.employeeModalObj.hour2" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                        
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.rate3">
+                        <label class="col-sm-3 control-label" for="rate3">
+                            Rate 3
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="rate3" name="rate3" type="text" ng-model="payrollSession.employeeModalObj.rate3" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hours3">
+                            Hours 3
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours3" name="hours3" type="text" ng-model="payrollSession.employeeModalObj.hour3" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                        
+                    </div>
+                    
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.rate4">
+                        <label class="col-sm-3 control-label" for="rate4">
+                            Rate 4
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="rate4" name="rate4" type="text" ng-model="payrollSession.employeeModalObj.rate4" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hours4">
+                            Hours 4
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours4" name="hours4" type="text" ng-model="payrollSession.employeeModalObj.hour4" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                        
+                    </div>
+                    
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.rate5">
+                        <label class="col-sm-3 control-label" for="rate5">
+                            Rate 5
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="rate5" name="rate5" type="text" ng-model="payrollSession.employeeModalObj.rate5" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hours5">
+                            Hours 5
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hours5" name="hours5" type="text" ng-model="payrollSession.employeeModalObj.hour5" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                        
                     </div>
                     <div class="form-group">
@@ -349,7 +393,7 @@
                             <input class="form-control" id="otHours" name="otHours" type="text" ng-model="payrollSession.employeeModalObj.otHours" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                       
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.otRate2">
                         <label class="col-sm-3 control-label" for="otRate2">
                             OT Rate2
                         </label>
@@ -361,6 +405,48 @@
                         </label>
                         <div class="col-sm-3">
                             <input class="form-control" id="otHours2" name="otHours2" type="text" ng-model="payrollSession.employeeModalObj.otHours2" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.otRate3">
+                        <label class="col-sm-3 control-label" for="otRate3">
+                            OT Rate3
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="otRate3" name="otRate3" type="text" ng-model="payrollSession.employeeModalObj.otRate3" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="otHours3">
+                            OT Hours3
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="otHours3" name="otHours3" type="text" ng-model="payrollSession.employeeModalObj.otHours3" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.otRate4">
+                        <label class="col-sm-3 control-label" for="otRate4">
+                            OT Rate4
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="otRate4" name="otRate4" type="text" ng-model="payrollSession.employeeModalObj.otRate4" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="otHours4">
+                            OT Hours4
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="otHours4" name="otHours4" type="text" ng-model="payrollSession.employeeModalObj.otHours4" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.otRate5">
+                        <label class="col-sm-3 control-label" for="otRate5">
+                            OT Rate5
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="otRate5" name="otRate5" type="text" ng-model="payrollSession.employeeModalObj.otRate5" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="otHours5">
+                            OT Hours5
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="otHours5" name="otHours5" type="text" ng-model="payrollSession.employeeModalObj.otHours5" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                       
                     </div>
                     <div class="form-group">
@@ -377,7 +463,7 @@
                             <input class="form-control" id="hdHours" name="hdHours" type="text" ng-model="payrollSession.employeeModalObj.hdHours" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                       
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.hdRate2">
                         <label class="col-sm-3 control-label" for="hdRate2">
                             HD Rate2
                         </label>
@@ -389,6 +475,48 @@
                         </label>
                         <div class="col-sm-3">
                             <input class="form-control" id="hdHours2" name="hdHours2" type="text" ng-model="payrollSession.employeeModalObj.hdHours2" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.hdRate3">
+                        <label class="col-sm-3 control-label" for="hdRate3">
+                            HD Rate3
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="hdRate3" name="hdRate3" type="text" ng-model="payrollSession.employeeModalObj.hdRate3" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hdHours3">
+                            HD Hours3
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hdHours3" name="hdHours3" type="text" ng-model="payrollSession.employeeModalObj.hdHours3" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.hdRate4">
+                        <label class="col-sm-3 control-label" for="hdRate4">
+                            HD Rate4
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="hdRate4" name="hdRate4" type="text" ng-model="payrollSession.employeeModalObj.hdRate4" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hdHours4">
+                            HD Hours4
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hdHours4" name="hdHours4" type="text" ng-model="payrollSession.employeeModalObj.hdHours4" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>                       
+                    </div>
+                    <div class="form-group" ng-if="payrollSession.employeeModalObj.hdRate5">
+                        <label class="col-sm-3 control-label" for="hdRate5">
+                            HD Rate5
+                        </label>
+                        <div class="col-sm-3">
+                            <input ng-disabled='true' class="form-control" id="hdRate5" name="hdRate5" type="text" ng-model="payrollSession.employeeModalObj.hdRate5" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
+                        </div>
+                        <label class="col-sm-3 control-label" for="hdHours5">
+                            HD Hours5
+                        </label>
+                        <div class="col-sm-3">
+                            <input class="form-control" id="hdHours5" name="hdHours5" type="text" ng-model="payrollSession.employeeModalObj.hdHours5" maxlength="5" ng-change="payrollSession.setGrossPay(payrollSession.employeeModalObj)" numbers-only="true" data-validate="number" decimalallowed="true"/>
                         </div>                       
                     </div>
                     <div class="form-group">
@@ -536,7 +664,8 @@
     <input ng-disabled='true' class="form-control" id="hours1" name="hours1" type="text" ng-model="payrollModal.payrollObj.hour1" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>                        
     </div>
-    <div class="form-group">
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.rate2">
     <label class="col-sm-3 control-label" for="rate2">
     Rate 2
     </label>
@@ -550,6 +679,52 @@
     <input ng-disabled='true' class="form-control" id="hours2" name="hours2" type="text" ng-model="payrollModal.payrollObj.hour2" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>                        
     </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.rate3">
+    <label class="col-sm-3 control-label" for="rate3">
+    Rate 3
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="rate3" name="rate3" type="text" ng-model="payrollModal.payrollObj.rate3" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="hours3">
+    Hours 3
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hours3" name="hours3" type="text" ng-model="payrollModal.payrollObj.hour3" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                        
+    </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.rate4">
+    <label class="col-sm-3 control-label" for="rate4">
+    Rate 4
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="rate4" name="rate4" type="text" ng-model="payrollModal.payrollObj.rate4" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="hours4">
+    Hours 4
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hours4" name="hours4" type="text" ng-model="payrollModal.payrollObj.hour4" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                        
+    </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.rate5">
+    <label class="col-sm-3 control-label" for="rate5">
+    Rate 5
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="rate5" name="rate5" type="text" ng-model="payrollModal.payrollObj.rate5" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="hours5">
+    Hours 5
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hours5" name="hours5" type="text" ng-model="payrollModal.payrollObj.hour5" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                        
+    </div>
+    
     <div class="form-group">
     <label class="col-sm-3 control-label" for="otRate">
     OT Rate1
@@ -564,7 +739,8 @@
     <input ng-disabled='true' class="form-control" id="otHours" name="otHours" type="text" ng-model="payrollModal.payrollObj.otHours" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>                       
     </div>
-    <div class="form-group">
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.otRate2">
     <label class="col-sm-3 control-label" for="otRate2">
     OT Rate2
     </label>
@@ -578,6 +754,52 @@
     <input ng-disabled='true' class="form-control" id="otHours2" name="otHours2" type="text" ng-model="payrollModal.payrollObj.otHours2" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>                       
     </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.otRate3">
+    <label class="col-sm-3 control-label" for="otRate3">
+    OT Rate3
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="otRate3" name="otRate3" type="text" ng-model="payrollModal.payrollObj.otRate3" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="otHours3">
+    OT Hours3
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="otHours3" name="otHours3" type="text" ng-model="payrollModal.payrollObj.otHours3" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                       
+    </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.otRate4">
+    <label class="col-sm-3 control-label" for="otRate4">
+    OT Rate4
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="otRate4" name="otRate4" type="text" ng-model="payrollModal.payrollObj.otRate4" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="otHours4">
+    OT Hours4
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="otHours4" name="otHours4" type="text" ng-model="payrollModal.payrollObj.otHours4" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                       
+    </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.otRate5">
+    <label class="col-sm-3 control-label" for="otRate5">
+    OT Rate5
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="otRate5" name="otRate5" type="text" ng-model="payrollModal.payrollObj.otRate5" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="otHours5">
+    OT Hours5
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="otHours5" name="otHours5" type="text" ng-model="payrollModal.payrollObj.otHours5" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                       
+    </div>
+    
     <div class="form-group">
     <label class="col-sm-3 control-label" for="hdRate">
     HD Rate1
@@ -592,7 +814,8 @@
     <input ng-disabled='true' class="form-control" id="hdHours" name="hdHours" type="text" ng-model="payrollModal.payrollObj.hdHours" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
     </div>                       
     </div>
-    <div class="form-group">
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.hdRate2">
     <label class="col-sm-3 control-label" for="hdRate2">
     HD Rate2
     </label>
@@ -607,7 +830,50 @@
     </div>                       
     </div>
 
-
+    <div class="form-group" ng-if="payrollModal.payrollObj.hdRate3">
+    <label class="col-sm-3 control-label" for="hdRate3">
+    HD Rate3
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hdRate3" name="hdRate3" type="text" ng-model="payrollModal.payrollObj.hdRate3" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="hdHours3">
+    HD Hours3
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hdHours3" name="hdHours3" type="text" ng-model="payrollModal.payrollObj.hdHours3" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                       
+    </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.hdRate4">
+    <label class="col-sm-3 control-label" for="hdRate4">
+    HD Rate4
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hdRate4" name="hdRate4" type="text" ng-model="payrollModal.payrollObj.hdRate4" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="hdHours4">
+    HD Hours4
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hdHours4" name="hdHours4" type="text" ng-model="payrollModal.payrollObj.hdHours4" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                       
+    </div>
+    
+    <div class="form-group" ng-if="payrollModal.payrollObj.hdRate5">
+    <label class="col-sm-3 control-label" for="hdRate5">
+    HD Rate5
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hdRate5" name="hdRate5" type="text" ng-model="payrollModal.payrollObj.hdRate5" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>
+    <label class="col-sm-3 control-label" for="hdHours5">
+    HD Hours5
+    </label>
+    <div class="col-sm-3">
+    <input ng-disabled='true' class="form-control" id="hdHours5" name="hdHours5" type="text" ng-model="payrollModal.payrollObj.hdHours5" maxlength="5" numbers-only="true" data-validate="number" decimalallowed="true"/>
+    </div>                       
+    </div>
 
     <div class="form-group">
     <label class="col-sm-3 control-label" for="vacation">
