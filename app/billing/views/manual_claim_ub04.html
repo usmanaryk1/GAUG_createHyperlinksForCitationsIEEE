@@ -307,11 +307,18 @@
             </div>
         </div>
     </div>
-    <div  id="btnprint" class="row" ng-show="manualClaim.reviewMode">
+    <div  id="btnprint" class="row" ng-show="manualClaim.reviewMode && !manualClaim.editMode">
         <div class="col-sm-12">
             <span ng-if="manualClaim.isRejected" class="text-danger pull-left" style="font-size: 16px; font-weight: 700;">{{manualClaim.isRejected?'Rejected':''}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <div class="pull-right">
                 <button type="button" class="btn btn-info btn-single pull-right" ng-click="manualClaim.printPdf()">Print</button>
+            </div>
+        </div>
+    </div>
+    <div  id="btnprint" class="row" ng-show="manualClaim.editMode===true">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <button type="button" class="btn btn-info btn-single pull-right" ng-click="manualClaim.processManualClaim()">Save And Close</button>
             </div>
         </div>
     </div>
@@ -997,13 +1004,16 @@
                     <div class=""><input type="text" ng-model="serviceLine.serviceDate" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" required></div>
                 </td>
                 <td class="width_8 border">
-                    <div class=""><input type="text" ng-model="serviceLine.serviceUnits" class="width_100" required></div>
+                    <div class=""><input type="text" ng-disabled="manualClaim.reviewMode"
+                                         ng-model="serviceLine.serviceUnits" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
-                    <div class=""><input type="text" numbers-only decimalallowed='2' ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
+                    <div class=""><input type="text" numbers-only decimalallowed='2'
+                                         ng-disabled="manualClaim.reviewMode" ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
-                    <div class=""><input type="text" numbers-only decimalallowed='2' ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
+                    <div class=""><input type="text" numbers-only decimalallowed='2'
+                                         ng-disabled="manualClaim.reviewMode" ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
                 </td>
                 <td class=" border_2" style="width: 3%;position: relative;">
                     <div class=""><input type="text" ng-model="serviceLine.field49" class="width_100"></div>
@@ -1102,7 +1112,8 @@
                     <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.priorPaymentA" class="width_100"></div>
                 </td>
                 <td class="border width_15">
-                    <div class=""><input type="text" ng-model="manualClaim.manualClaimObj.amountInDueA" class="width_100" required></div>
+                    <div class=""><input type="text" ng-disabled="manualClaim.reviewMode"
+                                         ng-model="manualClaim.manualClaimObj.amountInDueA" class="width_100" required></div>
                 </td>
                 <td class="border_2 width_20">
                     <table cellspacing="0" class="width_100 line-td">

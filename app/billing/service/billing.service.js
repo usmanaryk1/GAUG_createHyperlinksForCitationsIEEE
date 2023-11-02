@@ -46,6 +46,12 @@
                     action: 'process'
                 }
             },
+            updateClaim: {
+                method: 'PUT',
+                params: {
+                    action: 'claims'
+                }
+            },
             getPatientDetails: {
                 method: 'GET',
                 params: {
@@ -206,6 +212,9 @@
             },
             processManualClaim: function(param, data) {
                 return api.processManualClaim(param, data).$promise;
+            },
+            updateClaim: function(params, data) {
+                return api.updateClaim(params, data).$promise;
             },
             searchClaims: function(data) {
                 return api.searchClaims(data).$promise;

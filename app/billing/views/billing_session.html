@@ -102,6 +102,8 @@
                         <div>
                             <a style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download">Download EDI</a>
+                            <a ng-if="billingSession.anyClaimResubmitted === true" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
+                               ng-href="{{billingSession.baseUrl}}billing/session/{{billingSession.sessionId}}/edi/download?editedOnly=true">Edited Claim EDI</a>
                             <a ng-if="billingSession.billingSessions[0].claimType == 'UB04'" style="margin-left: 10px" type="button" class="btn btn-info green_bt  pull-right" 
                                ng-href="{{billingSession.baseUrl}}billing/download/batch/{{billingSession.sessionId}}" download>Download UB04</a>
                         </div>
@@ -137,7 +139,13 @@
                                 </thead>
                                 <tbody>
                                     <tr style="cursor: pointer" ng-repeat="session in billingSession.billingSessions">
-                                        <td ng-if="billingSession.processdMode" ng-click="billingSession.openClaim1500(session);"><b>{{session.id}}</b></td>
+                                        <td ng-if="billingSession.processdMode" ng-click="billingSession.openClaim1500(session);">
+                                            <span class="fa-ban" tooltip="Rejected" 
+                                                  ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" ng-if="session.isRejected"></span>
+                                            <span class="fa-pencil" tooltip="Edited" 
+                                                  ng-click="payrollSession.openPayrollModal(session, 'payrollModal', 'lg')" ng-if="session.isEdited && !session.isRejected"></span>
+                                            <b>{{session.id}}</b>
+                                        </td>
                                         <td>{{session.patientName}}</td>
                                         <!-- span with ng-hide for sorting in data table -->
                                         <td><span class="ng-hide">{{session.patientBirthDate|date:'yyyyMMdd'}}</span>{{session.patientBirthDate|date:dateFormat}}</td>
@@ -146,6 +154,10 @@
                                         <td class="text-center">{{session.authorizedCodes}}</td>
                                         <td class="text-center">
                                             <div class="center">
+                                                
+                                                <a ng-if="billingSession.processdMode && session.isRejected !== true && hasAccess('DELETE_BILLING_CLAIM')" 
+                                                   class="btn icon-left fa fa-pencil edit_button" tooltip="Edit Claim" tooltip-append-to-body="true"
+                                                   ng-click="billingSession.openClaim1500ForEdit(session);"><span class="ed_b"></span></a>
                                                 <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="session.isRejected !== true && hasAccess('DELETE_BILLING_CLAIM') && billingSession.processdMode" 
                                                    ng-click="billingSession.openRejectModal(session, $event)" tooltip="Reject"><span class="ed_b"></span></a>
                                                 <a class="btn icon-left fa fa-check edit_button" href="" ng-if="session.isRejected === true && hasAccess('DELETE_BILLING_CLAIM') && billingSession.processdMode" 

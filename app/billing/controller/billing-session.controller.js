@@ -17,11 +17,22 @@
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
-        ctrl.fetchBillingBatch = function(){
+
+        ctrl.calculateEditedClaim = function () {
+            ctrl.anyClaimResubmitted = false;
+            angular.forEach(ctrl.billingSessions, function (billingObj) {
+                if (billingObj.isEdited === true && billingObj.isRejected !== true) {
+                    ctrl.anyClaimResubmitted = true;
+                }
+            });
+        };
+        
+        ctrl.fetchBillingBatch = function () {
             BillingDAO.getSessionById({paramId: $state.params.id}).then(function (res) {
                 $rootScope.unmaskLoading();
                 if (res && res.billingClaims) {
                     ctrl.billingSessions = res.billingClaims;
+                    ctrl.calculateEditedClaim();
                     ctrl.sessionId = res.id;
                     ctrl.insuranceProvider = res.insuranceProvider;
                     ctrl.totalCharges = res.totalCharges;
@@ -37,7 +48,7 @@
                 toastr.error("Some arror occurred while retrieving existing session.");
             });
         }
-        
+
         if ($state.params.id && $state.params.id !== '') {
             ctrl.processdMode = true;
             $rootScope.maskLoading();
@@ -170,6 +181,26 @@
                 newwindow.focus();
             }
         };
+
+        ctrl.openClaim1500ForEdit = function (claim) {
+            console.log('=====' + JSON.stringify($state.current.name))
+            _setClaim1500InLocalStorage(claim);
+            var url = $state.href('app.manual_claim_edit', {id: claim.uniqueId ? claim.uniqueId : claim.id});
+            if (claim.claimType === 'UB04')
+                url = $state.href('app.manual_claim_ub04_edit', {id: claim.uniqueId ? claim.uniqueId : claim.id});
+            var params = [
+                'height=' + screen.height,
+                'width=' + screen.width,
+                'location=0',
+                'fullscreen=yes' // only works in IE, but here for completeness
+            ].join(',');
+            var newwindow = window.open(url, claim.uniqueId, params);
+            if (window.focus) {
+                newwindow.moveTo(0, 0);
+                newwindow.focus();
+            }
+        };
+
         ctrl.rerenderDataTable = function () {
             var pageInfo;
             if (ctrl.datatableObj.page != null) {
@@ -237,7 +268,7 @@
             });
 
         };
-        
+
         ctrl.openRejectModal = function (claim, e) {
             e.stopPropagation();
             var modalInstance = $modal.open({
@@ -246,7 +277,7 @@
                 size: 'md',
                 resolve: {
                     mode: function () {
-                        return claim.isRejected ? 'Open':'Reject';
+                        return claim.isRejected ? 'Open' : 'Reject';
                     },
                     claim: function () {
                         return claim;
@@ -256,8 +287,9 @@
             modalInstance.result.then(function (claimDetails) {
                 $rootScope.maskLoading();
                 BillingDAO.setClaimStatus(claimDetails).then(function () {
-                    toastr.success("Billing claim "+(claim.isRejected ? 'Opened.':'Rejected.'));
+                    toastr.success("Billing claim " + (claim.isRejected ? 'Opened.' : 'Rejected.'));
                     claim.isRejected = !claim.isRejected;
+                    ctrl.calculateEditedClaim();
                 }).catch(function (data, status) {
                     toastr.error(data.data);
                 }).then(function () {

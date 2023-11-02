@@ -27,6 +27,10 @@
 
         if ($state.params.id && $state.params.id !== '') {
             ctrl.reviewMode = true;
+            if ($state.current.name === 'app.manual_claim_ub04_edit') {
+                ctrl.editMode = true;
+            }
+            console.log('=====' + JSON.stringify($state.params))
             Page.setTitle("Claim UB04");
             $rootScope.layoutOptions.sidebar.hideMenu = true;
             var claimUB04 = JSON.parse(localStorage.getItem('claimUB04'));
@@ -47,10 +51,15 @@
             } else {
                 $rootScope.maskLoading();
                 BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
+                    ctrl.billingClaimObj = res;
                     $rootScope.unmaskLoading();
                     ctrl.claimId = res.id;
                     ctrl.isRejected = res.isRejected;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    if (ctrl.editMode === true && ctrl.billingClaimObj.insurerClaimNumber !== null
+                        && ctrl.manualClaimObj.documentControlNumberA == null) {
+                    ctrl.manualClaimObj.documentControlNumberA = ctrl.billingClaimObj.insurerClaimNumber;
+                }
                     ctrl.calculateTotalCharges();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
@@ -82,8 +91,9 @@
         }
 
         ctrl.checkReviewMode = function () {
-            if (ctrl.reviewMode)
+            if (ctrl.reviewMode && !ctrl.editMode) {
                 $("#manual_claim_form :input").prop("disabled", true);
+            }
             $("#manual_claim_form :input").css('background-color', '#fff');
         };
 
@@ -92,6 +102,10 @@
                 ctrl.patientIdSelected = res.patientId;
                 ctrl.billingClaimObj = res;
                 ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                if (ctrl.billingClaimObj.insurerClaimNumber !== null
+                        && ctrl.manualClaimObj.documentControlNumberA == null) {
+                    ctrl.manualClaimObj.documentControlNumberA = ctrl.billingClaimObj.insurerClaimNumber;
+                }
                 ctrl.calculateTotalCharges();
 
                 ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
@@ -192,6 +206,7 @@
                     toastr.error("Please add atleast one service line.");
                     return;
                 }
+                $rootScope.maskLoading();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
                     ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
@@ -210,7 +225,9 @@
                     });
                     ctrl.billingClaimObj.authorizedCodes = ctrl.billingClaimObj.authorizedCodes.join(',');
                 }
-                ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                if (ctrl.editMode != true) {
+                    ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                }
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 var claimCopy = angular.copy(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.isRejected = false;
@@ -219,17 +236,35 @@
                     delete serviceLine.selectedServiceCareType;
                 });
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(claimCopy);
-                BillingDAO.processManualClaim({patientId: ctrl.patientIdSelected, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
-                        .then(function (res) {
-                            toastr.success("Manual claim processed.");
-                            window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
-                            ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
-                            ctrl.insurerObj = undefined;
-                            $('input,textarea,select').filter('[required]:visible').removeClass('danger-input');
-                            $("#sboxit-1").select2("val", null);
-                        }).catch(function () {
-                    toastr.error("Can not process manual claim.");
-                });
+                if (ctrl.editMode === true) {
+                    BillingDAO.updateClaim({paramId: ctrl.billingClaimObj.id}, ctrl.billingClaimObj)
+                            .then(function (res) {
+                                $rootScope.unmaskLoading();
+                                toastr.success("Manual claim saved.");
+                                $timeout(function () {
+                                    window.close();
+                                }, 500);
+                            })
+                            .catch(function () {
+                                $rootScope.unmaskLoading();
+                                toastr.error("Can not process manual claim.");
+                            });
+                } else {
+                    BillingDAO.processManualClaim({patientId: ctrl.patientIdSelected, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
+                            .then(function (res) {
+                                $rootScope.unmaskLoading();
+                                toastr.success("Manual claim processed.");
+                                window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                                ctrl.manualClaimObj = {serviceLines: [{}], billingCreationDate: $filter('date')(new Date(), $rootScope.dateFormat)};
+                                ctrl.insurerObj = undefined;
+                                $('input,textarea,select').filter('[required]:visible').removeClass('danger-input');
+                                $("#sboxit-1").select2("val", null);
+                            })
+                            .catch(function () {
+                                $rootScope.unmaskLoading();
+                                toastr.error("Can not process manual claim.");
+                            });
+                }
             } else {
 //                console.log('invalid');
                 $('input,textarea,select').filter('[required]:visible').addClass('danger-input');

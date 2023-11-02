@@ -99,6 +99,9 @@
         };
         if ($state.params.id && $state.params.id !== '') {
             ctrl.reviewMode = true;
+            if ($state.current.name === 'app.manual_claim_edit') {
+                ctrl.editMode = true;
+            }
             Page.setTitle("Claim 1500");
             $rootScope.layoutOptions.sidebar.hideMenu = true;
             var claim1500 = JSON.parse(localStorage.getItem('claim1500'));
@@ -122,9 +125,14 @@
                 $rootScope.maskLoading();
                 BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
                     $rootScope.unmaskLoading();
+                    ctrl.billingClaimObj = res;
                     ctrl.claimId = res.id;
                     ctrl.isRejected = res.isRejected;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    if (ctrl.editMode === true && ctrl.billingClaimObj.insurerClaimNumber !== null
+                            && ctrl.manualClaimObj.originalRefNumber == null) {
+                        ctrl.manualClaimObj.originalRefNumber = ctrl.billingClaimObj.insurerClaimNumber;
+                    }
                     ctrl.calculateTotalCharges();
                     ctrl.unbindPatientCondition();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
@@ -158,8 +166,9 @@
         }
 
         ctrl.checkReviewMode = function () {
-            if (ctrl.reviewMode)
+            if (ctrl.reviewMode && !ctrl.editMode) {
                 $("#manual_claim_form :input").prop("disabled", true);
+            }
             $("#manual_claim_form :input").css('background-color', '#fff');
         };
 
@@ -168,6 +177,10 @@
                 ctrl.patientIdSelected = res.patientId;
                 ctrl.billingClaimObj = res;
                 ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                if (ctrl.billingClaimObj.insurerClaimNumber !== null
+                        && ctrl.manualClaimObj.originalRefNumber == null) {
+                    ctrl.manualClaimObj.originalRefNumber = ctrl.billingClaimObj.insurerClaimNumber;
+                }
                 ctrl.calculateTotalCharges();
 //                    console.log(JSON.stringify(ctrl.billingClaimObj));
                 ctrl.unbindPatientCondition();
@@ -229,6 +242,7 @@
                     toastr.error("Please add atleast one service line.");
                     return;
                 }
+                $rootScope.maskLoading();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
                     ctrl.billingClaimObj.totalCosts = ctrl.manualClaimObj.totalCharges;
@@ -251,16 +265,34 @@
                 $rootScope.removeNullKeys(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 ctrl.billingClaimObj.isRejected = false;
-                BillingDAO.processManualClaim({patientId: ctrl.patientIdSelected, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
-                        .then(function (res) {
-                            toastr.success("Manual claim processed.");
-                            window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
-                            ctrl.manualClaimObj = {};
-                            ctrl.manualClaimObj.serviceLines = [{}];
-                            $("#sboxit-1").select2("val", null);
-                        }).catch(function () {
-                    toastr.error("Can not process manual claim.");
-                });
+                if (ctrl.editMode === true) {
+                    BillingDAO.updateClaim({paramId: ctrl.billingClaimObj.id}, ctrl.billingClaimObj)
+                            .then(function (res) {
+                                $rootScope.unmaskLoading();
+                                toastr.success("Manual claim saved.");
+                                $timeout(function () {
+                                    window.close();
+                                }, 500);
+                            })
+                            .catch(function () {
+                                $rootScope.unmaskLoading();
+                                toastr.error("Can not process manual claim.");
+                            });
+                } else {
+                    BillingDAO.processManualClaim({patientId: ctrl.patientIdSelected, processedOn: $filter('date')(new Date(), $rootScope.dateFormat), fromDate: fromDate, toDate: toDate}, ctrl.billingClaimObj)
+                            .then(function (res) {
+                                $rootScope.unmaskLoading();
+                                toastr.success("Manual claim processed.");
+                                window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                                ctrl.manualClaimObj = {};
+                                ctrl.manualClaimObj.serviceLines = [{}];
+                                $("#sboxit-1").select2("val", null);
+                            })
+                            .catch(function () {
+                                $rootScope.unmaskLoading();
+                                toastr.error("Can not process manual claim.");
+                            });
+                }
             } else {
 //                console.log('invalid');
                 $('input,textarea,select').filter('[required]:visible').addClass('danger-input');
