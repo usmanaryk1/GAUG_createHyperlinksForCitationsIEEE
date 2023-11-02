@@ -18,6 +18,9 @@
                 params: {
                     action: 'all'
                 }
+            },
+            delete:{
+                method: 'DELETE'
             }
         });
         return {
@@ -32,7 +35,10 @@
             },
             retireveBySchedule: function (data) {
                 return api.retireveBySchedule(data).$promise;
-            }
+            },
+            delete: function (data) {
+                return api.delete(data).$promise;
+            },
         };
     };
     angular.module("xenon.factory").factory('EventTypeDAO', ['$resource', EventTypeDAO]);
