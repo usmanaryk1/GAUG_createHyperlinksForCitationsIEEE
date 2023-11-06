@@ -104,7 +104,7 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
-                }, 100);
+                }, 1000);
             }
 
             $rootScope.careTypeModel.save = function () {
