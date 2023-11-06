@@ -22,7 +22,7 @@
                         ng-change="employeeAttachment.setUploadFile(true);"
                         ng-click="employeeAttachment.attachment.type === 'med' ? employeeAttachment.remove(['physicalExpirationDate', 'tbTesting', 'isPositive', 'chestXRayExpiration', 'chestXRayClearance', 'tbQuestionnaire', 'hepatitisB', 'vaccinations'
                                             , 'habituation', 'drugTestDate', 'fluShotDate', 'declination', 'fluInoculation', 'declination', 'reason', 'IsHabituation']) :
-                                        employeeAttachment.remove(['applicationDate', 'orientationDate', 'eligibilityExpDate', 'subtypes'
+                                        employeeAttachment.remove(['applicationDate', 'orientationDate', 'eligibilityExpDate', 'subtypes', 'exclusionsExpDate'
                                                     , 'licenseExpDate', 'malpracticeExpDate', 'cprExpDate', 'InfectionControl', 'OPSearch', 'License', 'DateCompleted', 'TypeUpload'])">
                     <option value="" selected hidden />
                 </select>
@@ -261,7 +261,7 @@
 
         <div ng-if="['Physical', 'Chest X-Ray', 'TB Questionnaire', 'Habituation',
                     'Employment Eligibility (I-9)', 'HCR', 'References', 'Competency Exam', 'Certificate/License',
-                    'OP Search', 'License', 'Infection Control', 'Drug Test'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
+                    'OP Search', 'License', 'Infection Control', 'Drug Test', 'Exclusions'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="expiryDate">
@@ -387,6 +387,22 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="form-group-separator"></div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label add-padding-modal" for="ExclusionsExpDate">
+                    Exclusions Expiration Date
+                </label>
+                <div class="col-sm-8 add-padding-modal">
+                    <div class="input-group" style="z-index:1060">
+                        <input type="text" class="form-control datepicker" id="ExclusionsExpDate" name="ExclusionsExpDate" data-format="mm/dd/yyyy" ng-model="employeeAttachment.attachment.extraFields.exclusionsExpDate" 
+                               data-validate="required,date"  data-message-required="Please select Exclusions Expiration Date.">
+                        <div class="input-group-addon">
+                            <a href=""><i class="linecons-calendar"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div ng-if="employeeAttachment.attachment.attachmentType === 'Initial Application Packet'">
                 <div class="form-group-separator"></div>
@@ -461,6 +477,14 @@
                                     <label class="cbr-inline">
                                         <input name="OrientationPacket" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.OrientationPacket"/>
                                         Orientation Packet
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 add-padding-modal">
+                                <div class="input-group" style="z-index:1060">
+                                    <label class="cbr-inline">
+                                        <input name="Exclusions" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.Exclusions"/>
+                                        Exclusions
                                     </label>
                                 </div>
                             </div>
