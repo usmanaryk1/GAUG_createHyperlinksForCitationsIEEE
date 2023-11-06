@@ -83,9 +83,10 @@
 	      return weekdays;
 	    }
 
-	    function getMonthView(events, currentDay) {
+	    function getMonthView(events, currentDay,id) {
 
 	      var startOfMonth = moment(currentDay).startOf('month');
+	      console.log(startOfMonth);
 	      var day = startOfMonth.clone().startOf('week');
 	      var endOfMonthView = moment(currentDay).endOf('month').endOf('week');
 	      var eventsInPeriod;
@@ -100,10 +101,23 @@
 	      while (day.isBefore(endOfMonthView)) {
 
 	        var inMonth = day.month() === moment(currentDay).month();
-	        var monthEvents = [];
-	        if (inMonth || calendarConfig.displayAllMonthEvents) {
-	          monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
-	        }
+	        //var monthEvents = [];
+	        // if (inMonth || calendarConfig.displayAllMonthEvents) {
+	        //   monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
+	        // }
+
+     	 	var monthEvents = _.filter(events, function (data){
+     	 		return data.employeeId == id
+     	 	})
+     	 	console.log(day);
+     	 	console.log(moment(day));
+	        var finalEvents  = _.remove(monthEvents, function (content){
+	    							var start = moment(day).isSame(moment(new Date(content.startDate)));
+	    							var end = moment(day).isSame(moment(new Date(content.endDate)));
+	    							return start || end;
+		    					})
+
+	    							console.log(finalEvents);
 
 	        var cell = {
 	          label: day.date(),
@@ -160,8 +174,10 @@
 	        	_.each(eventdays, function (f) {
 	        		var e = {};
 	        		angular.copy(f,e);
-	        		e.events = _.filter(n.temp_events, function (content){
-	        							return moment(f.date).isSame(moment(new Date(content.startDate)));
+	        		e.events = _.remove(n.temp_events, function (content){
+	        							var start = moment(f.date).isSame(moment(new Date(content.startDate)));
+	        							var end = moment(f.date).isSame(moment(new Date(content.endDate)));
+	        							return start || end;
 	        					})
 	        		_.each(e.events, function (d) {
 	        			var startDate = moment(new Date(d.startDate));
@@ -178,7 +194,6 @@
 	        		n.days.push(e);
 	        	})
 	        })
-	        console.log(list);
 	      return {days: days, list:list};
 
 	    }

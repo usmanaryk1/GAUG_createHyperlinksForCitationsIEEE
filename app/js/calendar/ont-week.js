@@ -8,7 +8,9 @@ angular
 
                     $scope.$on('calendar.refreshView', function () {
                         $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list);
+                        console.log($scope.view);
                     });
+
                     $scope.onEventClick = function (eventCell, dayClickedFirstRun, $event) {
                         $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                     };
@@ -19,17 +21,15 @@ angular
                 restrict: 'EA',
                 require: '^mwlCalendar',
                 scope: {
-                events: '=',
-                currentDay: '=',
-                onEventClick: '=',
-                list:'=',
-                totalItems:'=',
-                currentPage:'='
+                    events: '=',
+                    currentDay: '=',
+                    onEventClick: '=',
+                    onLinkClick: '=',
+                    list:'=',
+                    totalItems:'=',
+                    currentPage:'='
                 },
-                controller: controller,
-	      link: function(scope, element, attrs, calendarCtrl) {
-                    //scope.$scope.calendarCtrl = calendarCtrl;
-                }
+                controller: controller
             };
 
         });

@@ -3,12 +3,11 @@
         var ctrl = this;
 
         ctrl.employee_list = [];
-        //ctrl.events  = [];
         var timeFormat = 'HH:mm';
 
         Page.setTitle("Employee Calendar");
 
-        ctrl.calendarView = 'month';
+        ctrl.calendarView = 'week';
         ctrl.isOpen = false;
         ctrl.calendarDay = new Date();
 

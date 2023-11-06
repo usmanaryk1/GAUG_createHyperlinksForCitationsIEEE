@@ -25,7 +25,7 @@
                     {{'Unavailable'}}
                 </span>                
             </div>
-            <span ng-if="temp_day.events.length - 1 > 0" ng-click="hide(this);" onclick="hide(this);" data-placement="bottom">+ {{temp_day.events.length - 1}} more</span>
+            <span ng-if="temp_day.events.length - 1 > 0" onclick="hide(this);" data-placement="bottom">+ {{temp_day.events.length - 1}} more</span>
             <div class="eventstoload" style="display:none;">
                 <div 
                     ng-repeat="temp_event in temp_day.events| limitTo: temp_day.events.length - 1:1" 
@@ -45,9 +45,9 @@
 <script type="text/javascript">
     function hide(obj) {
     $(obj).next().popover('show');
-            $(obj).popover({
-    content: $(obj).next().contents(),
+        $(obj).popover({
+            content: $(obj).next().contents(),
             html: true
-    })
+        })
     }
 </script>
