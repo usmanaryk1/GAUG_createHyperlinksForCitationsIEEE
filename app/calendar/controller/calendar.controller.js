@@ -46,7 +46,7 @@
             $('#languages').select2('val', null);
             ctrl.applySearch();
         };
-        ctrl.viewEmployeeId;
+        ctrl.viewEmployee;
         ctrl.retrieveEmployees = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
@@ -65,8 +65,8 @@
             }
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
-                if (!ctrl.viewEmployeeId) {
-                    ctrl.viewEmployeeId = res[0].id;
+                if (!ctrl.viewEmployee) {
+                    ctrl.viewEmployee = res[0];
                 }
                 delete res.$promise;
                 delete res.$resolved;
@@ -75,6 +75,14 @@
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
+        ctrl.positionMap = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    ctrl.positionMap[position.id] = position.position;
+                });
+            }
+        });
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
             ctrl.searchParams.limit = 10;
@@ -288,7 +296,7 @@
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true);
                 }
                 if (ctrl.calendarView == 'month') {
-                    $rootScope.employeePopup.employeeChanged(ctrl.viewEmployeeId, false, true);
+                    $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
             }
             $rootScope.maskLoading();

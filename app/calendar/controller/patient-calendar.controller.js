@@ -23,7 +23,7 @@
             ctrl.calendarView = 'week';
         }
         ctrl.searchParams = {skip: 0, limit: 10};
-        ctrl.viewPatientId;
+        ctrl.viewPatient;
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrievePatients();
@@ -59,8 +59,8 @@
             }
             PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
                 ctrl.patient_list = res;
-                if (!ctrl.viewPatientId) {
-                    ctrl.viewPatientId = res[0].id;
+                if (!ctrl.viewPatient) {
+                    ctrl.viewPatient = res[0];
                 }
                 delete res.$promise;
                 delete res.$resolved;
@@ -324,7 +324,7 @@
                     $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true);
                 }
                 if (ctrl.calendarView == 'month') {
-                    $rootScope.patientPopup.patientChanged(ctrl.viewPatientId, false, true);
+                    $rootScope.patientPopup.patientChanged(ctrl.viewPatient.id, false, true);
                 }
             }
             $rootScope.maskLoading();

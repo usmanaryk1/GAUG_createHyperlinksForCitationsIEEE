@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-md-10">
                     <div class="mwl-left">
-                        <h2>Karl Pierre <small>Designation</small></h2>
+                        <h2>{{patientcalendar.viewPatient.lName}}, {{patientcalendar.viewPatient.fName}}</h2>
                     </div>
                     <div class="col-md-6 pull-right">
                         <div>
@@ -156,11 +156,11 @@
             <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week'">Add Event</span>
             <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month'">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
             </h4>
-            <h6>{{patientPopup.patient.dob|date :dateFormat}}</h6>
+            <h6 ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month'">DOB : {{patientPopup.patient.dateOfBirth|date :dateFormat}}</h6>
             </div>
-     <div>
-                                        <img alt="user" class="img-cirlce img-responsive" ng-show="patientPopup.showLoadingImage" src="assets/images/loading.gif"/>
-                                    </div>
+            <div>
+            <img alt="user" class="img-cirlce img-responsive" ng-show="patientPopup.showLoadingImage" src="assets/images/loading.gif"/>
+            </div>
             <form class="form-horizontal" role="form" name="popuptest" id="popuptest" >
             <div class="form-group">
             <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Availability</label>
@@ -190,9 +190,9 @@
             <div ng-if="patientPopup.data.eventType == 'S'">
             <form class="form-horizontal validate" role="form" name="popuppatients" id="popuppatients" >
             <div class="modal-body">
-        <div class="form-group" ng-show="patientPopup.calendarView == 'week'">
-                           <div class="form-group-separator"></div>
- <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
+            <div class="form-group" ng-show="patientPopup.calendarView == 'week'">
+            <div class="form-group-separator"></div>
+            <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
             <div class="col-sm-10">
             <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week'" data-validate="required">
             <option value="" selected hidden />
@@ -307,22 +307,22 @@
             <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
             <div  ng-if="patientPopup.isNew">
             <div class="col-sm-2">
-                      <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-  <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+            <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+            <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
             Daily
-    </label>
+            </label>
             </div>
             <div class="col-sm-2">
-                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-   <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+            <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+            <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
             Weekly
-    </label>
+            </label>
             </div>
             <div class="col-sm-2">
-                                             <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-       <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
+            <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+            <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
             None
-    </label>
+            </label>
             </div>
             </div>
             <div  ng-if="!patientPopup.isNew">
@@ -368,9 +368,9 @@
             <div  ng-if="patientPopup.data.eventType == 'U'">
             <form class="form-horizontal validate" role="form" name="popuppatientu" id="popuppatientu" >
             <div class="modal-body">
-           <div class="form-group" ng-show="patientPopup.calendarView == 'week'">
-                           <div class="form-group-separator"></div>
- <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
+            <div class="form-group" ng-show="patientPopup.calendarView == 'week'">
+            <div class="form-group-separator"></div>
+            <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
             <div class="col-sm-10">
             <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week'" data-validate="required">
             <option value="" selected hidden />
@@ -429,22 +429,22 @@
             <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
             <div  ng-if="patientPopup.isNew" >
             <div class="col-sm-2">
-                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-    <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
-    Daily
-    </label>
+            <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
+            Daily
+            </label>
             </div>
             <div class="col-sm-2">
-                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-  <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
+            <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
             Weekly
-    </label>
+            </label>
             </div>
             <div class="col-sm-2">
-                               <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-  <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
+            <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
+            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
             None
-    </label>
+            </label>
             </div>
             </div>
             <div  ng-if="!patientPopup.isNew" >
