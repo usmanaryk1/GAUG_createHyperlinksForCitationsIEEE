@@ -55,26 +55,26 @@
         </div>
         <div class="mwl-panel-filter row" ng-if="calendar.calendarView == 'week'">
             <div class="row">
-                
+
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <label>Employees</label>
                     <script type="text/javascript">
-                        jQuery(document).ready(function ($)
+                                jQuery(document).ready(function ($)
                         {
-                            setTimeout(function () {
-                                $("#employeeIds").select2({
-                                    // minimumResultsForSearch: -1,
-                                    placeholder: 'Select Employee...',
-                                    // minimumInputLength: 1,
-                                    // placeholder: 'Search',
-                                }).on('select2-open', function ()
-                                {
-                                    // Adding Custom Scrollbar
-                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                });
-                            }, 200);
+                        setTimeout(function () {
+                        $("#employeeIds").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Employee...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
                         });</script>
                     <select multiple class="form-control" name ="employeeIds" id="employeeIds" ng-model="calendar.searchParams.employeeIds" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
                         <option value="" selected hidden />
@@ -83,17 +83,17 @@
                 <div class="col-md-4">
                     <label>Position</label>
                     <script type="text/javascript">
-                        jQuery(document).ready(function ($)
+                                jQuery(document).ready(function ($)
                         {
-                            setTimeout(function () {
-                                $("#positions").select2({
-                                    placeholder: 'Select Position...',
-                                }).on('select2-open', function ()
-                                {
-                                    // Adding Custom Scrollbar
-                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                });
-                            }, 200);
+                        setTimeout(function () {
+                        $("#positions").select2({
+                        placeholder: 'Select Position...',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
                         });</script>
                     <select multiple class="form-control" name ="positions" id="positions" ng-model="calendar.searchParams.positionIds" ng-options='position.id as position.position for position in calendar.positions'>
                     </select>
@@ -101,17 +101,17 @@
                 <div class="col-md-4">
                     <label>Languages</label>
                     <script type="text/javascript">
-                        jQuery(document).ready(function ($)
+                                jQuery(document).ready(function ($)
                         {
-                            setTimeout(function () {
-                                $("#languages").select2({
-                                    placeholder: 'Select Language...',
-                                }).on('select2-open', function ()
-                                {
-                                    // Adding Custom Scrollbar
-                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                });
-                            }, 200);
+                        setTimeout(function () {
+                        $("#languages").select2({
+                        placeholder: 'Select Language...',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
                         });</script>
                     <select multiple name ="languages" id="languages" class="form-control" ng-model="calendar.searchParams.languages" ng-options="key as value for (key,value) in languages">
                     </select>
@@ -229,7 +229,7 @@
     <label class="col-sm-2 control-label" for="field-2">Date</label>
     <div class="col-sm-4">
     <div class="input-group" style="z-index:1060">
-            <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
+            <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-calendar"></i></a>
@@ -254,7 +254,7 @@
     <label class="col-sm-2 control-label" for="field-2">Time</label>
     <div class="col-sm-3">
     <div class="input-group input-group-minimal">
-    <input class="form-control punch-time-input" ng-disabled="!employeePopup.isNew" ng-model='employeePopup.data.startTime' id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'A'"/>
+    <input class="form-control punch-time-input" ng-model='employeePopup.data.startTime' id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'A'"/>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-clock"></i></a>
@@ -336,8 +336,13 @@
     <div>
     <div class="col-sm-2">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+    Single
+    </label>
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
-    Down
+    Day Of Week
     </label>
     </div>
     <div class="col-sm-2">
@@ -346,11 +351,6 @@
     Sequence
     </label>
     </div>
-    <div class="col-sm-2">
-    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-    <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-    Single
-    </label>
     </div>
     </div>
     </div>
@@ -405,7 +405,7 @@
     <label class="col-sm-2 control-label" for="field-2">Date</label>
     <div class="col-sm-4">
     <div class="input-group" style="z-index:1060">
-            <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate1" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
+            <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate1" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-calendar"></i></a>
@@ -430,7 +430,7 @@
     <label class="col-sm-2 control-label" for="field-2">Time</label>
     <div class="col-sm-3">
     <div class="input-group input-group-minimal">
-    <input class="form-control  punch-time-input" ng-disabled="!employeePopup.isNew"  ng-model='employeePopup.data.startTime' id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'S'"/>
+    <input class="form-control  punch-time-input" ng-model='employeePopup.data.startTime' id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'S'"/>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-clock"></i></a>
@@ -499,20 +499,20 @@
     <div>
     <div class="col-sm-2">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+    Single
+    </label>
+    </div>
+    <div class="col-sm-2">
+    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
-    Down
+    Day Of Week
     </label>
     </div>
     <div class="col-sm-2">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
     Sequence
-    </label>
-    </div>
-    <div class="col-sm-2">
-    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-    Single
     </label>
     </div>
     </div>
@@ -572,7 +572,7 @@
     <label class="col-sm-2 control-label" for="field-2">Date</label>
     <div class="col-sm-4">
     <div class="input-group" style="z-index:1060">
-            <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'U'">
+            <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'U'">
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-calendar"></i></a>

@@ -293,8 +293,11 @@ ontimedata = {
             "careTypes": ["1"]
         }
     ],
-    reasons: [
-        "reason 1", "reason 2", "reason 3"
+    employeeReasons: [
+        "Sick", "Personal Day", "Vacation"
+    ],
+    patientReasons: [
+        "Hospital", "Vacation", "As per Pt."
     ],
     eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
     recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"}
@@ -311,7 +314,8 @@ ontimetest = {
     'dailyAttendance': ontimedata.dailyAttendance,
     'employeeTimesheet': ontimedata.employeeTimesheet,
     'insuranceProviders': ontimedata.insuranceProviders,
-    'reasons': ontimedata.reasons,
+    'employeeReasons': ontimedata.employeeReasons,
+    'patientReasons': ontimedata.patientReasons,
     'recurranceTypes': ontimedata.recurranceTypes,
     'eventTypes': ontimedata.eventTypes,
     'company_code': "TRT",

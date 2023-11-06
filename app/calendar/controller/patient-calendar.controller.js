@@ -158,7 +158,7 @@
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
                 $rootScope.patientPopup.dateFormat = "MM/DD/YYYY";
-                $rootScope.patientPopup.reasons = ontimetest.reasons;
+                $rootScope.patientPopup.reasons = ontimetest.patientReasons;
                 $rootScope.patientPopup.employees = [];
                 $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
                 $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
@@ -169,7 +169,7 @@
                     $rootScope.patientPopup.isNew = false;
                     $rootScope.patientPopup.data = data;
                     if (data.eventType != 'U')
-                        $rootScope.patientPopup.data.applyTo = "DOW";
+                        $rootScope.patientPopup.data.applyTo = "SINGLE";
                 }
                 //to make the radio buttons selected, theme bug
                 setTimeout(function () {
@@ -178,7 +178,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime};
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $rootScope.todayDate};
                 }
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {
@@ -190,7 +190,15 @@
                             if (diff > 6) {
                                 toastr.error("Date range should be no more of 7 days.");
                             } else {
-                                ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+                                if ($rootScope.patientPopup.data.eventType == 'U') {
+                                    if (new Date($rootScope.patientPopup.data.startDate).getDay() != 0 || new Date($rootScope.patientPopup.data.endDate).getDay() != 6) {
+                                        toastr.error("Start date must be Sunday & End date must be Saturday.");
+                                    } else {
+                                        ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+                                    }
+                                } else {
+                                    ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+                                }
                             }
                         } else {
                             console.log("invalid form")
@@ -200,7 +208,7 @@
                 $rootScope.patientPopup.changed = function (event) {
                     if (event != 'repeat') {
                         var old = $rootScope.patientPopup.data.eventType;
-                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N"};
+                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $rootScope.todayDate};
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         if (old == 'S') {
                             $rootScope.patientPopup.data.forLiveIn = false;
@@ -327,7 +335,7 @@
                                 var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
                                 EventTypeDAO.retrieveEventType(obj).then(function (res) {
                                     data = angular.copy(res);
-                                    data.applyTo = "DOW";
+                                    data.applyTo = "SINGLE";
                                     $rootScope.patientPopup.data = angular.copy(data);
                                 }).catch(function (data) {
                                     toastr.error("Failed to retrieve data");
