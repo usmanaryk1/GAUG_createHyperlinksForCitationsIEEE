@@ -428,14 +428,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'AddCompanyCtrl as addCompany',
             }).
             // Employee Calendar
-            state('app.calendar', {
-                url: '/employee-calendar',
+            state('app.employee-calendar', {
+                url: '/employee-calendar/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'employee_calendar'),
                 controller: 'CalendarCtrl as calendar',
             }).
             // Patient Calendar
             state('app.patient-calendar', {
-                url: '/patient-calendar',
+                url: '/patient-calendar/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'patient_calendar'),
                 controller: 'PatientCalendarCtrl as patientcalendar',
             }).

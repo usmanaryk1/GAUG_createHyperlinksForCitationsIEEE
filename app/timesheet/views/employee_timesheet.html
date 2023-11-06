@@ -350,8 +350,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Position</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Position</strong></label>
+    <div class="col-md-7">
     {{positions[selectEmployeeModel.employee.companyPositionId]}} 
     </div>
     </div>    
@@ -362,11 +362,47 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone Number</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.phone | tel}} 
     </div>
     </div>    
+
+    </div>
+    </div>
+<div class="row" ng-if="selectEmployeeModel.employee.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone 2</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactName!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Name</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+       <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactNumber!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactNumber | tel}} 
+    </div>
+    </div>	
 
     </div>
     </div>
@@ -374,8 +410,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Address</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.address1}}<div ng-if="selectEmployeeModel.employee.address2 != null">{{selectEmployeeModel.employee.address2}}</div><div>  {{selectEmployeeModel.employee.city}}, {{selectEmployeeModel.employee.state}}, {{selectEmployeeModel.employee.zipcode}}</div>
     </div>
     </div>    
@@ -386,8 +422,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Date Of Birth</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.dateOfBirth|date :dateFormat}} 
     </div>
     </div>    
@@ -398,8 +434,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Social Security Number</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Social Security Number</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.ssn | ssn}} 
     </div>
     </div>    
@@ -407,8 +443,8 @@
     </div>
     </div>
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Languages Spoken</strong></label>
+    <div class="col-md-7">
     <span ng-if="selectEmployeeModel.employee.languageSpoken== null || selectEmployeeModel.employee.languageSpoken.length==0">N/A</span>
     <span ng-repeat="language in selectEmployeeModel.employee.languageSpoken">{{languages[language]}}
     <label ng-if="$index<selectEmployeeModel.employee.languageSpoken.length-1">, </label>

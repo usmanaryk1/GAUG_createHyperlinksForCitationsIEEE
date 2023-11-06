@@ -128,8 +128,8 @@ angular.module('xenon.services', []).
                 company.addItem('Company Information', './company_information');
 
                 // Subitems of calendar
-                calendar.addItem('Employee', './employee-calendar');
-                calendar.addItem('Patient', './patient-calendar');
+                calendar.addItem('Employee', './employee-calendar/');
+                calendar.addItem('Patient', './patient-calendar/');
 
                 return this;
             };

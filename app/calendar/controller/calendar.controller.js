@@ -1,5 +1,5 @@
 (function () {
-    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state) {
+    function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
         var ctrl = this;
 
         ctrl.employee_list = [];
@@ -68,6 +68,21 @@
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
                 }
+                if ($stateParams.id != null) {
+                    var obj;
+                    angular.forEach(res, function (item) {
+                        if (item.id == $stateParams.id) {
+                            obj = angular.copy(item);
+                        }
+                    });
+                    if (!obj) {
+                        EmployeeDAO.getEmployeesForSchedule({employeeIds: $stateParams.id}).then(function (res1) {
+                            ctrl.viewEmployee = angular.copy(res1[0]);
+                        });
+                    } else {
+                        ctrl.viewEmployee = angular.copy(obj);
+                    }
+                }
                 delete res.$promise;
                 delete res.$resolved;
                 var ids = (_.map(ctrl.employee_list, 'id')).toString();
@@ -133,7 +148,6 @@
                 });
                 $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
-                $rootScope.employeePopup.dateFormat = "MM/DD/YYYY";
                 $rootScope.employeePopup.patients = patients;
                 $rootScope.employeePopup.reasons = ontimetest.employeeReasons;
                 $rootScope.employeePopup.eventTypes = ontimetest.eventTypes;
@@ -155,7 +169,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $rootScope.todayDate};
+                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};
                 }
                 $rootScope.employeePopup.save = function () {
                     $timeout(function () {
@@ -168,7 +182,17 @@
                                 toastr.error("Date range should be no more of 7 days.");
                             } else {
                                 if ($rootScope.employeePopup.data.eventType == 'U') {
-                                    if (new Date($rootScope.employeePopup.data.startDate).getDay() != 0 || new Date($rootScope.employeePopup.data.endDate).getDay() != 6) {
+                                    var startBoolean = false;
+                                    var endBoolean = false;
+                                    //start sunday
+                                    if (new Date($rootScope.employeePopup.data.startDate).getDay() == 0) {
+                                        startBoolean = true;
+                                    }
+                                    //end saturday
+                                    if (new Date($rootScope.employeePopup.data.endDate).getDay() == 6) {
+                                        endBoolean = true;
+                                    }
+                                    if (!startBoolean && !endBoolean) {
                                         toastr.error("Start date must be Sunday & End date must be Saturday.");
                                     } else {
                                         ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
@@ -190,7 +214,7 @@
                     if (event != 'repeat') {
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
-                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $rootScope.todayDate};
+                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
                                 $rootScope.employeePopup.data.forLiveIn = false;
@@ -371,5 +395,5 @@
         ctrl.retrieveAllPositions();
     }
 
-    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", CalendarCtrl]);
+    angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", CalendarCtrl]);
 })();
