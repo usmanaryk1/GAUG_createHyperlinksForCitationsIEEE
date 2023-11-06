@@ -3,6 +3,8 @@
         var ctrl = this;
 
         ctrl.employee_list = [];
+        ctrl.viewEmployee;
+        
         var timeFormat = 'HH:mm';
 
         Page.setTitle("Employee Calendar");
@@ -26,7 +28,9 @@
         ctrl.changeToWeek = function () {
             ctrl.calendarView = 'week';
         }
+        
         ctrl.searchParams = {skip: 0, limit: 10};
+        
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrieveEmployees();
@@ -36,6 +40,7 @@
             ctrl.pageNo = 1;
             $debounce(ctrl.retrieveEmployees, 500);
         };
+        
         ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, skip: 0};
             ctrl.searchParams.availableStartDate = null;
@@ -45,7 +50,7 @@
             $('#languages').select2('val', null);
             ctrl.applySearch();
         };
-        ctrl.viewEmployee;
+        
         ctrl.retrieveEmployees = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
@@ -64,6 +69,9 @@
             }
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
+                console.log($rootScope.totalRecords);
+                ctrl.count = $rootScope.totalRecords;
+
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
                 }
@@ -84,6 +92,7 @@
                 }
                 delete res.$promise;
                 delete res.$resolved;
+                /* Fetch all Employee id's to get related events */
                 var ids = (_.map(ctrl.employee_list, 'id')).toString();
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
@@ -97,11 +106,13 @@
                 });
             }
         });
+
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
             ctrl.searchParams.limit = 10;
             ctrl.retrieveEmployees();
         };
+
         ctrl.getAllEvents = function (ids) {
             EventTypeDAO.retireveBySchedule({employeeIds: ids}).then(function (res) {
                 delete res.$promise;
@@ -109,11 +120,13 @@
                 ctrl.events = res;
             });
         }
+
         ctrl.retrieveAllEmployees = function () {
             EmployeeDAO.retrieveAll({subAction: 'active'}).then(function (res) {
                 ctrl.employeeList = res;
             });
         };
+
         ctrl.retrieveAllPositions = function () {
             PositionDAO.retrieveAll({}).then(function (res) {
                 ctrl.positions = res;

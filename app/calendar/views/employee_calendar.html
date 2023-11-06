@@ -147,7 +147,7 @@
             </div>
         </div>
     </div>
-
+{{calendar.count}}
     <mwl-calendar
         events="calendar.events"
         view="calendar.calendarView"
@@ -161,9 +161,12 @@
     </mwl-calendar>
     <div ng-if="calendar.calendarView == 'week'">
         <div id="paginationButtons" class="text-right">
-            <dir-pagination-controls boundary-links="true" 
-                                     max-size="9"
-                                     template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination" on-page-change="calendar.pageChanged(newPageNumber)"></dir-pagination-controls>
+            <pagination boundary-links="true" 
+                        max-size="9"
+                        totalItems = "totalRecords"
+                        ng-model="calendar.pageNo"
+                        ng-change="calendar.pageChanged(newPageNumber)">
+            </pagination>
         </div>
     </div>
 </div>
@@ -272,9 +275,9 @@
     </div>
     </div>
     </div>
-    <div class="col-sm-3">
+    <label class="col-sm-3 control-label" style="text-align:left;">
     {{employeePopup.data.startTime| timecount : employeePopup.data.endTime}}
-    </div>
+    </label>
     </div>
 
     <div class="form-group-separator"></div>
@@ -334,24 +337,24 @@
 
     <div class="form-group" ng-if="!employeePopup.isNew" style="margin-bottom:0px;">
     <label class="col-sm-2 control-label" for="field-2" style="padding-top:7px;">Apply To</label>
-    <div>
-    <div class="col-sm-2">
-    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-    <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-    Single
-    </label>
-    <div class="col-sm-2">
+    <div class="col-sm-9">
+    <div class="col-sm-3">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
     Day Of Week
     </label>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
     Sequence
     </label>
     </div>
+    <div class="col-sm-3">
+    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+    Single
+    </label>
     </div>
     </div>
     </div>
@@ -448,9 +451,9 @@
     </div>
     </div>
     </div>
-    <div class="col-sm-3">
+    <label class="col-sm-3 control-label" style="text-align:left;">
     {{employeePopup.data.startTime| timecount : employeePopup.data.endTime}}
-    </div>
+    </label>
     </div>
 
     <div class="form-group-separator"></div>
@@ -464,8 +467,8 @@
 
     <div class="form-group-separator"></div>
 
-    <div class="form-group">
-    <label class="col-sm-2 control-label" for="field-1" style="padding-top:0;">Repeat</label>
+    <div class="form-group" style="margin-bottom:0;">
+    <label class="col-sm-2 control-label" for="field-1">Repeat</label>
     <div ng-if="employeePopup.isNew">
 
     <div class="col-sm-2">
@@ -495,25 +498,25 @@
     </div>
     <div class="form-group-separator" ng-if="!employeePopup.isNew"></div>
 
-    <div class="form-group" ng-if="!employeePopup.isNew">
-    <label class="col-sm-2 control-label" for="field-2" style="padding-top:0;">Apply To</label>
-    <div>
-    <div class="col-sm-2">
-    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-    Single
-    </label>
-    </div>
-    <div class="col-sm-2">
+    <div class="form-group" ng-if="!employeePopup.isNew" style="margin-bottom:0;">
+    <label class="col-sm-2 control-label" for="field-2">Apply To</label>
+    <div class="col-sm-9">
+    <div class="col-sm-3">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
     Day Of Week
     </label>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
     Sequence
+    </label>
+    </div>
+    <div class="col-sm-3">
+    <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
+    Single
     </label>
     </div>
     </div>
