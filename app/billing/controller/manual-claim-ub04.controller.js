@@ -57,9 +57,9 @@
                     ctrl.isRejected = res.isRejected;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
                     if (ctrl.editMode === true && ctrl.billingClaimObj.insurerClaimNumber !== null
-                        && ctrl.manualClaimObj.documentControlNumberA == null) {
-                    ctrl.manualClaimObj.documentControlNumberA = ctrl.billingClaimObj.insurerClaimNumber;
-                }
+                            && ctrl.manualClaimObj.documentControlNumberA == null) {
+                        ctrl.manualClaimObj.documentControlNumberA = ctrl.billingClaimObj.insurerClaimNumber;
+                    }
                     ctrl.calculateTotalCharges();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
@@ -242,6 +242,7 @@
                                 $rootScope.unmaskLoading();
                                 toastr.success("Manual claim saved.");
                                 $timeout(function () {
+                                        window.opener.focus();
                                     window.close();
                                 }, 500);
                             })

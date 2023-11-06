@@ -17,7 +17,6 @@
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
-
         ctrl.calculateEditedClaim = function () {
             ctrl.anyClaimResubmitted = false;
             angular.forEach(ctrl.billingSessions, function (billingObj) {
@@ -26,7 +25,6 @@
                 }
             });
         };
-        
         ctrl.fetchBillingBatch = function () {
             BillingDAO.getSessionById({paramId: $state.params.id}).then(function (res) {
                 $rootScope.unmaskLoading();
@@ -67,7 +65,6 @@
             ctrl.rerenderDataTable();
             ctrl.processClicked = false;
         };
-
         ctrl.filterSessions = function () {
             ctrl.errorMsg = {};
             if (!ctrl.searchParams.insuranceProviderId || ctrl.searchParams.insuranceProviderId == "") {
@@ -126,7 +123,6 @@
                 });
             }
         };
-
         ctrl.processSession = function () {
             ctrl.processClicked = true;
             var payload = angular.copy(ctrl.billingSessions);
@@ -181,9 +177,7 @@
                 newwindow.focus();
             }
         };
-
         ctrl.openClaim1500ForEdit = function (claim) {
-            console.log('=====' + JSON.stringify($state.current.name))
             _setClaim1500InLocalStorage(claim);
             var url = $state.href('app.manual_claim_edit', {id: claim.uniqueId ? claim.uniqueId : claim.id});
             if (claim.claimType === 'UB04')
@@ -199,8 +193,13 @@
                 newwindow.moveTo(0, 0);
                 newwindow.focus();
             }
+            newwindow.onunload = function () {
+                if (newwindow.location != "about:blank") {
+                    $rootScope.maskLoading();
+                    ctrl.fetchBillingBatch();
+                }
+            };
         };
-
         ctrl.rerenderDataTable = function () {
             var pageInfo;
             if (ctrl.datatableObj.page != null) {
@@ -209,7 +208,6 @@
             var billingSessions = angular.copy(ctrl.billingSessions);
             ctrl.billingSessions = [];
             $("#example-1_wrapper").remove();
-
             $timeout(function () {
                 ctrl.billingSessions = billingSessions;
                 $timeout(function () {
@@ -266,9 +264,7 @@
                 });
             }, function () {
             });
-
         };
-
         ctrl.openRejectModal = function (claim, e) {
             e.stopPropagation();
             var modalInstance = $modal.open({
@@ -297,7 +293,6 @@
                 });
             }, function () {
             });
-
         };
     }
     angular.module('xenon.controllers').controller('BillingSessionCtrl', ["$rootScope", "$filter", "$modal", "$timeout", "PayrollDAO", "BillingDAO", "InsurerDAO", "$state", "Page", BillingSessionCtrl]);

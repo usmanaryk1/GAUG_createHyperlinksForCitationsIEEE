@@ -896,8 +896,9 @@
                     <div class="first_sec">
                         <font class="numbers">22 </font>
                         <b> RESUBMISSION CODE </b><br>
-                        <input type="text" ng-class="{'width_80':!manualClaim.reviewMode,'width_100':manualClaim.reviewMode}" name="resubmissionCode" id="resubmissionCode" ng-model="manualClaim.manualClaimObj.resubmissionCode" />
-                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-search" title="Lookup places" style="width: 0%;cursor: pointer;font-size: 12px;margin-top: 4px;" ng-click="manualClaim.openLookup('resubmission');"></span>
+                        <input type="text" class="width_80" name="resubmissionCode" id="resubmissionCode" ng-model="manualClaim.manualClaimObj.resubmissionCode" />
+                        <span ng-if="!manualClaim.reviewMode || manualClaim.editMode===true"
+                              class="glyphicon glyphicon-search" title="Resubmission Codes" style="width: 0%;cursor: pointer;font-size: 12px;margin-top: 4px;" ng-click="manualClaim.openLookup('resubmission');"></span>
 
                     </div>  
                     <div class="clearfix display-print"></div>
