@@ -205,18 +205,10 @@
                                 toastr.error("Date range should be no more of 7 days.");
                             } else {
                                 if ($rootScope.patientPopup.data.eventType == 'U') {
-                                    var startBoolean = false;
-                                    var endBoolean = false;
-                                    //start sunday
-                                    if (new Date($rootScope.patientPopup.data.startDate).getDay() == 0) {
-                                        startBoolean = true;
-                                    }
-                                    //end saturday
-                                    if (new Date($rootScope.patientPopup.data.endDate).getDay() == 6) {
-                                        endBoolean = true;
-                                    }
-                                    if (!startBoolean && !endBoolean) {
-                                        toastr.error("Start date should be Sunday OR End date should be Saturday.");
+                                    var start = new Date($rootScope.patientPopup.data.startDate).getDay();
+                                    var end = new Date($rootScope.patientPopup.data.endDate).getDay();
+                                    if (end < start) {
+                                        toastr.error("Both dates must fall in same week.");
                                     } else {
                                         ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
                                     }
