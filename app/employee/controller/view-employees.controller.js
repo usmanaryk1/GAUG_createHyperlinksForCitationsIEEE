@@ -249,13 +249,17 @@
                 return "N/A";
             }
         };
+
+        ctrl.navigateToCalendar = function (employee) {
+            $state.go('app.employee-calendar', {id: employee.id});
+        };
 //        
 //        $scope.$watch(function() {
 //            return ctrl.viewType;
 //        }, function(newVal, oldValue) {
 //            ctrl.employeeList = [];
 //            ctrl.retrieveEmployees();
-//        });
+        //        });
     }
     ;
     angular.module('xenon.controllers').controller('ViewEmployeesCtrl', ["EmployeeDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewEmployeesCtrl]);

@@ -49,7 +49,7 @@
                                             </div>
                                         </div> 
                                         <div class="form-group col-md-3 col-sm-6 col-xs-12 pull-right">
-                                                <input type="search" class="form-control input-sm" ng-model="viewEmployee.searchParams.name" placeholder="Search by Name" ng-change="viewEmployee.applySearch()">
+                                            <input type="search" class="form-control input-sm" ng-model="viewEmployee.searchParams.name" placeholder="Search by Name" ng-change="viewEmployee.applySearch()">
                                         </div> 
 
                                     </div>
@@ -78,8 +78,8 @@
                                                                                                     </div>-->
                                                     </th>
                                                     <th width="25%">Address</th>
-                                                    <th width="20%">Languages Spoken</th>
-                                                    <th width="15%">Actions</th>
+                                                    <th width="15%">Languages Spoken</th>
+                                                    <th width="20%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -112,6 +112,7 @@
                                                     <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewEmployee.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a'" ng-click="viewEmployee.openDeactivateModal(emp, 'deactivateModel')" tooltip="Deactivate"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i'" ng-click="viewEmployee.openActivateModal(emp, 'activateModel')" tooltip="Activate"><span class="ed_b"></span></a>
+                                                    <a class="btn icon-left fa fa-calendar edit_button" href="" ng-click="viewEmployee.navigateToCalendar(emp)" tooltip="Calendar"><span class="ed_b"></span></a> 
                                                 </div>
                                             </td>
                                             </tr>
@@ -133,11 +134,11 @@
 
                                 </div>
                                 <div ng-show="viewEmployee.employeeList.length">
-                                <div id="paginationButtons" class="text-right">
-                                    <dir-pagination-controls boundary-links="true" 
-                                                             max-size="9"
-                                                             template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination" on-page-change="viewEmployee.pageChanged(newPageNumber)"></dir-pagination-controls>
-                                </div>
+                                    <div id="paginationButtons" class="text-right">
+                                        <dir-pagination-controls boundary-links="true" 
+                                                                 max-size="9"
+                                                                 template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination" on-page-change="viewEmployee.pageChanged(newPageNumber)"></dir-pagination-controls>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -166,8 +167,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Position</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Position</strong></label>
+    <div class="col-md-7">
     {{positions[selectEmployeeModel.employee.companyPositionId]}} 
     </div>
     </div>	
@@ -178,9 +179,45 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone Number</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+<div class="row" ng-if="selectEmployeeModel.employee.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone 2</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactName!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Name</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+       <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactNumber!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactNumber | tel}} 
     </div>
     </div>	
 
@@ -190,8 +227,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Address</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.address1}}<div ng-if="selectEmployeeModel.employee.address2 != null">{{selectEmployeeModel.employee.address2}}</div><div>  {{selectEmployeeModel.employee.city}}, {{selectEmployeeModel.employee.state}}, {{selectEmployeeModel.employee.zipcode}}</div>
     </div>
     </div>	
@@ -202,8 +239,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Date Of Birth</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.dateOfBirth|date :dateFormat}} 
     </div>
     </div>	
@@ -214,8 +251,8 @@
     <div class="col-md-12">
 
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Social Security Number</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Social Security Number</strong></label>
+    <div class="col-md-7">
     {{selectEmployeeModel.employee.ssn | ssn}} 
     </div>
     </div>	
@@ -223,8 +260,8 @@
     </div>
     </div>
     <div class="form-group">
-    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
-    <div class="col-md-8">
+    <label for="field-1" class="control-label col-md-5"><strong>Languages Spoken</strong></label>
+    <div class="col-md-7">
     <span ng-if="selectEmployeeModel.employee.languageSpoken== null || selectEmployeeModel.employee.languageSpoken.length==0">N/A</span>
     <span ng-repeat="language in selectEmployeeModel.employee.languageSpoken">{{languages[language]}}
     <label ng-if="$index<selectEmployeeModel.employee.languageSpoken.length-1">, </label>

@@ -1,5 +1,5 @@
 (function () {
-    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state) {
+    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
         var ctrl = this;
         ctrl.patient_list = [];
         var timeFormat = 'HH:mm';
@@ -61,6 +61,21 @@
                 ctrl.patient_list = res;
                 if (!ctrl.viewPatient) {
                     ctrl.viewPatient = res[0];
+                }
+                if ($stateParams.id != null) {
+                    var obj;
+                    angular.forEach(res, function (item) {
+                        if (item.id == $stateParams.id) {
+                            obj = angular.copy(item);
+                        }
+                    });
+                    if (!obj) {
+                        PatientDAO.getPatientsForSchedule({patientIds: $stateParams.id}).then(function (res1) {
+                            ctrl.viewPatient = angular.copy(res1[0]);
+                        });
+                    } else {
+                        ctrl.viewPatient = angular.copy(obj);
+                    }
                 }
                 delete res.$promise;
                 delete res.$resolved;
@@ -157,7 +172,6 @@
                 });
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
-                $rootScope.patientPopup.dateFormat = "MM/DD/YYYY";
                 $rootScope.patientPopup.reasons = ontimetest.patientReasons;
                 $rootScope.patientPopup.employees = [];
                 $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
@@ -178,7 +192,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $rootScope.todayDate};
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};
                 }
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {
@@ -191,8 +205,10 @@
                                 toastr.error("Date range should be no more of 7 days.");
                             } else {
                                 if ($rootScope.patientPopup.data.eventType == 'U') {
-                                    if (new Date($rootScope.patientPopup.data.startDate).getDay() != 0 || new Date($rootScope.patientPopup.data.endDate).getDay() != 6) {
-                                        toastr.error("Start date must be Sunday & End date must be Saturday.");
+                                    var start = new Date($rootScope.patientPopup.data.startDate).getDay();
+                                    var end = new Date($rootScope.patientPopup.data.endDate).getDay();
+                                    if (end < start) {
+                                        toastr.error("Both dates must fall in same week.");
                                     } else {
                                         ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
                                     }
@@ -208,7 +224,7 @@
                 $rootScope.patientPopup.changed = function (event) {
                     if (event != 'repeat') {
                         var old = $rootScope.patientPopup.data.eventType;
-                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $rootScope.todayDate};
+                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         if (old == 'S') {
                             $rootScope.patientPopup.data.forLiveIn = false;
@@ -367,5 +383,5 @@
         ctrl.retrieveAllCoordinators();
     }
 
-    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", PatientCalendarCtrl]);
+    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", PatientCalendarCtrl]);
 })();

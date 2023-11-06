@@ -275,6 +275,10 @@
                 return "N/A";
             }
         };
+
+        ctrl.navigateToCalendar = function (patient) {
+            $state.go('app.patient-calendar', {id: patient.id});
+        };
     }
     ;
     angular.module('xenon.controllers').controller('ViewPatientsCtrl', ["PatientDAO", "$rootScope", "$stateParams", "$state", "$modal", "$debounce", "EmployeeDAO", "InsurerDAO", "Page", ViewPatientsCtrl]);

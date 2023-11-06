@@ -208,6 +208,28 @@
                         <div class="form-group-separator">
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label" for="emergencyName">
+                                Emergency Contact Name
+                            </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" name="emergencyName" type="text" ng-model="addEmployee.employee.emergencyContactName" maxlength="9"/>              
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="emergencyNumber">
+                                Emergency Contact Number
+                            </label>
+                            <div class="col-sm-9">
+                                <input numbers-only="true" maxlength="10" class="form-control" id="emergencyNumber" name="emergencyNumber" type="text" ng-model="addEmployee.employee.emergencyContactNumber" 
+                                       data-validate="number,minlength[10],maxlength[10]"
+                                       data-message-minlength="Emergency Contact Number must contain 10 digits" data-message-maxlength="Emergency Contact Number must contain 10 digits"/>
+                            </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">
                                 Email
                             </label>
