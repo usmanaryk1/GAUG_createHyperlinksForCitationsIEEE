@@ -115,6 +115,9 @@
         ctrl.savePatientPopupChanges = function (data) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);
+            if (ctrl.calendarView == 'month') {
+                data1.patientId = ctrl.viewPatient.id;
+            }
             console.log("patient data :: " + JSON.stringify(data1));
             var obj = {action: data1.eventType, data: data1}
             if ($rootScope.patientPopup.isNew) {

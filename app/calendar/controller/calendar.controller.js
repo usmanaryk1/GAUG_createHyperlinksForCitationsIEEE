@@ -10,6 +10,9 @@
         Page.setTitle("Employee Calendar");
 
         ctrl.calendarView = 'week';
+        if ($stateParams.id != null) {
+            ctrl.calendarView = 'month';
+        }
         ctrl.isOpen = false;
         ctrl.calendarDay = new Date();
 
@@ -364,6 +367,9 @@
         ctrl.saveEmployeePopupChanges = function (data) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);
+            if (ctrl.calendarView == 'month') {
+                data1.employeeId = ctrl.viewEmployee.id;
+            }
             var obj = {action: data1.eventType, data: data1};
             console.log("employee data :: " + JSON.stringify(data1));
             if ($rootScope.employeePopup.isNew) {
