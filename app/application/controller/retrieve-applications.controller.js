@@ -2,22 +2,19 @@
 /* global _ */
 
 (function () {
-    function ApplicationCtrl(ApplicationDataService, $rootScope, $stateParams, $state, Page, ApplicationPublicDAO, JobPostPublicDAO) {
-
+    function RetrieveApplicationCtrl(ApplicationDataService, $rootScope, $stateParams, $state, Page, ApplicationPublicDAO, JobPostPublicDAO) {
         var ctrl = this;
 
         ctrl.companyName;
-        ctrl.applicationSubmitted = false;
         ApplicationDataService.setBaseValues();
 
         $rootScope.stopIdle();
         ctrl.applicationData = {},
-        ctrl.firstTime = true;
-        
-        ctrl.existingApplication = function () {
-            $state.go('applications-existing', {'posting_identifier': ctrl.applicationData.postingIdentifier, 'resource_identifier': ctrl.applicationData.sourceIdentifier});
-            $("form#login").trigger('reset');
-        };
+        ctrl.firstTime = false;
+
+        ctrl.sendUserToApplication = function (applicationId) {
+            $state.go('applications-edit.tab1', {'id': applicationId});
+        }
 
         ctrl.submitApplicationRetrieve = function () {
             if ($("form#login").valid()) {
@@ -72,5 +69,5 @@
         }
     }
 
-    angular.module('xenon.controllers').controller('ApplicationCtrl', ["ApplicationDataService", "$rootScope", "$stateParams", "$state", "Page", "ApplicationPublicDAO", "JobPostPublicDAO", ApplicationCtrl]);
+    angular.module('xenon.controllers').controller('RetrieveApplicationCtrl', ["ApplicationDataService", "$rootScope", "$stateParams", "$state", "Page", "ApplicationPublicDAO", "JobPostPublicDAO", RetrieveApplicationCtrl]);
 })();

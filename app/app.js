@@ -230,12 +230,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
         return deferred.promise;
     }
 
-    var applicationRootConfig = {
-        abstract: true,
-        url: '/applications-edit',
-        templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
-        controller: 'AddApplicationCtrl as addEmployee',
-        resolve: {
+    var applicationResolve = {
             resources: function ($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     ASSETS.forms.jQueryValidate,
@@ -249,7 +244,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     ASSETS.tables.datatables
                 ]);
             }
-        }
+        };
+
+    var applicationRootConfig = {
+        abstract: true,
+        url: '/applications-edit',
+        templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
+        controller: 'AddApplicationCtrl as addEmployee',
+        resolve: applicationResolve
     };
 
     var viewOnlyApplicationConfig = function () {
@@ -297,35 +299,25 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'LoginCtrl',
             })
             // Application
-            .state('applications', {
-                url: '/applications',
+            .state('applications-home', {
+                url: '/applications/home',
                 templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
-                controller: 'ApplicationCtrl as application',
-                resolve: {
-                    resources: function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            ASSETS.forms.jQueryValidate,
-                            ASSETS.forms.formDirty,
-                            ASSETS.extra.toastr,
-                            ASSETS.forms.inputmask,
-                            ASSETS.forms.tagsinput,
-                            ASSETS.core.moment,
-                            ASSETS.forms.daterangepicker,
-                            ASSETS.forms.select2,
-                            ASSETS.tables.datatables
-                        ]);
-                    }
-                }
+                controller: 'ApplicationHomeCtrl as application',
+                resolve: applicationResolve
             })
             // application start
-            .state('applications.new', {
-                url: '/new',
-                templateUrl: appHelper.viewTemplatePath('application', 'start-applications')
+            .state('applications-new', {
+                url: '/applications/:posting_identifier/:resource_identifier/start',
+                controller: 'ApplicationCtrl as application',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
+                 resolve: applicationResolve
             })
             // application retrieve
-            .state('applications.existing', {
-                url: '/existing',
-                templateUrl: appHelper.viewTemplatePath('application', 'start-applications')
+            .state('applications-existing', {
+                url: '/applications/:posting_identifier/:resource_identifier/retrieve',
+                controller: 'RetrieveApplicationCtrl as application',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
+                 resolve: applicationResolve
             })
             // application edit
             .state('applications-edit', applicationRootConfig)

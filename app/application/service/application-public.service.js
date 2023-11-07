@@ -14,6 +14,13 @@
                     action: "verify"
                 }
             },
+            startApplication: {
+                method: "POST",
+                params: {
+                    action: "start",
+                    appPath: window.location.toString()
+                }
+            },
             updateApplication: {
                 method: 'PUT'
             },
@@ -27,6 +34,9 @@
             },
             verifyExistingApplication: function(data) {
                 return api.verifyExistingApplication(data).$promise;
+            },
+            startApplication: function(data) {
+                return api.startApplication(data).$promise;
             },
             retrieveByApplicationId: function(data) {
                 return api.retrieveByApplicationId(data).$promise;
