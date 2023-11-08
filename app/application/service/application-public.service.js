@@ -21,6 +21,12 @@
                     appPath: window.location.toString()
                 }
             },
+            retrieveApplication: {
+                method: "POST",
+                params: {
+                    action: "retrieve"
+                }
+            },
             updateApplication: {
                 method: 'PUT'
             },
@@ -37,6 +43,9 @@
             },
             startApplication: function(data) {
                 return api.startApplication(data).$promise;
+            },
+            retrieveApplication: function(data) {
+                return api.retrieveApplication(data).$promise;
             },
             retrieveByApplicationId: function(data) {
                 return api.retrieveByApplicationId(data).$promise;

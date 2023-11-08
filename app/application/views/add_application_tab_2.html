@@ -34,14 +34,8 @@
                                 Search
                             </label>
                             <div class="col-sm-9" >
-                                <div class="input-group">
-                                    <input class="form-control width100 no-right-border form-focus-info" id="Search" name="Search" type="text"/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-info" type="button" id="address-search">
-                                            Go!
-                                        </button>
-                                    </span>
-                                </div>
+                                <input class="form-control" id="autocomplete" name="autocomplete" placeholder="Search for your location"
+                                       ng-model="addEmployee.autocomplete" type="text"/>
                             </div>
                         </div>
                         <div class="form-group-separator">

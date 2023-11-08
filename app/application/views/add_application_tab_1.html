@@ -35,6 +35,17 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="form-group-separator"  ng-if="addEmployee.employee.status!=null && addEmployee.employee.status!=='inprogress' && addEmployee.viewOnly">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ng-if="addEmployee.employee.status!=null && addEmployee.employee.status!=='inprogress' && addEmployee.viewOnly">
+                                    Application Date
+                                </label>
+                                <div class="col-sm-9">
+                                    {{addEmployee.employee.submittedDate}}
+
+                                </div>
+                            </div>
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">
@@ -239,7 +250,9 @@
                                     Emergency Contact Name
                                 </label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" name="emergencyName" type="text" ng-model="addEmployee.employee.emergencyContactName" maxlength="9"/>              
+                                    <input class="form-control" name="emergencyName" type="text" ng-model="addEmployee.employee.emergencyContactName" maxlength="200"
+                                           data-message-required="Please enter Emergency Contact Name." 
+                                           data-validate="required"/>              
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -250,7 +263,8 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <input numbers-only="true" maxlength="10" class="form-control" id="emergencyNumber" name="emergencyNumber" type="text" ng-model="addEmployee.employee.emergencyContactNumber" 
-                                           data-validate="number,minlength[10],maxlength[10]"
+                                           data-message-required="Please enter Emergency Contact Number." 
+                                           data-validate="required,number,minlength[10],maxlength[10]"
                                            data-message-minlength="Emergency Contact Number must contain 10 digits" data-message-maxlength="Emergency Contact Number must contain 10 digits"/>
                                 </div>
                             </div>
@@ -265,7 +279,7 @@
                                            ng-model="addEmployee.employee.email"/>
                                 </div>
                             </div>
-                            <div class="form-group-separator">
+<!--                            <div class="form-group-separator">
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
@@ -335,7 +349,7 @@
                                            ng-model="addEmployee.employee.zipcode"
                                            data-validate="required" data-message-required="Please enter Zip Code."/>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">

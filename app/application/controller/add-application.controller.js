@@ -1163,6 +1163,7 @@
             loadGoogleMaps(3).done(function ()
             {
                 var map;
+                var autocomplete;
                 var geocoder = new google.maps.Geocoder();
                 var newyork;
                 if (latitude && latitude !== null && longitude && longitude !== null) {
@@ -1174,6 +1175,52 @@
 // Add a marker to the map and push to the array.
                 function addMarker(location) {
                     marker.setPosition(location);
+                }
+
+                function  fillInAddress() {
+                    // Get the place details from the autocomplete object.
+                    var street, route, city, state, zipcode = '';
+                    var place = autocomplete.getPlace();
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types;
+                        if (addressType.includes('street_number')) {
+                            street = place.address_components[i]['long_name'];
+                        } else if (addressType.includes('route')) {
+                            route = place.address_components[i]['long_name'];
+                        } else if (addressType.includes('locality')) {
+                            city = place.address_components[i]['long_name'];
+                        } else if (addressType.includes('sublocality_level_1')) {
+                            city = place.address_components[i]['long_name'];
+                        } else if (addressType.includes('administrative_area_level_1')) {
+                            state = place.address_components[i]['short_name'];
+                        } else if (addressType.includes('postal_code')) {
+                            zipcode = place.address_components[i]['long_name'];
+                        }
+                    }
+                    ctrl.employee.address1 = (street != null) ? street + ' ' + route : route;
+                    ctrl.employee.address2 = null;
+                    ctrl.employee.city = city;
+                    ctrl.employee.state = state;
+                    ctrl.employee.zipcode = zipcode;
+
+                    var address = $('#autocomplete').val().trim();
+                    if (address.length != 0)
+                    {
+                        geocoder.geocode({'address': address}, function (results, status)
+                        {
+                            if (status == google.maps.GeocoderStatus.OK)
+                            {
+                                $('#GPSLocation').val(results[0].geometry.location);
+                                $('#GPSLocation').blur();
+                                ctrl.employee.locationLatitude = results[0].geometry.location.lat();
+                                ctrl.employee.locationLongitude = results[0].geometry.location.lng()
+                                map.setCenter(results[0].geometry.location);
+                                addMarker(results[0].geometry.location);
+                            } else {
+                                alert('Geocode was not successful for the following reason: ' + status);
+                            }
+                        });
+                    }
                 }
                 function initialize()
                 {
@@ -1210,6 +1257,18 @@
                         ctrl.employee.locationLongitude = event.latLng.lng();
                     });
                     $('#GPSLocation').val(newyork);
+                    autocomplete = new google.maps.places.Autocomplete(
+                            document.getElementById('autocomplete'), {types: ['geocode'], componentRestrictions: {
+                            'country': 'usa'
+                        }});
+
+                    // Avoid paying for data that you don't need by restricting the set of
+                    // place fields that are returned to just the address components.
+                    autocomplete.setFields(['address_component']);
+
+                    // When the user selects an address from the drop-down, populate the
+                    // address fields in the form.
+                    autocomplete.addListener('place_changed', fillInAddress);
                     form_data = $('#add_patient_form').serialize();
                 }
 
