@@ -4,7 +4,11 @@
         ctrl.patient_list = [];
         var timeFormat = 'HH:mm';
         Page.setTitle("Patient Calendar");
-        ctrl.calendarView = 'month';
+        ctrl.calendarView = 'week';
+        if ($stateParams.id != null) {
+            ctrl.calendarView = 'month';
+        }
+        ctrl.viewPatient;
         ctrl.isOpen = false;
         ctrl.calendarDay = new Date();
         ctrl.changeToMonth = function () {
@@ -23,7 +27,6 @@
             ctrl.calendarView = 'week';
         }
         ctrl.searchParams = {skip: 0, limit: 10};
-        ctrl.viewPatient;
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrievePatients();
@@ -59,6 +62,7 @@
             }
             PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
                 ctrl.patient_list = res;
+                ctrl.count = $rootScope.totalRecords;
                 if (!ctrl.viewPatient) {
                     ctrl.viewPatient = res[0];
                 }
@@ -224,7 +228,7 @@
                         }
                     });
                 };
-                $rootScope.patientPopup.changed = function (event) {
+                $rootScope.patientPopup.changed = function (form, event) {
                     if (event != 'repeat') {
                         var old = $rootScope.patientPopup.data.eventType;
                         $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};

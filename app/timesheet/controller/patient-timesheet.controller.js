@@ -1,5 +1,5 @@
-(function() {
-    function PatientTimeSheetCtrl(Page, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location) {
+(function () {
+    function PatientTimeSheetCtrl(Page, $rootScope, TimesheetDAO, PatientDAO, $modal, $timeout, EmployeeDAO, InsurerDAO, $location, $filter) {
         var ctrl = this;
         Page.setTitle("Patient Timesheet");
         ctrl.companyCode = ontimetest.company_code;
@@ -10,31 +10,31 @@
         ctrl.insuranceProviderMap = {};
         ctrl.patientList = [];
         ctrl.patientIdMap = {};
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
                 }
             }
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function(res) {
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
                 }
             }
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");
         });
-        InsurerDAO.retrieveAll().then(function(res) {
+        InsurerDAO.retrieveAll().then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
                 }
             }
-        }).catch(function() {
+        }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
         //method is called when page is changed
@@ -71,7 +71,7 @@
                 }
             }
         };
-        ctrl.resetFilters = function() {
+        ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, pageNo: 1};
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
@@ -83,7 +83,7 @@
             localStorage.removeItem('patientTimesheetSearchParams');
             ctrl.timesheetList = [];
         };
-        ctrl.rerenderDataTable = function() {
+        ctrl.rerenderDataTable = function () {
             if (ctrl.timesheetList.length === 0) {
                 if (ctrl.searchParams.pageNo > 1) {
                     ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
@@ -92,7 +92,7 @@
                 ctrl.retrieveTimesheet();
             }
         };
-        ctrl.filterTimesheet = function() {
+        ctrl.filterTimesheet = function () {
             if (ctrl.searchParams.patientId && ctrl.searchParams.patientId !== null) {
                 if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
                     ctrl.searchParams.startDate = null;
@@ -116,30 +116,33 @@
 //            ctrl.datatableObj.fnDraw();
 
         };
-        ctrl.retrieveTimesheet = function() {
+        ctrl.retrieveTimesheet = function () {
             $rootScope.paginationLoading = true;
             if (ctrl.searchParams.patientId !== null) {
                 ctrl.selectedPatient = ctrl.patientIdMap[ctrl.searchParams.patientId];
             }
-            TimesheetDAO.retrievePatientTimeSheet(ctrl.searchParams).then(function(res) {
+            TimesheetDAO.retrievePatientTimeSheet(ctrl.searchParams).then(function (res) {
                 ctrl.dataRetrieved = true;
-               ctrl.timesheetList = JSON.parse(res.data);
+                ctrl.timesheetList = JSON.parse(res.data);
                 ctrl.totalRecords = Number(res.headers.count);
                 localStorage.setItem('patientTimesheetSearchParams', JSON.stringify(ctrl.searchParams));
-                angular.forEach(ctrl.timesheetList, function(obj) {
+                angular.forEach(ctrl.timesheetList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                    if (obj.scheduleId && !obj.unauthorizedTime) {
+                        obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+                    }
                 });
-            }).catch(function() {
+            }).catch(function () {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
 
                     }
                 }); // showLoadingBar
 //                ctrl.timesheetList = ontimetest.employeeTimesheet;
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
@@ -148,14 +151,14 @@
         retrievePatientsData();
         function retrievePatientsData() {
             $rootScope.maskLoading();
-            PatientDAO.retrieveAll({subAction: 'all'}).then(function(res) {
+            PatientDAO.retrieveAll({subAction: 'all'}).then(function (res) {
                 ctrl.patientList = res;
                 ctrl.patientIdMap = {};
                 for (var i = 0; i < res.length; i++) {
                     ctrl.patientIdMap[res[i].id] = res[i];
                 }
-                
-                
+
+
                 var params = localStorage.getItem('patientTimesheetSearchParams');
                 if (params !== null) {
                     ctrl.searchParams = JSON.parse(params);
@@ -168,14 +171,14 @@
                     $rootScope.unmaskLoading();
                 }
 
-            }).catch(function(data, status) {
+            }).catch(function (data, status) {
                 $rootScope.unmaskLoading();
 //                ctrl.patientList = ontimetest.patients;
             });
         }
         ;
 
-        ctrl.openTaskListModal = function(modal_id, modal_size, modal_backdrop, tasks)
+        ctrl.openTaskListModal = function (modal_id, modal_size, modal_backdrop, tasks)
         {
             ctrl.taskListModalOpen = true;
             $rootScope.taskListModal = $modal.open({
@@ -189,7 +192,7 @@
 
         };
 
-        ctrl.openDeleteModal = function(punchObj, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (punchObj, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deletePunchModal = $modal.open({
                 templateUrl: modal_id,
@@ -243,16 +246,16 @@
             };
 
         };
-        ctrl.viewPatient = function(patientId) {
+        ctrl.viewPatient = function (patientId) {
             $rootScope.maskLoading();
-            PatientDAO.get({id: patientId}).then(function(res) {
+            PatientDAO.get({id: patientId}).then(function (res) {
                 ctrl.openEditModal(res, 'modal-5');
-            }).then(function() {
+            }).then(function () {
                 $rootScope.unmaskLoading();
             });
         };
 
-        ctrl.openEditModal = function(patient, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectPatientModel = $modal.open({
                 templateUrl: modal_id,
@@ -269,7 +272,80 @@
             }
         };
 
+
+        ctrl.openUTModal = function (timesheet, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.utModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.utModal.cancel = function () {
+                $rootScope.utModal.close();
+            };
+            $rootScope.utModal.approve = function () {
+                $rootScope.maskLoading();
+                console.log($rootScope.utModal.obj);
+
+                TimesheetDAO.approveUT($rootScope.utModal.obj).then(function (res) {
+                    ctrl.rerenderDataTable();
+                    toastr.success("Unauthorized Time approved.");
+                    $rootScope.utModal.close();
+                }).catch(function (data, status) {
+                    toastr.error("Failed to approve Unsauthorized time.");
+                    $rootScope.unmaskLoading();
+                    $rootScope.utModal.close();
+                }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+            };
+            $rootScope.utModal.documentUploadFile = {
+                target: ontimetest.weburl + 'file/upload',
+                chunkSize: 1024 * 1024 * 1024,
+                testChunks: false,
+                fileParameterName: "fileUpload",
+                singleFile: true,
+                headers: {
+                    type: "u",
+                    company_code: ontimetest.company_code
+                }
+            };
+            //When file is selected from browser file picker
+            $rootScope.utModal.profileFileSelected = function (file, flow) {
+                $rootScope.utModal.obj.flowObj = flow;
+
+            };
+            //When file is uploaded this method will be called.
+            $rootScope.utModal.profileFileUploaded = function (response, file, flow) {
+                if (response != null) {
+                    response = JSON.parse(response);
+                }
+                $rootScope.utModal.disableDocumentUploadButton = false;
+            };
+            $rootScope.utModal.profileFileError = function ($file, $message, $flow) {
+                $flow.cancel();
+                $rootScope.utModal.disableDocumentUploadButton = false;
+                $rootScope.utModal.obj.errorMsg = "File cannot be uploaded";
+            };
+            //When file is added in file upload
+            $rootScope.utModal.profileFileAdded = function (file, flow) { //It will allow all types of attahcments'
+                $rootScope.utModal.formDirty = true;
+                $rootScope.utModal.documentUploadFile.headers.fileExt = file.getExtension();
+                if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
+                    $rootScope.utModal.obj.errorMsg = "Please upload a valid file.";
+                    return false;
+                } else {
+                    $("#cropper-example-2-modal").modal('show');
+                }
+
+                $rootScope.utModal.obj.errorMsg = null;
+                $rootScope.utModal.obj.flow = flow;
+                return true;
+            };
+            $rootScope.utModal.obj = {id: timesheet.id, unauthorizedTime: timesheet.ut, forPayroll: false, forBilling: false, isMissedPunch: timesheet.isMissedPunch};
+        };
     }
     ;
-    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["Page", "$rootScope", "TimesheetDAO", "PatientDAO", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", "$location", PatientTimeSheetCtrl]);
+    angular.module('xenon.controllers').controller('PatientTimeSheetCtrl', ["Page", "$rootScope", "TimesheetDAO", "PatientDAO", "$modal", "$timeout", "EmployeeDAO", "InsurerDAO", "$location", "$filter", PatientTimeSheetCtrl]);
 })();

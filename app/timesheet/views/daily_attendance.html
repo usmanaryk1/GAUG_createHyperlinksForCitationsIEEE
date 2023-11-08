@@ -108,10 +108,10 @@
                                 <div class="col-sm-6 pull-right">
 
                                     <button type="submit" class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="dAttendance.searchParams.pageNo = 1;
-                                        dAttendance.searchParams.sortBy = 'date';
-                                        dAttendance.searchParams.order = 'desc';
-                                        dAttendance.filterTimesheet();
-                                        dAttendance.formSubmitted = true">Review</button>
+                                            dAttendance.searchParams.sortBy = 'date';
+                                            dAttendance.searchParams.order = 'desc';
+                                            dAttendance.filterTimesheet();
+                                            dAttendance.formSubmitted = true">Review</button>
                                     <a href="#/app/manual_punch{{dAttendance.searchParams.staffingCordinatorId==null?'':'/employee/'+dAttendance.searchParams.staffingCordinatorId+'?lastPage=daily_attendance'}}" class="btn btn-info btn-single process_bt pull-right mar_rg5">Manual Punch</a>
                                     <button class="btn btn-info btn-single gray_bt pull-right" type="button" ng-click="dAttendance.resetFilters()">
                                         Reset Filters
@@ -132,9 +132,10 @@
                                     <th width="13%" nowrap ng-class="dAttendance.applySortingClass('punchIn')" ng-click="dAttendance.applySorting('punchIn')" >Date In</th>
                                     <th width="13%" nowrap ng-class="dAttendance.applySortingClass('punchOut')" ng-click="dAttendance.applySorting('punchOut')" >Date Out</th>
                                     <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')" >Employee Name</th>
-                                    <th width="16%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>
+                                    <th width="15%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')" >Patient Name</th>
                                     <th width="8%" nowrap >Time In</th>
                                     <th width="8%" nowrap >Time Out</th>
+                                    <th width="8%" nowrap>UT</th>
                                     <th nowrap>Actions</th>
                                     <th nowrap>Signature</th>
                                 </tr>
@@ -163,15 +164,34 @@
                                         <!--<div class="green_dot"></div>-->
                                         <!--Display red dot for not matched GPS location-->
                                         <!--<div class="red_dot"></div>-->
-                                        <div ng-class="{'black_dot':timesheet.punchInColorFlag == 'black','red_dot':timesheet.punchInColorFlag == 'red','green_dot':timesheet.punchInColorFlag == 'green'}"></div> 
+                                        <div ng-class="{
+                                                'black_dot'
+                                                :timesheet.punchInColorFlag == 'black', 'red_dot':timesheet.punchInColorFlag == 'red', 'green_dot':timesheet.punchInColorFlag == 'green'}"></div> 
                                         {{timesheet.roundedPunchInTime|date :timeFormat}}
                                     </td>
                                     <td>
                                         <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
-                                            <div ng-class="{'black_dot':timesheet.punchOutColorFlag == 'black','red_dot':timesheet.punchOutColorFlag == 'red','green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
+                                            <div ng-class="{
+                                                    'black_dot'
+                                                    :timesheet.punchOutColorFlag == 'black', 'red_dot':timesheet.punchOutColorFlag == 'red', 'green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
                                             {{timesheet.roundedPunchOutTime|date :timeFormat}}
                                         </span>
                                         <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
+                                    </td>
+                                    <td>
+                                        <span ng-if='timesheet.ut' ng-click="dAttendance.openUTModal(timesheet, 'utModal')">{{timesheet.ut}}</span>
+                                        <span ng-if='timesheet.unauthorizedTime'> 
+                                            {{timesheet.unauthorizedTime}} <i class="fa fa-check edit_button" ng-click="hide(this);" onclick="hide(this);"></i>
+                                            <div class="eventstoload" style="display:none;">
+                                                <div>
+                                                    <b>Scheduled At</b><br/>
+                                                    from {{timesheet.scheduleId.startTime|date :timeFormat}} to {{timesheet.scheduleId.endTime|date :timeFormat}}<br/>
+                                                    <b>Cleared For</b><br/>
+                                                    Payroll : {{timesheet.forPayroll}}<br/>
+                                                    Billing : {{timesheet.forBilling}}<br/>
+                                                </div>
+                                            </div>
+                                        </span>
                                     </td>
                                     <td class="action-td">
                                         <div class="action-btn">
@@ -249,4 +269,72 @@
     <button type="button" class="btn btn-success" ng-click="deletePunchModal.delete(deletePunchModal.punchObj);">Yes</button>
     <button type="button" class="btn btn-red" ng-click="deletePunchModal.dismiss();">No</button>
     </div>
+</script>
+<script type="text/ng-template" id="utModal">
+    <form class="validate form-horizontal" name="utForm" id="ut_form" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="utModal.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Unauthorized Time</h4>
+    </div>
+
+    <div class="modal-body">
+    <div class="row">
+    <label class="col-sm-12">
+    <strong>Upload Documentation</strong>
+    </label>
+    <div class="col-sm-12">
+    <div flow-init="utModal.documentUploadFile" flow-file-added="utModal.documentFileAdded($file, $flow)" flow-file-success="utModal.documentFileUploaded($message,$file,$flow)" flow-files-submitted="utModal.documentFileSelected($file,$flow)" flow-file-error="utModal.documentFileError( $file, $message, $flow )">
+    <div class="row">
+    <div class="col-sm-3">
+    <button type='button' class='btn btn-single gray_bt' id="Document" ng-model="utModal.obj.document" flow-btn style="margin-bottom:0px !important" name="Document" ng-disabled="utModal.disableDocumentUploadButton">Choose File</button>
+    </div>
+    <div class="col-sm-9">
+    <label class="control-label">
+    <a href=""><i class="fa fa-close" ng-show="utModal.obj.document != null" ng-click="utModal.clearDocument()"></i></a>
+    </label>
+    </div>
+    </div>
+    <div>
+    <div ng-show="utModal.documentFileObj.errorMsg != null && utModal.documentFileObj.errorMsg != ''">
+    <span class="red">{{utModal.documentFileObj.errorMsg}}</span>
+    </div> 
+    </div>
+    <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
+    <div ng-repeat="file in transfers">
+    <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && utModal.documentShowfileProgress">
+    <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="row col-md-12" style="margin-top:12px;">
+    <label><strong>Cleared For</strong></label>
+    </div>
+    <div class="row col-md-12">
+    <input type="checkbox" name="payroll" ng-model="utModal.obj.forPayroll">
+    <label>Payroll</label>
+    </div>
+    <div class="row col-md-12">
+
+    <input type="checkbox" name="billing" ng-model="utModal.obj.forBilling">
+    <label>Billing</label>
+    </div>
+    </div>
+<div class="row"/>
+    <div class="modal-footer">
+    <button type="submit" class="btn btn-success" ng-click="utModal.approve();">Approve</button>
+    </div>
+    </form>
+</script>
+<script type="text/javascript">
+    function hide(obj) {
+    $(obj).next().popover('show');
+        $(obj).popover({
+            content: $(obj).next().contents(),
+            html: true
+        })
+    }
 </script>

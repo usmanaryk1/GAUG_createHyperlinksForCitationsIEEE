@@ -169,6 +169,48 @@ angular.module('xenon.filter', [])
                     var secondsDifference = Math.floor(durationSum / 1000);
                     return hoursDifference + ":" + minutesDifference;
                 }
-            }]);
+            }])
+        .filter('ut', function () {
+            return function (scheduleStart, scheduleEnd, punchIn, punchOut) {
+                scheduleStart = new Date(scheduleStart);
+                scheduleEnd = new Date(scheduleEnd);
+                var difference = scheduleEnd.getTime() - scheduleStart.getTime();
+
+                var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+                difference -= hoursDifference * 1000 * 60 * 60;
+
+                var minutesDifference = Math.floor(difference / 1000 / 60);
+                difference -= minutesDifference * 1000 * 60;
+                var scheduleDiff = hoursDifference * 60 + minutesDifference;
+
+                punchIn = new Date(punchIn);
+                punchOut = new Date(punchOut);
+
+                var difference1 = punchOut.getTime() - punchIn.getTime();
+
+                var hoursDifference1 = Math.floor(difference1 / 1000 / 60 / 60);
+                difference1 -= hoursDifference1 * 1000 * 60 * 60;
+
+                var minutesDifference1 = Math.floor(difference1 / 1000 / 60);
+                difference1 -= minutesDifference1 * 1000 * 60;
+                var punchDiff = hoursDifference1 * 60 + minutesDifference1;
+                var string;
+                if (punchDiff > scheduleDiff) {
+                    var diff = punchDiff - scheduleDiff;
+                    var hours = Math.floor(diff / 60);
+                    var minutes = diff % 60;
+                    if (hours.toString().length == 1) {
+                        hours = "0" + hours;
+                    }
+                    if (minutes.toString().length == 1) {
+                        minutes = "0" + minutes;
+                    }
+                    string = hours + ":" + minutes;
+                }
+                return string;
+
+            };
+        })
+        ;
 
 

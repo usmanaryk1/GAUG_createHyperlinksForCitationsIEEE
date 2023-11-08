@@ -87,6 +87,18 @@
                 params: {
                     action: 'missedpunch'
                 }
+            },
+            approveUT: {
+                method: 'POST',
+                params: {
+                    action: 'approveut'
+                }
+            },
+            approveUTMissedPunch: {
+                method: 'POST',
+                params: {
+                    action: 'approveutmissedpunch'
+                }
             }
         });
         return {
@@ -125,6 +137,15 @@
             },
             updateMissedPunch: function (data) {
                 return api.updateMissedPunch(data).$promise;
+            },
+            approveUT: function (data) {
+                if (data.isMissedPunch) {
+                    delete data.isMissedPunch;
+                    return api.approveUTMissedPunch(data).$promise;
+                } else {
+                    delete data.isMissedPunch;
+                    return api.approveUT(data).$promise;
+                }
             }
         };
     };
