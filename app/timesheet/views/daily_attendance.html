@@ -244,8 +244,11 @@
                                                 <a class=" btn fa fa-search view_task_button" ng-click="dAttendance.openTaskListModal('modal-3', 'lg', 'static', timesheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                             </div>
                                         </td>
-                                        <td ng-if="!dAttendance.isWorksiteTimesheet"><div ng-if="timesheet.isManualPunch === true">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
-                                            <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + dAttendance.companyCode + '/' + timesheet.signature}}"></td>
+                                        <td ng-if="!dAttendance.isWorksiteTimesheet">
+                                            <div ng-if="timesheet.isManualPunch === true">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
+                                            <div ng-if="timesheet.isManualPunch !== true && timesheet.signature===null">{{timesheet.createdByName==null? 'Admin Verified':'Verified : '+timesheet.createdByName}}</div>
+                                            <img ng-if="(!timesheet.isManualPunch || timesheet.isManualPunch === false) && timesheet.signature && timesheet.signature !== null" width="58" height="34" alt="Signature" ng-src="{{amazonSignatureUrl + dAttendance.companyCode + '/' + timesheet.signature}}">
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
