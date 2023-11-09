@@ -30,20 +30,29 @@
                                     <button class="btn btn-white mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('close')">
                                         Save & Close
                                     </button>
-                                    <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status!=null && addEmployee.employee.status!=='submitted'" ng-click="addEmployee.setFromNext('submit')">
+                                    <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'submitted'" ng-click="addEmployee.setFromNext('submit')">
                                         Submit Application
                                     </button>
                                 </div>
                             </div>
-                            <div class="form-group-separator"  ng-if="addEmployee.employee.status!=null && addEmployee.employee.status!=='inprogress' && addEmployee.viewOnly">
+                            <div class="form-group-separator">
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" ng-if="addEmployee.employee.status!=null && addEmployee.employee.status!=='inprogress' && addEmployee.viewOnly">
+                                <label class="col-sm-3 control-label">
+                                    Position Title
+                                </label>
+                                <div class="col-sm-9  form-control-static">
+                                    {{addEmployee.employee.positionTitle}}
+                                </div>
+                            </div>
+                            <div class="form-group-separator"  ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'inprogress' && addEmployee.adminLogin">
+                            </div>
+                            <div class="form-group"  ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'inprogress' && addEmployee.adminLogin">
+                                <label class="col-sm-3 control-label">
                                     Application Date
                                 </label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-9  form-control-static">
                                     {{addEmployee.employee.submittedDate}}
-
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -279,86 +288,106 @@
                                            ng-model="addEmployee.employee.email"/>
                                 </div>
                             </div>
-<!--                            <div class="form-group-separator">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">
-                                    Address 1
-                                </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" name="Address1" type="text" maxlength="255" ng-model="addEmployee.employee.address1"
-                                           data-validate="required" data-message-required="Please enter Address 1"/>
-                                </div>
-                            </div>
+                            <!--                            <div class="form-group-separator">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">
+                                                                Address 1
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input class="form-control" name="Address1" type="text" maxlength="255" ng-model="addEmployee.employee.address1"
+                                                                       data-validate="required" data-message-required="Please enter Address 1"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-separator">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">
+                                                                Address 2
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input class="form-control" name="Address2" type="text" maxlength="255" 
+                                                                       ng-model="addEmployee.employee.address2"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-separator">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">
+                                                                City
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input class="form-control" name="City" type="text" maxlength="100" ng-model="addEmployee.employee.city"
+                                                                       data-validate="required" data-message-required="Please enter City."/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-separator">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">
+                                                                State
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <script type="text/javascript">
+                                                                    // jQuery(document).ready(function($)
+                                                                    //            {
+                                                                    //              $("#sboxit-1").selectBoxIt().on('open', function()
+                                                                    //              {
+                                                                    //                // Adding Custom Scrollbar
+                                                                    //                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                                                                    //              });
+                                                                    //            });
+                                                                </script>
+                                                                <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.employee.state"
+                                                                        data-validate="required" data-message-required="Please select the state."
+                                                                        ng-options="state.abbreviation as state.name for state in states">
+                                                                    <option value="">
+                                                                        Select the state
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-separator">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">
+                                                                Zip Code
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input class="form-control" name="ZipCode"  numbers-only="true" type="text" maxlength="10"
+                                                                       ng-model="addEmployee.employee.zipcode"
+                                                                       data-validate="required" data-message-required="Please enter Zip Code."/>
+                                                            </div>
+                                                        </div>-->
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    Address 2
+                                    US Citizen?
                                 </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" name="Address2" type="text" maxlength="255" 
-                                           ng-model="addEmployee.employee.address2"/>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <label class="cbr-inline">
+                                            <input class="cbr cbr-primary" name="UsCitizen" type="radio" ng-value="true" ng-model="addEmployee.employee.usCitizen">
+                                            Yes
+                                            </input>
+                                        </label>
+                                        <label class="cbr-inline">
+                                            <input class="cbr cbr-primary" name="UsCitizen" type="radio" ng-value="false" ng-model="addEmployee.employee.usCitizen">
+                                            No
+                                            </input>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group-separator">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">
-                                    City
-                                </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" name="City" type="text" maxlength="100" ng-model="addEmployee.employee.city"
-                                           data-validate="required" data-message-required="Please enter City."/>
-                                </div>
-                            </div>
-                            <div class="form-group-separator">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">
-                                    State
-                                </label>
-                                <div class="col-sm-9">
-                                    <script type="text/javascript">
-                                        // jQuery(document).ready(function($)
-                                        //            {
-                                        //              $("#sboxit-1").selectBoxIt().on('open', function()
-                                        //              {
-                                        //                // Adding Custom Scrollbar
-                                        //                $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                        //              });
-                                        //            });
-                                    </script>
-                                    <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.employee.state"
-                                            data-validate="required" data-message-required="Please select the state."
-                                            ng-options="state.abbreviation as state.name for state in states">
-                                        <option value="">
-                                            Select the state
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group-separator">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">
-                                    Zip Code
-                                </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" name="ZipCode"  numbers-only="true" type="text" maxlength="10"
-                                           ng-model="addEmployee.employee.zipcode"
-                                           data-validate="required" data-message-required="Please enter Zip Code."/>
-                                </div>
-                            </div>-->
-                            <div class="form-group-separator">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">
-                                    Payroll ID
-                                </label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" name="PayrollID" type="text" maxlength="100"
-                                           ng-model="addEmployee.employee.payrollId"/>
+                                <div class="col-sm-7" ng-if="addEmployee.employee.usCitizen === false">
+                                    <div class="input-group">
+                                        <select class="form-control" ng-model="addEmployee.employee.workPermitStatus"
+                                                name="WorkPermitStatus" id="WorkPermitStatus" data-validate="required"  data-message-required="Please enter one of this." ng-required="addEmployee.employee.usCitizen === false">
+                                            <option value="" class="">Select work authorization status</option>
+                                            <option value="Permanent Resident" class="">Permanent Resident</option>
+                                            <option value="Employment Authorization" class="">Employment Authorization</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -387,7 +416,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    Does Employee Drive?
+                                    Do you have driving license?
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
@@ -398,6 +427,27 @@
                                         </label>
                                         <label class="cbr-inline">
                                             <input class="cbr cbr-primary" name="DoesEmpDrive" type="radio" ng-value="false" ng-model="addEmployee.employee.doesEmpDrive">
+                                            No
+                                            </input>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    Have you ever applied for employment with this agency?
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <label class="cbr-inline">
+                                            <input class="cbr cbr-primary" name="AppliedEarlier" type="radio" ng-value="true" ng-model="addEmployee.employee.appliedEarlier">
+                                            Yes
+                                            </input>
+                                        </label>
+                                        <label class="cbr-inline">
+                                            <input class="cbr cbr-primary" name="AppliedEarlier" type="radio" ng-value="false" ng-model="addEmployee.employee.appliedEarlier">
                                             No
                                             </input>
                                         </label>

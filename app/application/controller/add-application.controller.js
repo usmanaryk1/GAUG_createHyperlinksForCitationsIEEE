@@ -5,6 +5,7 @@
         var ctrl = this;
         ctrl.staticPosition;
         $rootScope.isLoginPage = false;
+        ctrl.adminLogin = false;
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
@@ -529,7 +530,8 @@
                         }
                     });
                 }
-
+                var userName = getCookie("un");
+                ctrl.adminLogin = userName !== ctrl.employee.applicationId;
 
                 ctrl.retrivalRunning = false;
             }).catch(function (data, status) {
@@ -574,6 +576,7 @@
         function setFormDynamicValidityMessages() {
             $("#Salary-error").text('Please enter Salary.');
             $("#SocialSecurity-error").text('Please enter Social Security.');
+            $("#WorkPermitStatus-error").text('Please select Work Permit Status.');
             $("#rate1-error").text('Please select Care Types.');
             $("#Rate1-error").text('Please enter Rate 1.');
             $("#OTRate-error").text('Please enter OT Rate.');
@@ -582,6 +585,14 @@
             $("#TBTestingExpirationDate-error").text('Please enter TB Testing Expiration Date.');
             $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
         }
+        
+        $scope.$watch(function () {
+            return ctrl.employee.usCitizen;
+        }, function (newVal, oldValue) {
+            if (newVal === true) {
+                ctrl.employee.workPermitStatus = null;
+            }
+        });
 
         $scope.$watch(function () {
             return ctrl.employee.physical;

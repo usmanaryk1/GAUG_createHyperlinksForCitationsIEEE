@@ -337,10 +337,24 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 }
             })
             .state('applications-edit.tab3', {
-                url: '/:id/document-details',
+                url: '/:id/education-details',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_3'),
                 data: {
                     tabNo: 3
+                }
+            })
+            .state('applications-edit.tab4', {
+                url: '/:id/employment-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_4'),
+                data: {
+                    tabNo: 4
+                }
+            })
+            .state('applications-edit.tab5', {
+                url: '/:id/certify',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_5'),
+                data: {
+                    tabNo: 5
                 }
             })
             // employee creation page
@@ -362,10 +376,24 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 }
             })
             .state('application-viewonly.tab3', {
-                url: '/:id/document-details',
+                url: '/:id/education-details',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_3'),
                 data: {
                     tabNo: 3
+                }
+            })
+            .state('application-viewonly.tab4', {
+                url: '/:id/employment-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_4'),
+                data: {
+                    tabNo: 4
+                }
+            })
+            .state('application-viewonly.tab5', {
+                url: '/:id/certify',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_5'),
+                data: {
+                    tabNo: 5
                 }
             })
             .state('forgotpassword', {

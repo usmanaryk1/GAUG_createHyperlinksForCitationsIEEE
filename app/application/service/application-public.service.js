@@ -21,6 +21,13 @@
                     appPath: window.location.toString()
                 }
             },
+            resendApplicationDetails: {
+                method: "POST",
+                params: {
+                    action: "resend",
+                    appPath: window.location.toString()
+                }
+            },
             retrieveApplication: {
                 method: "POST",
                 params: {
@@ -43,6 +50,9 @@
             },
             startApplication: function(data) {
                 return api.startApplication(data).$promise;
+            },
+            resendApplicationDetails: function(data) {
+                return api.resendApplicationDetails(data).$promise;
             },
             retrieveApplication: function(data) {
                 return api.retrieveApplication(data).$promise;
