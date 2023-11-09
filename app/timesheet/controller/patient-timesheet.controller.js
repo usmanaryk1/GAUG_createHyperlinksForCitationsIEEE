@@ -3,6 +3,7 @@
         var ctrl = this;
         Page.setTitle("Patient Timesheet");
         ctrl.companyCode = ontimetest.company_code;
+        ctrl.baseUrl = ontimetest.weburl;
         ctrl.criteriaSelected = false;
         ctrl.viewRecords = 10;
         ctrl.nursingCareMap = {};
@@ -281,13 +282,12 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            $rootScope.utModal.docFileObj = {};
             $rootScope.utModal.cancel = function () {
                 $rootScope.utModal.close();
             };
             $rootScope.utModal.approve = function () {
                 $rootScope.maskLoading();
-                console.log($rootScope.utModal.obj);
-
                 TimesheetDAO.approveUT($rootScope.utModal.obj).then(function (res) {
                     ctrl.rerenderDataTable();
                     toastr.success("Unauthorized Time approved.");
@@ -312,24 +312,28 @@
                 }
             };
             //When file is selected from browser file picker
-            $rootScope.utModal.profileFileSelected = function (file, flow) {
-                $rootScope.utModal.obj.flowObj = flow;
-
+            $rootScope.utModal.documentFileSelected = function (file, flow) {
+                $rootScope.utModal.docFileObj.flowObj = flow;
+                $rootScope.utModal.docFileObj.flowObj.upload();
             };
             //When file is uploaded this method will be called.
-            $rootScope.utModal.profileFileUploaded = function (response, file, flow) {
+            $rootScope.utModal.documentFileUploaded = function (response, file, flow) {
                 if (response != null) {
                     response = JSON.parse(response);
+                    if (response.fileName != null && response.status != null && response.status == 's') {
+                        $rootScope.utModal.obj.unauthorizedDocument = response.fileName;
+                    }
                 }
                 $rootScope.utModal.disableDocumentUploadButton = false;
             };
-            $rootScope.utModal.profileFileError = function ($file, $message, $flow) {
+            $rootScope.utModal.documentFileError = function ($file, $message, $flow) {
                 $flow.cancel();
+                $rootScope.utModal.obj.unauthorizedDocument = null;
                 $rootScope.utModal.disableDocumentUploadButton = false;
-                $rootScope.utModal.obj.errorMsg = "File cannot be uploaded";
+                $rootScope.utModal.docFileObj.errorMsg = "File cannot be uploaded";
             };
             //When file is added in file upload
-            $rootScope.utModal.profileFileAdded = function (file, flow) { //It will allow all types of attahcments'
+            $rootScope.utModal.documentFileAdded = function (file, flow) { //It will allow all types of attahcments'
                 $rootScope.utModal.formDirty = true;
                 $rootScope.utModal.documentUploadFile.headers.fileExt = file.getExtension();
                 if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
@@ -339,9 +343,17 @@
                     $("#cropper-example-2-modal").modal('show');
                 }
 
-                $rootScope.utModal.obj.errorMsg = null;
-                $rootScope.utModal.obj.flow = flow;
+                $rootScope.utModal.docFileObj.errorMsg = null;
+                $rootScope.utModal.docFileObj.flow = flow;
                 return true;
+            };
+            $rootScope.utModal.clearDocument = function () {
+                if ($rootScope.utModal.obj.unauthorizedDocument != null) {
+                    $rootScope.utModal.obj.unauthorizedDocument = null;
+                }
+                if ($rootScope.utModal.docFileObj.flowObj != null) {
+                    $rootScope.utModal.docFileObj.flowObj.cancel();
+                }
             };
             $rootScope.utModal.obj = {id: timesheet.id, unauthorizedTime: timesheet.ut, forPayroll: false, forBilling: false, isMissedPunch: timesheet.isMissedPunch};
         };

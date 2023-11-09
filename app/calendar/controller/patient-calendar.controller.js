@@ -94,7 +94,7 @@
             ctrl.retrievePatients();
         };
         ctrl.getAllEvents = function (ids) {
-            EventTypeDAO.retireveBySchedule({patientIds: ids}).then(function (res) {
+            EventTypeDAO.retrieveBySchedule({patientIds: ids}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;

@@ -1,15 +1,16 @@
 (function () {
-    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter) {
+    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO) {
         var ctrl = this;
         Page.setTitle("Daily Attendance");
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontimetest.company_code;
-
+        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.isSchedule = false;
         //method is called when page is changed
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
             ctrl.searchParams.pageNo = pagenumber;
-            ctrl.retrieveTimesheet();
+            ctrl.commonRetrieve();
         };
 
         //to apply sorting and manage variables
@@ -24,7 +25,7 @@
                     ctrl.searchParams.order = "desc";
                 }
             }
-            ctrl.retrieveTimesheet();
+            ctrl.commonRetrieve();
         };
 
         //to maintain sorting class dynamically
@@ -57,7 +58,7 @@
                     ctrl.pageChanged(ctrl.searchParams.pageNo - 1);
                 }
             } else {
-                ctrl.retrieveTimesheet();
+                ctrl.commonRetrieve();
             }
         };
 
@@ -114,6 +115,19 @@
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                     if (obj.scheduleId && !obj.unauthorizedTime) {
                         obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+                    }
+                    if (obj.scheduleId) {
+                        var temp = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+                        var t = temp.split(":");
+                        var h = Number(t[0]);
+                        var m = Number(t[1]);
+                        if (h > 0 || m > 30) {
+                            obj.color = "red";
+                        } else if (h > 0 || m > 8) {
+                            obj.color = "yellow";
+                        }
+                    } else {
+                        obj.color = "red";
                     }
                 });
                 ctrl.dataRetrieved = true;
@@ -208,13 +222,12 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            $rootScope.utModal.docFileObj = {};
             $rootScope.utModal.cancel = function () {
                 $rootScope.utModal.close();
             };
             $rootScope.utModal.approve = function () {
                 $rootScope.maskLoading();
-                console.log($rootScope.utModal.obj);
-
                 TimesheetDAO.approveUT($rootScope.utModal.obj).then(function (res) {
                     ctrl.rerenderDataTable();
                     toastr.success("Unauthorized Time approved.");
@@ -239,40 +252,118 @@
                 }
             };
             //When file is selected from browser file picker
-            $rootScope.utModal.profileFileSelected = function (file, flow) {
-                $rootScope.utModal.obj.flowObj = flow;
-
+            $rootScope.utModal.documentFileSelected = function (file, flow) {
+                $rootScope.utModal.docFileObj.flowObj = flow;
+                $rootScope.utModal.docFileObj.flowObj.upload();
             };
             //When file is uploaded this method will be called.
-            $rootScope.utModal.profileFileUploaded = function (response, file, flow) {
+            $rootScope.utModal.documentFileUploaded = function (response, file, flow) {
                 if (response != null) {
                     response = JSON.parse(response);
+                    if (response.fileName != null && response.status != null && response.status == 's') {
+                        $rootScope.utModal.obj.unauthorizedDocument = response.fileName;
+                    }
                 }
                 $rootScope.utModal.disableDocumentUploadButton = false;
             };
-            $rootScope.utModal.profileFileError = function ($file, $message, $flow) {
+            $rootScope.utModal.documentFileError = function ($file, $message, $flow) {
                 $flow.cancel();
+                $rootScope.utModal.obj.unauthorizedDocument = null;
                 $rootScope.utModal.disableDocumentUploadButton = false;
-                $rootScope.utModal.obj.errorMsg = "File cannot be uploaded";
+                $rootScope.utModal.docFileObj.errorMsg = "File cannot be uploaded";
             };
             //When file is added in file upload
-            $rootScope.utModal.profileFileAdded = function (file, flow) { //It will allow all types of attahcments'
+            $rootScope.utModal.documentFileAdded = function (file, flow) { //It will allow all types of attahcments'
                 $rootScope.utModal.formDirty = true;
                 $rootScope.utModal.documentUploadFile.headers.fileExt = file.getExtension();
                 if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
-                    $rootScope.utModal.obj.errorMsg = "Please upload a valid file.";
+                    $rootScope.utModal.docFileObj.errorMsg = "Please upload a valid file.";
                     return false;
                 } else {
                     $("#cropper-example-2-modal").modal('show');
                 }
 
-                $rootScope.utModal.obj.errorMsg = null;
-                $rootScope.utModal.obj.flow = flow;
+                $rootScope.utModal.docFileObj.errorMsg = null;
+                $rootScope.utModal.docFileObj.flow = flow;
                 return true;
+            };
+            $rootScope.utModal.clearDocument = function () {
+                if ($rootScope.utModal.obj.unauthorizedDocument != null) {
+                    $rootScope.utModal.obj.unauthorizedDocument = null;
+                }
+                if ($rootScope.utModal.docFileObj.flowObj != null) {
+                    $rootScope.utModal.docFileObj.flowObj.cancel();
+                }
             };
             $rootScope.utModal.obj = {id: timesheet.id, unauthorizedTime: timesheet.ut, forPayroll: false, forBilling: false, isMissedPunch: timesheet.isMissedPunch};
         };
+        ctrl.filterSchedule = function () {
+            ctrl.searchParams.pageNo = 1;
+            if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
+                ctrl.searchParams.startDate = null;
+            }
+            if (!ctrl.searchParams.endDate || ctrl.searchParams.endDate == "") {
+                ctrl.searchParams.endDate = null;
+            }
+            if (ctrl.searchParams.startDate !== null) {
+                ctrl.criteriaSelected = true;
+                ctrl.retrieveSchedule();
+            } else {
+                ctrl.criteriaSelected = false;
+                ctrl.attendanceList = [];
+                ctrl.dataRetrieved = false;
+            }
+        }
+        ctrl.retrieveSchedule = function () {
+
+            $rootScope.paginationLoading = true;
+            var params = angular.copy(ctrl.searchParams);
+            params.fromDate = ctrl.searchParams.startDate;
+            params.toDate = ctrl.searchParams.endDate;
+            delete params.startDate;
+            delete params.endDate;
+            delete params.staffingCordinatorId;
+            EventTypeDAO.retrieveSchedules(params).then(function (res) {
+                ctrl.attendanceList = JSON.parse(res.data);
+                ctrl.totalRecords = Number(res.headers.count);
+                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
+                ctrl.dataRetrieved = true;
+            }).catch(function () {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+                    }
+                }); // showLoadingBar
+                toastr.error("Could not load Schedule");
+            }).then(function () {
+                $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
+            });
+
+        };
+        ctrl.resetCheckbox = function () {
+            ctrl.searchParams.pageNo = 1;
+            ctrl.searchParams.sortBy = 'date';
+            ctrl.searchParams.order = 'desc';
+            ctrl.commonFilter();
+            ctrl.formSubmitted = true;
+        };
+        ctrl.commonFilter = function () {
+            if (ctrl.isSchedule) {
+                ctrl.filterSchedule();
+            } else {
+                ctrl.filterTimesheet();
+            }
+        };
+        ctrl.commonRetrieve = function () {
+            if (ctrl.isSchedule) {
+                ctrl.retrieveSchedule();
+            } else {
+                ctrl.retrieveTimesheet();
+            }
+        };
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", DailyAttendanceCtrl]);
 })();

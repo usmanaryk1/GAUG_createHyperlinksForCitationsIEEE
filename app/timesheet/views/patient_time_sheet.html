@@ -171,6 +171,12 @@
                                                     {{timesheet.unauthorizedTime}} <i class="fa fa-check edit_button" ng-click="hide(this);" onclick="hide(this);"></i>
                                                     <div class="eventstoload" style="display:none;">
                                                         <div>
+                                                            <div ng-if="timesheet.unauthorizedDocument">
+                                                                <a style="color: blue;text-decoration: underline" ng-href="{{patTimesheet.baseUrl}}file/download/{{patTimesheet.companyCode}}/l/{{timesheet.unauthorizedDocument}}">
+                                                                    document{{timesheet.unauthorizedDocument|extension}}
+                                                                </a>
+                                                                <br/>
+                                                            </div>
                                                             <b>Scheduled At</b><br/>
                                                             from {{timesheet.scheduleId.startTime|date :timeFormat}} to {{timesheet.scheduleId.endTime|date :timeFormat}}<br/>
                                                             <b>Cleared For</b><br/>
@@ -634,13 +640,15 @@
     </div>
     <div class="col-sm-9">
     <label class="control-label">
-    <a href=""><i class="fa fa-close" ng-show="utModal.obj.document != null" ng-click="utModal.clearDocument()"></i></a>
-    </label>
+ <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{dAttendance.baseUrl}}file/download/{{dAttendance.companyCode}}/l/{{utModal.obj.unauthorizedDocument}}">
+                                                document{{utModal.obj.unauthorizedDocument|extension}}
+                                            </a>
+    <a href=""><i class="fa fa-close" ng-show="utModal.obj.unauthorizedDocument != null" ng-click="utModal.clearDocument()"></i></a>    </label>
     </div>
     </div>
     <div>
-    <div ng-show="utModal.documentFileObj.errorMsg != null && utModal.documentFileObj.errorMsg != ''">
-    <span class="red">{{utModal.documentFileObj.errorMsg}}</span>
+     <div ng-show="utModal.docFileObj.errorMsg != null && utModal.docFileObj.errorMsg != ''">
+    <span class="red">{{utModal.docFileObj.errorMsg}}</span>
     </div> 
     </div>
     <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
@@ -667,9 +675,9 @@
     <label>Billing</label>
     </div>
     </div>
-    
-<div class="row"/>    
-            <div class="modal-footer">
+
+    <div class="row"/>    
+    <div class="modal-footer">
     <button type="submit" class="btn btn-success" ng-click="utModal.approve();">Approve</button>
     </div>
     </form>

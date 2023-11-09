@@ -272,7 +272,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Time</label>
                 <div class="col-sm-3">
                     <div class="input-group input-group-minimal">
-                        <input class="form-control punch-time-input" ng-model='patientPopup.data.startTime' id="startTime3" name="startTime3" type="text" data-validate='required,time' data-message-required='Please enter start Time.'/>
+                        <input class="form-control punch-time-input" ng-model='patientPopup.data.startTime' ng-disabled="!patientPopup.isNew" id="startTime3" name="startTime3" type="text" data-validate='required,time' data-message-required='Please enter start Time.'/>
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-clock"></i></a>
@@ -282,7 +282,7 @@
                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
                 <div class="col-sm-3">
                     <div class="input-group input-group-minimal">
-                        <input class="form-control punch-time-input" ng-model="patientPopup.data.endTime" id="endTime3" name="endTime3" type="text" data-validate='required,time' data-message-required='Please enter end Time.'/>
+                        <input class="form-control punch-time-input" ng-model="patientPopup.data.endTime" ng-disabled="!patientPopup.isNew" id="endTime3" name="endTime3" type="text" data-validate='required,time' data-message-required='Please enter end Time.'/>
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-clock"></i></a>
@@ -414,7 +414,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-model="patientPopup.data.startDate" min-date="todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+                        <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-disabled="!patientPopup.isNew" ng-model="patientPopup.data.startDate" min-date="todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
@@ -424,7 +424,7 @@
                 <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" id="toDate" class="form-control datepicker" name="toDate" data-format="mm/dd/yyyy" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
+                        <input type="text" id="toDate" class="form-control datepicker" name="toDate" data-format="mm/dd/yyyy" ng-disabled="!patientPopup.isNew" ng-model="patientPopup.data.endDate" min-date="patientPopup.data.startDate" data-validate="required,date"  data-message-required="Please select To Date." required>
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>

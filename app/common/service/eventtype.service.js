@@ -12,14 +12,26 @@
             updateEventType: {
                 method: 'PUT'
             },
-            retireveBySchedule :{
+            retrieveBySchedule: {
                 method: 'GET',
                 isArray: true,
                 params: {
                     action: 'all'
                 }
             },
-            delete:{
+            retrieveSchedules: {
+                method: 'GET',
+                params: {
+                    action: 'schedule'
+                },
+                transformResponse: function (data, headers) {
+                    var response = {};
+                    response.data = data;
+                    response.headers = headers();
+                    return response;
+                }
+            },
+            delete: {
                 method: 'DELETE'
             }
         });
@@ -31,14 +43,17 @@
                 return api.saveEventType({action: data.action}, data.data).$promise;
             },
             updateEventType: function (data) {
-                return api.updateEventType({action: data.action,subAction: data.subAction}, data.data).$promise;
+                return api.updateEventType({action: data.action, subAction: data.subAction}, data.data).$promise;
             },
-            retireveBySchedule: function (data) {
-                return api.retireveBySchedule(data).$promise;
+            retrieveBySchedule: function (data) {
+                return api.retrieveBySchedule(data).$promise;
+            },
+            retrieveSchedules: function (data) {
+                return api.retrieveSchedules(data).$promise;
             },
             delete: function (data) {
                 return api.delete(data).$promise;
-            },
+            }
         };
     };
     angular.module("xenon.factory").factory('EventTypeDAO', ['$resource', EventTypeDAO]);

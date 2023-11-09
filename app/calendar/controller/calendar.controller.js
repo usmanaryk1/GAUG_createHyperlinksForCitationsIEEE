@@ -117,7 +117,7 @@
         };
 
         ctrl.getAllEvents = function (ids) {
-            EventTypeDAO.retireveBySchedule({employeeIds: ids}).then(function (res) {
+            EventTypeDAO.retrieveBySchedule({employeeIds: ids}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;
