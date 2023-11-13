@@ -4,7 +4,6 @@
 
         ctrl.employee_list = [];
         ctrl.viewEmployee;
-        ctrl.todayDate = new Date();
 
         var timeFormat = 'HH:mm';
 
@@ -162,6 +161,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.employeePopup.todayDate = new Date();
                 $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
                 $rootScope.employeePopup.patients = patients;
@@ -185,7 +185,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat)};
+                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                 }
                 $rootScope.employeePopup.save = function () {
                     $timeout(function () {
@@ -222,7 +222,7 @@
                     if (event != 'repeat') {
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
-                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat)};
+                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
                                 $rootScope.employeePopup.data.forLiveIn = false;

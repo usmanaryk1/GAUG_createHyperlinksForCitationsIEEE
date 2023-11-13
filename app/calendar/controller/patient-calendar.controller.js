@@ -8,7 +8,6 @@
         if ($stateParams.id != null) {
             ctrl.calendarView = 'month';
         }
-        ctrl.todayDate = new Date();
         ctrl.viewPatient;
         ctrl.isOpen = false;
         ctrl.calendarDay = new Date();
@@ -178,6 +177,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.patientPopup.todayDate = new Date();
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
                 $rootScope.patientPopup.reasons = ontimetest.patientReasons;
@@ -200,7 +200,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat)};
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                 }
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {
@@ -232,7 +232,7 @@
                 $rootScope.patientPopup.changed = function (form, event) {
                     if (event != 'repeat') {
                         var old = $rootScope.patientPopup.data.eventType;
-                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat)};
+                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         if (old == 'S') {
                             $rootScope.patientPopup.data.forLiveIn = false;
