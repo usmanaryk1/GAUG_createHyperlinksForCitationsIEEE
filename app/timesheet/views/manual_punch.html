@@ -94,7 +94,7 @@
                                 </label>
                                 <div class="col-sm-9" >
                                     <script type="text/javascript">
-                                                jQuery(document).ready(function ($)
+                                        jQuery(document).ready(function ($)
                                         {
                                             setTimeout(function () {
                                                 $("#sboxit-1").select2({
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                             <div class="form-group-separator"></div>
-                            <div class="form-group">
+                            <div class="form-group"  ng-class="{ 'validate-has-error':manualPunch.attendanceObj.careTypeId == null && manualPunch.formSubmitted}">
                                 <label class="col-sm-3 control-label">Care Type</label>
 
                                 <div class="col-sm-9">
@@ -130,6 +130,9 @@
                                             data-validate="required" data-message-required="Please select care type." ng-change="manualPunch.onCareTypeChange()">
                                         <option value="">Select the care type</option>
                                     </select>
+                                    <div ng-show='manualPunch.attendanceObj.careTypeId == null && manualPunch.formSubmitted'>
+                                        <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Care Type.</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -158,7 +161,7 @@
 
                                     });
                                 </script>
-                                <select ng-disabled="!manualPunch.attendanceObj.isWorksitePunch && manualPunch.attendanceObj.careTypeId==null"
+                                <select ng-disabled="!manualPunch.attendanceObj.isWorksitePunch && manualPunch.attendanceObj.careTypeId == null"
                                         ng-show="manualPunch.attendanceObj.isManualPunch" 
                                         ng-change="manualPunch.retrieveEmployee(true)" 
                                         class="form-control" id="sboxit-2" name="EmployeeName" 
@@ -267,7 +270,7 @@
                                 </script>
                                 <select class="form-control" id="tasks" multiple="multiple" name="tasks"
                                         ng-model="manualPunch.attendanceObj.companyTaskIds"
-                                        ng-options="ct.id as ct.task for ct in manualPunch.taskList  | orderBy:'task'">
+                                        ng-options="ct.id as ct.task for ct in manualPunch.taskList| orderBy:'task'">
                                 </select>
                                 <div ng-show="manualPunch.tasksErrorMsg !== null && manualPunch.formSubmitted">
                                     <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>{{manualPunch.tasksErrorMsg}}</span>
