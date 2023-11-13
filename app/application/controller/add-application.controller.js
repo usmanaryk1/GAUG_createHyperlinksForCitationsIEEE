@@ -6,6 +6,7 @@
         ctrl.staticPosition;
         $rootScope.isLoginPage = false;
         ctrl.adminLogin = false;
+        ctrl.educations = [];
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
@@ -213,16 +214,24 @@
             return (validApplication && validW4);
         };
 
+        ctrl.nonEmployeeFormTab = function () {
+            return $rootScope.tabNo === 3 || $rootScope.tabNo === 4;
+        }
+
         //ceck if form has been changed or not
         //If changed then it should be valid
         ctrl.navigateToTab = function (event, state) {
             $scope.resetForm = false;
-            if ($('#add_employee_form').serialize() !== form_data) {
-                ctrl.formDirty = true;
-            }
-            var fileUploadValid = ctrl.checkFileUploadValidity();
-            if (($('#add_employee_form').valid() && fileUploadValid) || !ctrl.formDirty) {
+            if (ctrl.nonEmployeeFormTab()) {
                 $state.go('^.' + state, {id: $state.params.id});
+            } else {
+                if ($('#add_employee_form').serialize() !== form_data) {
+                    ctrl.formDirty = true;
+                }
+                var fileUploadValid = ctrl.checkFileUploadValidity();
+                if (($('#add_employee_form').valid() && fileUploadValid) || !ctrl.formDirty) {
+                    $state.go('^.' + state, {id: $state.params.id});
+                }
             }
             event.stopPropagation();
         };
@@ -279,7 +288,7 @@
 //            } else {
 //            }
             delete employeeToSave.employeeAttachments;
-            if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
+            if (ctrl.nonEmployeeFormTab() || ($('#add_employee_form')[0].checkValidity() && fileUploadValid)) {
                 //Check if ssn number is already present
                 ctrl.ssn.exists = false;
                 var reqParam;
@@ -502,6 +511,47 @@
                     fileName.substring(fileName.lastIndexOf('.') + 1);
         };
 
+        ctrl.addEducationLine = function () {
+
+            if ($('#add_education_form')[0].checkValidity()) {
+                $rootScope.maskLoading();
+                ctrl.educationLine['applicationId'] = ctrl.employee.id;
+                var request = {applicationId: ctrl.employee.applicationId, data: ctrl.educationLine};
+                ApplicationPublicDAO.updateApplicationEducation(request)
+                        .then(function (employeeRes) {
+                            ctrl.educations.push(employeeRes);
+                            ctrl.educationLine = {};
+                        })
+                        .catch(function () {
+                            toastr.error("Education cannot be saved.");
+                        }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+
+            }
+
+        }
+
+        ctrl.removeEducationLine = function (educationLine) {
+            var request = {applicationId: ctrl.employee.applicationId, educationId: educationLine.id};
+            $rootScope.maskLoading();
+            ApplicationPublicDAO.deleteApplicationEducation(request)
+                    .then(function () {
+                        for (var i = 0; i < ctrl.educations.length; i++) {
+                            if (ctrl.educations[i].id === educationLine.id) {
+                                ctrl.educations.splice(i, 1);
+                                break;
+                            }
+                        }
+                    })
+                    .catch(function () {
+                        toastr.error("Education cannot be saved.");
+                    }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+
+        }
+
         //function called on page initialization.
         function pageInit() {
             $rootScope.maskLoading();
@@ -518,6 +568,7 @@
                     ctrl.hideLoadingImage = true;
                 }
                 ctrl.employee = res;
+                ctrl.educations = res['educations'];
                 ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                 getFilteredAttachments();
 
@@ -585,7 +636,7 @@
             $("#TBTestingExpirationDate-error").text('Please enter TB Testing Expiration Date.');
             $("#PhysicalExpirationDate-error").text('Please enter Physical Expiration Date.');
         }
-        
+
         $scope.$watch(function () {
             return ctrl.employee.usCitizen;
         }, function (newVal, oldValue) {
@@ -639,11 +690,8 @@
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function () {
-                if (!ctrl.employee.employeeAttachments) {
-                    ctrl.employee.employeeAttachments = [];
-                }
+                ctrl.educationLine = {};
                 if (!ctrl.retrivalRunning) {
-                    form_data = $('#add_employee_form').serialize();
                     $formService.resetRadios();
                 } else {
                     ctrl.tab4DataInit();
@@ -651,7 +699,7 @@
             }, 100);
 
         };
-        
+
         ctrl.tab5DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
@@ -668,7 +716,7 @@
             }, 100);
 
         };
-        
+
         ctrl.tab3DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();

@@ -2,38 +2,106 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-horizontal validate" id="add_employee_form" novalidate="" name="add_employee_form" role="form" ng-submit="addEmployee.saveEmployee()">
-                    <fieldset ng-disabled="addEmployee.viewOnly">
-                        <div class="row"  ng-if="!addEmployee.viewOnly">
-                            <div class="col-sm-12">
-                                <button class="btn btn-success mar_rg5 mar_lf5 mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('tab3')">
-                                    Save Changes
-                                </button>
-                                <button class="btn btn-white mar_rg5 pull-right" type="submit" ng-click="addEmployee.setFromNext('close')">
-                                    Save & Close
-                                </button>
-                                <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'submitted'" ng-click="addEmployee.setFromNext('submit')">
-                                    Submit Application
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        
-                        <div class="form-group-separator">
-                        </div>
-                    </fieldset>
-                    <div class="row">
+                <fieldset ng-disabled="addEmployee.viewOnly">
+                    <div class="row"  ng-if="!addEmployee.viewOnly">
                         <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab4')">
-                                Next »
+                            <button class="btn btn-success mar_rg5 mar_lf5 mar_rg5 pull-right" ng-click="addEmployee.setFromNext('tab3');addEmployee.saveEmployee();">
+                                Save Changes
                             </button>
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab2')">
-                                « Previous
+                            <button class="btn btn-white mar_rg5 pull-right" ng-click="addEmployee.setFromNext('close');addEmployee.saveEmployee();">
+                                Save & Close
+                            </button>
+                            <button class="btn btn-black mar_rg5 pull-right" ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'submitted'"
+                                    ng-click="addEmployee.setFromNext('submit');addEmployee.saveEmployee();">
+                                Submit Application
                             </button>
                         </div>
                     </div>
-                </form>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group" >
+                        <div class="col-md-12">
+                            <div class="panel panel-default panel-table" style="padding: 0;" id="applicationEmployeeAttachments">
+                                <div class="panel-heading" style="border-bottom: none;">
+                                    <div class="row">
+                                        <div class="col col-xs-6">
+                                            <h3>Educations</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <form class="form-horizontal validate" id="add_education_form" novalidate="" name="add_education_form" role="form" ng-submit="addEmployee.addEducationLine()">
+                                        <table class="table table-striped table-bordered table-list table-attachments">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center col-md-3"> School/ College </th>
+                                                    <th class="text-center col-md-2"> Year </th>
+                                                    <th class="text-center col-md-3"> Degree </th>
+                                                    <th class="text-center col-md-2"> Result </th>
+                                                    <th class="text-center col-md-1" ng-if="addEmployee.employee.status === 'inprogress'"> <em class="fa fa-cog"> </em></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-if="addEmployee.employee.status === 'inprogress'">
+                                                    <td> 
+                                                        <div class="form-group col-md-12 mar_bt0">
+                                                            <input class="form-control" name="school" id="school"
+                                                                   type="text" ng-model="addEmployee.educationLine.school"  ng-required='true'> 
+                                                        </div>
+                                                    </td>
+                                                    <td> 
+                                                        <div class="form-group col-md-12 mar_bt0">
+                                                            <input class="form-control" name="year" id="year"
+                                                                   type="text" ng-model="addEmployee.educationLine.year"  ng-required='true'> 
+                                                        </div>
+                                                    </td>
+                                                    <td> 
+                                                        <div class="form-group col-md-12 mar_bt0">
+                                                            <input class="form-control" name="degree" id="degree"
+                                                                   type="text" ng-model="addEmployee.educationLine.degree"  ng-required='true'> 
+                                                        </div>
+                                                    </td>
+                                                    <td style="vertical-align: top"> 
+                                                        <div class="form-group col-md-12 mar_bt0">
+                                                            <input class="form-control" name="result" id="result" type="text" ng-model="addEmployee.educationLine.result"> 
+                                                        </div>
+                                                    </td>
+                                                    <td align="center">
+                                                        <button class="btn btn-info" style="width:auto;" type="submit">
+                                                            Add
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="education in addEmployee.educations">
+                                                    <td align="center"> {{education.school}}</td>
+                                                    <td align="center"> {{education.year}} </td>
+                                                    <td align="center"> {{education.degree}}</td>
+                                                    <td align="center"> {{education.result}} </td>
+                                                    <td align="center" ng-if="addEmployee.employee.status === 'inprogress'">                                                    
+                                                        <a class="btn icon-left fa fa-trash-o delete_button"
+                                                           ng-click="addEmployee.removeEducationLine(education)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                </fieldset>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.setFromNext('tab4');addEmployee.saveEmployee();">
+                            Next »
+                        </button>
+                        <button class="btn btn-info green_bt pull-right" style="width:auto;" ng-click="addEmployee.setFromNext('tab2');addEmployee.saveEmployee();">
+                            « Previous
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

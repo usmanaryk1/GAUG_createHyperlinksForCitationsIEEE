@@ -37,6 +37,18 @@
             updateApplication: {
                 method: 'PUT'
             },
+            updateApplicationEducation: {
+                method: 'PUT',
+                params: {
+                    subAction: "educations"
+                }
+            },
+            deleteApplicationEducation: {
+                method: 'DELETE',
+                params: {
+                    subAction: "educations"
+                }
+            },
             submitApplication: {
                 method: 'PUT'
             }
@@ -62,6 +74,12 @@
             },
             updateApplication: function (data) {
                 return api.updateApplication({action: data.applicationId}, data).$promise;
+            },
+            updateApplicationEducation: function (data) {
+                return api.updateApplicationEducation({action: data.applicationId}, data.data).$promise;
+            },
+            deleteApplicationEducation: function (data) {
+                return api.deleteApplicationEducation({action: data.applicationId, id:data.educationId}, {}).$promise;
             },
             submitApplication: function (data) {
                 return api.submitApplication({action: data.applicationId, subAction: 'submit'}, data.data).$promise;

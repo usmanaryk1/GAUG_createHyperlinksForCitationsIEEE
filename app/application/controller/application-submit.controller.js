@@ -17,6 +17,7 @@
             if (ctrl.dataUrl !== null) {
                 data.signature = ctrl.dataUrl.substring(ctrl.dataUrl.indexOf(",") + 1);
             }
+            $rootScope.maskLoading();
             
             ApplicationPublicDAO.submitApplication({'applicationId': application.applicationId, data: data})
                     .then(function (res) {
