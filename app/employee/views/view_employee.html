@@ -22,6 +22,11 @@
                         <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Inactive Employees</span> 
                     </a>
                 </li>
+                <li ui-sref="app.employee-list({status:'terminated'})" class="{{viewEmployee.viewType=='terminated'?'active':''}}">
+                    <a href="" data-toggle="tab">
+                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Terminated Employees</span> 
+                    </a>
+                </li>
                 <li ui-sref="app.employee-list({status:'all'})" class="{{viewEmployee.viewType=='all'?'active':''}}">
                     <a href="" data-toggle="tab">
                         <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">All Employees</span> 
