@@ -4,7 +4,8 @@
 
         ctrl.employee_list = [];
         ctrl.viewEmployee;
-        
+        ctrl.todayDate = new Date();
+
         var timeFormat = 'HH:mm';
 
         Page.setTitle("Employee Calendar");
@@ -31,9 +32,9 @@
         ctrl.changeToWeek = function () {
             ctrl.calendarView = 'week';
         }
-        
+
         ctrl.searchParams = {skip: 0, limit: 10};
-        
+
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrieveEmployees();
@@ -43,7 +44,7 @@
             ctrl.pageNo = 1;
             $debounce(ctrl.retrieveEmployees, 500);
         };
-        
+
         ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, skip: 0};
             ctrl.searchParams.availableStartDate = null;
@@ -53,7 +54,7 @@
             $('#languages').select2('val', null);
             ctrl.applySearch();
         };
-        
+
         ctrl.retrieveEmployees = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
@@ -184,7 +185,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};
+                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat)};
                 }
                 $rootScope.employeePopup.save = function () {
                     $timeout(function () {
@@ -221,7 +222,7 @@
                     if (event != 'repeat') {
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
-                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.todayDate, $rootScope.dateFormat)};
+                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')(ctrl.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
                                 $rootScope.employeePopup.data.forLiveIn = false;

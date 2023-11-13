@@ -21,7 +21,7 @@
                 <span ng-if="temp_event.eventType != 'U'" class="event-pointer">    
                     {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
                 </span>
-                <span ng-if="temp_event.eventType == 'U'">
+                <span ng-if="temp_event.eventType == 'U'" class="event-pointer">
                     {{'Unavailable'}}
                 </span>                
             </div>
@@ -34,7 +34,7 @@
                     <span style="padding: 0 5px;color: white;" ng-if="temp_event.eventType != 'U'" class="event-pointer">    
                         {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
                     </span>
-                    <span style="padding: 0 5px;" ng-if="temp_event.eventType == 'U'">
+                    <span style="padding: 0 5px;" ng-if="temp_event.eventType == 'U'" class="event-pointer">
                         {{'Unavailable'}}
                     </span>      
                 </div>

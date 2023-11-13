@@ -247,7 +247,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="fromDate3" name="fromDate3" data-format="mm/dd/yyyy" ng-model="patientPopup.data.startDate" min-date="todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+                        <input type="text" class="form-control datepicker" ng-disabled="!patientPopup.isNew" id="fromDate3" name="fromDate3" data-format="mm/dd/yyyy" ng-model="patientPopup.data.startDate" min-date="patientcalendar.todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
@@ -414,7 +414,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-disabled="!patientPopup.isNew" ng-model="patientPopup.data.startDate" min-date="todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
+                        <input type="text" id="fromDate" class="form-control datepicker" name="fromDate" data-format="mm/dd/yyyy" ng-disabled="!patientPopup.isNew" ng-model="patientPopup.data.startDate" min-date="patientcalendar.todayDate" max-date="patientPopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." required>
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
@@ -442,36 +442,6 @@
                 </div>
             </div>
 
-            <div class="form-group-separator"></div>
-
-            <div class="form-group" style="margin-bottom:0;">
-                <label class="col-sm-2 control-label" for="field-1">Repeat</label>
-                <div  ng-if="patientPopup.isNew" >
-                    <div class="col-sm-2">
-                        <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-                            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="D">
-                            Daily
-                        </label>
-                    </div>
-                    <div class="col-sm-2">
-                        <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-                            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="W">
-                            Weekly
-                        </label>
-                    </div>
-                    <div class="col-sm-2">
-                        <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
-                            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="patientPopup.data.recurranceType" value="N">
-                            None
-                        </label>
-                    </div>
-                </div>
-                <div  ng-if="!patientPopup.isNew" >
-                    <div class="col-sm-2">
-                        {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-red" ng-show="!patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>

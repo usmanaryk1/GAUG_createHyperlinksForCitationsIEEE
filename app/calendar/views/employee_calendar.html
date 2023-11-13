@@ -233,7 +233,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
+                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="calendar.todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'A'">
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
@@ -409,7 +409,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate1" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
+                        <input type="text" class="form-control datepicker" ng-disabled="!employeePopup.isNew" name="fromDate1" data-format="mm/dd/yyyy" ng-model="employeePopup.data.startDate" min-date="calendar.todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'S'">
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
@@ -576,7 +576,7 @@
                 <label class="col-sm-2 control-label" for="field-2">Date</label>
                 <div class="col-sm-4">
                     <div class="input-group" style="z-index:1060">
-                        <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-disabled="!employeePopup.isNew" ng-model="employeePopup.data.startDate" min-date="todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'U'">
+                        <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-disabled="!employeePopup.isNew" ng-model="employeePopup.data.startDate" min-date="calendar.todayDate" max-date="employeePopup.data.endDate" data-validate="required,date"  data-message-required="Please select From Date." ng-required="employeePopup.data.eventType == 'U'">
 
                         <div class="input-group-addon">
                             <a href=""><i class="linecons-calendar"></i></a>
@@ -604,61 +604,6 @@
                 </div>
             </div>
     
-    <div class="form-group-separator"></div>
-
-            <div class="form-group" style="margin-bottom:0;">
-                <label class="col-sm-2 control-label" for="field-2">Repeat</label>
-                <div ng-if="employeePopup.isNew">
-                    <div class="col-sm-2">
-                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-                            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="D">
-                            Daily
-                        </label>
-                    </div>
-                    <div class="col-sm-2">
-                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-                            <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="W">
-                            Weekly
-                        </label>
-                    </div>
-                    <div class="col-sm-2">
-                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-                            <input type="radio" name="radio-4" class="cbr cbr-primary" checked ng-model="employeePopup.data.recurranceType" value="N">
-                            None
-                        </label>
-                    </div>
-                </div>
-                <div ng-if="!employeePopup.isNew">
-                    <div class="col-sm-2">
-                        {{employeePopup.recurranceTypes[employeePopup.data.recurranceType]}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group-separator" ng-if="!employeePopup.isNew"></div>
-
-            <div class="form-group" ng-if="!employeePopup.isNew" style="margin-bottom:0px;">
-                <label class="col-sm-2 control-label" for="field-2" style="padding-top:7px;">Apply To</label>
-                <div class="col-sm-9">
-                    <div class="col-sm-3">
-                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-                            <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="DOW">
-                            Day Of Week
-                        </label>
-                    </div>
-                    <div class="col-sm-3">
-                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-                            <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SEQ">
-                            Sequence
-                        </label>
-                    </div>
-                    <div class="col-sm-3">
-                        <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
-                            <input type="radio" name="radio-7" class="cbr cbr-primary" ng-model="employeePopup.data.applyTo" value="SINGLE">
-                            Single
-                        </label>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
