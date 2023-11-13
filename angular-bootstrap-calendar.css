@@ -334,7 +334,7 @@ span[data-cal-date]:hover {
   font-weight: bold !important;
 }
 .row-data .col-data-empl {
-  line-height: 4em;
+  line-height: 1.5em;
 }
 .row-data .col-data {
   min-height: 60px;

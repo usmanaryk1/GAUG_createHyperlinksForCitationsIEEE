@@ -10,7 +10,7 @@
         Page.setTitle("Employee Calendar");
 
         ctrl.calendarView = 'week';
-        if ($stateParams.id != null) {
+        if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
         }
         ctrl.isOpen = false;
