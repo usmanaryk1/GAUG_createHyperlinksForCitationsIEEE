@@ -64,7 +64,7 @@
                 return api.updateApplication({action: data.applicationId}, data).$promise;
             },
             submitApplication: function (data) {
-                return api.submitApplication({action: data.applicationId, subAction: 'submit'}, {}).$promise;
+                return api.submitApplication({action: data.applicationId, subAction: 'submit'}, data.data).$promise;
             }
         };
     };

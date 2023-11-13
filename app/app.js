@@ -19,7 +19,8 @@ var app = angular.module('xenon-app', [
     'ngIdle',
     'angularUtils.directives.dirPagination',
     'toggle-switch',
-    'angular.chips'
+    'angular.chips',
+    'signature'
 ]);
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -344,14 +345,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 }
             })
             .state('applications-edit.tab4', {
-                url: '/:id/employment-details',
+                url: '/:id/work-experience',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_4'),
                 data: {
                     tabNo: 4
                 }
             })
             .state('applications-edit.tab5', {
-                url: '/:id/certify',
+                url: '/:id/general-details',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_5'),
                 data: {
                     tabNo: 5

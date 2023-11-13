@@ -34,7 +34,7 @@
         var openSubmitApplicationModal = function (application) {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('application', 'application-submit'),
-                size: "md",
+                size: "lg",
                 backdrop: false,
                 keyboard: false,
                 controller: 'ApplicationSubmitCtrl as applicationSubmit',
@@ -636,6 +636,40 @@
         }
 
         ctrl.tab4DataInit = function () {
+            ctrl.formDirty = false;
+            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
+            $timeout(function () {
+                if (!ctrl.employee.employeeAttachments) {
+                    ctrl.employee.employeeAttachments = [];
+                }
+                if (!ctrl.retrivalRunning) {
+                    form_data = $('#add_employee_form').serialize();
+                    $formService.resetRadios();
+                } else {
+                    ctrl.tab4DataInit();
+                }
+            }, 100);
+
+        };
+        
+        ctrl.tab5DataInit = function () {
+            ctrl.formDirty = false;
+            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
+            $timeout(function () {
+                if (!ctrl.employee.employeeAttachments) {
+                    ctrl.employee.employeeAttachments = [];
+                }
+                if (!ctrl.retrivalRunning) {
+                    form_data = $('#add_employee_form').serialize();
+                    $formService.resetRadios();
+                } else {
+                    ctrl.tab4DataInit();
+                }
+            }, 100);
+
+        };
+        
+        ctrl.tab3DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function () {

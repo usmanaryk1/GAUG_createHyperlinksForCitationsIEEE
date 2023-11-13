@@ -7,9 +7,18 @@
         ctrl.close = function () {
             $modalInstance.close();
         };
+        
+        if (application.signature != null) {
+            ctrl.dataUrl = "data:image/png;base64," + application.signature;
+        }
 
         ctrl.submitApplication = function () {
-            ApplicationPublicDAO.submitApplication({'applicationId': application.applicationId})
+            var data = {};
+            if (ctrl.dataUrl !== null) {
+                data.signature = ctrl.dataUrl.substring(ctrl.dataUrl.indexOf(",") + 1);
+            }
+            
+            ApplicationPublicDAO.submitApplication({'applicationId': application.applicationId, data: data})
                     .then(function (res) {
                         $modalInstance.close('submitted');
                         toastr.success('Application is sumitted for review');
