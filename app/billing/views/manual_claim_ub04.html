@@ -1004,16 +1004,16 @@
                     <div class=""><input type="text" ng-model="serviceLine.serviceDate" class="width_100 datepicker" data-format="mm/dd/yyyy" max-date="todayDate" required></div>
                 </td>
                 <td class="width_8 border">
-                    <div class=""><input type="text" ng-disabled="manualClaim.reviewMode"
+                    <div class=""><input type="text"
                                          ng-model="serviceLine.serviceUnits" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
                     <div class=""><input type="text" numbers-only decimalallowed='2'
-                                         ng-disabled="manualClaim.reviewMode" ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
+                                         ng-model="serviceLine.totalCharges" ng-change="manualClaim.calculateTotalCharges();" class="width_100" required></div>
                 </td>
                 <td class="width_13 border">
                     <div class=""><input type="text" numbers-only decimalallowed='2'
-                                         ng-disabled="manualClaim.reviewMode" ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
+                                         ng-model="serviceLine.nonCoveredCharges" class="width_100"></div>
                 </td>
                 <td class=" border_2" style="width: 3%;position: relative;">
                     <div class=""><input type="text" ng-model="serviceLine.field49" class="width_100"></div>
@@ -1039,7 +1039,11 @@
                     <div class="" style="font-size: 15px;font-weight: 600;">&nbsp;TOTALS</div>
                 </td>
                 <td class="border" style="border-top: 2px solid black;">
-                    <div class=""><span style="font-size: 14px;">{{manualClaim.manualClaimObj.totalCharges}}</span></div>
+                    <div class="">
+                        <input type="text" numbers-only decimalallowed='2'
+                                         ng-model="manualClaim.manualClaimObj.totalCharges" 
+                                         ng-change="manualClaim.manualClaimObj.amountInDueA=manualClaim.manualClaimObj.totalCharges;"
+                                         class="width_100" required>
                 </td>
                 <td class="border" style="border-top: 2px solid black;">
                     <div class=""></div>
