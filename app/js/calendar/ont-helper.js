@@ -19,8 +19,8 @@
 
 	    function eventIsInPeriod(event, periodStart, periodEnd) {
 
-	      var eventStart = moment(event.startsAt);
-	      var eventEnd = moment(event.endsAt || event.startsAt);
+	      var eventStart = moment(event.startDate);
+	      var eventEnd = moment(event.endDate || event.startDate);
 	      periodStart = moment(periodStart);
 	      periodEnd = moment(periodEnd);
 
@@ -59,7 +59,7 @@
 	    function filterEventsInPeriod(events, startPeriod, endPeriod) {
 	      return events.filter(function(event) {
 	        return eventIsInPeriod(event, startPeriod, endPeriod);
-	      });
+	      }); 
 	    }
 
 	    function getEventsInPeriod(calendarDate, period, allEvents) {
@@ -86,38 +86,28 @@
 	    function getMonthView(events, currentDay,id) {
 
 	      var startOfMonth = moment(currentDay).startOf('month');
-	      console.log(startOfMonth);
 	      var day = startOfMonth.clone().startOf('week');
 	      var endOfMonthView = moment(currentDay).endOf('month').endOf('week');
 	      var eventsInPeriod;
-	      if (calendarConfig.displayAllMonthEvents) {
-	        eventsInPeriod = filterEventsInPeriod(events, day, endOfMonthView);
-	      } else {
-	        eventsInPeriod = filterEventsInPeriod(events, startOfMonth, startOfMonth.clone().endOf('month'));
-	      }
+
+	   	 var month_events = _.filter(events, function (data){
+	   	 							return data.employeeId == id
+	   	 					})
+
+	     eventsInPeriod = filterEventsInPeriod(month_events, day, endOfMonthView);
+	      
+	      console.log(eventsInPeriod);
 	      var view = [];
 	      var today = moment().startOf('day');
 
 	      while (day.isBefore(endOfMonthView)) {
 
 	        var inMonth = day.month() === moment(currentDay).month();
-	        //var monthEvents = [];
-	        // if (inMonth || calendarConfig.displayAllMonthEvents) {
-	        //   monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
-	        // }
-
-     	 	var monthEvents = _.filter(events, function (data){
-     	 		return data.employeeId == id
-     	 	})
-     	 	console.log(day);
-     	 	console.log(moment(day));
-	        var finalEvents  = _.remove(monthEvents, function (content){
-	    							var start = moment(day).isSame(moment(new Date(content.startDate)));
-	    							var end = moment(day).isSame(moment(new Date(content.endDate)));
-	    							return start || end;
-		    					})
-
-	    							console.log(finalEvents);
+	        var monthEvents = [];
+	        if (inMonth || calendarConfig.displayAllMonthEvents) {
+	          monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
+	        }
+	        console.log(monthEvents);
 
 	        var cell = {
 	          label: day.date(),
@@ -131,8 +121,6 @@
 	          badgeTotal: getBadgeTotal(monthEvents)
 	        };
 
-	        //cellModifier({calendarCell: cell});
-
 	        view.push(cell);
 
 	        day.add(1, 'day');
@@ -141,6 +129,61 @@
 	      return view;
 
 	    }
+
+	    // function getMonthView(events, currentDay,id) {
+
+	    //   var startOfMonth = moment(currentDay).startOf('month');
+	    //   var day = startOfMonth.clone().startOf('week');
+	    //   var endOfMonthView = moment(currentDay).endOf('month').endOf('week');
+	    //   var eventsInPeriod;
+	    //   if (calendarConfig.displayAllMonthEvents) {
+	    //     eventsInPeriod = filterEventsInPeriod(events, day, endOfMonthView);
+	    //   } else {
+	    //     eventsInPeriod = filterEventsInPeriod(events, startOfMonth, startOfMonth.clone().endOf('month'));
+	    //   }
+	    //   var view = [];
+	    //   var today = moment().startOf('day');
+
+	    //   while (day.isBefore(endOfMonthView)) {
+
+	    //     var inMonth = day.month() === moment(currentDay).month();
+	    //     //var monthEvents = [];
+	    //     // if (inMonth || calendarConfig.displayAllMonthEvents) {
+	    //     //   monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
+	    //     // }
+
+     // 	 	var monthEvents = _.filter(events, function (data){
+     // 	 		return data.employeeId == id
+     // 	 	})
+	    //     var finalEvents  = _.remove(monthEvents, function (content){
+	    // 							var start = moment(day).isSame(moment(new Date(content.startDate)));
+	    // 							var end = moment(day).isSame(moment(new Date(content.endDate)));
+	    // 							return start || end;
+		   //  					})
+
+
+	    //     var cell = {
+	    //       label: day.date(),
+	    //       date: day.clone(),
+	    //       inMonth: inMonth,
+	    //       isPast: today.isAfter(day),
+	    //       isToday: today.isSame(day),
+	    //       isFuture: today.isBefore(day),
+	    //       isWeekend: [0, 6].indexOf(day.day()) > -1,
+	    //       events: monthEvents,
+	    //       badgeTotal: getBadgeTotal(monthEvents)
+	    //     };
+
+	    //     //cellModifier({calendarCell: cell});
+
+	    //     view.push(cell);
+
+	    //     day.add(1, 'day');
+	    //   }
+
+	    //   return view;
+
+	    // }
 
 	    function getWeekView(events, currentDay,list) {
 	      var startOfWeek = moment(currentDay).startOf('week');
@@ -175,21 +218,13 @@
 	        		var e = {};
 	        		angular.copy(f,e);
 	        		e.events = _.remove(n.temp_events, function (content){
-	        							var start = moment(f.date).isSame(moment(new Date(content.startDate)));
-	        							var end = moment(f.date).isSame(moment(new Date(content.endDate)));
-	        							return start || end;
+	        							return moment(f.date).isSame(moment(new Date(content.startDate)));
 	        					})
 	        		_.each(e.events, function (d) {
 	        			var startDate = moment(new Date(d.startDate));
 	        			var endDate = moment(new Date(d.endDate));
-	        			if(moment(endDate).isSameOrBefore(moment(days[6].date)))
-	        			{
-		                    var diff = endDate.diff(startDate,'days');
-			        	    d.daySpan = diff+1;
-	        			} else {
-	        				var diff = moment(days[6].date).diff(startDate,'days');
-			        		d.daySpan = diff+1;
-	        			}
+	        			var diff = moment(endDate).diff(startDate,'days');
+			        	d.daySpan = diff+1;
 	        		})
 	        		n.days.push(e);
 	        	})

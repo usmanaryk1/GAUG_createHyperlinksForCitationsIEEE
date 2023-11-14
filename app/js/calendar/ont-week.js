@@ -8,12 +8,19 @@ angular
 
                     $scope.$on('calendar.refreshView', function () {
                         $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list);
-                        console.log($scope.view);
                     });
 
                     $scope.onEventClick = function (eventCell, dayClickedFirstRun, $event) {
                         $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                     };
+
+                    $scope.toggleEvent = function (e) {
+                        $(e.currentTarget).next().popover('show');
+                        $(e.currentTarget).popover({
+                                content: $(e.currentTarget).next().contents(),
+                                html: true
+                        })
+                    }
 
                 }];
             return {

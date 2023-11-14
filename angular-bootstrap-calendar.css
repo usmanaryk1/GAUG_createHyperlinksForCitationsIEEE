@@ -351,3 +351,8 @@ span[data-cal-date]:hover {
 .event-pointer {
   cursor:pointer;
 }
+.tooltip-inner {
+    max-width: 240px;
+    /* If max-width does not work, try using width instead */
+    width: 240px; 
+}

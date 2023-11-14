@@ -64,6 +64,17 @@
 	    });
 
 	    $scope.$watch(
+	      'list'
+	    , function() {
+	      if (!eventsWatched) {
+	        eventsWatched = true;
+	        $scope.$watch('events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
+	      } else {
+	        refreshCalendar();
+	      }
+	    });
+
+	    $scope.$watch(
 	      'currentDay'
 	    , function() {
 	      if (!eventsWatched) {
@@ -89,7 +100,8 @@
 	        monthCellEventsTemplateUrl: '@',
             list:'=',
             totalItems:'=',
-            currentPage:'='    
+            currentPage:'=',
+            employeeId:'='    
 	      },
 	      controller: controller
 	    };

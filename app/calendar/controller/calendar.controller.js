@@ -3,16 +3,21 @@
         var ctrl = this;
 
         ctrl.employee_list = [];
+        
         ctrl.viewEmployee;
+
+        ctrl.employeeId = 4;
 
         var timeFormat = 'HH:mm';
 
         Page.setTitle("Employee Calendar");
 
         ctrl.calendarView = 'week';
+        
         if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
         }
+
         ctrl.isOpen = false;
         ctrl.calendarDay = new Date();
 
@@ -72,8 +77,6 @@
             }
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
-                console.log($rootScope.totalRecords);
-                ctrl.count = $rootScope.totalRecords;
 
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
@@ -365,6 +368,7 @@
             employeeObj = {};
             open();
         };
+
         ctrl.saveEmployeePopupChanges = function (data) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);

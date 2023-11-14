@@ -10,8 +10,8 @@ angular
 	    $scope.$on('calendar.refreshView', function() {
 
 	      $scope.weekDays = calendarHelper.getWeekDayNames();
-
-	      $scope.view = calendarHelper.getMonthView($scope.events, $scope.currentDay,1);
+	      console.log($scope);
+	      $scope.view = calendarHelper.getMonthView($scope.events, $scope.currentDay,$scope.employeeId);
 	      var rows = Math.floor($scope.view.length / 7);
 	      $scope.monthOffsets = [];
 	      for (var i = 0; i < rows; i++) {
@@ -19,10 +19,6 @@ angular
 	      }
 
 	    });
-
-	    $scope.dayClicked = function(day, dayClickedFirstRun, $event) {
-
-	    };
 
 	  }];
 
@@ -35,7 +31,8 @@ angular
 	        currentDay: '=',
 	        onEventClick: '=',
 	        cellTemplateUrl: '@',
-	        cellEventsTemplateUrl: '@'
+	        cellEventsTemplateUrl: '@',
+	        employeeId: '='
 	      },
 	      controller: controller
 	    };

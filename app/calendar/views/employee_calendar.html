@@ -153,20 +153,13 @@
         view-title="calendar.calendarTitle"
         current-day="calendar.calendarDay"
         on-event-click="eventClicked(calendarEvent)"
+        employee-id="calendar.employeeId"
         on-link-click="onListClick(list)"
         list="calendar.employee_list"
         total-items="calendar.totalRecords",
         current-page="calendar.pageNo">
     </mwl-calendar>
     <div ng-if="calendar.calendarView == 'week'">
-        <div id="paginationButtons" class="text-right">
-        <dir-pagination-controls boundary-links="true" 
-                                            max-size="9"
-                                             template-url="app/tpls/dirPagination.tpl.html" 
-                                             pagination-id="drinksPagination" 
-                                             on-page-change="calendar.pageChanged(newPageNumber)">
-        </dir-pagination-controls>
-        </div>
     </div>
 </div>
 
