@@ -7,6 +7,8 @@
         $rootScope.isLoginPage = false;
         ctrl.adminLogin = false;
         ctrl.educations = [];
+        ctrl.workExperiences = [];
+        ctrl.professionalReferences = [];
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
@@ -15,6 +17,8 @@
         if ($state.current.data.viewOnly && $state.current.data.viewOnly === true) {
             ctrl.viewOnly = true;
         }
+        ctrl.todayDate = angular.copy($rootScope.todayDate)
+        ctrl.employmentMaxDate = angular.copy(ctrl.todayDate);
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
@@ -520,7 +524,7 @@
                 ApplicationPublicDAO.updateApplicationEducation(request)
                         .then(function (employeeRes) {
                             ctrl.educations.push(employeeRes);
-                            ctrl.educationLine = {};
+                            ctrl.educationLine = {'result': 'Completed'};
                         })
                         .catch(function () {
                             toastr.error("Education cannot be saved.");
@@ -551,6 +555,88 @@
             });
 
         }
+        
+        ctrl.addWorkExperienceLine = function () {
+
+            if ($('#add_work_experience_form')[0].checkValidity()) {
+                $rootScope.maskLoading();
+                ctrl.workExperienceLine['applicationId'] = ctrl.employee.id;
+                var request = {applicationId: ctrl.employee.applicationId, data: ctrl.workExperienceLine};
+                ApplicationPublicDAO.updateApplicationWorkExperience(request)
+                        .then(function (employeeRes) {
+                            ctrl.workExperiences.push(employeeRes);
+                            ctrl.workExperienceLine = {};
+                        })
+                        .catch(function () {
+                            toastr.error("Work Experience cannot be saved.");
+                        }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+
+            }
+
+        }
+
+        ctrl.removeWorkExperienceLine = function (workExperienceLine) {
+            var request = {applicationId: ctrl.employee.applicationId, workExperienceId: workExperienceLine.id};
+            $rootScope.maskLoading();
+            ApplicationPublicDAO.deleteApplicationWorkExperience(request)
+                    .then(function () {
+                        for (var i = 0; i < ctrl.workExperiences.length; i++) {
+                            if (ctrl.workExperiences[i].id === workExperienceLine.id) {
+                                ctrl.workExperiences.splice(i, 1);
+                                break;
+                            }
+                        }
+                    })
+                    .catch(function () {
+                        toastr.error("Work Experience cannot be removed.");
+                    }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+
+        }
+        
+        ctrl.addProfessionalReferenceLine = function () {
+
+            if ($('#add_professional_reference_form')[0].checkValidity()) {
+                $rootScope.maskLoading();
+                ctrl.professionalReferenceLine['applicationId'] = ctrl.employee.id;
+                var request = {applicationId: ctrl.employee.applicationId, data: ctrl.professionalReferenceLine};
+                ApplicationPublicDAO.updateApplicationProfessionalReference(request)
+                        .then(function (employeeRes) {
+                            ctrl.professionalReferences.push(employeeRes);
+                            ctrl.professionalReferenceLine = {};
+                        })
+                        .catch(function () {
+                            toastr.error("Professional Reference cannot be saved.");
+                        }).then(function () {
+                    $rootScope.unmaskLoading();
+                });
+
+            }
+
+        }
+
+        ctrl.removeProfessionalReferenceLine = function (professionalReferenceLine) {
+            var request = {applicationId: ctrl.employee.applicationId, referenceId: professionalReferenceLine.id};
+            $rootScope.maskLoading();
+            ApplicationPublicDAO.deleteApplicationProfessionalReference(request)
+                    .then(function () {
+                        for (var i = 0; i < ctrl.professionalReferences.length; i++) {
+                            if (ctrl.professionalReferences[i].id === professionalReferenceLine.id) {
+                                ctrl.professionalReferences.splice(i, 1);
+                                break;
+                            }
+                        }
+                    })
+                    .catch(function () {
+                        toastr.error("Professional Reference cannot be saved.");
+                    }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+
+        }
 
         //function called on page initialization.
         function pageInit() {
@@ -569,6 +655,8 @@
                 }
                 ctrl.employee = res;
                 ctrl.educations = res['educations'];
+                ctrl.workExperiences = res['workExperiences'];
+                ctrl.professionalReferences = res['professionalReferences'];
                 ctrl.actualAttachments = angular.copy(ctrl.employee.employeeAttachments);
                 getFilteredAttachments();
 
@@ -686,11 +774,33 @@
             }, 100);
         }
 
+        ctrl.tab3DataInit = function () {
+            ctrl.formDirty = false;
+            $timeout(function () {
+                ctrl.educationLine = {'result': 'Completed'};
+                if (!ctrl.retrivalRunning) {
+                    $formService.resetRadios();
+                } else {
+                    ctrl.tab3DataInit();
+                }
+            }, 100);
+
+        };
+        
+        ctrl.setEmploymentMaxDate = function () {
+            if (ctrl.workExperienceLine.endDate) {
+                ctrl.employmentMaxDate = angular.copy(ctrl.workExperienceLine.endDate);
+            } else {
+                ctrl.employmentMaxDate = angular.copy(ctrl.todayDate);
+            }
+        };
+        
         ctrl.tab4DataInit = function () {
             ctrl.formDirty = false;
-            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function () {
-                ctrl.educationLine = {};
+                ctrl.workExperienceLine = {};
+                ctrl.professionalReferenceLine = {};
+                ctrl.setEmploymentMaxDate();
                 if (!ctrl.retrivalRunning) {
                     $formService.resetRadios();
                 } else {
@@ -699,7 +809,7 @@
             }, 100);
 
         };
-
+        
         ctrl.tab5DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
@@ -711,29 +821,12 @@
                     form_data = $('#add_employee_form').serialize();
                     $formService.resetRadios();
                 } else {
-                    ctrl.tab4DataInit();
+                    ctrl.tab5DataInit();
                 }
             }, 100);
 
         };
-
-        ctrl.tab3DataInit = function () {
-            ctrl.formDirty = false;
-            $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
-            $timeout(function () {
-                if (!ctrl.employee.employeeAttachments) {
-                    ctrl.employee.employeeAttachments = [];
-                }
-                if (!ctrl.retrivalRunning) {
-                    form_data = $('#add_employee_form').serialize();
-                    $formService.resetRadios();
-                } else {
-                    ctrl.tab4DataInit();
-                }
-            }, 100);
-
-        };
-
+        
         ctrl.tab1DataInit = function () {
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();

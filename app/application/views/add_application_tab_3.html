@@ -44,26 +44,44 @@
                                             <tbody>
                                                 <tr ng-if="addEmployee.employee.status === 'inprogress'">
                                                     <td> 
-                                                        <div class="form-group col-md-12 mar_bt0">
-                                                            <input class="form-control" name="school" id="school"
-                                                                   type="text" ng-model="addEmployee.educationLine.school"  ng-required='true'> 
+                                                        <div class="col-md-12 mar_bt0">
+                                                            <div class="form-group">
+                                                                <input class="form-control" name="school" id="school"
+                                                                       type="text" ng-model="addEmployee.educationLine.school"  ng-required='true'> 
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td> 
-                                                        <div class="form-group col-md-12 mar_bt0">
-                                                            <input class="form-control" name="year" id="year"
-                                                                   type="text" ng-model="addEmployee.educationLine.year"  ng-required='true'> 
+                                                        <div class="col-md-12 mar_bt0">
+                                                            <div class="form-group">
+                                                                <input class="form-control" name="year" id="year"
+                                                                       type="text" ng-model="addEmployee.educationLine.year"  ng-required='true'> 
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td> 
-                                                        <div class="form-group col-md-12 mar_bt0">
-                                                            <input class="form-control" name="degree" id="degree"
-                                                                   type="text" ng-model="addEmployee.educationLine.degree"  ng-required='true'> 
+                                                        <div class="col-md-12 mar_bt0">
+                                                            <div class="form-group">
+                                                                <input class="form-control" name="degree" id="degree"
+                                                                       type="text" ng-model="addEmployee.educationLine.degree"  ng-required='true'> 
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td style="vertical-align: top"> 
-                                                        <div class="form-group col-md-12 mar_bt0">
-                                                            <input class="form-control" name="result" id="result" type="text" ng-model="addEmployee.educationLine.result"> 
+                                                        <div class="col-md-12 mar_bt0">
+                                                            <div class="form-group">
+                                                                <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.educationLine.result">
+                                                                    <option value="Completed">
+                                                                        Completed
+                                                                    </option>
+                                                                    <option value="Incomplete">
+                                                                        Incomplete
+                                                                    </option>
+                                                                    <option value="In Progress">
+                                                                        In Progress
+                                                                    </option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td align="center">
@@ -73,10 +91,10 @@
                                                     </td>
                                                 </tr>
                                                 <tr ng-repeat="education in addEmployee.educations">
-                                                    <td align="center"> {{education.school}}</td>
-                                                    <td align="center"> {{education.year}} </td>
-                                                    <td align="center"> {{education.degree}}</td>
-                                                    <td align="center"> {{education.result}} </td>
+                                                    <td> {{education.school}}</td>
+                                                    <td> {{education.year}} </td>
+                                                    <td> {{education.degree}}</td>
+                                                    <td> {{education.result}} </td>
                                                     <td align="center" ng-if="addEmployee.employee.status === 'inprogress'">                                                    
                                                         <a class="btn icon-left fa fa-trash-o delete_button"
                                                            ng-click="addEmployee.removeEducationLine(education)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
