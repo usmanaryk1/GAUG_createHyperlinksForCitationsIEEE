@@ -769,6 +769,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_PATIENT_SCHEDULE'
                 }
             }).
+                    // coordinator calendar
+                    state('app.coordinator-calendar', {
+                url: '/coordinator-calendar/:id?lastPage',
+                templateUrl: appHelper.viewTemplatePath('calendar', 'coordinator_calendar'),
+                controller: 'CoordinatorCalendarCtrl as coordinatorcalendar',
+                data: {
+                    feature: 'VIEW_PATIENT_SCHEDULE'
+                }
+            }).
             // Report
             state('app.report', {
                 url: '/report',

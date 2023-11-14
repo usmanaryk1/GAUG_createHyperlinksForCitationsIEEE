@@ -1,36 +1,83 @@
 /* global _ */
 
 (function () {
-    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService, DispatchDAO) {
+    function CoordinatorCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO, PositionDAO, $formService, DispatchDAO) {
 
         var ctrl = this;
         var dispatchMessage = "$age year old $sex $date from $startTime to $endTime located in $city, $state. To accept this case mark interested below or contact $patientCoordinator for more information.";
 
         ctrl.patient_list = [];
 
+        ctrl.resetFilters = function () {
+            ctrl.searchParams = {};
+            ctrl.searchParams.openCaseEndDate = angular.copy($rootScope.weekEnd);
+            ;
+            ctrl.searchParams.openCaseStartDate = angular.copy($rootScope.weekStart);
+            ctrl.openCase = true;
+            $('#coordinatorIds').select2('val', null);
+            $('#patientIds').select2('val', null);
+            $('#positions').select2('val', null);
+            $('#languages').select2('val', null);
+        };
+
         var timeFormat = 'HH:mm';
-        ctrl.forShowTime = true;
 
-        Page.setTitle("Patient Calendar");
-
-        ctrl.calendarView = 'week';
-        setWeekDate();
-
-        if ($stateParams.id != '') {
+        ctrl.initializePage = function () {
+            ctrl.employeeCoordinateList =[];
+            ctrl.coordinatorId = 0;
+            if ($stateParams.id != '') {
+                ctrl.coordinatorId = $stateParams.id
+            }
+            ctrl.forShowTime = false;
+            Page.setTitle("Coordinator Calendar");
             ctrl.calendarView = 'month';
             setMonthDate();
+            ctrl.resetFilters();
+            ctrl.viewPatient;
+            ctrl.isOpen = false;
+            ctrl.calendarDay = new Date();
+            ctrl.insuranceProviderMap = {};
+            ctrl.nursingCareMap = {};
+            ctrl.staffCoordinatorMap = {};
+            EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+                if (res.length !== 0) {
+                    for (var i = 0; i < res.length; i++) {
+                        if (res[i].id == ctrl.coordinatorId) {
+                            ctrl.viewPatient = res[i];
+                        }
+                        ctrl.nursingCareMap[res[i].id] = res[i].label;
+                    }
+                }
+            }).catch(function () {
+                toastr.error("Failed to retrieve nursing care list.");
+            });
+            EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+                if (res.length !== 0) {
+                    for (var i = 0; i < res.length; i++) {
+                        if (res[i].id == ctrl.coordinatorId) {
+                            ctrl.viewPatient = res[i];
+                        }
+                        ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
+                    }
+                }
+            }).catch(function () {
+                toastr.error("Failed to retrieve staff coordinator list.");
+            });
+            InsurerDAO.retrieveAll().then(function (res) {
+                if (res.length !== 0) {
+                    for (var i = 0; i < res.length; i++) {
+                        ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
+                    }
+                }
+            }).catch(function () {
+                toastr.error("Failed to retrieve insurance provider list.");
+            });
+            ctrl.retrieveCoordinators();
+            ctrl.retrieveAllPatients();
+            ctrl.retrieveAllCoordinators();
+            ctrl.retrieveAllPositions();
         }
 
-        ctrl.viewPatient;
-
-//        ctrl.viewPatient = {'id': ''};
-
-        ctrl.isOpen = false;
-
-        ctrl.calendarDay = new Date();
-        ctrl.insuranceProviderMap = {};
-        ctrl.nursingCareMap = {};
-        ctrl.staffCoordinatorMap = {};
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
             setMonthDate();
@@ -49,119 +96,13 @@
             }
         };
 
-        ctrl.selectDate = function (e) {
-//            ctrl.showDatepicker(e);
-            setTimeout(function () {
-                var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
-                var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
-                if (a != ctrl.startRetrieved || b != ctrl.endRetrieved) {
-                    ctrl.showDatepicker(e);
-                    $rootScope.refreshCalendarView();
-                }
-            }, 200);
-        };
-
-        ctrl.changeToWeek = function () {
-            ctrl.calendarView = 'week';
-            setWeekDate();
-            $rootScope.refreshCalendarView();
-        };
-
-        ctrl.searchParams = {skip: 0, limit: 10};
-
-        ctrl.pageChanged = function (pagenumber) {
-            ctrl.pageNo = pagenumber;
-            ctrl.retrievePatients();
-        };
-
-        ctrl.applySearch = function () {
-            if ($state.params.lastPage) {
-                $state.params.lastPage = '';
-            }
-            ctrl.pageNo = 1;
-            $rootScope.paginationLoading = true;
-            $debounce(ctrl.retrievePatients, 500);
-        };
-
-        ctrl.resetFilters = function () {
-            ctrl.searchParams = {limit: 10, skip: 0};
-            ctrl.searchParams.openCaseEndDate = null;
-            ctrl.searchParams.openCaseStartDate = null;
-            ctrl.searchParams.liveInEndDate = null;
-            ctrl.searchParams.liveInStartDate = null;
-            $('#coordinatorIds').select2('val', null);
-            $('#patientIds').select2('val', null);
-            $('#positions').select2('val', null);
-            $('#languages').select2('val', null);
-            ctrl.applySearch();
-        };
-
         $rootScope.refreshCalendarView = function () {
             $rootScope.paginationLoading = true;
-            ctrl.retrievePatients();
+            ctrl.retrieveCoordinators();
         };
 
-        ctrl.retrievePatients = function () {
-            if ($state.params.lastPage && $state.params.lastPage === 'dashboard') {
-                ctrl.searchParams.openCaseStartDate = $filter('date')(new Date(), $rootScope.dateFormat);
-                ctrl.searchParams.openCaseEndDate = $filter('date')(new Date(), $rootScope.dateFormat);
-            }
-            if (ctrl.pageNo > 1) {
-                ctrl.searchParams.skip = (ctrl.pageNo - 1) * ctrl.searchParams.limit;
-            } else {
-                ctrl.searchParams.skip = 0;
-            }
-            var searchParams = angular.copy(ctrl.searchParams);
-            if (searchParams.patientIds != null) {
-                searchParams.patientIds = searchParams.patientIds.toString();
-            }
-            if (searchParams.coordinatorIds != null) {
-                searchParams.coordinatorIds = searchParams.coordinatorIds.toString();
-            }
-            if (searchParams.languages != null) {
-                searchParams.languages = searchParams.languages.toString();
-            }
-            delete searchParams.openCase;
-            PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
-                ctrl.patient_list = res;
-                ctrl.count = Number($rootScope.totalRecords);
-                if (!ctrl.viewPatient) {
-                    ctrl.viewPatient = res[0];
-                }
-                var obj;
-                if ($stateParams.id != '') {
-                    angular.forEach(res, function (item) {
-                        if (item.id == $stateParams.id) {
-                            obj = angular.copy(item);
-                        }
-                    });
-                    if (!obj) {
-                        PatientDAO.getPatientsForSchedule({patientIds: $stateParams.id}).then(function (res1) {
-                            ctrl.viewPatient = angular.copy(res1[0]);
-                            ctrl.patientId = ctrl.viewPatient.id;
-                            if (ctrl.viewPatient.status === 'd') {
-                                ctrl.hideAddButton = false;
-                            }
-                        });
-                    } else {
-                        ctrl.viewPatient = angular.copy(obj);
-                    }
-                }
-                if (ctrl.viewPatient) {
-                    ctrl.patientId = ctrl.viewPatient.id;
-                }
-                delete res.$promise;
-                delete res.$resolved;
-                var ids = (_.map(ctrl.patient_list, 'id')).toString();
-                if (ctrl.calendarView == 'month') {
-                    ids = ctrl.patientId;
-                    if ($stateParams.id != '' && !obj) {
-                        ids = $stateParams.id;
-                    }
-                }
-                ctrl.getAllEvents(ids);
-                ctrl.totalRecords = $rootScope.totalRecords;
-            });
+        ctrl.retrieveCoordinators = function () {
+            ctrl.getAllEvents(ctrl.searchParams.staffingCordinatorIds);
         };
 
         ctrl.checkOpenCase = function () {
@@ -173,7 +114,7 @@
                 delete ctrl.searchParams.openCaseEndDate;
             }
         };
-        
+
         ctrl.checkLiveIn = function () {
             if (ctrl.searchParams.forLiveIn) {
                 ctrl.searchParams.liveInStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
@@ -187,7 +128,7 @@
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
             ctrl.searchParams.limit = 10;
-            ctrl.retrievePatients();
+            ctrl.retrieveCoordinators();
         };
 
         ctrl.getAllEvents = function (ids) {
@@ -196,11 +137,12 @@
             var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
             ctrl.startRetrieved = a;
             ctrl.endRetrieved = b;
-            EventTypeDAO.retrieveBySchedule({patientIds: ids, fromDate: a, toDate: b}).then(function (res) {
+            EventTypeDAO.retrieveSchedules({staffingCordinatorIds: [ctrl.coordinatorId], fromDate: a, toDate: b}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
-                splitUnavailableEvents(res);
-                angular.forEach(res, function (item) {
+                var parsedResp = JSON.parse(res.data);
+                splitUnavailableEvents(parsedResp);
+                angular.forEach(parsedResp.data, function (item) {
                     if (!item.employeeId && item.eventType === 'S') {
                         if (!ctrl.openCaseMap[item.startDate]) {
                             ctrl.openCaseMap[item.startDate] = {};
@@ -285,10 +227,7 @@
         ctrl.savePatientPopupChanges = function (data, isPast) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);
-            if (ctrl.calendarView == 'month') {
-                data1.patientId = ctrl.viewPatient.id;
-            }
-            if (!data1.patientId && $rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
+            if ($rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
                 data1.patientId = $rootScope.patientPopup.cellClickPatientId;
             }
             if (data1.eventType != 'S') {
@@ -304,7 +243,7 @@
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.patientPopup.close();
-                    ctrl.retrievePatients();
+                    ctrl.retrieveCoordinators();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -319,7 +258,7 @@
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.patientPopup.close();
-                    ctrl.retrievePatients();
+                    ctrl.retrieveCoordinators();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -341,7 +280,7 @@
             }
         };
         ctrl.eventClicked = function (eventObj) {
-            $rootScope.openModalCalendar1(eventObj, 'calendar-modal', 'lg', 'static');
+            // do nothing
         };
 
         $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
@@ -597,7 +536,7 @@
                         id = obj.unavailabilityId;
                     $rootScope.maskLoading();
                     EventTypeDAO.delete({subAction: id, action: ontime_data.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: false}).then(function (res) {
-                        ctrl.retrievePatients();
+                        ctrl.retrieveCoordinators();
                         toastr.success("Event deleted.");
                         $rootScope.patientPopup.close();
                     }).catch(function (data, status) {
@@ -655,7 +594,7 @@
                                 $rootScope.patientPopup.searchParams.sex = patientObj.gender;
                                 $rootScope.patientPopup.searchParams.patientId = patientObj.id;
                             }
-                            if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
+                            if (!$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
                                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                             }
                         }).catch(function (data, status) {
@@ -768,7 +707,7 @@
                                 $rootScope.patientPopup.searchParams.sex = patientObj.gender;
                                 $rootScope.patientPopup.searchParams.patientId = patientObj.id;
                             }
-                            if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
+                            if (!$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
                                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                             }
                         }).catch(function (data, status) {
@@ -807,8 +746,6 @@
                     $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true);
                 } else if ($rootScope.patientPopup.patient && $rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
                     $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true, true);
-                } else if (ctrl.calendarView == 'month') {
-                    $rootScope.patientPopup.patientChanged(ctrl.viewPatient.id, false, true);
                 }
                 $rootScope.patientPopup.dispatchBtnClick = function () {
                     $rootScope.patientPopup.dispatchClicked = true;
@@ -853,7 +790,7 @@
                     var dispatchObj = getJsonFromSearchParams();
                     DispatchDAO.save(dispatchObj).then(function (res) {
                         toastr.success("Dispatch message has been sent to all filtered employees.");
-                        ctrl.retrievePatients();
+                        ctrl.retrieveCoordinators();
                         $rootScope.patientPopup.close();
                     }).catch(function (data) {
                         if (data.data != null) {
@@ -869,33 +806,7 @@
             patientObj = {};
             open();
         };
-        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
-            if (res.length !== 0) {
-                for (var i = 0; i < res.length; i++) {
-                    ctrl.nursingCareMap[res[i].id] = res[i].label;
-                }
-            }
-        }).catch(function () {
-            toastr.error("Failed to retrieve nursing care list.");
-        });
-        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
-            if (res.length !== 0) {
-                for (var i = 0; i < res.length; i++) {
-                    ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
-                }
-            }
-        }).catch(function () {
-            toastr.error("Failed to retrieve staff coordinator list.");
-        });
-        InsurerDAO.retrieveAll().then(function (res) {
-            if (res.length !== 0) {
-                for (var i = 0; i < res.length; i++) {
-                    ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
-                }
-            }
-        }).catch(function () {
-            toastr.error("Failed to retrieve insurance provider list.");
-        });
+
         $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             var modalInstance = $modal.open({
@@ -929,15 +840,9 @@
             $rootScope.weekStart = new Date(startOfMonth);
             $rootScope.weekEnd = new Date(endOfMonthView);
         }
-        function setWeekDate() {
-            var startOfWeek = moment().startOf('week');
-            var endOfWeek = moment().endOf('week');
-            $rootScope.weekStart = new Date(startOfWeek);
-            $rootScope.weekEnd = new Date(endOfWeek);
-        }
-        $rootScope.navigateToMonthPage = function (patient) {
-            delete ctrl.monthPatient;
-            $state.go('app.patient-calendar', {id: patient.id});
+        $rootScope.navigateToMonthPage = function (coordinator) {
+            delete ctrl.monthCoordinator;
+            $state.go('app.coordinator-calendar', {id: coordinator.id});
         };
         ctrl.retrieveAllPositions = function () {
             PositionDAO.retrieveAll({}).then(function (res) {
@@ -950,10 +855,7 @@
                 }
             });
         };
-        ctrl.retrievePatients();
-        ctrl.retrieveAllPatients();
-        ctrl.retrieveAllCoordinators();
-        ctrl.retrieveAllPositions();
+
         var getDispatchMessage = function () {
             var dispatchMessageToDisplay = angular.copy(dispatchMessage);
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$age", moment().diff($rootScope.patientPopup.patient.dateOfBirth, 'years'));
@@ -967,8 +869,10 @@
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$liveIn", ($rootScope.patientPopup.data.forLiveIn == true ? ' - live in' : ''));
             dispatchMessageToDisplay = dispatchMessageToDisplay.replace("$patientCoordinator", $rootScope.patientPopup.patient.staffingCordinatorId != null ? ctrl.staffCoordinatorMap[$rootScope.patientPopup.patient.staffingCordinatorId] : '');
             return dispatchMessageToDisplay;
-        }
+        };
+
+        ctrl.initializePage();
     }
 
-    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", "PositionDAO", "$formService", "DispatchDAO", PatientCalendarCtrl]);
+    angular.module('xenon.controllers').controller('CoordinatorCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", "PositionDAO", "$formService", "DispatchDAO", CoordinatorCalendarCtrl]);
 })();

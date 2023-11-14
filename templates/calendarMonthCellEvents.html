@@ -140,4 +140,47 @@
             </span>                
         </div>
     </div>
+
+
+    <!-- Coordinator View -->
+    <div 
+        ng-repeat="temp_event in day.events| calendarLimitTo: 2 : 0"
+        ng-if="type == 'coordinator'"
+        style="margin-bottom: 2px;"
+        ng-click="onEventClick({calendarEvent: event}, temp_event, false, $event)" 
+        ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
+        <i ng-if="temp_event.dispatchId != null" class="fa fa-wifi pull-right" style="margin-right:5px;padding-top:1.49px;"></i>
+        <i class="glyphicon glyphicon-list-alt pull-right" ng-if="temp_event.note != undefined" tooltip-html-unsafe="<div>Note:<br>{{temp_event.note}}" tooltip-placement="left" style="margin-right:5px;padding-top:1.49px;"></i>
+
+        <span 
+            ng-if="temp_event.eventType == 'S' && temp_event.employeeId == undefined ? true: false" 
+            tooltip-html-unsafe="{{getToolTipToDisplay(temp_event)}}"
+            class="event-pointer event-style">   
+            <span ng-if="!temp_event.worksiteSchedule"> {{temp_event.patient.lName| limitTo: 9}}</span>
+                        <br>
+                        <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime| ampmshort}}{{" - "}}{{temp_event.endTime| ampmshort}}</span>
+        </span>
+    </div>
+    <div ng-if="day.events.length - 2 > 0 && type == 'coordinator'" ng-click="toggleEvent($event)" data-placement="bottom">+ {{day.events.length - 2}} more</div>
+
+    <div class="eventstoload" ng-if="type == 'coordinator'">
+        <div 
+            ng-repeat="temp_event in day.events| calendarLimitTo: day.events.length - 1 : 2" 
+            ng-if="day.events.length"
+            style="margin-bottom: 2px;"
+            ng-click="onEventClick({calendarEvent: event}, temp_event, false, $event)"
+            ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
+            <i ng-if="temp_event.dispatchId != null" class="fa fa-wifi pull-right" style="margin-right:5px;padding-top:1.49px;"></i>
+            <i class="glyphicon glyphicon-list-alt pull-right" ng-if="temp_event.note != undefined" tooltip-html-unsafe="<div>Note:<br>{{temp_event.note}}" tooltip-placement="left" style="margin-right:5px;padding-top:1.49px;"></i>
+
+            <span 
+                ng-if="temp_event.eventType == 'S' && temp_event.employeeId == undefined ? true: false" 
+                tooltip-html-unsafe="{{getToolTipToDisplay(temp_event)}}"
+                class="event-pointer event-style">    
+                <span ng-if="!temp_event.worksiteSchedule"> {{temp_event.patient.lName| limitTo: 9}}</span>
+                        <br>
+                        <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime| ampmshort}}{{" - "}}{{temp_event.endTime| ampmshort}}</span>
+            </span>
+        </div>
+    </div>
 </div>
