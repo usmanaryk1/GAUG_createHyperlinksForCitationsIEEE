@@ -7,46 +7,22 @@
 
     <!--Printing Labels on Top -->
     <div class="cal-row-fluid cal-row-head-week row-heading">
-        <div class="cal-cell1weekempl col-heading" style="width:16%;height:20%;">Employees</div>
+        <div class="cal-cell1weekempl col-heading" style="width:16%;height:20%;" ng-if="type == 'employee'">Employees</div>
+        <div class="cal-cell1weekempl col-heading" style="width:16%;height:20%;" ng-if="type == 'patient'">Patients</div>
         <div class="cal-cell1week" ng-repeat="day in view.days track by $index" style="width:12%;height:20%;">
             <span ng-bind="day.weekDayLabel" class="col-heading"></span><br>
         </div>
     </div>
     <!--Printing events -->
-    <div class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
-        <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
-            <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
-            {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
-        </div>
-
-        <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" colspan="{{temp_day.eventSize}}">
-            <div 
-                ng-repeat="temp_event in temp_day.events| calendarLimitTo: 3:0" 
-                ng-if="temp_day.events.length" 
-                ng-click="onEventClick(temp_event, false, $event)"
-                ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
-                
-                <span 
-                    ng-if="temp_event.eventType == 'S'" 
-                    class="event-pointer" 
-                    tooltip-html-unsafe="<div>Name: {{temp_event.patient.fName}}, {{temp_event.patient.lName}} <br> Phone Number: {{temp_event.patient.phone}} <br> Schedule Time: {{temp_event.startTime}} - {{temp_event.endTime}} <br> Address: {{temp_event.patient.patientAddress.address1}} <br> {{temp_event.patient.patientAddress.city + ', '+ temp_event.patient.patientAddress.state + '- ' + temp_event.patient.patientAddress.zipcode}}" 
-                    style="display:block;margin-bottom:2px;">    
-                    {{temp_event.patient.lName | limitTo: 10}}
-                </span>
-               
-                <span ng-if="temp_event.eventType == 'A'" class="event-pointer" style="display:block;margin-bottom:2px;">    
-                    {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
-                </span>
-               
-                <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
-                    {{'Unavailable'}}
-                </span>                
+        <div ng-if="type == 'employee'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
+            <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
+                <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
+                {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
             </div>
-            <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
 
-            <div class="eventstoload">
+            <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" colspan="{{temp_day.eventSize}}">
                 <div 
-                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 3" 
+                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: 3:0" 
                     ng-if="temp_day.events.length" 
                     ng-click="onEventClick(temp_event, false, $event)"
                     ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
@@ -67,9 +43,93 @@
                         {{'Unavailable'}}
                     </span>                
                 </div>
+                <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
+
+                <div class="eventstoload">
+                    <div 
+                        ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 3" 
+                        ng-if="temp_day.events.length" 
+                        ng-click="onEventClick(temp_event, false, $event)"
+                        ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
+                        
+                        <span 
+                            ng-if="temp_event.eventType == 'S'" 
+                            class="event-pointer" 
+                            tooltip-html-unsafe="<div>Name: {{temp_event.patient.fName}}, {{temp_event.patient.lName}} <br> Phone Number: {{temp_event.patient.phone}} <br> Schedule Time: {{temp_event.startTime}} - {{temp_event.endTime}} <br> Address: {{temp_event.patient.patientAddress.address1}} <br> {{temp_event.patient.patientAddress.city + ', '+ temp_event.patient.patientAddress.state + '- ' + temp_event.patient.patientAddress.zipcode}}" 
+                            style="display:block;margin-bottom:2px;">    
+                            {{temp_event.patient.lName | limitTo: 10}}
+                        </span>
+                       
+                        <span ng-if="temp_event.eventType == 'A'" class="event-pointer" style="display:block;margin-bottom:2px;">    
+                            {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
+                        </span>
+                       
+                        <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
+                            {{'Unavailable'}}
+                        </span>                
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+<!-- Patient View -->
+        <div ng-if="type == 'patient'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
+            <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
+                <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
+                {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
+            </div>
+
+            <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" colspan="{{temp_day.eventSize}}">
+                <div 
+                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: 3:0" 
+                    ng-if="temp_day.events.length" 
+                    ng-click="onEventClick(temp_event, false, $event)"
+                    ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
+                    
+                    <span 
+                        ng-if="temp_event.eventType == 'S'" 
+                        class="event-pointer" 
+                        tooltip-html-unsafe="<div>Name: {{temp_event.employee.fName}}, {{temp_event.employee.lName}} <br> Phone Number: {{temp_event.employee.phone}} <br> Schedule Time: {{temp_event.startTime}} - {{temp_event.endTime}} <br> Address: {{temp_event.employee.address1}} <br> {{temp_event.employee.address2}} <br> {{temp_event.employee.city + ', '+ temp_event.employee.state + '- ' + temp_event.employee.zipcode}}" 
+                        style="display:block;margin-bottom:2px;">    
+                        {{temp_event.patient.lName | limitTo: 10}}
+                    </span>
+                   
+                    <span ng-if="temp_event.eventType == 'A'" class="event-pointer" style="display:block;margin-bottom:2px;">    
+                        {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
+                    </span>
+                   
+                    <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
+                        {{'Unavailable'}}
+                    </span>                
+                </div>
+                <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
+
+                <div class="eventstoload">
+                    <div 
+                        ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 3" 
+                        ng-if="temp_day.events.length" 
+                        ng-click="onEventClick(temp_event, false, $event)"
+                        ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
+                        
+                        <span 
+                            ng-if="temp_event.eventType == 'S'" 
+                            class="event-pointer" 
+                            tooltip-html-unsafe="<div>Name: {{temp_event.employee.fName}}, {{temp_event.employee.lName}} <br> Phone Number: {{temp_event.employee.phone}} <br> Schedule Time: {{temp_event.startTime}} - {{temp_event.endTime}} <br> Address: {{temp_event.employee.address1}} <br> {{temp_event.employee.address2}} <br> {{temp_event.employee.city + ', '+ temp_event.employee.state + '- ' + temp_event.employee.zipcode}}" 
+                            style="display:block;margin-bottom:2px;">    
+                            {{temp_event.patient.lName | limitTo: 10}}
+                        </span>
+                       
+                        <span ng-if="temp_event.eventType == 'A'" class="event-pointer" style="display:block;margin-bottom:2px;">    
+                            {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
+                        </span>
+                       
+                        <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
+                            {{'Unavailable'}}
+                        </span>                
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
 <div id="paginationButtons" class="text-right">
 <dir-pagination-controls boundary-links="true" 

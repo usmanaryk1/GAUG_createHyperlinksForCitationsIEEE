@@ -10,7 +10,8 @@
         cell-template-url="{{ monthCellTemplateUrl}}"
         cell-events-template-url="{{ monthCellEventsTemplateUrl}}"
         ng-switch-when="month"
-        employee-id="employeeId"
+        type-id="typeId"
+        type="type"
         ></mwl-calendar-month>
 
     <mwl-calendar-week
@@ -22,6 +23,8 @@
         ng-switch-when="week"
         list="list"
         total-items="totalItems"
-        current-page="currentPage">
-        ></mwl-calendar-week>
+        current-page="currentPage"
+        type="type"
+        >
+        </mwl-calendar-week>
 </div>

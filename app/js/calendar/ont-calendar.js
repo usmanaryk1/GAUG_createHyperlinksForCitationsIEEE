@@ -101,7 +101,8 @@
             list:'=',
             totalItems:'=',
             currentPage:'=',
-            employeeId:'='    
+            typeId:'=',
+            type:'@'    
 	      },
 	      controller: controller
 	    };

@@ -1,16 +1,28 @@
 (function () {
     function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
+        
         var ctrl = this;
+        
         ctrl.patient_list = [];
+
+        ctrl.patientId = 14;
+        
         var timeFormat = 'HH:mm';
+        
         Page.setTitle("Patient Calendar");
+        
         ctrl.calendarView = 'week';
-        if ($stateParams.id != null) {
+        
+        if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
         }
+        
         ctrl.viewPatient;
+        
         ctrl.isOpen = false;
+        
         ctrl.calendarDay = new Date();
+        
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
         }
@@ -26,15 +38,19 @@
         ctrl.changeToWeek = function () {
             ctrl.calendarView = 'week';
         }
+        
         ctrl.searchParams = {skip: 0, limit: 10};
+        
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrievePatients();
         };
+        
         ctrl.applySearch = function () {
             ctrl.pageNo = 1;
             $debounce(ctrl.retrievePatients, 500);
         };
+        
         ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, skip: 0};
             ctrl.searchParams.availableStartDate = null;
@@ -44,6 +60,7 @@
             $('#languages').select2('val', null);
             ctrl.applySearch();
         };
+        
         ctrl.retrievePatients = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
@@ -88,11 +105,13 @@
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
+        
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
             ctrl.searchParams.limit = 10;
             ctrl.retrievePatients();
         };
+        
         ctrl.getAllEvents = function (ids) {
             EventTypeDAO.retrieveBySchedule({patientIds: ids}).then(function (res) {
                 delete res.$promise;
@@ -100,11 +119,13 @@
                 ctrl.events = res;
             });
         };
+        
         ctrl.retrieveAllPatients = function () {
             PatientDAO.retrieveAll({subAction: 'active'}).then(function (res) {
                 ctrl.patientList = res;
             });
         };
+        
         ctrl.retrieveAllCoordinators = function () {
             $rootScope.maskLoading();
             EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR + "," + ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {

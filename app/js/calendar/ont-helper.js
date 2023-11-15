@@ -83,20 +83,25 @@
 	      return weekdays;
 	    }
 
-	    function getMonthView(events, currentDay,id) {
+	    function getMonthView(events, currentDay,id,type) {
 
 	      var startOfMonth = moment(currentDay).startOf('month');
 	      var day = startOfMonth.clone().startOf('week');
 	      var endOfMonthView = moment(currentDay).endOf('month').endOf('week');
 	      var eventsInPeriod;
 
-	   	 var month_events = _.filter(events, function (data){
-	   	 							return data.employeeId == id
-	   	 					})
+	   	  if(type == "employee") {
+			   	  var month_events = _.filter(events, function (data){
+			   	 							return data.employeeId == id
+			   	 					})
+	   		} else {
+	   			 var month_events = _.filter(events, function (data){
+	   										return data.patientId == id
+	   								})
+	   		}
 
 	     eventsInPeriod = filterEventsInPeriod(month_events, day, endOfMonthView);
 	      
-	      console.log(eventsInPeriod);
 	      var view = [];
 	      var today = moment().startOf('day');
 
@@ -107,7 +112,6 @@
 	        if (inMonth || calendarConfig.displayAllMonthEvents) {
 	          monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
 	        }
-	        console.log(monthEvents);
 
 	        var cell = {
 	          label: day.date(),
@@ -130,68 +134,14 @@
 
 	    }
 
-	    // function getMonthView(events, currentDay,id) {
-
-	    //   var startOfMonth = moment(currentDay).startOf('month');
-	    //   var day = startOfMonth.clone().startOf('week');
-	    //   var endOfMonthView = moment(currentDay).endOf('month').endOf('week');
-	    //   var eventsInPeriod;
-	    //   if (calendarConfig.displayAllMonthEvents) {
-	    //     eventsInPeriod = filterEventsInPeriod(events, day, endOfMonthView);
-	    //   } else {
-	    //     eventsInPeriod = filterEventsInPeriod(events, startOfMonth, startOfMonth.clone().endOf('month'));
-	    //   }
-	    //   var view = [];
-	    //   var today = moment().startOf('day');
-
-	    //   while (day.isBefore(endOfMonthView)) {
-
-	    //     var inMonth = day.month() === moment(currentDay).month();
-	    //     //var monthEvents = [];
-	    //     // if (inMonth || calendarConfig.displayAllMonthEvents) {
-	    //     //   monthEvents = filterEventsInPeriod(eventsInPeriod, day, day.clone().endOf('day'));
-	    //     // }
-
-     // 	 	var monthEvents = _.filter(events, function (data){
-     // 	 		return data.employeeId == id
-     // 	 	})
-	    //     var finalEvents  = _.remove(monthEvents, function (content){
-	    // 							var start = moment(day).isSame(moment(new Date(content.startDate)));
-	    // 							var end = moment(day).isSame(moment(new Date(content.endDate)));
-	    // 							return start || end;
-		   //  					})
-
-
-	    //     var cell = {
-	    //       label: day.date(),
-	    //       date: day.clone(),
-	    //       inMonth: inMonth,
-	    //       isPast: today.isAfter(day),
-	    //       isToday: today.isSame(day),
-	    //       isFuture: today.isBefore(day),
-	    //       isWeekend: [0, 6].indexOf(day.day()) > -1,
-	    //       events: monthEvents,
-	    //       badgeTotal: getBadgeTotal(monthEvents)
-	    //     };
-
-	    //     //cellModifier({calendarCell: cell});
-
-	    //     view.push(cell);
-
-	    //     day.add(1, 'day');
-	    //   }
-
-	    //   return view;
-
-	    // }
-
-	    function getWeekView(events, currentDay,list) {
+	    function getWeekView(events, currentDay,list, type) {
 	      var startOfWeek = moment(currentDay).startOf('week');
 	      var endOfWeek = moment(currentDay).endOf('week');
 	      var dayCounter = startOfWeek.clone();
 	      var days = [];
 	      var eventdays = [];
 	      var today = moment().startOf('day');
+
 	      while (days.length < 7) {
 	        days.push({
 	          weekDayLabel: formatDate(dayCounter, calendarConfig.dateFormats.weekDay),
@@ -206,11 +156,19 @@
 	      }
 	      eventdays = days;
 
-	      _.each(list, function (n){
-	      	 	n.temp_events = _.filter(events, function (data){
-	      	 		return data.employeeId == n.id
-	      	 	})
-	     	})
+	      if(type == "employee") {
+			      _.each(list, function (n){
+			      	 	n.temp_events = _.filter(events, function (data){
+			      	 		return data.employeeId == n.id
+			      	 	})
+			  	   	})
+	  		} else {
+	  			    _.each(list, function (n){
+	  			    	 	n.temp_events = _.filter(events, function (data){
+	  			    	 		return data.patientId == n.id
+	  			    	 	})
+	  				   	})
+	  		}
 
 	        _.each(list, function (n) {
 	        	n.days = [];

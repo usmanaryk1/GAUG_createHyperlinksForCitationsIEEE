@@ -7,7 +7,7 @@ angular
                     $scope.$sce = $sce;
 
                     $scope.$on('calendar.refreshView', function () {
-                        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list);
+                        $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list,$scope.type);
                     });
 
                     $scope.onEventClick = function (eventCell, dayClickedFirstRun, $event) {
@@ -34,7 +34,8 @@ angular
                     onLinkClick: '=',
                     list:'=',
                     totalItems:'=',
-                    currentPage:'='
+                    currentPage:'=',
+                    type:'='
                 },
                 controller: controller
             };

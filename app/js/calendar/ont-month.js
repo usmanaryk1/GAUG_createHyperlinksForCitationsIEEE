@@ -10,8 +10,7 @@ angular
 	    $scope.$on('calendar.refreshView', function() {
 
 	      $scope.weekDays = calendarHelper.getWeekDayNames();
-	      console.log($scope);
-	      $scope.view = calendarHelper.getMonthView($scope.events, $scope.currentDay,$scope.employeeId);
+	      $scope.view = calendarHelper.getMonthView($scope.events, $scope.currentDay,$scope.typeId, $scope.type);
 	      var rows = Math.floor($scope.view.length / 7);
 	      $scope.monthOffsets = [];
 	      for (var i = 0; i < rows; i++) {
@@ -32,7 +31,8 @@ angular
 	        onEventClick: '=',
 	        cellTemplateUrl: '@',
 	        cellEventsTemplateUrl: '@',
-	        employeeId: '='
+	        typeId: '=',
+	        type:'='
 	      },
 	      controller: controller
 	    };
