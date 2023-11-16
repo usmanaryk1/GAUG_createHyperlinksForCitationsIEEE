@@ -159,14 +159,6 @@
         total-items="patientcalendar.totalRecords",
         current-page="patientcalendar.pageNo">
     </mwl-calendar>
-    <div ng-if="patientcalendar.calendarView == 'week'">
-        <div id="paginationButtons" class="text-right">
-            <dir-pagination-controls boundary-links="true" 
-                                     max-size="9"
-                                     template-url="app/tpls/dirPagination.tpl.html" pagination-id="drinksPagination" on-page-change="patientcalendar.pageChanged(newPageNumber)"></dir-pagination-controls>
-
-        </div>
-    </div>
 </div>
 <!--Patient Modal-->
 <script type="text/ng-template" id="calendar-modal" >
