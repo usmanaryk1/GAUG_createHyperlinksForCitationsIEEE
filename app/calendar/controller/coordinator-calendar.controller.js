@@ -23,7 +23,7 @@
         var timeFormat = 'HH:mm';
 
         ctrl.initializePage = function () {
-            ctrl.employeeCoordinateList =[];
+            ctrl.employeeCoordinateList = [];
             ctrl.coordinatorId = 0;
             if ($stateParams.id != '') {
                 ctrl.coordinatorId = $stateParams.id
@@ -105,26 +105,6 @@
             ctrl.getAllEvents(ctrl.searchParams.staffingCordinatorIds);
         };
 
-        ctrl.checkOpenCase = function () {
-            if (ctrl.searchParams.openCase) {
-                ctrl.searchParams.openCaseStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
-                ctrl.searchParams.openCaseEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
-            } else {
-                delete ctrl.searchParams.openCaseStartDate;
-                delete ctrl.searchParams.openCaseEndDate;
-            }
-        };
-
-        ctrl.checkLiveIn = function () {
-            if (ctrl.searchParams.forLiveIn) {
-                ctrl.searchParams.liveInStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
-                ctrl.searchParams.liveInEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
-            } else {
-                delete ctrl.searchParams.liveInStartDate;
-                delete ctrl.searchParams.liveInEndDate;
-            }
-        };
-
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
             ctrl.searchParams.limit = 10;
@@ -142,7 +122,7 @@
                 delete res.$resolved;
                 var parsedResp = JSON.parse(res.data);
                 splitUnavailableEvents(parsedResp);
-                angular.forEach(parsedResp.data, function (item) {
+                angular.forEach(parsedResp, function (item) {
                     if (!item.employeeId && item.eventType === 'S') {
                         if (!ctrl.openCaseMap[item.startDate]) {
                             ctrl.openCaseMap[item.startDate] = {};
@@ -156,52 +136,8 @@
 
         function splitUnavailableEvents(res) {
             ctrl.events = [];
-            var endCount = 6;
             angular.forEach(res, function (content) {
-                if (content.eventType == 'U') {
-                    if (_.find(ontime_data.patientReasons, {key: content.reason}))
-                        content.reasonDisplay = _.find(ontime_data.patientReasons, {key: content.reason}).value;
-                    var startDay = new Date(content.startDate).getDay();
-                    var start = new Date(content.startDate);
-                    var end = new Date(content.endDate);
-                    var i = 0;
-                    while (start <= end)
-                    {
-                        var end1;
-                        var momentObj = moment(start);
-                        var momentObj1 = angular.copy(momentObj);
-                        if (i == 0) {
-                            start = new Date(momentObj.add(7 - startDay, "days"));
-                        } else {
-                            start = new Date(momentObj.add(7, "days"));
-                        }
-                        end1 = new Date(momentObj.add(endCount, "days"));
-                        var start1 = new Date(momentObj);
-                        if (start1 >= end) {
-                            end1 = end;
-                        }
-                        if (i == 0) {
-                            var temp = angular.copy(content);
-                            temp.startDate = content.startDate;
-                            var end2 = new Date(momentObj1.add(endCount - startDay, "days"));
-                            if (new Date(content.endDate) < end2) {
-                                temp.endDate = content.endDate;
-                            } else {
-                                temp.endDate = $filter('date')(end2, $rootScope.dateFormat);
-                            }
-                            ctrl.events.push(temp);
-                        }
-                        if (start <= end) {
-                            var temp = angular.copy(content);
-                            temp.startDate = $filter('date')(start, $rootScope.dateFormat);
-                            temp.endDate = $filter('date')(end1, $rootScope.dateFormat);
-                            ctrl.events.push(temp);
-                        }
-                        i++;
-                    }
-                } else {
-                    ctrl.events.push(content);
-                }
+                ctrl.events.push(content);
             });
         }
 
@@ -329,6 +265,7 @@
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
+                $rootScope.patientPopup.coordinatorPage = true;
                 $rootScope.patientPopup.todayDate = new Date();
                 if (data != null && data.eventType == null) {
                     $rootScope.patientPopup.todayDate = data.startDate;

@@ -775,7 +775,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('calendar', 'coordinator_calendar'),
                 controller: 'CoordinatorCalendarCtrl as coordinatorcalendar',
                 data: {
-                    feature: 'VIEW_PATIENT_SCHEDULE'
+                    feature: 'VIEW_COORDINATOR_SCHEDULE'
                 }
             }).
             // Report
