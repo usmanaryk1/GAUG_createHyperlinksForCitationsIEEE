@@ -1,13 +1,25 @@
 /* global _, ontime_data */
 
 (function () {
-    function ApplicationSubmitCtrl($rootScope, application, $modalInstance, ApplicationPublicDAO) {
+    function ApplicationSubmitCtrl($rootScope, application, professionalReferences, $modalInstance, ApplicationPublicDAO) {
         var ctrl = this;
+        ctrl.resumePending = false;
+        ctrl.professionalReferencesPending = false;
+        ctrl.canSubmitApplication = false;
+        if (application.resume === null || application === '') {
+            ctrl.resumePending = true;
+        }
+        if (professionalReferences.length < 2) {
+            ctrl.professionalReferencesPending = true;
+        }
+        if (!ctrl.resumePending && !ctrl.professionalReferencesPending) {
+            ctrl.canSubmitApplication = true;
+        }
 
         ctrl.close = function () {
             $modalInstance.close();
         };
-        
+
         if (application.signature != null) {
             ctrl.dataUrl = "data:image/png;base64," + application.signature;
         }
@@ -18,7 +30,7 @@
                 data.signature = ctrl.dataUrl.substring(ctrl.dataUrl.indexOf(",") + 1);
             }
             $rootScope.maskLoading();
-            
+
             ApplicationPublicDAO.submitApplication({'applicationId': application.applicationId, data: data})
                     .then(function (res) {
                         $modalInstance.close('submitted');
@@ -32,5 +44,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ApplicationSubmitCtrl', ["$rootScope", "application", "$modalInstance", "ApplicationPublicDAO", ApplicationSubmitCtrl]);
+    angular.module('xenon.controllers').controller('ApplicationSubmitCtrl', ["$rootScope", "application", "professionalReferences", "$modalInstance", "ApplicationPublicDAO", ApplicationSubmitCtrl]);
 })();

@@ -36,7 +36,7 @@
             window.close();
         }
 
-        var openSubmitApplicationModal = function (application) {
+        var openSubmitApplicationModal = function (application, professionalReferences) {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('application', 'application-submit'),
                 size: "lg",
@@ -46,6 +46,9 @@
                 resolve: {
                     application: function () {
                         return application;
+                    },
+                    professionalReferences: function() {
+                        return professionalReferences;
                     }
                 }
             });
@@ -234,7 +237,7 @@
                                 $state.go('applications');
                             }, 300);
                         } else if (ctrl.nextTab === 'submit') {
-                            openSubmitApplicationModal(employeeRes);
+                            openSubmitApplicationModal(employeeRes, ctrl.professionalReferences);
                         } else {
                             $state.go('^.' + ctrl.nextTab, {id: employeeRes.applicationId});
                             toastr.success("Application saved.");

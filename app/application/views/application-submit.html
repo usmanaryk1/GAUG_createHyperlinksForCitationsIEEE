@@ -15,7 +15,7 @@
 
     <div class="modal-body">
         <div class="form-group adjust-row-padding">
-            <div class="col-md-12 ">
+            <div class="col-md-12 "  ng-if="applicationSubmit.canSubmitApplication === true">
                 <div>
                     <label class="pull-left col-md-12 pad0">I certify that the facts contained in this application are true and complete to the best of my knowledge and understand, that, if employed, falsified statements on this application SHALL BE GROUNDS FOR DISMISSAL</label>
                     <label class="pull-left col-md-12 pad0">I Authorize complete investigation of all statements contained herein and herby give my full permission for the Agency to contact and fully discuss my background and history with all persons and entities listed above to give the Agency any and all information concerning my previous employment and any information they may have, and release all former employees and others listed above from all liability for any damage that my result from furnishing the same to the Agency.</label>
@@ -28,11 +28,17 @@
                     <button type="button" class="btn btn-default btn-default-bootstrap" ng-click="clear()">Clear signature</button>
                 </div>
             </div>
+            <div class="col-md-12 "  ng-if="applicationSubmit.canSubmitApplication === false">
+                <div>
+                    <label class="pull-left col-md-12 pad0" ng-show="applicationSubmit.resumePending">Please upload your resume on Personal Details tab</label>
+                    <label class="pull-left col-md-12 pad0" ng-show="applicationSubmit.professionalReferencesPending">Please add at least 2 professional references on Work Experience tab</label>
+                </div>
+            </div>
         </div>
     </div>      
 
     <div class="modal-footer">
         <button type="button" class="btn btn-white" ng-click="applicationSubmit.close();">Close</button>
-        <button type="submit" class="btn btn-success">Submit Application</button>
+        <button type="submit" class="btn btn-success" ng-if="applicationSubmit.canSubmitApplication === true">Submit Application</button>
     </div>
 </form>
