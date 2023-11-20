@@ -52,6 +52,13 @@
                     action: 'claims'
                 }
             },
+            resetBatch: {
+                method: 'PUT',
+                params: {
+                    action: 'sessions',
+                    paramId2: 'reset'
+                }
+            },
             getPatientDetails: {
                 method: 'GET',
                 params: {
@@ -215,6 +222,9 @@
             },
             updateClaim: function(params, data) {
                 return api.updateClaim(params, data).$promise;
+            },
+            resetBatch: function(params) {
+                return api.resetBatch(params).$promise;
             },
             searchClaims: function(data) {
                 return api.searchClaims(data).$promise;
