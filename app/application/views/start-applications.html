@@ -56,7 +56,7 @@
 
 
                 <div ng-show='application.firstTime !== null && !application.applicationSubmitted' style="text-align: center">
-                    <h4>{{application.companyName}} would like to thank for showing interest in {{application.postTitle}} position.</h4>
+                    <h4>{{application.companyName}} would like to thank you for showing interest in the {{application.postTitle}} position.</h4>
                     <form method="post" role="form" id="login" name='loginForm' class="validate" ng-submit='application.submitApplicationRetrieve();'>
 
                         <div class="info-links" ng-if='!application.forgotPassword'>
@@ -92,7 +92,7 @@
                     </form>
                 </div>
                 <div ng-show="application.applicationSubmitted">
-                    <h4>Thanks for applying, Please check you email for verification link and access code to start filling up the application.</h4>
+                    <h4>Thanks for applying, Please check your email for a verification link and access code to start the application process.</h4>
                 </div>
 
                 <div class="login-footer"  style="text-align: center"> 
