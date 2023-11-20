@@ -61,7 +61,7 @@
 
         ctrl.retrievePatients = function () {
             if (ctrl.pageNo > 1) {
-                ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
+                ctrl.searchParams.skip = (ctrl.pageNo-1) * ctrl.searchParams.limit;
             } else {
                 ctrl.searchParams.skip = 0;
             }

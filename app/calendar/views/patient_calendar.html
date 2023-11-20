@@ -157,10 +157,15 @@
         type="patient"
         list="patientcalendar.patient_list">
     </mwl-calendar>
-    <div ng-if="patientcalendar.calendarView == 'week'" class="row">
-        <div class="col-md-8"></div>
-        <div class="col-md-4">
-        <pagination boundary-links="true" total-items="patientcalendar.totalRecords" ng-model="patientcalendar.currentPage" ng-change="patientcalendar.pageChanged(patientcalendar.currentPage)" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination></div>
+    <div ng-if="patientcalendar.calendarView == 'week'">
+        <div pagination-id="patientPagination" dir-paginate="e in patientcalendar.patient_list | itemsPerPage: 10" total-items="totalRecords" current-page="patientcalendar.pageNo">
+        </div>
+        <div id="paginationButtons" class="text-right">
+            <dir-pagination-controls boundary-links="true" 
+                                     max-size="9"
+                                     template-url="app/tpls/dirPagination.tpl.html" pagination-id="patientPagination" on-page-change="patientcalendar.pageChanged(newPageNumber)"></dir-pagination-controls>
+
+        </div>
     </div>
 </div>
 <!--Patient Modal-->

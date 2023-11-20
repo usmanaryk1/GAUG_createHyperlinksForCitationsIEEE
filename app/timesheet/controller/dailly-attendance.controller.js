@@ -325,7 +325,7 @@
             delete params.staffingCordinatorId;
             EventTypeDAO.retrieveSchedules(params).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
-                ctrl.totalRecords = Number(res.headers.count);
+                ctrl.totalRecords = Number(res.headers.event_count);
                 localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
                 ctrl.dataRetrieved = true;
             }).catch(function () {
