@@ -14,7 +14,7 @@
         </div>
     </div>
     <!--Printing events -->
-        <div ng-if="type == 'employee'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
+        <div ng-if="type == 'employee'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="employeePagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
             <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
                 <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
                 {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
@@ -73,7 +73,7 @@
         </div>
 
 <!-- Patient View -->
-        <div ng-if="type == 'patient'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="drinksPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
+        <div ng-if="type == 'patient'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="patientPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
             <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
                 <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
                 {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
@@ -131,11 +131,19 @@
             </div>
         </div>
 </div>
-<div id="paginationButtons" class="text-right">
+<div ng-if="type == 'employee'" id="paginationButtons" class="text-right">
 <dir-pagination-controls boundary-links="true" 
                                     max-size="9"
                                      template-url="app/tpls/dirPagination.tpl.html" 
-                                     pagination-id="drinksPagination" 
+                                     pagination-id="employeePagination" 
                                      on-page-change="calendar.pageChanged(newPageNumber)">
+</dir-pagination-controls>
+</div>
+<div ng-if="type == 'patient'" id="paginationButtons" class="text-right">
+<dir-pagination-controls boundary-links="true" 
+                                    max-size="9"
+                                     template-url="app/tpls/dirPagination.tpl.html" 
+                                     pagination-id="patientPagination" 
+                                     on-page-change="patientcalendar.pageChanged(newPageNumber)">
 </dir-pagination-controls>
 </div>
