@@ -39,8 +39,6 @@ angular
                     onEventClick: '=',
                     onLinkClick: '=',
                     list: '=',
-                    totalItems: '=',
-                    currentPage: '=',
                     type: '='
                 },
                 controller: controller

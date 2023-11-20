@@ -155,11 +155,13 @@
         on-event-click="eventClicked(calendarEvent)"
         type-id="calendar.employeeId"
         type="employee"
-        list="calendar.employee_list"
-        total-items="calendar.totalRecords",
-        current-page="calendar.pageNo">
+        list="calendar.employee_list">
     </mwl-calendar>
-    <div ng-if="calendar.calendarView == 'week'">
+    <div ng-if="calendar.calendarView == 'week'" class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+        <pagination boundary-links="true" total-items="calendar.totalRecords" ng-model="calendar.currentPage" ng-change="calendar.pageChanged(calendar.currentPage)" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+        </div>
     </div>
 </div>
 

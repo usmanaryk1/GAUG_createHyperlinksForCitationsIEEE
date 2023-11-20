@@ -99,8 +99,6 @@
 	        monthCellTemplateUrl: '@',
 	        monthCellEventsTemplateUrl: '@',
             list:'=',
-            totalItems:'=',
-            currentPage:'=',
             typeId:'=',
             type:'@'    
 	      },
