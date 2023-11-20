@@ -33,6 +33,9 @@
             },
             approveApplication: {
                 method: 'PUT'
+            },
+            needMoreInfoApplication: {
+                method: 'PUT'
             }
         });
         return {
@@ -50,6 +53,9 @@
             },
             approveApplication: function (data) {
                 return api.approveApplication({action: data.applicationId, subAction: 'approve'}, data.additionalDetails).$promise;
+            },
+            needMoreInfoApplication: function (data) {
+                return api.needMoreInfoApplication({action: data.applicationId, subAction: 'request-more-info'}, data.nmiDetails).$promise;
             },
             deleteNotes: function (data) {
                 return api.deleteNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;

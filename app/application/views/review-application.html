@@ -1,0 +1,43 @@
+<style>
+    .no-error{
+        border-color: #B0B0B0!important;
+    }
+    .hide-error #FluShotDate-error{
+        display: none
+    }
+</style>
+<form class="validate form-horizontal" name="submit_employee_popup" id="submit_employee_popup" role="form"
+      ng-submit="reviewApplication.reviewApplication();">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="reviewApplication.close();" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Review Application</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                Status
+            </label> 
+            <div class="col-sm-9">
+                <select class="form-control" name="status" ng-model="reviewApplication.status"
+                        required>
+                    <option value="nmi">Need More Info</option>
+                    <option value="rfo">Ready For Orientation</option>
+                </select>    
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12 add-padding-modal">
+                <textarea ckeditor='reviewApplication.editorOptions' name="content" ng-model="reviewApplication.emailContent" ng-change="reviewApplication.content_not_filled = false;"></textarea>
+                <div ng-show='reviewApplication.content_not_filled'>
+                    <span class="validate-has-error">Please fill content</span>
+                </div>
+            </div>
+        </div>
+    </div>      
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="reviewApplication.close();">Close</button>
+        <button type="submit" class="btn btn-success">Submit Application</button>
+    </div>
+</form>

@@ -17,8 +17,8 @@
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.applicationList = [];
 
-        if ($stateParams.status !== 'inprogress' && $stateParams.status !== 'submitted'
-                && $stateParams.status !== 'all' && $stateParams.status !== 'accepted') {
+        if ($stateParams.status !== 'in-progress' && $stateParams.status !== 'need-more-info'
+                && $stateParams.status !== 'ready-for-orientation') {
             $state.transitionTo(ontime_data.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
@@ -293,6 +293,24 @@
                 backdrop: false,
                 keyboard: false,
                 controller: 'ApplicationApproveCtrl as applicationApprove',
+                resolve: {
+                    application: function () {
+                        return application;
+                    }
+                }
+            });
+            modalInstance.result.then(function () {
+                ctrl.rerenderDataTable();
+            });
+        };
+        
+        ctrl.openReviewApplicationModal = function (application) {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('application', 'review-application'),
+                size: "md",
+                backdrop: false,
+                keyboard: false,
+                controller: 'ReviewApplicationCtrl as reviewApplication',
                 resolve: {
                     application: function () {
                         return application;

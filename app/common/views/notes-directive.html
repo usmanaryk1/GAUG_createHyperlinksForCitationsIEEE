@@ -48,10 +48,10 @@
                 <tr>
                     <th style="width: 15%">Created By</th>
                     <th style="width: 11%">Created On</th>
-                    <th style="width: 13%">Type</th>
-                    <th style="width: 13%">Category</th>
-                    <th style="width: 38%">Notes</th>
-                    <th style="width: 10%">Actions</th>
+                    <th style="width: 15%">Type</th>
+                    <th style="width: 13%" ng-if="noteCategories.length>0">Category</th>
+                    <th>Notes</th>
+                    <th style="width: 9%">Actions</th>
                 </tr>
             </thead>
         </table>
@@ -61,11 +61,11 @@
                     <tr ng-repeat="note in notes|orderBy: 'id':true">                                                   
                         <td width="15%">{{note.createdByName}}</td>
                         <td width="11%">{{note.dateInserted|date:dateFormat}}</td>
-                        <td width="13%">{{note.noteType}}</td>
-                        <td width="13%">{{note.noteCategory}}</td>
-                        <td width="38%">{{note.note}}</td>
-                        <td width="10%">
-                            <a class="btn icon-left fa fa-pencil edit_button" ng-if="canEdit && note.type !== 'Deactivation'"  
+                        <td width="15%">{{note.noteType}}</td>
+                        <td width="13%" ng-if="noteCategories.length>0">{{note.noteCategory}}</td>
+                        <td><p  ng-bind-html="note.note | to_trusted"></p></td>
+                        <td width="9%">
+                            <a class="btn icon-left fa fa-pencil edit_button" ng-if="canEdit && note.type !== 'Deactivation' && note.noteType !== 'Need More Info'"  
                                href="" ng-click="editNote(note)" tooltip="Edit"><span class="ed_b"></span></a> 
                             <a class="btn icon-left fa fa-trash-o delete_button" ng-if="canEdit"
                                href="" ng-click="deleteNote(note.id)" tooltip="Delete"><span class="ed_b"></span></a>   

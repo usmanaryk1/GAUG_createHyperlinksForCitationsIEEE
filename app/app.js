@@ -20,6 +20,7 @@ var app = angular.module('xenon-app', [
     'angularUtils.directives.dirPagination',
     'toggle-switch',
     'angular.chips',
+    'ngCkeditor',
     'signature'
 ]);
 function setCookie(cname, cvalue, exdays) {

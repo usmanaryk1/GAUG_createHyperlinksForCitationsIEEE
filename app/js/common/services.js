@@ -99,7 +99,7 @@ angular.module('xenon.services', []).
                 // Subitems of employee
                 employee.addItem('Add Employee', './employee/tab1/', 'CREATE_EMPLOYEE');
                 employee.addItem('View Employee', './employee-list/active', 'VIEW_EMPLOYEE');
-                employee.addItem('View Applications', './application-list/inprogress', 'VIEW_APPLICATION_LIST');
+                employee.addItem('View Applications', './application-list/in-progress', 'VIEW_APPLICATION_LIST');
 
 
                 // Subitems of patient
@@ -172,7 +172,7 @@ angular.module('xenon.services', []).
 //				employee.addItem('Add Employee', 				'./add_employee_tab_2');
 //				employee.addItem('Add Employee', 				'./add_employee_tab_3');
                 employee.addItem('View Employee', './view_employee');
-                employee.addItem('View Applications', './application-list/inprogress');
+                employee.addItem('View Applications', './application-list/in-progress');
 
 
                 // Subitems of patient

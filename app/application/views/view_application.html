@@ -12,24 +12,19 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-tabs">
-                <li ui-sref="app.application-list({status:'inprogress'})" class="{{viewApplication.viewType=='inprogress'?'active':''}}">
+                <li ui-sref="app.application-list({status:'in-progress'})" class="{{viewApplication.viewType=='in-progress'?'active':''}}">
                     <a href="" data-toggle="tab">
                         <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">In Progress</span> 
                     </a>
                 </li>
-                <li ui-sref="app.application-list({status:'submitted'})" class="{{viewApplication.viewType=='submitted'?'active':''}}">
+                <li ui-sref="app.application-list({status:'need-more-info'})" class="{{viewApplication.viewType=='need-more-info'?'active':''}}">
                     <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Submitted</span> 
+                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Need More Info</span> 
                     </a>
                 </li>
-                <li ui-sref="app.application-list({status:'accepted'})" class="{{viewApplication.viewType=='accepted'?'active':''}}">
+                <li ui-sref="app.application-list({status:'ready-for-orientation'})" class="{{viewApplication.viewType=='ready-for-orientation'?'active':''}}">
                     <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Accepted</span> 
-                    </a>
-                </li>
-                <li ui-sref="app.application-list({status:'all'})" class="{{viewApplication.viewType=='all'?'active':''}}">
-                    <a href="" data-toggle="tab">
-                        <span class="visible-xs"><i class="fa fa-users"></i></span> <span class="hidden-xs">All</span> 
+                        <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Ready For Orientation</span> 
                     </a>
                 </li>
             </ul>
@@ -116,8 +111,10 @@
                                                             <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_APPLICATION')" 
                                                                href="" ng-click="viewApplication.openDeleteModal(application, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="application.newNotification = false;viewApplication.openNotesModal(application.id)" tooltip="Notes" ng-class="{'has-newNotification':application.newNotification}"><span class="ed_b"></span></a>
-                                                            <a ng-if="viewApplication.viewType=='submitted'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openApproveApplicationModal(application)"
-                                                               tooltip="Approve Application"><span class="ed_b"></span></a> 
+                                                            <a ng-if="viewApplication.viewType=='ready-for-orientation'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openApproveApplicationModal(application)"
+                                                               tooltip="Approve Application"><span class="ed_b"></span></a>
+                                                            <a ng-if="viewApplication.viewType=='in-progress'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openReviewApplicationModal(application)"
+                                                               tooltip="Review Application"><span class="ed_b"></span></a>
                                                             <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewApplication.openSettingsModal(application.id)" tooltip="Application Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && application.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
                                                     </td>
