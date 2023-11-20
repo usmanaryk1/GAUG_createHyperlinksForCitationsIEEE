@@ -3,17 +3,15 @@
         var ctrl = this;
 
         ctrl.employee_list = [];
-        
+        $rootScope.selectEmployeeModel = {};
         ctrl.viewEmployee;
-
-        ctrl.employeeId = 4;
 
         var timeFormat = 'HH:mm';
 
         Page.setTitle("Employee Calendar");
 
         ctrl.calendarView = 'week';
-        
+
         if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
         }
@@ -81,7 +79,7 @@
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
                 }
-                if ($stateParams.id != null) {
+                if ($stateParams.id != '') {
                     var obj;
                     angular.forEach(res, function (item) {
                         if (item.id == $stateParams.id) {
@@ -91,27 +89,26 @@
                     if (!obj) {
                         EmployeeDAO.getEmployeesForSchedule({employeeIds: $stateParams.id}).then(function (res1) {
                             ctrl.viewEmployee = angular.copy(res1[0]);
+                            ctrl.employeeId = ctrl.viewEmployee.id;
                         });
                     } else {
                         ctrl.viewEmployee = angular.copy(obj);
                     }
                 }
+                if (ctrl.viewEmployee) {
+                    ctrl.employeeId = ctrl.viewEmployee.id;
+                }
                 delete res.$promise;
                 delete res.$resolved;
                 /* Fetch all Employee id's to get related events */
                 var ids = (_.map(ctrl.employee_list, 'id')).toString();
+                if ($stateParams.id != '') {
+                    ids = ids + ',' + $stateParams.id;
+                }
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
-        ctrl.positionMap = {};
-        PositionDAO.retrieveAll({}).then(function (res) {
-            if (res && res.length > 0) {
-                angular.forEach(res, function (position) {
-                    ctrl.positionMap[position.id] = position.position;
-                });
-            }
-        });
 
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
@@ -136,6 +133,12 @@
         ctrl.retrieveAllPositions = function () {
             PositionDAO.retrieveAll({}).then(function (res) {
                 ctrl.positions = res;
+                ctrl.positionMap = {};
+                if (res && res.length > 0) {
+                    angular.forEach(res, function (position) {
+                        ctrl.positionMap[position.id] = position.position;
+                    });
+                }
             });
         };
 
@@ -405,6 +408,25 @@
                 });
             }
         };
+        $rootScope.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.selectEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
+            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
+            $rootScope.selectEmployeeModel.employee = angular.copy(employee);
+            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
+                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
+            }
+        };
+        $rootScope.navigateToMonthPage = function (employee) {
+            $state.go('app.employee-calendar', {id: employee.id});
+        };
+
         ctrl.retrieveEmployees();
         ctrl.retrieveAllEmployees();
         ctrl.retrieveAllPositions();

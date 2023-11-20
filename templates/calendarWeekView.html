@@ -16,7 +16,7 @@
     <!--Printing events -->
         <div ng-if="type == 'employee'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="employeePagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
             <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
-                <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
+                <span style="display:table-cell;vertical-align:middle;padding-left:10px;cursor:pointer;color:#000;" ng-click="onViewInfoClick(map, 'modal-5')"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;" ng-click="onLinkClick(map)"></i>
                 {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
             </div>
 
@@ -75,7 +75,7 @@
 <!-- Patient View -->
         <div ng-if="type == 'patient'" class="cal-row-fluid cal-row-head-week row-data" pagination-id="patientPagination" dir-paginate="map in view.list | itemsPerPage: 10" ng-repeat="map in view.list | itemsPerPage: 10" total-items="totalItems" current-page="searchParams.pageNo">
             <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
-                <span style="display:table-cell;vertical-align:middle;padding-left:10px;"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;"></i>
+                <span style="display:table-cell;vertical-align:middle;padding-left:10px;cursor:pointer;color:#000;" ng-click="onViewInfoClick(map, 'modal-5')"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;" ng-click="onLinkClick(map)"></i>
                 {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
             </div>
 

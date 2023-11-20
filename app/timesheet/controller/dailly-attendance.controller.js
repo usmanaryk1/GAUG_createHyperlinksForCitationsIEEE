@@ -116,19 +116,19 @@
                     if (obj.scheduleId && !obj.unauthorizedTime) {
                         obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
                     }
-                    if (obj.scheduleId) {
-                        var temp = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
-                        var t = temp.split(":");
-                        var h = Number(t[0]);
-                        var m = Number(t[1]);
-                        if (h > 0 || m > 30) {
-                            obj.color = "red";
-                        } else if (h > 0 || m > 8) {
-                            obj.color = "yellow";
-                        }
-                    } else {
-                        obj.color = "red";
-                    }
+//                    if (obj.scheduleId) {
+//                        var temp = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+//                        var t = temp.split(":");
+//                        var h = Number(t[0]);
+//                        var m = Number(t[1]);
+//                        if (h > 0 || m > 30) {
+//                            obj.color = "red";
+//                        } else if (h > 0 || m > 8) {
+//                            obj.color = "yellow";
+//                        }
+//                    } else {
+//                        obj.color = "red";
+//                    }
                 });
                 ctrl.dataRetrieved = true;
             }).catch(function () {

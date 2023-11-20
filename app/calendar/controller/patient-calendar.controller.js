@@ -1,28 +1,26 @@
 (function () {
     function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
-        
+
         var ctrl = this;
-        
+
         ctrl.patient_list = [];
 
-        ctrl.patientId = 14;
-        
         var timeFormat = 'HH:mm';
-        
+
         Page.setTitle("Patient Calendar");
-        
+
         ctrl.calendarView = 'week';
-        
+
         if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
         }
-        
+
         ctrl.viewPatient;
-        
+
         ctrl.isOpen = false;
-        
+
         ctrl.calendarDay = new Date();
-        
+
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
         }
@@ -38,19 +36,19 @@
         ctrl.changeToWeek = function () {
             ctrl.calendarView = 'week';
         }
-        
+
         ctrl.searchParams = {skip: 0, limit: 10};
-        
+
         ctrl.pageChanged = function (pagenumber) {
             ctrl.pageNo = pagenumber;
             ctrl.retrievePatients();
         };
-        
+
         ctrl.applySearch = function () {
             ctrl.pageNo = 1;
             $debounce(ctrl.retrievePatients, 500);
         };
-        
+
         ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, skip: 0};
             ctrl.searchParams.availableStartDate = null;
@@ -60,7 +58,7 @@
             $('#languages').select2('val', null);
             ctrl.applySearch();
         };
-        
+
         ctrl.retrievePatients = function () {
             if (ctrl.pageNo > 1) {
                 ctrl.searchParams.skip = ctrl.pageNo * ctrl.searchParams.limit;
@@ -83,7 +81,7 @@
                 if (!ctrl.viewPatient) {
                     ctrl.viewPatient = res[0];
                 }
-                if ($stateParams.id != null) {
+                if ($stateParams.id != '') {
                     var obj;
                     angular.forEach(res, function (item) {
                         if (item.id == $stateParams.id) {
@@ -93,25 +91,32 @@
                     if (!obj) {
                         PatientDAO.getPatientsForSchedule({patientIds: $stateParams.id}).then(function (res1) {
                             ctrl.viewPatient = angular.copy(res1[0]);
+                            ctrl.patientId = ctrl.viewPatient.id;
                         });
                     } else {
                         ctrl.viewPatient = angular.copy(obj);
                     }
                 }
+                if (ctrl.viewPatient) {
+                    ctrl.patientId = ctrl.viewPatient.id;
+                }
                 delete res.$promise;
                 delete res.$resolved;
                 var ids = (_.map(ctrl.patient_list, 'id')).toString();
+                if ($stateParams.id != '') {
+                    ids = ids + ',' + $stateParams.id;
+                }
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
-        
+
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
             ctrl.searchParams.limit = 10;
             ctrl.retrievePatients();
         };
-        
+
         ctrl.getAllEvents = function (ids) {
             EventTypeDAO.retrieveBySchedule({patientIds: ids}).then(function (res) {
                 delete res.$promise;
@@ -119,13 +124,13 @@
                 ctrl.events = res;
             });
         };
-        
+
         ctrl.retrieveAllPatients = function () {
             PatientDAO.retrieveAll({subAction: 'active'}).then(function (res) {
                 ctrl.patientList = res;
             });
         };
-        
+
         ctrl.retrieveAllCoordinators = function () {
             $rootScope.maskLoading();
             EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR + "," + ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
@@ -405,8 +410,26 @@
             var careEmployeeMap;
             patientObj = {};
             open();
-        }
-
+        };
+        $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.selectPatientModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.selectPatientModel.patient = angular.copy(patient);
+            $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
+            $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
+            $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
+            if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
+                $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+            }
+        };
+        $rootScope.navigateToMonthPage = function (patient) {
+            $state.go('app.patient-calendar', {id: patient.id});
+        };
         ctrl.retrievePatients();
         ctrl.retrieveAllPatients();
         ctrl.retrieveAllCoordinators();
