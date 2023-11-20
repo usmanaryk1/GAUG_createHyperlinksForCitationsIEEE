@@ -36,6 +36,9 @@
             },
             needMoreInfoApplication: {
                 method: 'PUT'
+            },
+            readyForOrientationApplication: {
+                method: 'PUT'
             }
         });
         return {
@@ -56,6 +59,9 @@
             },
             needMoreInfoApplication: function (data) {
                 return api.needMoreInfoApplication({action: data.applicationId, subAction: 'request-more-info'}, data.nmiDetails).$promise;
+            },
+            readyForOrientationApplication: function (data) {
+                return api.readyForOrientationApplication({action: data.applicationId, subAction: 'mark-ready-for-orientation'}, data.rfoDetails).$promise;
             },
             deleteNotes: function (data) {
                 return api.deleteNotes({action: data.userId, subAction: 'notes', subAction1: data.noteId}, {}).$promise;

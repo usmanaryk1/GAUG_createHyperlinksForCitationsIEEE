@@ -112,9 +112,11 @@
                                                                href="" ng-click="viewApplication.openDeleteModal(application, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                             <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="application.newNotification = false;viewApplication.openNotesModal(application.id)" tooltip="Notes" ng-class="{'has-newNotification':application.newNotification}"><span class="ed_b"></span></a>
                                                             <a ng-if="viewApplication.viewType=='ready-for-orientation'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openApproveApplicationModal(application)"
-                                                               tooltip="Approve Application"><span class="ed_b"></span></a>
+                                                               tooltip="Hire as employee"><span class="ed_b"></span></a>
                                                             <a ng-if="viewApplication.viewType=='in-progress'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openReviewApplicationModal(application)"
                                                                tooltip="Review Application"><span class="ed_b"></span></a>
+                                                            <a ng-if="viewApplication.viewType=='need-more-info'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openReviewApplicationModal(application, 'rfo')"
+                                                               tooltip="Ready For Orientation"><span class="ed_b"></span></a>
                                                             <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewApplication.openSettingsModal(application.id)" tooltip="Application Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && application.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
                                                     </td>

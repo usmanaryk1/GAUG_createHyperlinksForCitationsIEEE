@@ -304,7 +304,7 @@
             });
         };
         
-        ctrl.openReviewApplicationModal = function (application) {
+        ctrl.openReviewApplicationModal = function (application, action) {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('application', 'review-application'),
                 size: "md",
@@ -314,6 +314,9 @@
                 resolve: {
                     application: function () {
                         return application;
+                    },
+                    action: function() {
+                        return action;
                     }
                 }
             });

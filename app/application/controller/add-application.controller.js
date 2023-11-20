@@ -103,23 +103,6 @@
             'Drug Test': 'DrugTest'
         };
 
-
-        ctrl.positionList = [];
-//        PositionDAO.retrieveAll({}).then(function (res) {
-//            ctrl.positionList = res;
-//            if (ctrl.positionList && ctrl.positionList.length > 0) {
-//                if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
-//                    ctrl.employee.companyPositionId = ctrl.positionList[0].id;
-//                }
-//                for (var i = 0; i < ctrl.positionList.length; i++) {
-//                    if (ctrl.positionList[i].position === "Personal Care") {
-//                        ctrl.staticPosition = ctrl.positionList[i].id;
-//                        break;
-//                    }
-//                }
-//            }
-//            $formService.resetRadios();
-//        });
         ctrl.careTypeList = [];
         ctrl.ssn = {};
         ctrl.profileFileObj = {};
