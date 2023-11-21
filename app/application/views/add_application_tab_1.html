@@ -251,45 +251,6 @@
                         <div class="form-group-separator">
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">
-                                Resume
-                            </label>
-                            <div class="col-sm-9">
-                                <div flow-init="addEmployee.resumeUploadFile" flow-file-added="addEmployee.resumeFileAdded($file, $flow)" flow-file-success="addEmployee.resumeFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.resumeFileSelected($file,$flow)" flow-file-error="addEmployee.resumeFileError( $file, $message, $flow )">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <button type='button' class='btn btn-single gray_bt' style="margin-bottom:0px !important" id="resume_file" ng-model="addEmployee.employee.resume"
-                                                    flow-btn name="resume_file" ng-disabled="addEmployee.disableResumeUploadButton">Choose File</button>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <label class="control-label" ng-show="addEmployee.employee.resume != null" >
-                                                <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/aed/{{addEmployee.employee.resume}}">
-                                                    resume{{addEmployee.employee.resume|extension}}</a>
-                                                <a href=""><i class="fa fa-close" ng-click="addEmployee.clearResume()"></i></a>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div ng-show="addEmployee.resumeFileObj.errorMsg != null && addEmployee.resumeFileObj.errorMsg != ''">
-                                            <span class="red">{{addEmployee.resumeFileObj.errorMsg}}</span>
-                                        </div> 
-                                    </div>
-                                    <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
-                                        <div ng-repeat="file in transfers">
-                                            <div id="resumeProgress" class="progress"  ng-show="file.progress() < 1 && addEmployee.resumeShowfileProgress">
-                                                <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-                                                    <!--{{file.progress() * 100 | number : 0}} %-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="form-group-separator">
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-3 control-label" for="emergencyName">
                                 Emergency Contact Name
                             </label>
@@ -480,6 +441,45 @@
                                     </label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                <b>Resume</b>
+                            </label>
+                            <div class="col-sm-9">
+                                <div flow-init="addEmployee.resumeUploadFile" flow-file-added="addEmployee.resumeFileAdded($file, $flow)" flow-file-success="addEmployee.resumeFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.resumeFileSelected($file,$flow)" flow-file-error="addEmployee.resumeFileError( $file, $message, $flow )">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <button type='button' class='btn btn-single gray_bt' style="margin-bottom:0px !important" id="resume_file" ng-model="addEmployee.employee.resume"
+                                                    flow-btn name="resume_file" ng-disabled="addEmployee.disableResumeUploadButton">Choose File</button>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <label class="control-label" ng-show="addEmployee.employee.resume != null" >
+                                                <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/aed/{{addEmployee.employee.resume}}">
+                                                    resume{{addEmployee.employee.resume|extension}}</a>
+                                                <a href=""><i class="fa fa-close" ng-click="addEmployee.clearResume()"></i></a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div ng-show="addEmployee.resumeFileObj.errorMsg != null && addEmployee.resumeFileObj.errorMsg != ''">
+                                            <span class="red">{{addEmployee.resumeFileObj.errorMsg}}</span>
+                                        </div> 
+                                    </div>
+                                    <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
+                                        <div ng-repeat="file in transfers">
+                                            <div id="resumeProgress" class="progress"  ng-show="file.progress() < 1 && addEmployee.resumeShowfileProgress">
+                                                <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                                    <!--{{file.progress() * 100 | number : 0}} %-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="form-group-separator">
                         </div>
