@@ -332,6 +332,10 @@
                     employeeToSave.hdRate = 13.12;
                 }
             }
+            if(employeeToSave.authorizedHours==null){
+                employeeToSave.authorizedHoursReason = null;
+                employeeToSave.authorizedHoursExpiryDate = null;
+            }
             EmployeeDAO.update({action: reqParam, data: employeeToSave})
                     .then(function (employeeRes) {
                         if (!ctrl.employee.id || ctrl.employee.id === null) {
