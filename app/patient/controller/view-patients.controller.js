@@ -84,6 +84,15 @@
             }
         };
 
+        ctrl.validAuthorizationDate = function (date1) {
+            if (date1) {
+                return new Date(date1) > new Date();
+            } else {
+                return false;
+            }
+        }
+
+
         function retrievePatientsData() {
             $rootScope.paginationLoading = true;
             ctrl.searchParams.subAction = ctrl.viewType;
