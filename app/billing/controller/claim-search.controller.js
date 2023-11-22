@@ -13,7 +13,7 @@
         ctrl.errorMsg = {};
         retrievePatientsData();
         function retrievePatientsData() {
-            PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+            PatientDAO.retrieveAll({subAction: 'all', sortBy: 'lName', order: 'asc'}).then(function (res) {
                 ctrl.patientList = res;
             });
         }
