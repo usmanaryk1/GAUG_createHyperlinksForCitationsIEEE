@@ -19,7 +19,7 @@
                         </div>
                         <div class="form-group-separator">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="addEmployee.adminLogin">
                             <label class="col-sm-3 control-label">
                                 Map
                             </label>
@@ -27,7 +27,7 @@
                                 <div id="map-1" class="map_panel"></div>
                             </div>
                         </div>
-                        <div class="form-group-separator">
+                        <div class="form-group-separator"  ng-if="addEmployee.adminLogin">
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="field-35">
@@ -119,9 +119,9 @@
                                        data-validate="required" data-message-required="Please enter Zip Code."/>
                             </div>
                         </div>
-                        <div class="form-group-separator">
+                        <div class="form-group-separator"  ng-if="addEmployee.adminLogin">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"  ng-if="addEmployee.adminLogin">
                             <label class="col-sm-3 control-label" for="PreferredCounties">
                                 Preferred Counties
                             </label>

@@ -47,7 +47,7 @@
                     application: function () {
                         return application;
                     },
-                    professionalReferences: function() {
+                    professionalReferences: function () {
                         return professionalReferences;
                     }
                 }
@@ -966,13 +966,17 @@
                 var newyork;
                 if (latitude && latitude !== null && longitude && longitude !== null) {
                     newyork = new google.maps.LatLng(latitude, longitude);
+                    $('#GPSLocation').val(newyork);
                 } else {
                     newyork = new google.maps.LatLng(40.7127837, -74.00594);
                 }
                 var marker;
 // Add a marker to the map and push to the array.
                 function addMarker(location) {
-                    marker.setPosition(location);
+                    if (ctrl.adminLogin == true) {
+                        map.setCenter(location)
+                        marker.setPosition(location);
+                    }
                 }
 
                 function  fillInAddress() {
@@ -1012,7 +1016,6 @@
                                 $('#GPSLocation').blur();
                                 ctrl.employee.locationLatitude = results[0].geometry.location.lat();
                                 ctrl.employee.locationLongitude = results[0].geometry.location.lng()
-                                map.setCenter(results[0].geometry.location);
                                 addMarker(results[0].geometry.location);
                             } else {
                                 alert('Geocode was not successful for the following reason: ' + status);
@@ -1020,7 +1023,7 @@
                         });
                     }
                 }
-                function initialize()
+                function initializeMap()
                 {
                     var mapOptions = {
                         zoom: 12,
@@ -1054,7 +1057,11 @@
                         ctrl.employee.locationLatitude = event.latLng.lat();
                         ctrl.employee.locationLongitude = event.latLng.lng();
                     });
-                    $('#GPSLocation').val(newyork);
+
+                    form_data = $('#add_patient_form').serialize();
+                }
+
+                function initializeAutoComplete() {
                     autocomplete = new google.maps.places.Autocomplete(
                             document.getElementById('autocomplete'), {types: ['geocode'], componentRestrictions: {
                             'country': 'usa'
@@ -1067,32 +1074,12 @@
                     // When the user selects an address from the drop-down, populate the
                     // address fields in the form.
                     autocomplete.addListener('place_changed', fillInAddress);
-                    form_data = $('#add_patient_form').serialize();
                 }
 
-                initialize();
-                $("#address-search").click(function (ev)
-                {
-                    ev.preventDefault();
-                    var address = $('#Search').val().trim();
-                    if (address.length != 0)
-                    {
-                        geocoder.geocode({'address': address}, function (results, status)
-                        {
-                            if (status == google.maps.GeocoderStatus.OK)
-                            {
-                                $('#GPSLocation').val(results[0].geometry.location);
-                                $('#GPSLocation').blur();
-                                ctrl.employee.locationLatitude = results[0].geometry.location.lat();
-                                ctrl.employee.locationLongitude = results[0].geometry.location.lng()
-                                map.setCenter(results[0].geometry.location);
-                                addMarker(results[0].geometry.location);
-                            } else {
-                                alert('Geocode was not successful for the following reason: ' + status);
-                            }
-                        });
-                    }
-                });
+                if (ctrl.adminLogin == true) {
+                    initializeMap();
+                }
+                initializeAutoComplete();
             });
         }
     }
