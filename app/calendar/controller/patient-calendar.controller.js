@@ -315,7 +315,7 @@
                         $rootScope.patientPopup.careTypes = [];
                     }
                     if (!($rootScope.patientPopup.data.eventType != 'S' && !editMode && !viewMode)) {
-                        $rootScope.patientPopup.showLoadingImage = true;
+                        $rootScope.paginationLoading = true;
                         PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
                             patientObj = res[0];
                             if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew) {
@@ -354,7 +354,7 @@
                                             });
                                             $rootScope.patientPopup.careEmployeeMap = careEmployeeMap;
                                             $rootScope.patientPopup.careTypes = careTypes;
-                                            $rootScope.patientPopup.showLoadingImage = false;
+                                            $rootScope.paginationLoading = false;
                                             if (editMode) {
                                                 $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
                                             }
@@ -365,7 +365,7 @@
                                         });
 
                                     } else if (!patientObj) {
-                                        $rootScope.patientPopup.showLoadingImage = false;
+                                        $rootScope.paginationLoading = false;
                                         patientObj = {};
                                         $rootScope.unmaskLoading();
                                         toastr.error("Failed to retrieve patient.");

@@ -284,7 +284,7 @@
                         $rootScope.employeePopup.careTypes = [];
                     }
                     if (!($rootScope.employeePopup.data.eventType != 'S' && !editMode && !viewMode)) {
-                        $rootScope.employeePopup.showLoadingImage = true;
+                        $rootScope.paginationLoading = true;
                         EmployeeDAO.getEmployeesForSchedule({employeeIds: empId}).then(function (res) {
                             employeeObj = res[0];
                             if (ctrl.calendarView == 'month' || !$rootScope.employeePopup.isNew) {
@@ -312,7 +312,7 @@
                                                 toastr.error(data.data);
                                             }).then(function () {
                                                 if (next === (length - 1)) {
-                                                    $rootScope.employeePopup.showLoadingImage = false;
+                                                    $rootScope.paginationLoading = false;
                                                     careTypes = careTypesSelected;
                                                     $rootScope.employeePopup.carePatientMap = carePatientMap;
                                                     $rootScope.employeePopup.careTypes = careTypes;
@@ -323,15 +323,15 @@
                                             });
                                         }
                                     } else if (!employeeObj) {
-                                        $rootScope.employeePopup.showLoadingImage = false;
+                                        $rootScope.paginationLoading = false;
                                         employeeObj = {};
                                         $rootScope.unmaskLoading();
                                         toastr.error("Failed to retrieve employee.");
                                     } else if (employeeObj && employeeObj.employeeCareRatesList && employeeObj.employeeCareRatesList.length === 0) {
-                                        $rootScope.employeePopup.showLoadingImage = false;
+                                        $rootScope.paginationLoading = false;
                                     }
                                 } else {
-                                    $rootScope.employeePopup.showLoadingImage = false;
+                                    $rootScope.paginationLoading = false;
                                 }
                             }
                             if (data != null) {
