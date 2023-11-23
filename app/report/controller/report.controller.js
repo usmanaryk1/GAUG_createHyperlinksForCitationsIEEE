@@ -12,7 +12,8 @@
                 .value();
         ctrl.reportSubTypeList = ontime_data.reportSubTypes;
         ctrl.searchParams = {};
-        ctrl.maxDate = angular.copy($rootScope.todayDate);
+        ctrl.todayDate = angular.copy($rootScope.todayDate)
+        ctrl.maxDate = angular.copy(ctrl.todayDate);
         Page.setTitle("Report");
         ctrl.yearList = [];
         for (var currentYear = new Date().getFullYear(); currentYear >= 2015; currentYear--) {
@@ -83,14 +84,21 @@
             if (ctrl.searchParams.toDate) {
                 ctrl.maxDate = angular.copy(ctrl.searchParams.toDate);
             } else {
-                ctrl.maxDate = angular.copy($rootScope.todayDate);
+                ctrl.maxDate = angular.copy(ctrl.todayDate);
             }
         };
         ctrl.typeChange = function () {
             ctrl.searchParams = {};
+            
             if (ctrl.reportType === 'ptoreport') {
                 ctrl.searchParams.year = ctrl.yearList[0];
             }
+            if(ctrl.reportType==='weeklyotanalysis'){
+                ctrl.todayDate = null;
+            } else {
+                ctrl.todayDate = angular.copy($rootScope.todayDate);
+            }
+            ctrl.setMaxDate();
         };
         ctrl.resetFilters = function () {
             delete ctrl.reportType;
