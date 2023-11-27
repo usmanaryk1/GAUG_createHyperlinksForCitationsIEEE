@@ -113,6 +113,10 @@
                     if (obj.scheduleId && !obj.unauthorizedTime) {
                         obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
                     }
+                    if(obj.scheduleId){
+                        obj.scheduleId.startTime = Date.parse(obj.scheduleId.startTime);
+                        obj.scheduleId.endTime = Date.parse(obj.scheduleId.endTime);
+                    }
                 });
             }).catch(function () {
                 showLoadingBar({

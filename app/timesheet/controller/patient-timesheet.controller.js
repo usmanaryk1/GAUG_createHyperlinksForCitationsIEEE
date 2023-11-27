@@ -130,6 +130,10 @@
                 angular.forEach(ctrl.timesheetList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                    if(obj.scheduleId){
+                        obj.scheduleId.startTime = Date.parse(obj.scheduleId.startTime);
+                        obj.scheduleId.endTime = Date.parse(obj.scheduleId.endTime);
+                    }
                     if (obj.scheduleId && !obj.unauthorizedTime) {
                         obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
                     }

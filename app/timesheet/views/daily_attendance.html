@@ -198,8 +198,8 @@
                                                         <b>Scheduled At</b><br/>
                                                         from {{timesheet.scheduleId.startTime|date :timeFormat}} to {{timesheet.scheduleId.endTime|date :timeFormat}}<br/>
                                                         <b>Cleared For</b><br/>
-                                                        Payroll : {{timesheet.forPayroll}}<br/>
-                                                        Billing : {{timesheet.forBilling}}<br/>
+                                                        <div ng-if="timesheet.forPayroll">Payroll<br/></div>
+                                                        <div ng-if="timesheet.forBilling">Billing<br/></div>
                                                     </div>
                                                 </div>
                                             </span>
