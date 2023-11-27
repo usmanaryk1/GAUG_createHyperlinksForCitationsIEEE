@@ -180,8 +180,8 @@
                                                             <b>Scheduled At</b><br/>
                                                             from {{timesheet.scheduleId.startTime|date :timeFormat}} to {{timesheet.scheduleId.endTime|date :timeFormat}}<br/>
                                                             <b>Cleared For</b><br/>
-                                                            Payroll : {{timesheet.forPayroll}}<br/>
-                                                            Billing : {{timesheet.forBilling}}<br/>
+                                                            <div ng-if="timesheet.forPayroll">Payroll<br/></div>
+                                                            <div ng-if="timesheet.forBilling">Billing<br/></div>
                                                         </div>
                                                     </div>
                                                 </span>
@@ -640,14 +640,14 @@
     </div>
     <div class="col-sm-9">
     <label class="control-label">
- <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{dAttendance.baseUrl}}file/download/{{dAttendance.companyCode}}/l/{{utModal.obj.unauthorizedDocument}}">
-                                                document{{utModal.obj.unauthorizedDocument|extension}}
-                                            </a>
+    <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{dAttendance.baseUrl}}file/download/{{dAttendance.companyCode}}/l/{{utModal.obj.unauthorizedDocument}}">
+    document{{utModal.obj.unauthorizedDocument|extension}}
+    </a>
     <a href=""><i class="fa fa-close" ng-show="utModal.obj.unauthorizedDocument != null" ng-click="utModal.clearDocument()"></i></a>    </label>
     </div>
     </div>
     <div>
-     <div ng-show="utModal.docFileObj.errorMsg != null && utModal.docFileObj.errorMsg != ''">
+    <div ng-show="utModal.docFileObj.errorMsg != null && utModal.docFileObj.errorMsg != ''">
     <span class="red">{{utModal.docFileObj.errorMsg}}</span>
     </div> 
     </div>
