@@ -51,8 +51,8 @@
 
         ctrl.resetFilters = function () {
             ctrl.searchParams = {limit: 10, skip: 0};
-            ctrl.searchParams.availableStartDate = null;
-            ctrl.searchParams.availableStartDate = null;
+            ctrl.searchParams.openCaseEndDate = null;
+            ctrl.searchParams.openCaseStartDate = null;
             $('#patientIds').select2('val', null);
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
