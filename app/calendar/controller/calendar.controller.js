@@ -384,7 +384,7 @@
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.employeePopup.close();
-                    ctrl.loadEvents();
+                    ctrl.retrieveEmployees();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -401,6 +401,7 @@
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Updated successfully.");
                     $rootScope.employeePopup.close();
+                    ctrl.retrieveEmployees();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
