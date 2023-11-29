@@ -40,7 +40,7 @@
                     </span>
                    
                     <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
-                        {{'Unavailable'}}
+                        {{temp_event.reason}}
                     </span>                
                 </div>
                 <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
@@ -65,7 +65,7 @@
                         </span>
                        
                         <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
-                            {{'Unavailable'}}
+                            {{temp_event.reason}}
                         </span>                
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                     </span>
                    
                     <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
-                        {{'Unavailable'}}
+                        {{temp_event.reason}}
                     </span>                
                 </div>
                 <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
@@ -124,7 +124,7 @@
                         </span>
                        
                         <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;">
-                            {{'Unavailable'}}
+                            {{temp_event.reason}}
                         </span>                
                     </div>
                 </div>
