@@ -565,7 +565,7 @@
     Paid
     </label>
     </div>
-    <div class="col-sm-2" style="margin-top:-5px;" ng-show="employeePopup.data.isPaid">
+    <div class="col-sm-2" style="margin-top:0px;" ng-show="employeePopup.data.isPaid">
     <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-model="employeePopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." ng-required="employeePopup.data.eventType == 'U' && employeePopup.data.isPaid" ng-change="employeePopup.setHoursError()" ng-blur="employeePopup.setHoursError()">
     </div>
     </div>

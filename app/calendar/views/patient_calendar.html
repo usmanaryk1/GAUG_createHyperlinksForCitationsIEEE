@@ -345,7 +345,7 @@
     </label>
     </div>
     </div>
-    <div  ng-if="!patientPopup.isNew">
+    <div  ng-if="!patientPopup.isNew" style="margin-top:7px;">
     <div class="col-sm-2">
     {{patientPopup.recurranceTypes[patientPopup.data.recurranceType]}}
     </div>
@@ -354,7 +354,7 @@
     </div>  
     <div class="form-group-separator" ng-if="!patientPopup.isNew"></div>
 
-    <div class="form-group" ng-if="!patientPopup.isNew" style="margin-bottom:0px;">
+    <div class="form-group" ng-if="!patientPopup.isNew" style="margin-bottom:10px;">
     <label class="col-sm-2 control-label" for="field-2" style="padding-top:7px;">Apply To</label>
     <div class="col-sm-9">
     <div class="col-sm-3">
@@ -369,7 +369,7 @@
     Day Of Week
     </label>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
     <label class="cbr-inline" ng-click="patientPopup.changed(popuppatient, 'repeat')">
     <input type="radio" name="radio-8" class="cbr cbr-primary" ng-model="patientPopup.data.applyTo" value="SEQ">
     Sequence
