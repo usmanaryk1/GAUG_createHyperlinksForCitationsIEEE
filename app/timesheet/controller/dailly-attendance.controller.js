@@ -118,7 +118,7 @@
                         obj.scheduleId.endTime = Date.parse(obj.scheduleId.endTime);
                     }
                     if (obj.scheduleId && !obj.unauthorizedTime) {
-                        obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+                        obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.punchInTime, obj.punchOutTime);
                     }
                 });
                 ctrl.dataRetrieved = true;
@@ -327,13 +327,15 @@
                         var temp = $filter('ut')(s11, e11, obj.timeSheet.punchInTime, obj.timeSheet.punchOutTime);
                         obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
                         obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
-                        var t = temp.split(":");
-                        var h = Number(t[0]);
-                        var m = Number(t[1]);
-                        if (h > 0 || m > 30) {
-                            obj.color = "#e06666";
-                        } else if (h > 0 || m > 8) {
-                            obj.color = "yellow";
+                        if (temp) {
+                            var t = temp.split(":");
+                            var h = Number(t[0]);
+                            var m = Number(t[1]);
+                            if (h > 0 || m > 30) {
+                                obj.color = "#ea9999";
+                            } else if (h > 0 || m > 8) {
+                                obj.color = "#FEFEB8";
+                            }
                         }
                     }
                 });

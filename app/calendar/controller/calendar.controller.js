@@ -140,6 +140,14 @@
                     });
                 }
             });
+            ctrl.officeStaffIds = [];
+            PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+                if (res && res.length > 0) {
+                    angular.forEach(res, function (position) {
+                        ctrl.officeStaffIds.push(position.id)
+                    });
+                }
+            });
         };
 
         $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
@@ -175,7 +183,7 @@
                 $rootScope.employeePopup.eventTypes = ontimetest.eventTypes;
                 $rootScope.employeePopup.recurranceTypes = ontimetest.recurranceTypes;
                 $rootScope.employeePopup.employee = angular.copy(employeeObj);
-
+                $rootScope.employeePopup.patientMandatory = true;
                 if (data == null) {
                     $rootScope.employeePopup.isNew = true;
                 } else {
@@ -294,7 +302,11 @@
                     if (!($rootScope.employeePopup.data.eventType != 'S' && !editMode && !viewMode)) {
                         $rootScope.paginationLoading = true;
                         EmployeeDAO.getEmployeesForSchedule({employeeIds: empId}).then(function (res) {
+                            $rootScope.employeePopup.patientMandatory = true;
                             employeeObj = res[0];
+                            if (ctrl.officeStaffIds.indexOf(res[0].companyPositionId) > -1) {
+                                $rootScope.employeePopup.patientMandatory = false;
+                            }
                             if (ctrl.calendarView == 'month' || !$rootScope.employeePopup.isNew) {
                                 $rootScope.employeePopup.employee = angular.copy(employeeObj);
                             }
