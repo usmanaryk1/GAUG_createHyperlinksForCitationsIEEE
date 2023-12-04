@@ -393,6 +393,8 @@
                                     } else if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length === 0) {
                                         $rootScope.employeePopup.showLoadingImage = false;
                                     }
+                                } else {
+                                    $rootScope.paginationLoading = false;
                                 }
                             }
                             if (data != null) {
