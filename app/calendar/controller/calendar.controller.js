@@ -180,6 +180,14 @@
                     $rootScope.employeePopup.isNew = true;
                 } else {
                     $rootScope.employeePopup.isNew = false;
+                    var a = moment(new Date(data.startDate));
+                    var diff = moment().diff(a, 'days');
+                    if (diff > 0) { // past date
+                        data.isEdited = false;
+                    }
+                    if (!angular.isDefined(data.isEdited)) {
+                        data.isEdited = true;
+                    }
                     $rootScope.employeePopup.data = data;
                     if (data.eventType != 'U')
                         $rootScope.employeePopup.data.applyTo = "SINGLE";
@@ -346,6 +354,14 @@
                                 EventTypeDAO.retrieveEventType(obj).then(function (res) {
                                     data = angular.copy(res);
                                     data.applyTo = "SINGLE";
+                                    var a = moment(new Date(data.startDate));
+                                    var diff = moment().diff(a, 'days');
+                                    if (diff > 0) { // past date
+                                        data.isEdited = false;
+                                    }
+                                    if (!angular.isDefined(data.isEdited)) {
+                                        data.isEdited = true;
+                                    }
                                     $rootScope.employeePopup.data = angular.copy(data);
                                 }).catch(function (data) {
                                     toastr.error("Failed to retrieve data");
@@ -377,6 +393,9 @@
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
                 data1.employeeId = ctrl.viewEmployee.id;
+            }
+            if (data1.eventType != 'S') {
+                delete data1.isEdited;
             }
             var obj = {action: data1.eventType, data: data1};
             console.log("employee data :: " + JSON.stringify(data1));

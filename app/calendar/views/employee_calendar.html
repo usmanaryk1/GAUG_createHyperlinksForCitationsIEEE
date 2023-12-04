@@ -258,7 +258,7 @@
     <label class="col-sm-2 control-label" for="field-2">Time</label>
     <div class="col-sm-3">
     <div class="input-group input-group-minimal">
-    <input class="form-control punch-time-input" ng-model='employeePopup.data.startTime' ng-disabled="!employeePopup.isNew" id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'A'"/>
+    <input class="form-control punch-time-input" ng-model='employeePopup.data.startTime' ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" id="startTime" name="startTime" type="text" data-validate='required,time' data-message-required='Please enter start Time.' ng-required="employeePopup.data.eventType == 'A'"/>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-clock"></i></a>
@@ -268,7 +268,7 @@
     <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
     <div class="col-sm-3">
     <div class="input-group input-group-minimal">
-    <input class="form-control punch-time-input" ng-model='employeePopup.data.endTime' ng-disabled="!employeePopup.isNew" id="endTime" name="endTime" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'A'"/>
+    <input class="form-control punch-time-input" ng-model='employeePopup.data.endTime' ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" id="endTime" name="endTime" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'A'"/>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-clock"></i></a>
@@ -285,7 +285,7 @@
     <div class="form-group">
     <label class="col-sm-2 control-label" for="field-2">Note</label>
     <div class="col-sm-10">
-    <textarea class="form-control" cols="5" id="note" name="note" placeholder="Enter note for this scheduled event." ng-model="employeePopup.data.note"></textarea>
+    <textarea class="form-control" cols="5" id="note" name="note" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" placeholder="Enter note for this scheduled event." ng-model="employeePopup.data.note"></textarea>
     </div>
     </div>
 
@@ -296,7 +296,7 @@
     <div class="col-sm-3">
     <div class="form-block">
     <label class="no-padding-left checkbox" style="padding-top:0px;">
-    <input type="checkbox" class="cbr" id="livein" name="livein" ng-model="employeePopup.data.forLiveIn" ng-click="employeePopup.changed(popupemployee, 'repeat')">
+    <input type="checkbox" class="cbr" id="livein" name="livein" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.forLiveIn" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     Available for Live In
     </label>
     </div>
@@ -333,9 +333,9 @@
     </div>
     </div>
     </div>
-    <div class="form-group-separator" ng-if="!employeePopup.isNew"></div>
+    <div class="form-group-separator" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew"></div>
 
-    <div class="form-group" ng-if="!employeePopup.isNew" style="margin-bottom:0px;">
+    <div class="form-group" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" style="margin-bottom:0px;">
     <label class="col-sm-2 control-label" for="field-2" style="padding-top:7px;">Apply To</label>
     <div class="col-sm-9">
     <div class="col-sm-3">
@@ -360,9 +360,9 @@
     </div>
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.deleteSchedule()">Delete</button>
     <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
-    <button type="submit" class="btn btn-success" ng-click="employeePopup.save();">Save changes</button>
+    <button type="submit" class="btn btn-success" ng-click="employeePopup.save();" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)">Save changes</button>
     </div>
     </form>
     </div>
@@ -386,7 +386,7 @@
     <label class="col-sm-2 control-label">Care</label>
 
     <div class="col-sm-10">
-    <select class="form-control" id="care" name="care" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S'">
+    <select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S'">
     <option value="">Select the care</option>
     </select>
     </div>
@@ -397,7 +397,7 @@
     <div class="form-group">
     <label class="col-sm-2 control-label">Patient</label>
     <div class="col-sm-10">
-    <select class="form-control" id="patient" name="patient" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.fName+' '+patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-required="employeePopup.data.eventType == 'S'">
+    <select class="form-control" id="patient" name="patient" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.lName+', '+patient.fName+' '+patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-required="employeePopup.data.eventType == 'S'">
     <option value="">Select the patient</option>
     </select>
     </div>
@@ -434,7 +434,7 @@
     <label class="col-sm-2 control-label" for="field-2">Time</label>
     <div class="col-sm-3">
     <div class="input-group input-group-minimal">
-    <input class="form-control  punch-time-input" ng-model='employeePopup.data.startTime' ng-disabled="!employeePopup.isNew" id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'S'"/>
+    <input class="form-control  punch-time-input" ng-model='employeePopup.data.startTime' ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" id="startTime1" name="startTime1" type="text" data-validate='required,time' data-message-required='Please enter start Time.'  ng-required="employeePopup.data.eventType == 'S'"/>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-clock"></i></a>
@@ -444,7 +444,7 @@
     <div class="col-sm-1"><label class="col-sm-3 control-label">To</label></div>
     <div class="col-sm-3">
     <div class="input-group input-group-minimal">
-    <input class="form-control  punch-time-input" ng-model='employeePopup.data.endTime' ng-disabled="!employeePopup.isNew" id="endTime1" name="endTime2" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'S'"/>
+    <input class="form-control  punch-time-input" ng-model='employeePopup.data.endTime' ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" id="endTime1" name="endTime2" type="text" data-validate='required,time' data-message-required='Please enter end Time.' ng-required="employeePopup.data.eventType == 'S'"/>
 
     <div class="input-group-addon">
     <a href=""><i class="linecons-clock"></i></a>
@@ -461,7 +461,7 @@
     <div class="form-group">
     <label class="col-sm-2 control-label" for="field-2">Note</label>
     <div class="col-sm-10">
-    <textarea class="form-control" name="note" cols="5" id="note" placeholder="Enter note for this scheduled event." ng-model="employeePopup.data.note"></textarea>
+    <textarea class="form-control" name="note" cols="5" id="note" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" placeholder="Enter note for this scheduled event." ng-model="employeePopup.data.note"></textarea>
     </div>
     </div>
 
@@ -496,9 +496,9 @@
     </div>
     </div>
     </div>
-    <div class="form-group-separator" ng-if="!employeePopup.isNew"></div>
+    <div class="form-group-separator" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew"></div>
 
-    <div class="form-group" ng-if="!employeePopup.isNew" style="margin-bottom:0;">
+    <div class="form-group" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" style="margin-bottom:0;">
     <label class="col-sm-2 control-label" for="field-2">Apply To</label>
     <div class="col-sm-9">
     <div class="col-sm-3">
@@ -523,9 +523,9 @@
     </div>
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.deleteSchedule()">Delete</button>
     <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
-    <button type="submit" class="btn btn-success" ng-click="employeePopup.save();">Save changes</button>
+    <button type="submit" class="btn btn-success" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.save();">Save changes</button>
     </div>
     </form>
     </div>
@@ -548,7 +548,7 @@
     <label class="col-sm-2 control-label">Reason</label>
 
     <div class="col-sm-10">
-    <select class="form-control" id="reason" name="reason" ng-model="employeePopup.data.reason" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in employeePopup.reasons" ng-required="employeePopup.data.eventType == 'U'">
+    <select class="form-control" id="reason" name="reason" ng-model="employeePopup.data.reason" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" data-validate="required"  data-message-required="Please select the reason." ng-options="reason for reason in employeePopup.reasons" ng-required="employeePopup.data.eventType == 'U'">
     <option value="">Select the reason</option>
     </select>
     </div>
@@ -561,12 +561,12 @@
 
     <div class="col-sm-2" style="width:10%;padding-right:0;">
     <label class="no-padding-left checkbox" >
-    <input type="checkbox" class="cbr" id="paid" name="paid" ng-model="employeePopup.data.isPaid">
+    <input type="checkbox" class="cbr" id="paid" name="paid" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.isPaid">
     Paid
     </label>
     </div>
     <div class="col-sm-2" style="margin-top:0px;" ng-show="employeePopup.data.isPaid">
-    <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-model="employeePopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." ng-required="employeePopup.data.eventType == 'U' && employeePopup.data.isPaid" ng-change="employeePopup.setHoursError()" ng-blur="employeePopup.setHoursError()">
+    <input type="text" class="form-control" numbers-only="true" id="hours" name="hours" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.noOfHours" placeholder="Hours" data-validate="required" data-message-required="Please enter hours." ng-required="employeePopup.data.eventType == 'U' && employeePopup.data.isPaid" ng-change="employeePopup.setHoursError()" ng-blur="employeePopup.setHoursError()">
     </div>
     </div>
 
@@ -600,15 +600,15 @@
     <div class="form-group">
     <label class="col-sm-2 control-label" for="field-2">Note</label>
     <div class="col-sm-10">
-    <textarea class="form-control" cols="5" id="note" name="note" ng-model="employeePopup.data.note" placeholder="Enter note for this scheduled event."></textarea>
+    <textarea class="form-control" cols="5" id="note" name="note" ng-model="employeePopup.data.note" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" placeholder="Enter note for this scheduled event."></textarea>
     </div>
     </div>
 
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-show="!employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.deleteSchedule()">Delete</button>
     <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
-    <button type="submit" class="btn btn-success" ng-click="employeePopup.save();">Save changes</button>
+    <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.save();">Save changes</button>
     </div>
 
     </form>

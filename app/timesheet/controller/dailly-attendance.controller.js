@@ -113,26 +113,13 @@
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
-                    if(obj.scheduleId){
+                    if (obj.scheduleId) {
                         obj.scheduleId.startTime = Date.parse(obj.scheduleId.startTime);
                         obj.scheduleId.endTime = Date.parse(obj.scheduleId.endTime);
                     }
                     if (obj.scheduleId && !obj.unauthorizedTime) {
                         obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
                     }
-//                    if (obj.scheduleId) {
-//                        var temp = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
-//                        var t = temp.split(":");
-//                        var h = Number(t[0]);
-//                        var m = Number(t[1]);
-//                        if (h > 0 || m > 30) {
-//                            obj.color = "red";
-//                        } else if (h > 0 || m > 8) {
-//                            obj.color = "yellow";
-//                        }
-//                    } else {
-//                        obj.color = "red";
-//                    }
                 });
                 ctrl.dataRetrieved = true;
             }).catch(function () {
@@ -327,8 +314,29 @@
             delete params.startDate;
             delete params.endDate;
             delete params.staffingCordinatorId;
+            params.dailyAttendance = true;
             EventTypeDAO.retrieveSchedules(params).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
+                angular.forEach(ctrl.attendanceList, function (obj) {
+                    delete obj.color;
+                    if (obj.timeSheet) {
+                        var s1 = $filter('ampm')(obj.startTime);
+                        var e1 = $filter('ampm')(obj.endTime);
+                        var s11 = new Date(obj.startDate + " " + s1);
+                        var e11 = new Date(obj.endDate + " " + e1);
+                        var temp = $filter('ut')(s11, e11, obj.timeSheet.punchInTime, obj.timeSheet.punchOutTime);
+                        obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
+                        obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
+                        var t = temp.split(":");
+                        var h = Number(t[0]);
+                        var m = Number(t[1]);
+                        if (h > 0 || m > 30) {
+                            obj.color = "#e06666";
+                        } else if (h > 0 || m > 8) {
+                            obj.color = "yellow";
+                        }
+                    }
+                });
                 ctrl.totalRecords = Number(res.headers.event_count);
                 localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
                 ctrl.dataRetrieved = true;

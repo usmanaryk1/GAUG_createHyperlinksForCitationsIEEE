@@ -236,13 +236,12 @@
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >End Time</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')" >Time In</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >Time Out</th>
-                                        <th width="10%" nowrap>Note</th>
                                     </tr>
                                 </thead> 
                                 <tbody>
                                     <tr pagination-id="dailyAttendancePagination" dir-paginate="timesheet in dAttendance.attendanceList| itemsPerPage: dAttendance.searchParams.limit"
                                         total-items="dAttendance.totalRecords"
-                                        current-page="dAttendance.searchParams.pageNo">
+                                        current-page="dAttendance.searchParams.pageNo" ng-style="{'background-color':timesheet.color}">
                                         <th>
                                             {{timesheet.startDate|timesheetformat}} - {{timesheet.startDate|date :dateFormat}}
                                         </th>
@@ -253,19 +252,16 @@
                                             {{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}
                                         </td>
                                         <th>
-                                            {{timesheet.startTime|date :timeFormat}}
+                                            {{timesheet.startTime|ampm}}
                                         </th>
                                         <th>
-                                            {{timesheet.endTime|date :timeFormat}}
+                                            {{timesheet.endTime|ampm}}
                                         </th>
                                         <th>
-                                            {{timesheet.timesheet.punchInTime|date :timeFormat}}
+                                            {{timesheet.timeSheet.punchInTime|date : timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.timesheet.punchOutTime|date :timeFormat}}
-                                        </th>
-                                        <th>
-                                            {{timesheet.note}}
+                                            {{timesheet.timeSheet.punchOutTime|date :timeFormat}}
                                         </th>
                                     </tr>
                                 </tbody>

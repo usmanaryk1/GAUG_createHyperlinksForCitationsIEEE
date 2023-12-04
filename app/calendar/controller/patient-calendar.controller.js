@@ -61,7 +61,7 @@
 
         ctrl.retrievePatients = function () {
             if (ctrl.pageNo > 1) {
-                ctrl.searchParams.skip = (ctrl.pageNo-1) * ctrl.searchParams.limit;
+                ctrl.searchParams.skip = (ctrl.pageNo - 1) * ctrl.searchParams.limit;
             } else {
                 ctrl.searchParams.skip = 0;
             }
@@ -148,6 +148,9 @@
             if (ctrl.calendarView == 'month') {
                 data1.patientId = ctrl.viewPatient.id;
             }
+            if (data1.eventType != 'S') {
+                delete data1.isEdited;
+            }
             console.log("patient data :: " + JSON.stringify(data1));
             var obj = {action: data1.eventType, data: data1}
             if ($rootScope.patientPopup.isNew) {
@@ -215,6 +218,14 @@
                     $rootScope.patientPopup.isNew = true;
                 } else {
                     $rootScope.patientPopup.isNew = false;
+                    var a = moment(new Date(data.startDate));
+                    var diff = moment().diff(a, 'days');
+                    if (diff > 0) { // past date
+                        data.isEdited = false;
+                    }
+                    if (!angular.isDefined(data.isEdited)) {
+                        data.isEdited = true;
+                    }
                     $rootScope.patientPopup.data = data;
                     if (data.eventType != 'U')
                         $rootScope.patientPopup.data.applyTo = "SINGLE";
@@ -333,11 +344,11 @@
                                         var length = patientObj.patientCareTypeCollection.length;
                                         var str = "";
                                         for (var i = 0; i < length; i++) {
-                                            careTypesSelected.push(patientObj.patientCareTypeCollection[i].insuranceCareTypeId);
+                                            careTypesSelected.push(patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId);
                                             if (str.length > 0) {
                                                 str = str + ",";
                                             }
-                                            str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.id;
+                                            str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id;
                                         }
                                         careTypes = careTypesSelected;
                                         EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
@@ -386,6 +397,14 @@
                                 EventTypeDAO.retrieveEventType(obj).then(function (res) {
                                     data = angular.copy(res);
                                     data.applyTo = "SINGLE";
+                                    var a = moment(new Date(data.startDate));
+                                    var diff = moment().diff(a, 'days');
+                                    if (diff > 0) { // past date
+                                        data.isEdited = false;
+                                    }
+                                    if (!angular.isDefined(data.isEdited)) {
+                                        data.isEdited = true;
+                                    }
                                     $rootScope.patientPopup.data = angular.copy(data);
                                 }).catch(function (data) {
                                     toastr.error("Failed to retrieve data");
