@@ -216,19 +216,26 @@
                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                 if (data == null) {
                     $rootScope.patientPopup.isNew = true;
+                    $rootScope.patientPopup.showPatient = true;
                 } else {
-                    $rootScope.patientPopup.isNew = false;
-                    var a = moment(new Date(data.startDate));
-                    var diff = moment().diff(a, 'days');
-                    if (diff > 0) { // past date
-                        data.isEdited = false;
+                    if (data.eventType == null) {
+                        $rootScope.patientPopup.isNew = true;
+                        $rootScope.patientPopup.showPatient = false;
+                    } else {
+                        $rootScope.patientPopup.isNew = false;
+                        $rootScope.patientPopup.showPatient = false;
+                        var a = moment(new Date(data.startDate));
+                        var diff = moment().diff(a, 'days');
+                        if (diff > 0) { // past date
+                            data.isEdited = false;
+                        }
+                        if (!angular.isDefined(data.isEdited)) {
+                            data.isEdited = true;
+                        }
+                        $rootScope.patientPopup.data = data;
+                        if (data.eventType != 'U')
+                            $rootScope.patientPopup.data.applyTo = "SINGLE";
                     }
-                    if (!angular.isDefined(data.isEdited)) {
-                        data.isEdited = true;
-                    }
-                    $rootScope.patientPopup.data = data;
-                    if (data.eventType != 'U')
-                        $rootScope.patientPopup.data.applyTo = "SINGLE";
                 }
                 //to make the radio buttons selected, theme bug
                 setTimeout(function () {
@@ -238,6 +245,9 @@
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.patientPopup.data)) {
                     $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
+                }
+                if (data && data.eventType == null) {
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: data.data.id};
                 }
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {
@@ -329,7 +339,7 @@
                         $rootScope.paginationLoading = true;
                         PatientDAO.getPatientsForSchedule({patientIds: patientId}).then(function (res) {
                             patientObj = res[0];
-                            if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew) {
+                            if (ctrl.calendarView == 'month' || !$rootScope.patientPopup.isNew || !$rootScope.patientPopup.showPatient) {
                                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                             }
                         }).catch(function (data, status) {
@@ -393,24 +403,28 @@
                                     id = data.scheduleId;
                                 if (data.unavailabilityId)
                                     id = data.unavailabilityId;
-                                var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
-                                EventTypeDAO.retrieveEventType(obj).then(function (res) {
-                                    data = angular.copy(res);
-                                    data.applyTo = "SINGLE";
-                                    var a = moment(new Date(data.startDate));
-                                    var diff = moment().diff(a, 'days');
-                                    if (diff > 0) { // past date
-                                        data.isEdited = false;
-                                    }
-                                    if (!angular.isDefined(data.isEdited)) {
-                                        data.isEdited = true;
-                                    }
-                                    $rootScope.patientPopup.data = angular.copy(data);
-                                }).catch(function (data) {
-                                    toastr.error("Failed to retrieve data");
-                                }).then(function () {
+                                if (id) {
+                                    var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
+                                    EventTypeDAO.retrieveEventType(obj).then(function (res) {
+                                        data = angular.copy(res);
+                                        data.applyTo = "SINGLE";
+                                        var a = moment(new Date(data.startDate));
+                                        var diff = moment().diff(a, 'days');
+                                        if (diff > 0) { // past date
+                                            data.isEdited = false;
+                                        }
+                                        if (!angular.isDefined(data.isEdited)) {
+                                            data.isEdited = true;
+                                        }
+                                        $rootScope.patientPopup.data = angular.copy(data);
+                                    }).catch(function (data) {
+                                        toastr.error("Failed to retrieve data");
+                                    }).then(function () {
+                                        open1();
+                                    });
+                                } else {
                                     open1();
-                                });
+                                }
                             } else {
                                 open1();
                             }
@@ -419,6 +433,9 @@
                 };
                 if ($rootScope.patientPopup.patient && !$rootScope.patientPopup.isNew) {
                     $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true);
+                }
+                if ($rootScope.patientPopup.patient && $rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
+                    $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true, true);
                 }
                 if (ctrl.calendarView == 'month') {
                     $rootScope.patientPopup.patientChanged(ctrl.viewPatient.id, false, true);

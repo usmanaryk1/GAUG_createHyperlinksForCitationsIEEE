@@ -9,8 +9,18 @@ angular
                         $scope.view = calendarHelper.getWeekView($scope.events, $scope.currentDay, $scope.list, $scope.type);
                     });
 
-                    $scope.onEventClick = function (eventCell, dayClickedFirstRun, $event) {
-                        $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                    $scope.onEventClick = function (eventCell, object, onClickDate) {
+                        if (!eventCell) {
+                            var day = new Date(onClickDate.date);
+                            var day1 = moment(day);
+                            var diff = moment().diff(day1, 'days');
+                            if (diff <= 0) {
+                                eventCell = {data: object, startDate: day};
+                            }
+                        }
+                        if (eventCell) {
+                            $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                        }
                     };
 
                     $scope.onLinkClick = function (obj) {

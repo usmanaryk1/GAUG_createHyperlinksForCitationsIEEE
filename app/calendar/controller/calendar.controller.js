@@ -186,19 +186,26 @@
                 $rootScope.employeePopup.patientMandatory = true;
                 if (data == null) {
                     $rootScope.employeePopup.isNew = true;
+                    $rootScope.employeePopup.showEmployee = true;
                 } else {
-                    $rootScope.employeePopup.isNew = false;
-                    var a = moment(new Date(data.startDate));
-                    var diff = moment().diff(a, 'days');
-                    if (diff > 0) { // past date
-                        data.isEdited = false;
+                    if (data.eventType == null) {
+                        $rootScope.employeePopup.isNew = true;
+                        $rootScope.employeePopup.showEmployee = false;
+                    } else {
+                        $rootScope.employeePopup.isNew = false;
+                        $rootScope.employeePopup.showEmployee = false;
+                        var a = moment(new Date(data.startDate));
+                        var diff = moment().diff(a, 'days');
+                        if (diff > 0) { // past date
+                            data.isEdited = false;
+                        }
+                        if (!angular.isDefined(data.isEdited)) {
+                            data.isEdited = true;
+                        }
+                        $rootScope.employeePopup.data = data;
+                        if (data.eventType != 'U')
+                            $rootScope.employeePopup.data.applyTo = "SINGLE";
                     }
-                    if (!angular.isDefined(data.isEdited)) {
-                        data.isEdited = true;
-                    }
-                    $rootScope.employeePopup.data = data;
-                    if (data.eventType != 'U')
-                        $rootScope.employeePopup.data.applyTo = "SINGLE";
                 }
                 //to make the radio buttons selected, theme bug
                 setTimeout(function () {
@@ -208,6 +215,9 @@
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
                     $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                }
+                if (data && data.eventType == null) {
+                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: data.data.id};
                 }
                 $rootScope.employeePopup.save = function () {
                     $timeout(function () {
@@ -307,14 +317,14 @@
                             if (ctrl.officeStaffIds.indexOf(res[0].companyPositionId) > -1) {
                                 $rootScope.employeePopup.patientMandatory = false;
                             }
-                            if (ctrl.calendarView == 'month' || !$rootScope.employeePopup.isNew) {
+                            if (ctrl.calendarView == 'month' || !$rootScope.employeePopup.isNew || !$rootScope.employeePopup.showEmployee) {
                                 $rootScope.employeePopup.employee = angular.copy(employeeObj);
                             }
                         }).catch(function (data, status) {
                             toastr.error("Failed to retrieve employee.");
                         }).then(function () {
-
-                            function open1() {
+                         
+                        function open1() {
                                 if ($rootScope.employeePopup.data.eventType == 'S' || viewMode) {
                                     ctrl.careTypeIdMap = {};
                                     var careTypesSelected = [];
@@ -362,24 +372,28 @@
                                     id = data.scheduleId;
                                 if (data.unavailabilityId)
                                     id = data.unavailabilityId;
-                                var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
-                                EventTypeDAO.retrieveEventType(obj).then(function (res) {
-                                    data = angular.copy(res);
-                                    data.applyTo = "SINGLE";
-                                    var a = moment(new Date(data.startDate));
-                                    var diff = moment().diff(a, 'days');
-                                    if (diff > 0) { // past date
-                                        data.isEdited = false;
-                                    }
-                                    if (!angular.isDefined(data.isEdited)) {
-                                        data.isEdited = true;
-                                    }
-                                    $rootScope.employeePopup.data = angular.copy(data);
-                                }).catch(function (data) {
-                                    toastr.error("Failed to retrieve data");
-                                }).then(function () {
+                                if (id) {
+                                    var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
+                                    EventTypeDAO.retrieveEventType(obj).then(function (res) {
+                                        data = angular.copy(res);
+                                        data.applyTo = "SINGLE";
+                                        var a = moment(new Date(data.startDate));
+                                        var diff = moment().diff(a, 'days');
+                                        if (diff > 0) { // past date
+                                            data.isEdited = false;
+                                        }
+                                        if (!angular.isDefined(data.isEdited)) {
+                                            data.isEdited = true;
+                                        }
+                                        $rootScope.employeePopup.data = angular.copy(data);
+                                    }).catch(function (data) {
+                                        toastr.error("Failed to retrieve data");
+                                    }).then(function () {
+                                        open1();
+                                    });
+                                } else {
                                     open1();
-                                });
+                                }
                             } else {
                                 open1();
                             }
@@ -388,6 +402,9 @@
                 };
                 if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true);
+                }
+                if ($rootScope.employeePopup.employee && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
+                    $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true, true);
                 }
                 if (ctrl.calendarView == 'month') {
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);

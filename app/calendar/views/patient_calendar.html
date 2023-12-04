@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
                     <div class="mwl-left">
-                        <h2>{{patientcalendar.viewPatient.lName}}, {{patientcalendar.viewPatient.fName}}</h2>
+                        <h2 ng-if="patientcalendar.viewPatient">{{patientcalendar.viewPatient.lName}}, {{patientcalendar.viewPatient.fName}}</h2>
                     </div>
                     <div class="col-md-4 pull-right" style="padding-right:0px;">
                         <div>
@@ -173,8 +173,8 @@
     <div class="modal-header">
     <button type="button" class="close" ng-click="patientPopup.close();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
-    <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week'">Add Event</span>
-    <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month'">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
+    <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
+    <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
     </h4>
     <h6 ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month'">DOB : {{patientPopup.patient.dateOfBirth|date :dateFormat}}</h6>
     </div>
@@ -210,11 +210,11 @@
     <div ng-if="patientPopup.data.eventType == 'S'">
     <form class="form-horizontal validate" role="form" name="popuppatients" id="popuppatients" >
     <div class="modal-body">
-    <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew">
+    <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
     <div class="col-sm-10">
-    <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week'" data-validate="required">
+    <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient" data-validate="required">
     <option value="" selected hidden />
     </select>
     </div>
@@ -389,11 +389,11 @@
     <div  ng-if="patientPopup.data.eventType == 'U'">
     <form class="form-horizontal validate" role="form" name="popuppatientu" id="popuppatientu" >
     <div class="modal-body">
-    <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew">
+    <div class="form-group" ng-show="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Patient</label>
     <div class="col-sm-10">
-    <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week'" data-validate="required">
+    <select class="form-control" style="margin-top:15px;" name ="eventPatientIds" id="eventPatientIds" ng-model="patientPopup.data.patientId" ng-change="patientPopup.patientChanged(patientPopup.data.patientId)" ng-options='patient.id as (patient.lName+", "+patient.fName+" "+patient.middleInitial) for patient in patientPopup.patientList' data-message-required="Please select patient." ng-required="patientPopup.calendarView == 'week' && patientPopup.isNew && patientPopup.showPatient" data-validate="required">
     <option value="" selected hidden />
     </select>
     </div>

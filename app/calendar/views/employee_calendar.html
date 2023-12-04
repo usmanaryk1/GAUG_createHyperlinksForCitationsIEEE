@@ -38,7 +38,7 @@
             <div class="row">
                 <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
                     <div class="mwl-left">
-                        <h2>{{calendar.viewEmployee.lName}}, {{calendar.viewEmployee.fName}} <small>{{calendar.positionMap[calendar.viewEmployee.companyPositionId]}}</small></h2>
+                        <h2 ng-if="calendar.viewEmployee">{{calendar.viewEmployee.lName}}, {{calendar.viewEmployee.fName}} <small>{{calendar.positionMap[calendar.viewEmployee.companyPositionId]}}</small></h2>
                     </div>
                     <div class="col-md-4 pull-right" style="padding-right:0px;">
                         <div>
@@ -177,8 +177,8 @@
     <div class="modal-header">
     <button type="button" class="close" ng-click="employeePopup.close();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
-    <span ng-if="employeePopup.isNew && employeePopup.calendarView == 'week'">Add Event</span>
-    <span ng-if="!employeePopup.isNew || employeePopup.calendarView == 'month'">{{employeePopup.employee.lName}}, {{employeePopup.employee.fName}}</span>
+    <span ng-if="employeePopup.isNew && employeePopup.calendarView == 'week' && employeePopup.showEmployee">Add Event</span>
+    <span ng-if="!employeePopup.isNew || employeePopup.calendarView == 'month' || !employeePopup.showEmployee">{{employeePopup.employee.lName}}, {{employeePopup.employee.fName}}</span>
     </h4>
     </div>
     <div>
@@ -219,11 +219,11 @@
     <div ng-if="employeePopup.data.eventType == 'A'">
     <form class="form-horizontal validate" role="form" name="popupemployeea" id="popupemployeea" >
     <div class="modal-body">
-    <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew">
+    <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
     <div class="col-sm-10">
-    <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
+    <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee" data-validate="required">
     <option value="" selected hidden />
     </select>
     </div>
@@ -371,11 +371,11 @@
     <div ng-if="employeePopup.data.eventType == 'S'">
     <form class="form-horizontal validate" role="form" name="popupemployees" id="popupemployees" >
     <div class="modal-body">
-    <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew">
+    <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
     <div class="col-sm-10">
-    <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
+    <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee" data-validate="required">
     <option value="" selected hidden />
     </select>
     </div>
@@ -386,7 +386,10 @@
     <label class="col-sm-2 control-label">Care</label>
 
     <div class="col-sm-10">
-    <select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S'">
+    <select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-if="!employeePopup.patientMandatory">
+    <option value="">Select the care</option>
+    </select>
+<select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-if="employeePopup.patientMandatory">
     <option value="">Select the care</option>
     </select>
     </div>
@@ -537,11 +540,11 @@
     <div ng-if="employeePopup.data.eventType == 'U'">
     <form class="form-horizontal validate" role="form" name="popupemployeeu" id="popupemployeeu" >
     <div class="modal-body">
-    <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew">
+    <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
     <div class="col-sm-10">
-    <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week'" data-validate="required">
+    <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in employeePopup.employeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee" data-validate="required">
     <option value="" selected hidden />
     </select>
     </div>
