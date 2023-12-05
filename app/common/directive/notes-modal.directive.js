@@ -29,7 +29,7 @@ angular.module('xenon.directives').directive('notesDirective', function ($compil
 
             function initData() {
                 scope.notes = [];
-                scope.noteTypeCategoriesMap = {'Case Offered': ['Accepted', 'Not Available', 'Declined']};
+                scope.noteTypeCategoriesMap = {'Case Offered': ['Accepted', 'No Answer', 'Declined']};
                 scope.noteCategories = [];
                 scope.allLoaded = false;
                 scope.data = {note: ""};
