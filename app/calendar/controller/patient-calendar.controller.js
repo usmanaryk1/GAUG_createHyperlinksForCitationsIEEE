@@ -247,7 +247,13 @@
                     $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: data.data.id};
+                    var id;
+                    if (data.data) {
+                        id = data.data.id;
+                    } else {
+                        id = ctrl.viewPatient.id;
+                    }
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
                 }
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {

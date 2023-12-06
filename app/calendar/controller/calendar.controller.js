@@ -217,7 +217,13 @@
                     $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: data.data.id};
+                    var id;
+                    if (data.data) {
+                        id = data.data.id;
+                    } else {
+                        id = ctrl.viewEmployee.id;
+                    }
+                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
                 }
                 $rootScope.employeePopup.save = function () {
                     $timeout(function () {
@@ -323,8 +329,8 @@
                         }).catch(function (data, status) {
                             toastr.error("Failed to retrieve employee.");
                         }).then(function () {
-                         
-                        function open1() {
+
+                            function open1() {
                                 if ($rootScope.employeePopup.data.eventType == 'S' || viewMode) {
                                     ctrl.careTypeIdMap = {};
                                     var careTypesSelected = [];

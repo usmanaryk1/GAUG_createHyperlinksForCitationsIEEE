@@ -15,11 +15,11 @@
         </span>
 
         <span ng-if="temp_event.eventType == 'A'" class="event-pointer" style="display:block;margin-bottom:2px;text-align:center;">    
-            {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
+               {{temp_event.startTime}}{{" - "}}{{temp_event.endTime}}
         </span>
 
         <span ng-if="temp_event.eventType == 'U'" class="event-pointer" style="display:block;margin-bottom:2px;text-align:center;">
-            {{temp_event.reason}}
+               {{temp_event.reason}}
         </span>                
     </div>
     <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
@@ -113,6 +113,4 @@
             </span>                
         </div>
     </div>
-</div>
-<div class="events-list" ng-if="day.events.length == 0" style="padding-top:35px" ng-click="onEventClick()">
 </div>

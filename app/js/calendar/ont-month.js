@@ -18,9 +18,26 @@ angular
                         }
 
                     });
-
+                    $scope.eventClickCalled = false;
                     $scope.onEventClick = function (calendarEvent, eventCell, dayClickedFirstRun, $event) {
+                        $scope.eventClickCalled = true;
                         $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                    };
+                    $scope.dayClicked = function (date) {
+                        if (!$scope.eventClickCalled) {
+                            var eventCell;
+                            var day = new Date(date.date);
+                            var day1 = moment(day);
+                            var diff = moment().diff(day1, 'days');
+                            if (diff <= 0) {
+                                eventCell = {startDate: day};
+                            }
+                            if (eventCell) {
+                                $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                            }
+                        } else {
+                            $scope.eventClickCalled = false;
+                        }
                     };
                 }];
 
