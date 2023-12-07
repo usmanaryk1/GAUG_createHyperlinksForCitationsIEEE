@@ -321,10 +321,8 @@
                     delete obj.color;
                     if (obj.timeSheet) {
                         var s1 = $filter('ampm')(obj.startTime);
-                        var e1 = $filter('ampm')(obj.endTime);
                         var s11 = new Date(obj.startDate + " " + s1);
-                        var e11 = new Date(obj.endDate + " " + e1);
-                        var temp = $filter('ut')(s11, e11, obj.timeSheet.punchInTime, obj.timeSheet.punchOutTime);
+                        var temp = $filter('duration')(s11, obj.timeSheet.punchInTime);
                         obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
                         obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
                         if (temp) {

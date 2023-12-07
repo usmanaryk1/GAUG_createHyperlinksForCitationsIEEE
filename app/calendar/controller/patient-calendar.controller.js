@@ -1,5 +1,5 @@
 (function () {
-    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams) {
+    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO) {
 
         var ctrl = this;
 
@@ -457,19 +457,31 @@
         };
         $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            $rootScope.selectPatientModel = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+            PatientDAO.get({id: patient.id}).then(function (patient) {
+                $rootScope.selectPatientModel = $modal.open({
+                    templateUrl: modal_id,
+                    size: modal_size,
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false
+                });
+                if (!$rootScope.selectPatientModel.careTypeIdMap) {
+                    $rootScope.selectPatientModel.careTypeIdMap = {};
+                    CareTypeDAO.retrieveAll().then(function (res) {
+                        angular.forEach(res, function (careType) {
+                            $rootScope.selectPatientModel.careTypeIdMap[careType.id] = careType;
+                        });
+                    }).catch(function () {
+                        toastr.error("Failed to retrieve care types.");
+                    });
+                }
+                $rootScope.selectPatientModel.patient = angular.copy(patient);
+                $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
+                $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
+                $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
+                if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
+                    $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+                }
             });
-            $rootScope.selectPatientModel.patient = angular.copy(patient);
-            $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
-            $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
-            $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
-            if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
-                $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
-            }
         };
         $rootScope.navigateToMonthPage = function (patient) {
             $state.go('app.patient-calendar', {id: patient.id});
@@ -479,5 +491,5 @@
         ctrl.retrieveAllCoordinators();
     }
 
-    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", PatientCalendarCtrl]);
+    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", PatientCalendarCtrl]);
 })();

@@ -319,6 +319,24 @@
 
     </div>
     </div>
+    <div class="row" ng-if="selectPatientModel.patient.patientCareTypeCollection && selectPatientModel.patient.patientCareTypeCollection.length>0">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Authorized Services</strong></label>
+    <div class="col-md-8">
+    <span ng-repeat="care in selectPatientModel.patient.patientCareTypeCollection">
+    {{selectPatientModel.careTypeIdMap[care.insuranceCareTypeId.id].careTypeTitle}}
+     <span ng-if="care.authorizedHours">
+     ( {{care.authorizedHours}} hours )
+     </span>
+    <br>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
     </div>
 
     <div class="modal-footer">

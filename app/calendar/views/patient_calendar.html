@@ -118,14 +118,14 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <label>From</label>
+                    <label>Open From</label>
                     <div class="input-group">
                         <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientcalendar.searchParams.openCaseStartDate" max-date="patientcalendar.searchParams.openCaseEndDate">
                         <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label>To</label>
+                    <label>Open To</label>
                     <div class="input-group">
                         <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientcalendar.searchParams.openCaseEndDate" min-date="patientcalendar.searchParams.openCaseStartDate">
                         <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
@@ -636,6 +636,24 @@
     <label for="field-1" class="control-label col-md-4"><strong>C.C. Fax</strong></label>
     <div class="col-md-8">
     {{selectPatientModel.patient.careCordinatorFax | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.patientCareTypeCollection && selectPatientModel.patient.patientCareTypeCollection.length>0">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Authorized Services</strong></label>
+    <div class="col-md-8">
+    <span ng-repeat="care in selectPatientModel.patient.patientCareTypeCollection">
+    {{selectPatientModel.careTypeIdMap[care.insuranceCareTypeId.id].careTypeTitle}}
+     <span ng-if="care.authorizedHours">
+     ( {{care.authorizedHours}} hours )
+     </span>
+    <br>
+    </span>
     </div>
     </div>	
 
