@@ -4,6 +4,11 @@
     function CalendarCtrl(Page, EmployeeDAO, $rootScope, PositionDAO, $debounce, PatientDAO, EventTypeDAO, CompanyDAO, $modal, $filter, $timeout, $state, $stateParams, DispatchDAO, WorksiteDAO, $scope, $formService) {
         var ctrl = this;
         ctrl.pageNo = 1;
+        ctrl.retrieveAllPatients = function () {
+                PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                    ctrl.patientList = res;
+                });
+            };
         ctrl.retrieveWorkSites = function () {
             WorksiteDAO.retreveWorksiteNames({sortBy: 'name', order: 'asc'}).then(function (res) {
                 ctrl.workSiteList = res;
@@ -119,6 +124,7 @@
             ctrl.searchParams.availableStartDate = null;
             ctrl.searchParams.availableStartDate = null;
             $('#employeeIds').select2('val', null);
+            $('#patientIdsForCompatibility').select2('val', null);
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
 //            $('#worksiteDropdown').select2('val', null);
@@ -146,6 +152,9 @@
             var searchParams = angular.copy(ctrl.searchParams);
             if (searchParams.employeeIds != null) {
                 searchParams.employeeIds = searchParams.employeeIds.toString();
+            }
+            if (searchParams.patientIdsForCompatibility != null) {
+                searchParams.patientIdsForCompatibility = searchParams.patientIdsForCompatibility.toString();
             }
             if (searchParams.positionIds != null) {
                 searchParams.positionIds = searchParams.positionIds.toString();
@@ -1215,11 +1224,7 @@
                 ctrl.searchParams.latitude = null;
                 ctrl.applySearch();
             }
-            ctrl.retrieveAllPatients = function () {
-                PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
-                    ctrl.patientList = res;
-                });
-            };
+            
             ctrl.dispatchConfirmModal = function () {
                 ctrl.dispatchClicked = true;
                 if (ctrl.searchParams.patientId == null) {
@@ -1252,8 +1257,8 @@
                 }, function () {
                 });
             };
-            ctrl.retrieveAllPatients();
         }
+            ctrl.retrieveAllPatients();
     }
 
     angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "CompanyDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", "$formService", CalendarCtrl]);

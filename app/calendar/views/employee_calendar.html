@@ -266,6 +266,30 @@
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4" ng-if='!calendar.isEmployeeSearchPage'>
+                    <label>Patient' compatibility</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                        setTimeout(function () {
+                        $("#patientIdsForCompatibility").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="patientIdsForCompatibility" id="patientIdsForCompatibility" ng-model="calendar.searchParams.patientIdsForCompatibility" ng-options='pat.id as (pat.lName + ", " + pat.fName + " " + pat.middleInitial) for pat in calendar.patientList'>
+                        <option value="" selected hidden />
+                    </select>
+                </div>
+            </div>
             <div class="row" ng-if="calendar.calendarView == 'week'" style="padding-top:10px;">
                 <div class="form-group col-md-3">
                     <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
