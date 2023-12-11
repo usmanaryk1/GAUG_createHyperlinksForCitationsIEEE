@@ -236,6 +236,7 @@
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >End Time</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')" >Time In</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >Time Out</th>
+                                        <th width="10%" nowrap>Actions</th>
                                     </tr>
                                 </thead> 
                                 <tbody>
@@ -263,7 +264,15 @@
                                         <th>
                                             {{timesheet.timeSheet.punchOutTime|date :timeFormat}}
                                         </th>
-                                    </tr>
+                                        <th>
+                                <div class="action-btn" ng-if="timesheet.timeSheet">
+                                    <a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.timeSheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.timeSheet.id}}?lastPage=daily_attendance" tooltip="Edit"><span class="ed_b"></span></a> 
+                                    <a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet.timeSheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                    <a class=" btn fa fa-search view_task_button" ng-click="dAttendance.openTaskListModal('modal-3', 'lg', 'static', timesheet.timeSheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
+                                </div>
+                                <div class="action-btn" ng-if="!timesheet.timeSheet">No Punch</div>
+                                </th>
+                                </tr>
                                 </tbody>
                             </table>
                             <div ng-if="(dAttendance.attendanceList == null || dAttendance.attendanceList.length == 0) && dAttendance.dataRetrieved">
