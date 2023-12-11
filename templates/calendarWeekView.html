@@ -14,13 +14,13 @@
         </div>
     </div>
     <!--Printing events -->
-    <div ng-if="type == 'employee'" class="cal-row-fluid cal-row-head-week row-data" ng-repeat="map in view.list">
-        <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
+    <div ng-if="type == 'employee'" class="cal-row-fluid cal-row-head-week row-data" ng-repeat="map in view.list" style="width:100.02%">
+        <div class="cal-cell1weekempl col-data col-data-empl" style="width:16.01%;height:14vh;text-align:left;display:table;">
             <span style="display:table-cell;vertical-align:middle;padding-left:10px;cursor:pointer;color:#000;" ng-click="onViewInfoClick(map, 'modal-5')"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;" ng-click="onLinkClick(map)"></i>
                 {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
         </div>
 
-        <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" colspan="{{temp_day.eventSize}}" ng-click="onEventClick(null, map, temp_day)">
+        <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" ng-click="onEventClick(null, map, temp_day)">
             <div 
                 ng-repeat="temp_event in temp_day.events| calendarLimitTo: 3:0" 
                 ng-if="temp_day.events.length" 
@@ -73,8 +73,8 @@
     </div>
 
     <!-- Patient View -->
-    <div ng-if="type == 'patient'" class="cal-row-fluid cal-row-head-week row-data" ng-repeat="map in view.list">
-        <div class="cal-cell1weekempl col-data col-data-empl" style="width:16%;height:14vh;text-align:left;display:table;">
+    <div ng-if="type == 'patient'" class="cal-row-fluid cal-row-head-week row-data" ng-repeat="map in view.list" style="width:100.02%">
+        <div class="cal-cell1weekempl col-data col-data-empl" style="width:16.01%;height:14vh;text-align:left;display:table;">
             <span style="display:table-cell;vertical-align:middle;padding-left:10px;cursor:pointer;color:#000;" ng-click="onViewInfoClick(map, 'modal-5')"><i class="glyphicon glyphicon-calendar" style="cursor:pointer;color:#000;" ng-click="onLinkClick(map)"></i>
                 {{map.lName + ', ' + map.fName| limitTo: 18}}</span>
         </div>

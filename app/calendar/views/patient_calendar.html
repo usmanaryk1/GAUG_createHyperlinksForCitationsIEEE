@@ -117,21 +117,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Open From</label>
                     <div class="input-group">
                         <input type="text" id="field-68" name='fromDate' class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientcalendar.searchParams.openCaseStartDate" max-date="patientcalendar.searchParams.openCaseEndDate">
                         <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Open To</label>
                     <div class="input-group">
                         <input type="text" id="field-69" class="form-control datepicker" data-format="mm/dd/yyyy" ng-model="patientcalendar.searchParams.openCaseEndDate" min-date="patientcalendar.searchParams.openCaseStartDate">
                         <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div class="col-md-4 filter-checkbox row">
+                <div class="col-md-3 filter-checkbox row">
                     <div class="col-md-6">
                         <label>Live In</label>
                         <input type="checkbox" name="livein" ng-model="patientcalendar.searchParams.forLiveIn">
@@ -141,17 +141,18 @@
                         <input type="checkbox" name="opencase" ng-model="patientcalendar.searchParams.openCase" ng-change="patientcalendar.checkOpenCase()">
                     </div>
                 </div>
-                <div class="col-md-4 filter-checkbox row">
-                    <div class="col-md-3" style="padding-top:20px;">
+                <div class="col-md-3 filter-checkbox row">
+                    <div class="col-md-4 col-md-offset-2" style="padding-top:25px;">
                         <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="patientcalendar.resetFilters()">Reset Filters</button>
                     </div>
-                    <div class="col-md-3" style="padding-top:20px;">
+                    <div class="col-md-4" style="padding-top:25px;">
                         <button type="button" class="btn btn-success pull-right" ng-click="patientcalendar.applySearch()">Submit</button>
                     </div>
                 </div>
-                <div class="col-md-12 filter-checkbox row">
-                    <div class="form-group col-sm-6 pull-left">
-                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+            </div>
+                <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
+                    <div class="form-group col-sm-6 col-sm-offset-5">
+                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left;">
                             <select class="form-control input-sm" ng-model="patientcalendar.searchParams.limit" ng-change="patientcalendar.applySearch()">
                                 <option value="10">10</option>
@@ -163,7 +164,6 @@
                     </div> 
                 </div>
             </div>
-        </div>
     </div>
 
     <mwl-calendar
