@@ -1,5 +1,5 @@
 (function () {
-    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO) {
+    function PatientCalendarCtrl(Page, PatientDAO, $rootScope, $debounce, EmployeeDAO, EventTypeDAO, $modal, $filter, $timeout, $state, $stateParams, CareTypeDAO, InsurerDAO) {
 
         var ctrl = this;
 
@@ -20,7 +20,9 @@
         ctrl.isOpen = false;
 
         ctrl.calendarDay = new Date();
-
+        ctrl.insuranceProviderMap = {};
+        ctrl.nursingCareMap = {};
+        ctrl.staffCoordinatorMap = {};
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
         }
@@ -166,7 +168,7 @@
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.patientPopup.close();
-                    ctrl.loadEvents();
+                    ctrl.retrievePatients();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -181,6 +183,7 @@
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.patientPopup.close();
+                    ctrl.retrievePatients();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -464,6 +467,33 @@
             patientObj = {};
             open();
         };
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.nursingCareMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve nursing care list.");
+        });
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve staff coordinator list.");
+        });
+        InsurerDAO.retrieveAll().then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
         $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
             PatientDAO.get({id: patient.id}).then(function (patient) {
@@ -500,5 +530,5 @@
         ctrl.retrieveAllCoordinators();
     }
 
-    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", PatientCalendarCtrl]);
+    angular.module('xenon.controllers').controller('PatientCalendarCtrl', ["Page", "PatientDAO", "$rootScope", "$debounce", "EmployeeDAO", "EventTypeDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "CareTypeDAO", "InsurerDAO", PatientCalendarCtrl]);
 })();
