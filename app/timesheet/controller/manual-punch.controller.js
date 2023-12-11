@@ -304,7 +304,9 @@
         };
         ctrl.saveManualAttendance = function () {
             ctrl.formSubmitted = true;
-            if (ctrl.attendanceObj.employeeId && ctrl.attendanceObj.employeeId !== null) {
+            if (ctrl.attendanceObj.employeeId && ctrl.attendanceObj.employeeId !== null
+                    && ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime!==null
+                    && ctrl.attendanceObj.punchOutDate && ctrl.attendanceObj.punchOutDate!==null) {
                 if (ctrl.attendanceObj.employeeId.position === 'pc') {
                     if (ctrl.attendanceObj.companyTaskIds.length < 5 && ctrl.attendanceObj.companyTaskIds.length !== ctrl.taskList.length) {
                         ctrl.tasksErrorMsg = 'Please select atleast 5 tasks.';
