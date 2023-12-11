@@ -7,7 +7,8 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         Page.setTitle("View Patients");
-        if ($stateParams.status !== 'active' && $stateParams.status !== 'discharged' && $stateParams.status !== 'all') {
+        if ($stateParams.status !== 'active' && $stateParams.status !== 'discharged'
+                 && $stateParams.status !== 'onhold' && $stateParams.status !== 'all') {
             $state.transitionTo(ontime_data.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
@@ -97,6 +98,12 @@
         function retrievePatientsData() {
             $rootScope.paginationLoading = true;
             ctrl.searchParams.subAction = ctrl.viewType;
+            if (ctrl.viewType === 'active') {
+                ctrl.searchParams.onHold = false;
+            } else if (ctrl.viewType === 'onhold') {
+                ctrl.searchParams.onHold = true;
+                ctrl.searchParams.subAction = 'active';
+            }
             PatientDAO.retrieveAll(ctrl.searchParams).then(function (res) {
                 showLoadingBar({
                     delay: .5,

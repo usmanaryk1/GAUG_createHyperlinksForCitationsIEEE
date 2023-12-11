@@ -20,6 +20,11 @@
                             <span class="visible-xs"><i class="fa-user">+</i></span> <span class="hidden-xs">Active Patients</span>
                         </a> 
                     </li>
+                    <li ui-sref="app.patient-list({status:'onhold'})" class="{{viewPatient.viewType=='onhold'?'active':''}}">
+                        <a href="" data-toggle="tab">
+                            <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">On Hold Patients</span> 
+                        </a>
+                    </li>
                     <li ui-sref="app.patient-list({status:'discharged'})" class="{{viewPatient.viewType=='discharged'?'active':''}}">
                         <a href="" data-toggle="tab">
                             <span class="visible-xs"><i class="fa-user">x</i></span> <span class="hidden-xs">Discharged Patients</span> 
@@ -102,11 +107,12 @@
                                                                 <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status == 'a' && hasAccess('DISCHARGE_PATIENT')" ng-click="viewPatient.openDischargeModal(patient, 'dischargeModel');" tooltip="Discharge"><span class="ed_b"></span></a>
                                                                 <a class="btn icon-left fa fa-check edit_button" ng-if="patient.status == 'd' && hasAccess('READMIT_PATIENT')" ng-click="viewPatient.openReadmitModal(patient, 'readmitModal');" tooltip="Readmit"><span class="ed_b"></span></a>
                                                                 <a ng-if="patient.authorization" class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}?viewDownload=true" target="_blank" tooltip="Download Authorization"><span class="ed_b"></span></a>
-                                                                <a ng-if="(viewPatient.validAuthorizationDate(patient.authorizationEndDate) || viewPatient.viewType==='discharged') && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id:patient.id})" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                                <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="patient.newNotification=false;viewPatient.openNotesModal(patient.id)" tooltip="Notes" ng-class="{'has-newNotification':patient.newNotification}"><span class="ed_b"></span></a>
+                                                                <a ng-if="(viewPatient.validAuthorizationDate(patient.authorizationEndDate) || viewPatient.viewType === 'discharged') && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id:patient.id})" tooltip="Calendar"><span class="ed_b"></span></a> 
+                                                                <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="patient.newNotification = false;viewPatient.openNotesModal(patient.id)" tooltip="Notes" ng-class="{'has-newNotification':patient.newNotification}"><span class="ed_b"></span></a>
                                                                 <a class="btn icon-left fa fa-user-times delete_button" 
-                                                                    ng-click="viewPatient.openRejectEmployeesModal(patient.id);" 
-                                                                    tooltip="Rejected Caregivers"><span class="ed_b"></span></a>
+                                                                   ng-click="viewPatient.openRejectEmployeesModal(patient.id);" 
+                                                                   tooltip="Rejected Caregivers"><span class="ed_b"></span></a>
+                                                                <a class="btn fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id: patient.id})" ng-if="hasAccess('VIEW_PATIENT_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -149,51 +155,51 @@
     </div>
 </script>
 <script type="text/ng-template" id="dischargeModel">
-    
-	<form class="form-horizontal validate" role="form" name="popuppatient" id="popup_dis_patient" >     
+
+    <form class="form-horizontal validate" role="form" name="popuppatient" id="popup_dis_patient" >     
     <div class="modal-header">
     <h4 class="modal-title">Discharge {{dischargePatientModel.patient.lName}}, {{dischargePatientModel.patient.fName}} {{dischargePatientModel.patient.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Discharge Reason</label>
-            <div class="col-sm-8">
-            <select class="form-control" name ="reason" id="disReason" ng-model="dischargePatientModel.reason" ng-init="dischargePatientModel.reason='death'">
-                <option value="Dis-enrolled" >Dis-enrolled</option>
-                <option value="Patient Switched Providers">Patient Switched Providers</option>
-                <option value="Expired" >Expired</option>
-                <option value="Admitted To LTC Facility">Admitted To LTC Facility</option>
-                <option value="Extended Vacation" >Extended Vacation</option>
-                <option value="Other">Other</option>
-            </select>
-            </div>
-        </div>
-        
-        <div class="form-group-separator"></div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Discharge Date</label>
-            <div class="col-sm-8">
-            <div class="input-group" style="z-index:1060">
-            <input class="form-control datepicker" data-format="mm/dd/yyyy" max-date="dischargePatientModel.currentDate" id="disDate" name="dischargeDate" type="text" ng-model="dischargePatientModel.dischargeDate" 
-                                       data-validate="required,date" data-message-required="Please enter Date of Discharge." required/>
-            <div class="input-group-addon">
-            <a href="#">
-            <i class="linecons-calendar">
-            </i>
-            </a>
-            </div>
-            </div>
-            </div>
-        </div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Discharge Reason</label>
+    <div class="col-sm-8">
+    <select class="form-control" name ="reason" id="disReason" ng-model="dischargePatientModel.reason" ng-init="dischargePatientModel.reason='death'">
+    <option value="Dis-enrolled" >Dis-enrolled</option>
+    <option value="Patient Switched Providers">Patient Switched Providers</option>
+    <option value="Expired" >Expired</option>
+    <option value="Admitted To LTC Facility">Admitted To LTC Facility</option>
+    <option value="Extended Vacation" >Extended Vacation</option>
+    <option value="Other">Other</option>
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Discharge Date</label>
+    <div class="col-sm-8">
+    <div class="input-group" style="z-index:1060">
+    <input class="form-control datepicker" data-format="mm/dd/yyyy" max-date="dischargePatientModel.currentDate" id="disDate" name="dischargeDate" type="text" ng-model="dischargePatientModel.dischargeDate" 
+    data-validate="required,date" data-message-required="Please enter Date of Discharge." required/>
+    <div class="input-group-addon">
+    <a href="#">
+    <i class="linecons-calendar">
+    </i>
+    </a>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
 
     <div class="modal-footer">
     <button type="submit" class="btn btn-success" ng-click="dischargePatientModel.discharge(dischargePatientModel.patient);">Discharge</button>
     <button type="button" class="btn btn-red" ng-click="dischargePatientModel.dismiss();">Cancel</button>
     </div>
-	</form>
-    
+    </form>
+
 </script>
 <script type="text/ng-template" id="readmitModal">
     <div class="modal-header">
@@ -211,4 +217,3 @@
     <button type="button" class="btn btn-red" ng-click="readmitPatientModal.dismiss();">No</button>
     </div>
 </script>
-
