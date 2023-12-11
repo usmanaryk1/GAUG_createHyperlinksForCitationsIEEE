@@ -75,6 +75,7 @@
             if (searchParams.languages != null) {
                 searchParams.languages = searchParams.languages.toString();
             }
+            delete searchParams.openCase;
             PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
                 ctrl.patient_list = res;
                 ctrl.count = $rootScope.totalRecords;
@@ -110,6 +111,14 @@
                 ctrl.totalRecords = $rootScope.totalRecords;
             });
         };
+
+        ctrl.checkOpenCase = function () {
+            var searchParams = angular.copy(ctrl.searchParams);
+            if (searchParams.openCase) {
+                ctrl.searchParams.openCaseStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                ctrl.searchParams.openCaseEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+            }
+        }
 
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;

@@ -137,18 +137,25 @@
                         <label>Live In</label>
                         <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
                     </div>
-<!--                </div>
-                <div class="col-md-4 filter-checkbox row">
-                    <div class="col-md-6">
-                        <label>Open Cases</label>
-                        <input type="checkbox" name="livein" ng-model="calendar.searchParams.openCase">
-                    </div>-->
                     <div class="col-md-3" style="padding-top:20px;">
                         <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="calendar.resetFilters()">Reset Filters</button>
                     </div>
                     <div class="col-md-3" style="padding-top:20px;">
                         <button type="button" class="btn btn-success pull-right"  ng-click="calendar.applySearch()">Submit</button>
                     </div>
+                </div>
+                <div class="col-md-12 filter-checkbox row">
+                    <div class="form-group col-sm-6 pull-left">
+                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;"><span style="float:left;">Show Entries</span></label>
+                        <div style="width:70px; float:left;">
+                            <select class="form-control input-sm" ng-model="calendar.searchParams.limit">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -163,7 +170,7 @@
         type="employee"
         list="calendar.employee_list">
     </mwl-calendar>
-    <div ng-if="calendar.calendarView == 'week' && calendar.employee_list.length>0">
+    <div ng-if="calendar.calendarView == 'week' && calendar.employee_list.length > 0">
         <div pagination-id="employeePagination" dir-paginate="e in calendar.employee_list | itemsPerPage: 10" total-items="totalRecords" current-page="calendar.pageNo">
         </div>
         <div id="paginationButtons" class="text-right">
@@ -395,7 +402,7 @@
     <select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-if="!employeePopup.patientMandatory">
     <option value="">Select the care</option>
     </select>
-<select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-if="employeePopup.patientMandatory">
+    <select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" ng-change="employeePopup.retrievePatientBasedOnCare()" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-if="employeePopup.patientMandatory">
     <option value="">Select the care</option>
     </select>
     </div>
@@ -409,7 +416,7 @@
     <select class="form-control" id="patient" name="patient" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" ng-options="patient.id as (patient.lName+', '+patient.fName+' '+patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-if="!employeePopup.patientMandatory">
     <option value="">Select the patient</option>
     </select>
-     <select class="form-control" id="patient" name="patient" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.lName+', '+patient.fName+' '+patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-if="employeePopup.patientMandatory">
+    <select class="form-control" id="patient" name="patient" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.lName+', '+patient.fName+' '+patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-if="employeePopup.patientMandatory">
     <option value="">Select the patient</option>
     </select>
     </div>
