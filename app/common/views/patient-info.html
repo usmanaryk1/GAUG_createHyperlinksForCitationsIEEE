@@ -201,6 +201,36 @@
 
         </div>
     </div>
+    <div class="row" ng-if="Patientinfo.patient.authorizationStartDate">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label col-md-4"><strong>Start Date</strong></label>
+                <div class="col-md-8">
+                    {{Patientinfo.patient.authorizationStartDate}} 
+                </div>
+            </div>	
+        </div>
+    </div>
+    <div class="row" ng-if="Patientinfo.patient.lastDateOfService">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label col-md-4"><strong>Last Date of Service</strong></label>
+                <div class="col-md-8">
+                    {{Patientinfo.patient.lastDateOfService}} 
+                </div>
+            </div>	
+        </div>
+    </div>
+    <div class="row" ng-if="Patientinfo.patient.diagnosisCode">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label col-md-4"><strong>Diagnosis Code</strong></label>
+                <div class="col-md-8">
+                    {{Patientinfo.patient.diagnosisCode}} 
+                </div>
+            </div>	
+        </div>
+    </div>
     <div class="row" ng-if="Patientinfo.patient.patientCareTypeCollection && Patientinfo.patient.patientCareTypeCollection.length > 0">
         <div class="col-md-12">
 

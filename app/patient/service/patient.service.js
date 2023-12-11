@@ -22,6 +22,13 @@
                     return response;
                 }
             },
+            getPatientsByDistance: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'bydistance'
+                }
+            },
             retrieveForSelect: {
                 method: 'GET',
                 isArray: true,
@@ -93,6 +100,9 @@
             },
             retrieveForCareType: function (data) {
                 return api.retrieveForCareType(data).$promise;
+            },
+            getPatientsByDistance: function (data) {
+                return api.getPatientsByDistance(data).$promise;
             },
             retrieveForSelect: function (filter) {
                 return api.retrieveForSelect(filter).$promise;

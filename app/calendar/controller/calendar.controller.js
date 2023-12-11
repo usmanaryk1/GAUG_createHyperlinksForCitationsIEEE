@@ -5,10 +5,10 @@
         var ctrl = this;
         ctrl.pageNo = 1;
         ctrl.retrieveAllPatients = function () {
-                PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
-                    ctrl.patientList = res;
-                });
-            };
+            PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                ctrl.patientList = res;
+            });
+        };
         ctrl.retrieveWorkSites = function () {
             WorksiteDAO.retreveWorksiteNames({sortBy: 'name', order: 'asc'}).then(function (res) {
                 ctrl.workSiteList = res;
@@ -175,12 +175,36 @@
             return searchParams;
         }
 
+        var preparePatientByDistanceSearchParams = function (searchParams) {
+            var patientSearchParams = {};
+            if (searchParams.longitude != null) {
+                patientSearchParams['longitude'] = searchParams.longitude;
+            }
+            if (searchParams.latitude != null) {
+                patientSearchParams['latitude'] = searchParams.latitude;
+            }
+            if (searchParams.patientId != null) {
+                patientSearchParams['patientId'] = searchParams.patientId;
+            }
+            if (searchParams.distance != null) {
+                patientSearchParams['distance'] = searchParams.distance;
+            }
+            return patientSearchParams;
+        }
+
         ctrl.retrieveEmployees = function () {
             var searchParams = ctrl.prepareSearchCriteria();
             EmployeeDAO.getEmployeesForSchedule(searchParams).then(function (res) {
                 ctrl.employee_list = res;
                 if (ctrl.isEmployeeSearchPage) {
-                    addMarkersToMap(ctrl.employee_list);
+                    var patientSearchParams = preparePatientByDistanceSearchParams(searchParams);
+                    PatientDAO.getPatientsByDistance(patientSearchParams).then(function (res) {
+                        ctrl.patientsByDistance = res;
+                        addMarkersToMap(ctrl.employee_list, res);
+                    }).catch(function (data, status) {
+                        ctrl.patientsByDistance = [];
+                        addMarkersToMap(ctrl.employee_list, []);
+                    });
                 }
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
@@ -925,6 +949,15 @@
             open();
         };
 
+        ctrl.onChangeShowPatientsByDistnace = function () {
+            if (ctrl.showPatientsVyDistance) {
+                showPatientMarkers();
+            } else {
+                hidePatientMarkers();
+            }
+        }
+
+
         ctrl.saveEmployeePopupChanges = function (data, isPast) {
             $rootScope.maskLoading();
             if (!data.isPaid)
@@ -1025,8 +1058,9 @@
             var map;
             var patientMarker;
             var markers = [];
+            var patientMarkers = [];
             var infowindow = new google.maps.InfoWindow();
-            function addMarkersToMap(emplyeeList) {
+            function addMarkersToMap(emplyeeList, patientList) {
                 if (map == null) {
                     googleMapFunctions();
                 } else {
@@ -1068,8 +1102,50 @@
                         markers.push(marker);
                     }
                 }
+                addPatientMarkers(patientList);
             }
-            function showInfo(latlng, infowindow, title, content) {
+            function addPatientMarkers(patientList) {
+                for (var i = 0; i < patientList.length; i++) {
+                    if (patientList[i].locationLatitude != null) {
+                        var location = [patientList[i].locationLatitude, patientList[i].locationLongitude]
+                        var marker = new google.maps.Marker({
+                            position: {lat: location[0], lng: location[1]}
+                        });
+                        var image = {
+                            url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+                            // This marker is 55 pixels wide by 55 pixels high.
+                            scaledSize: new google.maps.Size(40, 40),
+                        };
+                        marker.setIcon(image);
+                        marker.addListener('click', function (e) {
+                            showInfo(this.position, infowindow, this.title, this.content, true);
+                            infowindow.open(map, this);
+                        });
+                        marker.title = patientList[i].lName + ", " + patientList[i].fName;
+                        marker.content = '';
+                        if (patientList[i].patientAddress != null) {
+                            marker.content += patientList[i].patientAddress.address1;
+                            if (patientList[i].patientAddress.address2 != null) {
+                                marker.content += patientList[i].patientAddress.address2;
+                            }
+                            marker.content += "<br/>" + patientList[i].patientAddress.city + ", ";
+                            marker.content += patientList[i].patientAddress.state + ", ";
+                            marker.content += patientList[i].patientAddress.zipcode + '<br/>';
+                        }
+                        if (patientList[i].phone != null) {
+                            marker.content += "Ph.: " + $filter("tel")(patientList[i].phone);
+                        }
+                        if (patientList[i].distance != null) {
+                            marker.content += "<br/>" + patientList[i].distance.toFixed(2) + " Miles";
+                        }
+                        patientMarkers.push(marker);
+                    }
+                }
+                if (ctrl.showPatientsVyDistance) {
+                    showPatientMarkers();
+                }
+            }
+            function showInfo(latlng, infowindow, title, content, patient) {
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({
                     'latLng': latlng
@@ -1079,8 +1155,12 @@
                             content = results[1].formatted_address;
                         }
                         if (results[1]) {
+                            var style = '';
+                            if (patient) {
+                                style = ' style="background-color: lightyellow;"';
+                            }
                             // here assign the data to asp lables
-                            infowindow.setContent('<div id="content">' +
+                            infowindow.setContent('<div id="content" ' + style + '>' +
                                     '<div id="firstHeading" class="firstHeading">' + title + '</div>' +
                                     '<div id="bodyContent">' + content +
                                     '</div>' +
@@ -1203,7 +1283,19 @@
                 for (var i = 0; i < markers.length; i++) {
                     markers[i].setMap(null);
                 }
+                hidePatientMarkers();
+                patientMarkers = [];
                 markers = [];
+            }
+            var hidePatientMarkers = function () {
+                for (var i = 0; i < patientMarkers.length; i++) {
+                    patientMarkers[i].setMap(null);
+                }
+            }
+            var showPatientMarkers = function () {
+                for (var i = 0; i < patientMarkers.length; i++) {
+                    patientMarkers[i].setMap(map);
+                }
             }
 
             ctrl.availableTimeChanged = function () {
@@ -1224,7 +1316,7 @@
                 ctrl.searchParams.latitude = null;
                 ctrl.applySearch();
             }
-            
+
             ctrl.dispatchConfirmModal = function () {
                 ctrl.dispatchClicked = true;
                 if (ctrl.searchParams.patientId == null) {
@@ -1258,7 +1350,7 @@
                 });
             };
         }
-            ctrl.retrieveAllPatients();
+        ctrl.retrieveAllPatients();
     }
 
     angular.module('xenon.controllers').controller('CalendarCtrl', ["Page", "EmployeeDAO", "$rootScope", "PositionDAO", "$debounce", "PatientDAO", "EventTypeDAO", "CompanyDAO", "$modal", "$filter", "$timeout", "$state", "$stateParams", "DispatchDAO", "WorksiteDAO", "$scope", "$formService", CalendarCtrl]);
