@@ -168,7 +168,7 @@
                 EventTypeDAO.saveEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.patientPopup.close();
-                    ctrl.loadEvents();
+                    ctrl.retrievePatients();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {
@@ -183,6 +183,7 @@
                 EventTypeDAO.updateEventType(obj).then(function (res) {
                     toastr.success("Saved successfully.");
                     $rootScope.patientPopup.close();
+                    ctrl.retrievePatients();
                 }).catch(function (data) {
                     toastr.error(data.data);
                 }).then(function () {

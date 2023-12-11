@@ -177,7 +177,7 @@
         list="patientcalendar.patient_list">
     </mwl-calendar>
     <div ng-if="patientcalendar.calendarView == 'week' && patientcalendar.patient_list.length > 0">
-        <div pagination-id="patientPagination" dir-paginate="e in patientcalendar.patient_list | itemsPerPage: 10" total-items="totalRecords" current-page="patientcalendar.pageNo">
+        <div pagination-id="patientPagination" dir-paginate="e in patientcalendar.patient_list | itemsPerPage: patientcalendar.searchParams.limit" total-items="totalRecords" current-page="patientcalendar.pageNo">
         </div>
         <div id="paginationButtons" class="text-right">
             <dir-pagination-controls boundary-links="true" 
