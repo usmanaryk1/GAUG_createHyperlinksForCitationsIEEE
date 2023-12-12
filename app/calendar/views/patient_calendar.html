@@ -136,12 +136,12 @@
                         <label>Live In</label>
                         <input type="checkbox" name="livein" ng-model="patientcalendar.searchParams.forLiveIn">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="padding-left:0;">
                         <label>Open Cases</label>
                         <input type="checkbox" name="opencase" ng-model="patientcalendar.searchParams.openCase" ng-change="patientcalendar.checkOpenCase()">
                     </div>
                 </div>
-                <div class="col-md-3 filter-checkbox row">
+                <div class="col-md-3 filter-checkbox row pull-right">
                     <div class="col-md-4 col-md-offset-2" style="padding-top:25px;">
                         <button class="btn btn-single btn-white btn-block-xs pull-right" type="button" ng-click="patientcalendar.resetFilters()">Reset Filters</button>
                     </div>
