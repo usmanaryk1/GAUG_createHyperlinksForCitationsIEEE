@@ -99,6 +99,18 @@
 
         </div>
     </div>
+    <div class="row" ng-if="Patientinfo.patient.patientAideSkills">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Aide Skill Capacities</strong></label>
+                <div class="col-md-8">
+                    <span ng-if="Patientinfo.patient.patientAideSkills == null || Patientinfo.patient.patientAideSkills.length == 0">N/A</span>
+                    <span ng-repeat="language in Patientinfo.patient.patientAideSkills">{{Patientinfo.capacitiesKeyValue[language]}}<label ng-if="$index < Patientinfo.patient.patientAideSkills.length - 1">, </label>
+                    </span>
+                </div>
+            </div>	
+        </div>
+    </div>
 
     <div class="row" ng-if="Patientinfo.patient.patientAddress">
         <div class="col-md-12">
