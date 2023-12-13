@@ -275,8 +275,6 @@ span[data-cal-date]:hover {
     display: inline-block;
 }
 .mwl-panel-search {
-    background-color: #EEE;
-    display: inline-block;
     padding: 20px 10px 20px 10px;
 }
 .mwl-panel-filter {

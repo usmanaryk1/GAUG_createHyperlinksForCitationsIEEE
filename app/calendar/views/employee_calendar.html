@@ -37,19 +37,32 @@
         <div class="mwl-panel-search" ng-if="calendar.calendarView == 'month'">
             <div class="row">
                 <div class="col-md-12" style="padding-left:0px;padding-right:0px;">
-                    <div class="mwl-left">
-                        <h2 ng-if="calendar.viewEmployee">{{calendar.viewEmployee.lName}}, {{calendar.viewEmployee.fName}} <small>{{calendar.positionMap[calendar.viewEmployee.companyPositionId]}}</small></h2>
+                    <div class="col-md-7">
+                        <h2 ng-if="calendar.viewEmployee" style="margin:0;">{{calendar.viewEmployee.lName}}, {{calendar.viewEmployee.fName}} <small>{{calendar.positionMap[calendar.viewEmployee.companyPositionId]}}</small></h2>
                     </div>
-                    <div class="col-md-4 pull-right" style="padding-right:0px;">
-                        <div>
-                            <div class="input-group input-group-minimal">
-                                <input type="email" class="form-control" placeholder="Search for something…">
-                                <span class="input-group-addon">
-                                    <i class="linecons-search"></i>
-                                </span>
-                            </div>
+                    <div class="col-md-5" style="padding-right:0px;">
+                            <div class="pull-right col-md-12" style="padding:0;">
+                                <script type="text/javascript">
+                                            jQuery(document).ready(function ($)
+                                    {
+                                    setTimeout(function () {
+                                    $("#employeedropdownIds").select2({
+                                    // minimumResultsForSearch: -1,
+                                    placeholder: 'Search Employee...',
+                                            // minimumInputLength: 1,
+                                            // placeholder: 'Search',
+                                    }).on('select2-open', function ()
+                                    {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                    });
+                                    }, 200);
+                                    });</script>
+                                <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="calendar.searchParams.employeeId" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
+                                    <option value="" selected hidden />
+                                </select>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
