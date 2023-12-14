@@ -54,7 +54,7 @@
                                             });
                                         }, 200);
                                     });</script>
-                                <select class="form-control" name="patientdropdownIds" ng-model="patientcalendar.patientId" id="patientdropdownIds" ng-options='data.id as (data.lName+", "+data.fName+" "+data.middleInitial) for data in patientcalendar.patientList'>
+                                <select class="form-control" name="patientdropdownIds" ng-model="patientcalendar.monthPatient" id="patientdropdownIds" ng-options='data.id as (data.lName+", "+data.fName+" "+data.middleInitial) for data in patientcalendar.patientList' ng-change="navigateToMonthPage(patientcalendar.monthPatient)">
                                     <option value="" selected hidden />
                                 </select>
                         </div>
@@ -203,7 +203,7 @@
 <!--Patient Modal-->
 <script type="text/ng-template" id="calendar-modal" >
     <div class="modal-header">
-    <button type="button" class="close" ng-click="patientPopup.close();" aria-hidden="true">&times;</button>
+    <button type="button" class="close" ng-click="patientPopup.closePopup();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
     <span ng-if="patientPopup.isNew && patientPopup.calendarView == 'week' && patientPopup.showPatient">Add Event</span>
     <span ng-if="!patientPopup.isNew || patientPopup.calendarView == 'month' || !patientPopup.showPatient">{{patientPopup.patient.lName}}, {{patientPopup.patient.fName}}</span>
@@ -411,7 +411,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-red" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited) && !patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
-    <button type="button" class="btn btn-white" ng-click="patientPopup.close();">Close</button>
+    <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.save();">Save changes</button>
     </div>
     </form>
@@ -479,7 +479,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-red" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited) && !patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
-    <button type="button" class="btn btn-white" ng-click="patientPopup.close();">Close</button>
+    <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.save();">Save changes</button>
     </div>
     </form>
