@@ -8,7 +8,7 @@
 	          hour: 'ha',
 	          day: 'd MMM',
 	          month: 'MMMM',
-	          weekDay: 'EEE d/M',
+	          weekDay: 'EEE M/d',
 	          monthDay: 'EEE',
 	          time: 'HH:mm',
 	          datetime: 'MMM d, h:mm a'
