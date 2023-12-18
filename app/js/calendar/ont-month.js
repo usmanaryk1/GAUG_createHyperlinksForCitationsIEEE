@@ -39,6 +39,14 @@ angular
                             $scope.eventClickCalled = false;
                         }
                     };
+
+                    $scope.toggleEvent = function (e) {
+                        $(e.currentTarget).next().popover('show');
+                        $(e.currentTarget).popover({
+                            content: $(e.currentTarget).next().contents(),
+                            html: true
+                        })
+                    }
                 }];
 
             return {
