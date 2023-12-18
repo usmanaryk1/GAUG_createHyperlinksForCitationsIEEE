@@ -22,7 +22,7 @@
 
         <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" ng-click="onEventClick(null, map, temp_day)">
             <div 
-                ng-repeat="temp_event in temp_day.events| calendarLimitTo: 3:0"
+                ng-repeat="temp_event in temp_day.events| calendarLimitTo: 2:0"
                 ng-if="temp_day.events.length" 
                 ng-click="onEventClick(temp_event, false, $event)"
                 ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
@@ -43,11 +43,11 @@
                     {{temp_event.reason}}
                 </span>                
             </div>
-            <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
+            <div ng-if="temp_day.events.length - 2 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 2}} more</div>
 
             <div class="eventstoload">
                 <div 
-                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 3" 
+                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 2" 
                     ng-if="temp_day.events.length" 
                     ng-click="onEventClick(temp_event, false, $event)"
                     ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
@@ -81,7 +81,7 @@
 
         <div class="cal-cell1week col-data" ng-repeat="temp_day in map.days track by $index" style="width:12%;height:14vh;" colspan="{{temp_day.eventSize}}" ng-click="onEventClick(null, map, temp_day)">
             <div 
-                ng-repeat="temp_event in temp_day.events| calendarLimitTo: 3:0" 
+                ng-repeat="temp_event in temp_day.events| calendarLimitTo: 2:0" 
                 ng-if="temp_day.events.length" 
                 ng-click="onEventClick(temp_event, false, $event)"
                 ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
@@ -117,11 +117,11 @@
                     {{temp_event.reason}}
                 </span>                
             </div>
-            <div ng-if="temp_day.events.length - 3 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 3}} more</div>
+            <div ng-if="temp_day.events.length - 2 > 0" ng-click="toggleEvent($event)" data-placement="bottom">+ {{temp_day.events.length - 2}} more</div>
 
             <div class="eventstoload">
                 <div 
-                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 3" 
+                    ng-repeat="temp_event in temp_day.events| calendarLimitTo: temp_day.events.length - 1 : 2" 
                     ng-if="temp_day.events.length" 
                     ng-click="onEventClick(temp_event, false, $event)"
                     ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">

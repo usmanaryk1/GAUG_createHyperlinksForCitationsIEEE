@@ -38,12 +38,13 @@ angular
                     };
 
                     $scope.toggleEvent = function (e) {
+                        $scope.eventClickCalled = true;
                         $(e.currentTarget).next().popover('show');
                         $(e.currentTarget).popover({
                             content: $(e.currentTarget).next().contents(),
                             html: true
-                        })
-                    }
+                        });
+                    };
 
                 }];
             return {
