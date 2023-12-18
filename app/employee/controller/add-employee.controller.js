@@ -44,7 +44,8 @@
             'OrientationPacket': 'Orientation Packet',
             'InfectionControl': 'Infection Control',
             'OPSearch': 'OP Search',
-            'License': 'License'
+            'License': 'License',
+            'Exclusions': 'Exclusions'
         };
 
         ctrl.subTypes = ['Pre – Employment Medical Documents',
@@ -548,6 +549,8 @@
                                     rowToPush['extraFields']['DateCompleted'] = extrafield.eligibilityExpDate;
                                 } else if (['License'].indexOf(type) > -1) {
                                     rowToPush['expiryDate'] = extrafield.licenseExpDate;
+                                } else if (['Exclusions'].indexOf(type) > -1) {
+                                    rowToPush['expiryDate'] = extrafield.exclusionsExpDate;
                                 }
                                 rowToPush['extraFields'] = JSON.stringify(rowToPush['extraFields']);
                                 employeeEligibilities.push(rowToPush);
