@@ -176,6 +176,7 @@
                                     });
                                 </script>
                                 <select class="form-control" id="rate1" multiple="multiple" name="rate1"
+                                        ng-change ="addEmployee.buildCareTypesList()"
                                         onblur="setSelectValidationMessage(this)" itemid="Care Types" ng-model="addEmployee.employee.careRatesList.rate1.careTypes"
                                         ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList1'>
                                 </select>
@@ -213,8 +214,117 @@
                                     });
                                 </script>
                                 <select class="form-control" id="rate2" multiple="multiple" name="rate2"
+                                        ng-change ="addEmployee.buildCareTypesList()"
                                         ng-model="addEmployee.employee.careRatesList.rate2.careTypes"
                                         ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList2'>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            Rate 3
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="no-padding-left col-sm-3 element-align">
+                                <input class="form-control" name="Rate3" type="text" 
+                                       numbers-only="true" decimalallowed maxlength="10" decimalpoints="true" ng-model="addEmployee.employee.careRatesList.rate3.rate">
+                                </input>
+                            </div>
+                            <div class="col-sm-9 largebox-align">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function ($)
+                                    {
+                                        $("#rate3").multiSelect({
+                                            afterInit: function ()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function ()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="rate3" multiple="multiple" name="rate3"
+                                        ng-change ="addEmployee.buildCareTypesList()"
+                                        ng-model="addEmployee.employee.careRatesList.rate3.careTypes"
+                                        ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList3'>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            Rate 4
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="no-padding-left col-sm-3 element-align">
+                                <input class="form-control" name="Rate4" type="text" 
+                                       numbers-only="true" decimalallowed maxlength="10" decimalpoints="true" ng-model="addEmployee.employee.careRatesList.rate4.rate">
+                                </input>
+                            </div>
+                            <div class="col-sm-9 largebox-align">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function ($)
+                                    {
+                                        $("#rate4").multiSelect({
+                                            afterInit: function ()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function ()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="rate4" multiple="multiple" name="rate4"
+                                        ng-change ="addEmployee.buildCareTypesList()"
+                                        ng-model="addEmployee.employee.careRatesList.rate4.careTypes"
+                                        ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList4'>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.employee.wages !== 'S'">
+                        <label class="col-sm-2 control-label">
+                            Rate 5
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="no-padding-left col-sm-3 element-align">
+                                <input class="form-control" name="Rate5" type="text" 
+                                       numbers-only="true" decimalallowed maxlength="10" decimalpoints="true" ng-model="addEmployee.employee.careRatesList.rate5.rate">
+                                </input>
+                            </div>
+                            <div class="col-sm-9 largebox-align">
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function ($)
+                                    {
+                                        $("#rate5").multiSelect({
+                                            afterInit: function ()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function ()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <select class="form-control" id="rate5" multiple="multiple" name="rate5"
+                                        ng-change ="addEmployee.buildCareTypesList()"
+                                        ng-model="addEmployee.employee.careRatesList.rate5.careTypes"
+                                        ng-options='ct.id as ct.careTypeTitle for ct in addEmployee.careTypeList5'>
                                 </select>
                             </div>
                         </div>
