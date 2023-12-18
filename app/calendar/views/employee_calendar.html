@@ -58,7 +58,7 @@
                                     });
                                     }, 200);
                                     });</script>
-                                <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="calendar.searchParams.employeeId" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList'>
+                                <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="calendar.monthEmployee" ng-options='emp as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in calendar.employeeList' ng-change="navigateToMonthPage(calendar.monthEmployee)">
                                     <option value="" selected hidden />
                                 </select>
                         </div>
@@ -201,7 +201,7 @@
 <!-- Employee Modal : it's like 3 different modal code inside main modal--> 
 <script type="text/ng-template" id="calendar-modal">
     <div class="modal-header">
-    <button type="button" class="close" ng-click="employeePopup.close();" aria-hidden="true">&times;</button>
+    <button type="button" class="close" ng-click="employeePopup.closePopup();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
     <span ng-if="employeePopup.isNew && employeePopup.calendarView == 'week' && employeePopup.showEmployee">Add Event</span>
     <span ng-if="!employeePopup.isNew || employeePopup.calendarView == 'month' || !employeePopup.showEmployee">{{employeePopup.employee.lName}}, {{employeePopup.employee.fName}}</span>
@@ -387,7 +387,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-red" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
-    <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
+    <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-click="employeePopup.save();" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)">Save changes</button>
     </div>
     </form>
@@ -556,7 +556,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-red" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
-    <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
+    <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-show="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.save();">Save changes</button>
     </div>
     </form>
@@ -639,7 +639,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-red" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" ng-click="employeePopup.deleteSchedule()">Delete</button>
-    <button type="button" class="btn btn-white" ng-click="employeePopup.close();">Close</button>
+    <button type="button" class="btn btn-white" ng-click="employeePopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited)" ng-click="employeePopup.save();">Save changes</button>
     </div>
 

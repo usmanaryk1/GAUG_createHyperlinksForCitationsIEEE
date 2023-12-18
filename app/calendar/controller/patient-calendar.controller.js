@@ -48,6 +48,7 @@
 
         ctrl.applySearch = function () {
             ctrl.pageNo = 1;
+            $rootScope.paginationLoading = true;
             $debounce(ctrl.retrievePatients, 500);
         };
 
@@ -133,6 +134,7 @@
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;
+                $rootScope.paginationLoading = false;
             });
         };
 
@@ -267,6 +269,10 @@
                     }
                     $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
                 }
+                $rootScope.patientPopup.closePopup = function () {
+                    $rootScope.paginationLoading = false;
+                    $rootScope.patientPopup.close();
+                };
                 $rootScope.patientPopup.save = function () {
                     $timeout(function () {
                         var name = '#' + "popuppatient" + $rootScope.patientPopup.data.eventType.toLowerCase();
@@ -523,6 +529,7 @@
             });
         };
         $rootScope.navigateToMonthPage = function (patient) {
+            delete ctrl.monthPatient;
             $state.go('app.patient-calendar', {id: patient.id});
         };
         ctrl.retrievePatients();

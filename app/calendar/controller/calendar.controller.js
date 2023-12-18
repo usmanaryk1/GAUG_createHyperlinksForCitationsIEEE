@@ -44,6 +44,7 @@
 
         ctrl.applySearch = function () {
             ctrl.pageNo = 1;
+            $rootScope.paginationLoading = true;
             $debounce(ctrl.retrieveEmployees, 500);
         };
 
@@ -121,6 +122,7 @@
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;
+                $rootScope.paginationLoading = false;
             });
         }
 
@@ -225,6 +227,10 @@
                     }
                     $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
                 }
+                $rootScope.employeePopup.closePopup = function () {
+                    $rootScope.paginationLoading = false;
+                    $rootScope.employeePopup.close();
+                };
                 $rootScope.employeePopup.save = function () {
                     $timeout(function () {
                         var name = '#' + "popupemployee" + $rootScope.employeePopup.data.eventType.toLowerCase();
@@ -479,6 +485,7 @@
             }
         };
         $rootScope.navigateToMonthPage = function (employee) {
+            delete ctrl.monthEmployee;
             $state.go('app.employee-calendar', {id: employee.id});
         };
 
