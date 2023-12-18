@@ -410,7 +410,7 @@
     </div>
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited) && !patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
     <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.save();">Save changes</button>
     </div>
@@ -478,7 +478,7 @@
 
     </div>
     <div class="modal-footer">
-    <button type="button" class="btn btn-red" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited) && !patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
+    <button type="button" class="btn btn-red" ng-if="!patientPopup.isNew" ng-click="patientPopup.deleteSchedule()">Delete</button>
     <button type="button" class="btn btn-white" ng-click="patientPopup.closePopup();">Close</button>
     <button type="submit" class="btn btn-success" ng-if="!(!patientPopup.isNew && !patientPopup.data.isEdited)" ng-click="patientPopup.save();">Save changes</button>
     </div>
