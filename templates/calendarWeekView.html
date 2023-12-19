@@ -2,11 +2,25 @@
     .eventstoload {
         display: none;
     }
+    #sticky {
+        width: 100%;
+        color: #fff;
+        border-radius: 0.5ex;
+    }
+    #sticky.stick {
+        position: fixed;
+        top: 0;
+        width: 87.5%;
+        z-index: 10000;
+        border-radius: 0 0 0.5em 0.5em;
+        background: white;
+    }
 </style>
 <div class="cal-week-box" ng-class="{'cal-day-box': showTimes}">
 
     <!--Printing Labels on Top -->
-    <div class="cal-row-fluid cal-row-head-week row-heading">
+    <div id="sticky-anchor"></div>
+    <div class="cal-row-fluid cal-row-head-week row-heading" id="sticky">
         <div class="cal-cell1weekempl col-heading" style="width:16%;height:20%;" ng-if="type == 'employee'">Employees</div>
         <div class="cal-cell1weekempl col-heading" style="width:16%;height:20%;" ng-if="type == 'patient'">Patients</div>
         <div class="cal-cell1week" ng-repeat="day in view.days track by $index" style="width:12%;height:20%;">

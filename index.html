@@ -207,5 +207,24 @@
         <!-- google map -->
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
         <script src="app/js/angular-google-maps/load-google-maps.js"></script>
+        <script>
+
+        function sticky_relocate() {
+            $element = $('#sticky-anchor');
+            if (jQuery.contains(document, $element[0])) {
+                var window_top = $(window).scrollTop();
+                var div_top = $('#sticky-anchor').offset().top;
+                if (window_top > div_top) {
+                    $('#sticky').addClass('stick');
+                } else {
+                    $('#sticky').removeClass('stick');
+                }
+            }
+        }
+
+        $(function () {
+            $(window).scroll(sticky_relocate);
+        });
+        </script>
     </body>
 </html>
