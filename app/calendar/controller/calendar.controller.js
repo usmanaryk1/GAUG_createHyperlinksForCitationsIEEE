@@ -127,7 +127,7 @@
         }
 
         ctrl.retrieveAllEmployees = function () {
-            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function (res) {
+            EmployeeDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
                 ctrl.employeeList = res;
             });
         };
@@ -163,6 +163,26 @@
                     $("#eventEmployeeIds").select2({
                         // minimumResultsForSearch: -1,
                         placeholder: 'Select Employee...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#patient").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#patient1").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
                         // minimumInputLength: 1,
                         // placeholder: 'Search',
                     }).on('select2-open', function ()
@@ -216,7 +236,7 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                    $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
                     var id;
@@ -225,7 +245,7 @@
                     } else {
                         id = ctrl.viewEmployee.id;
                     }
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
+                    $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
                 }
                 $rootScope.employeePopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
@@ -290,6 +310,26 @@
                                 // Adding Custom Scrollbar
                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                             });
+                            $("#patient").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            $("#patient1").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
                             cbr_replace();
                         }, 200);
                     }
@@ -347,13 +387,13 @@
                                         for (var i = 0; i < length; i++) {
                                             careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
                                             var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
-                                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active"}).then(function (res) {
+                                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active", sortBy: 'lName', order: 'asc'}).then(function (res) {
                                                 carePatientMap[res.headers.careid] = res.data;
                                                 next++;
                                             }).catch(function (data) {
                                                 toastr.error(data.data);
                                             }).then(function () {
-                                                if (next === (length - 1)) {
+                                                if (next === (length - 1) || length == 1) {
                                                     $rootScope.paginationLoading = false;
                                                     careTypes = careTypesSelected;
                                                     $rootScope.employeePopup.carePatientMap = carePatientMap;

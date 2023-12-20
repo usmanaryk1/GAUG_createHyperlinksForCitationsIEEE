@@ -139,7 +139,7 @@
         };
 
         ctrl.retrieveAllPatients = function () {
-            PatientDAO.retrieveAll({subAction: 'active'}).then(function (res) {
+            PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
                 ctrl.patientList = res;
             });
         };
@@ -206,6 +206,16 @@
                     $("#eventPatientIds").select2({
                         // minimumResultsForSearch: -1,
                         placeholder: 'Select Patient...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#employee").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Employee...',
                         // minimumInputLength: 1,
                         // placeholder: 'Search',
                     }).on('select2-open', function ()
@@ -324,6 +334,16 @@
                                 // Adding Custom Scrollbar
                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                             });
+                            $("#employee").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Employee...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
                             cbr_replace();
                         }, 200);
                     }
@@ -385,7 +405,7 @@
                                             str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id;
                                         }
                                         careTypes = careTypesSelected;
-                                        EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
+                                        EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active", sortBy: 'lName', order: 'asc'}).then(function (res) {
                                             careEmployeeMap = {};
                                             angular.forEach(res, function (item) {
                                                 angular.forEach(item.employeeCareRatesList, function (item1) {
