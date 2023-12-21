@@ -198,6 +198,9 @@
                     keyboard: false
                 });
                 $rootScope.employeePopup.todayDate = new Date();
+                if (data != null && data.eventType == null) {
+                    $rootScope.employeePopup.todayDate = data.startDate;
+                }
                 $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
                 $rootScope.employeePopup.patients = patients;
@@ -236,12 +239,13 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
-                    $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                    $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
                     var id;
                     if (data.data) {
                         id = data.data.id;
+                        $rootScope.employeePopup.cellClickEmployeeId = id;
                     } else {
                         id = ctrl.viewEmployee.id;
                     }
@@ -286,7 +290,7 @@
                     if (event != 'repeat') {
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
-                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
                                 $rootScope.employeePopup.data.forLiveIn = false;
@@ -454,11 +458,9 @@
                 };
                 if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true);
-                }
-                if ($rootScope.employeePopup.employee && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
+                } else if ($rootScope.employeePopup.employee && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true, true);
-                }
-                if (ctrl.calendarView == 'month') {
+                } else if (ctrl.calendarView == 'month') {
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
             }
@@ -474,6 +476,9 @@
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
                 data1.employeeId = ctrl.viewEmployee.id;
+            }
+            if (!data1.employeeId && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
+                data1.employeeId = $rootScope.employeePopup.cellClickEmployeeId;
             }
             if (data1.eventType != 'S') {
                 delete data1.isEdited;
