@@ -324,7 +324,7 @@
                 ctrl.tasksErrorMsg = null;
             }
             if ($("#manual_punch_form")[0].checkValidity() &&
-                    (ctrl.attendanceObj.patientId != null || !ctrl.patientMandatory || ctrl.attendanceObj.isWorksitePunch) &&
+                    ((ctrl.attendanceObj.patientId != null && ctrl.attendanceObj.careTypeId != null) || !ctrl.patientMandatory || ctrl.attendanceObj.isWorksitePunch) &&
                     ctrl.attendanceObj.employeeId != null && ctrl.tasksErrorMsg == null) {
                 $rootScope.maskLoading();
                 var attendanceObjToSave = angular.copy(ctrl.attendanceObj);
