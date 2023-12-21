@@ -247,10 +247,10 @@
                                             {{timesheet.startDate|timesheetformat}} - {{timesheet.startDate|date :dateFormat}}
                                         </th>
                                         <td>
-                                            {{timesheet.employee.lName + ", " + timesheet.employee.fName + " " + timesheet.employee.middleInitial}}
+                                            <span ng-if="timesheet.employee">{{timesheet.employee.lName + ", " + timesheet.employee.fName + " " + timesheet.employee.middleInitial}}</span>
                                         </td>
                                         <td>
-                                            {{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}
+                                            <span ng-if="timesheet.patient">{{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}</span>
                                         </td>
                                         <th>
                                             {{timesheet.startTime|ampm}}
@@ -262,12 +262,13 @@
                                             {{timesheet.timeSheet.punchInTime|date : timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.timeSheet.punchOutTime|date :timeFormat}}
+                                            <span ng-if='validNumber(timesheet.timeSheet.punchOutTime)'>{{timesheet.timeSheet.punchOutTime|date :timeFormat}}</span>
+                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.punchOutTime)'>Not Punched</span>
                                         </th>
                                         <th>
                                 <div class="action-btn" ng-if="timesheet.timeSheet">
                                     <a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-pencil edit_button" ng-href="#/app/{{timesheet.timeSheet.isMissedPunch===true?'edit_missed_punch':'edit_timesheet'}}/{{timesheet.timeSheet.id}}?lastPage=daily_attendance" tooltip="Edit"><span class="ed_b"></span></a> 
-                                    <a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet.timeSheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a> 
+                                    <!--<a ng-if="timesheet.timeSheet.isEdited == true" class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="dAttendance.openDeleteModal(timesheet.timeSheet, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>--> 
                                     <a class=" btn fa fa-search view_task_button" ng-click="dAttendance.openTaskListModal('modal-3', 'lg', 'static', timesheet.timeSheet.tasks);" href="javascript:;" tooltip="View Tasks"><span class="ed_b"></span></a>
                                 </div>
                                 <div class="action-btn" ng-if="!timesheet.timeSheet">No Punch</div>

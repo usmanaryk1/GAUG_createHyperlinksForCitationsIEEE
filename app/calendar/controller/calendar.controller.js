@@ -127,7 +127,7 @@
         }
 
         ctrl.retrieveAllEmployees = function () {
-            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function (res) {
+            EmployeeDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
                 ctrl.employeeList = res;
             });
         };
@@ -170,6 +170,26 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
+                    $("#patient").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                    $("#patient1").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
                 }, 200);
                 $rootScope.employeePopup = $modal.open({
                     templateUrl: modal_id,
@@ -178,6 +198,9 @@
                     keyboard: false
                 });
                 $rootScope.employeePopup.todayDate = new Date();
+                if (data != null && data.eventType == null) {
+                    $rootScope.employeePopup.todayDate = data.startDate;
+                }
                 $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
                 $rootScope.employeePopup.patients = patients;
@@ -216,16 +239,17 @@
 
                 var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                 if (!angular.isDefined($rootScope.employeePopup.data)) {
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                    $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                 }
                 if (data && data.eventType == null) {
                     var id;
                     if (data.data) {
                         id = data.data.id;
+                        $rootScope.employeePopup.cellClickEmployeeId = id;
                     } else {
                         id = ctrl.viewEmployee.id;
                     }
-                    $rootScope.employeePopup.data = {eventType: "A", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
+                    $rootScope.employeePopup.data = {eventType: "S", recurranceType: "N", startTime: currentTime, endTime: currentTime, forLiveIn: false, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), employeeId: id};
                 }
                 $rootScope.employeePopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
@@ -266,7 +290,7 @@
                     if (event != 'repeat') {
                         var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
                         var old = $rootScope.employeePopup.data.eventType;
-                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
+                        $rootScope.employeePopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.employeePopup.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             if (!angular.isDefined($rootScope.employeePopup.data.forLiveIn))
                                 $rootScope.employeePopup.data.forLiveIn = false;
@@ -290,6 +314,26 @@
                                 // Adding Custom Scrollbar
                                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                             });
+                            $("#patient").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            $("#patient1").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
                             cbr_replace();
                         }, 200);
                     }
@@ -304,7 +348,7 @@
                     if (obj.unavailabilityId)
                         id = obj.unavailabilityId;
                     $rootScope.maskLoading();
-                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo}).then(function (res) {
+                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: true}).then(function (res) {
                         ctrl.retrieveEmployees();
                         toastr.success("Event deleted.");
                         $rootScope.employeePopup.close();
@@ -347,13 +391,13 @@
                                         for (var i = 0; i < length; i++) {
                                             careTypesSelected.push(employeeObj.employeeCareRatesList[i].companyCaretypeId);
                                             var id = employeeObj.employeeCareRatesList[i].companyCaretypeId.id;
-                                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active"}).then(function (res) {
+                                            PatientDAO.retrieveForCareType({companyCareTypes: id, subAction: "active", sortBy: 'lName', order: 'asc'}).then(function (res) {
                                                 carePatientMap[res.headers.careid] = res.data;
                                                 next++;
                                             }).catch(function (data) {
                                                 toastr.error(data.data);
                                             }).then(function () {
-                                                if (next === (length - 1)) {
+                                                if (next === (length - 1) || length == 1) {
                                                     $rootScope.paginationLoading = false;
                                                     careTypes = careTypesSelected;
                                                     $rootScope.employeePopup.carePatientMap = carePatientMap;
@@ -414,11 +458,9 @@
                 };
                 if ($rootScope.employeePopup.employee && !$rootScope.employeePopup.isNew) {
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true);
-                }
-                if ($rootScope.employeePopup.employee && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
+                } else if ($rootScope.employeePopup.employee && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
                     $rootScope.employeePopup.employeeChanged($rootScope.employeePopup.data.employeeId, true, true);
-                }
-                if (ctrl.calendarView == 'month') {
+                } else if (ctrl.calendarView == 'month') {
                     $rootScope.employeePopup.employeeChanged(ctrl.viewEmployee.id, false, true);
                 }
             }
@@ -434,6 +476,9 @@
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
                 data1.employeeId = ctrl.viewEmployee.id;
+            }
+            if (!data1.employeeId && $rootScope.employeePopup.isNew && !$rootScope.employeePopup.showEmployee) {
+                data1.employeeId = $rootScope.employeePopup.cellClickEmployeeId;
             }
             if (data1.eventType != 'S') {
                 delete data1.isEdited;

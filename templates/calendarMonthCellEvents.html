@@ -6,7 +6,7 @@
 <div class="events-list" ng-if="day.events.length > 0" style="padding-top:35px">
     <!-- Employee View -->
     <div 
-        ng-repeat="temp_event in day.events | calendarLimitTo: 2 : 0"
+        ng-repeat="temp_event in day.events| calendarLimitTo: 2 : 0"
         ng-if="type == 'employee'"
         ng-click="onEventClick({calendarEvent: event}, temp_event, false, $event)" 
         ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">
@@ -58,7 +58,7 @@
 
     <!-- Patient View -->
     <div 
-        ng-repeat="temp_event in day.events | calendarLimitTo: 0 : 2"
+        ng-repeat="temp_event in day.events| calendarLimitTo: 2 : 0"
         ng-if="type == 'patient'"
         ng-click="onEventClick({calendarEvent: event}, temp_event, false, $event)" 
         ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000' }">

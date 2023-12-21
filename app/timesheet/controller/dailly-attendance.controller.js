@@ -335,6 +335,32 @@
                                 obj.color = "#FEFEB8";
                             }
                         }
+                        if (!obj.timeSheet.punchOutTime) {
+                            var s2 = $filter('ampm')(obj.endTime);
+                            var s22 = new Date(obj.endDate + " " + s2);
+                            var s222 = new Date();
+                            var temp1 = $filter('duration')(s22, s222);
+                            if (temp1) {
+                                var t = temp1.split(":");
+                                var h = Number(t[0]);
+                                var m = Number(t[1]);
+                                if (h > 0 || m > 30) {
+                                    obj.color = "#b4a7d6";
+                                }
+                            }
+                        }
+                    } else {
+                        var s1 = $filter('ampm')(obj.startTime);
+                        var s11 = new Date(obj.startDate + " " + s1);
+                        var temp = $filter('duration')(s11, new Date());
+                        if (temp) {
+                            var t = temp.split(":");
+                            var h = Number(t[0]);
+                            var m = Number(t[1]);
+                            if (h > 0 || m > 30) {
+                                obj.color = "#ea9999";
+                            }
+                        }
                     }
                 });
                 ctrl.totalRecords = Number(res.headers.event_count);

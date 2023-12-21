@@ -116,12 +116,14 @@
         };
 
         ctrl.checkOpenCase = function () {
-            var searchParams = angular.copy(ctrl.searchParams);
-            if (searchParams.openCase) {
+            if (ctrl.searchParams.openCase) {
                 ctrl.searchParams.openCaseStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
                 ctrl.searchParams.openCaseEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+            } else {
+                delete ctrl.searchParams.openCaseStartDate;
+                delete ctrl.searchParams.openCaseEndDate;
             }
-        }
+        };
 
         ctrl.loadEvents = function () {
             ctrl.pageNo = 0;
@@ -130,16 +132,25 @@
         };
 
         ctrl.getAllEvents = function (ids) {
+            ctrl.openCaseMap = {};
             EventTypeDAO.retrieveBySchedule({patientIds: ids}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;
+                angular.forEach(res, function (item) {
+                    if (!item.employeeId && item.eventType === 'S') {
+                        if (!ctrl.openCaseMap[item.startDate]) {
+                            ctrl.openCaseMap[item.startDate] = {};
+                        }
+                        ctrl.openCaseMap[item.startDate][item.patientId] = {startTime: item.startTime, endTime: item.endTime}; // angular.copy(item);
+                    }
+                });
                 $rootScope.paginationLoading = false;
             });
         };
 
         ctrl.retrieveAllPatients = function () {
-            PatientDAO.retrieveAll({subAction: 'active'}).then(function (res) {
+            PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
                 ctrl.patientList = res;
             });
         };
@@ -160,6 +171,9 @@
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
                 data1.patientId = ctrl.viewPatient.id;
+            }
+            if (!data1.patientId && $rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
+                data1.patientId = $rootScope.patientPopup.cellClickPatientId;
             }
             if (data1.eventType != 'S') {
                 delete data1.isEdited;
@@ -213,6 +227,16 @@
                         // Adding Custom Scrollbar
                         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                     });
+                    $("#employee").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Employee...',
+                        // minimumInputLength: 1,
+                        // placeholder: 'Search',
+                    }).on('select2-open', function ()
+                    {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
                 }, 200);
                 $rootScope.patientPopup = $modal.open({
                     templateUrl: modal_id,
@@ -221,6 +245,9 @@
                     keyboard: false
                 });
                 $rootScope.patientPopup.todayDate = new Date();
+                if (data != null && data.eventType == null) {
+                    $rootScope.patientPopup.todayDate = data.startDate;
+                }
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
                 $rootScope.patientPopup.reasons = ontimetest.patientReasons;
@@ -239,7 +266,7 @@
                         $rootScope.patientPopup.isNew = false;
                         $rootScope.patientPopup.showPatient = false;
                         var a = moment(new Date(data.startDate));
-                        var diff = moment().diff(a, 'days');
+                        var diff = moment().diff(date, 'days');
                         if (diff > 0) { // past date
                             data.isEdited = false;
                         }
@@ -256,10 +283,8 @@
                     cbr_replace();
                 }, 100);
 
-                var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
-                if (!angular.isDefined($rootScope.patientPopup.data)) {
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
-                }
+                $rootScope.patientPopup.currentStartTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                $rootScope.patientPopup.currentEndTime = $rootScope.patientPopup.currentStartTime;
                 if (data && data.eventType == null) {
                     var id;
                     if (data.data) {
@@ -267,7 +292,25 @@
                     } else {
                         id = ctrl.viewPatient.id;
                     }
-                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: currentTime, endTime: currentTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
+                    var date = $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat);
+                    if (ctrl.openCaseMap[date] && ctrl.openCaseMap[date][id]) {
+                        var get = ctrl.openCaseMap[date][id];
+                        $rootScope.patientPopup.currentStartTime = get.startTime;
+                        $rootScope.patientPopup.currentEndTime = get.endTime;
+                    }
+                }
+                if (!angular.isDefined($rootScope.patientPopup.data)) {
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
+                }
+                if (data && data.eventType == null) {
+                    var id;
+                    if (data.data) {
+                        id = data.data.id;
+                        $rootScope.patientPopup.cellClickPatientId = id;
+                    } else {
+                        id = ctrl.viewPatient.id;
+                    }
+                    $rootScope.patientPopup.data = {eventType: "S", recurranceType: "N", forLiveIn: false, startTime: $rootScope.patientPopup.currentStartTime, endTime: $rootScope.patientPopup.currentEndTime, startDate: $filter('date')(data.startDate, $rootScope.dateFormat), endDate: $filter('date')(data.startDate, $rootScope.dateFormat), patientId: id};
                 }
                 $rootScope.patientPopup.closePopup = function () {
                     $rootScope.paginationLoading = false;
@@ -303,12 +346,11 @@
                 $rootScope.patientPopup.changed = function (form, event) {
                     if (event != 'repeat') {
                         var old = $rootScope.patientPopup.data.eventType;
-                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
-                        var currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
+                        $rootScope.patientPopup.data = {eventType: old, recurranceType: "N", startDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat), endDate: $filter('date')($rootScope.patientPopup.todayDate, $rootScope.dateFormat)};
                         if (old == 'S') {
                             $rootScope.patientPopup.data.forLiveIn = false;
-                            $rootScope.patientPopup.data.startTime = currentTime;
-                            $rootScope.patientPopup.data.endTime = currentTime;
+                            $rootScope.patientPopup.data.startTime = $rootScope.patientPopup.currentStartTime;
+                            $rootScope.patientPopup.data.endTime = $rootScope.patientPopup.currentEndTime;
                         }
                         if (old == 'U') {
                             $rootScope.patientPopup.data.isPaid = false;
@@ -317,6 +359,16 @@
                             $("#eventPatientIds").select2({
                                 // minimumResultsForSearch: -1,
                                 placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            $("#employee").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Employee...',
                                 // minimumInputLength: 1,
                                 // placeholder: 'Search',
                             }).on('select2-open', function ()
@@ -342,7 +394,7 @@
                     if (obj.unavailabilityId)
                         id = obj.unavailabilityId;
                     $rootScope.maskLoading();
-                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo}).then(function (res) {
+                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: false}).then(function (res) {
                         ctrl.retrievePatients();
                         toastr.success("Event deleted.");
                         $rootScope.patientPopup.close();
@@ -385,7 +437,7 @@
                                             str = str + patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id;
                                         }
                                         careTypes = careTypesSelected;
-                                        EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active"}).then(function (res) {
+                                        EmployeeDAO.retrieveAll({companyCareTypes: str, subAction: "active", sortBy: 'lName', order: 'asc'}).then(function (res) {
                                             careEmployeeMap = {};
                                             angular.forEach(res, function (item) {
                                                 angular.forEach(item.employeeCareRatesList, function (item1) {
@@ -459,11 +511,9 @@
                 };
                 if ($rootScope.patientPopup.patient && !$rootScope.patientPopup.isNew) {
                     $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true);
-                }
-                if ($rootScope.patientPopup.patient && $rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
+                } else if ($rootScope.patientPopup.patient && $rootScope.patientPopup.isNew && !$rootScope.patientPopup.showPatient) {
                     $rootScope.patientPopup.patientChanged($rootScope.patientPopup.data.patientId, true, true);
-                }
-                if (ctrl.calendarView == 'month') {
+                } else if (ctrl.calendarView == 'month') {
                     $rootScope.patientPopup.patientChanged(ctrl.viewPatient.id, false, true);
                 }
             }
