@@ -48,6 +48,7 @@
                         return Date.parse(a.serviceDate) - Date.parse(b.serviceDate);
                     });
                 }
+                loadInsurerLines();
             } else {
                 $rootScope.maskLoading();
                 BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
@@ -72,6 +73,7 @@
                             return Date.parse(a.serviceDate) - Date.parse(b.serviceDate);
                         });
                     }
+                    loadInsurerLines();
                 }).catch(function (err) {
                     $rootScope.unmaskLoading();
                     toastr.error("Unable to retrieve claim details");
@@ -96,21 +98,10 @@
             }
             $("#manual_claim_form :input").css('background-color', '#fff');
         };
-
-        var formatBillingClaim = function (res) {
-            if (res && res.claim1500Data) {
-                ctrl.patientIdSelected = res.patientId;
-                ctrl.billingClaimObj = res;
-                ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
-                if (ctrl.billingClaimObj.insurerClaimNumber !== null
-                        && ctrl.manualClaimObj.documentControlNumberA == null) {
-                    ctrl.manualClaimObj.documentControlNumberA = ctrl.billingClaimObj.insurerClaimNumber;
-                }
-                ctrl.calculateTotalCharges();
-
-                ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+        
+        var loadInsurerLines = function() {
                 $rootScope.paginationLoading = true;
-                InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
+            InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
                     ctrl.insurerObj = res;
                     if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
                         ctrl.insurerObj.insuranceCareTypeCollection = [];
@@ -136,6 +127,21 @@
                 }).then(function () {
                     $rootScope.paginationLoading = false;
                 });
+        }
+
+        var formatBillingClaim = function (res) {
+            if (res && res.claim1500Data) {
+                ctrl.patientIdSelected = res.patientId;
+                ctrl.billingClaimObj = res;
+                ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                if (ctrl.billingClaimObj.insurerClaimNumber !== null
+                        && ctrl.manualClaimObj.documentControlNumberA == null) {
+                    ctrl.manualClaimObj.documentControlNumberA = ctrl.billingClaimObj.insurerClaimNumber;
+                }
+                ctrl.calculateTotalCharges();
+
+                ctrl.manualClaimObj.billingCreationDate = $filter('date')(new Date(), $rootScope.dateFormat);
+                loadInsurerLines()
             }
         }
 

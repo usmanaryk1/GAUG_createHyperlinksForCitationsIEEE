@@ -992,9 +992,8 @@
                 </td>
                 <td class="width_33 border">
                     <div class="">
-                        <select ng-if="!manualClaim.reviewMode" ng-model="serviceLine.selectedServiceCareType" ng-options="careType as careType.serviceDescription for careType in manualClaim.insurerObj.insuranceCareTypeCollection" class="width_100" required 
+                        <select ng-model="serviceLine.selectedServiceCareType" ng-options="careType as careType.serviceDescription for careType in manualClaim.insurerObj.insuranceCareTypeCollection" class="width_100" required 
                                 ng-change="manualClaim.updateServiceLine(serviceLine);"></select>
-                        <input ng-if="manualClaim.reviewMode" type="text" ng-model="serviceLine.serviceDescription" class="width_100" required disabled>
                     </div>
                 </td>
                 <td class="width_15 border">
