@@ -262,7 +262,8 @@
                                             {{timesheet.timeSheet.punchInTime|date : timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.timeSheet.punchOutTime|date :timeFormat}}
+                                            <span ng-if='validNumber(timesheet.timeSheet.punchOutTime)'>{{timesheet.timeSheet.punchOutTime|date :timeFormat}}</span>
+                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.punchOutTime)'>Not Punched</span>
                                         </th>
                                         <th>
                                 <div class="action-btn" ng-if="timesheet.timeSheet">
