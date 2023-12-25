@@ -146,7 +146,7 @@
                 </div>
                 <div class="col-md-3 filter-checkbox row">
                     <div class="col-md-6">
-                        <label>Live In</label>
+                        <label>Live In Care</label>
                         <input type="checkbox" name="livein" ng-model="patientcalendar.searchParams.forLiveIn">
                     </div>
                     <div class="col-md-6" style="padding-left:0;">
@@ -162,19 +162,19 @@
                         <button type="button" class="btn btn-success pull-right" ng-click="patientcalendar.applySearch()">Submit</button>
                     </div>
                 </div>
-            </div>
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
-                    <div class="form-group col-sm-6">
-                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
-                        <div style="width:70px; float:left;">
-                            <select class="form-control input-sm" ng-model="patientcalendar.searchParams.limit" ng-change="patientcalendar.applySearch()">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </div>
-                    </div> 
+                        <div class="form-group col-sm-6" style="padding-left: 15px;">
+                            <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
+                            <div style="width:70px; float:left;">
+                                <select class="form-control input-sm" ng-model="patientcalendar.searchParams.limit" ng-change="patientcalendar.applySearch()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
     </div>
@@ -338,7 +338,7 @@
     <div class="form-block">
     <label class="no-padding-left checkbox" style="padding-top:0px;">
     <input type="checkbox" ng-disabled="!patientPopup.isNew && !patientPopup.data.isEdited"  class="cbr" id="livein" name="livein" ng-model="patientPopup.data.forLiveIn">
-    Available for Live In
+    Live In Care
     </label>
     </div>
     </div>
