@@ -382,6 +382,9 @@
                 };
                 $rootScope.patientPopup.retrieveEmployeeBasedOnCare = function () {
                     delete $rootScope.patientPopup.data.employeeId;
+                    setTimeout(function () {
+                        $("#employee").select2('data', null);
+                    }, 100);
                     $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
                 };
                 $rootScope.patientPopup.deleteSchedule = function () {
@@ -406,6 +409,9 @@
                 }
                 $rootScope.patientPopup.patientChanged = function (patientId, editMode, viewMode) {
                     if ($rootScope.patientPopup.data.eventType == 'S' && !editMode) {
+                        setTimeout(function () {
+                            $("#employee").select2('data', null);
+                        }, 100);
                         delete $rootScope.patientPopup.data.companyCareTypeId;
                         delete $rootScope.patientPopup.data.employeeId;
                         $rootScope.patientPopup.carePatientMap = {};
@@ -454,6 +460,11 @@
                                             $rootScope.paginationLoading = false;
                                             if (editMode) {
                                                 $rootScope.patientPopup.employees = $rootScope.patientPopup.careEmployeeMap[$rootScope.patientPopup.data.companyCareTypeId];
+                                                if ($rootScope.patientPopup.data.employeeId) {
+                                                    setTimeout(function () {
+                                                        $("#employee").select2({val: $rootScope.patientPopup.data.employeeId});
+                                                    }, 100);
+                                                }
                                             }
                                         }).catch(function (data) {
                                             toastr.error(data.data);
