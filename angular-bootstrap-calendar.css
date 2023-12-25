@@ -1,9 +1,3 @@
-/**
- * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
- * @version v0.17.6
- * @link https://github.com/mattlewis92/angular-bootstrap-calendar
- * @license MIT
- */
 [class*="cal-cell"] {
   float: left;
   margin-left: 0;
@@ -126,7 +120,7 @@
   padding-bottom: 10px;
   color: #717272;
   font-weight: 400;
-  text-align: center;
+  text-align: left;
   border-right: 1px solid #e1e1e1;
   padding: 5px 0;
 }
@@ -144,17 +138,12 @@
   height: 100px;
 }
 
-.cal-year-box [class*="span"],
 .cal-month-box [class*="cal-cell"] {
   min-height: 100px;
   border-right: 1px solid #e1e1e1;
   border-bottom: 1px solid #e1e1e1;
   position: relative;
 }
-.cal-year-box [class*="span"] {
-  min-height: 60px;
-}
-.cal-year-box .row [class*="col-"]:last-child,
 .cal-month-box .cal-row [class*="cal-cell"]:last-child {
   border-right: 0px;
 }
@@ -164,7 +153,6 @@
   margin-left: 0px;
   margin-right: 0px;
 }
-.cal-year-box .row:last-child,
 .cal-month-box .cal-row-fluid:last-child {
   border-bottom: 0px;
 }
@@ -198,21 +186,6 @@ span[data-cal-date]:hover {
 .cal-day-outmonth span[data-cal-date] {
   opacity: 0.1;
   cursor: default;
-}
-.cal-day-today {
-  background-color: #e8fde7;
-}
-.cal-day-today span[data-cal-date] {
-  color: darkgreen;
-}
-.cal-month-box .cal-day-today span[data-cal-date] {
-  font-size: 1.9em;
-}
-.cal-day-holiday span[data-cal-date] {
-  color: #800080;
-}
-.cal-day-weekend span[data-cal-date] {
-  color: darkred;
 }
 #cal-week-box {
   border: 1px solid #e1e1e1;
@@ -353,4 +326,26 @@ span[data-cal-date]:hover {
     max-width: 240px;
     /* If max-width does not work, try using width instead */
     width: 240px; 
+}
+.event-style {
+  text-align:left;
+  width:75%;
+  padding-left: 5px;
+}
+
+.eventstoload {
+    display: none;
+}
+#sticky {
+    width: 100%;
+    color: #fff;
+    border-radius: 0.5ex;
+}
+#sticky.stick {
+    position: fixed;
+    top: 0;
+    width: 87.5%;
+    z-index: 10000;
+    border-radius: 0 0 0.5em 0.5em;
+    background: white;
 }

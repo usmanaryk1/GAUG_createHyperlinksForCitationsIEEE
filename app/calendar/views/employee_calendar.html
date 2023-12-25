@@ -159,7 +159,7 @@
                 </div>
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
                     <div class="form-group col-sm-6">
-                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;"><span style="float:left;">Show Entries</span></label>
+                        <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left;">
                             <select class="form-control input-sm" ng-model="calendar.searchParams.limit" ng-change="calendar.applySearch()">
                                 <option value="10">10</option>
@@ -244,7 +244,7 @@
     <!-- available-->
     <div ng-if="employeePopup.data.eventType == 'A'">
     <form class="form-horizontal validate" role="form" name="popupemployeea" id="popupemployeea" >
-    <div class="modal-body">
+    <div class="modal-body" style="padding-bottom:0;">
     <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
@@ -329,11 +329,11 @@
     </div>
     </div>
 
-    <div class="form-group-separator"></div>
+    <div class="form-group-separator" style="margin-bottom:0;"></div>
 
-    <div class="form-group" style="margin-bottom:0;">
-    <label class="col-sm-2 control-label" for="field-2">Repeat</label>
-    <div ng-if="employeePopup.isNew">
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-2" style="margin-top:15px;">Repeat</label>
+    <div ng-if="employeePopup.isNew" style="margin-top:15px;">
     <div class="col-sm-2">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-4" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="D">
@@ -353,15 +353,15 @@
     </label>
     </div>
     </div>
-    <div ng-if="!employeePopup.isNew">
-    <div class="col-sm-2">
+    <div ng-if="!employeePopup.isNew" style="margin-top:15px;">
+    <div class="col-sm-2" style="margin-top:7px;">
     {{employeePopup.recurranceTypes[employeePopup.data.recurranceType]}}
     </div>
     </div>
     </div>
     <div class="form-group-separator" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew"></div>
 
-    <div class="form-group" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" style="margin-bottom:0px;">
+    <div class="form-group" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew">
     <label class="col-sm-2 control-label" for="field-2" style="padding-top:7px;">Apply To</label>
     <div class="col-sm-9">
     <div class="col-sm-3">
@@ -396,7 +396,7 @@
     <!-- schedule-->
     <div ng-if="employeePopup.data.eventType == 'S'">
     <form class="form-horizontal validate" role="form" name="popupemployees" id="popupemployees" >
-    <div class="modal-body">
+    <div class="modal-body" style="padding-bottom:0;">
     <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee">
     <div class="form-group-separator"></div>
     <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
@@ -497,12 +497,11 @@
     </div>
     </div>
 
-    <div class="form-group-separator"></div>
+    <div class="form-group-separator" style="margin-bottom:0;"></div>
 
-    <div class="form-group" style="margin-bottom:0;">
-    <label class="col-sm-2 control-label" for="field-1">Repeat</label>
-    <div ng-if="employeePopup.isNew">
-
+    <div class="form-group">
+    <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Repeat</label>
+    <div ng-if="employeePopup.isNew" style="margin-top:15px;">
     <div class="col-sm-2">
     <label class="cbr-inline" ng-click="employeePopup.changed(popupemployee, 'repeat')">
     <input type="radio" name="radio-5" class="cbr cbr-primary" ng-model="employeePopup.data.recurranceType" value="D">
@@ -522,15 +521,15 @@
     </label>
     </div>
     </div>
-    <div ng-if="!employeePopup.isNew">
-    <div class="col-sm-2">
+    <div ng-if="!employeePopup.isNew" style="margin-top:15px;">
+    <div class="col-sm-2" style="margin-top:7px;">
     {{employeePopup.recurranceTypes[employeePopup.data.recurranceType]}}
     </div>
     </div>
     </div>
     <div class="form-group-separator" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew"></div>
 
-    <div class="form-group" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew" style="margin-bottom:0;">
+    <div class="form-group" ng-if="!(!employeePopup.isNew && !employeePopup.data.isEdited) && !employeePopup.isNew">
     <label class="col-sm-2 control-label" for="field-2">Apply To</label>
     <div class="col-sm-9">
     <div class="col-sm-3">
