@@ -348,7 +348,7 @@
                     if (obj.unavailabilityId)
                         id = obj.unavailabilityId;
                     $rootScope.maskLoading();
-                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo}).then(function (res) {
+                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: true}).then(function (res) {
                         ctrl.retrieveEmployees();
                         toastr.success("Event deleted.");
                         $rootScope.employeePopup.close();
