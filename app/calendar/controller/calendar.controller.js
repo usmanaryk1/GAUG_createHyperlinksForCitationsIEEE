@@ -284,6 +284,10 @@
                 };
                 $rootScope.employeePopup.retrievePatientBasedOnCare = function () {
                     delete $rootScope.employeePopup.data.patientId;
+                    setTimeout(function () {
+                        $("#patient").select2('data', null);
+                        $("#patient1").select2('data', null);
+                    }, 100);
                     $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
                 };
                 $rootScope.employeePopup.changed = function (form, event) {
@@ -360,6 +364,10 @@
                 }
                 $rootScope.employeePopup.employeeChanged = function (empId, editMode, viewMode) {
                     if ($rootScope.employeePopup.data.eventType == 'S' && !editMode) {
+                        setTimeout(function () {
+                            $("#patient").select2('data', null);
+                            $("#patient1").select2('data', null);
+                        }, 100);
                         delete $rootScope.employeePopup.data.companyCareTypeId;
                         delete $rootScope.employeePopup.data.patientId;
                         $rootScope.employeePopup.carePatientMap = {};
@@ -404,6 +412,12 @@
                                                     $rootScope.employeePopup.careTypes = careTypes;
                                                     if (editMode) {
                                                         $rootScope.employeePopup.patients = $rootScope.employeePopup.carePatientMap[$rootScope.employeePopup.data.companyCareTypeId];
+                                                        if ($rootScope.employeePopup.data.patientId) {
+                                                            setTimeout(function () {
+                                                                $("#patient").select2({val: $rootScope.employeePopup.data.patientId});
+                                                                $("#patient1").select2({val: $rootScope.employeePopup.data.patientId});
+                                                            }, 100);
+                                                        }
                                                     }
                                                 }
                                             });
