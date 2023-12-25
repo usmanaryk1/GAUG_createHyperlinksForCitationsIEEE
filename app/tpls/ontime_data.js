@@ -73,6 +73,7 @@ ontime_data = {
         {id: 'patienttimesheet', label: "Patient Time Sheet"},
         {id: 'employeedeactivatereport', label: "Employee Deactivate Report"},
         {id: 'revenuereconciliationreport', label: "Revenue Reconciliation Report"},
+        {id: 'revenuereconciliationbycounty', label: "Revenue Reconciliation By County Report"},
         {id: 'weeklyotanalysis', label: "Weekly OT Analysis Report"}
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
