@@ -192,7 +192,7 @@
     <div ng-if="patientcalendar.calendarView == 'week' && patientcalendar.patient_list.length > 0">
         <div pagination-id="patientPagination" dir-paginate="e in patientcalendar.patient_list | itemsPerPage: patientcalendar.searchParams.limit" total-items="totalRecords" current-page="patientcalendar.pageNo">
         </div>
-        <div id="paginationButtons" class="text-right">
+        <div id="paginationButtons" class="text-right" style="padding-right: 10px">
             <dir-pagination-controls boundary-links="true" 
                                      max-size="9"
                                      template-url="app/tpls/dirPagination.tpl.html" pagination-id="patientPagination" on-page-change="patientcalendar.pageChanged(newPageNumber)"></dir-pagination-controls>

@@ -186,7 +186,7 @@
     <div ng-if="calendar.calendarView == 'week' && calendar.employee_list.length > 0">
         <div pagination-id="employeePagination" dir-paginate="e in calendar.employee_list | itemsPerPage: calendar.searchParams.limit" total-items="totalRecords" current-page="calendar.pageNo">
         </div>
-        <div id="paginationButtons" class="text-right">
+        <div id="paginationButtons" class="text-right" style="padding-right: 10px">
             <dir-pagination-controls boundary-links="true" 
                                      max-size="9"
                                      template-url="app/tpls/dirPagination.tpl.html" 
