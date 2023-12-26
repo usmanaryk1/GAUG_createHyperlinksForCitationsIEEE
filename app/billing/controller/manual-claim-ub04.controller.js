@@ -8,6 +8,36 @@
         ctrl.showPatientError = false;
         ctrl.claimId = undefined;
 
+        var loadInsurerLines = function () {
+            $rootScope.paginationLoading = true;
+            InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
+                ctrl.insurerObj = res;
+                if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
+                    ctrl.insurerObj.insuranceCareTypeCollection = [];
+                }
+                if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                    angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        if (serviceLine.serviceDate) {
+                            serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
+                        }
+
+                        serviceLine.selectedServiceCareType = _.find(ctrl.insurerObj.insuranceCareTypeCollection, function (insuranceCareType) {
+                            return insuranceCareType.serviceDescription === serviceLine.serviceDescription;
+                        })
+
+                    });
+                } else {
+                    ctrl.manualClaimObj.serviceLines = [{}];
+                }
+
+
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve insurance provider.");
+            }).then(function () {
+                $rootScope.paginationLoading = false;
+            });
+        }
+
         ctrl.calculateTotalCharges = function () {
             var totalCharges = 0;
             if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
@@ -98,36 +128,6 @@
             }
             $("#manual_claim_form :input").css('background-color', '#fff');
         };
-        
-        var loadInsurerLines = function() {
-                $rootScope.paginationLoading = true;
-            InsurerDAO.get({id: ctrl.manualClaimObj.payorId}).then(function (res) {
-                    ctrl.insurerObj = res;
-                    if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
-                        ctrl.insurerObj.insuranceCareTypeCollection = [];
-                    }
-                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                            if (serviceLine.serviceDate) {
-                                serviceLine.serviceDate = $filter('date')(Date.parse(serviceLine.serviceDate), $rootScope.dateFormat);
-                            }
-
-                            serviceLine.selectedServiceCareType = _.find(ctrl.insurerObj.insuranceCareTypeCollection, function (insuranceCareType) {
-                                return insuranceCareType.serviceDescription === serviceLine.serviceDescription;
-                            })
-
-                        });
-                    } else {
-                        ctrl.manualClaimObj.serviceLines = [{}];
-                    }
-
-
-                }).catch(function (data, status) {
-                    toastr.error("Failed to retrieve insurance provider.");
-                }).then(function () {
-                    $rootScope.paginationLoading = false;
-                });
-        }
 
         var formatBillingClaim = function (res) {
             if (res && res.claim1500Data) {
@@ -248,7 +248,7 @@
                                 $rootScope.unmaskLoading();
                                 toastr.success("Manual claim saved.");
                                 $timeout(function () {
-                                        window.opener.focus();
+                                    window.opener.focus();
                                     window.close();
                                 }, 500);
                             })
