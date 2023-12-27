@@ -169,7 +169,12 @@
                                             </td>
                                             <td>
                                                 <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
-                                                    {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
+                                                    <span ng-if='timesheet.unauthorizedTime && timesheet.forPayroll'>
+                                                        {{timesheet.scheduleId.startTime|duration:timesheet.scheduleId.endTime}}
+                                                    </span>
+                                                    <span ng-if='!(timesheet.unauthorizedTime && timesheet.forPayroll)'>
+                                                        {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
+                                                    </span>
                                                 </span>
                                                 <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>N/A</span>
                                             </td>
