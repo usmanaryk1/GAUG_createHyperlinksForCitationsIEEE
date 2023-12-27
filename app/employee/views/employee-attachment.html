@@ -261,7 +261,7 @@
 
         <div ng-if="['Physical', 'Chest X-Ray', 'TB Questionnaire', 'Habituation',
                     'Employment Eligibility (I-9)', 'HCR', 'References', 'Competency Exam', 'Certificate/License',
-                    'OP Search', 'License', 'Infection Control', 'Drug Test', 'Exclusions'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
+                    'OP Search', 'License', 'Malpractice Insurance', 'Drug Test', 'Exclusions', 'CPR', 'In-service'].indexOf(employeeAttachment.attachment.attachmentType) > -1">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="expiryDate">
@@ -566,7 +566,7 @@
                                 <div class="input-group" style="z-index:1060">
                                     <label class="cbr-inline">
                                         <input name="InfectionControl" value="Yes" type="checkbox" class="cbr" ng-model="employeeAttachment.attachment.extraFields.subtypes.InfectionControl"/>
-                                        Infection Control
+                                        Malpractice Insurance
                                     </label>
                                 </div>
                             </div>
@@ -620,7 +620,8 @@
             </div>
         </div>
 
-        <div ng-if="employeeAttachment.attachment.attachmentType === 'Employment Eligibility (I-9)'">
+        <div ng-if="['Initial Application Packet', 'Initial Application Packet Nursing', 'Employment Eligibility (I-9)'].indexOf(employeeAttachment.attachment.attachmentType) > -1"
+            >
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <label class="col-sm-4 control-label add-padding-modal" for="TypeUpload">

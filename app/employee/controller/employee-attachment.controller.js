@@ -14,7 +14,7 @@
         } else {
             ctrl.subTypes = ['Initial Application Packet', 'Initial Application Packet Nursing', 'W-4', 'Employment Eligibility (I-9)', 'CHRC Forms', 'Evaluation', 
                 'Orientation Packet', 'Competency Exam', 'Certificate/License', 'References', 'HCR', 
-                'OP Search', 'License', 'Infection Control', 'Disciplinary Action', 'Exclusions'];
+                'OP Search', 'License', 'Malpractice Insurance', 'Disciplinary Action', 'Exclusions', "CPR", "In-service"];
         }
 
         if (attachmentInfo && attachmentInfo.extraFields) {
