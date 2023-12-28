@@ -60,7 +60,7 @@
             <li class="{{tabNo==3?'active':''}}">
                 <a data-toggle="tab" href=""  ng-click="addEmployee.navigateToTab($event,'tab3')" 
                    style="{{(!addEmployee.editMode || (!hasAccess('HR_EDIT_EMPLOYEE') && !hasAccess('CREATE_EMPLOYEE')))?'pointer-events: none':''}}">
-                    <div class="visible-xs"><i class="fa fa-upload"></i></div> 
+                    <div class="visible-xs"><i class="fa fa-location-arrow"></i></div> 
                     <div class="hidden-xs">Location Information</div>
                     <span>
                         {{hasAccess('VIEW_EMPLOYEE_WAGES')?3:2}}

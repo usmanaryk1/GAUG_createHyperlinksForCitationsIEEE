@@ -1,7 +1,6 @@
 /* global appHelper, state */
 
 'use strict';
-
 var app = angular.module('xenon-app', [
     'ngCookies',
     'ngResource',
@@ -20,7 +19,9 @@ var app = angular.module('xenon-app', [
     'ngIdle',
     'angularUtils.directives.dirPagination',
     'toggle-switch',
-    'angular.chips'
+    'angular.chips',
+    'ngCkeditor',
+    'signature'
 ]);
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -46,9 +47,8 @@ function delete_cookie(name) {
 
 app.run(function ($rootScope, $modal, $state, Idle, $http)
 {
-    // Page Loading Overlay
+// Page Loading Overlay
     public_vars.$pageLoadingOverlay = jQuery('.page-loading-overlay');
-
     jQuery(window).load(function ()
     {
         public_vars.$pageLoadingOverlay.addClass('loaded');
@@ -70,7 +70,6 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             keyboard: false
         });
     });
-
     $rootScope.$on('IdleTimeout', function () {
         closeModals();
         $rootScope.logout();
@@ -81,17 +80,14 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
         Idle.watch();
         $rootScope.started = true;
     };
-
     $rootScope.stopIdle = function () {
         closeModals();
         Idle.unwatch();
         $rootScope.started = false;
-
     };
     $rootScope.$on('IdleEnd', function () {
         closeModals();
     });
-
     $rootScope.logout = function () {
         $http.get(ontime_data.weburl + 'logout').success(function (response) {
             delete_cookie("cc");
@@ -101,8 +97,6 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             window.location.hash = '#/app/login';
         });
     };
-
-
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
@@ -112,7 +106,8 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                         $(this).css('display', 'none');
                     }
                 });
-                if (toState.url.indexOf("login") < 0 && toState.url.indexOf("forgotpassword") < 0) {
+                if (toState.url.indexOf("login") < 0 && toState.url.indexOf("forgotpassword") < 0
+                        && toState.name.indexOf("applications") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
                         event.preventDefault();
@@ -158,7 +153,6 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                 }
             })
             ;
-
     $rootScope.$on('$locationChangeStart',
             function (event, newUrl, oldUrl) {
                 var pattern = /(#\/app)\/([^\/]+)[$|\/]?/;
@@ -212,12 +206,10 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
 
             });
 });
-
 app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
     IdleProvider.idle(900);
     IdleProvider.timeout(60);
     KeepaliveProvider.interval(10);
-
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
     var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout) {
@@ -238,7 +230,37 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             });
         }
         return deferred.promise;
+    }
 
+    var applicationResolve = {
+            resources: function ($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    ASSETS.forms.jQueryValidate,
+                    ASSETS.forms.formDirty,
+                    ASSETS.extra.toastr,
+                    ASSETS.forms.inputmask,
+                    ASSETS.forms.tagsinput,
+                    ASSETS.core.moment,
+                    ASSETS.forms.daterangepicker,
+                    ASSETS.forms.select2,
+                    ASSETS.tables.datatables
+                ]);
+            }
+        };
+
+    var applicationRootConfig = {
+        abstract: true,
+        url: '/applications-edit',
+        templateUrl: appHelper.viewTemplatePath('application', 'add_application'),
+        controller: 'AddApplicationCtrl as addEmployee',
+        resolve: applicationResolve
+    };
+
+    var viewOnlyApplicationConfig = function () {
+        var config = angular.copy(applicationRootConfig);
+        config['url'] = '/applications';
+        config['data'] = {'feature': 'VIEW_APPLICATION_LIST'};
+        return config;
     }
     $stateProvider.
             // Main Layout Structure
@@ -271,14 +293,112 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         return verifyModuleAllocated(UserDAO, $rootScope, $q, $timeout);
                     }
                 }
-            }).
+            })
             // Login
-            state('login', {
+            .state('login', {
                 url: '/login',
                 templateUrl: appHelper.templatePath('login'),
                 controller: 'LoginCtrl',
-            }).
-            state('forgotpassword', {
+            })
+            // Application
+            .state('applications-home', {
+                url: '/applications/home',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
+                controller: 'ApplicationHomeCtrl as application',
+                resolve: applicationResolve
+            })
+            // application start
+            .state('applications-new', {
+                url: '/applications/:posting_identifier/:resource_identifier/start',
+                controller: 'ApplicationCtrl as application',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
+                 resolve: applicationResolve
+            })
+            // application retrieve
+            .state('applications-existing', {
+                url: '/applications/:posting_identifier/:resource_identifier/retrieve',
+                controller: 'RetrieveApplicationCtrl as application',
+                templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
+                 resolve: applicationResolve
+            })
+            // application edit
+            .state('applications-edit', applicationRootConfig)
+            // application retrieve
+            .state('applications-edit.tab1', {
+                url: '/:id/details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
+                data: {
+                    tabNo: 1
+                }
+            })
+            .state('applications-edit.tab2', {
+                url: '/:id/location-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
+                data: {
+                    tabNo: 2
+                }
+            })
+            .state('applications-edit.tab3', {
+                url: '/:id/education-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_3'),
+                data: {
+                    tabNo: 3
+                }
+            })
+            .state('applications-edit.tab4', {
+                url: '/:id/work-experience',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_4'),
+                data: {
+                    tabNo: 4
+                }
+            })
+            .state('applications-edit.tab5', {
+                url: '/:id/general-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_5'),
+                data: {
+                    tabNo: 5
+                }
+            })
+            // employee creation page
+            .state('application-viewonly', viewOnlyApplicationConfig())
+            // add_application_tab_1
+            .state('application-viewonly.tab1', {
+                url: '/:id/details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
+                data: {
+                    tabNo: 1
+                }
+            })
+            // add_application_tab_2
+            .state('application-viewonly.tab2', {
+                url: '/:id/location-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_2'),
+                data: {
+                    tabNo: 2
+                }
+            })
+            .state('application-viewonly.tab3', {
+                url: '/:id/education-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_3'),
+                data: {
+                    tabNo: 3
+                }
+            })
+            .state('application-viewonly.tab4', {
+                url: '/:id/employment-details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_4'),
+                data: {
+                    tabNo: 4
+                }
+            })
+            .state('application-viewonly.tab5', {
+                url: '/:id/certify',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_5'),
+                data: {
+                    tabNo: 5
+                }
+            })
+            .state('forgotpassword', {
                 url: '/forgotpassword',
                 templateUrl: appHelper.templatePath('forgot_password'),
                 controller: 'ForgotPasswordCtrl as forgotPwd',
@@ -409,6 +529,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'ViewEmployeesCtrl as viewEmployee',
                 data: {
                     feature: 'VIEW_EMPLOYEE'
+                }
+            }).
+            //view applications single page
+            state('app.application-list', {
+                url: '/application-list/:status',
+                templateUrl: appHelper.viewTemplatePath('application', 'view_application'),
+                controller: 'ViewApplicationsCtrl as viewApplication',
+                data: {
+                    feature: 'VIEW_APPLICATION_LIST'
                 }
             }).
             // edit_timesheet
@@ -611,7 +740,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
                 controller: 'ManualClaimUB04Ctrl as manualClaim'
             }).
-                    state('app.manual_claim_ub04_edit', {
+            state('app.manual_claim_ub04_edit', {
                 url: '/manual_claim_ub04/:id/edit',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_ub04'),
                 controller: 'ManualClaimUB04Ctrl as manualClaim'
@@ -665,21 +794,21 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'VIEW_BILLING_HISTORY'
                 }
-            }).
-            state('app.bill_reader', {
-                url: '/bill_reader',
-                controller: 'EdiReaderCtrl as ediReader',
-                templateUrl: appHelper.viewTemplatePath('billing', 'edi_reader'),
-                data: {
-                    feature: 'EDI_DATA_READER'
-                }
-            }).state('app.billing_reconciliation', {
-        url: '/billing_reconciliation',
-        templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
+            }).state('app.bill_reader', {
+        url: '/bill_reader',
+        controller: 'EdiReaderCtrl as ediReader',
+        templateUrl: appHelper.viewTemplatePath('billing', 'edi_reader'),
         data: {
-            feature: 'MANAGE_BILLING_RECONCILIATION'
+            feature: 'EDI_DATA_READER'
         }
     }).
+            state('app.billing_reconciliation', {
+                url: '/billing_reconciliation',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION'
+                }
+            }).
             state('app.billing_reconciliation_list', {
                 url: '/billing_reconciliation/list',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_reconciliation_list'),
@@ -769,8 +898,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_PATIENT_SCHEDULE'
                 }
             }).
-                    // coordinator calendar
-                    state('app.coordinator-calendar', {
+            // coordinator calendar
+            state('app.coordinator-calendar', {
                 url: '/coordinator-calendar/:id?lastPage',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'coordinator_calendar'),
                 controller: 'CoordinatorCalendarCtrl as coordinatorcalendar',
@@ -1008,21 +1137,21 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'CREATE_BENEFIT,EDIT_BENEFIT'
                 }
             }).state('admin.employee-adjustments', {
-                url: '/employee-adjustments/:status',
-                templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
-                controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
-                data: {
-                    feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
-                }
-            }).state('admin.benifit-payouts', {
-                url: '/benifit-payouts/:status',
-                templateUrl: appHelper.viewTemplatePath('benefits', 'benifit-payouts'),
-                controller: 'BenefitPayoutCtrl as benefitPayoutCtrl',
-                data: {
-                    feature: 'EMPLOYEE_BENEFIT_PAYOUT'
-                }
-            }).
-            // Update Highlights
+        url: '/employee-adjustments/:status',
+        templateUrl: appHelper.viewTemplatePath('benefits', 'benefit-adjistments'),
+        controller: 'BenefitAdjistmentsCtrl as empBenefitCtrl',
+        data: {
+            feature: 'EMPLOYEE_BENEFIT_ADJUSTMENT'
+        }
+    }).state('admin.benifit-payouts', {
+        url: '/benifit-payouts/:status',
+        templateUrl: appHelper.viewTemplatePath('benefits', 'benifit-payouts'),
+        controller: 'BenefitPayoutCtrl as benefitPayoutCtrl',
+        data: {
+            feature: 'EMPLOYEE_BENEFIT_PAYOUT'
+        }
+    }).
+// Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',
 //                templateUrl: appHelper.templatePath('update-highlights'),
@@ -1731,16 +1860,24 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     }
                     var deferred = $q.defer();
                     if (response.status == 401) {
-                        delete_cookie("cc");
-                        delete_cookie("token");
-                        delete_cookie("un");
-                        window.location.hash = '#/app/login';
-                        toastr.clear();
-                        return deferred.promise;
+                        if (response.config.url.indexOf("app/") >= 0 || response.config.url.indexOf("admin/") >= 0) {
+                            delete_cookie("cc");
+                            delete_cookie("token");
+                            delete_cookie("un");
+                            window.location.hash = '#/app/login';
+                            toastr.clear();
+                        } else {
+                            delete_cookie("cc");
+                            delete_cookie("token");
+                            delete_cookie("un");
+                            window.location.hash = '#/applications/new';
+                            toastr.clear();
+                        }
 
+                        return deferred.promise;
 //                        return $q.when(response);
                     }
-                    // do something on success
+// do something on success
                     return $q.reject(response);
                 }
 
