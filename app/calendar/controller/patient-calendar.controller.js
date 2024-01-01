@@ -79,6 +79,7 @@
         };
 
         $rootScope.refreshCalendarView = function () {
+            $rootScope.paginationLoading = true;
             ctrl.retrievePatients();
         };
 

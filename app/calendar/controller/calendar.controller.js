@@ -75,6 +75,7 @@
         };
 
         $rootScope.refreshCalendarView = function () {
+            $rootScope.paginationLoading = true;
             ctrl.retrieveEmployees();
         };
 
