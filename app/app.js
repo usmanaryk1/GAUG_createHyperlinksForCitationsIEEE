@@ -107,7 +107,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                     }
                 });
                 if (toState.url.indexOf("login") < 0 && toState.url.indexOf("forgotpassword") < 0
-                        && toState.name.indexOf("applications") < 0) {
+                        && toState.name.indexOf("applications") < 0 && toState.name.indexOf(ontime_data.defaultState) < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
                         event.preventDefault();
@@ -211,7 +211,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
     IdleProvider.timeout(60);
     KeepaliveProvider.interval(10);
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/redirect');
     var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout) {
         var deferred = $q.defer();
         if ($rootScope.currentUser.allowedFeature != null) {
@@ -233,20 +233,20 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
     }
 
     var applicationResolve = {
-            resources: function ($ocLazyLoad) {
-                return $ocLazyLoad.load([
-                    ASSETS.forms.jQueryValidate,
-                    ASSETS.forms.formDirty,
-                    ASSETS.extra.toastr,
-                    ASSETS.forms.inputmask,
-                    ASSETS.forms.tagsinput,
-                    ASSETS.core.moment,
-                    ASSETS.forms.daterangepicker,
-                    ASSETS.forms.select2,
-                    ASSETS.tables.datatables
-                ]);
-            }
-        };
+        resources: function ($ocLazyLoad) {
+            return $ocLazyLoad.load([
+                ASSETS.forms.jQueryValidate,
+                ASSETS.forms.formDirty,
+                ASSETS.extra.toastr,
+                ASSETS.forms.inputmask,
+                ASSETS.forms.tagsinput,
+                ASSETS.core.moment,
+                ASSETS.forms.daterangepicker,
+                ASSETS.forms.select2,
+                ASSETS.tables.datatables
+            ]);
+        }
+    };
 
     var applicationRootConfig = {
         abstract: true,
@@ -294,6 +294,16 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     }
                 }
             })
+            .state('redirect', {
+                url: '/redirect',
+                controller: function ($state) {
+                    if (ontime_data.redirectStateOrURL.indexOf("http") > -1) {
+                        window.location.href = ontime_data.redirectStateOrURL;
+                    } else {
+                        $state.transitionTo(ontime_data.redirectStateOrURL);
+                    }
+                }
+            })
             // Login
             .state('login', {
                 url: '/login',
@@ -312,14 +322,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/applications/:posting_identifier/:resource_identifier/start',
                 controller: 'ApplicationCtrl as application',
                 templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
-                 resolve: applicationResolve
+                resolve: applicationResolve
             })
             // application retrieve
             .state('applications-existing', {
                 url: '/applications/:posting_identifier/:resource_identifier/retrieve',
                 controller: 'RetrieveApplicationCtrl as application',
                 templateUrl: appHelper.viewTemplatePath('application', 'start-applications'),
-                 resolve: applicationResolve
+                resolve: applicationResolve
             })
             // application edit
             .state('applications-edit', applicationRootConfig)
@@ -1870,7 +1880,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             delete_cookie("cc");
                             delete_cookie("token");
                             delete_cookie("un");
-                            window.location.hash = '#/applications/new';
+                            window.location.hash = '#/redirect';
                             toastr.clear();
                         }
 

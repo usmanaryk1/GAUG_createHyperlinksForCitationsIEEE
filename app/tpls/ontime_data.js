@@ -1,7 +1,8 @@
 ontime_data = {
     'weburl': 'http://localhost:8084/webapplication/api/',
 //    'weburl': 'http://demotrt.com:8080/ontime/api/',
-    'defaultState': 'login',
+    'defaultState': 'redirect',
+    'redirectStateOrURL': 'login',
     'homepage': 'app.dashboard',
     'weatherCity': 'New York, NY',
     'employeeReasons': [
