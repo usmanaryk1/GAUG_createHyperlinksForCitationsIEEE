@@ -1327,6 +1327,65 @@
             $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
             $formService.resetRadios();
         };
+        
+        // add patient plan of care
+        ctrl.carePlanFileObj={};
+        ctrl.carePlanUploadFile = {
+            target: ontime_data.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: 'p',
+                fileNamePrefix: 'plan-of-care',
+                company_code: ontime_data.company_code
+            }
+        };
+        ctrl.carePlanFileAdded = function (file, flow) {
+            ctrl.formDirty = true;
+            ctrl.patient.planOfCare = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.carePlanFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableCarePlanUploadButton = true;
+            ctrl.carePlanShowfileProgress = true;
+            ctrl.carePlanFileObj.errorMsg = null;
+            ctrl.carePlanFileObj.flow = flow;
+            return true;
+        };
+        ctrl.carePlanFileUploaded = function (response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.patient.planOfCare = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.carePlanShowfileProgress = false;
+            ctrl.disableCarePlanUploadButton = false;
+        };
+        ctrl.carePlanFileSelected = function (file, flow) {
+            ctrl.carePlanFileObj.flowObj = flow;
+            ctrl.carePlanFileObj.flowObj.upload();
+        };
+        ctrl.carePlanFileError = function ($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableCarePlanUploadButton = false;
+            ctrl.patient.planOfCare = null;
+            ctrl.carePlanFileObj.errorMsg = "File cannot be uploaded";
+        };
+        ctrl.clearCarePlan = function () {
+            if (ctrl.patient != null && ctrl.patient.planOfCare != null) {
+                ctrl.patient.planOfCare = null;
+            }
+            if (ctrl.carePlanFileObj.flowObj != null) {
+                ctrl.carePlanFileObj.flowObj.cancel();
+            }
+        };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
 })();
