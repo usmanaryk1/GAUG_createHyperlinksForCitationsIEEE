@@ -338,18 +338,13 @@ span[data-cal-date]:hover {
     display: none;
 }
 #sticky {
-    width: 100%;
     color: #fff;
     border-radius: 0.5ex;
 }
 #sticky.stick {
     position: fixed;
     top: 0;
-    width: 87.4%;
     z-index: 10000;
     border-radius: 0 0 0.5em 0.5em;
     background: white;
-}
-.toggleWidth {
-  width: 67% !important;
 }

@@ -214,17 +214,13 @@
             if (jQuery.contains(document, $element[0])) {
                 var window_top = $(window).scrollTop();
                 var div_top = $('#sticky-anchor').offset().top;
+                var width = $("div#sticky").width();
                 if (window_top > div_top) {
                     $('#sticky').addClass('stick');
-                    $stick = $("div.collapsed");
-                    if (jQuery.contains(document, $stick[0])) {
-                        $('#sticky').removeClass('toggleWidth');
-                    } else {
-                        $('#sticky').addClass('toggleWidth');
-                    }
+                    $('#sticky').width(width);
                 } else {
                     $('#sticky').removeClass('stick');
-                    $('#sticky').removeClass('toggleWidth');
+                    $('#sticky').removeAttr( 'style' );
                 }
             }
         }
