@@ -329,9 +329,9 @@
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
-                            if (h > 0 || m > 30) {
+                            if (h > 0 || (h === 0 && m > 30)) {
                                 obj.color = "#ea9999";
-                            } else if (h > 0 || m > 8) {
+                            } else if (h > 0 || (h === 0 && m > 8)) {
                                 obj.color = "#FEFEB8";
                             }
                         }
@@ -344,7 +344,7 @@
                                 var t = temp1.split(":");
                                 var h = Number(t[0]);
                                 var m = Number(t[1]);
-                                if (h > 0 || m > 30) {
+                                if (h > 0 || (h === 0 && m > 30)) {
                                     obj.color = "#b4a7d6";
                                 }
                             }
@@ -357,7 +357,7 @@
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
-                            if (h > 0 || m > 30) {
+                            if (h > 0 || (h === 0 && m > 30)) {
                                 obj.color = "#ea9999";
                             }
                         }

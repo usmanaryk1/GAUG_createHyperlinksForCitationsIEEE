@@ -11,9 +11,11 @@
         Page.setTitle("Employee Calendar");
 
         ctrl.calendarView = 'week';
+        setWeekDate();
 
         if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
+            setMonthDate();
         }
 
         ctrl.isOpen = false;
@@ -21,6 +23,8 @@
 
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
+            setMonthDate();
+            $rootScope.refreshCalendarView();
         }
 
         ctrl.showDatepicker = function () {
@@ -29,10 +33,22 @@
             } else {
                 ctrl.isOpen = true;
             }
-        }
+        };
+
+        ctrl.selectDate = function () {
+            setTimeout(function () {
+                var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+                if (a != ctrl.startRetrieved || b != ctrl.endRetrieved) {
+                    $rootScope.refreshCalendarView();
+                }
+            }, 200);
+        };
 
         ctrl.changeToWeek = function () {
             ctrl.calendarView = 'week';
+            setWeekDate();
+            $rootScope.refreshCalendarView();
         }
 
         ctrl.searchParams = {skip: 0, limit: 10};
@@ -56,6 +72,10 @@
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
             ctrl.applySearch();
+        };
+
+        $rootScope.refreshCalendarView = function () {
+            ctrl.retrieveEmployees();
         };
 
         ctrl.retrieveEmployees = function () {
@@ -103,8 +123,8 @@
                 delete res.$resolved;
                 /* Fetch all Employee id's to get related events */
                 var ids = (_.map(ctrl.employee_list, 'id')).toString();
-                if ($stateParams.id != '') {
-                    ids = ids + ',' + $stateParams.id;
+                if (ctrl.calendarView == 'month') {
+                    ids = ctrl.employeeId;
                 }
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
@@ -118,7 +138,11 @@
         };
 
         ctrl.getAllEvents = function (ids) {
-            EventTypeDAO.retrieveBySchedule({employeeIds: ids}).then(function (res) {
+            var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+            var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+            ctrl.startRetrieved = a;
+            ctrl.endRetrieved = b;
+            EventTypeDAO.retrieveBySchedule({employeeIds: ids, fromDate: a, toDate: b}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;
@@ -543,6 +567,18 @@
                 $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
             }
         };
+        function setMonthDate() {
+            var startOfMonth = moment().startOf('month');
+            var endOfMonthView = moment().endOf('month').endOf('week');
+            $rootScope.weekStart = new Date(startOfMonth);
+            $rootScope.weekEnd = new Date(endOfMonthView);
+        }
+        function setWeekDate() {
+            var startOfWeek = moment().startOf('week');
+            var endOfWeek = moment().endOf('week');
+            $rootScope.weekStart = new Date(startOfWeek);
+            $rootScope.weekEnd = new Date(endOfWeek);
+        }
         $rootScope.navigateToMonthPage = function (employee) {
             delete ctrl.monthEmployee;
             $state.go('app.employee-calendar', {id: employee.id});

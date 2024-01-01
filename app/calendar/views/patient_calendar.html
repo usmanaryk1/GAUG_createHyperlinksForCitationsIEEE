@@ -11,7 +11,7 @@
         <div class="mwl-left input-group btn-date-group" style="padding-top:5px;">
             <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="patientcalendar.showDatepicker()"><i class="glyphicon glyphicon-calendar"></i></button>
             <h2>{{ patientcalendar.calendarTitle}}</h2>
-            <datepicker ng-model="patientcalendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{'show':patientcalendar.isOpen,'hide':!patientcalendar.isOpen}"></datepicker>
+            <datepicker ng-model="patientcalendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-click="patientcalendar.selectDate()" ng-class="{'show':patientcalendar.isOpen,'hide':!patientcalendar.isOpen}"></datepicker>
         </div>
         <div class="mwl-right">
             <a href="" ng-click="openModalCalendar(null, 'calendar-modal', 'lg', 'static');" class="btn btn-primary btn-single btn-sm" style="">Add New Event</a>

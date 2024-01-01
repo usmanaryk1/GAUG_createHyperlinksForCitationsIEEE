@@ -1,6 +1,6 @@
 angular
         .module('mwl.calendar')
-        .factory('calendarHelper', ["$filter", "moment", "calendarConfig", "$rootScope", function($filter, moment, calendarConfig, $rootScope) {
+        .factory('calendarHelper', ["$filter", "moment", "calendarConfig", "$rootScope", function ($filter, moment, calendarConfig, $rootScope) {
                 function formatDate(date, format) {
                     if (calendarConfig.dateFormatter === 'angular') {
                         return $filter('date')(moment(date).toDate(), format);
@@ -19,8 +19,8 @@ angular
 
                 function eventIsInPeriod(event, periodStart, periodEnd) {
 
-                    var eventStart = moment(event.startDate);
-                    var eventEnd = moment(event.endDate || event.startDate);
+                    var eventStart = moment(new Date(event.startDate));
+                    var eventEnd = moment(new Date(event.endDate || event.startDate));
                     periodStart = moment(periodStart);
                     periodEnd = moment(periodEnd);
 
@@ -57,7 +57,7 @@ angular
                 }
 
                 function filterEventsInPeriod(events, startPeriod, endPeriod) {
-                    return events.filter(function(event) {
+                    return events.filter(function (event) {
                         return eventIsInPeriod(event, startPeriod, endPeriod);
                     });
                 }
@@ -69,7 +69,7 @@ angular
                 }
 
                 function getBadgeTotal(events) {
-                    return events.filter(function(event) {
+                    return events.filter(function (event) {
                         return event.incrementsBadgeTotal !== false;
                     }).length;
                 }
@@ -83,19 +83,21 @@ angular
                     return weekdays;
                 }
 
-	    function getMonthView(events, currentDay,id,type) {
+                function getMonthView(events, currentDay, id, type) {
 
                     var startOfMonth = moment(currentDay).startOf('month');
                     var day = startOfMonth.clone().startOf('week');
                     var endOfMonthView = moment(currentDay).endOf('month').endOf('week');
+                    $rootScope.weekStart = new Date(startOfMonth);
+                    $rootScope.weekEnd = new Date(endOfMonthView);
                     var eventsInPeriod;
 
-	   	  if(type == "employee") {
-			   	  var month_events = _.filter(events, function (data){
+                    if (type == "employee") {
+                        var month_events = _.filter(events, function (data) {
                             return data.employeeId == id
                         })
                     } else {
-	   			 var month_events = _.filter(events, function (data){
+                        var month_events = _.filter(events, function (data) {
                             return data.patientId == id
                         })
                     }
@@ -134,7 +136,7 @@ angular
 
                 }
 
-	    function getWeekView(events, currentDay,list, type) {
+                function getWeekView(events, currentDay, list, type) {
                     var startOfWeek = moment(currentDay).startOf('week');
                     var endOfWeek = moment(currentDay).endOf('week');
                     $rootScope.weekStart = new Date(startOfWeek);
@@ -158,38 +160,38 @@ angular
                     }
                     eventdays = days;
 
-	      if(type == "employee") {
-			      _.each(list, function (n){
-			      	 	n.temp_events = _.filter(events, function (data){
+                    if (type == "employee") {
+                        _.each(list, function (n) {
+                            n.temp_events = _.filter(events, function (data) {
                                 return data.employeeId == n.id
                             })
                         })
                     } else {
-	  			    _.each(list, function (n){
-	  			    	 	n.temp_events = _.filter(events, function (data){
+                        _.each(list, function (n) {
+                            n.temp_events = _.filter(events, function (data) {
                                 return data.patientId == n.id
                             })
                         })
                     }
 
-	        _.each(list, function (n) {
+                    _.each(list, function (n) {
                         n.days = [];
-	        	_.each(eventdays, function (f) {
+                        _.each(eventdays, function (f) {
                             var e = {};
-	        		angular.copy(f,e);
-	        		e.events = _.remove(n.temp_events, function (content){
+                            angular.copy(f, e);
+                            e.events = _.remove(n.temp_events, function (content) {
                                 return moment(f.date).isSame(moment(new Date(content.startDate)));
                             })
-	        		_.each(e.events, function (d) {
+                            _.each(e.events, function (d) {
                                 var startDate = moment(new Date(d.startDate));
                                 var endDate = moment(new Date(d.endDate));
-	        			var diff = moment(endDate).diff(startDate,'days');
-			        	d.daySpan = diff+1;
+                                var diff = moment(endDate).diff(startDate, 'days');
+                                d.daySpan = diff + 1;
                             })
                             n.days.push(e);
                         })
                     })
-	      return {days: days, list:list};
+                    return {days: days, list: list};
 
                 }
 

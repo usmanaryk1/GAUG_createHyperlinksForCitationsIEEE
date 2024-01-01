@@ -10,7 +10,7 @@
         <div class="mwl-left input-group btn-date-group" style="padding-top:5px;">
             <button type="button" class="btn btn-default btn-sm btn-date"  ng-click="calendar.showDatepicker()"><i class="glyphicon glyphicon-calendar"></i></button>
             <h2>{{ calendar.calendarTitle}}</h2>
-            <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-class="{
+            <datepicker ng-model="calendar.calendarDay" show-weeks="true" class="well well-sm overly-datepicker" ng-click="calendar.selectDate()" ng-class="{
                     'show'
                     :calendar.isOpen, 'hide':!calendar.isOpen}"></datepicker>
         </div>

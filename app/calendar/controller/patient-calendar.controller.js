@@ -10,9 +10,11 @@
         Page.setTitle("Patient Calendar");
 
         ctrl.calendarView = 'week';
+        setWeekDate();
 
         if ($stateParams.id != '') {
             ctrl.calendarView = 'month';
+            setMonthDate();
         }
 
         ctrl.viewPatient;
@@ -25,7 +27,9 @@
         ctrl.staffCoordinatorMap = {};
         ctrl.changeToMonth = function () {
             ctrl.calendarView = 'month';
-        }
+            setMonthDate();
+            $rootScope.refreshCalendarView();
+        };
 
         ctrl.showDatepicker = function () {
             if (ctrl.isOpen) {
@@ -33,11 +37,23 @@
             } else {
                 ctrl.isOpen = true;
             }
-        }
+        };
+
+        ctrl.selectDate = function () {
+            setTimeout(function () {
+                var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+                var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+                if (a != ctrl.startRetrieved || b != ctrl.endRetrieved) {
+                    $rootScope.refreshCalendarView();
+                }
+            }, 200);
+        };
 
         ctrl.changeToWeek = function () {
             ctrl.calendarView = 'week';
-        }
+            setWeekDate();
+            $rootScope.refreshCalendarView();
+        };
 
         ctrl.searchParams = {skip: 0, limit: 10};
 
@@ -60,6 +76,10 @@
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
             ctrl.applySearch();
+        };
+
+        $rootScope.refreshCalendarView = function () {
+            ctrl.retrievePatients();
         };
 
         ctrl.retrievePatients = function () {
@@ -107,8 +127,8 @@
                 delete res.$promise;
                 delete res.$resolved;
                 var ids = (_.map(ctrl.patient_list, 'id')).toString();
-                if ($stateParams.id != '') {
-                    ids = ids + ',' + $stateParams.id;
+                if (ctrl.calendarView == 'month') {
+                    ids = ctrl.patientId;
                 }
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
@@ -133,7 +153,11 @@
 
         ctrl.getAllEvents = function (ids) {
             ctrl.openCaseMap = {};
-            EventTypeDAO.retrieveBySchedule({patientIds: ids}).then(function (res) {
+            var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
+            var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
+            ctrl.startRetrieved = a;
+            ctrl.endRetrieved = b;
+            EventTypeDAO.retrieveBySchedule({patientIds: ids, fromDate: a, toDate: b}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
                 ctrl.events = res;
@@ -332,9 +356,9 @@
                                     if (end < start) {
                                         toastr.error("Both dates must fall in same week.");
                                     } else {
-                                        ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
-                                    }
-                                } else {
+                                ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
+                            }
+                        } else {
                                     ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
                                 }
                             }
@@ -589,6 +613,18 @@
                 }
             });
         };
+        function setMonthDate() {
+            var startOfMonth = moment().startOf('month');
+            var endOfMonthView = moment().endOf('month').endOf('week');
+            $rootScope.weekStart = new Date(startOfMonth);
+            $rootScope.weekEnd = new Date(endOfMonthView);
+        }
+        function setWeekDate() {
+            var startOfWeek = moment().startOf('week');
+            var endOfWeek = moment().endOf('week');
+            $rootScope.weekStart = new Date(startOfWeek);
+            $rootScope.weekEnd = new Date(endOfWeek);
+        }
         $rootScope.navigateToMonthPage = function (patient) {
             delete ctrl.monthPatient;
             $state.go('app.patient-calendar', {id: patient.id});
