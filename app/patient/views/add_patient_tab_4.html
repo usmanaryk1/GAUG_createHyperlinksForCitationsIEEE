@@ -178,7 +178,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="control-label" ng-show="addPatient.patient.planOfCare != null" >
-                                            <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/aed/{{addPatient.employee.resume}}">
+                                            <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{addPatient.employee.patient.planOfCare}}">
                                                 plan_of_care{{addPatient.patient.planOfCare|extension}}</a>
                                             <a href=""><i class="fa fa-close" ng-click="addPatient.clearCarePlan()"></i></a>
                                         </label>
