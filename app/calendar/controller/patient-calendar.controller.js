@@ -161,7 +161,7 @@
             EventTypeDAO.retrieveBySchedule({patientIds: ids, fromDate: a, toDate: b}).then(function (res) {
                 delete res.$promise;
                 delete res.$resolved;
-                ctrl.events = res;
+                splitUnavailableEvents(res);
                 angular.forEach(res, function (item) {
                     if (!item.employeeId && item.eventType === 'S') {
                         if (!ctrl.openCaseMap[item.startDate]) {
@@ -173,6 +173,55 @@
                 $rootScope.paginationLoading = false;
             });
         };
+
+        function splitUnavailableEvents(res) {
+            ctrl.events = [];
+            var endCount = 6;
+            angular.forEach(res, function (content) {
+                if (content.eventType == 'U') {
+                    var startDay = new Date(content.startDate).getDay();
+                    var start = new Date(content.startDate);
+                    var end = new Date(content.endDate);
+                    var i = 0;
+                    while (start < end)
+                    {
+                        var end1;
+                        var momentObj = moment(start);
+                        var momentObj1 = angular.copy(momentObj);
+                        if (i == 0) {
+                            start = new Date(momentObj.add(7 - startDay, "days"));
+                        } else {
+                            start = new Date(momentObj.add(7, "days"));
+                        }
+                        end1 = new Date(momentObj.add(endCount, "days"));
+                        var start1 = new Date(momentObj);
+                        if (start1 >= end) {
+                            end1 = end;
+                        }
+                        if (i == 0) {
+                            var temp = angular.copy(content);
+                            temp.startDate = content.startDate;
+                            var end2 = new Date(momentObj1.add(endCount - startDay, "days"));
+                            if (new Date(content.endDate) < end2) {
+                                temp.endDate = content.endDate;
+                            } else {
+                                temp.endDate = $filter('date')(end2, $rootScope.dateFormat);
+                            }
+                            ctrl.events.push(temp);
+                        }
+                        if (start <= end) {
+                            var temp = angular.copy(content);
+                            temp.startDate = $filter('date')(start, $rootScope.dateFormat);
+                            temp.endDate = $filter('date')(end1, $rootScope.dateFormat);
+                            ctrl.events.push(temp);
+                        }
+                        i++;
+                    }
+                } else {
+                    ctrl.events.push(content);
+                }
+            });
+        }
 
         ctrl.retrieveAllPatients = function () {
             PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
@@ -348,20 +397,12 @@
                             var a = moment(new Date($rootScope.patientPopup.data.startDate));
                             var b = moment(new Date($rootScope.patientPopup.data.endDate));
                             var diff = b.diff(a, 'days');
-                            if (diff > 6) {
+                            if (diff > 6 && $rootScope.patientPopup.data.eventType == 'S') {
                                 toastr.error("Date range should be no more of 7 days.");
+                            } else if (diff > 89 && $rootScope.patientPopup.data.eventType == 'U') {
+                                toastr.error("Date range should be no more of 90 days.");
                             } else {
-                                if ($rootScope.patientPopup.data.eventType == 'U') {
-                                    var start = new Date($rootScope.patientPopup.data.startDate).getDay();
-                                    var end = new Date($rootScope.patientPopup.data.endDate).getDay();
-                                    if (end < start) {
-                                        toastr.error("Both dates must fall in same week.");
-                                    } else {
                                 ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
-                            }
-                        } else {
-                                    ctrl.savePatientPopupChanges($rootScope.patientPopup.data);
-                                }
                             }
                         } else {
                             console.log("invalid form")
