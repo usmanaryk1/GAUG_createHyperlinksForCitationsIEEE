@@ -20,39 +20,15 @@ angular
                 function eventIsInPeriod(event, periodStart, periodEnd) {
 
                     var eventStart = moment(new Date(event.startDate));
-                    var eventEnd = moment(new Date(event.endDate || event.startDate));
+                    var eventEnd = moment(new Date(event.endDate));
                     periodStart = moment(periodStart);
                     periodEnd = moment(periodEnd);
-
-                    if (angular.isDefined(event.recursOn)) {
-
-                        switch (event.recursOn) {
-                            case 'year':
-                                eventStart.set({
-                                    year: periodStart.year()
-                                });
-                                break;
-
-                            case 'month':
-                                eventStart.set({
-                                    year: periodStart.year(),
-                                    month: periodStart.month()
-                                });
-                                break;
-
-                            default:
-                                throw new Error('Invalid value (' + event.recursOn + ') given for recurs on. Can only be year or month.');
-                        }
-
-                        eventEnd = adjustEndDateFromStartDiff(event.startsAt, eventStart, eventEnd);
-
-                    }
 
                     return (eventStart.isAfter(periodStart) && eventStart.isBefore(periodEnd)) ||
                             (eventEnd.isAfter(periodStart) && eventEnd.isBefore(periodEnd)) ||
                             (eventStart.isBefore(periodStart) && eventEnd.isAfter(periodEnd)) ||
-                            eventStart.isSame(periodStart) ||
-                            eventEnd.isSame(periodEnd);
+                            eventStart.isSame(periodStart,'day') ||
+                            eventEnd.isSame(periodEnd,'day');
 
                 }
 
