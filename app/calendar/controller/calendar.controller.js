@@ -27,15 +27,20 @@
             $rootScope.refreshCalendarView();
         }
 
-        ctrl.showDatepicker = function () {
-            if (ctrl.isOpen) {
-                ctrl.isOpen = false;
+        ctrl.showDatepicker = function (e) {
+            if(e.currentTarget.className == "btn btn-default btn-sm btn-date") {
+                if (ctrl.isOpen) {
+                    ctrl.isOpen = false;
+                } else {
+                    ctrl.isOpen = true;
+                }
             } else {
-                ctrl.isOpen = true;
+                ctrl.isOpen = false;
             }
         };
 
-        ctrl.selectDate = function () {
+        ctrl.selectDate = function (e) {
+            ctrl.showDatepicker(e);
             setTimeout(function () {
                 var a = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
                 var b = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
