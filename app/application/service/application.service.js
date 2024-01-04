@@ -34,7 +34,7 @@
             approveApplication: {
                 method: 'PUT'
             },
-            needMoreInfoApplication: {
+            reviewApplication: {
                 method: 'PUT'
             },
             readyForOrientationApplication: {
@@ -57,8 +57,8 @@
             approveApplication: function (data) {
                 return api.approveApplication({action: data.applicationId, subAction: 'approve'}, data.additionalDetails).$promise;
             },
-            needMoreInfoApplication: function (data) {
-                return api.needMoreInfoApplication({action: data.applicationId, subAction: 'request-more-info'}, data.nmiDetails).$promise;
+            reviewApplication: function (data) {
+                return api.reviewApplication({action: data.applicationId, subAction: data.reviewAction}, data.nmiDetails).$promise;
             },
             readyForOrientationApplication: function (data) {
                 return api.readyForOrientationApplication({action: data.applicationId, subAction: 'mark-ready-for-orientation'}, data.rfoDetails).$promise;

@@ -8,6 +8,8 @@
         if (action && action === 'rfo') {
             ctrl.status = 'rfo';
             ctrl.showStatus = false;
+        } else if (action && action === 'rejected') {
+            ctrl.status = 'rejected';
         } else {
             ctrl.status = 'nmi';
         }
@@ -37,12 +39,13 @@
         });
 
         ctrl.reviewApplication = function () {
-            if (ctrl.status === 'nmi') {
+            if (ctrl.status === 'nmi' || ctrl.status === 'rejected') {
                 if (ctrl.emailContent !== null && ctrl.emailContent !== '') {
                     ctrl.content_not_filled = false;
                     $rootScope.maskLoading();
                     var nmiDetails = {'content': ctrl.emailContent, appPath: window.location.toString()}
-                    ApplicationDAO.needMoreInfoApplication({'applicationId': application.applicationId, 'nmiDetails': nmiDetails})
+                    ApplicationDAO.reviewApplication({'applicationId': application.applicationId, 'nmiDetails': nmiDetails,
+                    'reviewAction': ctrl.status === 'nmi'? 'request-more-info': 'reject'})
                             .then(function (res) {
                                 $modalInstance.close();
                                 toastr.success('Application is moved to Need More Info and email sent');

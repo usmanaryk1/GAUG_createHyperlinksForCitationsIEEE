@@ -24,10 +24,11 @@
                         required>
                     <option value="nmi">Need More Info</option>
                     <option value="rfo">Ready For Orientation</option>
+                    <option value="rejected">Rejected</option>
                 </select>    
             </div>
         </div>
-        <div class="form-group" ng-show="reviewApplication.status === 'nmi'">
+        <div class="form-group" ng-show="reviewApplication.status === 'nmi' || reviewApplication.status === 'rejected'">
             <div class="col-md-12 add-padding-modal">
                 <textarea ckeditor='reviewApplication.editorOptions' name="content" ng-model="reviewApplication.emailContent" ng-change="reviewApplication.content_not_filled = false;"></textarea>
                 <div ng-if="reviewApplication.content_not_filled === true">
@@ -80,6 +81,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-white" ng-click="reviewApplication.close();">Close</button>
         <button ng-if="reviewApplication.status === 'nmi'" type="submit" class="btn btn-success">Request More Info</button>
+        <button ng-if="reviewApplication.status === 'rejected'" type="submit" class="btn btn-success">Rejected</button>
         <button ng-if="reviewApplication.status === 'rfo'" type="submit" class="btn btn-success">Mark For Orientation</button>
     </div>
 </form>
