@@ -997,9 +997,10 @@ angular.module('xenon.directives', []).
                     var modelUpdated = false;
                     //changes to edit the date as currently editing the date is not working properly and we can not make it blank again.
                     scope.$watch("ngModel", function (value) {
-                        if (!modelUpdated && value != null) {
+                        if (value != null) { // removed condition to highligh date, was not updating if changed from controller.
                             if (value.length >= 10 && new Date(value).toString() !== "Invalid Date") {
                                 $this.datepicker("setDate", new Date(value));
+                                $this.datepicker("fill"); // added to highligh date, was not updating if changed from controller.
 //                            dateWatch();
                             }
                             modelUpdated = true;
