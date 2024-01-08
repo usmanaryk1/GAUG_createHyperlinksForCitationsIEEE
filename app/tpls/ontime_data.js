@@ -50,6 +50,7 @@ ontime_data = {
     amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
     amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/",
     reportTypes: [
+        {id: 'applicationmetricsreport', label: "Application Metrics Report"},
         {id: 'claimrejectionreport', label: "Billing - Claim Rejection Report"},
         {id: 'detailagingreport', label: "Billing - Detail Aging Report"},
         {id: 'summaryagingreport', label: "Billing - Summary Aging Report"},

@@ -17,8 +17,7 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         ctrl.applicationAdditionalDetail = {"orientationPacketExtraFields":"",
-            "hireDate": $filter('date')(new Date(), $rootScope.dateFormat),
-            "ssn": application.ssn
+            "hireDate": $filter('date')(new Date(), $rootScope.dateFormat)
         };
 
         ctrl.close = function () {
@@ -84,7 +83,7 @@
             ctrl.ssn.exists = false;
             if ($('#approve_employee_popup')[0].checkValidity()) {
                 $rootScope.maskLoading();
-                EmployeeDAO.checkIfSsnExists({ssn: ctrl.applicationAdditionalDetail.ssn})
+                EmployeeDAO.checkIfSsnExists({ssn: application.ssn})
                         .then(function (res) {
                             if (res.data) {
                                 toastr.error('Employee with same SSN exists, please validate application');
