@@ -772,7 +772,7 @@
         if ($state.params.id != '') {
             PatientDAO.checkSchedule({patientId: $state.params.id})
                     .then(function (res) {
-                        if (res.data != '') {
+                        if (res.data == 'true') {
                             ctrl.checkSchedule = true;
                         }
                     });
