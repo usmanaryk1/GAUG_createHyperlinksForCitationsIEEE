@@ -14,7 +14,7 @@
                 });
             }
         });
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dateInserted', order: 'desc', name: ''};
         ctrl.applicationList = [];
 
         if ($stateParams.status !== 'in-progress' && $stateParams.status !== 'need-more-info'

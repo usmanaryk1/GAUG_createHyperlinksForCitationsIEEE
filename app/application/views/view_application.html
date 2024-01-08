@@ -68,7 +68,8 @@
                                                                                                             viewApplication.retrieveApplications()" class="yadcf-filter-reset-button">
                                                                                                     </div>-->
                                                     </th>
-                                                    <th width="15%" >Phone
+                                                    <th width="12%" ng-class="viewApplication.applySortingClass('dateInserted')" ng-click="viewApplication.applySorting('dateInserted')">Application Date</th>
+                                                    <th width="13%" >Phone
                                                         <!--                                            <div ng-click="$event.stopPropagation();" id="yadcf-filter-wrapper--example-3-2" class="yadcf-filter-wrapper">
                                                                                                         <input type="text" id="yadcf-filter--example-3-1" class="yadcf-filter" numbers-only="true"
                                                                                                                ng-model="viewApplication.searchParams.phone" placeholder="phone number" ng-change="viewApplication.applySearch()"/>
@@ -77,8 +78,8 @@
                                                                                                     </div>-->
                                                     </th>
                                                     <th width="23%">Address</th>
-                                                    <th width="15%">Languages Spoken</th>
-                                                    <th width="23%">Actions</th>
+                                                    <th width="13%">Languages Spoken</th>
+                                                    <th width="15%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -100,6 +101,7 @@
                                                             </div>
                                                         </div>
                                                     </th>
+                                                    <td>{{application.dateInserted|date:dateFormat}}</td>
                                                     <td>{{application.phone| tel}}</td>
                                                     <td>
                                                         <div>{{application.address1}}</div> <div ng-if="application.address2 != null">{{application.address2}}</div> {{application.city}}, {{application.state}}, {{application.zipcode}}
