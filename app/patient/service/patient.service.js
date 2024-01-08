@@ -45,6 +45,17 @@
                 params: {
                     action: 'forschedule'
                 }
+            },
+            checkSchedule: {
+                method: 'GET',
+                params: {
+                    action: 'checkschedule'
+                },
+                transformResponse: function (data, headers) {
+                    var response = {};
+                    response.data = data;
+                    return response;
+                }
             }
         });
         return {
@@ -61,7 +72,7 @@
                 return api.get({action: params.id}).$promise;
             },
             update: function (data) {
-                return api.update({action: data.action}, data.data).$promise;
+                return api.update({action: data.action, changeSchedule: data.changeSchedule}, data.data).$promise;
             },
             delete: function (data) {
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
@@ -71,6 +82,9 @@
             },
             getPatientsForSchedule: function (data) {
                 return api.getPatientsForSchedule(data).$promise;
+            },
+            checkSchedule: function (data) {
+                return api.checkSchedule(data).$promise;
             }
         };
     };

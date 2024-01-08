@@ -7,7 +7,7 @@
             </h1>
             <p class="description">
                 {{addPatient.editMode?'Edit A Patient Record By Entering Patient Information':'Create A Patient Record By Entering Patient Information'}}
-                
+
             </p>
         </div>
     </div>
@@ -40,7 +40,7 @@
     <form class="form-wizard custom-form" dirty="addPatient.formDirty" selectedtab="tabNo" novalidate="" role="form">
         <ul class="tabs">
             <li class="{{tabNo==1?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab1')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event, 'tab1')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-user"></i></div> 
                     <div class="hidden-xs">Patient Information</div>
                     <span>
@@ -49,7 +49,7 @@
                 </a>
             </li>
             <li class="{{tabNo==2?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab2')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event, 'tab2')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-location-arrow"></i></div> 
                     <div class="hidden-xs">Location Information</div>
                     <span>
@@ -58,8 +58,8 @@
                 </a>
             </li>
             <li class="{{tabNo==3?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab3')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
-                    
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event, 'tab3')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
+
                     <div class="visible-xs"><i class="fa  fa-edit"></i></div> 
                     <div class="hidden-xs">Insurance Information</div>
                     <span>
@@ -68,7 +68,7 @@
                 </a>
             </li>
             <li class="{{tabNo==4?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab4')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event, 'tab4')" style="{{!addPatient.editMode?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-key"></i></div> 
                     <div class="hidden-xs">Authorization Info</div>
                     <span>
@@ -77,7 +77,7 @@
                 </a>
             </li>
             <li class="{{tabNo==5?'active':''}}">
-                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event,'tab5')" style="{{(!addPatient.editMode)?'pointer-events: none':''}}">
+                <a data-toggle="tab" href="" ng-click="addPatient.navigateToTab($event, 'tab5')" style="{{(!addPatient.editMode)?'pointer-events: none':''}}">
                     <div class="visible-xs"><i class="fa fa-info-circle"></i></div> 
                     <div class="hidden-xs">Insurance Subscriber Information</div>
                     <span>
@@ -93,8 +93,33 @@
         <div ui-view></div>
     </form>
 </div>
-    <!-- FORM WIZARD WITH VALIDATION END HERE-->
+<!-- FORM WIZARD WITH VALIDATION END HERE-->
+<script type="text/ng-template" id="exist-schedule-modal">
+    <form class="validate form-horizontal" name="existingForm" id="care_type_form" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="existingModel.cancel();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Change in Schedule</h4>
+    </div>
 
+    <div class="modal-body">
+
+    <div class="row">
+    <p> 
+    This member has an existing schedule that contains a repeat schedule through auth expiration date.
+    </p>
+    <p>
+    Please select '{{existingModel.extend?'Extend':'Remove'}} Sequence' to {{existingModel.extend?'extend':'remove'}} sequence of schedule, select 'Update' to update record only and select 'Cancel' to cancel change.
+    </p>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="existingModel.cancel();">Cancel</button>
+    <button type="button" class="btn btn-red" ng-click="existingModel.updateOnly();">Update Only</button>
+    <button type="submit" class="btn btn-success" ng-click="existingModel.extendSequence();">{{existingModel.extend?'Extend':'Remove'}} Sequence</button>
+    </div>
+    </form>
+</script>
 
 <script type="text/javascript">
     customJqueryValidation();

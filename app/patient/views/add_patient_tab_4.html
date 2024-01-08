@@ -196,7 +196,7 @@
                             <div class="input-group">
                                 <input class="form-control datepicker" data-format="mm/dd/yyyy" id="EndDate" 
                                        name="EndDate" type="text" ng-model="addPatient.patient.authorizationEndDate"
-                                       data-validate="required"  data-message-required="Please enter End Date." min-date="addPatient.patient.authorizationStartDate">
+                                       data-validate="required"  data-message-required="Please enter End Date." min-date="addPatient.patient.authorizationStartDate" ng-change="addPatient.authorizationDateChanged()">
                                 <div class="input-group-addon">
                                     <a href="#">
                                         <i class="linecons-calendar">

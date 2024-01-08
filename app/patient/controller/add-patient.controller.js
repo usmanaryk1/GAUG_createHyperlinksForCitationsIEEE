@@ -151,8 +151,7 @@
                     reqParam = 'save';
                 }
                 $rootScope.maskLoading();
-                console.log(patientToSave);
-                PatientDAO.update({action: reqParam, data: patientToSave})
+                PatientDAO.update({action: reqParam, data: patientToSave, changeSchedule: ctrl.changeSchedule})
                         .then(function (res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
@@ -170,7 +169,6 @@
                                     ctrl.patientCareTypeMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id] = res.patientCareTypeCollection[i];
                                 }
                             }
-//                            delete ctrl.patient.patientCareTypeCollection;
                             toastr.success("Patient saved.");
                         })
                         .catch(function () {
@@ -180,7 +178,6 @@
                         }).then(function () {
                     $rootScope.unmaskLoading();
                 });
-
             }
         }
 
@@ -190,6 +187,8 @@
                 $rootScope.maskLoading();
                 PatientDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.patient = res;
+                    ctrl.oldDate = ctrl.patient.authorizationEndDate;
+                    ctrl.lastDate = ctrl.patient.authorizationEndDate;
                     if (res.languagesSpoken != null) {
                         var languages = res.languagesSpoken;
                         angular.forEach(ctrl.languagesKeyValue, function (obj) {
@@ -211,7 +210,6 @@
                         }
                         ctrl.careTypes = careTypesSelected;
 //                        delete ctrl.patient.patientCareTypeCollection;
-                        console.log(JSON.stringify(ctrl.patient))
                     }
                     ctrl.retrivalRunning = false;
                 }).catch(function (data, status) {
@@ -719,6 +717,66 @@
             return true;
         };
 
+        ctrl.authorizationDateChanged = function () {
+            if (ctrl.checkSchedule && ctrl.patient.authorizationEndDate !== ctrl.oldDate) {
+                var a = moment(new Date(ctrl.patient.authorizationEndDate));
+                var b = moment(new Date(ctrl.oldDate));
+                var diff = b.diff(a, 'days');
+                var extend = true;
+                if (diff > 0) {
+                    extend = false;
+                }
+                ctrl.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend);
+            } else if (ctrl.checkSchedule && ctrl.patient.authorizationEndDate === ctrl.oldDate) {
+                delete ctrl.changeSchedule;
+            }
+        };
+
+        ctrl.openModalExisting = function (modal_id, modal_size, modal_backdrop, selection, extend)
+        {
+            //use the same pop up modal based on selection true/false
+            $rootScope.existingModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.existingModel.extend = extend;
+            $rootScope.existingModel.extendSequence = function () {
+                $timeout(function () {
+                    ctrl.changeSchedule = true;
+                    ctrl.lastDate = angular.copy(ctrl.patient.authorizationEndDate);
+                    $rootScope.existingModel.dismiss();
+                });
+            };
+
+            $rootScope.existingModel.updateOnly = function () {
+                $timeout(function () {
+                    delete ctrl.changeSchedule;
+                    ctrl.lastDate = angular.copy(ctrl.patient.authorizationEndDate);
+                    $rootScope.existingModel.dismiss();
+                });
+            };
+
+            $rootScope.existingModel.cancel = function () {
+                $timeout(function () {
+                    delete ctrl.changeSchedule;
+                    ctrl.patient.authorizationEndDate = ctrl.lastDate;
+                    $rootScope.existingModel.close();
+                });
+            };
+
+        };
+
+        ctrl.checkSchedule = false;
+        if ($state.params.id != '') {
+            PatientDAO.checkSchedule({patientId: $state.params.id})
+                    .then(function (res) {
+                        if (res.data != '') {
+                            ctrl.checkSchedule = true;
+                        }
+                    });
+        }
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
 })();
