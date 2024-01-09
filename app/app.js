@@ -304,6 +304,16 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     }
                 }
             })
+            .state('application-redirect', {
+                url: '/application-redirect',
+                controller: function ($state, $location) {
+                    var data = $location.search();
+                    setCookie("token", data.refreshToken, 7);
+                    setCookie("un", data.applicationId, 7);
+                    setCookie("cc", data.orgCode, 7);
+                    $state.go('applications-edit.tab1', {'id': data.applicationId});
+                }
+            })
             // Login
             .state('login', {
                 url: '/login',
