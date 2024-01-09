@@ -142,13 +142,19 @@ angular.module('xenon.filter', [])
             };
         })
         .filter('durationtotal', ['$filter', function ($filter) {
-                return function (objList) {
+                return function (objList, name) {
                     var durationSum = 0;
                     angular.forEach(objList, function (obj) {
                         if (!isNaN(obj.roundedPunchOutTime) && !isNaN(obj.roundedPunchInTime) != null) {
-                            var earlierdate = new Date(obj.roundedPunchInTime);
-                            var laterdate = new Date(obj.roundedPunchOutTime);
-                            durationSum += laterdate.getTime() - earlierdate.getTime();
+                            if (!obj[name] && obj.scheduleId) {
+                                var earlierdate = new Date(obj.scheduleId.startTime);
+                                var laterdate = new Date(obj.scheduleId.endTime);
+                                durationSum += laterdate.getTime() - earlierdate.getTime();
+                            } else {
+                                var earlierdate = new Date(obj.roundedPunchInTime);
+                                var laterdate = new Date(obj.roundedPunchOutTime);
+                                durationSum += laterdate.getTime() - earlierdate.getTime();
+                            }
                         }
                     });
 
@@ -209,6 +215,24 @@ angular.module('xenon.filter', [])
                 }
                 return string;
 
+            };
+        })
+        .filter('utrounded', function () {
+            return function (ut) {
+                var split = ut.split(":");
+                split[1] = Number(split[1]);
+                var mod = split[1] % 15;
+                var min;
+                if (mod < 8) {
+                    min = split[1] - mod;
+                } else {
+                    min = split[1] + 15 - mod;
+                }
+                if (min.toString().length === 1) {
+                    min = "0" + min;
+                }
+                return ut;
+//                return split[0] + ":" + min;
             };
         })
         .filter('ampm', function () {

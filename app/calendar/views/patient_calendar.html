@@ -92,7 +92,7 @@
                         jQuery(document).ready(function ($)
                         {
                             setTimeout(function () {
-                                $("#sboxit-2").select2({
+                                $("#coordinatorIds").select2({
                                     //                                                        minimumResultsForSearch: -1,
                                     placeholder: 'Select Coordinator...',
                                     //                                                        minimumInputLength: 1,
@@ -106,7 +106,7 @@
 
                         });
                     </script>
-                    <select class="form-control" name ="sboxit-2" id="sboxit-2" ng-model="patientcalendar.searchParams.coordinatorIds" ng-options='emp.id as (emp.label) for emp in patientcalendar.employeeCoordinateList track by emp.id'>
+                    <select class="form-control" name ="coordinatorIds" id="coordinatorIds" ng-model="patientcalendar.searchParams.coordinatorIds" ng-options='emp.id as (emp.label) for emp in patientcalendar.employeeCoordinateList track by emp.id'>
                         <option value="" selected hidden />
                     </select>
                 </div>

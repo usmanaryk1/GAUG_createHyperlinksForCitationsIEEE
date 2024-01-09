@@ -32,7 +32,7 @@
         };
 
         ctrl.showDatepicker = function (e) {
-            if(e.currentTarget.className == "btn btn-default btn-sm btn-date") {
+            if (e.currentTarget.className == "btn btn-default btn-sm btn-date") {
                 if (ctrl.isOpen) {
                     ctrl.isOpen = false;
                 } else {
@@ -77,6 +77,7 @@
             ctrl.searchParams = {limit: 10, skip: 0};
             ctrl.searchParams.openCaseEndDate = null;
             ctrl.searchParams.openCaseStartDate = null;
+            $('#coordinatorIds').select2('val', null);
             $('#patientIds').select2('val', null);
             $('#positions').select2('val', null);
             $('#languages').select2('val', null);
@@ -549,7 +550,7 @@
                                         $rootScope.unmaskLoading();
                                         toastr.error("Failed to retrieve patient.");
                                     } else if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length === 0) {
-                                        $rootScope.employeePopup.showLoadingImage = false;
+                                        $rootScope.paginationLoading = false;
                                     }
                                 } else {
                                     $rootScope.paginationLoading = false;

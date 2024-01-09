@@ -184,9 +184,9 @@
                                             <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                         </td>
                                         <td>
-                                            <span ng-if='timesheet.ut' ng-click="dAttendance.openUTModal(timesheet, 'utModal')">{{timesheet.ut}}</span>
+                                            <span ng-if='timesheet.ut' style="cursor: pointer;" ng-click="dAttendance.openUTModal(timesheet, 'utModal')">{{timesheet.ut|utrounded}}</span>
                                             <span ng-if='timesheet.unauthorizedTime'> 
-                                                {{timesheet.unauthorizedTime}} <i class="fa fa-check edit_button" ng-click="hide(this);" onclick="hide(this);"></i>
+                                                {{timesheet.unauthorizedTime|utrounded}} <i class="fa fa-check edit_button" style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);"></i>
                                                 <div class="eventstoload" style="display:none;">
                                                     <div>
                                                         <div ng-if="timesheet.unauthorizedDocument">
