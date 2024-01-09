@@ -28,7 +28,7 @@
         }
 
         ctrl.showDatepicker = function (e) {
-            if(e.currentTarget.className == "btn btn-default btn-sm btn-date") {
+            if (e.currentTarget.className == "btn btn-default btn-sm btn-date") {
                 if (ctrl.isOpen) {
                     ctrl.isOpen = false;
                 } else {
@@ -435,7 +435,7 @@
                                             }).catch(function (data) {
                                                 toastr.error(data.data);
                                             }).then(function () {
-                                                if (next === (length - 1) || length == 1) {
+                                                if (next === length || length == 1) {
                                                     $rootScope.paginationLoading = false;
                                                     careTypes = careTypesSelected;
                                                     $rootScope.employeePopup.carePatientMap = carePatientMap;
