@@ -184,9 +184,9 @@
                                             <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                         </td>
                                         <td>
-                                            <span ng-if='timesheet.ut' style="cursor: pointer;" ng-click="dAttendance.openUTModal(timesheet, 'utModal')">{{timesheet.ut|utrounded}}</span>
+                                            <span ng-if='timesheet.ut' style="cursor: pointer;" ng-click="dAttendance.openUTModal(timesheet, 'utModal')">{{timesheet.ut}}</span>
                                             <span ng-if='timesheet.unauthorizedTime'> 
-                                                {{timesheet.unauthorizedTime|utrounded}} <i class="fa fa-check edit_button" style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);"></i>
+                                                {{timesheet.unauthorizedTime}} <i class="fa fa-check edit_button" style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);"></i>
                                                 <div class="eventstoload" style="display:none;">
                                                     <div>
                                                         <div ng-if="timesheet.unauthorizedDocument">
@@ -196,7 +196,7 @@
                                                             <br/>
                                                         </div>
                                                         <b>Scheduled From</b><br/>
-                                                        {{timesheet.scheduleId.startTime|date :timeFormat}} To {{timesheet.scheduleId.endTime|date :timeFormat}}<br/>
+                                                        {{timesheet.scheduleId.roundedStartTime|date :timeFormat}} To {{timesheet.scheduleId.roundedEndTime|date :timeFormat}}<br/>
                                                         <b>Cleared For</b><br/>
                                                         <div ng-if="timesheet.forPayroll">Payroll<br/></div>
                                                         <div ng-if="timesheet.forBilling">Billing<br/></div>
@@ -253,16 +253,16 @@
                                             <span ng-if="timesheet.patient">{{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}</span>
                                         </td>
                                         <th>
-                                            {{timesheet.startTime|ampm}}
+                                            {{timesheet.roundedStartTime|date :timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.endTime|ampm}}
+                                            {{timesheet.roundedEndTime|date :timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.timeSheet.punchInTime|date : timeFormat}}
+                                            {{timesheet.timeSheet.roundedPunchInTime|date : timeFormat}}
                                         </th>
                                         <th>
-                                            <span ng-if='validNumber(timesheet.timeSheet.punchOutTime)'>{{timesheet.timeSheet.punchOutTime|date :timeFormat}}</span>
+                                            <span ng-if='validNumber(timesheet.timeSheet.punchOutTime)'>{{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}</span>
                                             <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.punchOutTime)'>Not Punched</span>
                                         </th>
                                         <th>
@@ -297,8 +297,6 @@
     </div>
 </div>
 
-
-</div>
 <!-- Modal 7 (Ajax Modal)-->
 <script type="text/ng-template" id="modal-3">
     <div class="modal-header">

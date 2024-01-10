@@ -147,8 +147,8 @@ angular.module('xenon.filter', [])
                     angular.forEach(objList, function (obj) {
                         if (!isNaN(obj.roundedPunchOutTime) && !isNaN(obj.roundedPunchInTime) != null) {
                             if (!obj[name] && obj.scheduleId) {
-                                var earlierdate = new Date(obj.scheduleId.startTime);
-                                var laterdate = new Date(obj.scheduleId.endTime);
+                                var earlierdate = new Date(obj.scheduleId.roundedStartTime);
+                                var laterdate = new Date(obj.scheduleId.roundedEndTime);
                                 durationSum += laterdate.getTime() - earlierdate.getTime();
                             } else {
                                 var earlierdate = new Date(obj.roundedPunchInTime);
@@ -215,24 +215,6 @@ angular.module('xenon.filter', [])
                 }
                 return string;
 
-            };
-        })
-        .filter('utrounded', function () {
-            return function (ut) {
-                var split = ut.split(":");
-                split[1] = Number(split[1]);
-                var mod = split[1] % 15;
-                var min;
-                if (mod < 8) {
-                    min = split[1] - mod;
-                } else {
-                    min = split[1] + 15 - mod;
-                }
-                if (min.toString().length === 1) {
-                    min = "0" + min;
-                }
-                return ut;
-//                return split[0] + ":" + min;
             };
         })
         .filter('ampm', function () {

@@ -131,11 +131,11 @@
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                     if (obj.scheduleId) {
-                        obj.scheduleId.startTime = Date.parse(obj.scheduleId.startTime);
-                        obj.scheduleId.endTime = Date.parse(obj.scheduleId.endTime);
+                        obj.scheduleId.roundedStartTime = Date.parse(obj.scheduleId.roundedStartTime);
+                        obj.scheduleId.roundedEndTime = Date.parse(obj.scheduleId.roundedEndTime);
                     }
                     if (obj.scheduleId && !obj.unauthorizedTime) {
-                        obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
+                        obj.ut = $filter('ut')(obj.scheduleId.roundedStartTime, obj.scheduleId.roundedEndTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
                     }
                 });
             }).catch(function () {

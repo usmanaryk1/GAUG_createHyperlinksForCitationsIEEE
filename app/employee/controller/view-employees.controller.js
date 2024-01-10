@@ -73,7 +73,6 @@
                     finish: function () {
                     }
                 }); // showLoadingBar
-                console.log(res);
                 ctrl.employeeList = res;
                 if (res.length === 0) {
 //                    $("#paginationButtons").remove();

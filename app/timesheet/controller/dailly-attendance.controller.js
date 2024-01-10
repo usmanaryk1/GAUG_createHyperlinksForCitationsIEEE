@@ -114,11 +114,11 @@
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
                     if (obj.scheduleId) {
-                        obj.scheduleId.startTime = Date.parse(obj.scheduleId.startTime);
-                        obj.scheduleId.endTime = Date.parse(obj.scheduleId.endTime);
+                        obj.scheduleId.roundedStartTime = Date.parse(obj.scheduleId.roundedStartTime);
+                        obj.scheduleId.roundedEndTime = Date.parse(obj.scheduleId.roundedEndTime);
                     }
                     if (obj.scheduleId && !obj.unauthorizedTime) {
-                        obj.ut = $filter('ut')(obj.scheduleId.startTime, obj.scheduleId.endTime, obj.punchInTime, obj.punchOutTime);
+                        obj.ut = $filter('ut')(obj.scheduleId.roundedStartTime, obj.scheduleId.roundedEndTime, obj.roundedPunchInTime, obj.roundedPunchOutTime);
                     }
                 });
                 ctrl.dataRetrieved = true;
@@ -320,48 +320,45 @@
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     delete obj.color;
                     if (obj.timeSheet) {
-                        var s1 = $filter('ampm')(obj.startTime);
-                        var s11 = new Date(obj.startDate + " " + s1);
-                        var temp = $filter('duration')(s11, obj.timeSheet.punchInTime);
+                        var temp = $filter('duration')(obj.roundedStartTime, obj.timeSheet.roundedPunchInTime);
                         obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
                         obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
+                        obj.timeSheet.roundedPunchInTime = Date.parse(obj.timeSheet.roundedPunchInTime);
+                        obj.timeSheet.roundedPunchOutTime = Date.parse(obj.timeSheet.roundedPunchOutTime);
                         if (temp) {
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#ea9999";
+                                obj.color = "#ea9999"; // red color
                             } else if (h > 0 || (h === 0 && m > 8)) {
-                                obj.color = "#FEFEB8";
+                                obj.color = "#FEFEB8"; // yellow color
                             }
                         }
                         if (!obj.timeSheet.punchOutTime) {
-                            var s2 = $filter('ampm')(obj.endTime);
-                            var s22 = new Date(obj.endDate + " " + s2);
-                            var s222 = new Date();
-                            var temp1 = $filter('duration')(s22, s222);
+                            var temp1 = $filter('duration')(obj.roundedEndTime, new Date());
                             if (temp1) {
                                 var t = temp1.split(":");
                                 var h = Number(t[0]);
                                 var m = Number(t[1]);
                                 if (h > 0 || (h === 0 && m > 30)) {
-                                    obj.color = "#b4a7d6";
+                                    obj.color = "#b4a7d6"; // purple color
                                 }
                             }
                         }
                     } else {
-                        var s1 = $filter('ampm')(obj.startTime);
-                        var s11 = new Date(obj.startDate + " " + s1);
-                        var temp = $filter('duration')(s11, new Date());
+                        var temp = $filter('duration')(obj.roundedStartTime, new Date());
                         if (temp) {
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#ea9999";
+                                obj.color = "#ea9999"; // red color
                             }
                         }
                     }
+                    obj.roundedStartTime = Date.parse(obj.roundedStartTime);
+                    obj.roundedEndTime = Date.parse(obj.roundedEndTime);
                 });
                 ctrl.totalRecords = Number(res.headers.event_count);
                 localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
