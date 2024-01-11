@@ -267,7 +267,7 @@
             $rootScope.utModal.documentFileAdded = function (file, flow) { //It will allow all types of attahcments'
                 $rootScope.utModal.formDirty = true;
                 $rootScope.utModal.documentUploadFile.headers.fileExt = file.getExtension();
-                if ($rootScope.validImageFileTypes.indexOf(file.getExtension()) < 0) {
+                if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                     $rootScope.utModal.docFileObj.errorMsg = "Please upload a valid file.";
                     return false;
                 } else {

@@ -188,7 +188,7 @@
                                                     <div class="eventstoload" style="display:none;">
                                                         <div>
                                                             <div ng-if="timesheet.unauthorizedDocument">
-                                                                <a style="color: blue;text-decoration: underline" ng-href="{{empTimesheet.baseUrl}}file/download/{{empTimesheet.companyCode}}/l/{{timesheet.unauthorizedDocument}}">
+                                                                <a style="color: blue;text-decoration: underline" ng-href="{{empTimesheet.baseUrl}}file/download/{{empTimesheet.companyCode}}/u/{{timesheet.unauthorizedDocument}}">
                                                                     document{{timesheet.unauthorizedDocument|extension}}
                                                                 </a>
                                                                 <br/>
@@ -508,7 +508,7 @@
     </div>
     <div class="col-sm-9">
     <label class="control-label">
-    <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{dAttendance.baseUrl}}file/download/{{dAttendance.companyCode}}/l/{{utModal.obj.unauthorizedDocument}}">
+    <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{dAttendance.baseUrl}}file/download/{{dAttendance.companyCode}}/u/{{utModal.obj.unauthorizedDocument}}">
     document{{utModal.obj.unauthorizedDocument|extension}}
     </a>
     <a href=""><i class="fa fa-close" ng-show="utModal.obj.unauthorizedDocument != null" ng-click="utModal.clearDocument()"></i></a>
