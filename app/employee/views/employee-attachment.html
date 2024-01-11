@@ -279,7 +279,8 @@
             </div>
         </div>
 
-        <div ng-if="employeeAttachment.attachment.attachmentType === 'Physical'">
+        <div ng-if="employeeAttachment.attachment.attachmentType === 'Physical' 
+             && employeeAttachment.attachment.extraFields.IsHabituation === 'Yes'">
             <div class="form-group-separator"></div>
             <div class="form-group">
                 <div class="col-sm-push-4 col-sm-8 add-padding-modal">
