@@ -136,23 +136,14 @@
         ctrl.retrievePatients();
         ctrl.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            PatientDAO.get({id: patient.id}).then(function (patient) {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id}).then(function (patients) {
+                var patient = patients[0];
                 $rootScope.selectPatientModel = $modal.open({
                     templateUrl: modal_id,
                     size: modal_size,
                     backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                     keyboard: false
                 });
-                if (!$rootScope.selectPatientModel.careTypeIdMap) {
-                    $rootScope.selectPatientModel.careTypeIdMap = {};
-                    CareTypeDAO.retrieveAll().then(function (res) {
-                        angular.forEach(res, function (careType) {
-                            $rootScope.selectPatientModel.careTypeIdMap[careType.id] = careType;
-                        });
-                    }).catch(function () {
-                        toastr.error("Failed to retrieve care types.");
-                    });
-                }
                 $rootScope.selectPatientModel.patient = angular.copy(patient);
                 $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
                 $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
