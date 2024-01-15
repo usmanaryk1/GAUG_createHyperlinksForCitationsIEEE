@@ -10,6 +10,7 @@
             ctrl.showStatus = false;
         } else if (action && action === 'rejected') {
             ctrl.status = 'rejected';
+            ctrl.showStatus = false;
         } else {
             ctrl.status = 'nmi';
         }

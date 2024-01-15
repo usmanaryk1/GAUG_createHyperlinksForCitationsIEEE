@@ -11,7 +11,8 @@
     <div class="modal-header">
         <button type="button" class="close" ng-click="reviewApplication.close();" aria-hidden="true">&times;</button>
         <h4 class="modal-title" ng-show="reviewApplication.showStatus">Review Application</h4>
-        <h4 class="modal-title" ng-show="!reviewApplication.showStatus">Mark Ready for Orientation</h4>
+        <h4 class="modal-title" ng-show="!reviewApplication.showStatus && reviewApplication.status==='rfo'">Mark Ready for Orientation</h4>
+        <h4 class="modal-title" ng-show="!reviewApplication.showStatus && reviewApplication.status==='rejected'">Reject Application</h4>
     </div>
 
     <div class="modal-body">
