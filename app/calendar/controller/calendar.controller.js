@@ -106,8 +106,8 @@
                 if (!ctrl.viewEmployee) {
                     ctrl.viewEmployee = res[0];
                 }
+                var obj;
                 if ($stateParams.id != '') {
-                    var obj;
                     angular.forEach(res, function (item) {
                         if (item.id == $stateParams.id) {
                             obj = angular.copy(item);
@@ -131,6 +131,9 @@
                 var ids = (_.map(ctrl.employee_list, 'id')).toString();
                 if (ctrl.calendarView == 'month') {
                     ids = ctrl.employeeId;
+                    if ($stateParams.id != '' && !obj) {
+                        ids = $stateParams.id;
+                    }
                 }
                 ctrl.getAllEvents(ids);
                 ctrl.totalRecords = $rootScope.totalRecords;
