@@ -666,7 +666,7 @@
     </div>
     <div class="col-sm-9">
     <label class="control-label">
-    <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{dAttendance.baseUrl}}file/download/{{dAttendance.companyCode}}/u/{{utModal.obj.unauthorizedDocument}}">
+    <a ng-show="utModal.obj.unauthorizedDocument != null" style="color: blue;text-decoration: underline" ng-href="{{utModal.baseUrl}}file/download/{{utModal.companyCode}}/u/{{utModal.obj.unauthorizedDocument}}">
     document{{utModal.obj.unauthorizedDocument|extension}}
     </a>
     <a href=""><i class="fa fa-close" ng-show="utModal.obj.unauthorizedDocument != null" ng-click="utModal.clearDocument()"></i></a>    </label>

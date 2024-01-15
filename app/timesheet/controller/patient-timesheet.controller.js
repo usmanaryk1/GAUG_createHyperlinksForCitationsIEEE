@@ -298,6 +298,8 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            $rootScope.utModal.companyCode = ontimetest.company_code;
+            $rootScope.utModal.baseUrl = ontimetest.weburl;
             $rootScope.utModal.docFileObj = {};
             $rootScope.utModal.cancel = function () {
                 $rootScope.utModal.close();
