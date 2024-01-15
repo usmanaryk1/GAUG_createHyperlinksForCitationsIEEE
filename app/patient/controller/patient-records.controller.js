@@ -2,7 +2,7 @@
 
 (function () {
     function PatientRecordsCtrl($state, PatientDAO, PatientRecordDAO, Page, $rootScope, $timeout, $modal) {
-        
+        console.log("$state", $state);
         var ctrl = this;
         ctrl.patientList = [];
         ctrl.search = {};
