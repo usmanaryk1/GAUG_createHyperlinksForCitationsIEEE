@@ -6,7 +6,7 @@
         ctrl.resumePending = false;
         ctrl.professionalReferencesPending = false;
         ctrl.canSubmitApplication = false;
-        if (application.resume === null || application === '') {
+        if ((application.resume === null || application === '') && application.resumeMandatory!==false) {
             ctrl.resumePending = true;
         }
         if (professionalReferences.length < 2) {
