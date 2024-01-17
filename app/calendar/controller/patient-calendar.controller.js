@@ -192,7 +192,7 @@
                     var start = new Date(content.startDate);
                     var end = new Date(content.endDate);
                     var i = 0;
-                    while (start < end)
+                    while (start <= end)
                     {
                         var end1;
                         var momentObj = moment(start);
