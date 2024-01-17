@@ -14,7 +14,10 @@
                 });
             }
         });
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dateInserted', order: 'desc', name: ''};
+        ApplicationDAO.retrieveAllPostTitles({}).then(function (res) {
+            ctrl.postTitles = res;
+        });
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dateInserted', order: 'desc', name: '', postTitle: ''};
         ctrl.applicationList = [];
 
         if ($stateParams.status !== 'in-progress' && $stateParams.status !== 'need-more-info'

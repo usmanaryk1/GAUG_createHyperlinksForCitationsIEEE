@@ -9,6 +9,13 @@
                     action: 'view'
                 }
             },
+            retrieveAllPostTitles: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'post-titles'
+                }
+            },
             delete: {
                 method: 'DELETE'
             },
@@ -44,6 +51,9 @@
         return {
             retrieveAll: function (filter) {
                 return api.retrieveAll(filter).$promise;
+            },
+            retrieveAllPostTitles: function (filter) {
+                return api.retrieveAllPostTitles(filter).$promise;
             },
             delete: function (data) {
                 return api.delete(data).$promise;
