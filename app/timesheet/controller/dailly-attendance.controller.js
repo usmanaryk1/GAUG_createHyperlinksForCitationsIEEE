@@ -315,7 +315,7 @@
             params.toDate = ctrl.searchParams.endDate;
             delete params.startDate;
             delete params.endDate;
-            delete params.staffingCordinatorId;
+//            delete params.staffingCordinatorId;
             params.dailyAttendance = true;
             EventTypeDAO.retrieveSchedules(params).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
@@ -388,6 +388,7 @@
         };
         ctrl.commonFilter = function () {
             if (ctrl.isSchedule) {
+                ctrl.searchParams.order = 'asc';
                 ctrl.filterSchedule();
             } else {
                 ctrl.filterTimesheet();
