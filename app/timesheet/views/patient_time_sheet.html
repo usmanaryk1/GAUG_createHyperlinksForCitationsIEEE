@@ -164,10 +164,10 @@
                                                     <span ng-if='timesheet.unauthorizedTime && timesheet.forBilling && timesheet.scheduleId'>
                                                         {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
                                                     </span>
-                                                    <span ng-if='!timesheet.forBilling && timesheet.scheduleId'>
+                                                    <span ng-if='(timesheet.unauthorizedTime && !timesheet.forBilling && timesheet.scheduleId) || timesheet.ut'>
                                                         {{timesheet.scheduleId.roundedStartTime|duration:timesheet.scheduleId.roundedEndTime}}
                                                     </span>
-                                                    <span ng-if='!timesheet.scheduleId'>
+                                                    <span ng-if='!timesheet.scheduleId && !timesheet.ut'>
                                                         {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
                                                     </span>
                                                 </span>
