@@ -184,7 +184,42 @@
                 }
             });
         };
-
+        ctrl.passwordModalLogic = function (action, data, modal_id, modal_size, modal_backdrop) {
+            $rootScope.passwordPopup = $modal.open({
+                templateUrl: 'password-modal',
+                size: 'md',
+                backdrop: 'static',
+                keyboard: false
+            });
+            $rootScope.passwordPopup.save = function () {
+                if ($('#popuppassword')[0].checkValidity()) {
+                    if ($rootScope.passwordPopup.password != ontimetest.pastEventAuthorizationPassword) {
+                        toastr.error('Authorization Failed');
+                        $rootScope.passwordPopup.closePopup();
+                    } else {
+                        if (action === 'delete') {
+                            $rootScope.employeePopup.deleteSchedule();
+                        } else if (action === 'edit') {
+                            ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data, true);
+                        } else if (action === 'add') {
+                            $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
+                        }
+                        $rootScope.passwordPopup.closePopup();
+                    }
+                }
+            };
+            $rootScope.passwordPopup.closePopup = function () {
+                $rootScope.passwordPopup.close();
+            };
+        };
+        $rootScope.openModalCalendar1 = function (data, modal_id, modal_size, modal_backdrop)
+        {
+            if (data != null && data.eventType == null && data.askPassword) {
+                ctrl.passwordModalLogic('add', data, modal_id, modal_size, modal_backdrop);
+            } else {
+                $rootScope.openModalCalendar(data, modal_id, modal_size, modal_backdrop);
+            }
+        };
         $rootScope.openModalCalendar = function (data, modal_id, modal_size, modal_backdrop)
         {
             var data;
@@ -255,11 +290,9 @@
                         var a = moment(new Date(data.startDate));
                         var diff = moment().diff(a, 'days');
                         if (diff > 0) { // past date
-                            data.isEdited = false;
+                            data.isEdited1 = true;
                         }
-                        if (!angular.isDefined(data.isEdited)) {
-                            data.isEdited = true;
-                        }
+                        data.isEdited = true;
                         $rootScope.employeePopup.data = data;
                         if (data.eventType != 'U')
                             $rootScope.employeePopup.data.applyTo = "SINGLE";
@@ -288,7 +321,7 @@
                     $rootScope.paginationLoading = false;
                     $rootScope.employeePopup.close();
                 };
-                $rootScope.employeePopup.save = function () {
+                $rootScope.employeePopup.save1 = function () {
                     $timeout(function () {
                         var name = '#' + "popupemployee" + $rootScope.employeePopup.data.eventType.toLowerCase();
                         if ($(name)[0].checkValidity()) {
@@ -304,14 +337,23 @@
                                     if (end < start) {
                                         toastr.error("Both dates must fall in same week.");
                                     } else {
-                                        ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
+                                        $rootScope.employeePopup.response = true;
                                     }
                                 } else {
-                                    ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
+                                    $rootScope.employeePopup.response = true;
                                 }
                             }
                         } else {
                             console.log("invalid form");
+                        }
+                    });
+                };
+                $rootScope.employeePopup.save = function () {
+                    delete $rootScope.employeePopup.response;
+                    $rootScope.employeePopup.save1();
+                    $timeout(function () {
+                        if ($rootScope.employeePopup.response) {
+                            ctrl.saveEmployeePopupChanges($rootScope.employeePopup.data);
                         }
                     });
                 };
@@ -373,6 +415,32 @@
                             });
                             cbr_replace();
                         }, 200);
+                    }
+                };
+                $rootScope.employeePopup.openPasswordModal = function (action) {
+                    $rootScope.employeePopup.action = action;
+                    if (!$rootScope.employeePopup.data.isEdited1) {
+                        if (action == 'delete') {
+                            $rootScope.employeePopup.deleteSchedule();
+                        } else {
+                            $rootScope.employeePopup.save();
+                        }
+                    } else {
+                        function open() {
+                            $rootScope.employeePopup.close();
+                            ctrl.passwordModalLogic(action);
+                        }
+                        if (action == 'delete') {
+                            open();
+                        } else {
+                            delete $rootScope.employeePopup.response;
+                            $rootScope.employeePopup.save1();
+                            $timeout(function () {
+                                if ($rootScope.employeePopup.response) {
+                                    open();
+                                }
+                            });
+                        }
                     }
                 };
                 $rootScope.employeePopup.deleteSchedule = function () {
@@ -483,11 +551,9 @@
                                         var a = moment(new Date(data.startDate));
                                         var diff = moment().diff(a, 'days');
                                         if (diff > 0) { // past date
-                                            data.isEdited = false;
+                                            data.isEdited1 = true;
                                         }
-                                        if (!angular.isDefined(data.isEdited)) {
-                                            data.isEdited = true;
-                                        }
+                                        data.isEdited = true;
                                         $rootScope.employeePopup.data = angular.copy(data);
                                     }).catch(function (data) {
                                         toastr.error("Failed to retrieve data");
@@ -518,7 +584,7 @@
             open();
         };
 
-        ctrl.saveEmployeePopupChanges = function (data) {
+        ctrl.saveEmployeePopupChanges = function (data, isPast) {
             $rootScope.maskLoading();
             var data1 = angular.copy(data);
             if (ctrl.calendarView == 'month') {
@@ -530,7 +596,11 @@
             if (data1.eventType != 'S') {
                 delete data1.isEdited;
             }
-            var obj = {action: data1.eventType, data: data1};
+            delete data1.isEdited1;
+            var obj = {action: data1.eventType, data: data1, isPast: false};
+            if (isPast) {
+                obj.isPast = true;
+            }
             console.log("employee data :: " + JSON.stringify(data1));
             if ($rootScope.employeePopup.isNew) {
                 EventTypeDAO.saveEventType(obj).then(function (res) {

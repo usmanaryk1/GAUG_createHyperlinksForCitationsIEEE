@@ -18,6 +18,8 @@ angular
                                 var diff = moment().diff(day1, 'days');
                                 if (diff <= 0) {
                                     eventCell = {data: object, startDate: day};
+                                } else {
+                                    eventCell = {data: object, startDate: day, askPassword: true};
                                 }
                             } else {
                                 $scope.eventClickCalled = false;
@@ -26,7 +28,7 @@ angular
                             $scope.eventClickCalled = true;
                         }
                         if (eventCell) {
-                            $rootScope.openModalCalendar(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
+                            $rootScope.openModalCalendar1(angular.copy(eventCell), 'calendar-modal', 'lg', 'static');
                         }
                     };
 
