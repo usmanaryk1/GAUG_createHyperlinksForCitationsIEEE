@@ -5,7 +5,6 @@
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-        ctrl.isSchedule = false;
         //method is called when page is changed
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -42,12 +41,13 @@
         };
 
         ctrl.resetFilters = function () {
-            ctrl.searchParams = {limit: 10, pageNo: 1};
+            ctrl.searchParams = {limit: 10, pageNo: 1, isSchedule: false};
             ctrl.searchParams.startDate = null;
             ctrl.searchParams.endDate = null;
             $('#sboxit-2').select2('val', null);
             ctrl.searchParams.staffingCordinatorId = null;
             localStorage.removeItem('dailyAttendanceSearchParams');
+            localStorage.removeItem('dailyAttendanceNoPunch');
             ctrl.attendanceList = [];
             ctrl.criteriaSelected = false;
         };
@@ -91,7 +91,7 @@
                     $timeout(function () {
                         $("#sboxit-2").select2("val", ctrl.searchParams.staffingCordinatorId);
                     }, 300);
-                    ctrl.filterTimesheet();
+                    ctrl.commonFilter();
                 } else {
                     ctrl.resetFilters();
                     $rootScope.unmaskLoading();
@@ -319,6 +319,7 @@
             params.dailyAttendance = true;
             EventTypeDAO.retrieveSchedules(params).then(function (res) {
                 ctrl.attendanceList = JSON.parse(res.data);
+                localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     delete obj.color;
                     if (obj.timeSheet) {
@@ -387,7 +388,7 @@
             ctrl.formSubmitted = true;
         };
         ctrl.commonFilter = function () {
-            if (ctrl.isSchedule) {
+            if (ctrl.searchParams.isSchedule) {
                 ctrl.searchParams.order = 'asc';
                 ctrl.filterSchedule();
             } else {
@@ -395,11 +396,14 @@
             }
         };
         ctrl.commonRetrieve = function () {
-            if (ctrl.isSchedule) {
+            if (ctrl.searchParams.isSchedule) {
                 ctrl.retrieveSchedule();
             } else {
                 ctrl.retrieveTimesheet();
             }
+        };
+        ctrl.navigateToManualPunch = function (timesheet) {
+            localStorage.setItem('dailyAttendanceNoPunch', JSON.stringify(timesheet));
         };
     }
     ;

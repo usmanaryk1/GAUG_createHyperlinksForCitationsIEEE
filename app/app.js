@@ -313,6 +313,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
             }).
+            // manual_punch
+            state('app.manual_punch_schedule', {
+                url: '/manual_punch/schedule/:id?from&to&lastPage',
+                templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
+                controller: 'ManualPunchCtrl as manualPunch',
+            }).
             // patient_time_sheet
             state('app.patient_time_sheet', {
                 url: '/patient_time_sheet?id&from&to&lastPage',
