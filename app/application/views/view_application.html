@@ -130,6 +130,7 @@
                                                                tooltip="Review Application"><span class="ed_b"></span></a>
                                                             <a ng-if="viewApplication.viewType == 'need-more-info'" class="btn icon-left fa fa-check edit_button" href="" ng-click="viewApplication.openReviewApplicationModal(application, 'rfo')"
                                                                tooltip="Ready For Orientation"><span class="ed_b"></span></a>
+                                                            <a class="btn icon-left fa fa-download download_bt"  ng-href="{{viewApplication.baseUrl}}applications/{{application.applicationId}}/download" tooltip="Export as PDF"><em class="ed_b"></em></a>
                                                             <!--<a class="btn icon-left fa fa-cog edit_button" href="" ng-click="viewApplication.openSettingsModal(application.id)" tooltip="Application Benefit Adjustment" ng-if="hasAccess('EMPLOYEE_BENEFIT_ADJUSTMENT') && application.benefitPackageId"><span class="ed_b"></span></a>-->
                                                         </div>
                                                     </td>

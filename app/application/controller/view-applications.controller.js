@@ -3,6 +3,7 @@
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.datatableObj = {};
+        ctrl.baseUrl = ontime_data.weburl;
         Page.setTitle("View Applications");
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
