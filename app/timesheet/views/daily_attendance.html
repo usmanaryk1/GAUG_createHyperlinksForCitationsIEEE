@@ -230,8 +230,8 @@
                                 <thead>
                                     <tr>
                                         <th width="13%" nowrap ng-class="dAttendance.applySortingClass('date')" ng-click="dAttendance.applySorting('date')" >Schedule Date</th>
-                                        <th width="16%" nowrap >Employee Name</th>
-                                        <th width="15%" nowrap >Patient Name</th>
+                                        <th width="16%" nowrap ng-class="dAttendance.applySortingClass('employee')" ng-click="dAttendance.applySorting('employee')">Employee Name</th>
+                                        <th width="15%" nowrap ng-class="dAttendance.applySortingClass('patient')" ng-click="dAttendance.applySorting('patient')">Patient Name</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('startTime')" ng-click="dAttendance.applySorting('startTime')">Start Time</th>
                                         <th width="10%" nowrap ng-class="dAttendance.applySortingClass('endTime')" ng-click="dAttendance.applySorting('endTime')" >End Time</th>
                                         <th width="10%" nowrap >Time In</th>
