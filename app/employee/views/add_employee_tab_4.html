@@ -60,6 +60,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <div class="pull-right">
+                                <a ng-if="addEmployee.employee.applicationId !=null" ng-href="{{addEmployee.baseUrl}}applications/{{addEmployee.employee.applicationId}}/download" class="btn btn-info btn-create">Download Ontime Application</a>
                                 <button type="button" class="btn btn-info btn-create" ng-click="addEmployee.openAttachmentModal('aed', 'Create')">Add Application Attachment</button>
                                 <button type="button" class="btn btn-info btn-create" ng-click="addEmployee.openAttachmentModal('med', 'Create')">Add Medical Attachment</button>
                             </div>
