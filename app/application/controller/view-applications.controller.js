@@ -7,17 +7,11 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         $rootScope.positions = {};
+        ctrl.positionList = [];
         PositionDAO.retrieveAll({}).then(function (res) {
-            if (res && res.length > 0) {
-                angular.forEach(res, function (position) {
-                    $rootScope.positions[position.id] = position.position;
-                });
-            }
+            ctrl.positionList = res;
         });
-        ApplicationDAO.retrieveAllPostTitles({}).then(function (res) {
-            ctrl.postTitles = res;
-        });
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dateInserted', order: 'desc', name: '', postTitle: ''};
+        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'dateInserted', order: 'desc', name: '', positionId: null};
         ctrl.applicationList = [];
 
         if ($stateParams.status !== 'in-progress' && $stateParams.status !== 'need-more-info'

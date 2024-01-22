@@ -52,22 +52,9 @@
                                             <input type="search" class="form-control" ng-model="viewApplication.searchParams.name" placeholder="Search by [Name,SSN,City,Language,Phone number]" ng-change="viewApplication.applySearch()">
                                         </div> 
                                         <div class="col-md-4 pull-right">
-                                                <script type="text/javascript">
-                                                    jQuery(document).ready(function ($)
-                                                    {
-                                                        setTimeout(function () {
-                                                            $("#postTitle").select2({
-                                                                placeholder: 'Select Post Title...',
-                                                            }).on('select2-open', function ()
-                                                            {
-                                                                // Adding Custom Scrollbar
-                                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                                            });
-                                                        }, 200);
-                                                    });</script>
-                                                <select class="form-control" name ="postTitle" id="postTitle" ng-model="viewApplication.searchParams.postTitle"
-                                                        ng-options='o as o for o in viewApplication.postTitles' ng-change="viewApplication.applySearch()">
-                                                    <option value="" selected >All Posts</option>
+                                                <select class="form-control" name ="postTitle" id="positionList" ng-model="viewApplication.searchParams.positionId"
+                                                        ng-options='o.id as o.position for o in viewApplication.positionList' ng-change="viewApplication.applySearch()">
+                                                    <option value="" selected >All Positions</option>
                                                     <!--<option value="Nursing Director" >Nursing Director</option>-->
                                                 </select>
                                             </div>
