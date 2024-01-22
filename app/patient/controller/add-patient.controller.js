@@ -6,7 +6,7 @@
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
-        ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
+        ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.nextTab;
         ctrl.fileObj = {};
 //        ctrl.formDirty = false;

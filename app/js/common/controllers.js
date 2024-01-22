@@ -33,7 +33,7 @@ angular.module('xenon.controllers', []).
             $rootScope.validNumber = function (number) {
                 return !isNaN(number);
             };
-            $rootScope.languages = {"En": "English", "Cr": "Creole", "Sp": "Spanish", "Ru": "Russian", "Fr": "French", "Hi": "Hindi", "Be": "Bengali", "Ma": "Mandarin", "Ko": "Korean", "Ar": "Arabic", "Fa": "Farsi", "Ur": "Urdu"};
+            $rootScope.languages = {"English": "English", "Creole": "Creole", "Spanish": "Spanish", "Russian": "Russian", "French": "French", "Hindi": "Hindi", "Bengali": "Bengali", "Mandarin": "Mandarin", "Korean": "Korean", "Arabic": "Arabic", "Farsi": "Farsi", "Urdu": "Urdu"};
             $rootScope.amazonPublicUrl = ontimetest.amazonPublicUrl;
             $rootScope.amazonSignatureUrl = ontimetest.amazonSignatureUrl;
             $rootScope.todayDate = new Date();
