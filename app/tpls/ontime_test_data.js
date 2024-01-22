@@ -297,7 +297,7 @@ ontimedata = {
         "Sick", "Personal Day", "Vacation"
     ],
     patientReasons: [
-        "Hospital", "Vacation", "As per Pt."
+        "Hospital", "Vacation", "As per Pt.", "No Service"
     ],
     eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
     recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"}
