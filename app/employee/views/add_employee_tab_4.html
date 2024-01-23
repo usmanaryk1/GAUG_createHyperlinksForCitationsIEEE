@@ -60,7 +60,6 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <div class="pull-right">
-                                <a ng-if="addEmployee.employee.applicationId !=null" ng-href="{{addEmployee.baseUrl}}applications/{{addEmployee.employee.applicationId}}/download" class="btn btn-info btn-create">Download Ontime Application</a>
                                 <button type="button" class="btn btn-info btn-create" ng-click="addEmployee.openAttachmentModal('aed', 'Create')">Add Application Attachment</button>
                                 <button type="button" class="btn btn-info btn-create" ng-click="addEmployee.openAttachmentModal('med', 'Create')">Add Medical Attachment</button>
                             </div>
@@ -91,16 +90,19 @@
                                         <tbody>
                                             <tr  pagination-id="applicationPagination" dir-paginate="attachment in addEmployee.applicationEmployeeAttachments | itemsPerPage: addEmployee.attachmentCount.AED">
                                                 <td align="center"> {{attachment.attachmentType}}</td>
-<!--                                                <td align="center"> 
-                                                    {{attachment.DateCompleted}}
-                                                </td>-->
+                                                <!--                                                <td align="center"> 
+                                                                                                    {{attachment.DateCompleted}}
+                                                                                                </td>-->
                                                 <td align="center"> {{attachment.expiryDate}} </td>
                                                 <td align="center">                                                    
-                                                    <a class="btn icon-left fa fa-download download_bt"                                                    
+                                                    <a class="btn icon-left fa fa-download download_bt" ng-if="attachment.attachmentType !== 'Ontime Application Form'"                                                    
                                                        ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{addEmployee.getAttachmentName(attachment)}}" 
-                                                       tooltip="{{addEmployee.getAttachmentName(attachment)}}"><em class="ed_b"></em></a>                                                                                                        
-                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" 
-                                                       ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><span class="ed_b"></span></a>                                                    
+                                                       tooltip="{{addEmployee.getAttachmentName(attachment)}}"><em class="ed_b"></em></a>   
+                                                    <a class="btn icon-left fa fa-download download_bt" ng-if="attachment.attachmentType === 'Ontime Application Form'"                                                    
+                                                       ng-href="{{addEmployee.baseUrl}}applications/{{addEmployee.employee.applicationId}}/download?userFileName={{attachment.attachmentType}}" 
+                                                       tooltip="{{attachment.attachmentType}}"><em class="ed_b"></em></a>   
+                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" ng-if="attachment.attachmentType !== 'Ontime Application Form'"
+                                                       ng-click="addEmployee.openAttachmentModal(attachment, 'Edit')"><span class="ed_b"></span></a>                                                  
                                                     <a class="btn icon-left fa fa-trash-o delete_button"
                                                        ng-if="attachment.modified !== true"
                                                        ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
@@ -148,9 +150,9 @@
                                     <tbody>
                                         <tr pagination-id="medicalPagination" dir-paginate="attachment in addEmployee.medicalEmployeeAttachments | itemsPerPage: addEmployee.attachmentCount.MED">
                                             <td align="center"> {{attachment.attachmentType}}</td>
-<!--                                            <td align="center"> 
-                                                {{attachment.DateCompleted}}
-                                            </td>-->
+                                            <!--                                            <td align="center"> 
+                                                                                            {{attachment.DateCompleted}}
+                                                                                        </td>-->
                                             <td align="center"> {{attachment.expiryDate}} </td>
                                             <td align="center">
                                                 <a class="btn icon-left fa fa-download download_bt"                                                    
@@ -161,7 +163,7 @@
                                                 <a class="btn icon-left fa fa-trash-o delete_button"
                                                    ng-if="attachment.modified !== true"
                                                    ng-click="addEmployee.deleteAttachment(attachment)" tooltip="Delete"><span class="ed_b"></span></a>
-                                               <a class="btn icon-left fa fa-external-link download_bt"  
+                                                <a class="btn icon-left fa fa-external-link download_bt"  
                                                    ng-if="attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1).toLowerCase() === 'pdf'"
                                                    ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{addEmployee.getAttachmentName(attachment)}}&viewDownload=true" 
                                                    target="_blank" tooltip="{{addEmployee.getAttachmentName(attachment)}}">

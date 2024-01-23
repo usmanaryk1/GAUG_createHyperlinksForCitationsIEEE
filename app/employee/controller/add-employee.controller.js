@@ -438,6 +438,7 @@
         };
 
         var getFilteredAttachments = function () {
+            var aedResults = {'data': []}
             if (ctrl.actualAttachments) {
                 var employeeEligibilities = [];
                 _.each(_.filter(ctrl.actualAttachments, function (attachment) {
@@ -591,14 +592,31 @@
                 }, ['desc']);
                 ctrl.attachmentCount = {};
 
-                var aedResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'aed');
+                aedResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'aed');
                 var medResults = getAttachmentsByType(ctrl.employee.employeeAttachments, 'med');
 
-                ctrl.attachmentCount.AED = aedResults.count;
-                ctrl.applicationEmployeeAttachments = angular.copy(aedResults.data);
                 ctrl.attachmentCount.MED = medResults.count;
                 ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
             }
+
+            if (ctrl.employee.applicationId !== null) {
+                aedResults['data'].push({
+                    modified: true,
+                    attachmentType: 'Ontime Application Form',
+                    dateInserted: ctrl.employee.dateInserted,
+                    dateUpdated: ctrl.employee.dateUpdated,
+                    employeeId: ctrl.employee.id,
+                    name: "Ontime Application Form",
+                    type: "aed"
+                });
+                ctrl.attachmentCount.AED = aedResults.count + 1;
+            } else {
+                ctrl.attachmentCount.AED = aedResults.count;
+            }
+
+            ctrl.applicationEmployeeAttachments = angular.copy(aedResults.data);
+
+
         };
 
         ctrl.getAttachmentName = function (attachment) {
@@ -764,7 +782,7 @@
         });
 
         ctrl.buildCareTypesList = function () {
-            
+
             var selectedCareTypesAll = [];
             angular.forEach(ctrl.employee.careRatesList.rate1.careTypes, function (obj) {
                 selectedCareTypesAll.push(obj);
@@ -887,11 +905,11 @@
                     CareTypeDAO.retrieveAll({positionId: ctrl.employee.companyPositionId}).then(function (res) {
                         ctrl.careTypeList = res;
                         ctrl.buildCareTypesList();
-                        
-            $timeout(function () {
-                refreshRates();
-                form_data = $('#add_employee_form').serialize();
-            }, 200);
+
+                        $timeout(function () {
+                            refreshRates();
+                            form_data = $('#add_employee_form').serialize();
+                        }, 200);
                     }).catch(function () {
                         toastr.error("Failed to retrieve care types.");
                         form_data = $('#add_employee_form').serialize();
