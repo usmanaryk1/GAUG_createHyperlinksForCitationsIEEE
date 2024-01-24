@@ -43,7 +43,7 @@
                 return api.saveEventType({action: data.action}, data.data).$promise;
             },
             updateEventType: function (data) {
-                return api.updateEventType({action: data.action, subAction: data.subAction}, data.data).$promise;
+                return api.updateEventType({action: data.action, subAction: data.subAction, isPast: data.isPast}, data.data).$promise;
             },
             retrieveBySchedule: function (data) {
                 return api.retrieveBySchedule(data).$promise;
