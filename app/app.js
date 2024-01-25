@@ -311,7 +311,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     setCookie("token", data.refreshToken, 7);
                     setCookie("un", data.applicationId, 7);
                     setCookie("cc", data.orgCode, 7);
-                    $state.go('applications-edit.tab1', {'id': data.applicationId});
+                    $state.go('applications-single-tab', {'id': data.applicationId});
                 }
             })
             // Login
@@ -344,8 +344,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             // application edit
             .state('applications-edit', applicationRootConfig)
             // application retrieve
-            .state('applications-edit.tab1', {
+            .state('applications-single-tab', {
                 url: '/:id/details',
+                templateUrl: appHelper.viewTemplatePath('application', 'add_application_single_tab'),
+                controller: 'AddApplicationSinglePageCtrl as addEmployee',
+                resolve: applicationResolve,
+                data: {}
+            })
+            .state('applications-edit.tab1', {
+                url: '/:id/details-legacy',
                 templateUrl: appHelper.viewTemplatePath('application', 'add_application_tab_1'),
                 data: {
                     tabNo: 1

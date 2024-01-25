@@ -14,7 +14,7 @@
         ctrl.forgotPassword = false;
 
         ctrl.sendUserToApplication = function (applicationId) {
-            $state.go('applications-edit.tab1', {'id': applicationId});
+            $state.go('applications-single-tab', {'id': applicationId});
         }
 
         ctrl.showForgotPassword = function () {

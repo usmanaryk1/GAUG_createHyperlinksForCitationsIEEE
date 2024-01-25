@@ -248,7 +248,7 @@
         };
 
         ctrl.openApplicationViewOnly = function (applicationId) {
-            var url = $state.href('application-viewonly.tab1', {id: applicationId});
+            var url = $state.href('applications-single-tab', {id: applicationId});
             var params = [
                 'height=' + screen.height,
                 'width=' + screen.width,
