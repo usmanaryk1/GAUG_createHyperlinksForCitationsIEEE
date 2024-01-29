@@ -173,9 +173,8 @@
             $rootScope.deactivateEmployeeModel.deactivate = function (employee) {
                     
                 if ($('#popup_dea_employees')[0].checkValidity()) {
-                    alert("validatino passed");
-                $rootScope.maskLoading();
-                EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, dischargeDate:$rootScope.deactivateEmployeeModel.dischargeDate, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
+                 $rootScope.maskLoading();
+                 EmployeeDAO.changestatus({id: employee.id, status: 'inactive', reason: $rootScope.deactivateEmployeeModel.reason, dischargeDate:$rootScope.deactivateEmployeeModel.dischargeDate, terminationDate:$rootScope.deactivateEmployeeModel.terminationDate}).then(function (res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
