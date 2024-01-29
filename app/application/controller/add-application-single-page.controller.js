@@ -160,7 +160,9 @@
             $rootScope.maskLoading();
             ApplicationPublicDAO.updateApplication(employeeToSave)
                     .then(function (employeeRes) {
+                        var positionTitle = ctrl.employee.positionTitle;
                         ctrl.employee = employeeRes;
+                        ctrl.employee.positionTitle = positionTitle;
                         if (action === 'close') {
                             toastr.success("Application saved.");
                             setTimeout(function () {
@@ -422,7 +424,6 @@
                         $('#PreferredCounties').trigger('change.select2');
                     }, 100);
                     // tab1
-                    $("input[name='SocialSecurity']").attr('required', true);
                     if (!ctrl.employee.gender) {
                         ctrl.employee.gender = 'M';
                     }
