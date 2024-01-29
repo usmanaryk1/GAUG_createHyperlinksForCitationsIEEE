@@ -14,7 +14,7 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
-        ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
+        ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
@@ -592,6 +592,10 @@
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
+                    
+                    if (!ctrl.employee.gender) {
+                        ctrl.employee.gender = 'M';
+                    }
                     if (ctrl.positionList && ctrl.positionList.length > 0) {
                         if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
                             ctrl.employee.companyPositionId = ctrl.positionList[0].id;
