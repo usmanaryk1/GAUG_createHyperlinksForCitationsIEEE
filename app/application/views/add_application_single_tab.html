@@ -632,16 +632,14 @@
                             </div>
                             <div class="form-group" >
                                 <div class="col-md-12">
-                                    <div class="panel panel-default panel-table" style="padding: 0;" id="applicationEmployeeAttachments">
-                                        <div class="panel-heading" style="border-bottom: none;">
-                                            <div class="row">
-                                                <div class="col col-xs-6">
-                                                    <h3>Educations</h3>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col col-xs-12">
+                                            <h3><a class="btn icon-left fa fa-plus"
+                                                   ng-click="addEmployee.addEducationLinePopup()" tooltip="Add Education"> Add Education </a></h3>
                                         </div>
-                                        <div>
-                                            <p ng-if="addEmployee.educationLineValid === false" style="color: red">School/ College, Year & Degree are mandatory fields</p>
+                                    </div>
+                                    <div ng-if="addEmployee.educations.length > 0">
+                                        <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
                                             <table class="table table-striped table-bordered table-list table-attachments">
                                                 <thead>
                                                     <tr>
@@ -653,54 +651,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="school" id="school"
-                                                                           type="text" ng-model="addEmployee.educationLine.school"> 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="year" id="year"
-                                                                           type="text" ng-model="addEmployee.educationLine.year"> 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="degree" id="degree"
-                                                                           type="text" ng-model="addEmployee.educationLine.degree"> 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top"> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.educationLine.result">
-                                                                        <option value="Completed">
-                                                                            Completed
-                                                                        </option>
-                                                                        <option value="Incomplete">
-                                                                            Incomplete
-                                                                        </option>
-                                                                        <option value="In Progress">
-                                                                            In Progress
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td align="center">
-                                                            <button class="btn btn-info" style="width:auto;" ng-click="addEmployee.addEducationLine()">
-                                                                Add
-                                                            </button>
-                                                        </td>
-                                                    </tr>
                                                     <tr ng-repeat="education in addEmployee.educations">
                                                         <td> {{education.school}}</td>
                                                         <td> {{education.year}} </td>
@@ -721,16 +671,14 @@
                             </div>
                             <div class="form-group" >
                                 <div class="col-md-12">
-                                    <div class="panel panel-default panel-table" style="padding: 0;" id="applicationWorkExperiences">
-                                        <div class="panel-heading" style="border-bottom: none;">
-                                            <div class="row">
-                                                <div class="col col-xs-6">
-                                                    <h3>Work Experiences</h3>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col col-xs-12">
+                                            <h3><a class="btn icon-left fa fa-plus"
+                                                   ng-click="addEmployee.addWorkExperienceLinePopup()" tooltip="Add Work Experience"> Add Work Experience </a></h3>
                                         </div>
-                                        <div>
-                                            <p ng-if="addEmployee.workExperienceLineValid === false" style="color: red">Employee Name, Job Title & Duration(From) are mandatory fields</p>
+                                    </div>
+                                    <div ng-if="addEmployee.workExperiences.length > 0">
+                                        <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
                                             <table class="table table-striped table-bordered table-list table-attachments">
                                                 <thead>
                                                     <tr>
@@ -743,66 +691,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td style="vertical-align: top"> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="employerName" id="school"
-                                                                           type="text" ng-model="addEmployee.workExperienceLine.employerName"> 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top"> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="jobTitle" id="jobTitle"
-                                                                           type="text" ng-model="addEmployee.workExperienceLine.jobTitle"> 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top" > 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <textarea class="form-control" ng-model="addEmployee.workExperienceLine.responsibilities" cols="5"
-                                                                              id="responsibilities" name="responsibilities"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top"> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <textarea class="form-control" ng-model="addEmployee.workExperienceLine.reasonForLeaving" cols="5"
-                                                                              id="reasonForLeaving" name="reasonForLeaving"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top">
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group sm-layout-align">
-                                                                    <div class="input-group">
-                                                                        <input type="text" id="fromdate" name="fromdate" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="addEmployee.workExperienceLine.startDate"
-                                                                               max-date="addEmployee.employmentMaxDate" placeholder="From"/>
-                                                                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6 ">
-                                                                <div class="form-group sm-layout-align">
-                                                                    <div class="input-group">
-                                                                        <input type="text" id="todate" name="todate" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="addEmployee.workExperienceLine.endDate" min-date="addEmployee.workExperienceLine.startDate" max-date='addEmployee.todayDate'
-                                                                               ng-change="addEmployee.setEmploymentMaxDate()" placeholder="To"/> 
-                                                                        <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </td>
-                                                        <td align="center"  style="vertical-align: top">
-                                                            <button class="btn btn-info" style="width:auto;" ng-click="addEmployee.addWorkExperienceLine()">
-                                                                Add
-                                                            </button>
-                                                        </td>
-                                                    </tr>
                                                     <tr ng-repeat="workExperience in addEmployee.workExperiences">
                                                         <td> {{workExperience.employerName}}</td>
                                                         <td> {{workExperience.jobTitle}} </td>
@@ -819,22 +707,22 @@
                                         </div>
                                     </div>
                                 </div>
-
-
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group" >
                                 <div class="col-md-12">
-                                    <div class="panel panel-default panel-table" style="padding: 0;" id="applicationProfessionalReference">
-                                        <div class="panel-heading" style="border-bottom: none;">
-                                            <div class="row">
-                                                <div class="col col-xs-6">
-                                                    <h3>Professional References</h3>
-                                                    <p class="description">
-                                                        Please add 2 professional references before application submission
-                                                    </p>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col col-xs-12">
+                                            <h3><a class="btn icon-left fa fa-plus"
+                                                   ng-click="addEmployee.addProfessionalReferenceLinePopup()" tooltip="Add Professional Reference"> Add Professional Reference </a></h3>
+                                            <p class="col-md-12 description">
+                                                Please add 2 professional references before application submission
+                                            </p>
                                         </div>
-                                        <div>
-                                            <p ng-if="addEmployee.professionalReferenceLineValid === false" style="color: red">Name, Telephone & Address are mandatory fields</p>
+                                    </div>
+                                    <div class="panel-body"  ng-if="addEmployee.professionalReferences.length > 0">
+                                        <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
                                             <table class="table table-striped table-bordered table-list table-attachments">
                                                 <thead>
                                                     <tr>
@@ -845,37 +733,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td style="vertical-align: top"> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="name" id="name"
-                                                                           type="text" ng-model="addEmployee.professionalReferenceLine.name" > 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top"> 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <input class="form-control" name="telephone" id="telephone" numbers-only="true" maxlength="10"
-                                                                           type="text" ng-model="addEmployee.professionalReferenceLine.telephone" > 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td style="vertical-align: top" > 
-                                                            <div class="col-md-12 mar_bt0">
-                                                                <div class="form-group">
-                                                                    <textarea class="form-control" ng-model="addEmployee.professionalReferenceLine.address" cols="5"
-                                                                              id="address" name="address"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td align="center"  style="vertical-align: top">
-                                                            <button class="btn btn-info" style="width:auto;" ng-click="addEmployee.addProfessionalReferenceLine()">
-                                                                Add
-                                                            </button>
-                                                        </td>
-                                                    </tr>
                                                     <tr ng-repeat="professionalReference in addEmployee.professionalReferences">
                                                         <td> {{professionalReference.name}}</td>
                                                         <td> {{professionalReference.telephone}} </td>
@@ -1014,7 +871,191 @@
     jQuery(document).ready(function ($) {
         setTimeout(function () {
             $(".fade-in-effect").addClass('in');
-
         }, 1);
-    });// ready 
+    }); // ready 
+</script>
+
+<script type="text/ng-template" id="educationModel">
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="educationModel.closePopup();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" >Add Education</h4>
+    </div>
+    <div class="modal-body">
+    <div class="row">
+    <div class="col-md-12">
+    <form role="form" class="form-horizontal validate col-md-12" id="education_form" name="educationModel.education_form" role="form"  ng-submit="educationModel.save()" >
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-1">School/ College</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="school" id="school"
+    type="text" ng-model="educationModel.educationLine.school" ng-required='true' data-validate="required" data-message-required="Please enter School/ College."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-2">Year</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="year" id="year"
+    type="text" ng-model="educationModel.educationLine.year" ng-required='true' data-validate="required" data-message-required="Please enter Year."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-3">Degree</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="degree" id="degree"
+    type="text" ng-model="educationModel.educationLine.degree" ng-required='true' data-validate="required" data-message-required="Please enter Degree."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-4">Result</label>
+    <div class="col-sm-8">
+    <select class="form-control" id="sboxit-1" name="State" ng-model="educationModel.educationLine.result">
+    <option value="Completed">
+    Completed
+    </option>
+    <option value="Incomplete">
+    Incomplete
+    </option>
+    <option value="In Progress">
+    In Progress
+    </option>
+    </select>
+    </div>	
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="educationModel.closePopup();">Close</button>
+    <button class="btn btn-info" ng-submit="educationModel.save()" >Save changes</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="workExperienceModel">
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="workExperienceModel.closePopup();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" >Add Education</h4>
+    </div>
+    <div class="modal-body">
+    <div class="row">
+    <div class="col-md-12">
+    <form role="form" class="form-horizontal validate col-md-12" id="work_experience_form" name="workExperienceModel.work_experience_form" role="form"  ng-submit="workExperienceModel.save()" >
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-1">Employer Name</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="employerName" id="employerName"
+    type="text" ng-model="workExperienceModel.workExperienceLine.employerName" ng-required='true' data-validate="required" data-message-required="Please enter Employer Name."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-2">Job Title</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="jobTitle" id="jobTitle"
+    type="text" ng-model="workExperienceModel.workExperienceLine.jobTitle" ng-required='true' data-validate="required" data-message-required="Please enter Job Title."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-3">Responsibilities</label>
+    <div class="col-sm-8">
+    <textarea class="form-control" ng-model="workExperienceModel.workExperienceLine.responsibilities" cols="5"
+    id="responsibilities" name="responsibilities"></textarea>
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-4">Reason For Leaving</label>
+    <div class="col-sm-8">
+    <textarea class="form-control" ng-model="workExperienceModel.workExperienceLine.reasonForLeaving" cols="5"
+    id="reasonForLeaving" name="reasonForLeaving"></textarea>
+    </div>	
+    </div>
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-4">Start Date</label>
+    <div class="col-sm-8">
+    <div class="input-group">
+    <input type="text" id="fromdate" name="fromdate" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="workExperienceModel.workExperienceLine.startDate"
+    max-date="workExperienceModel.employmentMaxDate" placeholder="From"/>
+    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+    </div>
+    </div>	
+    </div>
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-4">End Date</label>
+    <div class="col-sm-8">
+    <div class="input-group">
+    <input type="text" id="todate" name="todate" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="workExperienceModel.workExperienceLine.endDate" min-date="workExperienceModel.workExperienceLine.startDate" max-date='workExperienceModel.todayDate'
+    ng-change="workExperienceModel.setEmploymentMaxDate()" placeholder="To"/> 
+    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+    </div>
+    </div>	
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="workExperienceModel.closePopup();">Close</button>
+    <button class="btn btn-info" ng-submit="workExperienceModel.save()" >Save changes</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="professionalReferenceModel">
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="professionalReferenceModel.closePopup();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" >Add Professional Reference</h4>
+    </div>
+    <div class="modal-body">
+    <div class="row">
+    <div class="col-md-12">
+    <form role="form" class="form-horizontal validate col-md-12" id="professional_reference_form" name="professionalReferenceModel.professional_reference_form" role="form"  ng-submit="professionalReferenceModel.save()" >
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-1">Name</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="name" id="name"
+    type="text" ng-model="professionalReferenceModel.professionalReferenceLine.name" ng-required='true' data-validate="required" data-message-required="Please enter Name."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-2">Telephone</label>
+    <div class="col-sm-8">
+    <input class="form-control" name="telephone" id="telephone"
+    type="text" ng-model="professionalReferenceModel.professionalReferenceLine.telephone" ng-required='true' data-validate="required" data-message-required="Please enter Telephone."> 
+    </div>
+    </div>	
+    <div class="form-group-separator">
+    </div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label" for="field-3">Address</label>
+    <div class="col-sm-8">
+    <textarea class="form-control" name="address" id="address"  cols="5"
+    type="text" ng-model="professionalReferenceModel.professionalReferenceLine.address" ng-required='true' data-validate="required" data-message-required="Please enter Address."> 
+    </textarea>
+    </div>
+    </div>	
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="professionalReferenceModel.closePopup();">Close</button>
+    <button class="btn btn-info" ng-submit="professionalReferenceModel.save()" >Save changes</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
 </script>

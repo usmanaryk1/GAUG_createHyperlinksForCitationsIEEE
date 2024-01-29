@@ -190,28 +190,116 @@
             });
         }
 
-        ctrl.addEducationLine = function () {
-            ctrl.educationLineValid = true;
-            if (ctrl.educationLine.year && ctrl.educationLine.school && ctrl.educationLine.degree) {
-                $rootScope.maskLoading();
-                ctrl.educationLine['applicationId'] = ctrl.employee.id;
-                var request = {applicationId: ctrl.employee.applicationId, data: ctrl.educationLine};
-                ApplicationPublicDAO.updateApplicationEducation(request)
-                        .then(function (employeeRes) {
-                            ctrl.educations.push(employeeRes);
-                            ctrl.educationLine = {'result': 'Completed'};
-                        })
-                        .catch(function () {
-                            toastr.error("Education cannot be saved.");
-                        }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
+        ctrl.addEducationLinePopup = function () {
+            $rootScope.educationModel = $modal.open({
+                templateUrl: 'educationModel',
+                size: "md"
 
-            } else {
-                ctrl.educationLineValid = false;
+            });
+
+            $rootScope.educationModel.educationLine = {'result': 'Completed'};
+
+            $rootScope.educationModel.closePopup = function () {
+                $rootScope.educationModel.close();
             }
 
-        }
+
+            $rootScope.educationModel.save = function () {
+                if ($rootScope.educationModel.education_form.$valid) {
+                    $rootScope.maskLoading();
+                    $rootScope.educationModel.educationLine['applicationId'] = ctrl.employee.id;
+                    var request = {applicationId: ctrl.employee.applicationId, data: $rootScope.educationModel.educationLine};
+                    ApplicationPublicDAO.updateApplicationEducation(request)
+                            .then(function (employeeRes) {
+                                ctrl.educations.push(employeeRes);
+                            })
+                            .catch(function () {
+                                toastr.error("Education cannot be saved.");
+                            }).then(function () {
+                        $rootScope.unmaskLoading();
+                        $rootScope.educationModel.close();
+                    });
+                }
+            }
+        };
+
+        ctrl.addWorkExperienceLinePopup = function () {
+            $rootScope.workExperienceModel = $modal.open({
+                templateUrl: 'workExperienceModel',
+                size: "md"
+
+            });
+
+            $rootScope.workExperienceModel.workExperienceLine = {};
+            $rootScope.workExperienceModel.todayDate = angular.copy($rootScope.todayDate)
+            $rootScope.workExperienceModel.employmentMaxDate = angular.copy($rootScope.workExperienceModel.todayDate);
+
+            $rootScope.workExperienceModel.closePopup = function () {
+                $rootScope.workExperienceModel.close();
+            }
+
+
+            $rootScope.workExperienceModel.save = function () {
+                if ($rootScope.workExperienceModel.work_experience_form.$valid) {
+                    $rootScope.maskLoading();
+                    $rootScope.workExperienceModel.workExperienceLine['applicationId'] = ctrl.employee.id;
+                    var request = {applicationId: ctrl.employee.applicationId, data: $rootScope.workExperienceModel.workExperienceLine};
+                    ApplicationPublicDAO.updateApplicationWorkExperience(request)
+                            .then(function (employeeRes) {
+                                ctrl.workExperiences.push(employeeRes);
+                                ctrl.workExperienceLine = {};
+                            })
+                            .catch(function () {
+                                toastr.error("Work Experience cannot be saved.");
+                            }).then(function () {
+                        $rootScope.unmaskLoading();
+                        $rootScope.workExperienceModel.close();
+                    });
+                }
+            }
+
+            $rootScope.workExperienceModel.setEmploymentMaxDate = function () {
+                if ($rootScope.workExperienceModel.workExperienceLine.endDate) {
+                    $rootScope.workExperienceModel.employmentMaxDate = angular.copy($rootScope.workExperienceModel.workExperienceLine.endDate);
+                } else {
+                    $rootScope.workExperienceModel.employmentMaxDate = angular.copy($rootScope.workExperienceModel.todayDate);
+                }
+            };
+        };
+
+        ctrl.addProfessionalReferenceLinePopup = function () {
+            $rootScope.professionalReferenceModel = $modal.open({
+                templateUrl: 'professionalReferenceModel',
+                size: "md"
+
+            });
+
+            $rootScope.professionalReferenceModel.professionalReferenceLine = {};
+
+            $rootScope.professionalReferenceModel.closePopup = function () {
+                $rootScope.professionalReferenceModel.close();
+            }
+
+
+            $rootScope.professionalReferenceModel.save = function () {
+                if ($rootScope.professionalReferenceModel.professional_reference_form.$valid) {
+                    $rootScope.maskLoading();
+                    $rootScope.professionalReferenceModel.professionalReferenceLine['applicationId'] = ctrl.employee.id;
+                    var request = {applicationId: ctrl.employee.applicationId, data: $rootScope.professionalReferenceModel.professionalReferenceLine};
+                    ApplicationPublicDAO.updateApplicationProfessionalReference(request)
+                            .then(function (employeeRes) {
+                                ctrl.professionalReferences.push(employeeRes);
+                                ctrl.professionalReferenceLine = {};
+                            })
+                            .catch(function () {
+                                toastr.error("Professional Reference cannot be saved.");
+                            }).then(function () {
+                        $rootScope.unmaskLoading();
+                        $rootScope.professionalReferenceModel.close();
+                    });
+                }
+            }
+        };
 
         ctrl.removeEducationLine = function (educationLine) {
             var request = {applicationId: ctrl.employee.applicationId, educationId: educationLine.id};
@@ -233,29 +321,6 @@
 
         }
 
-        ctrl.addWorkExperienceLine = function () {
-            ctrl.workExperienceLineValid = true;
-
-            if (ctrl.workExperienceLine.employerName && ctrl.workExperienceLine.jobTitle && ctrl.workExperienceLine.startDate) {
-                $rootScope.maskLoading();
-                ctrl.workExperienceLine['applicationId'] = ctrl.employee.id;
-                var request = {applicationId: ctrl.employee.applicationId, data: ctrl.workExperienceLine};
-                ApplicationPublicDAO.updateApplicationWorkExperience(request)
-                        .then(function (employeeRes) {
-                            ctrl.workExperiences.push(employeeRes);
-                            ctrl.workExperienceLine = {};
-                        })
-                        .catch(function () {
-                            toastr.error("Work Experience cannot be saved.");
-                        }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
-            } else {
-                ctrl.workExperienceLineValid = false;
-            }
-
-        }
-
         ctrl.removeWorkExperienceLine = function (workExperienceLine) {
             var request = {applicationId: ctrl.employee.applicationId, workExperienceId: workExperienceLine.id};
             $rootScope.maskLoading();
@@ -273,28 +338,6 @@
                     }).then(function () {
                 $rootScope.unmaskLoading();
             });
-
-        }
-
-        ctrl.addProfessionalReferenceLine = function () {
-            ctrl.professionalReferenceLineValid = true;
-            if (ctrl.professionalReferenceLine.name && ctrl.professionalReferenceLine.telephone && ctrl.professionalReferenceLine.address) {
-                $rootScope.maskLoading();
-                ctrl.professionalReferenceLine['applicationId'] = ctrl.employee.id;
-                var request = {applicationId: ctrl.employee.applicationId, data: ctrl.professionalReferenceLine};
-                ApplicationPublicDAO.updateApplicationProfessionalReference(request)
-                        .then(function (employeeRes) {
-                            ctrl.professionalReferences.push(employeeRes);
-                            ctrl.professionalReferenceLine = {};
-                        })
-                        .catch(function () {
-                            toastr.error("Professional Reference cannot be saved.");
-                        }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
-            } else {
-                ctrl.professionalReferenceLineValid = false;
-            }
 
         }
 
