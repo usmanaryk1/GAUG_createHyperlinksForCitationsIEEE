@@ -199,8 +199,10 @@
             $rootScope.dischargePatientModel.patient = patient;
 
             $rootScope.dischargePatientModel.discharge = function (patient) {
-                $rootScope.maskLoading();
-                PatientDAO.changestatus({id: patient.id, status: 'discharged'}).then(function (res) {
+                
+				if ($('#popup_dis_patient')[0].checkValidity()) {
+				$rootScope.maskLoading();
+                PatientDAO.changestatus({id: patient.id, status: 'discharged', reason:$rootScope.dischargePatientModel.reason, dischargeDate:$rootScope.dischargePatientModel.dischargeDate}).then(function (res) {
                     var length = ctrl.patientList.length;
 
                     for (var i = 0; i < length; i++) {
@@ -222,6 +224,7 @@
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
+				}
             };
         };
 
