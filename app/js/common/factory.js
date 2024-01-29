@@ -204,6 +204,8 @@ angular.module('xenon.factory').
                     $state.go('admin.language-list');
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_TASK') > -1) {
                     $state.go('admin.task-list');
+                } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_ROLE') > -1) {
+                    $state.go('admin.document-list');
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('CREATE_COMPANY_INFORMATION') > -1) {
                     $state.go('admin.company_information');
                 } else {

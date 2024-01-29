@@ -1,10 +1,11 @@
 /* global _, ontime_data */
 
 (function () {
-    function ReviewApplicationCtrl($rootScope, application, action, $modalInstance, $formService, ApplicationDAO, EmployeeDAO, PositionDAO) {
+    function ReviewApplicationCtrl($rootScope, application, action, $modalInstance, $formService, ApplicationDAO, DocumentDao, PositionDAO) {
         var ctrl = this;
         ctrl.showStatus = true;
-
+        ctrl.documentList = [];
+        ctrl.documentIds = [];
         if (action && action === 'rfo') {
             ctrl.status = 'rfo';
             ctrl.showStatus = false;
@@ -13,6 +14,21 @@
             ctrl.showStatus = false;
         } else {
             ctrl.status = 'nmi';
+            DocumentDao.retrieveAll({}).then(function (res) {
+                ctrl.documentList = res;
+//                $("#documentIds").select2({
+//                    // minimumResultsForSearch: -1,
+//                    placeholder: 'Select Documents...',
+//                    // minimumInputLength: 1,
+//                    // placeholder: 'Search',
+//                }).on('select2-open', function ()
+//                {
+//                    // Adding Custom Scrollbar
+//                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+//                });
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve documents.");
+            });
         }
         ctrl.content_not_filled = false;
         ctrl.editorOptions = {
@@ -44,9 +60,9 @@
                 if (ctrl.emailContent !== null && ctrl.emailContent !== '') {
                     ctrl.content_not_filled = false;
                     $rootScope.maskLoading();
-                    var nmiDetails = {'content': ctrl.emailContent, appPath: window.location.toString()}
+                    var nmiDetails = {'content': ctrl.emailContent, appPath: window.location.toString(), documentIds: ctrl.documentIds}
                     ApplicationDAO.reviewApplication({'applicationId': application.applicationId, 'nmiDetails': nmiDetails,
-                    'reviewAction': ctrl.status === 'nmi'? 'request-more-info': 'reject'})
+                        'reviewAction': ctrl.status === 'nmi' ? 'request-more-info' : 'reject'})
                             .then(function (res) {
                                 $modalInstance.close();
                                 toastr.success('Application is moved to Need More Info and email sent');
@@ -81,5 +97,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('ReviewApplicationCtrl', ["$rootScope", "application", "action", "$modalInstance", "$formService", "ApplicationDAO", "EmployeeDAO", "PositionDAO", ReviewApplicationCtrl]);
+    angular.module('xenon.controllers').controller('ReviewApplicationCtrl', ["$rootScope", "application", "action", "$modalInstance", "$formService", "ApplicationDAO", "DocumentDao", "PositionDAO", ReviewApplicationCtrl]);
 })();

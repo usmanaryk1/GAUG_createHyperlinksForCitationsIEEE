@@ -565,6 +565,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'ViewApplicationsCtrl as viewApplication',
                 data: {
                     feature: 'VIEW_APPLICATION_LIST'
+                },
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.select2,
+                        ]);
+                    }
                 }
             }).
             // edit_timesheet
@@ -1012,6 +1019,14 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             ASSETS.forms.select2,
                         ]);
                     }
+                }
+            }).
+            state('admin.document-list', {
+                url: '/document-library',
+                templateUrl: appHelper.viewTemplatePath('documentlibrary', 'view_document'),
+                controller: 'ViewDocumentsCtrl as viewDocuments',
+                data: {
+                    feature: 'VIEW_ROLE'
                 }
             }).
             state('admin.event-notifications', {

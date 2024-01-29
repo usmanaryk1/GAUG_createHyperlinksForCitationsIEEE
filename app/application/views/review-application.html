@@ -11,8 +11,8 @@
     <div class="modal-header">
         <button type="button" class="close" ng-click="reviewApplication.close();" aria-hidden="true">&times;</button>
         <h4 class="modal-title" ng-show="reviewApplication.showStatus">Review Application</h4>
-        <h4 class="modal-title" ng-show="!reviewApplication.showStatus && reviewApplication.status==='rfo'">Mark Ready for Orientation</h4>
-        <h4 class="modal-title" ng-show="!reviewApplication.showStatus && reviewApplication.status==='rejected'">Reject Application</h4>
+        <h4 class="modal-title" ng-show="!reviewApplication.showStatus && reviewApplication.status === 'rfo'">Mark Ready for Orientation</h4>
+        <h4 class="modal-title" ng-show="!reviewApplication.showStatus && reviewApplication.status === 'rejected'">Reject Application</h4>
     </div>
 
     <div class="modal-body">
@@ -35,6 +35,31 @@
                 <div ng-if="reviewApplication.content_not_filled === true">
                     <span class="validate-has-error">Please fill content</span>
                 </div>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="reviewApplication.status === 'nmi'">
+            <label  class="col-sm-3 control-label">Documents</label>
+            <div class="col-md-9" >
+                <script type="text/javascript">
+                    jQuery(document).ready(function ($)
+                    {
+                        setTimeout(function () {
+                            $("#documentIds").select2({
+                                // minimumResultsForSearch: -1,
+                                placeholder: 'Select Documents...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        }, 200);
+                    });</script>
+                <select multiple class="form-control" name ="documentIds" id="documentIds" ng-model="reviewApplication.documentIds" ng-options='doc.id as doc.name for doc in reviewApplication.documentList'>
+                    <option value="" selected hidden />
+                </select>
             </div>
         </div>
 
@@ -67,7 +92,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group" ng-show="reviewApplication.position!==''">
+                <div class="form-group" ng-show="reviewApplication.position !== ''">
                     <label class="col-sm-3 control-label">
                         Position
                     </label>
