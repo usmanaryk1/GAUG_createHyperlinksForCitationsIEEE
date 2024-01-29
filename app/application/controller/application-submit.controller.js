@@ -6,7 +6,8 @@
         ctrl.resumePending = false;
         ctrl.professionalReferencesPending = false;
         ctrl.canSubmitApplication = false;
-        if ((application.resume === null || application === '') && application.resumeMandatory!==false) {
+        ctrl.alreadySubmitted = false;
+        if ((application.resume === null || application === '') && application.resumeMandatory !== false) {
             ctrl.resumePending = true;
         }
         if (professionalReferences.length < 2) {
@@ -17,7 +18,11 @@
         }
 
         ctrl.close = function () {
-            $modalInstance.close();
+            if (ctrl.alreadySubmitted) {
+                $modalInstance.close('submitted');
+            } else {
+                $modalInstance.close();
+            }
         };
 
         if (application.signature != null) {
@@ -33,8 +38,7 @@
 
             ApplicationPublicDAO.submitApplication({'applicationId': application.applicationId, data: data})
                     .then(function (res) {
-                        $modalInstance.close('submitted');
-                        toastr.success('Application is sumitted for review');
+                        ctrl.alreadySubmitted = true;
                     })
                     .catch(function (res) {
                         toastr.error('Something went wrong');

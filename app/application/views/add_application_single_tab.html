@@ -59,6 +59,9 @@
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-12 control-label">All fields marked with an asterisk (*) are mandatory</label>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-sm-3 control-label">
                                     Position Title
                                 </label>
@@ -80,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    First Name
+                                    First Name *
                                 </label>
                                 <div class="col-sm-3">
                                     <input charactersonly class="form-control" name="FirstName" type="text" maxlength="100" 
@@ -99,7 +102,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    Last Name
+                                    Last Name *
                                 </label>
                                 <div class="col-sm-9">
                                     <input charactersonly class="form-control" name="LastName" type="text" maxlength="100" ng-model="addEmployee.employee.lName"
@@ -254,7 +257,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    Phone
+                                    Phone *
                                 </label>
                                 <div class="col-sm-3">
                                     <input numbers-only="true" maxlength="10" class="form-control" name="Phone" type="text" data-validate="required,number,minlength[10],maxlength[10]" ng-model="addEmployee.employee.phone"
@@ -273,7 +276,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="emergencyName">
-                                    Emergency Contact Name
+                                    Emergency Contact Name *
                                 </label>
                                 <div class="col-sm-3">
                                     <input class="form-control" name="emergencyName" type="text" ng-model="addEmployee.employee.emergencyContactName" maxlength="200"
@@ -281,7 +284,7 @@
                                            data-validate="required"/>              
                                 </div>
                                 <label class="col-sm-3 control-label" for="emergencyNumber">
-                                    Emergency Contact Number
+                                    Emergency Contact Number *
                                 </label>
                                 <div class="col-sm-3">
                                     <input numbers-only="true" maxlength="10" class="form-control" id="emergencyNumber" name="emergencyNumber" type="text" ng-model="addEmployee.employee.emergencyContactNumber" 
@@ -294,7 +297,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    Email
+                                    Email *
                                 </label>
                                 <div class="col-sm-9">
                                     <input class="form-control" name="Email" type="email" maxlength="100"
@@ -467,7 +470,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">
-                                    <b>Resume</b>
+                                    <b>Resume *</b>
                                 </label>
                                 <div class="col-sm-9">
                                     <div flow-init="addEmployee.resumeUploadFile" flow-file-added="addEmployee.resumeFileAdded($file, $flow)" flow-file-success="addEmployee.resumeFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.resumeFileSelected($file,$flow)" flow-file-error="addEmployee.resumeFileError( $file, $message, $flow )">
@@ -516,7 +519,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-35">
-                                    Address Search
+                                    Address Search *
                                 </label>
                                 <div class="col-sm-9" >
                                     <input class="form-control" id="autocomplete" name="autocomplete" placeholder="Search for your location"
@@ -717,7 +720,7 @@
                                             <h3><a class="btn icon-left fa fa-plus"
                                                    ng-click="addEmployee.addProfessionalReferenceLinePopup()" tooltip="Add Professional Reference"> Add Professional Reference </a></h3>
                                             <p class="col-md-12 description">
-                                                Please add 2 professional references before application submission
+                                                * Please add 2 professional references before application submission
                                             </p>
                                         </div>
                                     </div>

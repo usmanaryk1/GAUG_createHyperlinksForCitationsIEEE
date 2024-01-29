@@ -13,7 +13,7 @@
         <h4 class="modal-title">Submit Application</h4>
     </div>
 
-    <div class="modal-body">
+    <div class="modal-body" ng-if="!applicationSubmit.alreadySubmitted">
         <div class="form-group adjust-row-padding">
             <div class="col-md-12 "  ng-if="applicationSubmit.canSubmitApplication === true">
                 <div>
@@ -35,10 +35,16 @@
                 </div>
             </div>
         </div>
-    </div>      
+    </div>
+    
+    <div class="modal-body text-center" ng-if="applicationSubmit.alreadySubmitted">
+        <h1><span class="fa-check-circle-o" style="font-size: 2.6em; color: #72a230"></span></h1>
+        <h1>Thanks You!!</h1>
+        <h4>Your application is submitted for review.</h4>
+    </div>
 
     <div class="modal-footer">
         <button type="button" class="btn btn-white" ng-click="applicationSubmit.close();">Close</button>
-        <button type="submit" class="btn btn-success" ng-if="applicationSubmit.canSubmitApplication === true">Submit Application</button>
+        <button type="submit" class="btn btn-success" ng-if="applicationSubmit.canSubmitApplication === true && !applicationSubmit.alreadySubmitted">Submit Application</button>
     </div>
 </form>

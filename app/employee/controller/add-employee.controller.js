@@ -599,7 +599,7 @@
                 ctrl.medicalEmployeeAttachments = angular.copy(medResults.data);
             }
 
-            if (ctrl.employee.applicationId !== null) {
+            if (ctrl.employee.applicationId && ctrl.employee.applicationId !== null) {
                 aedResults['data'].push({
                     modified: true,
                     attachmentType: 'Ontime Application Form',

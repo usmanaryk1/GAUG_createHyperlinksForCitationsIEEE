@@ -7,8 +7,8 @@ module.exports = function (grunt) {
     var config = {
         app: require('./package.json').appPath || 'app',
         name: require('./package.json').name || 'app',
-        currentVersion: /(@\$6.0.9\$@)/g,
-        targetVersion: '@$6.0.10$@'
+        currentVersion: /(@\$6.0.10\$@)/g,
+        targetVersion: '@$6.0.11$@'
     };
     // Define the configuration for all the tasks
     grunt.initConfig({
