@@ -592,10 +592,6 @@
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-                    
-                    if (!ctrl.employee.gender) {
-                        ctrl.employee.gender = 'M';
-                    }
                     if (ctrl.positionList && ctrl.positionList.length > 0) {
                         if (!ctrl.employee.companyPositionId || ctrl.employee.companyPositionId === null) {
                             ctrl.employee.companyPositionId = ctrl.positionList[0].id;
