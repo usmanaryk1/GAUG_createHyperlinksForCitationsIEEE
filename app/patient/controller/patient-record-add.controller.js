@@ -13,15 +13,15 @@
                 toastr.success("Patient Record Added");
                 if (ctrl.type.value == 'Nursing_Assessment')
                     $state.go('app.edit_patient', { id: res.patientId, recordType: res.type });
-                if (ctrl.type.value == 'Home_care_plan')
-                $state.go('app.home_care_plan', { id: res.patientId, recordType: res.type })
-        }).catch(function (data, status) {
                 if (ctrl.type.value == 'Medication_Reconciliation')
                     $state.go('app.medication_reconciliation', { id: res.patientId });
                 if (ctrl.type.value == 'Progress_Note')
                     $state.go('app.progress_note', { id: res.patientId })
                 if (ctrl.type.value == 'Medical_Orders')
                     $state.go('app.medical_orders', { id: res.patientId })
+                if (ctrl.type.value == 'Home_care_plan')
+                    $state.go('app.home_care_plan', { id: res.patientId, recordType: res.type })
+            }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
