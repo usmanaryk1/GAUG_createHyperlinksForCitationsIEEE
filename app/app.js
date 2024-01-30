@@ -1026,7 +1026,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('documentlibrary', 'view_document'),
                 controller: 'ViewDocumentsCtrl as viewDocuments',
                 data: {
-                    feature: 'VIEW_ROLE'
+                    feature: 'MANAGE_DOCUMENTS'
                 }
             }).
             state('admin.event-notifications', {

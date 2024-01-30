@@ -215,7 +215,7 @@ angular.module('xenon.services', []).
                 var tasks = this.addItem('Tasks', './admin/task-list', 'fa-tasks', 'CREATE_TASK,UPDATE_TASK,VIEW_TASK');
                 var events = this.addItem('Event Notifications', '/admin/event-notifications', 'fa-envelope', 'EVENT_NOTIFICATIONS');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
-                var documents = this.addItem('Document Library', '/admin/document-library', 'fa-file', 'VIEW_ROLE');
+                var documents = this.addItem('Document Library', '/admin/document-library', 'fa-file', 'MANAGE_DOCUMENTS');
                 var company = this.addItem('Company', '/admin/company_information', 'linecons-key', 'CREATE_COMPANY_INFORMATION');
 
                 // Subitems of users
