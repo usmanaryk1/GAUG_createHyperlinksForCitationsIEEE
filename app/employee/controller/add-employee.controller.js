@@ -14,7 +14,7 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
-        ctrl.languagesKeyValue = [{key: "En"}, {key: "Cr"}, {key: "Sp"}, {key: "Ru"}, {key: "Fr"}, {key: "Hi"}, {key: "Be"}, {key: "Ma"}, {key: "Ko"}, {key: "Ar"}, {key: "Fa"}, {key: "Ur"}];
+        ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
@@ -40,6 +40,7 @@
         ctrl.licenceFileObj = {};
         ctrl.i9eligibilityFileObj = {};
         ctrl.w4FileObj = {};
+        ctrl.ssn = {};
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
         ctrl.profileFileObj = {};
@@ -206,6 +207,23 @@
             event.stopPropagation();
         };
 
+        //Check if ssn number is already present.
+        $scope.checkSsnNumber = function () {
+            if (ctrl.employee.ssn && ctrl.employee.ssn.trim().length > 0) {
+                EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
+                        .then(function (res) {
+                            if (res.data)
+                                ctrl.ssn.exists = true;
+                            else
+                                ctrl.ssn.exists = false;
+                        })
+                        .catch(function () {
+                        });
+            } else {
+                ctrl.ssn.exists = false;
+            }
+        };
+
         //function to save the employee data
         function saveEmployeeData() {
             $scope.resetForm = false;
@@ -254,28 +272,40 @@
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
-                var reqParam;
-                if (ctrl.employee.id && ctrl.employee.id !== null) {
-                    reqParam = 'updateemployee';
-                    if (ctrl.employee.careRatesList && ctrl.employee.careRatesList !== null) {
-                        var careRateList = angular.copy(ctrl.employee.careRatesList);
-                        careRateList.employeeId = ctrl.employee.id;
-                        EmployeeDAO.updateCareRates(careRateList)
-                                .then(function () {
+                //Check if ssn number is already present
+                EmployeeDAO.checkIfSsnExists({Id: ctrl.employee.id, ssn: ctrl.employee.ssn})
+                        .then(function (res) {
+                            if (res.data) {
+                                ctrl.ssn.exists = true;
+                                $('#SocialSecurity').focus();
+                            } else {
+                                ctrl.ssn.exists = false;
+                                var reqParam;
+                                if (ctrl.employee.id && ctrl.employee.id !== null) {
+                                    reqParam = 'updateemployee';
+                                    if (ctrl.employee.careRatesList && ctrl.employee.careRatesList !== null) {
+                                        var careRateList = angular.copy(ctrl.employee.careRatesList);
+                                        careRateList.employeeId = ctrl.employee.id;
+                                        EmployeeDAO.updateCareRates(careRateList)
+                                                .then(function () {
+                                                    updateEmployee(reqParam, employeeToSave);
+                                                })
+                                                .catch(function () {
+                                                    console.log(JSON.stringify(careRateList));
+                                                });
+                                    } else {
+                                        updateEmployee(reqParam, employeeToSave);
+                                    }
+                                } else {
+                                    employeeToSave.orgCode = ontimetest.company_code;
+                                    ctrl.employee.orgCode = ontimetest.company_code;
+                                    reqParam = 'saveemployee';
                                     updateEmployee(reqParam, employeeToSave);
-                                })
-                                .catch(function () {
-                                    console.log(JSON.stringify(careRateList));
-                                });
-                    } else {
-                        updateEmployee(reqParam, employeeToSave);
-                    }
-                } else {
-                    employeeToSave.orgCode = ontimetest.company_code;
-                    ctrl.employee.orgCode = ontimetest.company_code;
-                    reqParam = 'saveemployee';
-                    updateEmployee(reqParam, employeeToSave);
-                }
+                                }
+                            }
+                        })
+                        .catch(function () {
+                        });
             }
         }
 
@@ -592,7 +622,7 @@
             //to set radio buttons on tab init..
             $timeout(function () {
                 if (!ctrl.retrivalRunning) {
-                    
+
                     if (!ctrl.employee.gender) {
                         ctrl.employee.gender = 'M';
                     }

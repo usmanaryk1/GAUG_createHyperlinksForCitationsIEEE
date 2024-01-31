@@ -159,8 +159,10 @@
                                 Social Security #
                             </label>
                             <div class="col-sm-9">
-                                <input numbers-only="true" class="form-control" name="SocialSecurity" type="text" ng-model="addEmployee.employee.ssn"
-                                       data-validate="required" data-message-required="Please enter Social Security." maxlength="9"/>
+                                <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':addEmployee.ssn.exists}" name="SocialSecurity" type="text" ng-model="addEmployee.employee.ssn"
+                                       data-validate="required" data-message-required="Please enter Social Security." maxlength="9" 
+                                       ng-blur="checkSsnNumber();" ng-change="addEmployee.ssn.exists = false;"/>
+                                <span ng-if="addEmployee.ssn.exists" class="validate-has-error">Social security number already exists.</span>
                             </div>
                         </div>
                         <div class="form-group-separator">
