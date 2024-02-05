@@ -445,6 +445,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('calendar', 'patient_calendar'),
                 controller: 'PatientCalendarCtrl as patientcalendar',
             }).
+            // Report
+            state('app.report', {
+                url: '/report',
+                templateUrl: appHelper.viewTemplatePath('report', 'report'),
+                controller: 'ReportCtrl as report'
+            }).
             // Update Highlights
 //            state('app.update-highlights', {
 //                url: '/update-highlights',

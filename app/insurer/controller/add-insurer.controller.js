@@ -172,6 +172,7 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            $rootScope.careTypeModel.unitValues = ontimetest.unitValues;
             //to not open the popup for changes done in this modals
             if (selection) {
                 ctrl.selecteModalOpen = true;
@@ -186,6 +187,7 @@
             if (selection) {
                 $rootScope.careTypeModel.careTypeObj = {};
                 $rootScope.careTypeModel.careTypeObj.unit = "unit";
+                $rootScope.careTypeModel.careTypeObj.unitValue = 0.25;
             } else {
                 $rootScope.careTypeModel.careTypeObj = angular.copy(ctrl.insuranceCareTypeMap[ctrl.newDeselectedType[0]]);
                 if ($rootScope.careTypeModel.careTypeObj.modifiers != null) {
@@ -212,6 +214,9 @@
                                     pushed = true;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].rate = $rootScope.careTypeModel.careTypeObj.rate;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].unit = $rootScope.careTypeModel.careTypeObj.unit;
+                                    if ($rootScope.careTypeModel.careTypeObj.unit == 'unit') {
+                                        ctrl.insurerObj.insuranceCareTypeCollection[i].unitValue = $rootScope.careTypeModel.careTypeObj.unitValue;
+                                    }
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].modifiers = $rootScope.careTypeModel.careTypeObj.modifiers;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].billingCode = $rootScope.careTypeModel.careTypeObj.billingCode;
                                 }
@@ -226,6 +231,9 @@
                                 if (ctrl.insurerObj.insuranceCareTypeCollection[i].companyCaretypeId.id === Number(ctrl.newDeselectedType[0])) {
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].rate = $rootScope.careTypeModel.careTypeObj.rate;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].unit = $rootScope.careTypeModel.careTypeObj.unit;
+                                    if ($rootScope.careTypeModel.careTypeObj.unit == 'unit') {
+                                        ctrl.insurerObj.insuranceCareTypeCollection[i].unitValue = $rootScope.careTypeModel.careTypeObj.unitValue;
+                                    }
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].modifiers = $rootScope.careTypeModel.careTypeObj.modifiers;
                                     ctrl.insurerObj.insuranceCareTypeCollection[i].billingCode = $rootScope.careTypeModel.careTypeObj.billingCode;
                                 }

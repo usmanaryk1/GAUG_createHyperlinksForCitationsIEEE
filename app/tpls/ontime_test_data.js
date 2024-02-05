@@ -300,8 +300,9 @@ ontimedata = {
         "Hospital", "Vacation", "As per Pt.", "No Service"
     ],
     eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
-    recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"}
-
+    recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"},
+    reportTypes: [{id: 'wh', label: "Worked Hours"}, {id: 'pc', label: "Patient Census"}, {id: 'ts', label: "Time Sheets & Patients Time Sheet Print Out"}, {id: 'ect', label: "Employee Compliance Tracker"}, {id: 'ec', label: "Employee Census"}],
+    unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}]
 };
 
 ontimetest = {
@@ -326,8 +327,10 @@ ontimetest = {
     },
     'pastEventAuthorizationPassword': '!avalanche!',
     'date_time_format': "yyyy/MM/dd hh:mm:ss aa",
-    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/test-ontimeprofileimage/",
-    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/test-ontimepatientsign/"
+    amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/",
+    amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/ontimepatientsign/",
+    reportTypes: ontimedata.reportTypes,
+    unitValues: ontimedata.unitValues
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },

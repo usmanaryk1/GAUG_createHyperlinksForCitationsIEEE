@@ -86,6 +86,7 @@ angular.module('xenon.services', []).
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet');
                 var company = this.addItem('Company', '/app', 'linecons-key');
                 var calendar = this.addItem('Schedule', '/app', 'linecons-cog');
+                var report = this.addItem('Report', '/app/report', 'fa-eye');
 
                 // Subitems of Dashboard
                 // dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
@@ -143,6 +144,7 @@ angular.module('xenon.services', []).
                 var insuranceProvider = this.addItem('Insurance Provider', '/app', 'fa fa-umbrella');
                 var billing = this.addItem('Billing', '/app', 'linecons-user');
                 var calendar = this.addItem('Calendar', '/app', 'linecons-user');
+                var report = this.addItem('Report', '/app/report-variant-1', 'fa-eye');
 
                 // var dashboard    = this.addItem('Dashboard', 		'/app/dashboard', 			'linecons-cog');
                 // var employee      = this.addItem('Employee',	'/app/layout-and-skins',	'linecons-desktop');

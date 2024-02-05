@@ -1,0 +1,71 @@
+<div class="page-body">
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">Report</h1>
+            <p class="description"></p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal validate" role="form" id='report_form' name="report_form">
+                        <div class="row adjust-row-padding">
+                            <div class="col-sm-4 element-align sm-flex-align">
+                            </div>
+                            <div class="col-sm-8">  
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group sm-layout-align">
+                                            <label class="control-label">Report Type</label>
+                                            <select class="form-control" id="reportType" ng-model='report.reportType' name="reportType"
+                                                    ng-change="report.typeChange()"
+                                                    data-validate="required" data-message-required="Please select Report Type."
+                                                    ng-options='report.id as (report.label) for report in report.reportTypeList'>
+                                                <option value="">Select the report type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="report.reportType == 'wh'" style="margin-top: 10px;">
+                                    <div class="col-sm-6 pad0 wd_full">
+                                        <div class="form-group">
+                                            <label for="fromdate" class="col-sm-3 control-label">From</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" id="fromdate" name="fromdate" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="report.searchParams.fromDate" max-date="report.maxDate" data-validate="required" data-message-required="Please select From Date." ng-required="report.reportType == 'wh'"/>
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 pad0">
+                                        <div class="form-group">
+                                            <label for="todate" class="col-sm-3 control-label">To</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" id="todate" name="todate" class="form-control datepicker" enabled='S' data-format="mm/dd/yyyy" ng-model="report.searchParams.toDate" min-date="report.searchParams.fromDate" max-date='todayDate' ng-change="report.setMaxDate()" data-validate="required" data-message-required="Please select To Date." ng-required="report.reportType == 'wh'"/>
+                                                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 pad0" style="margin-top: 10px;"></div>
+                                    <div class="col-sm-12 pad0" style="margin-bottom:10px;">
+                                        <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
+                                        <button type="submit" ng-if="report.reportType" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
+                                        <button type="submit" ng-if="report.reportType && report.reportType!='pc'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
