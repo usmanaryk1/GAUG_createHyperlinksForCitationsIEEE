@@ -78,7 +78,8 @@
             } else {
                 if ($('#review_employee_popup')[0].checkValidity()) {
                     $rootScope.maskLoading();
-                    var rfoDetails = {'email': ctrl.email, 'dateOfBirth': ctrl.dateOfBirth};
+                    var rfoDetails = {'content': ctrl.emailContent, appPath: window.location.toString(),
+                        'email': ctrl.email, 'dateOfBirth': ctrl.dateOfBirth};
                     console.log(JSON.stringify(rfoDetails));
                     ApplicationDAO.readyForOrientationApplication({'applicationId': application.applicationId, 'rfoDetails': rfoDetails})
                             .then(function (res) {
