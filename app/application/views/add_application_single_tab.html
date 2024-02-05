@@ -46,13 +46,9 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 pull-right"  ng-if="!addEmployee.viewOnly" >
-                                    <button class="btn btn-success mar_rg5 mar_lf5 mar_rg5 pull-right" type="submit" ng-click="addEmployee.submitForm('save')"
-                                            ng-disabled="addEmployee.disableSaveButton">
-                                        Save for later
-                                    </button>
                                     <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'submitted'" ng-click="addEmployee.submitForm('submit')"
                                             ng-disabled="addEmployee.disableSaveButton">
-                                        Submit Application
+                                        Save & Submit
                                     </button>
                                 </div>
                             </div>
@@ -843,13 +839,9 @@
                             <div class="col-sm-6">
                             </div>
                             <div class="col-sm-6 pull-right"  ng-if="!addEmployee.viewOnly" >
-                                <button class="btn btn-success mar_rg5 mar_lf5 mar_rg5 pull-right" type="submit" ng-click="addEmployee.submitForm('tab1')"
-                                        ng-disabled="addEmployee.disableSaveButton">
-                                    Save for later
-                                </button>
                                 <button class="btn btn-black mar_rg5 pull-right" type="submit" ng-if="addEmployee.employee.status != null && addEmployee.employee.status !== 'submitted'" ng-click="addEmployee.submitForm('submit')"
                                         ng-disabled="addEmployee.disableSaveButton">
-                                    Submit Application
+                                    Save & Submit
                                 </button>
                             </div>
                         </div>
