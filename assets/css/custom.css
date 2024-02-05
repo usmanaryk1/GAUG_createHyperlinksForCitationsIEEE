@@ -237,7 +237,7 @@ label.error { color: #CC3F44; display: block; font-size: 12px; padding-top: 5px;
 }
 /*Danger-border*/
 .border-danger{
-    border-color: #cc3f44;
+    border-color: #cc3f44 !important;
 }
 /*Medium compatibility i.e. Tablets*/
 @media screen and (max-width:767px) {
