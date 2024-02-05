@@ -82,7 +82,7 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, date:data.deactivateDate, terminationDate:data.terminationDate}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, reason: data.reason, terminationDate:data.terminationDate}).$promise;
             },
             getEmployeesForSchedule: function (data) {
                 return api.getEmployeesForSchedule(data).$promise;

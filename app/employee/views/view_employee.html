@@ -310,22 +310,6 @@
             </select>
             </div>
         </div>
-        <div class="form-group-separator"></div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Deactivate Date</label>
-            <div class="col-sm-8">
-            <div class="input-group" style="z-index:1060">
-            <input class="datepicker form-control" data-format="mm/dd/yyyy" id="disDate" name="deactivateDate" type="text" ng-model="deactivateEmployeeModel.deactivateDate" 
-                                       data-validate="required,date" data-message-required="Please enter Date of Deactivation." required/>
-            <div class="input-group-addon">
-            <a href="">
-            <i class="linecons-calendar">
-            </i>
-            </a>
-            </div>
-            </div>
-            </div>
-        </div>
         <div class="form-group-separator" ng-if="deactivateEmployeeModel.reason == 'terminated'"></div>
         <div class="form-group" style="z-index:1060" ng-if="deactivateEmployeeModel.reason == 'terminated'">
             <label class="col-sm-3 control-label">Termination Date</label>
@@ -353,6 +337,7 @@
     </form>
 </script>
 <script type="text/ng-template" id="activateModel">
+    <form class="form-horizontal validate" role="form" name="popupActEmployees" id="popup_act_employees" >     
     <div class="modal-header">		
     <h4 class="modal-title">{{activateEmployeeModel.employee.lName}} {{activateEmployeeModel.employee.fName}} {{activateEmployeeModel.employee.middleInitial}}</h4>
     </div>
@@ -360,15 +345,13 @@
     <div class="modal-body">
 
     
-    <div class="form-group">
-            <label class="col-sm-10 control-label">To activate employee please enter password:</label>
-            <div class="col-sm-8">
-            <div class="input-group">
-            <input class="form-control" id="disDate" name="actPass" type="password" ng-model="activateEmployeeModel.password" 
+        <div class="form-group">
+            <label class="col-sm-7 control-label">To activate employee please enter password:</label>
+            <div class="col-sm-4">
+            <input class="form-control" id="actPass" name="actPass" type="password" ng-model="activateEmployeeModel.password" 
                                        data-validate="required" required/>
+            </div>
             
-            </div>
-            </div>
         </div>
     </div>
 
@@ -376,4 +359,5 @@
     <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Activate</button>
     <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">Cancel</button>
     </div>
+    </form>
 </script>
