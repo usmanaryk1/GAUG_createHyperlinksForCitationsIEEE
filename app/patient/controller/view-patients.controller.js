@@ -18,7 +18,7 @@
         ctrl.nursingCareMap = {};
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
-
+        
         EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
@@ -193,9 +193,9 @@
                 templateUrl: modal_id,
                 size: modal_size,
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
+                keyboard: false    
             });
-
+            $rootScope.dischargePatientModel.currentDate = new Date();
             $rootScope.dischargePatientModel.patient = patient;
 
             $rootScope.dischargePatientModel.discharge = function (patient) {
