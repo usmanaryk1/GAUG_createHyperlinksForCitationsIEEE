@@ -34,7 +34,8 @@
                         || ctrl.reportType == 'totalworkedhours' || ctrl.reportType == 'eventactivityreport' || ctrl.reportType == 'missedpunchreport'
                         || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport' || ctrl.reportType == 'applicationlistreport'
                         || ctrl.reportType == 'revenuereconciliationreport' || ctrl.reportType == 'revenuereconciliationbycounty' || ctrl.reportType == 'detailagingreport'
-                        || ctrl.reportType == 'summaryagingreport' || ctrl.reportType == 'billingmonitorreport' || ctrl.reportType == 'claimrejectionreport') {
+                        || ctrl.reportType == 'summaryagingreport' || ctrl.reportType == 'billingmonitorreport' || ctrl.reportType == 'claimrejectionreport'
+                        || ctrl.reportType == 'evv-emedny-error-report') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {

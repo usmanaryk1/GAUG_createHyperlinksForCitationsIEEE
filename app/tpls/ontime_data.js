@@ -67,6 +67,7 @@ ontime_data = {
         {id: 'employeeworkedhoursbycounty', label: "Employee Worked Hours - By County"},
         {id: 'wppreport', label: "Employee WPP Report"},
         {id: 'eventactivityreport', label: "Event Logs Report"},
+        {id: 'evv-emedny-error-report', label: "EVV Errors for EMedNY Report"},
         {id: 'missedpunchreport', label: "Missed Punch Report"},
         {id: 'totalworkedhours', label: "Total Patient Worked Hours Summary"},
         {id: 'workedhours', label: "Worked Hours"},
