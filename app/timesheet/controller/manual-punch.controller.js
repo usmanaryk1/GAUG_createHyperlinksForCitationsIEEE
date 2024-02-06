@@ -230,15 +230,17 @@
 
         var mergeDateAndTime = function (date, time) {
             date = new Date(date);
-            var hours = Number(time.match(/^(\d+)/)[1]);
-            var minutes = Number(time.match(/:(\d+)/)[1]);
-            var seconds = 0;
+            if (time) {
+                var hours = Number(time.match(/^(\d+)/)[1]);
+                var minutes = Number(time.match(/:(\d+)/)[1]);
+                var seconds = 0;
 //            var AMPM = time.match(/\s(.*)$/)[1];
 //            if ((AMPM == "PM" || AMPM == "Pm") && hours < 12)
 //                hours = hours + 12;
 //            if ((AMPM == "AM" || AMPM == "Am") && hours == 12)
 //                hours = hours - 12;
-            date.setHours(hours, minutes, seconds);
+                date.setHours(hours, minutes, seconds);
+            }
             return $filter('date')(date, ontimetest.date_time_format);
         };
 
@@ -251,7 +253,7 @@
 
         ctrl.navigateToState = function () {
             var params = angular.copy(searchParams);
-            if (searchParams !== null && searchParams.lastPage !== null) {
+            if (searchParams !== null && searchParams.lastPage !== null && searchParams.lastPage) {
                 if (searchParams.lastPage.indexOf("employee_timesheet") >= 0) {
                     $state.go('app.employee_timesheet');
                 } else if (searchParams.lastPage.indexOf("patient_time_sheet") >= 0) {
@@ -308,7 +310,9 @@
                     } else {
                         delete attendanceObjToSave.isMissedPunch;
                         attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        if (ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime !== '') {
+                            attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        }
                         if (attendanceObjToSave.employeeId != null) {
                             attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }
@@ -360,7 +364,9 @@
                     } else {
                         delete attendanceObjToSave.isMissedPunch;
                         attendanceObjToSave.punchInTime = mergeDateAndTime(ctrl.attendanceObj.punchInDate, ctrl.attendanceObj.punchInTime);
-                        attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        if (ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime !== '') {
+                            attendanceObjToSave.punchOutTime = mergeDateAndTime(ctrl.attendanceObj.punchOutDate, ctrl.attendanceObj.punchOutTime);
+                        }
                         if (attendanceObjToSave.employeeId != null) {
                             attendanceObjToSave.employeeId = {id: ctrl.attendanceObj.employeeId};
                         }

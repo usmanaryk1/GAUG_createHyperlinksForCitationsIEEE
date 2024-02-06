@@ -326,7 +326,7 @@ ontimetest = {
         'OFFICE_STAFF': "OS"
     },
     'pastEventAuthorizationPassword': '!avalanche!',
-    'date_time_format': "yyyy/MM/dd hh:mm:ss aa",
+    'date_time_format': "yyyy/MM/dd hh:mm:ss a",
     amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/",
     amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/ontimepatientsign/",
     reportTypes: ontimedata.reportTypes,
