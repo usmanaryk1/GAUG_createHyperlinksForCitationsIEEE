@@ -27,15 +27,35 @@
                                 </button>
                             </div>
                         </div>
+
+
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Payer Type
+                            </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="payerType" name="payerType" ng-model="addInsurer.insurerObj.payerType"
+                                        data-validate="required"  data-message-required="Please select Payer Type." maxlength="100">
+                                    <option value="HomeCarePayer">
+                                        Home Care Provider
+                                    </option>
+                                    <option value="WorksitePayer">
+                                        Worksite Payer
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group-separator">
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label" for="InsuranceName">
-                                Insurance Name
+                                Payer Name
                             </label>
                             <div class="col-sm-9">
                                 <input class="form-control" id="InsuranceName" name="InsuranceName" type="text" ng-model="addInsurer.insurerObj.insuranceName"
-                                       data-validate="required"  data-message-required="Please enter Insurance Name." maxlength="100">
+                                       data-validate="required"  data-message-required="Please enter Payer Name." maxlength="100">
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -50,9 +70,9 @@
 
                             </div>
                         </div>
-                        <div class="form-group-separator">
+                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                             <label class="col-sm-3 control-label">
                                 EDI Processor 
                             </label>
@@ -71,9 +91,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group-separator">
+                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                         </div>                        
-                        <div class="form-group">
+                        <div class="form-group" ng-if="addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                             <label class="col-sm-3 control-label">
                                 Claim Form Type 
                             </label>
@@ -92,9 +112,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.mdol==='MD Online' && addInsurer.insurerObj.claimFormType === 'UB04'">
+                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.mdol === 'MD Online'
+                                    && addInsurer.insurerObj.claimFormType === 'UB04'
+                                    && addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                         </div>
-                        <div class="form-group" ng-if="addInsurer.insurerObj.mdol === 'MD Online' && addInsurer.insurerObj.claimFormType === 'UB04'">
+                        <div class="form-group" ng-if="addInsurer.insurerObj.mdol === 'MD Online'
+                                    && addInsurer.insurerObj.claimFormType === 'UB04'
+                                    && addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                             <label class="col-sm-3 control-label">
                                 MDOL Acct #
                             </label>
@@ -103,7 +127,7 @@
                                        data-validate="required"  data-message-required="Please enter MDOL Acct #." maxlength="100">
                             </div>
                         </div>
-                        <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04'">
+                        <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04' && addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">
@@ -117,9 +141,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group-separator">
+                        <div class="form-group-separator" ng-if="addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="addInsurer.insurerObj.payerType === 'HomeCarePayer'">
                             <label class="col-sm-3 control-label">
                                 Plan Type
                             </label>
@@ -198,7 +222,7 @@
                             </div>
                         </div>
                         <!-- Detailed Address for UB04 -->
-                        <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04'">
+                        <div ng-if="addInsurer.insurerObj.claimFormType === 'UB04' || addInsurer.insurerObj.payerType === 'WorksitePayer'">
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">
@@ -354,21 +378,21 @@
                                 <script type="text/javascript">
                                     jQuery(document).ready(function ($)
                                     {
-                                        $("#multi-select").multiSelect({
-                                            afterInit: function ()
-                                            {
-                                                // Add alternative scrollbar to list
-                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                                            },
+                                    $("#multi-select").multiSelect({
+                                    afterInit: function ()
+                                    {
+                                    // Add alternative scrollbar to list
+                                    this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                    },
                                             afterSelect: function ()
                                             {
-                                                // Update scrollbar size
-                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            // Update scrollbar size
+                                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
                                             }
-                                        });
+                                    });
                                     });
                                 </script>
-                                <select class="form-control" ng-model='addInsurer.selectedCareTypes' ng-options="careType.id as careType.careTypeTitle for careType in addInsurer.careTypeList| orderBy:'careTypeTitle'"  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type." ng-change="addInsurer.displayCareTypeModal = true">
+                                <select class="form-control" ng-model='addInsurer.selectedCareTypes' ng-options="careType.id as careType.careTypeTitle for careType in addInsurer.careTypeList | orderBy:'careTypeTitle'"  id="multi-select" multiple="multiple" name="CareType" data-validate="required"  data-message-required="Please select Care Type." ng-change="addInsurer.displayCareTypeModal = true">
                                     <!--                                    <option value="1" >
                                                                             Personal Care HHA Hourly       
                                                                         </option>
@@ -482,7 +506,7 @@
     </div>
     </div>
     </div>
-    <div ng-show="careTypeModel.claimFormType === 'UB04'">
+    <div ng-show="careTypeModel.claimFormType === 'UB04' && careTypeModel.payerType==='HomeCarePayer'">
     <div class="row">
     <div class="form-group">
     <label class="col-sm-3 control-label add-padding-modal" for="revenueCode">
@@ -507,7 +531,7 @@
     </div>
     </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="careTypeModel.payerType==='HomeCarePayer'">
     <div class="form-group">
     <label class="col-sm-3 control-label add-padding-modal" for="modifires1">
     Modifiers
