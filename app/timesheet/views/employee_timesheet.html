@@ -100,7 +100,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 pad0" style="margin-bottom:10px;">
                                         <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="empTimesheet.resetFilters()">Reset Filters</button>
-                                        <a href="#/app/manual_punch{{empTimesheet.searchParams.employeeId==null?'':'/employee/'+empTimesheet.searchParams.employeeId+'?lastPage=employee_timesheet'}}" class="btn btn-single btn-info clean-margin btn-block-xs">Manual Punch</a>
+                                        <a href="#/app/manual_punch{{empTimesheet.selectedEmployee==null?'':'/employee/'+empTimesheet.searchParams.employeeId+'?lastPage=employee_timesheet'}}" class="btn btn-single btn-info clean-margin btn-block-xs" ng-disabled="empTimesheet.selectedEmployee.status==='i'">Manual Punch</a>
                                         <button type="submit" class="btn btn-single btn-success clean-margin btn-block-xs"  ng-click="empTimesheet.searchParams.pageNo = 1;
                                             empTimesheet.searchParams.sortBy = 'date';
                                             empTimesheet.searchParams.order = 'desc';

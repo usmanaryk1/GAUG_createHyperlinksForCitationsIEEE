@@ -709,7 +709,7 @@
         });
         $rootScope.openEditModal = function (patient, modal_id, modal_size, modal_backdrop)
         {
-            PatientDAO.getPatientsForSchedule({patientIds: patient.id}).then(function (patients) {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired:true}).then(function (patients) {
                 var patient = patients[0];
                 $rootScope.selectPatientModel = $modal.open({
                     templateUrl: modal_id,
