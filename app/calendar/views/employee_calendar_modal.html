@@ -2,6 +2,7 @@
 <div class="modal-header">
     <button type="button" class="close" ng-click="employeePopup.closePopup();" aria-hidden="true">&times;</button>
     <h4 class="modal-title">
+        <span ng-if="employeePopup.data.worksiteSchedule && !employeePopup.isNew">Update Event</span>
         <span ng-if="employeePopup.isNew && employeePopup.calendarView == 'week' && employeePopup.showEmployee">Add Event</span>
         <span ng-if="!employeePopup.isNew || employeePopup.calendarView == 'month' || !employeePopup.showEmployee">{{employeePopup.employee.lName}}, {{employeePopup.employee.fName}}</span>
     </h4>
@@ -209,15 +210,32 @@
                     </div>
                 </div>                             
 
-                <div class="form-group" ng-show="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee">                    
-                    <div class="form-group-separator"></div>            
-                    <label class="col-sm-2 control-label" for="field-1" style="margin-top:15px;">Employee</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" style="margin-top:15px;" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-change="employeePopup.employeeChanged(employeePopup.data.employeeId)" ng-options='emp.id as emp.label for emp in employeePopup.workSiteEmployeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee" data-validate="required">
-                            <option value="" selected hidden />
-                        </select>
+
+                <div ng-show="employeePopup.workSiteSelected.insuranceProviderId != null">
+                    <div class="form-group-separator"> </div>  
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Care</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control" id="care" name="care" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" 
+                                    ng-model="employeePopup.data.companyCareTypeId" data-validate="required" data-message-required="Please select care." 
+                                    ng-options="care.id as care.careTypeTitle for care in employeePopup.careTypes" 
+                                    ng-change="employeePopup.workSiteCareTypeChanged(employeePopup.data.companyCareTypeId)" 
+                                    ng-required="employeePopup.workSiteSelected.insuranceProviderId != null">
+                                <option value="">Select the care</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-1" >Employee</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name ="eventEmployeeIds" id="eventEmployeeIds" ng-model="employeePopup.data.employeeId" ng-options='emp.id as emp.label for emp in employeePopup.workSiteEmployeeList' data-message-required="Please select employee." ng-required="employeePopup.calendarView == 'week' && employeePopup.isNew && employeePopup.showEmployee" data-validate="required">
+                                <option value="" selected hidden />
+                            </select>
+                        </div>
+                    </div>
                 <div class="form-group-separator"></div>
             </div>
             <div ng-if='!employeePopup.data.worksiteSchedule'>
@@ -249,10 +267,10 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Patient</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="patient" name="patient" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.lName +  ', ' +  patient.fName +  ' ' +  patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-show="employeePopup.patientMandatory">
+                        <select class="form-control" id="patient" name="patient" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" data-validate="required"  data-message-required="Please select the patient." ng-options="patient.id as (patient.lName +    ', ' +    patient.fName +    ' ' +    patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-required="employeePopup.data.eventType == 'S' && employeePopup.patientMandatory" ng-show="employeePopup.patientMandatory">
                             <option value="" selected hidden></option>
                         </select>
-                        <select class="form-control" id="patient1" name="patient1" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" ng-options="patient.id as (patient.lName +  ', ' +  patient.fName +  ' ' +  patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-show="!employeePopup.patientMandatory">
+                        <select class="form-control" id="patient1" name="patient1" ng-disabled="!employeePopup.isNew && !employeePopup.data.isEdited" ng-model="employeePopup.data.patientId" ng-options="patient.id as (patient.lName +    ', ' +    patient.fName +    ' ' +    patient.middleInitial) for patient in employeePopup.carePatientMap[employeePopup.data.companyCareTypeId]" ng-show="!employeePopup.patientMandatory">
                             <option value="" selected hidden></option>
                         </select>
                     </div>
@@ -455,7 +473,7 @@
                     <span class="text-warning" ng-if="employeePopup.validStart === false">No paid leave in vesting period.</span>                                    
                 </div>                
                 <div class="col-sm-10 col-sm-push-2" style="margin-top:5px;">                    
-                    <span class="text-warning" ng-if="employeePopup.utilizationDate && employeePopup.utilizationDateFallsBtw === true">Utilization date({{employeePopup.utilizationDate | date :dateFormat}}) falls between start and end date</span>                                    
+                    <span class="text-warning" ng-if="employeePopup.utilizationDate && employeePopup.utilizationDateFallsBtw === true">Utilization date({{employeePopup.utilizationDate| date :dateFormat}}) falls between start and end date</span>                                    
                     <span class="text-warning" ng-if="employeePopup.validHours === false">You have only {{employeePopup.hoursData.noOfAllowedHours}} hours in {{employeePopup.data.leaveYear2 ? "Previous Year's ":""}} {{employeePopup.data.reason}} account.</span>                                    
                     <span class="text-warning" ng-if="employeePopup.validHours2 === false">You have only {{employeePopup.hoursData.noOfAllowedHours2}} hours in This Year's {{employeePopup.data.reason}} account.</span>                                    
                 </div>                

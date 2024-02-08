@@ -63,10 +63,10 @@
         });
         //function to save insurer data.
         function saveInsurerData() {
-            if (ctrl.insurerObj.contractFile == null) {
-                ctrl.fileObj.errorMsg = "Please upload Contract File.";
-            }
-            if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile != null) {
+//            if (ctrl.insurerObj.contractFile == null) {
+//                ctrl.fileObj.errorMsg = "Please upload Contract File.";
+//            }
+            if ($('#add_inusrer_form')[0].checkValidity()) {
                 if(ctrl.insurerObj.mdol !== 'MD Online'){
                     delete ctrl.insurerObj.mdolAccountNumber;
                 }
@@ -148,6 +148,9 @@
                 $rootScope.maskLoading();
                 InsurerDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.insurerObj = res;
+                    if(ctrl.insurerObj.payerType==null){
+                        ctrl.insurerObj.payerType = 'HomeCarePayer';
+                    }
 
                     if (ctrl.insurerObj.insuranceCareTypeCollection == null) {
                         ctrl.insurerObj.insuranceCareTypeCollection = [];
@@ -173,6 +176,8 @@
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
+            } else {
+                ctrl.insurerObj.payerType = 'HomeCarePayer';
             }
         }
 
@@ -188,6 +193,7 @@
             });
             $rootScope.careTypeModel.unitValues = ontime_data.unitValues;
             $rootScope.careTypeModel.claimFormType = ctrl.insurerObj.claimFormType;
+            $rootScope.careTypeModel.payerType = ctrl.insurerObj.payerType;
             //to not open the popup for changes done in this modals
             if (selection) {
                 ctrl.selecteModalOpen = true;

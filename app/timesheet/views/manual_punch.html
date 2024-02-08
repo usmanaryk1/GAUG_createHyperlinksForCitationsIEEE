@@ -79,7 +79,7 @@
                                                 });
                                             }, 200);
                                         });</script>
-                                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="manualPunch.attendanceObj.workSiteId" ng-options='worksite.id as worksite.name for worksite in manualPunch.workSiteList' ng-change="manualPunch.worksiteChanged()">
+                                    <select class="form-control" name ="worksiteDropdown" id="worksiteDropdown" ng-model="manualPunch.attendanceObj.workSiteId" ng-options='worksite.id as worksite.name for worksite in manualPunch.workSiteList' ng-change="manualPunch.retrieveWorkSite(true)">
                                         <option value="" selected hidden />
                                     </select>               
                                 </div>
@@ -122,6 +122,9 @@
                                 </div>
                             </div>
                             <div class="form-group-separator"></div>
+                            
+                        </div>
+                        <div ng-if='!manualPunch.attendanceObj.isWorksitePunch || manualPunch.workSiteHasPayer'>
                             <div class="form-group"  ng-class="{ 'validate-has-error':manualPunch.attendanceObj.careTypeId == null && manualPunch.formSubmitted}">
                                 <label class="col-sm-3 control-label">Care Type</label>
 

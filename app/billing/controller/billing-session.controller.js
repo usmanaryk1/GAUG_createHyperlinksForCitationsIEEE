@@ -12,6 +12,7 @@
         ctrl.errorMsg = {};
         ctrl.insuranceProviderList = [];
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.workSiteBilling = false;
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
@@ -30,6 +31,12 @@
                 $rootScope.unmaskLoading();
                 if (res && res.billingClaims) {
                     ctrl.billingSessions = res.billingClaims;
+                    for (var i = 0; i < ctrl.billingSessions.length; i++) {
+                        if (ctrl.billingSessions[i].claimType === 'WORKSITE') {
+                            ctrl.workSiteBilling = true;
+                            break;
+                        }
+                    }
                     ctrl.calculateEditedClaim();
                     ctrl.sessionId = res.id;
                     ctrl.insuranceProvider = res.insuranceProvider;
@@ -62,6 +69,7 @@
             ctrl.billingSessions = [];
             ctrl.billingSessionToProcess = [];
             ctrl.criteriaSelected = false;
+            ctrl.workSiteBilling = false;
             ctrl.rerenderDataTable();
             ctrl.processClicked = false;
         };
@@ -98,6 +106,7 @@
                 $rootScope.maskLoading();
                 ctrl.dataRetrieved = false;
                 ctrl.reviewedFilters = angular.copy(ctrl.searchParams);
+                ctrl.workSiteBilling = false;
                 BillingDAO.reviewSessions(ctrl.searchParams).then(function (res) {
                     ctrl.dataRetrieved = true;
                     ctrl.billingSessions = res;
@@ -105,7 +114,12 @@
                     ctrl.totalClaims = ctrl.billingSessions.length;
                     ctrl.totalCharges = 0;
                     angular.forEach(ctrl.billingSessions, function (billingObj) {
-                        billingObj.patientBirthDate = Date.parse(billingObj.patientBirthDate);
+                        if (billingObj.claimType === 'WORKSITE') {
+                            ctrl.workSiteBilling = true;
+                        }
+                        if (billingObj.patientBirthDate != null) {
+                            billingObj.patientBirthDate = Date.parse(billingObj.patientBirthDate);
+                        }
 //                        billingObj.claim1500Data = JSON.parse(billingObj.claim1500Data);
                         billingObj.uniqueId = randomString();
                         ctrl.totalCharges = ctrl.totalCharges + billingObj.totalCosts;
@@ -134,10 +148,12 @@
             ctrl.reviewedFilters.processedOn = $filter('date')(new Date(), $rootScope.dateFormat);
             $rootScope.maskLoading();
             BillingDAO.processSessions(ctrl.reviewedFilters, payload).then(function (res) {
-                if (ctrl.billingSessions != null && ctrl.billingSessions.length > 0 && ctrl.billingSessions[0].claimType != 'UB04') {
-                    window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
-                } else {
-                    window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                if (ctrl.workSiteBilling != true) {
+                    if (ctrl.billingSessions != null && ctrl.billingSessions.length > 0 && ctrl.billingSessions[0].claimType != 'UB04') {
+                        window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                    } else {
+                        window.location.href = $rootScope.serverPath + 'billing/session/' + res.id + '/edi/download';
+                    }
                 }
                 $state.go('app.billing_batch', {id: res.id});
             }).catch(function (e) {
@@ -160,7 +176,30 @@
             else
                 localStorage.setItem('claimUB04', JSON.stringify(claim1500));
         };
-        ctrl.openClaim1500 = function (claim) {
+        ctrl.openWorkSiteClaimServiceLines = function (claim) {
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('billing', 'worksite_claim_detail_modal'),
+                controller: 'WorkSiteClaimLinesCtrl as workSiteClaimLinesCtrl',
+                size: 'lg',
+                resolve: {
+                    workSiteName: function () {
+                        return claim.workSiteName;
+                    },
+                    workSiteClaimLines: function () {
+                        return claim.workSiteClaimServiceLines;
+                    }
+                }
+            });
+            modalInstance.result.then(function (res) {
+            }, function () {
+            });
+        }
+        ctrl.openClaim1500 = function (claim, e) {
+            if (claim.claimType === 'WORKSITE') {
+                e.stopPropagation();
+                ctrl.openWorkSiteClaimServiceLines(claim);
+                return;
+            }
             _setClaim1500InLocalStorage(claim);
             var url = $state.href('app.manual_claim_review', {id: claim.uniqueId ? claim.uniqueId : claim.id});
             if (claim.claimType === 'UB04')
@@ -294,7 +333,7 @@
             }, function () {
             });
         };
-        
+
         ctrl.openResetModal = function (e) {
             e.stopPropagation();
             var modalInstance = $modal.open({

@@ -8,6 +8,8 @@
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.stateCountyList = geo_data.stateCountyList;
+        ctrl.stateCountyList['NY'] = $rootScope.nyStateCountyList;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.aideSkills = {};
         ctrl.nextTab;
@@ -67,7 +69,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve aide skill capacities.");
         });
-        InsurerDAO.retrieveAll().then(function (res) {
+        InsurerDAO.retrieveAll({'payerType':'HomeCarePayer'}).then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");

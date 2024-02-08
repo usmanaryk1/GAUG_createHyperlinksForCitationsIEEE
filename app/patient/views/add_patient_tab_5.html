@@ -154,7 +154,7 @@
                         <div class="col-sm-9"> 
                             <select class="form-control" id="State" name="County" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                     ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].county"
-                                    ng-options="county as county for county in stateCountyList[addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state]">
+                                    ng-options="county as county for county in addPatient.stateCountyList[addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state]">
                                 <option value="">
                                     Select the county
                                 </option>
