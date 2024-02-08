@@ -1,5 +1,5 @@
 (function () {
-    function AddWorksiteCtrl($state, WorksiteDAO, $timeout, $scope, $rootScope, PositionDAO, Page, $formService, EmployeeDAO) {
+    function AddWorksiteCtrl($state, WorksiteDAO, $timeout, $scope, $rootScope, PositionDAO, Page, $formService, EmployeeDAO, InsurerDAO) {
         var ctrl = this;
         ctrl.currentDate = new Date();
         ctrl.retrivalRunning = true;
@@ -11,6 +11,12 @@
         ctrl.worksitePositionMap = {};
         ctrl.positionIdMap = {};
         var allPositionIds = [];
+        ctrl.insuranceProviderList = [];
+        InsurerDAO.retrieveAll({'payerType':'WorksitePayer'}).then(function (res) {
+            ctrl.insuranceProviderList = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_WORKSITE') === -1) {
                 $state.transitionTo(ontime_data.defaultState);
@@ -335,5 +341,5 @@
             });
         }
     }
-    angular.module('xenon.controllers').controller('AddWorksiteCtrl', ["$state", "WorksiteDAO", "$timeout", "$scope", "$rootScope", "PositionDAO", "Page", "$formService", "EmployeeDAO", AddWorksiteCtrl]);
+    angular.module('xenon.controllers').controller('AddWorksiteCtrl', ["$state", "WorksiteDAO", "$timeout", "$scope", "$rootScope", "PositionDAO", "Page", "$formService", "EmployeeDAO", "InsurerDAO", AddWorksiteCtrl]);
 })();

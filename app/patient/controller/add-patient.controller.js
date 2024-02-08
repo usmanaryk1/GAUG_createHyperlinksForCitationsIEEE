@@ -67,7 +67,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve aide skill capacities.");
         });
-        InsurerDAO.retrieveAll().then(function (res) {
+        InsurerDAO.retrieveAll({'payerType':'HomeCarePayer'}).then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");

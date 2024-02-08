@@ -1,5 +1,6 @@
 (function () {
-    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state, $location, $timeout, $modal, Page, WorksiteDAO) {
+    function ManualPunchCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, PatientDAO, $filter, $state,
+            $location, $timeout, $modal, Page, WorksiteDAO, CareTypeDAO) {
         var ctrl = this;
         Page.setTitle("Manual Punch");
         ctrl.taskList = [];
@@ -11,13 +12,6 @@
         ctrl.patientMandatory = true;
         ctrl.tasksErrorMsg = null;
         ctrl.officeStaffIds = [];
-//        PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
-//            if (res && res.length > 0) {
-//                angular.forEach(res, function (position) {
-//                    ctrl.officeStaffIds.push(position.id)
-//                });
-//            }
-//        });
         ctrl.resetManualPunch = function () {
             ctrl.currentTime = $filter('date')(new Date().getTime(), timeFormat).toString();
             if (ctrl.editTimesheet) {
@@ -68,6 +62,13 @@
                     $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
                 });
 
+            }
+            if (ctrl.attendanceObj.workSiteId != null) {
+                ctrl.attendanceObj.isWorksitePunch = true;
+                ctrl.retrieveWorkSite();
+                $timeout(function () {
+                    $("#worksiteDropdown").select2("val", ctrl.attendanceObj.patientId);
+                });
             }
             ctrl.attendanceObj.punchInDate = angular.copy(ctrl.attendanceObj.punchInTime);
             if (!ctrl.attendanceObj.punchOutTime || ctrl.attendanceObj.punchOutTime === null) {
@@ -122,6 +123,17 @@
                             $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
                         });
                     }
+                    if (param.companyCareTypeId) {
+                        ctrl.attendanceObj.careTypeId = Number(param.companyCareTypeId);
+                    }
+                    if (param.workSiteId) {
+                        ctrl.attendanceObj.isWorksitePunch = true;
+                        ctrl.attendanceObj.workSiteId = Number(param.workSiteId);
+                        ctrl.retrieveWorkSite();
+                        $timeout(function () {
+                            $("#worksiteDropdown").select2("val", ctrl.attendanceObj.patientId);
+                        });
+                    }
                     if (param.startTime) {
                         ctrl.attendanceObj.punchInTime = param.startTime;
                     }
@@ -149,9 +161,11 @@
                 } else if ($state.current.name.indexOf('worksite') > 0) {
                     ctrl.attendanceObj.isWorksitePunch = true;
                     ctrl.attendanceObj.workSiteId = Number(id);
+                    ctrl.retrieveWorkSite();
                 } else {
                     ctrl.editTimesheet = true;
                     if ($state.current.name.indexOf('edit_missed_punch') > 0) {
+                        $rootScope.maskLoading();
                         TimesheetDAO.getMissedPunch({id: id}).then(function (res) {
                             ctrl.attendanceObj = res;
                             $timeout(function () {
@@ -159,8 +173,10 @@
                             }, 100);
                             ctrl.attendanceObj.isMissedPunch = true;
                             setAttendanceForEdit();
+                            $rootScope.unmaskLoading();
                         });
                     } else if ($state.current.name.indexOf('edit_timesheet') > 0) {
+                        $rootScope.maskLoading();
                         TimesheetDAO.get({id: id}).then(function (res) {
                             ctrl.attendanceObj = res;
                             $timeout(function () {
@@ -168,6 +184,7 @@
                             }, 100);
                             ctrl.attendanceObj.isMissedPunch = false;
                             setAttendanceForEdit();
+                            $rootScope.unmaskLoading();
                         });
                     }
                 }
@@ -194,9 +211,6 @@
                 $timeout(function () {
                     $('#tasks').multiSelect('refresh');
                 }, 100);
-//                if (res.companyPositionId && ctrl.officeStaffIds.indexOf(res.companyPositionId) > -1) {
-//                    ctrl.patientMandatory = false;
-//                }
             });
         }
 
@@ -240,7 +254,7 @@
 //                ctrl.employeeList = ontime_data.employees;
             }).then(function () {
                 ctrl.employeeListLoaded = true;
-                if (ctrl.patientListLoaded) {
+                if (ctrl.patientListLoaded && ctrl.workSiteListLoaded) {
                     $rootScope.unmaskLoading();
                     initPage();
                 }
@@ -256,7 +270,7 @@
 //                ctrl.patientList = ontime_data.patients;
             }).then(function () {
                 ctrl.patientListLoaded = true;
-                if (ctrl.employeeListLoaded) {
+                if (ctrl.employeeListLoaded && ctrl.workSiteListLoaded) {
                     $rootScope.unmaskLoading();
                     initPage();
                 }
@@ -280,13 +294,6 @@
             return $filter('date')(date, ontime_data.date_time_format);
         };
 
-//        var verifyTimeValidation=function(){
-//            var punchInTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchInTime);
-//            var punchOutTime=mergeDateAndTime(ctrl.attendanceObj.punchInDate,ctrl.attendanceObj.punchOutTime);
-//            if(punchInTime.getTime()<)
-//            
-//        };
-
         ctrl.navigateToState = function () {
             var params = angular.copy(searchParams);
             if (searchParams !== null && searchParams.lastPage != null) {
@@ -305,8 +312,8 @@
         ctrl.saveManualAttendance = function () {
             ctrl.formSubmitted = true;
             if (ctrl.attendanceObj.employeeId && ctrl.attendanceObj.employeeId !== null
-                    && ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime!==null
-                    && ctrl.attendanceObj.punchOutDate && ctrl.attendanceObj.punchOutDate!==null) {
+                    && ctrl.attendanceObj.punchOutTime && ctrl.attendanceObj.punchOutTime !== null
+                    && ctrl.attendanceObj.punchOutDate && ctrl.attendanceObj.punchOutDate !== null) {
                 if (ctrl.attendanceObj.employeeId.position === 'pc') {
                     if (ctrl.attendanceObj.companyTaskIds.length < 5 && ctrl.attendanceObj.companyTaskIds.length !== ctrl.taskList.length) {
                         ctrl.tasksErrorMsg = 'Please select atleast 5 tasks.';
@@ -492,56 +499,104 @@
             }
         }, true);
         ctrl.worksiteSelected = function () {
+            ctrl.workSiteHasPayer = false;
             if (ctrl.attendanceObj.isWorksitePunch) {
                 ctrl.attendanceObj.careTypeId = null;
                 ctrl.attendanceObj.patientId = null;
             } else {
                 ctrl.attendanceObj.workSiteId = null;
             }
-            retrieveEmployeesData();
         };
-        ctrl.worksiteChanged = function () {
-            retrieveEmployeesData();
-            ctrl.attendanceObj.employeeId = null;
-            $("#sboxit-2").select2("val", null);
+        ctrl.retrieveWorkSite = function (reset) {
+            $rootScope.paginationLoading = true;
+            if (reset) {
+                delete ctrl.attendanceObj.careTypeId;
+            }
+            for (var i = 0; i < ctrl.workSiteList.length; i++) {
+                var ws = ctrl.workSiteList[i];
+                ctrl.employeeList = [];
+                if (ws.id === ctrl.attendanceObj.workSiteId) {
+                    if (ws.insuranceProviderId != null) {
+                        ctrl.workSiteHasPayer = true;
+                        CareTypeDAO.retrieveAll({insuranceProviderId: ws.insuranceProviderId}).then(function (res) {
+                            ctrl.careTypes = res;
+                            if (ctrl.attendanceObj.careTypeId != null) {
+                                ctrl.onCareTypeChange();
+                            } else {
+                                ctrl.attendanceObj.employeeId = null;
+                                $("#sboxit-2").select2("val", null);
+                            }
+
+                        }).catch(function () {
+                            toastr.error("Failed to retrieve care types.");
+                        }).then(function () {
+                            $rootScope.paginationLoading = false;
+                        });
+                    } else {
+                        ctrl.workSiteHasPayer = false;
+                        var param = {workSiteId: ctrl.attendanceObj.workSiteId};
+                        EmployeeDAO.retrieveByPosition(param).then(function (res) {
+                            ctrl.employeeList = res;
+                            ctrl.resetEmployeeDropDown();
+                        }).catch(function (data, status) {
+                            toastr.error("Failed to retrieve employees.");
+                        }).then(function () {
+                            $rootScope.paginationLoading = false;
+                        });
+                    }
+                }
+            }
         };
+
+        ctrl.resetEmployeeDropDown = function () {
+            var employeeExists = false;
+            for (var i = 0; i < ctrl.employeeList.length; i++) {
+                if (ctrl.employeeList[i].id === ctrl.attendanceObj.employeeId) {
+                    employeeExists = true;
+                }
+            }
+            if (!employeeExists) {
+                ctrl.attendanceObj.employeeId = null;
+                $("#sboxit-2").select2("val", null);
+                ctrl.taskList = [];
+                $timeout(function () {
+                    $('#tasks').multiSelect('refresh');
+                }, 100);
+            } else {
+                $timeout(function () {
+                    $("#sboxit-2").select2("val", ctrl.attendanceObj.employeeId);
+                });
+            }
+        }
+
         ctrl.onCareTypeChange = function () {
             if (ctrl.attendanceObj.careTypeId && ctrl.attendanceObj.isManualPunch) {
                 $rootScope.maskLoading();
                 EmployeeDAO.retrieveByPosition({careTypeId: ctrl.attendanceObj.careTypeId}).then(function (res) {
                     ctrl.employeeList = res;
-                    var employeeExists = false;
-                    for (var i = 0; i < res.length; i++) {
-                        if (res[i].id === ctrl.attendanceObj.employeeId) {
-                            employeeExists = true;
-                        }
-                    }
-                    if (!employeeExists) {
-                        ctrl.attendanceObj.employeeId = null;
-                        $("#sboxit-2").select2("val", null);
-                        ctrl.taskList = [];
-                        $timeout(function () {
-                            $('#tasks').multiSelect('refresh');
-                        }, 100);
-                    }
+                    ctrl.resetEmployeeDropDown();
                 }).catch(function (data, status) {
-//                ctrl.employeeList = ontime_data.employees;
                 }).then(function () {
                     $rootScope.unmaskLoading();
                 });
             }
         }
+
         ctrl.retrieveWorkSites = function () {
+            ctrl.workSiteListLoaded = false;
+            $rootScope.maskLoading();
             WorksiteDAO.retreveWorksiteNames().then(function (res) {
                 ctrl.workSiteList = res;
-                if (ctrl.attendanceObj.workSiteId != null) {
-                    $timeout(function () {
-                        $("#worksiteDropdown").select2("val", ctrl.attendanceObj.workSiteId);
-                    });
+            }).then(function () {
+                ctrl.workSiteListLoaded = true;
+                if (ctrl.employeeListLoaded && ctrl.patientListLoaded) {
+                    $rootScope.unmaskLoading();
+                    initPage();
                 }
             });
         };
         ctrl.retrieveWorkSites();
     }
-    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state", "$location", "$timeout", "$modal", "Page", "WorksiteDAO", ManualPunchCtrl]);
+    angular.module('xenon.controllers').controller('ManualPunchCtrl', ["$scope", "$rootScope", "TimesheetDAO", "EmployeeDAO", "PatientDAO", "$filter", "$state",
+        "$location", "$timeout", "$modal", "Page", "WorksiteDAO", "CareTypeDAO", ManualPunchCtrl]);
 })();

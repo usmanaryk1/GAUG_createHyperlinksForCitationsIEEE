@@ -106,6 +106,22 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
+                            Insurance Provider
+                        </label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="sboxit-1" name="InsuranceProvider"
+                                    ng-model="addWorksite.worksite.insuranceProviderId"
+                                    ng-options='ins.id as (ins.insuranceName) for ins in addWorksite.insuranceProviderList'>
+                                <option value="">
+                                    Select the insurance provider
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
                             Position
                         </label>
                         <div class="col-sm-9">

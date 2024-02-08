@@ -63,10 +63,10 @@
         });
         //function to save insurer data.
         function saveInsurerData() {
-            if (ctrl.insurerObj.contractFile == null) {
-                ctrl.fileObj.errorMsg = "Please upload Contract File.";
-            }
-            if ($('#add_inusrer_form')[0].checkValidity() && ctrl.insurerObj.contractFile != null) {
+//            if (ctrl.insurerObj.contractFile == null) {
+//                ctrl.fileObj.errorMsg = "Please upload Contract File.";
+//            }
+            if ($('#add_inusrer_form')[0].checkValidity()) {
                 if(ctrl.insurerObj.mdol !== 'MD Online'){
                     delete ctrl.insurerObj.mdolAccountNumber;
                 }
