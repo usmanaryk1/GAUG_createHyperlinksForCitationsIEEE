@@ -175,7 +175,7 @@
                                                     <span ng-if='(timesheet.unauthorizedTime && !timesheet.forPayroll && timesheet.scheduleId) || timesheet.ut'>
                                                         {{timesheet.scheduleId.roundedStartTime|duration:timesheet.scheduleId.roundedEndTime}}
                                                     </span>
-                                                    <span ng-if='!timesheet.scheduleId && !timesheet.ut'>
+                                                    <span ng-if='!timesheet.ut && !timesheet.unauthorizedTime'>
                                                         {{timesheet.roundedPunchInTime|duration:timesheet.roundedPunchOutTime}}
                                                     </span>
                                                 </span>
