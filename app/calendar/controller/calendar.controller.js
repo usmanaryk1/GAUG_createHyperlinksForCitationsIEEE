@@ -5,6 +5,7 @@
         ctrl.employee_list = [];
         $rootScope.selectEmployeeModel = {};
         ctrl.viewEmployee;
+        ctrl.forShowTime = true;
 
         var timeFormat = 'HH:mm';
 

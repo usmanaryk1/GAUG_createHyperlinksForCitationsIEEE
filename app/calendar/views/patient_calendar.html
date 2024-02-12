@@ -163,7 +163,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
-                    <div class="form-group col-sm-6" style="padding-left: 15px;">
+                    <div class="form-group col-sm-3">
                         <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left;">
                             <select class="form-control input-sm" ng-model="patientcalendar.searchParams.limit" ng-change="patientcalendar.applySearch()">
@@ -174,6 +174,10 @@
                             </select>
                         </div>
                     </div> 
+                    <div class="col-md-3" style="padding-top: 7px;">
+                        <label>Show Time</label>
+                        <input type="checkbox" name="livein" ng-model="patientcalendar.forShowTime">
+                    </div>
                 </div>
             </div>
         </div>
@@ -187,6 +191,7 @@
         on-event-click="eventClicked(calendarEvent)"
         type-id="patientcalendar.patientId"
         type="patient"
+        show-time="patientcalendar.forShowTime"
         list="patientcalendar.patient_list">
     </mwl-calendar>
     <div ng-if="patientcalendar.calendarView == 'week' && patientcalendar.patient_list.length > 0">

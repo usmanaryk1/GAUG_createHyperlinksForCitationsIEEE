@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 filter-checkbox row" style="margin-top: 30px;">
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-3">
                         <label class="col-sm-3 control-label pull-left" style="min-width:110px;padding-top: 7px;padding-left: 0px;"><span style="float:left;">Show Entries</span></label>
                         <div style="width:70px; float:left;">
                             <select class="form-control input-sm" ng-model="calendar.searchParams.limit" ng-change="calendar.applySearch()">
@@ -168,7 +168,11 @@
                                 <option value="100">100</option>
                             </select>
                         </div>
-                    </div> 
+                    </div>
+                    <div class="col-md-3" style="padding-top: 7px;">
+                        <label>Show Time</label>
+                        <input type="checkbox" name="livein" ng-model="calendar.forShowTime">
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,6 +185,7 @@
         on-event-click="eventClicked(calendarEvent)"
         type-id="calendar.employeeId"
         type="employee"
+        show-time="calendar.forShowTime"
         list="calendar.employee_list">
     </mwl-calendar>
     <div ng-if="calendar.calendarView == 'week' && calendar.employee_list.length > 0">

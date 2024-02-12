@@ -59,7 +59,8 @@ angular
                     onEventClick: '=',
                     onLinkClick: '=',
                     list: '=',
-                    type: '='
+                    type: '=',
+                    showTime: '='
                 },
                 controller: controller
             };

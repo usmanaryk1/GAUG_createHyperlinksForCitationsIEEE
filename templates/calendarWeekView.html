@@ -29,7 +29,8 @@
                     ng-if="temp_event.eventType == 'S'" 
                     class="event-pointer event-style" 
                     tooltip-html-unsafe="<div>Name: {{temp_event.patient.lName}}, {{temp_event.patient.fName}} <br> Phone Number: {{temp_event.patient.phone|tel}} <br> Schedule Time: {{temp_event.startTime|ampm}} - {{temp_event.endTime|ampm}} <br> Address: {{temp_event.patient.patientAddress.address1}} <br> {{temp_event.patient.patientAddress.city + ', ' + temp_event.patient.patientAddress.state + '- ' + temp_event.patient.patientAddress.zipcode}}">    
-                    {{temp_event.patient.lName| limitTo: 9}}
+                    {{temp_event.patient.lName| limitTo: 9}} <br>
+                    <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime | ampmshort}}{{" - "}}{{temp_event.endTime | ampmshort}}</span>
                 </span>
 
                 <span ng-if="temp_event.eventType == 'A'" class="event-pointer event-style">    
@@ -56,7 +57,8 @@
                         ng-if="temp_event.eventType == 'S'" 
                         class="event-pointer event-style" 
                         tooltip-html-unsafe="<div>Name: {{temp_event.patient.lName}}, {{temp_event.patient.fName}} <br> Phone Number: {{temp_event.patient.phone|tel}} <br> Schedule Time: {{temp_event.startTime|ampm}} - {{temp_event.endTime|ampm}} <br> Address: {{temp_event.patient.patientAddress.address1}} <br> {{temp_event.patient.patientAddress.city + ', ' + temp_event.patient.patientAddress.state + '- ' + temp_event.patient.patientAddress.zipcode}}">    
-                        {{temp_event.patient.lName| limitTo: 9}}
+                        {{temp_event.patient.lName| limitTo: 9}} <br>
+                    <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime | ampmshort}}{{" - "}}{{temp_event.endTime | ampmshort}}</span>
                     </span>
 
                     <span ng-if="temp_event.eventType == 'A'" class="event-pointer event-style">    
@@ -90,17 +92,18 @@
 
                 <i class="glyphicon glyphicon-list-alt pull-right" ng-if="temp_event.note != undefined" tooltip-html-unsafe="<div>Note:<br>{{temp_event.note}}" tooltip-placement="left" style="margin-right:5px;padding-top:1.49px;"></i>
                 <span 
-                    ng-if="temp_event.eventType == 'S' && temp_event.employeeId == undefined ? false: true && temp_event.employee.address2 == undefined ? false: true" 
+                    ng-if="temp_event.eventType == 'S' && (temp_event.employeeId == undefined ? false: true) && (temp_event.employee.address2 == undefined ? false: true)" 
                     class="event-pointer event-style" 
                     tooltip-html-unsafe="<div>Name: {{temp_event.employee.lName}}, {{temp_event.employee.fName}} <br> Phone Number: {{temp_event.employee.phone|tel}} <br> Schedule Time: {{temp_event.startTime|ampm}} - {{temp_event.endTime|ampm}} <br> Address: {{temp_event.employee.address1}} <br> {{temp_event.employee.address2}} <br> {{temp_event.employee.city + ', ' + temp_event.employee.state + '- ' + temp_event.employee.zipcode}}">    
-                    {{temp_event.employee.lName| limitTo: 9}}
+                    {{temp_event.employee.lName| limitTo: 9}} <br>
+                    <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime | ampmshort}}{{" - "}}{{temp_event.endTime | ampmshort}}</span>
                 </span>
-
                 <span 
-                    ng-if="temp_event.eventType == 'S' && temp_event.employeeId == undefined ? false: true && temp_event.employee.address2 == undefined ? true: false" 
+                    ng-if="temp_event.eventType == 'S' && (temp_event.employeeId == undefined ? false: true) && (temp_event.employee.address2 == undefined ? true: false)" 
                     class="event-pointer event-style" 
                     tooltip-html-unsafe="<div>Name: {{temp_event.employee.lName}}, {{temp_event.employee.fName}} <br> Phone Number: {{temp_event.employee.phone|tel}} <br> Schedule Time: {{temp_event.startTime|ampm}} - {{temp_event.endTime|ampm}} <br> Address: {{temp_event.employee.address1}} <br> {{temp_event.employee.city + ', ' + temp_event.employee.state + '- ' + temp_event.employee.zipcode}}">    
-                    {{temp_event.employee.lName| limitTo: 9}}
+                    {{temp_event.employee.lName| limitTo: 9}} <br>
+                    <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime | ampmshort}}{{" - "}}{{temp_event.endTime | ampmshort}}</span>
                 </span>
 
                 <span 
@@ -129,17 +132,19 @@
 
                     <i class="glyphicon glyphicon-list-alt pull-right" ng-if="temp_event.note != undefined" tooltip-html-unsafe="<div>Note:<br>{{temp_event.note}}" style="margin-right:5px;padding-top:1.49px;"></i>
                     <span 
-                        ng-if="temp_event.eventType == 'S' && temp_event.employeeId == undefined ? false: true && temp_event.employee.address2 == undefined ? false: true" 
+                        ng-if="temp_event.eventType == 'S' && (temp_event.employeeId == undefined ? false: true) && (temp_event.employee.address2 == undefined ? false: true)" 
                         class="event-pointer event-style" 
                         tooltip-html-unsafe="<div>Name: {{temp_event.employee.lName}}, {{temp_event.employee.fName}} <br> Phone Number: {{temp_event.employee.phone|tel}} <br> Schedule Time: {{temp_event.startTime|ampm}} - {{temp_event.endTime|ampm}} <br> Address: {{temp_event.employee.address1}} <br ng-if='temp_event.employee.address2 != undefined'> {{temp_event.employee.address2}} <br> {{temp_event.employee.city + ', ' + temp_event.employee.state + '- ' + temp_event.employee.zipcode}}">    
-                        {{temp_event.employee.lName| limitTo: 9}}
+                        {{temp_event.employee.lName| limitTo: 9}} <br>
+                    <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime | ampmshort}}{{" - "}}{{temp_event.endTime | ampmshort}}</span>
                     </span>
 
                     <span 
-                        ng-if="temp_event.eventType == 'S' && temp_event.employeeId == undefined ? false: true && temp_event.employee.address2 == undefined ? true: false" 
+                        ng-if="temp_event.eventType == 'S' && (temp_event.employeeId == undefined ? false: true) && (temp_event.employee.address2 == undefined ? true: false)" 
                         class="event-pointer event-style" 
                         tooltip-html-unsafe="<div>Name: {{temp_event.employee.lName}}, {{temp_event.employee.fName}} <br> Phone Number: {{temp_event.employee.phone|tel}} <br> Schedule Time: {{temp_event.startTime|ampm}} - {{temp_event.endTime|ampm}} <br> Address: {{temp_event.employee.address1}} <br ng-if='temp_event.employee.address2 != undefined'> {{temp_event.employee.address2}} <br> {{temp_event.employee.city + ', ' + temp_event.employee.state + '- ' + temp_event.employee.zipcode}}">    
-                        {{temp_event.employee.lName| limitTo: 9}}
+                        {{temp_event.employee.lName| limitTo: 9}} <br>
+                    <span style="margin-left:5px;" ng-if="showTime">{{temp_event.startTime | ampmshort}}{{" - "}}{{temp_event.endTime | ampmshort}}</span>
                     </span>
 
                     <span 

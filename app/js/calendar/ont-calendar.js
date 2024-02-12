@@ -85,6 +85,18 @@
 	      }
 	    });
 
+	    $scope.$watch(
+	      'showTime'
+	    , function() {
+	      if (!eventsWatched) {
+	        eventsWatched = true;
+	        $scope.$watch('events', refreshCalendar, true); //this will call refreshCalendar when the watcher starts (i.e. now)
+	      } else {
+	        refreshCalendar();
+	        console.log($scope.showTime);
+	      }
+	    });
+
 	  }];
 	    return {
 	      templateUrl: 'templates/calendar.html',
@@ -100,7 +112,8 @@
 	        monthCellEventsTemplateUrl: '@',
             list:'=',
             typeId:'=',
-            type:'@'    
+            type:'@',
+            showTime: '='   
 	      },
 	      controller: controller
 	    };

@@ -6,6 +6,7 @@
         ctrl.patient_list = [];
 
         var timeFormat = 'HH:mm';
+        ctrl.forShowTime = true;
 
         Page.setTitle("Patient Calendar");
 
