@@ -253,7 +253,7 @@
 
         ctrl.navigateToState = function () {
             var params = angular.copy(searchParams);
-            if (searchParams !== null && searchParams.lastPage !== null && searchParams.lastPage) {
+            if (searchParams !== null && searchParams.lastPage != null) {
                 if (searchParams.lastPage.indexOf("employee_timesheet") >= 0) {
                     $state.go('app.employee_timesheet');
                 } else if (searchParams.lastPage.indexOf("patient_time_sheet") >= 0) {
