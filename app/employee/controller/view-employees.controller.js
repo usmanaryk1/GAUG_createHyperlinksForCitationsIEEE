@@ -8,7 +8,9 @@
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
         $rootScope.positions = {};
+        ctrl.positionList = [];
         PositionDAO.retrieveAll({}).then(function (res) {
+        ctrl.positionList = res;
             if (res && res.length > 0) {
                 angular.forEach(res, function (position) {
                     $rootScope.positions[position.id] = position.position;
