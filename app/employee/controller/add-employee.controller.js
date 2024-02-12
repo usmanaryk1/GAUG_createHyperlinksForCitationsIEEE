@@ -5,7 +5,7 @@
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
-        ctrl.employee = {employeeDocumentId: {}};
+        ctrl.employee = {employeeDocumentId: {}, employeeAttachments: []};
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
@@ -44,13 +44,18 @@
         ctrl.referencesFileObj = {};
         ctrl.physicalFileObj = {};
         ctrl.profileFileObj = {};
+        ctrl.backgroundCheckFileObj = {};
         ctrl.resetEmployeeTab3 = function () {
             ctrl.applicationFileObj.errorMsg = null;
             ctrl.licenceFileObj.errorMsg = null;
             ctrl.i9eligibilityFileObj.errorMsg = null;
             ctrl.w4FileObj.errorMsg = null;
+            ctrl.backgroundCheckFileObj.errorMsg = null;
             if (ctrl.employee.employeeDocumentId.application != null) {
                 ctrl.employee.employeeDocumentId.application = null;
+            }
+            if (ctrl.employee.employeeDocumentId.backgroundCheck != null) {
+                ctrl.employee.employeeDocumentId.backgroundCheck = null;
             }
             if (ctrl.employee.employeeDocumentId.licence != null) {
                 ctrl.employee.employeeDocumentId.licence = null;
@@ -67,12 +72,15 @@
             if (ctrl.employee.employeeDocumentId.physical != null) {
                 ctrl.employee.employeeDocumentId.physical = null;
             }
-
+            ctrl.employee.employeeAttachments = [];
             if (ctrl.licenceFileObj.flowObj != null) {
                 ctrl.licenceFileObj.flowObj.cancel();
             }
             if (ctrl.applicationFileObj.flowObj != null) {
                 ctrl.applicationFileObj.flowObj.cancel();
+            }
+            if (ctrl.backgroundCheckFileObj.flowObj != null) {
+                ctrl.backgroundCheckFileObj.flowObj.cancel();
             }
             if (ctrl.i9eligibilityFileObj.flowObj != null) {
                 ctrl.i9eligibilityFileObj.flowObj.cancel();
@@ -168,27 +176,31 @@
 
         ctrl.checkFileUploadValidity = function () {
             var validApplication = true;
-            var validI9Eligibility = true;
+            var validBackground = true;
             var validW4 = true;
             if ($rootScope.tabNo != 3) {
                 ctrl.applicationFileObj.errorMsg = null;
-                ctrl.i9eligibilityFileObj.errorMsg = null;
                 ctrl.w4FileObj.errorMsg = null;
             }
-
-            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.applicationFileObj.errorMsg = "Please upload Application.";
-                validApplication = false;
+            if (ctrl.displayDocumentsByPositionMap['a']) {
+                if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                    ctrl.applicationFileObj.errorMsg = "Please upload Application.";
+                    validApplication = false;
+                }
             }
-            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.i9 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.i9eligibilityFileObj.errorMsg = "Please upload I-9 Eligibility.";
-                validI9Eligibility = false;
+            if (ctrl.displayDocumentsByPositionMap['w']) {
+                if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                    ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
+                    validW4 = false;
+                }
             }
-            if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
-                validW4 = false;
+            if (ctrl.displayDocumentsByPositionMap['b']) {
+                if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.backgroundCheck == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+//                    ctrl.backgroundCheckFileObj.errorMsg = "Please upload Background Check.";
+//                    validBackground = false;
+                }
             }
-            return (validApplication && validI9Eligibility && validW4);
+            return (validApplication && validBackground && validW4);
         };
 
         //ceck if form has been changed or not
@@ -371,6 +383,7 @@
         function retrieveEmployeeCareTypeAfterSave(employeeRes) {
             EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function (res) {
                 ctrl.employee = employeeRes;
+                ctrl.displayDocumentsByPosition();
                 ctrl.employee.careRatesList = res;
                 $timeout(function () {
                     $("#rate2").multiSelect('refresh');
@@ -383,7 +396,7 @@
         function pageInit() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
-                EmployeeDAO.get({id: $state.params.id}).then(function (res) {
+                EmployeeDAO.get({id: $state.params.id, includeAttachment: true}).then(function (res) {
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
@@ -396,6 +409,7 @@
                         ctrl.hideLoadingImage = true;
                     }
                     ctrl.employee = res;
+                    ctrl.displayDocumentsByPosition();
                     if (res.languageSpoken != null) {
                         var languages = res.languageSpoken;
                         angular.forEach(ctrl.languagesKeyValue, function (obj) {
@@ -543,6 +557,9 @@
             $timeout(function () {
                 if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
                     ctrl.employee.employeeDocumentId = {};
+                }
+                if (!ctrl.employee.employeeAttachments) {
+                    ctrl.employee.employeeAttachments = [];
                 }
                 if (!ctrl.retrivalRunning) {
                     form_data = $('#add_employee_form').serialize();
@@ -1069,7 +1086,194 @@
 //        });
 
 //        ctrl.pageInitCall();
+        ctrl.deleteAttachment = function (i) {
+            ctrl.employee.employeeAttachments.splice(i, 1);
+        };
 
+        ctrl.openAttachmentModal = function (modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.unmaskLoading();
+            $rootScope.uploadPopup = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.uploadPopup.baseUrl = ontimetest.weburl;
+            $rootScope.uploadPopup.companyCode = ontimetest.company_code;
+            $rootScope.uploadPopup.data = {employeeId: ctrl.employee.id};
+            $rootScope.uploadPopup.fileObj = {};
+            $rootScope.uploadPopup.closePopup = function () {
+                $rootScope.uploadPopup.close();
+            };
+            $rootScope.uploadPopup.save = function () {
+                var required = true;
+                if ($rootScope.uploadPopup.data.type == 'l' && ctrl.position == 'staff') {
+                    required = false;
+                }
+                if (required) {
+                    if (!$rootScope.uploadPopup.data.filePath && $rootScope.uploadPopup.data.type != 't') {
+                        $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
+                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.name || !$rootScope.uploadPopup.data.name == '')) {
+                        $rootScope.uploadPopup.fileObj.errorMsg = "Please select Tb Testing.";
+                    } else {
+                        ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
+                        $rootScope.uploadPopup.closePopup();
+                    }
+                } else {
+                    ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
+                    $rootScope.uploadPopup.closePopup();
+                }
+
+            };
+            $rootScope.uploadPopup.typeList = [];
+            if (ctrl.displayDocumentsByPositionMap['l']) {
+                if (ctrl.position == 'staff') {
+                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License"});
+                } else {
+                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License or Certificate"});
+                }
+            }
+            if (ctrl.displayDocumentsByPositionMap['9']) {
+                $rootScope.uploadPopup.typeList.push({id: '9', label: "I-9 Eligibility"});
+            }
+            if (ctrl.displayDocumentsByPositionMap['z']) {
+                $rootScope.uploadPopup.typeList.push({id: 'z', label: "Physical"});
+            }
+            if (ctrl.displayDocumentsByPositionMap['t']) {
+                $rootScope.uploadPopup.typeList.push({id: 't', label: "Tb Testing"});
+            }
+            $rootScope.uploadPopup.setUploadFile = function () {
+                $formService.resetRadios();
+                $rootScope.uploadPopup.fileObj = {};
+                delete $rootScope.uploadPopup.data.filePath;
+                if ($rootScope.uploadPopup.data.type == 't') {
+                    delete $rootScope.uploadPopup.data.name;
+                }
+                $rootScope.uploadPopup.uploadFile = {
+                    target: ontimetest.weburl + 'file/upload',
+                    chunkSize: 1024 * 1024 * 1024,
+                    testChunks: false,
+                    fileParameterName: "fileUpload",
+                    singleFile: true,
+                    headers: {
+                        type: $rootScope.uploadPopup.data.type,
+                        company_code: ontimetest.company_code
+                    }
+                };
+            }
+            //When file is selected from browser file picker
+            $rootScope.uploadPopup.fileSelected = function (file, flow) {
+                $rootScope.uploadPopup.fileObj.flowObj = flow;
+                $rootScope.uploadPopup.fileObj.flowObj.upload();
+            };
+            //When file is uploaded this method will be called.
+            $rootScope.uploadPopup.fileUploaded = function (response, file, flow) {
+                if (response != null) {
+                    response = JSON.parse(response);
+                    if (response.fileName != null && response.status != null && response.status == 's') {
+                        $rootScope.uploadPopup.data.filePath = response.fileName;
+                        if ($rootScope.uploadPopup.data.name == null || $rootScope.uploadPopup.data.name == '') {
+                            $rootScope.uploadPopup.data.name = response.fileName;
+                        }
+                    }
+                }
+                $rootScope.uploadPopup.disableSaveButton = false;
+                $rootScope.uploadPopup.disableUploadButton = false;
+            };
+            $rootScope.uploadPopup.fileError = function ($file, $message, $flow) {
+                $flow.cancel();
+                $rootScope.uploadPopup.disableSaveButton = false;
+                $rootScope.uploadPopup.disableUploadButton = false;
+                $rootScope.uploadPopup.data.filePath = null;
+                $rootScope.uploadPopup.data.name = null;
+                $rootScope.uploadPopup.fileObj.errorMsg = "File cannot be uploaded";
+            };
+            //When file is added in file upload
+            $rootScope.uploadPopup.fileAdded = function (file, flow) { //It will allow all types of attahcments'
+                $rootScope.uploadPopup.formDirty = true;
+                $rootScope.uploadPopup.data.filePath = null;
+                if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                    $rootScope.uploadPopup.fileObj.errorMsg = "Please upload a valid file.";
+                    return false;
+                }
+                $rootScope.uploadPopup.disableSaveButton = true;
+                $rootScope.uploadPopup.disableUploadButton = true;
+                $rootScope.uploadPopup.showfileProgress = true;
+                $rootScope.uploadPopup.fileObj.errorMsg = null;
+                $rootScope.uploadPopup.fileObj.flow = flow;
+                return true;
+            };
+        };
+        ctrl.officeStaffIds = [];
+        PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    ctrl.officeStaffIds.push(position.id);
+                });
+            }
+        });
+        ctrl.displayDocumentsByPosition = function () {
+            ctrl.displayDocumentsByPositionMap = {};
+            if (ctrl.employee.companyPositionId && ctrl.officeStaffIds.indexOf(ctrl.employee.companyPositionId) > -1) {
+                ctrl.position = "staff";
+                ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, l: false};
+                ctrl.typeMap = {'l': "License", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing"};
+            } else {
+                ctrl.position = "other";
+                ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, z: true, t: true, b: true, l: true};
+                ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing"};
+            }
+        };
+        ctrl.backgroundCheckUploadFile = {
+            target: ontimetest.weburl + 'file/upload',
+            chunkSize: 1024 * 1024 * 1024,
+            testChunks: false,
+            fileParameterName: "fileUpload",
+            singleFile: true,
+            headers: {
+                type: "b",
+                company_code: ontimetest.company_code
+            }
+        };
+        //When file is selected from browser file picker
+        ctrl.backgroundCheckFileSelected = function (file, flow) {
+            ctrl.backgroundCheckFileObj.flowObj = flow;
+            ctrl.backgroundCheckFileObj.flowObj.upload();
+        };
+        //When file is uploaded this method will be called.
+        ctrl.backgroundCheckFileUploaded = function (response, file, flow) {
+            if (response != null) {
+                response = JSON.parse(response);
+                if (response.fileName != null && response.status != null && response.status == 's') {
+                    ctrl.employee.employeeDocumentId.backgroundCheck = response.fileName;
+                }
+            }
+            ctrl.disableSaveButton = false;
+            ctrl.disableBackgroundCheckUploadButton = false;
+        };
+        ctrl.backgroundCheckFileError = function ($file, $message, $flow) {
+            $flow.cancel();
+            ctrl.disableSaveButton = false;
+            ctrl.disableBackgroundCheckUploadButton = false;
+            ctrl.employee.employeeDocumentId.backgroundCheck = null;
+            ctrl.backgroundCheckFileObj.errorMsg = "File cannot be uploaded";
+        };
+        //When file is added in file upload
+        ctrl.backgroundCheckFileAdded = function (file, flow) { //It will allow all types of attahcments'
+            ctrl.formDirty = true;
+            ctrl.employee.employeeDocumentId.backgroundCheck = null;
+            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                ctrl.backgroundCheckFileObj.errorMsg = "Please upload a valid file.";
+                return false;
+            }
+            ctrl.disableSaveButton = true;
+            ctrl.disableBackgroundCheckUploadButton = true;
+            ctrl.backgroundCheckShowfileProgress = true;
+            ctrl.backgroundCheckFileObj.errorMsg = null;
+            ctrl.backgroundCheckFileObj.flow = flow;
+            return true;
+        };
     }
     ;
     angular.module('xenon.controllers').controller('AddEmployeeCtrl', ["$scope", "CareTypeDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "EventTypeDAO", "PatientDAO", "moment", AddEmployeeCtrl]);

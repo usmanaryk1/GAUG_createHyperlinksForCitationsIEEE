@@ -8,17 +8,15 @@
                             <button class="btn btn-info green_bt pull-right" type="submit">
                                 Save Changes
                             </button>
+                            <button type="button" class="btn btn-single btn-info clean-margin btn-block-xs" ng-click="addEmployee.openAttachmentModal('upload-modal', 'md', 'static')">Add Attachment</button>
                             <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click="addEmployee.resetEmployeeTab3()">
                                 Reset To Default
                             </button>
-                            <!--<a class="btn btn-info btn-single pull-right" href="javascript:;" onclick="showAjaxModal();">
-                                View Document
-                            </a>-->
                         </div>
                     </div>
-                    <div class="form-group-separator">
+                    <div class="form-group-separator" ng-show="addEmployee.displayDocumentsByPositionMap['a']">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-show="addEmployee.displayDocumentsByPositionMap['a']">
                         <label class="col-sm-3 control-label">
                             Application
                         </label>
@@ -27,11 +25,11 @@
                                 <!--<input class="form-control" name="Application" type="file" data-message-required="Please upload Application."/>-->
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <button type='button' class='btn btn-single gray_bt' id="Application" ng-model="addEmployee.employee.employeeDocumentId.application" style="margin-bottom:0px !important" flow-btn name="Application"  ng-disabled="addEmployee.disableApplicationUploadButton" >Choose File</button>
+                                        <button type='button' class='btn btn-single gray_bt' id="Application" ng-model="addEmployee.employee.employeeDocumentId.application" style="margin-bottom:0px !important" flow-btn name="Application"  ng-disabled="addEmployee.disableApplicationUploadButton">Choose File</button>
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="control-label">
-                                            <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.employeeDocumentId.application}}">
+                                            <a ng-if="addEmployee.employee.employeeDocumentId.application" style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.employeeDocumentId.application}}">
                                                 application{{addEmployee.employee.employeeDocumentId.application|extension}}
                                             </a>
                                         </label>
@@ -54,127 +52,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group-separator">
+                    <div class="form-group-separator" ng-show="addEmployee.displayDocumentsByPositionMap['w']">
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            License Or Certificate
-                        </label>
-                        <div class="col-sm-9">
-                            <div flow-init="addEmployee.licenceUploadFile" flow-file-added="addEmployee.licenceFileAdded($file, $flow)" flow-file-success="addEmployee.licenceFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.licenceFileSelected($file,$flow)" flow-file-error="addEmployee.licenceFileError( $file, $message, $flow )">
-                                <!--<input class="form-control" name="Application" type="file" data-message-required="Please upload Application."/>-->
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <button type='button' class='btn btn-single gray_bt' id="Licence" ng-model="addEmployee.employee.employeeDocumentId.licence" style="margin-bottom:0px !important" flow-btn name="Licence" ng-disabled="addEmployee.disableLicenceUploadButton">Choose File</button>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <label class="control-label">
-                                            <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/l/{{addEmployee.employee.employeeDocumentId.licence}}">
-                                                license{{addEmployee.employee.employeeDocumentId.licence|extension}}
-                                            </a>
-                                            <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.licence != null" ng-click="addEmployee.clearLicence()"></i></a>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div ng-show="addEmployee.licenceFileObj.errorMsg != null && addEmployee.licenceFileObj.errorMsg != ''">
-                                        <span class="red">{{addEmployee.licenceFileObj.errorMsg}}</span>
-                                    </div> 
-                                </div>
-                                <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
-                                    <div ng-repeat="file in transfers">
-                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.licenceShowfileProgress">
-                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-                                                <!--{{file.progress() * 100 | number : 0}} %-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            License Or Certificate Expiration Date
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="LicenseOrCertificateExpirationDate" type="text"
-                                       ng-model='addEmployee.employee.employeeDocumentId.licenceExpirationDate'/>
-                                <div class="input-group-addon">
-                                    <a href="#">
-                                        <i class="linecons-calendar">
-                                        </i>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            I-9 Eligibility
-                        </label>
-                        <div class="col-sm-9">
-                            <!--                            <input class="form-control" name="I9Eligibility" type="file" fileread="addEmployee.employee.employeeDocumentId.i9Eligibility"
-                                                               data-validate="required" data-message-required="Please upload I-9 Eligibility."/>-->
-
-                            <div flow-init="addEmployee.i9eligibilityUploadFile" flow-file-added="addEmployee.i9eligibilityFileAdded($file, $flow)" flow-file-success="addEmployee.i9eligibilityFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.i9eligibilityFileSelected($file,$flow)" flow-file-error="addEmployee.i9eligibilityFileError( $file, $message, $flow )">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <button type='button' class='btn btn-single gray_bt' id="I9Eligibility" ng-model="addEmployee.employee.employeeDocumentId.i9" style="margin-bottom:0px !important" flow-btn name="I9Eligibility"  ng-disabled="addEmployee.disableI9ElgibilityUploadButton">Choose File</button>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <label class="control-label">
-                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/9/{{addEmployee.employee.employeeDocumentId.i9}}">
-                                            i-9 eligibility{{addEmployee.employee.employeeDocumentId.i9|extension}}</a>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div ng-show="addEmployee.i9eligibilityFileObj.errorMsg != null && addEmployee.i9eligibilityFileObj.errorMsg != ''">
-                                        <span class="red">{{addEmployee.i9eligibilityFileObj.errorMsg}}</span>
-                                    </div> 
-                                </div>
-                                <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
-                                    <div ng-repeat="file in transfers">
-                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.i9eligibilityShowfileProgress">
-                                            <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-                                                <!--{{file.progress() * 100 | number : 0}} %-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            I-9 Eligibility Expiration Date
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="I9EligibilityExpirationDate" type="text" ng-model="addEmployee.employee.employeeDocumentId.i9ExpirationDate"
-                                       data-validate="required" data-message-required="Please enter I-9 Eligibility Expiration Date."/>
-                                <div class="input-group-addon">
-                                    <a href="#">
-                                        <i class="linecons-calendar">
-                                        </i>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-show="addEmployee.displayDocumentsByPositionMap['w']">
                         <label class="col-sm-3 control-label">
                             W-4 or W-9
                         </label>
@@ -188,8 +68,8 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="control-label">
-                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/w/{{addEmployee.employee.employeeDocumentId.w4}}">
-                                            w-4{{addEmployee.employee.employeeDocumentId.w4|extension}}</a>
+                                            <a ng-if="addEmployee.employee.employeeDocumentId.w4" style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/w/{{addEmployee.employee.employeeDocumentId.w4}}">
+                                                w-4{{addEmployee.employee.employeeDocumentId.w4|extension}}</a>
                                         </label>
                                     </div>
                                 </div>
@@ -210,9 +90,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group-separator">
+                    <div class="form-group-separator" ng-show="addEmployee.displayDocumentsByPositionMap['r']">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-show="addEmployee.displayDocumentsByPositionMap['r']">
                         <label class="col-sm-3 control-label">
                             References
                         </label>
@@ -226,9 +106,9 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="control-label">
-                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/r/{{addEmployee.employee.employeeDocumentId.references}}">
-                                            references{{addEmployee.employee.employeeDocumentId.references|extension}}</a>
-                                        <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.references != null" ng-click="addEmployee.clearRefereces()"></i></a>
+                                            <a ng-if="addEmployee.employee.employeeDocumentId.references" style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/r/{{addEmployee.employee.employeeDocumentId.references}}">
+                                                references{{addEmployee.employee.employeeDocumentId.references|extension}}</a>
+                                            <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.references != null" ng-click="addEmployee.clearRefereces()"></i></a>
                                         </label>
                                     </div>
                                 </div>
@@ -253,32 +133,70 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
-                            Physical
+                            Hire Date
                         </label>
                         <div class="col-sm-9">
-                            <!--                            <input class="form-control" name="Physical" type="file" fileread="addEmployee.employee.employeeDocumentId.physical"
-                                                               data-message-required="Please upload Physical."/>-->
-                            <div flow-init="addEmployee.physicalUploadFile" flow-file-added="addEmployee.physicalFileAdded($file, $flow)" flow-file-success="addEmployee.physicalFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.physicalFileSelected($file,$flow)" flow-file-error="addEmployee.physicalFileError( $file, $message, $flow )">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="StartDate" type="text"
+                                       data-validate="required,date" data-message-required="Please enter Hire Date" ng-model="addEmployee.employee.hireDate"
+                                       max-date="addEmployee.employee.terminationDate">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Termination Date
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="EndDate" type="text"
+                                       data-validate="date" data-message-required="Please enter Termination Date" ng-model="addEmployee.employee.terminationDate"
+                                       min-date="addEmployee.employee.hireDate">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="linecons-calendar">
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator" ng-show="addEmployee.displayDocumentsByPositionMap['b']">
+                    </div>
+                    <div class="form-group" ng-show="addEmployee.displayDocumentsByPositionMap['b']">
+                        <label class="col-sm-3 control-label">
+                            Background Check
+                        </label>
+                        <div class="col-sm-9">
+                            <div flow-init="addEmployee.backgroundCheckUploadFile" flow-file-added="addEmployee.backgroundCheckFileAdded($file, $flow)" flow-file-success="addEmployee.backgroundCheckFileUploaded($message,$file,$flow)" flow-files-submitted="addEmployee.backgroundCheckFileSelected($file,$flow)" flow-file-error="addEmployee.backgroundCheckFileError( $file, $message, $flow )">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <button type='button' class='btn btn-single gray_bt' id="Physical" ng-model="addEmployee.employee.employeeDocumentId.physical" flow-btn style="margin-bottom:0px !important" name="Physical" ng-disabled="addEmployee.disablePhysicalUploadButton">Choose File</button>
+                                        <button type='button' class='btn btn-single gray_bt' id="BackgroundCheck" ng-model="addEmployee.employee.employeeDocumentId.backgroundCheck" style="margin-bottom:0px !important" flow-btn name="BackgroundCheck"  ng-disabled="addEmployee.disableBackgroundCheckUploadButton">Choose File</button>
                                     </div>
                                     <div class="col-sm-9">
                                         <label class="control-label">
-                                        <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/z/{{addEmployee.employee.employeeDocumentId.physical}}">
-                                            physical{{addEmployee.employee.employeeDocumentId.physical|extension}}</a>
-                                        <a href=""><i class="fa fa-close" ng-show="addEmployee.employee.employeeDocumentId.physical != null" ng-click="addEmployee.clearPhysical()"></i></a>
+                                            <a ng-if="addEmployee.employee.employeeDocumentId.backgroundCheck" style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/a/{{addEmployee.employee.employeeDocumentId.backgroundCheck}}">
+                                                backgroundCheck{{addEmployee.employee.employeeDocumentId.backgroundCheck|extension}}
+                                            </a>
                                         </label>
                                     </div>
                                 </div>
                                 <div>
-                                    <div ng-show="addEmployee.physicalFileObj.errorMsg != null && addEmployee.physicalFileObj.errorMsg != ''">
-                                        <span class="red">{{addEmployee.physicalFileObj.errorMsg}}</span>
+                                    <div ng-show="addEmployee.backgroundCheckFileObj.errorMsg != null && addEmployee.backgroundCheckFileObj.errorMsg != ''">
+                                        <span class="red">{{addEmployee.backgroundCheckFileObj.errorMsg}}</span>
                                     </div> 
                                 </div>
                                 <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
                                     <div ng-repeat="file in transfers">
-                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.physicalShowfileProgress">
+                                        <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && addEmployee.backgroundCheckShowfileProgress">
                                             <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
                                                 <!--{{file.progress() * 100 | number : 0}} %-->
                                             </div>
@@ -288,113 +206,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group-separator">
+                    <div class="form-group-separator" ng-show="addEmployee.displayDocumentsByPositionMap['b']">
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Physical Expiration Date
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="PhysicalExpirationDate" type="text"
-                                       onblur="setValidationMessage(this)" itemid="Physical Expiration Date" ng-model="addEmployee.employee.employeeDocumentId.physicalExpirationDate"/>
-                                <div class="input-group-addon">
-                                    <a href="#">
-                                        <i class="linecons-calendar">
-                                        </i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            TB Testing
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <label class="cbr-inline">
-                                    <input value="P" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
-                                    PPD
-                                </label>
-                                <label class="cbr-inline">
-                                    <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="addEmployee.employee.employeeDocumentId.tbTesting"/>
-                                    CXR
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            TB Testing Expiration Date
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="TBTestingExpirationDate" type="text" itemid="TB Testing Expiration Date"
-                                       onblur="setValidationMessage(this)" ng-model="addEmployee.employee.employeeDocumentId.tbTestingExpirationDate"/>
-                                <div class="input-group-addon">
-                                    <a href="#">
-                                        <i class="linecons-calendar">
-                                        </i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <!-- <div class="form-group">
-                              <div class="col-lg-12">
-                                <button class="btn btn-info green_bt pull-right" style="min-width:140px;" type="button">Add New Physical </button>
-                              </div>
-                              
-                            </div>
-                            <div class="form-group-separator"></div>-->
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Start Date
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="StartDate" type="text"
-                                       data-validate="required,date" data-message-required="Please enter Start Date" ng-model="addEmployee.employee.employeeDocumentId.startDate"
-                                       max-date="addEmployee.employee.employeeDocumentId.endDate">
-                                <div class="input-group-addon">
-                                    <a href="#">
-                                        <i class="linecons-calendar">
-                                        </i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            End Date
-                        </label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input class="form-control datepicker" data-format="mm/dd/yyyy" name="EndDate" type="text"
-                                       data-validate="date" data-message-required="Please enter End Date" ng-model="addEmployee.employee.employeeDocumentId.endDate"
-                                       min-date="addEmployee.employee.employeeDocumentId.startDate">
-                                <div class="input-group-addon">
-                                    <a href="#">
-                                        <i class="linecons-calendar">
-                                        </i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-show="addEmployee.displayDocumentsByPositionMap['b']">
                         <label class="col-sm-3 control-label">
                             Background Check Date
                         </label>
@@ -412,9 +226,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group-separator">
+                    <div class="form-group-separator" ng-show="addEmployee.displayDocumentsByPositionMap['b']">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-show="addEmployee.displayDocumentsByPositionMap['b']">
                         <label class="col-sm-3 control-label">
                             Background Check Status
                         </label>
@@ -431,13 +245,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group-separator">
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit">
-                                Submit
-                            </button>
+                    <div class="row" ng-if="addEmployee.employee.employeeAttachments && addEmployee.employee.employeeAttachments.length > 0">
+                        <div class="form-group-separator">
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-list">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center"> No. </th>
+                                        <th class="text-center"> Type </th>
+                                        <th class="text-center"> Name </th>
+                                        <th class="text-center"> Expiry Date </th>
+                                        <th class="text-center"> <em class="fa fa-cog"> </em></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="attachment in addEmployee.employee.employeeAttachments">
+                                        <td class="hidden-xs text-center"> {{$index + 1}} </td>
+                                        <td align="center"> {{addEmployee.typeMap[attachment.type]}} </td>
+                                        <td align="center"> <a ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}"> {{attachment.name}} </a></td>
+                                        <td align="center"> {{attachment.expiryDate}} </td>
+                                        <td align="center">
+                                            <a class="btn btn-danger" ng-click="addEmployee.deleteAttachment($index)"> <em class="fa fa-trash"> </em></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </form>
@@ -446,7 +279,7 @@
     </div>
 </div>
 <!-- Modal 7 (Ajax Modal)-->
-<div class="modal fade" id="modal-7"  data-keyboard="false" >
+<div class="modal fade" id="modal-7"  data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -532,8 +365,122 @@
 //        setTimeout(function() {
 //        // serialize clean form
 //            $(function() {
-//                form_clean = $("form").serialize();
+//                form_clean=$("form").serialize();
 //            });
 //        }, 500);
     });
+</script>
+<script type="text/ng-template" id="upload-modal">
+    <form class="validate form-horizontal" name="uploadpopup" id="uploadpopup" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="uploadPopup.closePopup();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Add Attachment</h4>
+    </div>
+
+    <div class="modal-body">
+
+    <div class="form-group">
+    <label class="col-sm-4 control-label add-padding-modal" for="password">
+    Type
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <select class="form-control" style="margin-top:15px;" name ="type" id="type" ng-model="uploadPopup.data.type" ng-options='type.id as type.label for type in uploadPopup.typeList' data-message-required="Please select type." data-validate="required" ng-change="uploadPopup.setUploadFile()">
+    <option value="" selected hidden />
+    </select>
+    </div>
+    </div>
+
+    <div class="form-group-separator"></div>
+    <div class="form-group">
+    <label class="col-sm-4 control-label add-padding-modal" for="password">
+    Expiry Date
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <div class="input-group" style="z-index:1060">
+    <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-model="uploadPopup.data.expiryDate" data-validate="required,date"  data-message-required="Please select Expiry Date.">
+    <div class="input-group-addon">
+    <a href=""><i class="linecons-calendar"></i></a>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type=='t'"></div>
+    <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type=='t'">
+    <label class="col-sm-4 control-label add-padding-modal" for="password">
+    Tb Testing
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <div class="input-group" style="z-index:1060">
+    <label class="cbr-inline">
+    <input value="P" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.name"/>
+    PPD
+    </label>
+    <label class="cbr-inline">
+    <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.name"/>
+    CXR
+    </label>
+    <div>
+    <div ng-show="uploadPopup.fileObj.errorMsg != null && uploadPopup.fileObj.errorMsg != ''">
+    <span class="red">{{uploadPopup.fileObj.errorMsg}}</span>
+    </div> 
+    </div>
+    </div>
+    </div>
+
+    </div>
+    <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type!='t'"></div>
+    <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type!='t'">
+    <label class="col-sm-4 control-label add-padding-modal" for="password">
+    Document Name
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <input type="text" class="form-control" name="name" ng-model="uploadPopup.data.name">
+    </div>
+    </div>
+
+    <div class="form-group-separator" ng-if="uploadPopup.data.type && uploadPopup.data.type!='t'"></div>
+    <div class="form-group" ng-if="uploadPopup.data.type && uploadPopup.data.type!='t'">
+    <label class="col-sm-4 control-label add-padding-modal">
+    Upload
+    </label>
+    <div class="col-sm-8 add-padding-modal">
+    <div flow-init="uploadPopup.uploadFile" flow-file-added="uploadPopup.fileAdded($file, $flow)" flow-file-success="uploadPopup.fileUploaded($message,$file,$flow)" flow-files-submitted="uploadPopup.fileSelected($file,$flow)" flow-file-error="uploadPopup.fileError( $file, $message, $flow )">
+    <div class="row">
+    <div class="col-sm-3">
+    <button type='button' class='btn btn-single gray_bt' id="upload" ng-model="uploadPopup.data.filePath" style="margin-bottom:0px !important" flow-btn name="upload"  ng-disabled="uploadPopup.disableUploadButton">Choose File</button>
+    </div>
+    <div class="col-sm-9">
+    <label class="control-label">
+    <a ng-show="uploadPopup.data.filePath" style="color: blue;text-decoration: underline" ng-href="{{uploadPopup.baseUrl}}file/download/{{uploadPopup.companyCode}}/a/{{uploadPopup.data.filePath}}">
+    {{uploadPopup.data.name}}.{{uploadPopup.data.filePath|extension}}
+    </a>
+    </label>
+    </div>
+    </div>
+    <div>
+    <div ng-show="uploadPopup.fileObj.errorMsg != null && uploadPopup.fileObj.errorMsg != ''">
+    <span class="red">{{uploadPopup.fileObj.errorMsg}}</span>
+    </div> 
+    </div>
+    <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
+    <div ng-repeat="file in transfers">
+    <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && uploadPopup.showfileProgress">
+    <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+    <!--{{file.progress() * 100 | number : 0}} %-->
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>      
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="uploadPopup.closePopup();">Close</button>
+    <button type="submit" class="btn btn-success" ng-click="uploadPopup.save();">Save changes</button>
+    </div>
+    </form>
 </script>
