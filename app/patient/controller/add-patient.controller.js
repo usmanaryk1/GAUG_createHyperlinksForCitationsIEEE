@@ -8,7 +8,7 @@
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.nextTab;
-        ctrl.fileObj = {};
+//        ctrl.fileObj = {};
 //        ctrl.formDirty = false;
         ctrl.patient = {};
         ctrl.careTypes = [];
@@ -63,23 +63,23 @@
         ctrl.setBillingAddress = setBillingAddress;
         ctrl.setBillingAddressRadioButton = setBillingAddressRadioButton;
         ctrl.resetPatient = function () {
-            if (ctrl.patient.authorization != null) {
-                ctrl.patient.authorization = null;
-            }
-            if (ctrl.fileObj.flowObj != null) {
-                ctrl.fileObj.flowObj.cancel();
-            }
         };
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
         ctrl.isValidAutorization = function (formValidity) {
             var validAuthorization = true;
-            if ($rootScope.tabNo == 4 && ctrl.patient.authorization == null && formValidity) {
-                ctrl.fileObj.errorMsg = "Please upload Authorization Document.";
+            if ($rootScope.tabNo == 4 && (!ctrl.authorizationDocuments || ctrl.authorizationDocuments.length === 0 || ctrl.authorizationDocuments.length !== ctrl.careTypes.length)) {
+                ctrl.authorizationErrorMsg = "Please upload authorization document For each care type.";
                 validAuthorization = false;
+                setTimeout(function () {
+                    $('html,body').animate({
+                        scrollTop: $("#authorizationDocuments").offset().top},
+                    'fast');
+                });
+
             } else {
-                ctrl.fileObj.errorMsg = "";
+                ctrl.authorizationErrorMsg = null;
             }
             return validAuthorization;
         };
@@ -150,6 +150,22 @@
                     patientToSave.orgCode = ontimetest.company_code;
                     reqParam = 'save';
                 }
+                if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
+                    patientToSave.patientAuthorizationDocuments = [];
+                    angular.forEach(ctrl.authorizationDocuments, function (doc) {
+                        var docEntity = {
+                            id: doc.id,
+                            patientId: patientToSave.id,
+                            companyCareTypeId: doc.companyCareTypeId,
+                            authorizedHours: doc.authorizedHours,
+                            filePath: doc.filePath,
+                            name: doc.name,
+                            expiryDate: doc.expiryDate,
+                            dateInserted: doc.dateInserted
+                        };
+                        patientToSave.patientAuthorizationDocuments.push(docEntity);
+                    });
+                }
                 $rootScope.maskLoading();
                 PatientDAO.update({action: reqParam, data: patientToSave, changeSchedule: ctrl.changeSchedule})
                         .then(function (res) {
@@ -187,6 +203,7 @@
                 $rootScope.maskLoading();
                 PatientDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.patient = res;
+                    ctrl.authorizationDocuments = res.patientAuthorizationDocuments;
                     ctrl.oldDate = ctrl.patient.authorizationEndDate;
                     ctrl.lastDate = ctrl.patient.authorizationEndDate;
                     if (res.languagesSpoken != null) {
@@ -207,6 +224,14 @@
                         for (var i = 0; i < length; i++) {
                             ctrl.patientCareTypeMap[res.patientCareTypeCollection[i].insuranceCareTypeId.id] = res.patientCareTypeCollection[i];
                             careTypesSelected.push(res.patientCareTypeCollection[i].insuranceCareTypeId.id);
+                            if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
+                                for (var j = 0; j < ctrl.authorizationDocuments.length; j++) {
+                                    if (ctrl.authorizationDocuments[j].companyCareTypeId === res.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id) {
+                                        ctrl.authorizationDocuments[j].careType = res.patientCareTypeCollection[i].insuranceCareTypeId.id;//dateInserted
+                                        ctrl.authorizationDocuments[j].careTypeTitle = res.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.careTypeTitle;
+                                    }
+                                }
+                            }
                         }
                         ctrl.careTypes = careTypesSelected;
 //                        delete ctrl.patient.patientCareTypeCollection;
@@ -485,6 +510,14 @@
             };
 
             $rootScope.careTypeModel.remove = function () {
+                //Remove Authorization Documents if any
+                if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
+                    for (var i = ctrl.authorizationDocuments.length - 1; i >= 0; i--) {
+                        if (ctrl.authorizationDocuments[i].careType == Number(ctrl.newDeselectedType[0])) {
+                            ctrl.authorizationDocuments.splice(i, 1);
+                        }
+                    }
+                }
                 $timeout(function () {
                     //make this false when unselection process should end casually.
                     ctrl.unselecteModalOpen = false;
@@ -513,6 +546,26 @@
 
         };
 
+        $scope.addCareType = function () {
+            $rootScope.careTypeModel = {};
+            $rootScope.careTypeModel.careTypeObj = {};
+            $rootScope.careTypeModel.careTypeObj.insuranceCareTypeId = ctrl.careTypeIdMap[ctrl.newSelectedType];
+            ctrl.patientCareTypeMap[ctrl.newSelectedType] = $rootScope.careTypeModel.careTypeObj;
+            var pushed = false;
+            //to not make a new entry if it is selected again(exists in a list.)
+            for (var i = 0; i < ctrl.patient.patientCareTypeCollection.length; i++) {
+                if (ctrl.patient.patientCareTypeCollection[i].insuranceCareTypeId.id === Number(ctrl.newSelectedType)) {
+                    pushed = true;
+                    ctrl.patient.patientCareTypeCollection[i].authorizedHours = $rootScope.careTypeModel.careTypeObj.authorizedHours;
+                }
+            }
+            if (!pushed) {
+                ctrl.patient.patientCareTypeCollection.push($rootScope.careTypeModel.careTypeObj);
+            }
+            //make this false when selection process should end casually.
+            ctrl.selecteModalOpen = false;
+        };
+
         $scope.$watch(function () {
             return ctrl.careTypes;
         }, function (newValue, oldValue) {
@@ -526,7 +579,8 @@
                     } else {
                         ctrl.newSelectedType = arr_diff(newValue, oldValue);
                     }
-                    ctrl.openModal('modal-5', 'md', 'static', true);
+                    $scope.addCareType();
+//                    ctrl.openModal('modal-5', 'md', 'static', true);
                 } else {
                     ctrl.unselecteModalOpen = false;
                 }
@@ -540,6 +594,221 @@
             }
         }, true);
 
+        // Open Authorization Document upload Modal
+        ctrl.openAuthorizationDocumentModal = function (modal_id, modal_size, modal_backdrop)
+        {
+            //use the same pop up modal based on selection true/false
+            ctrl.authorizationModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                resolve: {
+                    addPatient: function () {
+                        return ctrl;
+                    }
+                },
+                controller: function (addPatient, $scope, $modalInstance) {
+                    $scope.addPatient = addPatient;
+                    $scope.careTypeList = [];
+                    //Upload Related Code
+                    $scope.fileObj = {};
+                    $scope.careObj = {};
+
+                    $scope.uploadFile = {
+                        target: ontimetest.weburl + 'file/upload',
+                        chunkSize: 1024 * 1024 * 1024,
+                        testChunks: false,
+                        fileParameterName: "fileUpload",
+                        singleFile: true,
+                        headers: {
+                            type: "p",
+                            company_code: ontimetest.company_code
+                        }
+                    };
+                    //When file is selected from browser file picker
+                    $scope.fileSelected = function (file, flow) {
+                        $scope.fileObj.flowObj = flow;
+                        $scope.fileObj.selectedFile = file;
+//                        $scope.fileObj.flowObj.upload();
+                    };
+                    //When file is uploaded this method will be called.
+                    $scope.fileUploaded = function (response, file, flow) {
+                        if (response != null) {
+                            response = JSON.parse(response);
+                            if (response.fileName != null && response.status != null && response.status == 's') {
+                                $scope.fileObj.filePath = response.fileName;
+                                $scope.careObj.filePath = response.fileName;
+                            }
+                        }
+                        $scope.disableSaveButton = false;
+                        $scope.disableUploadButton = false;
+                        $scope.showfileProgress = false;
+                        console.log('file uploaded');
+                        $rootScope.unmaskLoading();
+                        $scope.prepareDataAndSave();
+                    };
+                    $scope.fileError = function ($file, $message, $flow) {
+                        $flow.cancel();
+                        $scope.disableSaveButton = false;
+                        $scope.disableUploadButton = false;
+                        $scope.showfileProgress = false;
+                        $scope.fileName = undefined;
+                        $scope.fileExt = undefined;
+                        $scope.careObj.filePath = null;
+                        $scope.fileObj.errorMsg = "File cannot be uploaded";
+                        $rootScope.unmaskLoading();
+                        console.log('file error');
+                    };
+                    //When file is added in file upload
+                    $scope.fileAdded = function (file, flow) { //It will allow all types of attachments'
+                        $scope.formDirty = true;
+                        $scope.careObj.filePath = null;
+                        if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+                            $scope.fileObj.errorMsg = "Please upload a valid file.";
+                            return false;
+                        }
+
+
+                        $scope.fileObj.errorMsg = null;
+                        $scope.fileObj.flow = flow;
+                        $scope.viewEditFileMode = true;
+                        $scope.fileName = file.name.substring(0, file.name.lastIndexOf("."));
+                        $scope.fileExt = file.getExtension();
+                        return true;
+                    };
+
+                    $scope.isValidAutorization = function () {
+                        var validAuthorization = true;
+                        if (!$scope.viewEditFileMode) {
+                            $scope.fileObj.errorMsg = "Please upload Authorization Document.";
+                            validAuthorization = false;
+                        } else if ($scope.fileObj.errorMsg && $scope.fileObj.errorMsg.length > 0) {
+                            validAuthorization = false;
+                        } else {
+                            $scope.fileObj.errorMsg = null;
+                        }
+                        return validAuthorization;
+                    };
+
+                    $scope.isValidCareType = function () {
+                        var valid = true;
+                        if ($scope.addPatient.authorizationDocuments && $scope.addPatient.authorizationDocuments.length > 0) {
+                            for (var i = 0; i < $scope.addPatient.authorizationDocuments.length; i++) {
+                                if ($scope.addPatient.currentAuthorizationDocument && $scope.addPatient.currentAuthorizationDocument.careType == $scope.careObj.careType.id) {
+                                }
+                                else {
+                                    if ($scope.careObj.careType.id == $scope.addPatient.authorizationDocuments[i].careType) {
+                                        valid = false;
+                                        $scope.careObj.errorMsg = 'Authorized document is already added for this care type.';
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        return valid;
+                    };
+
+                    $scope.removeFile = function () {
+                        if ($scope.careObj.filePath != null) {
+                            $scope.careObj.filePath = null;
+                        }
+                        if ($scope.fileObj.flowObj != null) {
+                            $scope.fileObj.flowObj.cancel();
+                        }
+                        $scope.fileObj = {};
+                        $scope.disableSaveButton = false;
+                        $scope.disableUploadButton = false;
+                        $scope.showfileProgress = false;
+                        $scope.viewEditFileMode = false;
+                        $scope.fileName = undefined;
+                        $scope.fileExt = undefined;
+                    };
+
+                    $scope.prepareDataAndSave = function () {
+                        if (!$scope.addPatient.authorizationDocuments) {
+                            $scope.addPatient.authorizationDocuments = [];
+                        }
+                        var authObj = {
+                            careType: $scope.careObj.careType.id,
+                            careTypeTitle: $scope.careObj.careType.companyCaretypeId.careTypeTitle,
+                            companyCareTypeId: $scope.careObj.careType.companyCaretypeId.id,
+                            authorizedHours: $scope.careObj.authorizedHours,
+                            filePath: $scope.careObj.filePath,
+                            name: $scope.fileName + '.' + $scope.fileExt,
+                            expiryDate: $scope.careObj.expiryDate
+                        };
+                        if ($scope.addPatient.currentAuthorizationDocument) {
+                            if ($scope.addPatient.currentAuthorizationDocument.id) {
+                                authObj.id = $scope.addPatient.currentAuthorizationDocument.id;
+                                authObj.dateInserted = $scope.addPatient.currentAuthorizationDocument.dateInserted;
+                            }
+                            $scope.addPatient.authorizationDocuments[$scope.currentAuthorizationDocumentIndex] = authObj;
+                        } else {
+                            $scope.addPatient.authorizationDocuments.push(authObj);
+                        }
+
+                        $scope.addPatient.authorizationErrorMsg = null;
+                        $scope.close();
+                    };
+
+                    $scope.saveAuthorizationDocument = function () {
+                        if ($scope.isValidAutorization() && $scope.isValidCareType() && $('#authorizationDoc')[0].checkValidity()) {
+                            $scope.disableSaveButton = true;
+                            $scope.disableUploadButton = true;
+                            $scope.showfileProgress = true;
+                            if ($scope.fileObj.flowObj){
+                                $rootScope.maskLoading();
+                                $scope.fileObj.flowObj.upload();
+                            } else
+                                $scope.prepareDataAndSave();
+                        } else {
+                            console.log('invalid');
+                        }
+                    };
+
+
+                    if (addPatient.careTypes && addPatient.careTypes.length > 0) {
+                        angular.forEach(addPatient.careTypes, function (careTypeId) {
+                            $scope.careTypeList.push(addPatient.careTypeIdMap[careTypeId]);
+                        });
+                    }
+                    if ($scope.addPatient.currentAuthorizationDocument) {
+                        for (var i = 0; i < $scope.addPatient.authorizationDocuments.length; i++) {
+                            if ($scope.addPatient.authorizationDocuments[i].companyCareTypeId === $scope.addPatient.currentAuthorizationDocument.companyCareTypeId) {
+                                $scope.currentAuthorizationDocumentIndex = i;
+                                $scope.viewEditFileMode = true;
+                                $scope.careObj.careType = addPatient.careTypeIdMap[$scope.addPatient.authorizationDocuments[i].careType];
+                                $scope.careObj.authorizedHours = $scope.addPatient.authorizationDocuments[i].authorizedHours;
+                                $scope.careObj.expiryDate = $scope.addPatient.authorizationDocuments[i].expiryDate;
+                                $scope.careObj.filePath = $scope.addPatient.authorizationDocuments[i].filePath;
+                                $scope.fileName = $scope.addPatient.authorizationDocuments[i].name.substring(0, $scope.addPatient.authorizationDocuments[i].name.lastIndexOf("."));
+                                $scope.fileExt = $scope.addPatient.authorizationDocuments[i].name.substring($scope.addPatient.authorizationDocuments[i].name.lastIndexOf(".") + 1);
+                                break;
+                            }
+                        }
+                    }
+                    $scope.close = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }
+            });
+        };
+        ctrl.createOrEditAuthorizationDocument = function (editMode) {
+            if (editMode !== true)
+                ctrl.currentAuthorizationDocument = undefined;
+            ctrl.openAuthorizationDocumentModal('authorization-doc-modal', 'md', 'static');
+        };
+        ctrl.removeAuthorizationDocument = function (index) {
+            if (ctrl.authorizationDocuments && ctrl.authorizationDocuments[index])
+                ctrl.authorizationDocuments.splice(index, 1);
+        };
+        ctrl.editAuthorizationDocument = function (index) {
+            if (ctrl.authorizationDocuments && ctrl.authorizationDocuments[index]) {
+                ctrl.currentAuthorizationDocument = ctrl.authorizationDocuments[index];
+                ctrl.createOrEditAuthorizationDocument(true);
+            }
+        };
         function googleMapFunctions(latitude, longitude) {
 
             loadGoogleMaps(3).done(function ()
@@ -660,62 +929,62 @@
                 });
             });
         }
-        ctrl.uploadFile = {
-            target: ontimetest.weburl + 'file/upload',
-            chunkSize: 1024 * 1024 * 1024,
-            testChunks: false,
-            fileParameterName: "fileUpload",
-            singleFile: true,
-            headers: {
-                type: "p",
-                company_code: ontimetest.company_code
-            }
-        };
-        //When file is selected from browser file picker
-        ctrl.fileSelected = function (file, flow) {
-            ctrl.fileObj.flowObj = flow;
-            ctrl.fileObj.selectedFile = file;
-            ctrl.fileObj.flowObj.upload();
-        };
-        //When file is uploaded this method will be called.
-        ctrl.fileUploaded = function (response, file, flow) {
-            if (response != null) {
-                response = JSON.parse(response);
-                if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.patient.authorization = response.fileName;
-                }
-            }
-            ctrl.disableSaveButton = false;
-            ctrl.disableUploadButton = false;
-        };
-        ctrl.fileError = function ($file, $message, $flow) {
-            $flow.cancel();
-            ctrl.disableSaveButton = false;
-            ctrl.disableUploadButton = false;
-            ctrl.fileName = "";
-            ctrl.fileExt = "";
-            ctrl.patient.authorization = null;
-            ctrl.fileObj.errorMsg = "File cannot be uploaded";
-        };
-        //When file is added in file upload
-        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
-            ctrl.formDirty = true;
-            ctrl.patient.authorization = null;
-            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
-                ctrl.fileObj.errorMsg = "Please upload a valid file.";
-                return false;
-            }
-            ctrl.disableSaveButton = true;
-            ctrl.disableUploadButton = true;
-            ctrl.showfileProgress = true;
-
-            ctrl.fileObj.errorMsg = null;
-            ctrl.fileObj.flow = flow;
-            ctrl.fileName = file.name;
-            ctrl.fileExt = "";
-            ctrl.fileExt = file.getExtension();
-            return true;
-        };
+//        ctrl.uploadFile = {
+//            target: ontimetest.weburl + 'file/upload',
+//            chunkSize: 1024 * 1024 * 1024,
+//            testChunks: false,
+//            fileParameterName: "fileUpload",
+//            singleFile: true,
+//            headers: {
+//                type: "p",
+//                company_code: ontimetest.company_code
+//            }
+//        };
+//        //When file is selected from browser file picker
+//        ctrl.fileSelected = function (file, flow) {
+//            ctrl.fileObj.flowObj = flow;
+//            ctrl.fileObj.selectedFile = file;
+//            ctrl.fileObj.flowObj.upload();
+//        };
+//        //When file is uploaded this method will be called.
+//        ctrl.fileUploaded = function (response, file, flow) {
+//            if (response != null) {
+//                response = JSON.parse(response);
+//                if (response.fileName != null && response.status != null && response.status == 's') {
+//                    ctrl.patient.authorization = response.fileName;
+//                }
+//            }
+//            ctrl.disableSaveButton = false;
+//            ctrl.disableUploadButton = false;
+//        };
+//        ctrl.fileError = function ($file, $message, $flow) {
+//            $flow.cancel();
+//            ctrl.disableSaveButton = false;
+//            ctrl.disableUploadButton = false;
+//            ctrl.fileName = "";
+//            ctrl.fileExt = "";
+//            ctrl.patient.authorization = null;
+//            ctrl.fileObj.errorMsg = "File cannot be uploaded";
+//        };
+//        //When file is added in file upload
+//        ctrl.fileAdded = function (file, flow) { //It will allow all types of attachments'
+//            ctrl.formDirty = true;
+//            ctrl.patient.authorization = null;
+//            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
+//                ctrl.fileObj.errorMsg = "Please upload a valid file.";
+//                return false;
+//            }
+//            ctrl.disableSaveButton = true;
+//            ctrl.disableUploadButton = true;
+//            ctrl.showfileProgress = true;
+//
+//            ctrl.fileObj.errorMsg = null;
+//            ctrl.fileObj.flow = flow;
+//            ctrl.fileName = file.name;
+//            ctrl.fileExt = "";
+//            ctrl.fileExt = file.getExtension();
+//            return true;
+//        };
 
         ctrl.authorizationDateChanged = function () {
             if (ctrl.checkSchedule && ctrl.patient.authorizationEndDate !== ctrl.oldDate) {
