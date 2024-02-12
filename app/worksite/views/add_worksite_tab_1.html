@@ -118,7 +118,37 @@
                             </select>
                         </div>
                     </div>
-                     <div class="form-group-separator">
+                     <div class="form-group-separator" ng-if="addWorksite.worksite.insuranceProviderId!=null">
+                    </div>
+                    <div class="form-group" ng-if="addWorksite.worksite.insuranceProviderId!=null">
+                    <label class="col-sm-3 control-label" for="thresholdHoursForLunchTimeCalculation">
+                            Threshold Hrs For Lunch Time Calculation
+                        </label>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input class="form-control" name="thresholdHoursForLunchTimeCalculation" maxlength="5" numbers-only="true" 
+                                       decimalallowed type="text" ng-model="addWorksite.worksite.thresholdHoursForLunchTimeCalculation"> 
+                                <span class="input-group-addon">
+                                    <i>per day</i>
+                                </span>
+                                </input>
+                            </div>
+                        </div>
+                        <label class="col-sm-3 control-label" for="lunchHoursDeduction">
+                            Lunch Hours Deduction
+                        </label>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input class="form-control" name="lunchHoursDeduction" maxlength="4" numbers-only="true"
+                                       decimalallowed type="text" ng-model="addWorksite.worksite.lunchHoursDeduction"> 
+                                <span class="input-group-addon">
+                                    <i>per day</i>
+                                </span>
+                                </input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">
