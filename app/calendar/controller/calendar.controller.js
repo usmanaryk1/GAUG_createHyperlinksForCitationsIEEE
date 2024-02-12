@@ -581,7 +581,7 @@
                                     toastr.error("Failed to retrieve care types.");
                                 });
                             } else {
-                                EmployeeDAO.retrieveByPosition({workSiteId: workSiteId}).then(function (res) {
+                                EmployeeDAO.retrieveByPosition({workSiteId: data.workSiteId}).then(function (res) {
                                     $rootScope.employeePopup.workSiteEmployeeList = res;
                                     setEmployeeValueInModal(data.employeeId);
                                     $rootScope.paginationLoading = false;
