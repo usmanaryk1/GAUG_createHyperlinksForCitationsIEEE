@@ -862,6 +862,12 @@
                 $("input[name='WHRate']").attr('required', true);
             }
         }
+        
+        ctrl.refreshCountyDropDown = function() {
+            $timeout(function () {
+                        $('#PreferredCounties').trigger('change.select2');
+                    }, 100);
+        }
 
         ctrl.tab3DataInit = function () {
             ctrl.formDirty = false;
@@ -870,9 +876,7 @@
                 if (!ctrl.retrivalRunning) {
                     googleMapFunctions(ctrl.employee.locationLatitude, ctrl.employee.locationLongitude);
                     form_data = $('#add_employee_form').serialize();
-                    $timeout(function () {
-                        $('#PreferredCounties').trigger('change.select2');
-                    }, 100);
+                    ctrl.refreshCountyDropDown();
                 } else {
                     ctrl.tab3DataInit();
                 }

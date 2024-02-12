@@ -103,7 +103,7 @@
                             </script>
                             <select class="form-control" id="sboxit-1" name="State" ng-model="addEmployee.employee.state"
                                     data-validate="required" data-message-required="Please select the state."
-                                    ng-options="state.abbreviation as state.name for state in states">
+                                    ng-options="state.abbreviation as state.name for state in states" ng-change="addEmployee.employee.preferredCounties = null;addEmployee.refreshCountyDropDown();">
                                 <option value="">
                                     Select the state
                                 </option>
@@ -129,25 +129,26 @@
                         </label>
                         <div class="col-sm-9">
                             <script type="text/javascript">
-                                        jQuery(document).ready(function ($)
+                                jQuery(document).ready(function ($)
+                                {
+                                    setTimeout(function () {
+                                        $("#PreferredCounties").select2({
+                                            // minimumResultsForSearch: -1,
+                                            placeholder: 'Select Preferred Counties...',
+                                            // minimumInputLength: 1,
+                                            // placeholder: 'Search',
+                                        }).on('select2-open', function ()
                                         {
-                                            setTimeout(function () {
-                                                $("#PreferredCounties").select2({
-                                                    // minimumResultsForSearch: -1,
-                                                    placeholder: 'Select Preferred Counties...',
-                                                    // minimumInputLength: 1,
-                                                    // placeholder: 'Search',
-                                                }).on('select2-open', function ()
-                                                {
-                                                    // Adding Custom Scrollbar
-                                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                                });
-                                            }, 200);
-                                        });</script>
+                                            // Adding Custom Scrollbar
+                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                        });
+                                    }, 200);
+                                });</script>
                             <select multiple class="form-control" name ="PreferredCounties" id="PreferredCounties" 
-                                            ng-model="addEmployee.employee.preferredCounties" ng-options='county as county for county in nyStateCountyList'>
-                                        <option value="" selected hidden />
-                                    </select>
+                                    ng-model="addEmployee.employee.preferredCounties" ng-options='county as county for county in
+                                                stateCountyList[addEmployee.employee.state]'>
+                                <option value="" selected hidden />
+                            </select>
                         </div>
                     </div>
                     <div class="form-group-separator">
@@ -157,7 +158,7 @@
                             <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addEmployee.setFromNext('tab4')">
                                 Next »
                             </button>
-                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="hasAccess('VIEW_EMPLOYEE_WAGES') ? addEmployee.setFromNext('tab2'):addEmployee.setFromNext('tab1')">
+                            <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="hasAccess('VIEW_EMPLOYEE_WAGES') ? addEmployee.setFromNext('tab2') : addEmployee.setFromNext('tab1')">
                                 « Previous
                             </button>
                         </div>
@@ -178,4 +179,11 @@
             $(".fade-in-effect").addClass('in');
         }, 1);
     });
+    function refreshCountyDropDown() {
+
+        setTimeout(function () {
+            $('#PreferredCounties').trigger('change.select2');
+        }, 1);
+
+    }
 </script>
