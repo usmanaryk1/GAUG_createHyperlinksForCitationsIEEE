@@ -110,7 +110,7 @@
                         </label>
                         <div class="col-sm-9">
                             <select class="form-control" id="sboxit-2" name="County" ng-model="addWorksite.worksite.county"
-                                    ng-options="county as county for county in stateCountyList[addWorksite.worksite.state]">
+                                    ng-options="county as county for county in addWorksite.stateCountyList[addWorksite.worksite.state]">
                                 <option value="">
                                     Select the county
                                 </option>

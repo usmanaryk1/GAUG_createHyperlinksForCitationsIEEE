@@ -145,7 +145,7 @@
                         </label>
                         <div class="col-sm-9">
                             <select class="form-control" id="sboxit-2" name="County" ng-model="addPatient.patient.patientAddress.county"
-                                    ng-options="county as county for county in stateCountyList[addPatient.patient.patientAddress.state]">
+                                    ng-options="county as county for county in addPatient.stateCountyList[addPatient.patient.patientAddress.state]">
                                 <option value="">
                                     Select the county
                                 </option>

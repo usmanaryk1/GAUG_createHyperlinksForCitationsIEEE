@@ -146,7 +146,7 @@
                                 });</script>
                             <select multiple class="form-control" name ="PreferredCounties" id="PreferredCounties" 
                                     ng-model="addEmployee.employee.preferredCounties" ng-options='county as county for county in
-                                                stateCountyList[addEmployee.employee.state]'>
+                                                addEmployee.stateCountyList[addEmployee.employee.state]'>
                                 <option value="" selected hidden />
                             </select>
                         </div>

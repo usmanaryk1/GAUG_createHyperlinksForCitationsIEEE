@@ -15,6 +15,8 @@
         };
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.stateCountyList = geo_data.stateCountyList;
+        ctrl.stateCountyList['NY'] = $rootScope.nyStateCountyList;
         ctrl.nextTab;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {

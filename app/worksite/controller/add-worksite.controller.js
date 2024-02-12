@@ -5,6 +5,8 @@
         ctrl.retrivalRunning = true;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.stateCountyList = geo_data.stateCountyList;
+        ctrl.stateCountyList['NY'] = $rootScope.nyStateCountyList;
         ctrl.nextTab;
         ctrl.worksite = {};
         ctrl.positions = [];
