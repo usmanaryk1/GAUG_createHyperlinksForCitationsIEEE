@@ -11,7 +11,7 @@
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
-                if (ctrl.reportType == 'wh') {
+                if (ctrl.reportType == 'workedhours') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
@@ -19,7 +19,7 @@
                     }
                 }
                 if (valid) {
-                    var path = $rootScope.serverPath + 'reports/report/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontimetest.company_code;
+                    var path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontimetest.company_code;
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }
