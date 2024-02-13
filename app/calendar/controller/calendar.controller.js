@@ -168,6 +168,9 @@
             if (searchParams.newHires != null && !searchParams.newHires) {
                 delete searchParams.newHires;
             }
+            if (searchParams.includeInactive != null && !searchParams.includeInactive) {
+                delete searchParams.includeInactive;
+            }
             if (searchParams.scheduledOnly != null && searchParams.scheduledOnly) {
                 searchParams.scheduleStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);
                 searchParams.scheduleEndDate = $filter('date')($rootScope.weekEnd, $rootScope.dateFormat);
