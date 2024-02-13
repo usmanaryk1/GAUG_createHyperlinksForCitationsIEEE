@@ -12,6 +12,32 @@
         ctrl.positions = [];
         ctrl.worksitePositionMap = {};
         ctrl.positionIdMap = {};
+        ctrl.usTimezones = [
+            {
+                'googleTimezone': 'America/New_York',
+                'displayValue': 'Eastern Time (New York)'
+            },
+            {
+                'googleTimezone': 'America/Chicago',
+                'displayValue': 'Central Time (Chicago)'
+            },
+            {
+                'googleTimezone': 'America/Phoenix',
+                'displayValue': 'Mountain Time (Phoenix)'
+            },
+            {
+                'googleTimezone': 'America/Los_Angeles',
+                'displayValue': 'Pacific Time (Los Angeles)'
+            },
+            {
+                'googleTimezone': 'America/Anchorage',
+                'displayValue': 'Alaska Time (Anchorage)'
+            },
+            {
+                'googleTimezone': 'Pacific/Honolulu',
+                'displayValue': 'Hawaii Time (Honolulu)'
+            }
+        ];
         var allPositionIds = [];
         ctrl.insuranceProviderList = [];
         InsurerDAO.retrieveAll({'payerType':'WorksitePayer'}).then(function (res) {
@@ -88,6 +114,7 @@
                 } else {
                     ctrl.worksite.orgCode = ontime_data.company_code;
                     worksiteToSave.orgCode = ontime_data.company_code;
+                    worksiteToSave.timezone = 'America/New_York';
                     reqParam = 'save';
                 }
 
