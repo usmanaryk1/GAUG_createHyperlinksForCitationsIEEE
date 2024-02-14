@@ -123,6 +123,14 @@
             }
             delete searchParams.openCase;
             PatientDAO.getPatientsForSchedule(searchParams).then(function (res) {
+                // manipulate isNewPatient
+                var dateBefore30Days = new Date(); // Now
+                dateBefore30Days.setDate(dateBefore30Days.getDate() - 30); // Set now - 30 days as the new date
+                angular.forEach(res, function (item) {
+                    if (new Date(item.dateInserted) >= dateBefore30Days) {
+                        item.isNewPatient = true;
+                    }
+                });
                 ctrl.patient_list = res;
                 ctrl.count = Number($rootScope.totalRecords);
                 if (!ctrl.viewPatient) {
@@ -173,7 +181,7 @@
                 delete ctrl.searchParams.openCaseEndDate;
             }
         };
-        
+
         ctrl.checkLiveIn = function () {
             if (ctrl.searchParams.forLiveIn) {
                 ctrl.searchParams.liveInStartDate = $filter('date')($rootScope.weekStart, $rootScope.dateFormat);

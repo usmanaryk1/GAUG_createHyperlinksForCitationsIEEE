@@ -147,17 +147,22 @@
                     </div>
                 </div>
                 <div class="col-md-3 filter-checkbox ">
-                    <div class="col-md-6" style="padding-left:0;">
+                    <div class="col-md-4" style="padding-left:0;">
                         <label>Live In Care</label>
                         <input type="checkbox" name="livein" 
                                ng-model="patientcalendar.searchParams.forLiveIn"
                                ng-change="patientcalendar.checkLiveIn()">
                     </div>
-                    <div class="col-md-6" style="padding-left:0;">
+                    <div class="col-md-4" style="padding-left:0;">
                         <label>Open Cases</label>
                         <input type="checkbox" name="opencase" 
                                ng-model="patientcalendar.searchParams.openCase" 
                                ng-change="patientcalendar.checkOpenCase()">
+                    </div>
+                    <div class="col-md-4" style="padding-left:0;">
+                        <label>New Patients</label>
+                        <input type="checkbox" name="newPatientsOnly" 
+                               ng-model="patientcalendar.searchParams.newPatientsOnly">
                     </div>
                 </div>
                 <div class="col-md-3 filter-checkbox" style="padding-top:20px;padding-right: 15px">                    
