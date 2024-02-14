@@ -14,6 +14,7 @@
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
+        ctrl.tbTestingMap = {C: 'CXR', P: 'PPD', S: 'Screening'};
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
@@ -1087,6 +1088,7 @@
 
 //        ctrl.pageInitCall();
         ctrl.deleteAttachment = function (i) {
+            ctrl.employee.employeeAttachments = $filter('orderBy')(ctrl.employee.employeeAttachments, '-expiryDate');
             ctrl.employee.employeeAttachments.splice(i, 1);
         };
 
@@ -1112,9 +1114,10 @@
                     required = false;
                 }
                 if (required) {
+                    console.log($rootScope.uploadPopup.data.type + "   " + $rootScope.uploadPopup.data.name)
                     if (!$rootScope.uploadPopup.data.filePath && $rootScope.uploadPopup.data.type != 't') {
                         $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
-                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.name || !$rootScope.uploadPopup.data.name == '')) {
+                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.name || $rootScope.uploadPopup.data.name == '')) {
                         $rootScope.uploadPopup.fileObj.errorMsg = "Please select Tb Testing.";
                     } else {
                         ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
@@ -1145,6 +1148,9 @@
             }
             $rootScope.uploadPopup.setUploadFile = function () {
                 $formService.resetRadios();
+                if ($rootScope.uploadPopup.fileObj.flowObj != null) {
+                    $rootScope.uploadPopup.fileObj.flowObj.cancel();
+                }
                 $rootScope.uploadPopup.fileObj = {};
                 delete $rootScope.uploadPopup.data.filePath;
                 if ($rootScope.uploadPopup.data.type == 't') {
@@ -1174,7 +1180,7 @@
                     if (response.fileName != null && response.status != null && response.status == 's') {
                         $rootScope.uploadPopup.data.filePath = response.fileName;
                         if ($rootScope.uploadPopup.data.name == null || $rootScope.uploadPopup.data.name == '') {
-                            $rootScope.uploadPopup.data.name = response.fileName;
+                            $rootScope.uploadPopup.data.name = file.name;
                         }
                     }
                 }

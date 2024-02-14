@@ -260,10 +260,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="attachment in addEmployee.employee.employeeAttachments">
+                                    <tr ng-repeat="attachment in addEmployee.employee.employeeAttachments| orderBy:'-expiryDate'">
                                         <td class="hidden-xs text-center"> {{$index + 1}} </td>
                                         <td align="center"> {{addEmployee.typeMap[attachment.type]}} </td>
-                                        <td align="center"> <a ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}"> {{attachment.name}} </a></td>
+                                        <td align="center"> 
+                                            <a ng-if="attachment.type != 't'" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}"> {{attachment.name}} </a>
+                                            <span ng-if="attachment.type=='t'">{{addEmployee.tbTestingMap[attachment.name]}}</span>
+                                        </td>
                                         <td align="center"> {{attachment.expiryDate}} </td>
                                         <td align="center">
                                             <a class="btn btn-danger" ng-click="addEmployee.deleteAttachment($index)"> <em class="fa fa-trash"> </em></a>
@@ -420,6 +423,10 @@
     <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.name"/>
     CXR
     </label>
+    <label class="cbr-inline">
+    <input name="TBTesting" value="S" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.name"/>
+    Screening
+    </label>
     <div>
     <div ng-show="uploadPopup.fileObj.errorMsg != null && uploadPopup.fileObj.errorMsg != ''">
     <span class="red">{{uploadPopup.fileObj.errorMsg}}</span>
@@ -453,7 +460,7 @@
     <div class="col-sm-9">
     <label class="control-label">
     <a ng-show="uploadPopup.data.filePath" style="color: blue;text-decoration: underline" ng-href="{{uploadPopup.baseUrl}}file/download/{{uploadPopup.companyCode}}/a/{{uploadPopup.data.filePath}}">
-    {{uploadPopup.data.name}}.{{uploadPopup.data.filePath|extension}}
+    {{uploadPopup.data.name}}
     </a>
     </label>
     </div>
