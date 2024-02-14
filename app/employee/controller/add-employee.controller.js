@@ -53,7 +53,7 @@
         ctrl.subTypes = ['Pre – Employment Medical Documents',
             'Physical', 'TB Testing',
             'Chest X-Ray', 'TB Questionnaire',
-            'Habituation', 'Flu Shot'];
+            'Habituation', 'Flu Shot', 'Covid Vaccine'];
 
 
         var MappingForDownload = {
@@ -78,6 +78,7 @@
             'TB Questionnaire': 'TBQuestionnaire',
             'Habituation': 'Habituation',
             'Flu Shot': 'FluShot',
+            'Covid Vaccine': 'CovidVaccine',
             'Drug Test': 'DrugTest'
         };
 

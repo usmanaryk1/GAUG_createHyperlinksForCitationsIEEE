@@ -10,7 +10,8 @@
         $rootScope.maskLoading();
 
         if (attachmentInfo && attachmentInfo.type === 'med') {            
-            ctrl.subTypes = ['Pre – Employment Medical Documents', 'Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire', 'Habituation', 'Flu Shot', 'Drug Test'];
+            ctrl.subTypes = ['Pre – Employment Medical Documents', 'Physical', 'TB Testing', 'Chest X-Ray', 'TB Questionnaire',
+                'Habituation', 'Flu Shot', 'Drug Test', 'Covid Vaccine'];
         } else {
             ctrl.subTypes = ['Initial Application Packet', 'Initial Application Packet Nursing', 'W-4', 'Employment Eligibility (I-9)', 'CHRC Forms', 'Evaluation', 
                 'Orientation Packet', 'Competency Exam', 'Certificate/License', 'References', 'HCR', 

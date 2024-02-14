@@ -202,20 +202,29 @@
                         <div class="input-group-addon" style="padding: 6px 7px"> <a href="#"><i class="linecons-calendar"></i></a> </div>
                     </div>
                 </div>
-                <div class="col-md-4 filter-checkbox row" style="padding-top:20px;">
-                    <div class="col-md-4" >
-                        <label>Live In?</label>
-                        <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn">
-                    </div>
-                    <div class="col-md-4" >
-                        <label>New Hires?</label>
-                        <input type="checkbox" name="newhires" ng-model="calendar.searchParams.newHires">
-                    </div>
-                    <div class="col-md-4" >
-                        <label>Include Inactive?</label>
-                        <input type="checkbox" name="includeInactive" ng-model="calendar.searchParams.includeInactive">
-                    </div>
+                <div class="col-md-4">
+                    <label>Patient' compatibility</label>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function ($)
+                        {
+                        setTimeout(function () {
+                        $("#patientIdsForCompatibility").select2({
+                        // minimumResultsForSearch: -1,
+                        placeholder: 'Select Patient...',
+                                // minimumInputLength: 1,
+                                // placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        }, 200);
+                        });</script>
+                    <select multiple class="form-control" name ="patientIdsForCompatibility" id="patientIdsForCompatibility" ng-model="calendar.searchParams.patientIdsForCompatibility" ng-options='pat.id as (pat.lName +  ", " +  pat.fName +  " " +  pat.middleInitial) for pat in calendar.patientList'>
+                        <option value="" selected hidden />
+                    </select>
                 </div>
+
             </div>
 
             <div class="row" ng-if="calendar.isEmployeeSearchPage">
@@ -244,14 +253,6 @@
                     </div>
                 </div>
                 <div class="col-md-2" style="padding-top:20px;">
-                    <label>Live In?</label>
-                    <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn"><br/>
-                    <label>Can Drive?</label>
-                    <input type="checkbox" name="candrive" ng-model="calendar.searchParams.drives">
-                    <label>New Hires?</label>
-                    <input type="checkbox" name="newhires" ng-model="calendar.searchParams.newHires">
-                        <label>Include Inactive?</label>
-                        <input type="checkbox" name="includeInactive" ng-model="calendar.searchParams.includeInactive">
                 </div>
                 <div class="col-md-4">
                     <label>Preferred Counties</label>
@@ -278,27 +279,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4" ng-if='!calendar.isEmployeeSearchPage'>
-                    <label>Patient' compatibility</label>
-                    <script type="text/javascript">
-                        jQuery(document).ready(function ($)
-                        {
-                        setTimeout(function () {
-                        $("#patientIdsForCompatibility").select2({
-                        // minimumResultsForSearch: -1,
-                        placeholder: 'Select Patient...',
-                                // minimumInputLength: 1,
-                                // placeholder: 'Search',
-                        }).on('select2-open', function ()
-                        {
-                        // Adding Custom Scrollbar
-                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                        }, 200);
-                        });</script>
-                    <select multiple class="form-control" name ="patientIdsForCompatibility" id="patientIdsForCompatibility" ng-model="calendar.searchParams.patientIdsForCompatibility" ng-options='pat.id as (pat.lName + ", " + pat.fName + " " + pat.middleInitial) for pat in calendar.patientList'>
-                        <option value="" selected hidden />
-                    </select>
+                <div class="col-md-8" style="padding-top:20px;">
+                    <label>Live In?</label>
+                    <input type="checkbox" name="livein" ng-model="calendar.searchParams.forLiveIn" >
+                    <label style="padding-left: 10px">New Hires?</label>
+                    <input type="checkbox" name="newhires" ng-model="calendar.searchParams.newHires" >
+                    <label style="padding-left: 10px">Can Drive?</label>
+                    <input type="checkbox" name="candrive" ng-model="calendar.searchParams.drives">
+                    <label style="padding-left: 10px">Include Inactive?</label>
+                    <input type="checkbox" name="includeInactive" ng-model="calendar.searchParams.includeInactive">
+                    <label style="padding-left: 10px">Covid Vaccinated?</label>
+                    <input type="checkbox" name="covidVaccinated" ng-model="calendar.searchParams.covidVaccinated">
                 </div>
             </div>
             <div class="row" ng-if="calendar.calendarView == 'week'" style="padding-top:10px;">
