@@ -139,7 +139,7 @@
                                             <h3 class="panel-title">Uploaded Authorizations</h3>
                                         </div>
                                         <div class="col col-xs-6 text-right">
-                                            <button type="button" class="btn btn-sm btn-primary btn-create" ng-click="addPatient.createOrEditAuthorizationDocument();">Create New</button>
+                                            <button type="button" class="btn btn-sm btn-info btn-create" ng-click="addPatient.createOrEditAuthorizationDocument();">Add New Authorization</button>
                                         </div>
                                     </div>
                                 </div>
@@ -163,15 +163,15 @@
                                                 <td align="center">{{authDocument.careTypeTitle}}</td>
                                                 <td align="center">{{authDocument.authorizedHours}}</td>
                                                 <td align="center">
-                                                    <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}">
+                                                    <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}?userFileName={{authDocument.name}}">
                                                         {{authDocument.name}}
                                                     </a>
                                                 </td> 
                                                 <td align="center">{{authDocument.expiryDate|date:dateFormat}}</td> 
                                                 <td align="center">
-                                                    <a class="btn btn-warning btn-sm" ng-click="addPatient.editAuthorizationDocument($index)"><em class="fa fa-pencil"></em></a>
+                                                    <a class="btn btn-warning btn-sm" ng-click="addPatient.editAuthorizationDocument($index)" ng-if="authDocument.careType"><em class="fa fa-pencil"></em></a>
                                                     &nbsp;&nbsp;
-                                                    <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);"><em class="fa fa-trash"></em></a>
+                                                    <a class="btn btn-danger btn-sm" ng-click="addPatient.removeAuthorizationDocument($index);" ng-if="authDocument.id === null || authDocument.id === undefined"><em class="fa fa-trash"></em></a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -180,9 +180,6 @@
                                 </div>
                                 <div ng-if="!addPatient.authorizationDocuments || addPatient.authorizationDocuments.length === 0" class="text-center">
                                     No Authorization Documents Found.
-                                </div>
-                                <div ng-if="addPatient.authorizationErrorMsg" class="text-center text-danger">
-                                    {{addPatient.authorizationErrorMsg}}
                                 </div>
                             </div>
 
@@ -334,7 +331,7 @@
     <div class="modal-body">
 
     <div class="row">
-    <div class="col-xs-12 text-danger">Removing care type will remove any authorization document associated with the care type.</div>
+    <div class="col-xs-12 text-danger">Removing care type will remove any unsaved authorization document associated with the care type.</div>
     <!--<label class="col-sm-4 control-label add-padding-modal" for="rate">
     Authorized hours
     </label>
@@ -447,7 +444,7 @@
     </div>
     <div class="modal-footer">
     <button type="button" class="btn btn-default btn-default-bootstrap" ng-disabled="disableUploadButton" ng-click="close();">Close</button>
-    <button type="submit" class="btn btn-primary"  ng-disabled="disableUploadButton">Save changes</button>
+    <button type="submit" class="btn btn-success"  ng-disabled="disableUploadButton">Save changes</button>
     </div>
     </form>
     </div>        

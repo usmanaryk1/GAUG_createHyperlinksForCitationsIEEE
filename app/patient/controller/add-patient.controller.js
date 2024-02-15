@@ -67,23 +67,7 @@
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
-        ctrl.isValidAutorization = function (formValidity) {
-            var validAuthorization = true;
-            if ($rootScope.tabNo == 4 && (!ctrl.authorizationDocuments || ctrl.authorizationDocuments.length === 0 || ctrl.authorizationDocuments.length !== ctrl.careTypes.length)) {
-                ctrl.authorizationErrorMsg = "Please upload authorization document For each care type.";
-                validAuthorization = false;
-                setTimeout(function () {
-                    $('html,body').animate({
-                        scrollTop: $("#authorizationDocuments").offset().top},
-                    'fast');
-                });
-
-            } else {
-                ctrl.authorizationErrorMsg = null;
-            }
-            return validAuthorization;
-        };
-
+        
         //ceck if form has been changed or not
         //If changed then it should be valid
         //function to navigate to different tab by state
@@ -92,8 +76,7 @@
             if ($('#add_patient_form').serialize() !== form_data) {
                 ctrl.formDirty = true;
             }
-            var validAuthorization = ctrl.isValidAutorization(ctrl.formDirty);
-            if (($('#add_patient_form').valid() && validAuthorization) || !ctrl.formDirty) {
+            if (($('#add_patient_form').valid()) || !ctrl.formDirty) {
                 if (ctrl.editMode) {
                     $state.go('^.' + state, {id: $state.params.id});
                 }
@@ -103,8 +86,7 @@
 
         //function to save patient data.
         function savePatientData() {
-            var validAuthorization = ctrl.isValidAutorization(true);
-            if ($('#add_patient_form')[0].checkValidity() && validAuthorization) {
+            if ($('#add_patient_form')[0].checkValidity()) {
                 var patientToSave = angular.copy(ctrl.patient);
 //                if (patientToSave.subscriberInfo && patientToSave.subscriberInfo[0] && patientToSave.subscriberInfo[0].dateOfBirth) {
 //                    patientToSave.subscriberInfo[0].dateOfBirth = new Date(patientToSave.subscriberInfo[0].dateOfBirth);
@@ -204,6 +186,11 @@
                 PatientDAO.get({id: $state.params.id}).then(function (res) {
                     ctrl.patient = res;
                     ctrl.authorizationDocuments = res.patientAuthorizationDocuments;
+                    if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
+                        for (var j = 0; j < ctrl.authorizationDocuments.length; j++) {
+                            ctrl.authorizationDocuments[j].careTypeTitle = ctrl.authorizationDocuments[j].companyCareType.careTypeTitle;
+                        }
+                    }
                     ctrl.oldDate = ctrl.patient.authorizationEndDate;
                     ctrl.lastDate = ctrl.patient.authorizationEndDate;
                     if (res.languagesSpoken != null) {
@@ -228,7 +215,6 @@
                                 for (var j = 0; j < ctrl.authorizationDocuments.length; j++) {
                                     if (ctrl.authorizationDocuments[j].companyCareTypeId === res.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.id) {
                                         ctrl.authorizationDocuments[j].careType = res.patientCareTypeCollection[i].insuranceCareTypeId.id;//dateInserted
-                                        ctrl.authorizationDocuments[j].careTypeTitle = res.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId.careTypeTitle;
                                     }
                                 }
                             }
@@ -513,7 +499,7 @@
                 //Remove Authorization Documents if any
                 if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
                     for (var i = ctrl.authorizationDocuments.length - 1; i >= 0; i--) {
-                        if (ctrl.authorizationDocuments[i].careType == Number(ctrl.newDeselectedType[0])) {
+                        if (ctrl.authorizationDocuments[i].careType == Number(ctrl.newDeselectedType[0]) && (ctrl.authorizationDocuments[i].id === undefined || ctrl.authorizationDocuments[i].id === null)) {
                             ctrl.authorizationDocuments.splice(i, 1);
                         }
                     }
@@ -587,7 +573,19 @@
             } else if (oldValue !== null && newValue.length < oldValue.length) {
                 if (!ctrl.selecteModalOpen) {
                     ctrl.newDeselectedType = arr_diff(oldValue, newValue);
-                    ctrl.openModal('modal-5', 'md', 'static', false);
+                    //Check if auth document is present.
+                    var isAuthPresent = false, index;
+                    if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
+                        for (var i = ctrl.authorizationDocuments.length - 1; i >= 0; i--) {
+                            if (ctrl.authorizationDocuments[i].careType == Number(ctrl.newDeselectedType[0]) && (ctrl.authorizationDocuments[i].id === undefined || ctrl.authorizationDocuments[i].id === null)) {
+                                isAuthPresent = true;
+                                index = i;
+                                break;
+                            }
+                        }
+                    }
+                    if (isAuthPresent)
+                        ctrl.openModal('modal-5', 'md', 'static', false);
                 } else {
                     ctrl.selecteModalOpen = false;
                 }
@@ -691,23 +689,23 @@
                         return validAuthorization;
                     };
 
-                    $scope.isValidCareType = function () {
-                        var valid = true;
-                        if ($scope.addPatient.authorizationDocuments && $scope.addPatient.authorizationDocuments.length > 0) {
-                            for (var i = 0; i < $scope.addPatient.authorizationDocuments.length; i++) {
-                                if ($scope.addPatient.currentAuthorizationDocument && $scope.addPatient.currentAuthorizationDocument.careType == $scope.careObj.careType.id) {
-                                }
-                                else {
-                                    if ($scope.careObj.careType.id == $scope.addPatient.authorizationDocuments[i].careType) {
-                                        valid = false;
-                                        $scope.careObj.errorMsg = 'Authorized document is already added for this care type.';
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        return valid;
-                    };
+//                    $scope.isValidCareType = function () {
+//                        var valid = true;
+//                        if ($scope.addPatient.authorizationDocuments && $scope.addPatient.authorizationDocuments.length > 0) {
+//                            for (var i = 0; i < $scope.addPatient.authorizationDocuments.length; i++) {
+//                                if ($scope.addPatient.currentAuthorizationDocument && $scope.addPatient.currentAuthorizationDocument.careType == $scope.careObj.careType.id) {
+//                                }
+//                                else {
+//                                    if ($scope.careObj.careType.id == $scope.addPatient.authorizationDocuments[i].careType) {
+//                                        valid = false;
+//                                        $scope.careObj.errorMsg = 'Authorized document is already added for this care type.';
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        return valid;
+//                    };
 
                     $scope.removeFile = function () {
                         if ($scope.careObj.filePath != null) {
@@ -748,16 +746,15 @@
                             $scope.addPatient.authorizationDocuments.push(authObj);
                         }
 
-                        $scope.addPatient.authorizationErrorMsg = null;
                         $scope.close();
                     };
 
                     $scope.saveAuthorizationDocument = function () {
-                        if ($scope.isValidAutorization() && $scope.isValidCareType() && $('#authorizationDoc')[0].checkValidity()) {
+                        if ($scope.isValidAutorization() && $('#authorizationDoc')[0].checkValidity()) {
                             $scope.disableSaveButton = true;
                             $scope.disableUploadButton = true;
                             $scope.showfileProgress = true;
-                            if ($scope.fileObj.flowObj){
+                            if ($scope.fileObj.flowObj) {
                                 $rootScope.maskLoading();
                                 $scope.fileObj.flowObj.upload();
                             } else
