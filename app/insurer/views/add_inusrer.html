@@ -78,7 +78,8 @@
                             </label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="ediProcessor" name="ediProcessor" ng-model="addInsurer.insurerObj.mdol"
-                                        data-validate="required"  data-message-required="Please select EDI Processor." maxlength="100">
+                                        data-validate="required"  data-message-required="Please select EDI Processor." maxlength="100"
+                                        ng-change="addInsurer.ediProcessorUpdated()">
                                     <option value="">
                                         Select
                                     </option>
@@ -87,6 +88,9 @@
                                     </option>
                                     <option value="Emdeon">
                                         Emdeon – Change
+                                    </option>
+                                    <option value="Availity">
+                                        Availity
                                     </option>
                                 </select>
                             </div>
@@ -103,7 +107,7 @@
                                     <option value="">
                                         Select
                                     </option>
-                                    <option value="1500">
+                                    <option value="1500" ng-if="addInsurer.insurerObj.mdol !== 'Availity'">
                                         Claim 1500
                                     </option>
                                     <option value="UB04">

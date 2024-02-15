@@ -392,6 +392,14 @@
             ctrl.fileExt = file.getExtension();
             return true;
         };
+        
+        ctrl.ediProcessorUpdated = function() {
+            if(ctrl.insurerObj.mdol === 'Availity') {
+                if(ctrl.insurerObj.claimFormType === '1500') {
+                    delete ctrl.insurerObj.claimFormType;
+                }
+            }
+        }
     }
     ;
     angular.module('xenon.controllers').controller('AddInsurerCtrl', ["$scope", "$rootScope", "$state", "$modal", "$timeout", "InsurerDAO", "CareTypeDAO", "Page", AddInsurerCtrl]);

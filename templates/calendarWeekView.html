@@ -22,7 +22,7 @@
                 ng-if="temp_day.events.length"
                 style="margin-bottom: 2px;"
                 ng-click="onEventClick(temp_event, false, $event)"
-                ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':temp_event.worksiteSchedule?'black':'white','background': temp_event.worksiteSchedule?'#FFDB58':(temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000') }">
+                ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background':(temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000') }">
 
                 <i class="glyphicon glyphicon-list-alt pull-right" ng-if="temp_event.note != undefined" tooltip-html-unsafe="<div>Note:<br>{{temp_event.note}}" tooltip-placement="left" style="margin-right:5px;padding-top:1.49px;"></i>
                 <span 
@@ -51,7 +51,7 @@
                     ng-if="temp_day.events.length"
                     style="margin-bottom: 2px;" 
                     ng-click="onEventClick(temp_event, false, $event)"
-                    ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':temp_event.worksiteSchedule?'black':'white','background': temp_event.worksiteSchedule?'#FFDB58':(temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000') }">
+                    ng-style="{'width': temp_event.daySpan == 1 ? (96 * temp_event.daySpan) + '%' : (100 * temp_event.daySpan) + '%', position:'relative', 'margin-left': '2' + 'px', 'color':'white','background': (temp_event.eventType == 'S' ? temp_event.colorCode: temp_event.eventType == 'A' ? '#7D7D7D':'#000') }">
 
                     <i class="glyphicon glyphicon-list-alt pull-right" ng-if="temp_event.note != undefined" tooltip-html-unsafe="<div>Note:<br>{{temp_event.note}}" tooltip-placement="left" style="margin-right:5px;padding-top:1.49px;"></i>
 
