@@ -5,7 +5,7 @@
         ctrl.retrivalRunning = true;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
-        ctrl.employee = {employeeDocumentId: {}, employeeAttachments: []};
+        ctrl.employee = {employeeAttachments: []};
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
@@ -38,62 +38,43 @@
         ctrl.careTypeList = [];
         ctrl.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
         ctrl.applicationFileObj = {};
-        ctrl.licenceFileObj = {};
-        ctrl.i9eligibilityFileObj = {};
         ctrl.w4FileObj = {};
         ctrl.ssn = {};
         ctrl.referencesFileObj = {};
-        ctrl.physicalFileObj = {};
         ctrl.profileFileObj = {};
-        ctrl.backgroundCheckFileObj = {};
         ctrl.resetEmployeeTab3 = function () {
             ctrl.applicationFileObj.errorMsg = null;
-            ctrl.licenceFileObj.errorMsg = null;
-            ctrl.i9eligibilityFileObj.errorMsg = null;
             ctrl.w4FileObj.errorMsg = null;
-            ctrl.backgroundCheckFileObj.errorMsg = null;
-            if (ctrl.employee.employeeDocumentId.application != null) {
-                ctrl.employee.employeeDocumentId.application = null;
+            if (ctrl.employee.application != null) {
+                ctrl.employee.application = null;
             }
-            if (ctrl.employee.employeeDocumentId.backgroundCheck != null) {
-                ctrl.employee.employeeDocumentId.backgroundCheck = null;
+            if (ctrl.employee.backgroundCheck != null) {
+                ctrl.employee.backgroundCheck = null;
             }
-            if (ctrl.employee.employeeDocumentId.licence != null) {
-                ctrl.employee.employeeDocumentId.licence = null;
+            if (ctrl.employee.licence != null) {
+                ctrl.employee.licence = null;
             }
-            if (ctrl.employee.employeeDocumentId.i9 != null) {
-                ctrl.employee.employeeDocumentId.i9 = null;
+            if (ctrl.employee.i9 != null) {
+                ctrl.employee.i9 = null;
             }
-            if (ctrl.employee.employeeDocumentId.w4 != null) {
-                ctrl.employee.employeeDocumentId.w4 = null;
+            if (ctrl.employee.w4 != null) {
+                ctrl.employee.w4 = null;
             }
-            if (ctrl.employee.employeeDocumentId.references != null) {
-                ctrl.employee.employeeDocumentId.references = null;
+            if (ctrl.employee.references != null) {
+                ctrl.employee.references = null;
             }
-            if (ctrl.employee.employeeDocumentId.physical != null) {
-                ctrl.employee.employeeDocumentId.physical = null;
+            if (ctrl.employee.physical != null) {
+                ctrl.employee.physical = null;
             }
             ctrl.employee.employeeAttachments = [];
-            if (ctrl.licenceFileObj.flowObj != null) {
-                ctrl.licenceFileObj.flowObj.cancel();
-            }
             if (ctrl.applicationFileObj.flowObj != null) {
                 ctrl.applicationFileObj.flowObj.cancel();
-            }
-            if (ctrl.backgroundCheckFileObj.flowObj != null) {
-                ctrl.backgroundCheckFileObj.flowObj.cancel();
-            }
-            if (ctrl.i9eligibilityFileObj.flowObj != null) {
-                ctrl.i9eligibilityFileObj.flowObj.cancel();
             }
             if (ctrl.w4FileObj.flowObj != null) {
                 ctrl.w4FileObj.flowObj.cancel();
             }
             if (ctrl.referencesFileObj.flowObj != null) {
                 ctrl.referencesFileObj.flowObj.cancel();
-            }
-            if (ctrl.physicalFileObj.flowObj != null) {
-                ctrl.physicalFileObj.flowObj.cancel();
             }
             $scope.resetForm = true;
         };
@@ -108,28 +89,12 @@
             }
             $scope.resetForm = true;
         };
-        ctrl.clearLicence = function () {
-            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.licence != null) {
-                ctrl.employee.employeeDocumentId.licence = null;
-            }
-            if (ctrl.licenceFileObj.flowObj != null) {
-                ctrl.licenceFileObj.flowObj.cancel();
-            }
-        };
         ctrl.clearRefereces = function () {
-            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.references != null) {
-                ctrl.employee.employeeDocumentId.references = null;
+            if (ctrl.employee != null && ctrl.employee.references != null) {
+                ctrl.employee.references = null;
             }
             if (ctrl.referencesFileObj.flowObj != null) {
                 ctrl.referencesFileObj.flowObj.cancel();
-            }
-        };
-        ctrl.clearPhysical = function () {
-            if (ctrl.employee.employeeDocumentId != null && ctrl.employee.employeeDocumentId.physical != null) {
-                ctrl.employee.employeeDocumentId.physical = null;
-            }
-            if (ctrl.physicalFileObj.flowObj != null) {
-                ctrl.physicalFileObj.flowObj.cancel();
             }
         };
         ctrl.clearProfileImage = function () {
@@ -177,31 +142,24 @@
 
         ctrl.checkFileUploadValidity = function () {
             var validApplication = true;
-            var validBackground = true;
             var validW4 = true;
             if ($rootScope.tabNo != 3) {
                 ctrl.applicationFileObj.errorMsg = null;
                 ctrl.w4FileObj.errorMsg = null;
             }
             if (ctrl.displayDocumentsByPositionMap['a']) {
-                if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                if ($rootScope.tabNo == 3 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
                     ctrl.applicationFileObj.errorMsg = "Please upload Application.";
                     validApplication = false;
                 }
             }
             if (ctrl.displayDocumentsByPositionMap['w']) {
-                if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                if ($rootScope.tabNo == 3 && ctrl.employee.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
                     ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
                     validW4 = false;
                 }
             }
-            if (ctrl.displayDocumentsByPositionMap['b']) {
-                if ($rootScope.tabNo == 3 && ctrl.employee.employeeDocumentId.backgroundCheck == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-//                    ctrl.backgroundCheckFileObj.errorMsg = "Please upload Background Check.";
-//                    validBackground = false;
-                }
-            }
-            return (validApplication && validBackground && validW4);
+            return (validApplication && validW4);
         };
 
         //ceck if form has been changed or not
@@ -257,31 +215,10 @@
                 }
             });
             employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
-            if (!ctrl.employee.employeeDocumentId.application || ctrl.employee.employeeDocumentId.application === null) {
-                delete employeeToSave.employeeDocumentId;
-            } else {
-//                if (employeeToSave.employeeDocumentId.physicalExpirationDate) {
-//                    employeeToSave.employeeDocumentId.physicalExpirationDate = new Date(employeeToSave.employeeDocumentId.physicalExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.licenceExpirationDate) {
-//                    employeeToSave.employeeDocumentId.licenceExpirationDate = new Date(employeeToSave.employeeDocumentId.licenceExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.i9ExpirationDate) {
-//                    employeeToSave.employeeDocumentId.i9ExpirationDate = new Date(employeeToSave.employeeDocumentId.i9ExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.tbTestingExpirationDate) {
-//                    employeeToSave.employeeDocumentId.tbTestingExpirationDate = new Date(employeeToSave.employeeDocumentId.tbTestingExpirationDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.startDate) {
-//                    employeeToSave.employeeDocumentId.startDate = new Date(employeeToSave.employeeDocumentId.startDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.endDate) {
-//                    employeeToSave.employeeDocumentId.endDate = new Date(employeeToSave.employeeDocumentId.endDate);
-//                }
-//                if (employeeToSave.employeeDocumentId.bgCheckDate) {
-//                    employeeToSave.employeeDocumentId.bgCheckDate = new Date(employeeToSave.employeeDocumentId.bgCheckDate);
-//                }
-            }
+//            if (!ctrl.employee.application || ctrl.employee.application === null) {
+//                delete employeeToSave.employeeDocumentId;
+//            } else {
+//            }
             delete employeeToSave.careRatesList;
             delete employeeToSave.employeeCareRatesList;
             if ($('#add_employee_form')[0].checkValidity() && fileUploadValid) {
@@ -466,10 +403,7 @@
         }
 
         $scope.$watch(function () {
-            if (!ctrl.employee.employeeDocumentId) {
-                ctrl.employee.employeeDocumentId = {};
-            }
-            return ctrl.employee.employeeDocumentId.physical;
+            return ctrl.employee.physical;
         }, function (newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='PhysicalExpirationDate']").attr('required', true);
@@ -479,10 +413,7 @@
         });
 
         $scope.$watch(function () {
-            if (!ctrl.employee.employeeDocumentId) {
-                ctrl.employee.employeeDocumentId = {};
-            }
-            return ctrl.employee.employeeDocumentId.tbTesting;
+            return ctrl.employee.tbTesting;
         }, function (newVal, oldValue) {
             if (newVal && newVal !== '') {
                 $("input[name='TBTestingExpirationDate']").attr('required', true);
@@ -556,9 +487,6 @@
             ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             $timeout(function () {
-                if (!ctrl.employee.employeeDocumentId || ctrl.employee.employeeDocumentId === null) {
-                    ctrl.employee.employeeDocumentId = {};
-                }
                 if (!ctrl.employee.employeeAttachments) {
                     ctrl.employee.employeeAttachments = [];
                 }
@@ -680,7 +608,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.application = response.fileName;
+                    ctrl.employee.application = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -690,13 +618,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableApplicationUploadButton = false;
-            ctrl.employee.employeeDocumentId.application = null;
+            ctrl.employee.application = null;
             ctrl.applicationFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.applicationFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.application = null;
+            ctrl.employee.application = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.applicationFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -730,7 +658,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.licence = response.fileName;
+                    ctrl.employee.licence = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -740,13 +668,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableLicenceUploadButton = false;
-            ctrl.employee.employeeDocumentId.licence = null;
+            ctrl.employee.licence = null;
             ctrl.licenceFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.licenceFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.licence = null;
+            ctrl.employee.licence = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.licenceFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -780,7 +708,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.i9 = response.fileName;
+                    ctrl.employee.i9 = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -790,13 +718,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
-            ctrl.employee.employeeDocumentId.i9 = null;
+            ctrl.employee.i9 = null;
             ctrl.i9eligibilityFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.i9eligibilityFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.i9 = null;
+            ctrl.employee.i9 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.i9eligibilityFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -830,7 +758,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.w4 = response.fileName;
+                    ctrl.employee.w4 = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -840,13 +768,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableW4UploadButton = false;
-            ctrl.employee.employeeDocumentId.w4 = null;
+            ctrl.employee.w4 = null;
             ctrl.w4FileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.w4FileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.w4 = null;
+            ctrl.employee.w4 = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.w4FileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -880,7 +808,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.references = response.fileName;
+                    ctrl.employee.references = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -890,13 +818,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disableReferencesUploadButton = false;
-            ctrl.employee.employeeDocumentId.references = null;
+            ctrl.employee.references = null;
             ctrl.referencesFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.referencesFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.references = null;
+            ctrl.employee.references = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.referencesFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -930,7 +858,7 @@
             if (response != null) {
                 response = JSON.parse(response);
                 if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.physical = response.fileName;
+                    ctrl.employee.physical = response.fileName;
                 }
             }
             ctrl.disableSaveButton = false;
@@ -940,13 +868,13 @@
             $flow.cancel();
             ctrl.disableSaveButton = false;
             ctrl.disablePhysicalUploadButton = false;
-            ctrl.employee.employeeDocumentId.physical = null;
+            ctrl.employee.physical = null;
             ctrl.physicalFileObj.errorMsg = "File cannot be uploaded";
         };
         //When file is added in file upload
         ctrl.physicalFileAdded = function (file, flow) { //It will allow all types of attahcments'
             ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.physical = null;
+            ctrl.employee.physical = null;
             if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
                 ctrl.physicalFileObj.errorMsg = "Please upload a valid file.";
                 return false;
@@ -1115,10 +1043,12 @@
                 }
                 if (required) {
                     console.log($rootScope.uploadPopup.data.type + "   " + $rootScope.uploadPopup.data.name)
-                    if (!$rootScope.uploadPopup.data.filePath && $rootScope.uploadPopup.data.type != 't') {
+                    if (!$rootScope.uploadPopup.data.filePath) {
                         $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
-                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.name || $rootScope.uploadPopup.data.name == '')) {
-                        $rootScope.uploadPopup.fileObj.errorMsg = "Please select Tb Testing.";
+                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
+                        $rootScope.uploadPopup.errorMsg = "Please select Tb Testing.";
+                    } else if ($rootScope.uploadPopup.data.type == 'b' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
+                        $rootScope.uploadPopup.errorMsg = "Please select Background Status.";
                     } else {
                         ctrl.employee.employeeAttachments.push($rootScope.uploadPopup.data);
                         $rootScope.uploadPopup.closePopup();
@@ -1146,14 +1076,20 @@
             if (ctrl.displayDocumentsByPositionMap['t']) {
                 $rootScope.uploadPopup.typeList.push({id: 't', label: "Tb Testing"});
             }
+            if (ctrl.displayDocumentsByPositionMap['b']) {
+                $rootScope.uploadPopup.typeList.push({id: 'b', label: "Background Check"});
+            }
             $rootScope.uploadPopup.setUploadFile = function () {
                 $formService.resetRadios();
+                $rootScope.uploadPopup.disableUploadButton = false;
                 if ($rootScope.uploadPopup.fileObj.flowObj != null) {
                     $rootScope.uploadPopup.fileObj.flowObj.cancel();
                 }
+                delete $rootScope.uploadPopup.errorMsg;
                 $rootScope.uploadPopup.fileObj = {};
                 delete $rootScope.uploadPopup.data.filePath;
-                if ($rootScope.uploadPopup.data.type == 't') {
+                if ($rootScope.uploadPopup.data.type == 't' || $rootScope.uploadPopup.data.type == 'b') {
+                    delete $rootScope.uploadPopup.data.result;
                     delete $rootScope.uploadPopup.data.name;
                 }
                 $rootScope.uploadPopup.uploadFile = {
@@ -1228,57 +1164,8 @@
             } else {
                 ctrl.position = "other";
                 ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, z: true, t: true, b: true, l: true};
-                ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing"};
+                ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
             }
-        };
-        ctrl.backgroundCheckUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
-            chunkSize: 1024 * 1024 * 1024,
-            testChunks: false,
-            fileParameterName: "fileUpload",
-            singleFile: true,
-            headers: {
-                type: "b",
-                company_code: ontimetest.company_code
-            }
-        };
-        //When file is selected from browser file picker
-        ctrl.backgroundCheckFileSelected = function (file, flow) {
-            ctrl.backgroundCheckFileObj.flowObj = flow;
-            ctrl.backgroundCheckFileObj.flowObj.upload();
-        };
-        //When file is uploaded this method will be called.
-        ctrl.backgroundCheckFileUploaded = function (response, file, flow) {
-            if (response != null) {
-                response = JSON.parse(response);
-                if (response.fileName != null && response.status != null && response.status == 's') {
-                    ctrl.employee.employeeDocumentId.backgroundCheck = response.fileName;
-                }
-            }
-            ctrl.disableSaveButton = false;
-            ctrl.disableBackgroundCheckUploadButton = false;
-        };
-        ctrl.backgroundCheckFileError = function ($file, $message, $flow) {
-            $flow.cancel();
-            ctrl.disableSaveButton = false;
-            ctrl.disableBackgroundCheckUploadButton = false;
-            ctrl.employee.employeeDocumentId.backgroundCheck = null;
-            ctrl.backgroundCheckFileObj.errorMsg = "File cannot be uploaded";
-        };
-        //When file is added in file upload
-        ctrl.backgroundCheckFileAdded = function (file, flow) { //It will allow all types of attahcments'
-            ctrl.formDirty = true;
-            ctrl.employee.employeeDocumentId.backgroundCheck = null;
-            if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
-                ctrl.backgroundCheckFileObj.errorMsg = "Please upload a valid file.";
-                return false;
-            }
-            ctrl.disableSaveButton = true;
-            ctrl.disableBackgroundCheckUploadButton = true;
-            ctrl.backgroundCheckShowfileProgress = true;
-            ctrl.backgroundCheckFileObj.errorMsg = null;
-            ctrl.backgroundCheckFileObj.flow = flow;
-            return true;
         };
     }
     ;
