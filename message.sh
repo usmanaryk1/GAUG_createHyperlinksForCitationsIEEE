@@ -1,21 +1,4 @@
 
-# # Extract the parameters
-# DATE=$1
-# MESSAGE=$2
-
-# # Extract day and month from the date
-# DD=$(echo $DATE | cut -d'-' -f1)
-# MM=$(echo $DATE | cut -d'-' -f2)
-
-# # Set the author and committer dates
-# export GIT_AUTHOR_DATE="2024-$MM-$DDT12:00:00"
-# export GIT_COMMITTER_DATE="2024-$MM-$DDT12:00:00"
-
-# # Stage, commit, and push the changes
-# git add .
-# git commit -m "$MESSAGE functionality"
-# git push
-
 #!/bin/bash
 
 # Check if the correct number of arguments is provided
@@ -44,5 +27,5 @@ export GIT_COMMITTER_DATE="2024-$MM-$DD"T12:00:00
 
 # Stage, commit, and push the changes
 git add .
-git commit -m "change $MESSAGE functionality"
+git commit -m "$MESSAGE functionality"
 git push
