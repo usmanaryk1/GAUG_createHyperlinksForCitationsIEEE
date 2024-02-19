@@ -1,5 +1,5 @@
 (function () {
-    function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, Page) {
+    function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, ComplaintDAO, Page) {
         var ctrl = this;
         Page.setTitle("Add Complaint");
         ctrl.currentUser = $rootScope.currentUser
@@ -9,7 +9,7 @@
         ctrl.employeeList = [];
         ctrl.dataUrl = ''
         ctrl.complaintTypes = angular.copy(ontime_data.complaintTypes)
-        ctrl.reviewedComplaint = false;
+        ctrl.reviewedComplaint = true;
         ctrl.formSubmitted = false;
         ctrl.isSignAdded = false;
         ctrl.isSignTouched = false;
@@ -32,25 +32,42 @@
         ctrl.getListsCall()
 
 
+        // {
+        //     "complaintDate": "10/02/2023",
+        //     "complainantName": "John Doe",
+        //     "complainantContactType": "PHONE",
+        //     "complainantContact": "123-456-7890",
+        //     "complainantRelationshipType": "PATIENT",
+        //     "complainantRelationship": "Patient ID: 12345",
+        //     "complaintReceiverName": "Jane Doe",
+        //     "complaintMethod": "EMAIL",
+        //     "complaintType": "Service Issue",
+        //     "complaintDescription": "The service was not up to the mark.",
+        //     "complaintResolution": "Offered a discount for the next service.",
+        //     "complaintFollowUp": true,
+        //     "complaintSatisfied": true,
+        //     "signature": "base64_encoded_signature_here"
+        // }
+
         /*================   FORM FUNCTIONS   ===================*/
         function generateForms() {
             $rootScope.isFormDirty = false;
 
             ctrl.complaint = {
-                dateOfComplaint: $filter('date')(ctrl.currentDate, 'MM/dd/yyyy'),
-                complainant: '',
-                contactInfo: {
-                    type: 'phone',
-                },
-                relationToOrg: {
-                    type: 'patient',
-                },
-                complaintReceiver: ctrl.currentUser.userName,
-                method: 'phone',
-                complainantSatisfied: 'yes',
-                signature: '',
-                followUpNeeded: 'yes',
-                date: $filter('date')(ctrl.currentDate, 'MM/dd/yyyy')
+            complaintDate: $filter('date')(ctrl.currentDate, 'MM/dd/yyyy'),
+            complainantName: "",
+            complainantContactType: "phone",
+            complainantContact: "",
+            complainantRelationshipType: "patient",
+            complainantRelationship: "",
+            complaintMethod: "phone",
+            complaintType: "",
+            complaintDescription: "",
+            complaintResolution: "",
+            complaintFollowUp: "",
+            complaintSatisfied: "",
+            signature: "",
+            complainantContact2: ''
             };
 
             setupWatch()
@@ -61,12 +78,26 @@
         }
 
         ctrl.saveForm = function () {
-            console.log(ctrl.dataUrl);
-            if (!ctrl.isSignTouched) {
-                ctrl.formSubmitted = true;
-                return;
+            let comp = {
+                "complaintDate": "10/02/2023",
+                "complainantName": "John Doe",
+                "complainantContactType": "PHONE",
+                "complainantContact": "123-456-7890",
+                "complainantRelationshipType": "PATIENT",
+                "complainantRelationship": "Patient ID: 12345",
+                "complaintMethod": "EMAIL",
+                "complaintType": "Service Issue",
+                "complaintDescription": "The service was not up to the mark.",
+                "complaintResolution": "Offered a discount for the next service.",
+                "complaintFollowUp": true,
+                "complaintSatisfied": "true",
+                "signature": "base64_encoded_signature_here"
             }
-            ctrl.formSubmitted = false;
+            ComplaintDAO.addComplaint(comp).then((res)=>{
+                console.log(res);
+            }).catch((err)=>{
+                console.log(err);
+            })
         }
 
 
@@ -304,5 +335,5 @@
         //     canvas.addEventListener('pointermove', handlePointerMove, { passive: true })
         // }
     }
-    angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO", "Page", AddComplaintController]);
+    angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO","ComplaintDAO", "Page", AddComplaintController]);
 })();

@@ -105,8 +105,7 @@
                                     <div class="input-group">
                                         <input class="form-control datepicker" max-date="addCompCtrl.currentDate"
                                             data-format="mm/dd/yyyy" id="field-1" name="DateofComplaint" type="text"
-                                            ng-model="addCompCtrl.complaint.dateOfComplaint"
-                                            data-validate="required,date"
+                                            ng-model="addCompCtrl.complaint.complaintDate" data-validate="required,date"
                                             data-message-required="Please Enter Complaint Receiving Date" />
                                         <div class="input-group-addon">
                                             <a href="#">
@@ -127,9 +126,12 @@
                                     <input class="form-control" charactersonly id="field-2" name="complainant"
                                         type="text" required data-validate="required"
                                         data-message-required="Please enter the name of the Complainant." maxlength="50"
-                                        ng-model="addCompCtrl.complaint.complainant" />
+                                        ng-model="addCompCtrl.complaint.complainantName" />
                                 </div>
                             </div>
+
+
+
                             <div class="form-group-separator">
                             </div>
                             <div class="form-group">
@@ -141,46 +143,93 @@
                                         <label class="radio-field">
                                             <input value="phone" name="ContactInfo" type="radio" class=""
                                                 ng-change="addCompCtrl.contactChange()"
-                                                ng-model="addCompCtrl.complaint.contactInfo.type" />
+                                                ng-model="addCompCtrl.complaint.complainantContactType" />
                                             Phone
                                         </label>
                                         <label class="radio-field">
                                             <input name="ContactInfo" value="email" type="radio"
                                                 ng-change="addCompCtrl.contactChange()"
-                                                ng-model="addCompCtrl.complaint.contactInfo.type" />
+                                                ng-model="addCompCtrl.complaint.complainantContactType" />
                                             Email
                                         </label>
                                         <label class="radio-field">
                                             <input name="ContactInfo" value="address" type="radio"
                                                 ng-change="addCompCtrl.contactChange()"
-                                                ng-model="addCompCtrl.complaint.contactInfo.type" />
+                                                ng-model="addCompCtrl.complaint.complainantContactType" />
                                             Address
                                         </label>
                                     </div>
-                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.contactInfo.type">
-                                        <div ng-switch-when="phone">
-                                            <input class="form-control"
-                                                ng-model="addCompCtrl.complaint.contactInfo.value" required
-                                                numbers-only="true" maxlength="10" id="field-4" data-validate="required"
-                                                data-message-required="Please enter Phone Number."
-                                                name="contactInfoValue" type="text" placeholder="Enter Phone Number" />
-                                        </div>
-                                        <div ng-switch-when="email">
-                                            <input class="form-control" maxlength="30" id="field-4"
-                                                name="contactInfoValue" type="email" placeholder="Enter Email"
-                                                ng-model="addCompCtrl.complaint.contactInfo.value" />
-                                        </div>
-                                        <div ng-switch-when="address">
-                                            <input class="form-control" maxlength="10" id="placeInput"
-                                                name="contactInfoValue" type="text" maxlength="50"
-                                                placeholder="Enter a location"
-                                                ng-model="addCompCtrl.complaint.contactInfo.value" />
-                                            <div id="map-2" class=""></div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
+
+                            <div class="form-group" ng-show="addCompCtrl.complaint.complainantContactType == 'phone'">
+                                <label class="col-sm-3 control-label" for="field-50">
+                                    Phone
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" name="complainantContactPhone"
+                                        ng-model="addCompCtrl.complaint.complainantContact" numbers-only="true"
+                                        maxlength="10" id="field-50" placeholder="Enter phone"
+                                        data-validate="required,number,minlength[10],maxlength[10]"
+                                        data-message-required="Please enter Phone Number."
+                                        data-message-minlength="Phone Number must contain 10 digits"
+                                        data-message-maxlength="Phone Number must contain 10 digits" type="text" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-show="addCompCtrl.complaint.complainantContactType == 'email'">
+                                <label class="col-sm-3 control-label" for="field-51">
+                                    Email
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" name="complainantContactEmail"
+                                        ng-model="addCompCtrl.complaint.complainantContact"
+                                        maxlength="100" id="field-51"
+                                        data-validate="required,email" data-message-required="Please enter a Contact Email."  data-message-email="Please enter valid Contact Email." placeholder="Enter email" type="text" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-show="addCompCtrl.complaint.complainantContactType == 'address'">
+                                <label class="col-sm-3 control-label" for="field-50">
+                                    Address
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" maxlength="10" id="placeInput"
+                                        name="contactInfoValue" type="text" maxlength="50"
+                                        placeholder="Enter a location"
+                                        ng-model="addCompCtrl.complaint.complainantContact" />
+                                </div>
+                            </div>
+
+                            <!-- <div class="pt-7" ng-switch="addCompCtrl.complaint.complainantContactType">
+                                <div ng-switch-when="phone">
+                                    <input class="form-control"
+                                        ng-model="addCompCtrl.complaint.complainantContact" numbers-only="true"
+                                        name="phone" maxlength="10" id="field-4"
+                                        data-validate="required,number,minlength[10],maxlength[10]"
+                                        data-message-required="Please enter Phone Number."
+                                        data-message-minlength="Phone Number must contain 10 digits"
+                                        data-message-maxlength="Phone Number must contain 10 digits"
+                                        type="text" />
+                                </div>
+                                <div ng-switch-when="email">
+                                    <input class="form-control" maxlength="30" id="field-4"
+                                        name="contactInfoValue" type="email" data-validate="email"
+                                        data-message-email="Please enter valid Contact Email." maxlength="100"
+                                        placeholder="Enter Email"
+                                        ng-model="addCompCtrl.complaint.complainantContact" />
+                                </div>
+                                <div ng-switch-when="address">
+                                    <input class="form-control" maxlength="10" id="placeInput"
+                                        name="contactInfoValue" type="text" maxlength="50"
+                                        placeholder="Enter a location"
+                                        ng-model="addCompCtrl.complaint.complainantContact" />
+                                    <div id="map-2" class=""></div>
+                                </div>
+                            </div> -->
+
+                            <div class="form-group-separator"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-5">
                                     Relationship To Organization
@@ -190,32 +239,32 @@
                                         <label class="radio-field">
                                             <input value="patient" name="RelationToOrg" type="radio" class=""
                                                 ng-change="addCompCtrl.relationToOrgChange()"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                                ng-model="addCompCtrl.complaint.complainantRelationshipType" />
                                             Patient
                                         </label>
                                         <label class="radio-field">
                                             <input name="RelationToOrg" value="employee" type="radio"
                                                 ng-change="addCompCtrl.relationToOrgChange()"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                                ng-model="addCompCtrl.complaint.complainantRelationshipType" />
                                             Employee
                                         </label>
                                         <label class="radio-field">
                                             <input name="RelationToOrg" value="worksite" type="radio"
                                                 ng-change="addCompCtrl.relationToOrgChange()"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                                ng-model="addCompCtrl.complaint.complainantRelationshipType" />
                                             Worksite
                                         </label>
                                         <label class="radio-field">
                                             <input name="RelationToOrg" value="vendor" type="radio"
                                                 ng-change="addCompCtrl.relationToOrgChange()"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                                ng-model="addCompCtrl.complaint.complainantRelationshipType" />
                                             Vendor
                                         </label>
                                     </div>
-                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.relationToOrg.type">
+                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.complainantRelationshipType">
                                         <div ng-switch-when="patient">
                                             <select class="form-control" name="patientdropdownIds"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.value"
+                                                ng-model="addCompCtrl.complaint.complainantRelationship"
                                                 id="patientdropdownIds" data-validate="required"
                                                 data-message-required="Please select a Patient" required
                                                 ng-options='patient.id as patient.label for patient in addCompCtrl.patientList'>
@@ -224,7 +273,7 @@
                                         </div>
                                         <div ng-switch-when="employee">
                                             <select class="form-control" name="employeedropdownIds"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.value"
+                                                ng-model="addCompCtrl.complaint.complainantRelationship"
                                                 id="employeedropdownIds" data-validate="required"
                                                 data-message-required="Please select a Employee"
                                                 ng-options='employee.id as employee.fName for employee in addCompCtrl.employeeList'>
@@ -233,7 +282,7 @@
                                         </div>
                                         <div ng-switch-when="worksite">
                                             <select class="form-control" name="worksitedropdownIds"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.value"
+                                                ng-model="addCompCtrl.complaint.complainantRelationship"
                                                 id="worksitedropdownIds" data-validate="required"
                                                 data-message-required="Please select a Worksite"
                                                 ng-options='worksite.id as worksite.name for worksite in addCompCtrl.worksiteList'>
@@ -244,7 +293,7 @@
                                             <input class="form-control" maxlength="10" id="field-2" name="vendorvalue"
                                                 type="text" maxlength="50" placeholder="Enter Name"
                                                 data-validate="required" data-message-required="Please enter a value"
-                                                ng-model="addCompCtrl.complaint.relationToOrg.value" />
+                                                ng-model="addCompCtrl.complaint.complainantRelationship" />
                                         </div>
                                     </div>
 
@@ -259,7 +308,7 @@
                                 <div class="col-sm-9">
                                     <input class="form-control" disabled charactersonly id="field-10"
                                         name="complaintReceiver" type="text" maxlength="50"
-                                        placeholder="{{addCompCtrl.complaint.complaintReceiver | titleCase}}" />
+                                        placeholder="{{addCompCtrl.currentUser.userName | titleCase}}" />
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -272,22 +321,22 @@
                                     <div class="radio-container pt-7">
                                         <label class="radio-field">
                                             <input name="Method" value="phone" type="radio" class=""
-                                                ng-model="addCompCtrl.complaint.method" />
+                                                ng-model="addCompCtrl.complaint.complaintMethod" />
                                             Phone
                                         </label>
                                         <label class="radio-field">
                                             <input name="Method" value="writing" type="radio"
-                                                ng-model="addCompCtrl.complaint.method" />
+                                                ng-model="addCompCtrl.complaint.complaintMethod" />
                                             Writing
                                         </label>
                                         <label class="radio-field">
                                             <input name="Method" value="email" type="radio"
-                                                ng-model="addCompCtrl.complaint.method" />
+                                                ng-model="addCompCtrl.complaint.complaintMethod" />
                                             Email
                                         </label>
                                         <label class="radio-field">
                                             <input name="Method" value="inperson" type="radio"
-                                                ng-model="addCompCtrl.complaint.method" />
+                                                ng-model="addCompCtrl.complaint.complaintMethod" />
                                             In Person
                                         </label>
                                     </div>
@@ -299,8 +348,8 @@
                                 <div class="col-sm-9">
                                     <select class="form-control" name="complaintType"
                                         ng-change="addCompCtrl.typeChange(addCompCtrl.complaint.type)"
-                                        ng-model="addCompCtrl.complaint.type" id="field-11" data-validate="required"
-                                        data-message-required="Please select type of Complaint"
+                                        ng-model="addCompCtrl.complaint.complaintType" id="field-11"
+                                        data-validate="required" data-message-required="Please select type of Complaint"
                                         ng-options='type.value as type.title for type in addCompCtrl.complaintTypes'>
                                         <option value="" selected hidden>Select Type</option>
                                     </select>
@@ -309,7 +358,7 @@
                                             data-validate="required"
                                             data-message-required="Please enter Other Complaint" required
                                             name="OtherComplaint" autofocus
-                                            ng-model="addCompCtrl.complaint.otherComplaint"
+                                            ng-model="addCompCtrl.complaint.complaintType"
                                             placeholder="Enter Complaint Type">
                                     </div>
                                 </div>
@@ -348,12 +397,12 @@
                                     <div class="radio-container pt-7">
                                         <label class="radio-field">
                                             <input value="yes" name="followUpNeeded" type="radio" class=""
-                                                ng-model="addCompCtrl.complaint.followUpNeeded" />
+                                                ng-model="addCompCtrl.complaint.complaintFollowUp" />
                                             Yes
                                         </label>
                                         <label class="radio-field">
                                             <input name="followUpNeeded" value="no" type="radio"
-                                                ng-model="addCompCtrl.complaint.followUpNeeded" />
+                                                ng-model="addCompCtrl.complaint.complaintFollowUp" />
                                             No, Resolved
                                         </label>
                                     </div>
@@ -369,18 +418,18 @@
                                     <div class="radio-container pt-7">
                                         <label class="radio-field">
                                             <input value="yes" name="complainantSatisfied" type="radio" class=""
-                                                ng-model="addCompCtrl.complaint.complainantSatisfied"
+                                                ng-model="addCompCtrl.complaint.complaintSatisfied"
                                                 ng-change="complainantSatisfiedChange()" />
                                             Yes
                                         </label>
                                         <label class="radio-field">
                                             <input name="complainantSatisfied" value="no" type="radio"
-                                                ng-model="addCompCtrl.complaint.complainantSatisfied"
+                                                ng-model="addCompCtrl.complaint.complaintSatisfied"
                                                 ng-change="complainantSatisfiedChange()" />
                                             No
                                         </label>
                                     </div>
-                                    <div class="pt-7" ng-if="addCompCtrl.complaint.complainantSatisfied == 'no'">
+                                    <div class="pt-7" ng-if="addCompCtrl.complaint.complaintSatisfied == 'no'">
                                         <input class="form-control" type="text" name="implementedFollowUp" autofocus
                                             ng-model="addCompCtrl.complaint.implementedFollowUp"
                                             data-validate="required"
