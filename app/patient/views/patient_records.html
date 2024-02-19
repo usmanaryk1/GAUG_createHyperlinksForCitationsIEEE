@@ -1,0 +1,29 @@
+<style>
+    .pad_top5{
+        padding: 5px 0px 0px 0px !important;
+    }
+    .pad_bt0{
+        padding-bottom: 0px !important;
+    }
+</style>
+<div>
+    <div class="page-title" ng-class="{'pad_bt0':patientRecordsCtrl.search.title}">
+        <div class="title-env">
+            <h1 class="title">Patient Records</h1>
+            <span class="description" ng-if="patientRecordsCtrl.search.title">
+                <ol class="breadcrumb bc-1 pad_top5" xe-breadcrumb>
+                    <li>
+                        <a href="#/app/patient_records"><i class="fa-home"></i>Patient Records</a>
+                    </li>
+                    <li class="active">
+                        <strong>{{patientRecordsCtrl.search.title}}</strong>
+                    </li>
+                </ol>
+            </span>
+            <p class="description" ng-if="!patientRecordsCtrl.search.title">
+                Patient Records
+            </p>
+        </div>
+    </div>
+    
+</div>

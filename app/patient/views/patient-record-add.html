@@ -1,0 +1,48 @@
+<style>
+    .no-error{
+        border-color: #B0B0B0!important;
+    }
+    .hide-error #FluShotDate-error{
+        display: none
+    }
+</style>
+<form class="validate form-horizontal" name="patient_record_add_popup" id="patient_record_add_popup" role="form">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Patient Record</h4>
+    </div>
+
+    <div class="modal-body" >
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="type">
+                Type:
+            </label>
+            <div class="col-sm-6">
+                <select class="form-control" ng-model="PatientRecordAddCtrl.type" ng-options="options.option for options in PatientRecordAddCtrl.options"
+                        id="type" name="Type"
+                        data-validate="required" data-message-required="Please select type." required>
+                    <option value="">
+                        Select
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group-separator"></div>
+        <div class="form-group">
+            <label for="expiry-date" class="col-sm-4 control-label ">Expiry Date:</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <input type="text" id="expiry-date" class="form-control datepicker" enabled='M' data-format="mm/dd/yyyy"
+                           ng-model="PatientRecordAddCtrl.expiry" />
+                    <div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="PatientRecordAddCtrl.close();">Close</button>
+        <button type="submit" class="btn btn-success" ng-click="PatientRecordAddCtrl.save();">Create & Add Details</button>
+    </div>
+</form>

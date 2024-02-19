@@ -499,6 +499,38 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     feature: 'VIEW_PATIENT'
                 }
             }).
+            state('app.patient_records', {
+                url: '/patient_records',
+                templateUrl: appHelper.viewTemplatePath('patient', 'patient_records_list'),
+                controller: 'PatientRecordsCtrl as patientRecordsCtrl',
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title: 'Search Patient'
+                }
+            }).
+            state('app.patient_records_patient', {
+                url: '/patient_records/:patientId/list',
+                templateUrl: appHelper.viewTemplatePath('patient', 'patient_records_list'),
+                controller: 'PatientRecordsCtrl as patientRecordsCtrl',
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title: 'Patient Record List'
+                }
+            }).
+            state('app.patient_records_view', {
+                url: '/patient_records/:patientId/list/:recordId/view',
+                templateUrl: appHelper.viewTemplatePath('patient', 'patient_records_single_view'),
+                data: {
+                    feature: 'MANAGE_BILLING_RECONCILIATION',
+                    title: 'Patient Record Edit'
+                }
+            }).
+            // edit patient record page
+            state('app.edit_patient', {
+                url: '/edit_patient/:id/:recordType',
+                templateUrl: appHelper.viewTemplatePath('patient', 'edit_patient'),
+                controller: 'PatientEditCtrl as editPatient'
+            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,
@@ -940,6 +972,24 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 data: {
                     feature: 'VIEW_COORDINATOR_SCHEDULE'
                 }
+            }).
+            //Complaints
+            state('app.complaints', {
+                url: '/complaints/:status',
+                templateUrl: appHelper.viewTemplatePath('forms', 'complaints_list'),
+                controller: 'ComplaintsController as compCtrl'
+            }).
+            // Add complaint
+            state('app.add-complaint', {
+                url: '/add-complaint?id',
+                templateUrl: appHelper.viewTemplatePath('forms', 'add_complaint'),
+                controller: 'AddComplaintController as addCompCtrl'
+            }).
+            // Forms Setting
+            state('app.forms-setting', {
+                url: '/forms-setting',
+                templateUrl: appHelper.viewTemplatePath('forms', 'forms_setting'),
+                controller: 'FormSettingController as formCtrl'
             }).
             // Report
             state('app.report', {

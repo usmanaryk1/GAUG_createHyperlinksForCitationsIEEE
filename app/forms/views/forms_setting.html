@@ -1,0 +1,59 @@
+<style>
+    .mt-10 {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="page-body">
+    <!--PAGE TITLE START -->
+    <div class="page-title">
+        <div class="title-env">
+            <h1 class="title">Forms Setting</h1>
+            <p class="description"></p>
+        </div>
+    </div>
+    <!--PAGE TITLE END -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal validate" role="form" id='report_form' name="report_form">
+                        <div class="row adjust-row-padding">
+                            <div class="col-sm-2 element-align sm-flex-align">
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="row">
+                                    <div class="">
+                                        <div class="form-group sm-layout-align">
+                                            <label class="control-label col-sm-6">Form Type</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="formType"
+                                                    ng-model='formCtrl.formType' name="formType"
+                                                    ng-change="formCtrl.typeChange()" data-validate="required"
+                                                    data-message-required="Please select Form Type."
+                                                    ng-options='form.id as (form.label) for form in formCtrl.formTypeList'>
+                                                    <option value="">Select the form type</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-10" ng-if="formCtrl.formType == 'complaintform'">
+                                    <div class="form-group sm-layout-align">
+                                        <label for="field-35" class="col-sm-6 control-label">Complaint Policy Resolution Time - Days</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" id="field-35" numbers-only="true" ng-model="formCtrl.complaintResDays" placeholder="Number of Days" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-10" ng-if="formCtrl.formType">
+                                        <button class="btn btn-info green_bt pull-right" type="button">Save</button>
+                                </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 ontime_data = {
-    'weburl': 'http://localhost:8084/webapplication/api/',
+    'weburl': 'https://uat-app.ontimeits.com/ontime/api/',
 //    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'redirect',
     'redirectStateOrURL': 'login',
@@ -56,6 +56,7 @@ ontime_data = {
         {id: 'detailagingreport', label: "Billing - Detail Aging Report"},
         {id: 'summaryagingreport', label: "Billing - Summary Aging Report"},
         {id: 'billingmonitorreport', label: "Billing - Monitor Report"},
+        {id: 'complaints', label: "Complaints Report"},
         {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
         {id: 'employeelastpunchin', label: "Employee Last Punchin Date Report"},
         {id: 'employeebenefitshealthcare', label: "Employee Healthcare Benefits Report"},
@@ -79,6 +80,34 @@ ontime_data = {
         {id: 'revenuereconciliationreport', label: "Revenue Reconciliation Report"},
         {id: 'revenuereconciliationbycounty', label: "Revenue Reconciliation By County Report"},
         {id: 'weeklyotanalysis', label: "Weekly OT Analysis Report"}
+    ],
+    formTypes: [
+        {id: 'complaintform', label: "Complaint Form"}
+    ],
+    complaintTypes: [
+        { title: 'Staff Punctuality', value: 'staff_punctuality' },
+        { title: 'Medication Errors', value: 'medication_errors' },
+        { title: 'Lack of Communication', value: 'lack_of_communication' },
+        { title: 'Inadequate Care', value: 'inadequate_care' },
+        { title: 'Billing Issues', value: 'billing_issues' },
+        { title: 'Payroll Issues', value: 'payroll_issues' },
+        { title: 'Scheduling Problems', value: 'scheduling_problems' },
+        { title: 'Equipment Failures', value: 'equipment_failures' },
+        { title: 'Staff Professionalism', value: 'staff_professionalism' },
+        { title: 'Privacy Concerns', value: 'privacy_concerns' },
+        { title: 'Safety Issues', value: 'safety_issues' },
+        { title: 'Service Quality', value: 'service_quality' },
+        { title: 'Poor Hygiene', value: 'poor_hygiene' },
+        { title: 'Patient – Staff Conflicts', value: 'patient_staff_conflicts' },
+        { title: 'Unmet Medical Needs', value: 'unmet_medical_needs' },
+        { title: 'Lack of Care Coordination', value: 'lack_of_care_coordination' },
+        { title: 'Transportation Issues', value: 'transportation_issues' },
+        { title: 'No Service', value: 'no_service' },
+        { title: 'Family Involvement Concerns', value: 'family_involvement_concerns' },
+        { title: 'Cultural Sensitivity', value: 'cultural_sensitivity' },
+        { title: 'Technology Issues', value: 'technology_issues' },
+        { title: 'Unclear Procedures and Policies', value: 'unclear_procedures_and_policies' },
+        { title: 'Other', value: 'other' }
     ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
     defaultDistance: 3

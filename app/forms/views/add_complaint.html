@@ -1,0 +1,474 @@
+<style>
+    .radio-container {
+        display: flex;
+        gap: 2em;
+        align-items: center;
+    }
+
+    .radio-field {
+        display: flex;
+        line-height: 1;
+        align-items: center;
+        gap: 0.5em;
+    }
+
+    .radio-field input[type="radio"],
+    input[type="checkbox"] {
+        accent-color: black;
+        width: 15px;
+        height: 15px;
+        opacity: 1;
+        margin-top: 0;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .pt-7 {
+        padding-top: 7px;
+    }
+
+    .mt-7 {
+        margin-top: 7px;
+    }
+
+    .signature-pad {
+        border: 1px solid #B0B0B0;
+        margin-bottom: 1em;
+        height: 150px;
+        display: block;
+    }
+
+    .error {
+        border: thin solid #cc3f44;
+    }
+
+    .error-text {
+        font-size: 12px;
+        color: #cc3f44;
+    }
+
+    .checkbox-right {
+        padding-top: 3px;
+    }
+
+    @media (min-width: 768px) {
+        .checkbox-right {
+            text-align: end;
+        }
+    }
+
+    @media print {
+        textarea {
+            height: auto;
+        }
+    }
+</style>
+
+<div class="page-body">
+
+    <div>
+
+        <!-- ADD COMPLAINTS TITLE START -->
+        <div class="page-title">
+            <div class="title-env">
+                <h1 class="title">{{addCompCtrl.title}}</h1>
+                <p class="description">{{addCompCtrl.subtitle}}</p>
+            </div>
+        </div>
+
+        <!-- ADD COMPLAINTS TITLE END -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="visible-print-block">Complaint</h2>
+                        <form class="form-horizontal validate" id="add_patient_form" novalidate=""
+                            name="add_patient_form" role="form">
+                            <div class="row hidden-print">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-info btn-single gray_bt pull-right"
+                                        ng-click="addCompCtrl.resetForm()">
+                                        Reset To Default
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-1">
+                                    Date the complaint was received
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input class="form-control datepicker" max-date="addCompCtrl.currentDate"
+                                            data-format="mm/dd/yyyy" id="field-1" name="DateofComplaint" type="text"
+                                            ng-model="addCompCtrl.complaint.dateOfComplaint"
+                                            data-validate="required,date"
+                                            data-message-required="Please Enter Complaint Receiving Date" />
+                                        <div class="input-group-addon">
+                                            <a href="#">
+                                                <i class="linecons-calendar">
+                                                </i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-2">
+                                    Name Of Person Making the complaint
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" charactersonly id="field-2" name="complainant"
+                                        type="text" required data-validate="required"
+                                        data-message-required="Please enter the name of the Complainant." maxlength="50"
+                                        ng-model="addCompCtrl.complaint.complainant" />
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-3">
+                                    Contact Information
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="radio-container pt-7">
+                                        <label class="radio-field">
+                                            <input value="phone" name="ContactInfo" type="radio" class=""
+                                                ng-change="addCompCtrl.contactChange()"
+                                                ng-model="addCompCtrl.complaint.contactInfo.type" />
+                                            Phone
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="ContactInfo" value="email" type="radio"
+                                                ng-change="addCompCtrl.contactChange()"
+                                                ng-model="addCompCtrl.complaint.contactInfo.type" />
+                                            Email
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="ContactInfo" value="address" type="radio"
+                                                ng-change="addCompCtrl.contactChange()"
+                                                ng-model="addCompCtrl.complaint.contactInfo.type" />
+                                            Address
+                                        </label>
+                                    </div>
+                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.contactInfo.type">
+                                        <div ng-switch-when="phone">
+                                            <input class="form-control"
+                                                ng-model="addCompCtrl.complaint.contactInfo.value" required
+                                                numbers-only="true" maxlength="10" id="field-4" data-validate="required"
+                                                data-message-required="Please enter Phone Number."
+                                                name="contactInfoValue" type="text" placeholder="Enter Phone Number" />
+                                        </div>
+                                        <div ng-switch-when="email">
+                                            <input class="form-control" maxlength="30" id="field-4"
+                                                name="contactInfoValue" type="email" placeholder="Enter Email"
+                                                ng-model="addCompCtrl.complaint.contactInfo.value" />
+                                        </div>
+                                        <div ng-switch-when="address">
+                                            <input class="form-control" maxlength="10" id="placeInput"
+                                                name="contactInfoValue" type="text" maxlength="50"
+                                                placeholder="Enter a location"
+                                                ng-model="addCompCtrl.complaint.contactInfo.value" />
+                                            <div id="map-2" class=""></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-5">
+                                    Relationship To Organization
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="radio-container pt-7">
+                                        <label class="radio-field">
+                                            <input value="patient" name="RelationToOrg" type="radio" class=""
+                                                ng-change="addCompCtrl.relationToOrgChange()"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                            Patient
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="RelationToOrg" value="employee" type="radio"
+                                                ng-change="addCompCtrl.relationToOrgChange()"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                            Employee
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="RelationToOrg" value="worksite" type="radio"
+                                                ng-change="addCompCtrl.relationToOrgChange()"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                            Worksite
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="RelationToOrg" value="vendor" type="radio"
+                                                ng-change="addCompCtrl.relationToOrgChange()"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.type" />
+                                            Vendor
+                                        </label>
+                                    </div>
+                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.relationToOrg.type">
+                                        <div ng-switch-when="patient">
+                                            <select class="form-control" name="patientdropdownIds"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.value"
+                                                id="patientdropdownIds" data-validate="required"
+                                                data-message-required="Please select a Patient" required
+                                                ng-options='patient.id as patient.label for patient in addCompCtrl.patientList'>
+                                                <option value="" selected hidden>Select All</option>
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="employee">
+                                            <select class="form-control" name="employeedropdownIds"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.value"
+                                                id="employeedropdownIds" data-validate="required"
+                                                data-message-required="Please select a Employee"
+                                                ng-options='employee.id as employee.fName for employee in addCompCtrl.employeeList'>
+                                                <option value="" selected hidden>Select All</option>
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="worksite">
+                                            <select class="form-control" name="worksitedropdownIds"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.value"
+                                                id="worksitedropdownIds" data-validate="required"
+                                                data-message-required="Please select a Worksite"
+                                                ng-options='worksite.id as worksite.name for worksite in addCompCtrl.worksiteList'>
+                                                <option value="" selected hidden>Select All</option>
+                                            </select>
+                                        </div>
+                                        <div ng-switch-when="vendor">
+                                            <input class="form-control" maxlength="10" id="field-2" name="vendorvalue"
+                                                type="text" maxlength="50" placeholder="Enter Name"
+                                                data-validate="required" data-message-required="Please enter a value"
+                                                ng-model="addCompCtrl.complaint.relationToOrg.value" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-10">
+                                    Complaint Receiver Name
+                                </label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" disabled charactersonly id="field-10"
+                                        name="complaintReceiver" type="text" maxlength="50"
+                                        placeholder="{{addCompCtrl.complaint.complaintReceiver | titleCase}}" />
+                                </div>
+                            </div>
+                            <div class="form-group-separator">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-5">
+                                    Method
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="radio-container pt-7">
+                                        <label class="radio-field">
+                                            <input name="Method" value="phone" type="radio" class=""
+                                                ng-model="addCompCtrl.complaint.method" />
+                                            Phone
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="Method" value="writing" type="radio"
+                                                ng-model="addCompCtrl.complaint.method" />
+                                            Writing
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="Method" value="email" type="radio"
+                                                ng-model="addCompCtrl.complaint.method" />
+                                            Email
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="Method" value="inperson" type="radio"
+                                                ng-model="addCompCtrl.complaint.method" />
+                                            In Person
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label for="field-11" class="col-sm-3 control-label">Type</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="complaintType"
+                                        ng-change="addCompCtrl.typeChange(addCompCtrl.complaint.type)"
+                                        ng-model="addCompCtrl.complaint.type" id="field-11" data-validate="required"
+                                        data-message-required="Please select type of Complaint"
+                                        ng-options='type.value as type.title for type in addCompCtrl.complaintTypes'>
+                                        <option value="" selected hidden>Select Type</option>
+                                    </select>
+                                    <div class="pt-7" ng-if="addCompCtrl.complaint.type == 'other'">
+                                        <input class="form-control" id="other-complaint" type="text"
+                                            data-validate="required"
+                                            data-message-required="Please enter Other Complaint" required
+                                            name="OtherComplaint" autofocus
+                                            ng-model="addCompCtrl.complaint.otherComplaint"
+                                            placeholder="Enter Complaint Type">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label for="field-12" class="col-sm-3 control-label">Description of Complaint</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control hidden-print" name="ComplaintDescription"
+                                        ng-model="addCompCtrl.complaint.complaintDescription" id="field-12" cols="30"
+                                        rows="5" placeholder="Complaint Description" data-validate="required"
+                                        data-message-required="Please enter Complaint Description"></textarea>
+                                    <p class="visible-print-block" style="border: 1px solid #B0B0B0; padding: 1em">
+                                        {{addCompCtrl.complaint.complaintDescription}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label for="field-13" class="col-sm-3 control-label">Resolution of the Complaint</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control hidden-print" name="ComplaintResolution"
+                                        ng-model="addCompCtrl.complaint.complaintResolution" id="field-13" cols="30"
+                                        rows="5" placeholder="Complaint Resolution" data-validate="required"
+                                        data-message-required="Please enter Complaint Resolution"></textarea>
+                                    <p class="visible-print-block" style="border: 1px solid #B0B0B0; padding: 1em;">
+                                        {{addCompCtrl.complaint.complaintResolution}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group-separator"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-13">
+                                    Follow up Needed
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="radio-container pt-7">
+                                        <label class="radio-field">
+                                            <input value="yes" name="followUpNeeded" type="radio" class=""
+                                                ng-model="addCompCtrl.complaint.followUpNeeded" />
+                                            Yes
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="followUpNeeded" value="no" type="radio"
+                                                ng-model="addCompCtrl.complaint.followUpNeeded" />
+                                            No, Resolved
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="field-14">
+                                    Was the person making the complaint satisfied with the resolution and/or action
+                                    plan?
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="radio-container pt-7">
+                                        <label class="radio-field">
+                                            <input value="yes" name="complainantSatisfied" type="radio" class=""
+                                                ng-model="addCompCtrl.complaint.complainantSatisfied"
+                                                ng-change="complainantSatisfiedChange()" />
+                                            Yes
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="complainantSatisfied" value="no" type="radio"
+                                                ng-model="addCompCtrl.complaint.complainantSatisfied"
+                                                ng-change="complainantSatisfiedChange()" />
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="pt-7" ng-if="addCompCtrl.complaint.complainantSatisfied == 'no'">
+                                        <input class="form-control" type="text" name="implementedFollowUp" autofocus
+                                            ng-model="addCompCtrl.complaint.implementedFollowUp"
+                                            data-validate="required"
+                                            data-message-required="Please enter Implemented Follow Up" required
+                                            placeholder="Enter implemented follow up">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+
+                            <div class="form-group hidden-print">
+                                <div class="col-sm-3 checkbox-right">
+                                    <input type="checkbox" ng-model="addCompCtrl.reviewedComplaint" id="field-15">
+                                </div>
+                                <label class="col-sm-9" for="field-15">I have reviewed and ensured the implementation
+                                    related to this complaint including any follow up needed.</label>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+
+                            <div class="form-group">
+                                <label for="" class="col-sm-3 control-label">Signature</label>
+                                <div class="col-sm-9">
+                                    <!-- accept="applicationSubmit.accept" -->
+                                    <signature-pad width="550" height="175" style="border:1px solid #B0B0B0"
+                                        dataurl="addCompCtrl.dataUrl" accept="addCompCtrl.accept"
+                                        clear="clear"></signature-pad>
+                                    <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
+                                        ng-click="clear()">Clear signature</button>
+
+                                    <!-- <form action="" class="signature-pad-form"> -->
+                                    <!-- <div class="row mt-7">
+                                        <div class="col-sm-12" id="signature-pad-container">
+                                            <canvas class="signature-pad hidden-print"
+                                                ng-class="!addCompCtrl.isSignTouched && addCompCtrl.formSubmitted && !addCompCtrl.isSignAdded ?  'error':''"
+                                                id="signature-pad"></canvas>
+                                            <span class="error-text"
+                                                ng-if="!addCompCtrl.isSignTouched && addCompCtrl.formSubmitted && !addCompCtrl.isSignAdded">Please
+                                                add your signature</span>
+                                        </div>
+                                    </div> -->
+                                    <button ng-if="addCompCtrl.isSignTouched"
+                                        class="clear-btn btn delet_bt hidden-print"
+                                        ng-click="addCompCtrl.clearPad()">Clear</button>
+                                    <button ng-if="!addCompCtrl.isSignAdded && addCompCtrl.isSignTouched "
+                                        class="btn btn-info green_bt hidden-print"
+                                        ng-click="addCompCtrl.createSignature($event)">Submit</button>
+                                    <button ng-if="addCompCtrl.isSignAdded" class="btn delet_bt hidden-print"
+                                        ng-click="addCompCtrl.deleteSignature($event)">Delete</button>
+                                    <!-- </form> -->
+                                    <!-- disabled="!addCompCtrl.isSignTouched" -->
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Date</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="addCompCtrl.complaint.date" disabled
+                                        class="form-control">
+                                </div>
+                            </div>
+
+                            <div ng-if="addCompCtrl.reviewedComplaint">
+                                <div class="form-group-separator">
+                                </div>
+                                <div class="row hidden-print">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-info delet_bt pull-right" style="width:auto;"
+                                            type="button">
+                                            Close
+                                        </button>
+                                        <button class="btn btn-info green_bt pull-right" style="width:auto;"
+                                            type="submit" ng-click="addCompCtrl.saveForm()">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

@@ -1,0 +1,122 @@
+<div ng-include="'app/patient/views/patient_records.html'"></div>
+<div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default pad_bt0 pad_top0">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-sm-6 pad_lf0">
+                            <!--                            <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                                {
+                                    setTimeout(function () {
+                                        $("#patientdropdownIds").select2({
+                                            // minimumResultsForSearch: -1,
+                                            placeholder: 'Search Patient...',
+                                            // minimumInputLength: 1,
+                                            // placeholder: 'Search',
+                                        }).on('select2-open', function ()
+                                        {
+                                            // Adding Custom Scrollbar
+                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                        });
+                                    }, 200);
+                                });</script>-->
+                            <select class="form-control" name="patientdropdownIds"
+                                ng-model="patientRecordsCtrl.search.patientId" id="patientdropdownIds"
+                                ng-options='patient.id as patient.label for patient in patientRecordsCtrl.patientList'>
+                                <option value="" selected hidden>Select All</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" ng-disabled="!patientRecordsCtrl.search.patientId"
+                            ng-click="patientRecordsCtrl.navigateToTab()">
+                            Go
+                        </button>
+                    </div>
+                    <div class="form-group"
+                        ng-if="patientRecordsCtrl.patientRecords && patientRecordsCtrl.patientRecords.length > 0">
+                        <div class="col-md-12">
+                            <div class="panel panel-default panel-table" style="padding: 0;"
+                                id="applicationEmployeeAttachments">
+                                <div class="panel-heading" style="border-bottom: none;">
+                                    <div class="row">
+                                        <div class="col col-xs-6">
+                                            <h3 class="panel-title">Patient Records</h3>
+                                        </div>
+                                        <div class="col col-xs-6">
+                                            <button type="button" class="btn btn-info btn-create pull-right"
+                                                ng-click="patientRecordsCtrl.openPatientAddRecord()">Add Record</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    ng-if="patientRecordsCtrl.patientRecords && patientRecordsCtrl.patientRecords.length > 0">
+                                    <table class="table table-striped table-bordered table-list table-attachments">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center col-md-4"> Record Name </th>
+                                                <th class="text-center col-md-3"> Date Created </th>
+                                                <th class="text-center col-md-2"> Expiration Date </th>
+                                                <th class="text-center col-md-2"> <em class="fa fa-cog"> </em></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr pagination-id="patientRecordPagination"
+                                                dir-paginate="record in patientRecordsCtrl.patientRecords | itemsPerPage: 10">
+                                                <td align="center"> {{record.type}}</td>
+                                                <td align="center">
+                                                    {{record.dateInserted}}
+                                                </td>
+                                                <td align="center"> {{record.expiryDate}} </td>
+                                                <td align="center">
+                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" ui-sref="app.edit_patient({id: record.patientId, recordType: record.type})"
+                                                        ng-if="record.attachmentType !== 'Ontime Application Form'"
+                                                        ng-click="patientRecordsCtrl.openAttachmentModal(record, 'Edit')"><span
+                                                            class="ed_b"></span></a>
+
+                                                    <!--                                                    <a class="btn icon-left fa fa-download download_bt" ng-if="record.attachmentType !== 'Ontime Application Form'"                                                    
+                                                                                                           ng-href="{{patientRecordsCtrl.baseUrl}}file/download/{{patientRecordsCtrl.companyCode}}/{{record.type}}/{{record.filePath}}?userFileName={{patientRecordsCtrl.getAttachmentName(record)}}" 
+                                                                                                           tooltip="{{patientRecordsCtrl.getAttachmentName(record)}}"><em class="ed_b"></em></a>   
+                                                                                                        <a class="btn icon-left fa fa-download download_bt" ng-if="record.attachmentType === 'Ontime Application Form'"                                                    
+                                                                                                           ng-href="{{patientRecordsCtrl.baseUrl}}applications/{{patientRecordsCtrl.employee.applicationId}}/download?userFileName={{record.attachmentType}}" 
+                                                                                                           tooltip="{{record.attachmentType}}"><em class="ed_b"></em></a>   
+                                                                                                        <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" ng-if="record.attachmentType !== 'Ontime Application Form'"
+                                                                                                           ng-click="patientRecordsCtrl.openAttachmentModal(record, 'Edit')"><span class="ed_b"></span></a>                                                  
+                                                                                                        <a class="btn icon-left fa fa-trash-o delete_button"
+                                                                                                           ng-if="record.modified !== true"
+                                                                                                           ng-click="patientRecordsCtrl.deleteAttachment(record)" tooltip="Delete"><span class="ed_b"></span></a>                                                    
+                                                                                                        <a class="btn icon-left fa fa-external-link download_bt"  
+                                                                                                           ng-if="record.filePath.substring(record.filePath.lastIndexOf('.') + 1).toLowerCase() === 'pdf'"
+                                                                                                           ng-href="{{patientRecordsCtrl.baseUrl}}file/download/{{patientRecordsCtrl.companyCode}}/{{record.type}}/{{record.filePath}}?userFileName={{patientRecordsCtrl.getAttachmentName(record)}}&viewDownload=true" 
+                                                                                                           target="_blank" tooltip="{{patientRecordsCtrl.getAttachmentName(record)}}">
+                                                                                                            <span class="ed_b"></span>
+                                                                                                        </a>-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div id="patientRecordPagination" class="text-right">
+                                        <dir-pagination-controls boundary-links="true" max-size="10"
+                                            show-page-numbers="false" template-url="app/tpls/dirPagination.tpl.html"
+                                            pagination-id="patientRecordPagination"></dir-pagination-controls>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"
+                        ng-if="patientRecordsCtrl.patient != null && (!patientRecordsCtrl.patientRecords || patientRecordsCtrl.patientRecords.length === 0)">
+                        <div>
+                            No records available for the patient selected.
+                        </div>
+                        <button type="button" class="btn btn-info btn-create pull-right"
+                            ng-click="patientRecordsCtrl.openPatientAddRecord()">Add Record</button>
+                    </div>
+                    <div class="form-group-separator"
+                        ng-if="patientRecordsCtrl.medicalEmployeeAttachments && patientRecordsCtrl.medicalEmployeeAttachments.length > 0">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -91,8 +91,8 @@ angular.module('xenon.services', []).
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
                 var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 
                 'VIEW_COORDINATOR_SCHEDULE,VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
+                var forms = this.addItem('Forms', '/app', 'linecons-database');
                 var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
-
                 // Subitems of Dashboard
                 // dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
 
@@ -105,6 +105,7 @@ angular.module('xenon.services', []).
                 // Subitems of patient
                 patient.addItem('Add Patient', './patient/tab1/', 'CREATE_PATIENT');
                 patient.addItem('View Patient', './patient-list/active', 'VIEW_PATIENT');
+                patient.addItem('Patient Records', './patient_records', 'VIEW_PATIENT');
 
 
                 // Subitems of timeSheet
@@ -145,6 +146,10 @@ angular.module('xenon.services', []).
                 calendar.addItem('Search Employee', './search-employee-calendar/', 'SEARCH_EMPLOYEE');
                 calendar.addItem('View Dispatch', './dispatch-list/active', 'VIEW_DISPATCH');
 
+                // Subitems of Forms
+                forms.addItem('Complaints', './complaints/open', 'VIEW_DISPATCH');
+                forms.addItem('Forms Setting', './forms-setting')
+
                 return this;
             };
 
@@ -178,6 +183,7 @@ angular.module('xenon.services', []).
                 // Subitems of patient
                 patient.addItem('Add Patient', './patient/tab1');
                 patient.addItem('View Patient', './view_patient_tab_1');
+                patient.addItem('Patient Records', './patient_records', 'VIEW_PATIENT');
 
 
                 // Subitems of timeSheet

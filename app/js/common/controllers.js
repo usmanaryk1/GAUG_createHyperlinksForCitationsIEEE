@@ -31,11 +31,28 @@ angular.module('xenon.controllers', []).
                     }
                 }
             }
+
+            $rootScope.notificationsArr = [
+                {id: 'VIEW_DISPATCH', unread: 10}
+            ]
             var userName = getCookie("un");
             if (userName != null) {
                 $rootScope.currentUser = {userName: userName};
                 $rootScope.startIdle();
             }
+
+            $rootScope.hasNotifications = function (key) {
+                if($rootScope.notificationsArr != null){
+                    let val = $rootScope.notificationsArr.find(item => item.id === key);
+                    if(val !== undefined){
+                        return true
+                    }
+                    return false
+                } else {
+                    return false
+                }
+            }
+
             $rootScope.hasAccess = function (key) {
                 if (key != null) {
                     var keys = key.split(",");
