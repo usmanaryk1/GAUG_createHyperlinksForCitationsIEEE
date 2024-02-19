@@ -112,7 +112,8 @@
                                ng-href="{{billingSession.baseUrl}}billing/download/batch/{{billingSession.sessionId}}" download>Download Invoice</a>
                         </div>
                         <div class="text-left">
-                            Billing Batch Number: {{billingSession.sessionId}}
+                            Billing Batch Number: {{billingSession.sessionId}} <a ng-if="billingSession.billingSessions[0].claimType !== 'WORKSITE'" style="margin: 10px" type="button" class="fa fa-file" 
+                               ng-href="{{billingSession.baseUrl}}billing/download/batch/{{billingSession.sessionId}}/fidelis-csv" download title="Download CSV for HHAX integration"></a>
                             <br/>
                             Insurance Provider: {{billingSession.insuranceProvider}}
                             <br/>
