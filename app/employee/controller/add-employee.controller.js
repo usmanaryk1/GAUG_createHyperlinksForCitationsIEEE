@@ -1042,7 +1042,6 @@
                     required = false;
                 }
                 if (required) {
-                    console.log($rootScope.uploadPopup.data.type + "   " + $rootScope.uploadPopup.data.name)
                     if (!$rootScope.uploadPopup.data.filePath) {
                         $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
                     } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {

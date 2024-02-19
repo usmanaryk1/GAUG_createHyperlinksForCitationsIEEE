@@ -178,7 +178,8 @@
                                     <tr>
                                         <th class="text-center"> No. </th>
                                         <th class="text-center"> Type </th>
-                                        <th class="text-center"> Name </th>
+                                        <th class="text-center"> File Name </th>
+                                        <th class="text-center"> Value </th>
                                         <th class="text-center"> Expiry Date </th>
                                         <th class="text-center"> <em class="fa fa-cog"> </em></th>
                                     </tr>
@@ -188,7 +189,9 @@
                                         <td class="hidden-xs text-center"> {{$index + 1}} </td>
                                         <td align="center"> {{addEmployee.typeMap[attachment.type]}} </td>
                                         <td align="center"> 
-                                            <a ng-if="attachment.type != 't' && attachment.type != 'b'" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}"> {{attachment.name}} </a>
+                                            <a ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}"> {{attachment.name}} </a>
+                                        </td>
+                                        <td align="center"> 
                                             <span ng-if="attachment.type == 't' || attachment.type == 'b'">{{addEmployee.tbTestingMap[attachment.value]}}</span>
                                         </td>
                                         <td align="center"> {{attachment.expiryDate}} </td>
@@ -359,7 +362,7 @@
     </div>
     </div>
     </div>
-    
+
     <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type=='b'"></div>
     <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type=='b'">
     <label class="col-sm-4 control-label add-padding-modal" for="password">
@@ -384,8 +387,8 @@
     </div>
 
     </div>
-    <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type!='t'"></div>
-    <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type!='t'">
+    <div class="form-group-separator" ng-show="uploadPopup.data.type"></div>
+    <div class="form-group" ng-show="uploadPopup.data.type">
     <label class="col-sm-4 control-label add-padding-modal" for="password">
     Document Name
     </label>
@@ -394,8 +397,8 @@
     </div>
     </div>
 
-    <div class="form-group-separator"></div>
-    <div class="form-group">
+    <div class="form-group-separator" ng-if="uploadPopup.data.type"></div>
+    <div class="form-group" ng-if="uploadPopup.data.type">
     <label class="col-sm-4 control-label add-padding-modal">
     Upload
     </label>
