@@ -164,7 +164,7 @@
                                                 <td align="center">{{authDocument.authorizedHours}}</td>
                                                 <td align="center">
                                                     <a style="color: blue;text-decoration: underline" ng-href="{{addPatient.baseUrl}}file/download/{{addPatient.companyCode}}/p/{{authDocument.filePath}}?userFileName={{authDocument.name}}">
-                                                        {{authDocument.name}}
+                                                        {{authDocument.name}}.{{authDocument.filePath.substring(authDocument.filePath.lastIndexOf('.') + 1)}}
                                                     </a>
                                                 </td> 
                                                 <td align="center">{{authDocument.expiryDate|date:dateFormat}}</td> 

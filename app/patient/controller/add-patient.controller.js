@@ -733,7 +733,7 @@
                             companyCareTypeId: $scope.careObj.careType.companyCaretypeId.id,
                             authorizedHours: $scope.careObj.authorizedHours,
                             filePath: $scope.careObj.filePath,
-                            name: $scope.fileName + '.' + $scope.fileExt,
+                            name: $scope.fileName,
                             expiryDate: $scope.careObj.expiryDate
                         };
                         if ($scope.addPatient.currentAuthorizationDocument) {
@@ -779,8 +779,8 @@
                                 $scope.careObj.authorizedHours = $scope.addPatient.authorizationDocuments[i].authorizedHours;
                                 $scope.careObj.expiryDate = $scope.addPatient.authorizationDocuments[i].expiryDate;
                                 $scope.careObj.filePath = $scope.addPatient.authorizationDocuments[i].filePath;
-                                $scope.fileName = $scope.addPatient.authorizationDocuments[i].name.substring(0, $scope.addPatient.authorizationDocuments[i].name.lastIndexOf("."));
-                                $scope.fileExt = $scope.addPatient.authorizationDocuments[i].name.substring($scope.addPatient.authorizationDocuments[i].name.lastIndexOf(".") + 1);
+                                $scope.fileName = $scope.addPatient.authorizationDocuments[i].name;
+                                $scope.fileExt = $scope.addPatient.authorizationDocuments[i].filePath.substring($scope.addPatient.authorizationDocuments[i].filePath.lastIndexOf(".") + 1);
                                 break;
                             }
                         }
