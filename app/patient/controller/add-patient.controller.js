@@ -67,7 +67,7 @@
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
         }
-        
+
         //ceck if form has been changed or not
         //If changed then it should be valid
         //function to navigate to different tab by state
@@ -143,13 +143,14 @@
                             filePath: doc.filePath,
                             name: doc.name,
                             expiryDate: doc.expiryDate,
+                            changeSchedule: doc.changeSchedule,
                             dateInserted: doc.dateInserted
                         };
                         patientToSave.patientAuthorizationDocuments.push(docEntity);
                     });
                 }
                 $rootScope.maskLoading();
-                PatientDAO.update({action: reqParam, data: patientToSave, changeSchedule: ctrl.changeSchedule})
+                PatientDAO.update({action: reqParam, data: patientToSave})
                         .then(function (res) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
@@ -189,6 +190,7 @@
                     if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
                         for (var j = 0; j < ctrl.authorizationDocuments.length; j++) {
                             ctrl.authorizationDocuments[j].careTypeTitle = ctrl.authorizationDocuments[j].companyCareType.careTypeTitle;
+                            ctrl.authorizationDocuments[j].actualExpiryDate = ctrl.authorizationDocuments[j].expiryDate;
                         }
                     }
                     ctrl.oldDate = ctrl.patient.authorizationEndDate;
@@ -689,6 +691,26 @@
                         return validAuthorization;
                     };
 
+                    $scope.authorizationEndDateChanged = function () {
+                        if ($scope.addPatient.currentAuthorizationDocument && $scope.addPatient.currentAuthorizationDocument.id
+                                && $scope.addPatient.currentAuthorizationDocument.companyCareTypeId && $scope.addPatient.existingSchedule
+                                && $scope.addPatient.existingSchedule[$scope.addPatient.currentAuthorizationDocument.companyCareTypeId] === true
+                                && $scope.careObj.expiryDate !== $scope.careObj.actualExpiryDate) {
+
+                            var a = moment(new Date($scope.careObj.expiryDate));
+                            var b = moment(new Date($scope.careObj.actualExpiryDate));
+                            var diff = b.diff(a, 'days');
+                            var extend = true;
+                            if (diff > 0) {
+                                extend = false;
+                            }
+                            $scope.careObj.changeSchedule = false;
+                            $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
+                        } else if ($scope.careObj.expiryDate == $scope.careObj.actualExpiryDate) {
+                            $scope.careObj.changeSchedule = false;
+                        }
+                    };
+
 //                    $scope.isValidCareType = function () {
 //                        var valid = true;
 //                        if ($scope.addPatient.authorizationDocuments && $scope.addPatient.authorizationDocuments.length > 0) {
@@ -734,7 +756,9 @@
                             authorizedHours: $scope.careObj.authorizedHours,
                             filePath: $scope.careObj.filePath,
                             name: $scope.fileName,
-                            expiryDate: $scope.careObj.expiryDate
+                            expiryDate: $scope.careObj.expiryDate,
+                            actualExpiryDate: $scope.careObj.actualExpiryDate,
+                            changeSchedule: $scope.careObj.changeSchedule
                         };
                         if ($scope.addPatient.currentAuthorizationDocument) {
                             if ($scope.addPatient.currentAuthorizationDocument.id) {
@@ -778,6 +802,7 @@
                                 $scope.careObj.careType = addPatient.careTypeIdMap[$scope.addPatient.authorizationDocuments[i].careType];
                                 $scope.careObj.authorizedHours = $scope.addPatient.authorizationDocuments[i].authorizedHours;
                                 $scope.careObj.expiryDate = $scope.addPatient.authorizationDocuments[i].expiryDate;
+                                $scope.careObj.actualExpiryDate = $scope.addPatient.authorizationDocuments[i].actualExpiryDate;
                                 $scope.careObj.filePath = $scope.addPatient.authorizationDocuments[i].filePath;
                                 $scope.fileName = $scope.addPatient.authorizationDocuments[i].name;
                                 $scope.fileExt = $scope.addPatient.authorizationDocuments[i].filePath.substring($scope.addPatient.authorizationDocuments[i].filePath.lastIndexOf(".") + 1);
@@ -983,22 +1008,8 @@
 //            return true;
 //        };
 
-        ctrl.authorizationDateChanged = function () {
-            if (ctrl.checkSchedule && ctrl.patient.authorizationEndDate !== ctrl.oldDate) {
-                var a = moment(new Date(ctrl.patient.authorizationEndDate));
-                var b = moment(new Date(ctrl.oldDate));
-                var diff = b.diff(a, 'days');
-                var extend = true;
-                if (diff > 0) {
-                    extend = false;
-                }
-                ctrl.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend);
-            } else if (ctrl.checkSchedule && ctrl.patient.authorizationEndDate === ctrl.oldDate) {
-                delete ctrl.changeSchedule;
-            }
-        };
 
-        ctrl.openModalExisting = function (modal_id, modal_size, modal_backdrop, selection, extend)
+        ctrl.openModalExisting = function (modal_id, modal_size, modal_backdrop, selection, extend, careObj)
         {
             //use the same pop up modal based on selection true/false
             $rootScope.existingModel = $modal.open({
@@ -1010,37 +1021,32 @@
             $rootScope.existingModel.extend = extend;
             $rootScope.existingModel.extendSequence = function () {
                 $timeout(function () {
-                    ctrl.changeSchedule = true;
-                    ctrl.lastDate = angular.copy(ctrl.patient.authorizationEndDate);
+                    careObj.changeSchedule = true;
                     $rootScope.existingModel.dismiss();
                 });
             };
 
             $rootScope.existingModel.updateOnly = function () {
                 $timeout(function () {
-                    delete ctrl.changeSchedule;
-                    ctrl.lastDate = angular.copy(ctrl.patient.authorizationEndDate);
                     $rootScope.existingModel.dismiss();
                 });
             };
 
             $rootScope.existingModel.cancel = function () {
                 $timeout(function () {
-                    delete ctrl.changeSchedule;
-                    ctrl.patient.authorizationEndDate = ctrl.lastDate;
+                    careObj.expiryDate = careObj.actualExpiryDate;
                     $rootScope.existingModel.close();
                 });
             };
 
         };
 
-        ctrl.checkSchedule = false;
+        ctrl.existingSchedule = undefined;
         if ($state.params.id != '') {
             PatientDAO.checkSchedule({patientId: $state.params.id})
                     .then(function (res) {
-                        if (res.data == 'true') {
-                            ctrl.checkSchedule = true;
-                        }
+                        if (res && res.data)
+                            ctrl.existingSchedule = JSON.parse(res.data);
                     });
         }
     }
