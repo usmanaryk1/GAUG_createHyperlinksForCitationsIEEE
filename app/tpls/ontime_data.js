@@ -1,6 +1,6 @@
 ontime_data = {
     // 'weburl': 'https://uat-app.ontimeits.com/ontime/api/',
-    'weburl': 'http://192.168.0.163:8080/webapplication/api/',
+    'weburl': 'http://192.168.100.38:8080/webapplication/api/',
 //    'weburl': 'http://demotrt.com:8080/ontime/api/',
     'defaultState': 'redirect',
     'redirectStateOrURL': 'login',
