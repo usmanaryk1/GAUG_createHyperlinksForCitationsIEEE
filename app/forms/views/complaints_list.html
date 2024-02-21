@@ -81,12 +81,12 @@
                                                 cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name of compCtrl</th>
+                                                        <th>Name of Complainant</th>
                                                         <th>Type</th>
                                                         <th>Method</th>
                                                         <th>Contact Info</th>
                                                         <th>Date</th>
-                                                        <th>Resolution Date</th>
+                                                        <!-- <th>Resolution Date</th> -->
                                                         <th>Received By</th>
                                                         <th>Actions</th>
                                                         <!-- <th></th>
@@ -100,7 +100,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr pagination-id="viewPatientPagination"
+                                                    <tr pagination-id="viewComplaintPagination"
                                                         dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.limit"
                                                         total-items="totalRecords"
                                                         current-page="viewPatient.searchParams.pageNo">
@@ -108,18 +108,41 @@
                                                             <div ng-click="compCtrl.openEditModal(complaint, 'modal-5')"
                                                                 style="cursor: pointer">
                                                                 <div class="emp_user_hd">
-                                                                    <div class="emp_user_name">{{complaint.name}}</div>
+                                                                    <div class="emp_user_name">{{complaint.complainantName}}</div>
                                                                     <!-- <p>{{viewPatient.insuranceProviderMap[patient.insuranceProviderId]}}</p> -->
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>{{complaint.type}}</td>
-                                                        <td>{{complaint.method}}</td>
-                                                        <td>{{complaint.contactInfo}}</td>
-                                                        <td>{{complaint.date}}</td>
-                                                        <td>{{complaint.resolutionDate}}</td>
-                                                        <td>{{complaint.receivedBy}}</td>
+                                                        <td>{{complaint.complaintType}}</td>
+                                                        <td>{{complaint.complaintMethod}}</td>
+                                                        <td>{{complaint.complainantContact}}</td>
+                                                        <td>{{complaint.complaintDate | date}}</td>
+                                                        <!-- <td>{{complaint.resolutionDate}}</td> -->
+                                                        <td>{{complaint.complaintReceiverName}}</td>
                                                         <td>
+                                                            <!-- {
+                                                                "id": 1,
+                                                                "complaintDate": 1696186800000,
+                                                                "complainantName": "John Doe",
+                                                                "contactType": null,
+                                                                "complainantContactType": 1,
+                                                                "complainantContact": "123-456-7890",
+                                                                "complainantRelation": null,
+                                                                "complainantRelationshipType": 1,
+                                                                "complainantRelationship": "Patient ID: 12345",
+                                                                "complaintReceiverName": "adnan",
+                                                                "complaintMethodUsed": null,
+                                                                "complaintMethod": 3,
+                                                                "complaintType": "Service Issue",
+                                                                "complaintDescription": "The service was not up to the mark.",
+                                                                "complaintResolution": "Offered a discount for the next service.",
+                                                                "complaintFollowUp": true,
+                                                                "complaintSatisfied": "Yes",
+                                                                "signature": "base64/encoded/signature/her",
+                                                                "orgCode": "AC2",
+                                                                "dateInserted": 1696343644000,
+                                                                "dateUpdated": 1696343644000
+                                                            }, -->
                                                             <div class="center">
                                                                 <a ui-sref="app.add-complaint({id: 12})"
                                                                     class="btn icon-left fa fa-pencil edit_button"
@@ -166,12 +189,12 @@
                                         </div>
 
                                     </div>
-                                    <div ng-show="viewPatient.patientList.length">
+                                    <div ng-show="compCtrl.complaintsList.length">
                                         <div id="paginationButtons" class="text-right">
                                             <dir-pagination-controls boundary-links="true" max-size="9"
                                                 template-url="app/tpls/dirPagination.tpl.html"
-                                                pagination-id="viewPatientPagination"
-                                                on-page-change="viewPatient.pageChanged(newPageNumber)"></dir-pagination-controls>
+                                                pagination-id="viewComplaintPagination"
+                                                on-page-change="compCtrl.pageChanged(newPageNumber)"></dir-pagination-controls>
                                         </div>
                                     </div>
                                 </div>

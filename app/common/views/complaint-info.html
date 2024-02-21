@@ -2,26 +2,128 @@
     <div class="row">
         <div class="user_panel col-md-12">
             <div class="emp_user_hd">
-                <div class="emp_user_name">{{ComplaintInfo.complaint.name}}</div>
+                
+                <div class="emp_user_name">{{ComplaintInfo.complaint.complainantName}}</div>
                 <!-- <p>{{ComplaintInfo.complaint.insuranceProviderName}}</p> -->
             </div>
             <button type="button" class="close" ng-click="ComplaintInfo.close();" aria-hidden="true">&times;</button>
         </div>
 
     </div>
-    <hr/>
+    <hr />
     <div class="row">
         <div class="col-md-12">
-
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-4"><strong>Date</strong></label>
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Date</strong></label>
                 <div class="col-md-8">
-                    {{'02/01/2023'}} 
+                    {{ComplaintInfo.complaint.complaintDate | date}}
                 </div>
-            </div>	
-
+            </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Type</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complaintType}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Contact Type</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantContactType}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Contact info</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantContact}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Complainant Relation</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantRelationshipType}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Relationship Name</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantRelationship}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Complainant Method</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complaintMethod}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Description</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complaintDescription}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Resolution</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complaintResolution}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- {
+                                                                "id": 1,
+                                                                "complaintDate": 1696186800000,
+                                                                "complainantName": "John Doe",
+                                                                "contactType": null,
+                                                                "complainantContactType": 1,
+                                                                "complainantContact": "123-456-7890",
+                                                                "complainantRelation": null,
+                                                                "complainantRelationshipType": 1,
+                                                                "complainantRelationship": "Patient ID: 12345",
+                                                                "complaintReceiverName": "adnan",
+                                                                "complaintMethodUsed": null,
+                                                                "complaintMethod": 3,
+                                                                "complaintType": "Service Issue",
+                                                                "complaintDescription": "The service was not up to the mark.",
+                                                                "complaintResolution": "Offered a discount for the next service.",
+                                                                "complaintFollowUp": true,
+                                                                "complaintSatisfied": "Yes",
+                                                                "signature": "base64/encoded/signature/her",
+                                                                "orgCode": "AC2",
+                                                                "dateInserted": 1696343644000,
+                                                                "dateUpdated": 1696343644000
+                                                            }, -->
 </div>
 
 <div class="modal-footer">

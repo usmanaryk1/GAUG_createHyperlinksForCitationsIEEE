@@ -1,9 +1,9 @@
 (function () {
-    function ComplaintInfoCtrl(complaintId, $rootScope, $modal, $modalInstance, PatientDAO) {
+    function ComplaintInfoCtrl(complaint, $rootScope, $modal, $modalInstance, PatientDAO) {
         var ctrl = this;
-        ctrl.complaint = {};
+        ctrl.complaint = complaint;
 
-        ctrl.complaint.name = "Complaint"
+        console.log(complaint);
 
 
         ctrl.close = function () {
@@ -11,5 +11,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('ComplaintInfoCtrl', ["complaintId", "$rootScope", "$modal", "$modalInstance", "PatientDAO", ComplaintInfoCtrl]);
+    angular.module('xenon.controllers').controller('ComplaintInfoCtrl', ["complaint", "$rootScope", "$modal", "$modalInstance", "PatientDAO", ComplaintInfoCtrl]);
 })();

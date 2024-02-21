@@ -95,6 +95,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             delete_cookie("un");
             $rootScope.stopIdle();
             window.location.hash = '#/app/login';
+            $rootScope.isFormDirty = false
         });
     };
     //this will be called when any state change starts
@@ -174,7 +175,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                 }
             });
     var includedStatesForDirtyCheck = ['app.patient.tab1', 'app.patient.tab2', 'app.patient.tab3', 'app.patient.tab4', 'app.patient.tab5',
-        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4', 'admin.worksite.tab1', 'admin.worksite.tab2'];
+        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3', 'app.employee.tab4', 'admin.worksite.tab1', 'admin.worksite.tab2', 'app.add-complaint'];
     $rootScope.$on('$stateChangeSuccess',
             function (event, currentState) {
                 if (currentState.data != null && currentState.data.feature != null && $rootScope.currentUser.allowedFeature != null) {
@@ -1956,7 +1957,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             delete_cookie("cc");
                             delete_cookie("token");
                             delete_cookie("un");
-                            window.location.hash = '#/app/login';
+                            window.location.
+                            h = '#/app/login';
                             toastr.clear();
                         } else {
                             delete_cookie("cc");

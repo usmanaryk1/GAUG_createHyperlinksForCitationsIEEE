@@ -56,15 +56,15 @@
 
             ctrl.complaint = {
                 complaintDate: ctrl.currentDateWithFormat,
-                complainantName: "",
+                complainantName: "Abdul Raouf",
                 complainantContactType: "PHONE",
                 complainantContact: "",
                 complainantRelationshipType: "PATIENT",
                 complainantRelationship: "",
                 complaintMethod: "PHONE",
-                complaintType: "",
-                complaintDescription: "",
-                complaintResolution: "",
+                complaintType: "medication_errors",
+                complaintDescription: "test",
+                complaintResolution: "test",
                 complaintFollowUp: "true",
                 complaintSatisfied: "yes",
                 signature: "",
@@ -87,22 +87,40 @@
 
         ctrl.saveForm = function () {
             if ($('#add_complaint_form')[0].checkValidity()) {
-                $rootScope.isFormDirty = false;
                 var complaintToSave = angular.copy(ctrl.complaint);
 
                 complaintToSave.complainantRelationship = complaintToSave.complainantRelationship.toString()
-                complaintToSave.signature = complaintToSave.signature.substring(ctrl.signature.indexOf(",") + 1);
+                complaintToSave.signature = complaintToSave.signature? complaintToSave.signature.substring(ctrl.signature.indexOf(",") + 1): '';
                 complaintToSave.complaintFollowUp = JSON.parse(complaintToSave.complaintFollowUp)
                 console.log(complaintToSave);
 
+                // Check the value of the complainantContactType field
+                switch (complaintToSave.complainantContactType) {
+                    case 'PHONE':
+                        complaintToSave.complainantContact = complaintToSave.complainantContactPhone;
+                        deleteContactTypes(complaintToSave)
+                        break;
+                    case 'EMAIL':
+                        complaintToSave.complainantContact = complaintToSave.complainantContactEmail;
+                        deleteContactTypes(complaintToSave)
+                        break;
+                    case 'ADDRESS':
+                        complaintToSave.complainantContact = complaintToSave.complainantContactAddress;
+                        deleteContactTypes(complaintToSave)
+                        break;
+                }
+
                 $rootScope.maskLoading();
                 ComplaintDAO.addComplaint(complaintToSave).then((res) => {
-                    ctrl.generateFormCall();
+                    // ctrl.generateFormCall();
+                    $rootScope.isFormDirty = false;
                     toastr.success("Complaint saved successfully")
                     if ($.fn.dirtyForms) {
                         $('form').dirtyForms('setClean');
                         $('.dirty').removeClass('dirty');
                     }
+
+                    $state.go('app.complaints', { status: 'open' });
                 }).catch((err) => {
                     toastr.error("Unable to save the Complaint.");
                 }).then(function () {
@@ -111,6 +129,11 @@
             }
         }
 
+        function deleteContactTypes(obj){
+            delete obj.complainantContactPhone
+            delete obj.complainantContactEmail
+            delete obj.complainantContactAddress
+        }
 
         /*================   GETTING LISTS   ===================*/
         async function getLists() {
@@ -233,15 +256,6 @@
                     $rootScope.isFormDirty = true;
                 }
             }, true);
-
-            // Watch for changes in ctrl.isSignTouched
-            $scope.$watch(function () {
-                return ctrl.isSignTouched;
-            }, function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    $rootScope.isFormDirty = true;
-                }
-            });
         }
 
         ctrl.getDate = function (date) {

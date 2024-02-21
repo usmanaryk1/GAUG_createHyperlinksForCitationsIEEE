@@ -1,12 +1,14 @@
 (function () {
-    function ComplaintsController($state, $rootScope,  $stateParams,  $modal, Page) {
+    function ComplaintsController($state, $rootScope,  $stateParams,  $modal, ComplaintDAO, Page) {
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
+        ctrl.searchParams = {limit: 10, pageNo: 1};
 
         ctrl.complaintType = $stateParams.status;
         ctrl.complaintsList = [];
         ctrl.pageInitCall = pageInit;
+        ctrl.getComplaintsCall = getComplaints;
         ctrl.complaintsList.push({
             id: 1243,
             date: '21/265/21',
@@ -29,8 +31,8 @@
                 keyboard: false,
                 controller: 'ComplaintInfoCtrl as ComplaintInfo',
                 resolve: {
-                    complaintId: function () {
-                        return complaint.id;
+                    complaint: function () {
+                        return complaint;
                     }
                 }
             });
@@ -44,9 +46,26 @@
             let index = $rootScope.notificationsArr.indexOf(not);
             console.log(index);
             $rootScope.notificationsArr.splice(index, 1);
+            ctrl.getComplaintsCall()
+        } 
+
+        function getComplaints() {
+            ComplaintDAO.getAllComplaints(ctrl.searchParams).then((res)=>{
+                console.log(res);
+                ctrl.complaintsList = res;
+                toastr.success("Complaints retrieved successfully")
+            }).catch((err)=>{
+                console.log(err);
+                toastr.error("Failed to retrieve all complaints")
+            })
         }
 
-        ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
+        ctrl.pageChanged = function (pagenumber) {
+            console.log("pagenumber", pagenumber);
+            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.getAllComplaints();
+        };
+
     }
-    angular.module('xenon.controllers').controller('ComplaintsController', ["$state","$rootScope", "$stateParams", "$modal", "Page", ComplaintsController]);
+    angular.module('xenon.controllers').controller('ComplaintsController', ["$state","$rootScope", "$stateParams", "$modal", "ComplaintDAO", "Page", ComplaintsController]);
 })();

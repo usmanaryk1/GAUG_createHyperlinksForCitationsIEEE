@@ -5,13 +5,27 @@
             addComplaint: {
                 method: 'POST',
                 params: {
-                    subAction: 'new'
+                    action: 'new'
+                }
+            },
+            getAllComplaints: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'getAllComplaints'
                 }
             },
         });
+
+
+
+
         return {
             addComplaint: function (data) {
                 return api.addComplaint(data).$promise;
+            },
+            getAllComplaints: function (data) {
+                return api.getAllComplaints(data).$promise;
             }
         };
     };
