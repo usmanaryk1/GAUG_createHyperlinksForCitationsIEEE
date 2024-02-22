@@ -146,17 +146,20 @@
             if ($rootScope.tabNo != 3) {
                 ctrl.applicationFileObj.errorMsg = null;
                 ctrl.w4FileObj.errorMsg = null;
-            }
-            if (ctrl.displayDocumentsByPositionMap['a']) {
-                if ($rootScope.tabNo == 3 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                    ctrl.applicationFileObj.errorMsg = "Please upload Application.";
-                    validApplication = false;
-                }
-            }
-            if (ctrl.displayDocumentsByPositionMap['w']) {
-                if ($rootScope.tabNo == 3 && ctrl.employee.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
-                    ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
-                    validW4 = false;
+            } else {
+                if (ctrl.displayDocumentsByPositionMap) {
+                    if (ctrl.displayDocumentsByPositionMap['a']) {
+                        if ($rootScope.tabNo == 3 && ctrl.employee.application == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                            ctrl.applicationFileObj.errorMsg = "Please upload Application.";
+                            validApplication = false;
+                        }
+                    }
+                    if (ctrl.displayDocumentsByPositionMap['w']) {
+                        if ($rootScope.tabNo == 3 && ctrl.employee.w4 == null && (ctrl.formDirty || ctrl.formSubmitted)) {
+                            ctrl.w4FileObj.errorMsg = "Please upload W-4 or W-9.";
+                            validW4 = false;
+                        }
+                    }
                 }
             }
             return (validApplication && validW4);
