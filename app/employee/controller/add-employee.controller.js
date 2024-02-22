@@ -1106,6 +1106,7 @@
             //When file is selected from browser file picker
             $rootScope.uploadPopup.fileSelected = function (file, flow) {
                 $rootScope.uploadPopup.fileObj.flowObj = flow;
+                $rootScope.maskLoading();
                 $rootScope.uploadPopup.fileObj.flowObj.upload();
             };
             //When file is uploaded this method will be called.
@@ -1115,12 +1116,13 @@
                     if (response.fileName != null && response.status != null && response.status == 's') {
                         $rootScope.uploadPopup.data.filePath = response.fileName;
                         if ($rootScope.uploadPopup.data.name == null || $rootScope.uploadPopup.data.name == '') {
-                            $rootScope.uploadPopup.data.name = file.name;
+                            $rootScope.uploadPopup.data.name = file.name.substring(0, file.name.lastIndexOf('.'));
                         }
                     }
                 }
                 $rootScope.uploadPopup.disableSaveButton = false;
                 $rootScope.uploadPopup.disableUploadButton = false;
+                $rootScope.unmaskLoading();
             };
             $rootScope.uploadPopup.fileError = function ($file, $message, $flow) {
                 $flow.cancel();
@@ -1129,6 +1131,7 @@
                 $rootScope.uploadPopup.data.filePath = null;
                 $rootScope.uploadPopup.data.name = null;
                 $rootScope.uploadPopup.fileObj.errorMsg = "File cannot be uploaded";
+                $rootScope.unmaskLoading();
             };
             //When file is added in file upload
             $rootScope.uploadPopup.fileAdded = function (file, flow) { //It will allow all types of attahcments'
