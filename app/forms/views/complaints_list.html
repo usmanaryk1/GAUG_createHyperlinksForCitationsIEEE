@@ -66,7 +66,7 @@
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
                                                 <input type="search" class="form-control input-sm"
                                                     ng-model="viewPatient.searchParams.name"
-                                                    placeholder="Search by [Name,City,Language,Phone number]"
+                                                    placeholder="Search by []"
                                                     ng-change="viewPatient.applySearch()">
                                             </div>
 
@@ -81,7 +81,7 @@
                                                 cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name of Complainant</th>
+                                                        <th ng-class="compCtrl.applySortingClass('lName')" >Name of Complainant</th>
                                                         <th>Type</th>
                                                         <th>Method</th>
                                                         <th>Contact Info</th>

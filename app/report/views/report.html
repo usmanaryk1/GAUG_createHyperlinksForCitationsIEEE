@@ -125,7 +125,7 @@
                                         || report.reportType == 'applicationlistreport' || report.reportType == 'notesreport' || report.reportType == 'employeedeactivatereport'
                                         || report.reportType == 'detailagingreport' || report.reportType == 'summaryagingreport' || report.reportType == 'totalworkedhours'
                                         || report.reportType == 'missedpunchreport' || report.reportType == 'employeeothours' || report.reportType == 'revenuereconciliationreport' || report.reportType == 'revenuereconciliationbycounty'
-                                        || report.reportType == 'billingmonitorreport' || report.reportType == 'claimrejectionreport' || report.reportType == 'weeklyotanalysis'" style="margin-top: 10px;">
+                                        || report.reportType == 'billingmonitorreport' || report.reportType == 'claimrejectionreport' || report.reportType == 'weeklyotanalysis' || report.reportType == 'complaints'" style="margin-top: 10px;">
                             <div class="">
                                 <div class="col-sm-7 pull-right wd_full">
                                     <div class="col-sm-6 pad0 wd_full">
@@ -200,7 +200,7 @@
                                                 && report.reportType != 'employeewages' && report.reportType != 'revenuereconciliationreport' && report.reportType != 'revenuereconciliationbycounty'
                                                 && report.reportType != 'lossofhoursreport' && report.reportType != 'notesreport'
                                                 && report.reportType != 'detailagingreport' && report.reportType != 'summaryagingreport'
-                                                && report.reportType != 'billingmonitorreport' && report.reportType != 'claimrejectionreport'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
+                                                && report.reportType != 'billingmonitorreport' && report.reportType != 'claimrejectionreport' && report.reportType != 'complaints'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                             </div>
                         </div>
                     </form>

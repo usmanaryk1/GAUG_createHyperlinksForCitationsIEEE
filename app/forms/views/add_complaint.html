@@ -410,6 +410,59 @@
                                 </div>
                             </div>
 
+
+                            <div class="form-group" ng-if="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                                <label class="col-sm-3 control-label" for="field-13">
+                                    Proposed Resolution Notification Date
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input class="form-control datepicker" max-date="addCompCtrl.currentDate" min-date="addCompCtrl.resolutionNotifDate" 
+                                            data-format="mm/dd/yyyy" id="field-1" name="complainanttNotificationDate" type="text"
+                                            ng-model="addCompCtrl.complaint.complainanttNotificationDate" data-validate="required,date"
+                                            data-message-required="Please Enter Complaint Receiving Date" />
+                                        <div class="input-group-addon">
+                                            <a href="#">
+                                                <i class="linecons-calendar">
+                                                </i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                                <label class="col-sm-3 control-label" for="field-13">
+                                    Notification Method
+                                </label>
+                                <div class="col-sm-9">
+                                    <div class="radio-container pt-7">
+                                        <label class="radio-field">
+                                            <input value="PHONE" name="complaintNotificationMethod" type="radio" class=""
+                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
+                                            Phone
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="complaintNotificationMethod" value="WRITING" type="radio"
+                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
+                                            Writing
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="complaintNotificationMethod" value="EMAIL" type="radio"
+                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
+                                            Email
+                                        </label>
+                                        <label class="radio-field">
+                                            <input name="complaintNotificationMethod" value="INPERSON" type="radio"
+                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
+                                            In Person
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-14">
                                     Was the person making the complaint satisfied with the resolution and/or action

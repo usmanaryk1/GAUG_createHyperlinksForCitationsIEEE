@@ -4,7 +4,9 @@
         Page.setTitle("Add Complaint");
         ctrl.currentUser = $rootScope.currentUser
         ctrl.currentDate = new Date();
+        ctrl.fiveDaysAgo = new Date();
         ctrl.currentDateWithFormat = $filter('date')(ctrl.currentDate, 'MM/dd/yyyy');
+        ctrl.resolutionNotifDate = $filter('date')(ctrl.fiveDaysAgo.setDate(ctrl.currentDate.getDate() - 5), 'MM/dd/yyyy');
         ctrl.searchParamsForEmployee = { limit: 10, subActio: 'active', pageNo: 1, sortBy: 'lName', order: 'asc', name: '' };
         ctrl.patientList = [];
         ctrl.employeeList = [];
@@ -67,6 +69,8 @@
                 complaintResolution: "test",
                 complaintFollowUp: "true",
                 complaintSatisfied: "yes",
+                complaintNotificationMethod: 'PHONE',
+                complainanttNotificationDate: ctrl.currentDateWithFormat,
                 signature: "",
             };
 
@@ -128,6 +132,9 @@
                 });
             }
         }
+
+
+
 
         function deleteContactTypes(obj){
             delete obj.complainantContactPhone

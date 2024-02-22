@@ -41,6 +41,18 @@
             });
         };
 
+        // ctrl.applySortingClass = function (sortBy) {
+        //     if (ctrl.searchParams.sortBy !== sortBy) {
+        //         return 'sorting';
+        //     } else {
+        //         if (ctrl.searchParams.order === "desc") {
+        //             return 'sorting_desc';
+        //         } else {
+        //             return 'sorting_asc';
+        //         }
+        //     }
+        // };
+
         function pageInit () {
             let not = $rootScope.notificationsArr.find(item => item.id == 'VIEW_DISPATCH');
             let index = $rootScope.notificationsArr.indexOf(not);
