@@ -12,7 +12,7 @@
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
-                if (ctrl.reportType == 'workedhours' || ctrl.reportType == 'timesheet') {
+                if (ctrl.reportType == 'workedhours' || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
@@ -25,7 +25,7 @@
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }
-                    if (ctrl.searchParams.type) {
+                    if (ctrl.searchParams.type || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
                         path = path + "&type=" + ctrl.searchParams.type + "&id=" + ctrl.searchParams.id;
                     }
                     window.location.href = path;
