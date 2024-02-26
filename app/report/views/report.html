@@ -29,7 +29,75 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" ng-show="report.reportType == 'workedhours'" style="margin-top: 10px;">
+                                <div class="row" ng-show="report.reportType == 'timesheet'">
+                                    <div class="col-sm-12">
+                                        <div class="form-group sm-layout-align">
+                                            <label class="control-label">Type</label>
+                                            <select class="form-control" id="type" ng-model='report.searchParams.type' name="type"
+                                                    data-validate="required" data-message-required="Please select Type." ng-required="report.reportType=='timesheet'"
+                                                    ng-options='report.id as (report.label) for report in report.reportSubTypeList'>
+                                                <option value="">Select the type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="report.searchParams.type == 'employee'">
+                                    <div class="col-sm-12">
+                                        <div class="form-group sm-layout-align">
+                                            <label class="control-label">Employee</label>
+                                            <div class="pull-right col-md-12" style="padding:0;">
+                                                <script type="text/javascript">
+                                                    jQuery(document).ready(function ($)
+                                                    {
+                                                        setTimeout(function () {
+                                                            $("#employeedropdownIds").select2({
+                                                                // minimumResultsForSearch: -1,
+                                                                placeholder: 'Search Employee...',
+                                                                // minimumInputLength: 1,
+                                                                // placeholder: 'Search',
+                                                            }).on('select2-open', function ()
+                                                            {
+                                                                // Adding Custom Scrollbar
+                                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                            });
+                                                        }, 200);
+                                                    });</script>
+                                                <select class="form-control" name ="employeedropdownIds" id="employeedropdownIds" ng-model="report.searchParams.id" ng-options='emp.id as (emp.lName+", "+emp.fName+" "+emp.middleInitial) for emp in report.employeeList'>
+                                                    <option value="" selected hidden>Select All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="report.searchParams.type == 'patient'">
+                                    <div class="col-sm-12">
+                                        <div class="form-group sm-layout-align">
+                                            <label class="control-label">Patient</label>
+                                            <div class="pull-right col-md-12" style="padding:0;">
+                                                <script type="text/javascript">
+                                                    jQuery(document).ready(function ($)
+                                                    {
+                                                        setTimeout(function () {
+                                                            $("#patientdropdownIds").select2({
+                                                                // minimumResultsForSearch: -1,
+                                                                placeholder: 'Search Patient...',
+                                                                // minimumInputLength: 1,
+                                                                // placeholder: 'Search',
+                                                            }).on('select2-open', function ()
+                                                            {
+                                                                // Adding Custom Scrollbar
+                                                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                                            });
+                                                        }, 200);
+                                                    });</script>
+                                                <select class="form-control" name="patientdropdownIds" ng-model="report.searchParams.id" id="patientdropdownIds" ng-options='data.id as (data.lName+", "+data.fName+" "+data.middleInitial) for data in report.patientList'>
+                                                    <option value="" selected hidden />
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" ng-show="report.reportType == 'workedhours' || report.reportType == 'timesheet'" style="margin-top: 10px;">
                                     <div class="col-sm-6 pad0 wd_full">
                                         <div class="form-group">
                                             <label for="fromdate" class="col-sm-3 control-label">From</label>
@@ -57,8 +125,8 @@
                                     <div class="col-sm-12 pad0" style="margin-top: 10px;"></div>
                                     <div class="col-sm-12 pad0" style="margin-bottom:10px;">
                                         <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
-                                        <button type="submit" ng-if="report.reportType" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
-                                        <button type="submit" ng-if="report.reportType && report.reportType!='patientcensus'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
+                                        <button type="submit" ng-if="report.reportType && report.reportType != 'timesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
+                                        <button type="submit" ng-if="report.reportType && report.reportType != 'patientcensus'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                                     </div>
                                 </div>
                             </div>
