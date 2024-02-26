@@ -26,6 +26,18 @@
                 params: {
                     action: 'getComplaintPolicyResolutionTime'
                 }
+            },
+            getComplaintById: {
+                method: 'GET',
+                params: {
+                    action: 'getComplaint'
+                }
+            },
+            updateComplaint: {
+                method: 'PUT',
+                params: {
+                    action: 'updateComplaint'
+                }
             }
         });
 
@@ -45,6 +57,12 @@
             },
             getComplaintPolicyResolutionTime: function (){
                 return api.getComplaintPolicyResolutionTime().$promise
+            },
+            getComplaintById: function (id) {
+                return api.getComplaintById(id).$promise
+            },
+            updateComplaint: function (data) {
+                return api.updateComplaint({subAction: data.id}, data).$promise
             }
         };
     };
