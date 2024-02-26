@@ -143,8 +143,39 @@ app.run(function ($rootScope, $modal, $state, Idle)
                 }
             })
             ;
-});
 
+    $rootScope.$on('$locationChangeStart',
+            function (event, newUrl, oldUrl) {
+                var pattern = /(#\/app)\/([^\/]+)[$|\/]?/;
+                if ((newUrl.indexOf('/login') === -1 && oldUrl.indexOf('/login') === -1)) {
+                    var newSubUrl = (pattern.exec(newUrl) && pattern.exec(newUrl)[2]) ? pattern.exec(newUrl)[2] : undefined;
+                    var oldSubUrl = (pattern.exec(oldUrl) && pattern.exec(oldUrl)[2]) ? pattern.exec(oldUrl)[2] : undefined;
+                    //Check the sub url i.e. after app/
+                    if (newSubUrl && oldSubUrl && newSubUrl !== oldSubUrl) {
+                        if ($.fn.dirtyForms) {
+                            if ($('form').dirtyForms('isDirty')) {
+                                if (!confirm("You've made changes on this page which aren't saved. If you leave you will lose these changes.\n\nAre you sure you want to leave this page?")) {
+                                    event.preventDefault();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+    $rootScope.$on('$stateChangeSuccess',
+            function (event, currentState) {
+                setTimeout(function () {
+                    if ($.fn.dirtyForms) {
+                        //https://github.com/snikch/jquery.dirtyforms
+                        $('form:dirty').dirtyForms('setClean');
+                        //Skip check in login page
+                        if (currentState.url !== '/login') {
+                            $('form').dirtyForms();
+                        }
+                    }
+                }, 1000);
+            });
+});
 
 app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ASSETS, $httpProvider, KeepaliveProvider, IdleProvider) {
     IdleProvider.idle(900);
@@ -170,6 +201,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     resources: function ($ocLazyLoad) {
                         return $ocLazyLoad.load([
                             ASSETS.forms.jQueryValidate,
+                            ASSETS.forms.formDirty,
                             ASSETS.extra.toastr,
                             ASSETS.forms.inputmask,
                             ASSETS.forms.tagsinput,
@@ -1225,7 +1257,8 @@ app.constant('ASSETS', {
         'timepicker': appHelper.assetPath('js/timepicker/bootstrap-timepicker.min.js'),
         'inputmask': appHelper.assetPath('js/inputmask/jquery.inputmask.bundle.js'),
         'formWizard': appHelper.assetPath('js/formwizard/jquery.bootstrap.wizard.min.js'),
-        'jQueryValidate': appHelper.assetPath('js/jquery-validate/jquery.validate.min.js'),
+        'jQueryValidate': appHelper.assetPath('js/jquery-validate/jquery.validate.js'),
+        'formDirty': appHelper.assetPath('js/jquery.dirtyforms.js'),
         'dropzone': [
             appHelper.assetPath('js/dropzone/css/dropzone.css'),
             appHelper.assetPath('js/dropzone/dropzone.min.js'),
