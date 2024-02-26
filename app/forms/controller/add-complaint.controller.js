@@ -100,8 +100,6 @@
         }
 
         ctrl.saveForm = function (action) {
-            console.log(action);
-
             if ($('#add_complaint_form')[0].checkValidity()) {
                 var complaintToSave = angular.copy(ctrl.complaint);
 

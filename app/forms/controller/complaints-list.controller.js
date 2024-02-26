@@ -1,5 +1,5 @@
 (function () {
-    function ComplaintsController($state, $rootScope, $stateParams, $modal, FormsDAO, Page) {
+    function ComplaintsController($state, $rootScope, $stateParams, $modal, FormsDAO, $debounce, Page) {
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
@@ -43,19 +43,6 @@
         };
 
 
-
-        // ctrl.applySortingClass = function (sortBy) {
-        //     if (ctrl.searchParams.sortBy !== sortBy) {
-        //         return 'sorting';
-        //     } else {
-        //         if (ctrl.searchParams.order === "desc") {
-        //             return 'sorting_desc';
-        //         } else {
-        //             return 'sorting_asc';
-        //         }
-        //     }
-        // };
-
         ctrl.setComplaint = function(complaint){
             localStorage.setItem('complaint', JSON.stringify(complaint));
         }
@@ -98,6 +85,11 @@
             return ctrl.remainingDaysToCloseCall(openDate, ctrl.complaintResDays, ctrl.currentDate);
         }
 
+        ctrl.applySearch = function () {
+            ctrl.searchParams.pageNo = 1;
+            $debounce(getComplaints, 500);
+        };
+
         function getComplaints() {
             if(ctrl.complaintType == 'open'){
                 ctrl.searchParams.complaintFollowUp = true;
@@ -105,7 +97,6 @@
                 ctrl.searchParams.complaintFollowUp = false;
             }
             FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
-                console.log(res);
                 ctrl.complaintsList = res;
                 // toastr.success("Complaints retrieved successfully")
             }).catch((err) => {
@@ -116,9 +107,9 @@
 
         ctrl.pageChanged = function (pagenumber) {
             ctrl.searchParams.pageNo = pagenumber;
-            ctrl.getComplaintsCall();
+            getComplaints();
         };
 
     }
-    angular.module('xenon.controllers').controller('ComplaintsController', ["$state", "$rootScope", "$stateParams", "$modal", "FormsDAO", "Page", ComplaintsController]);
+    angular.module('xenon.controllers').controller('ComplaintsController', ["$state", "$rootScope", "$stateParams", "$modal", "FormsDAO", "$debounce", "Page", ComplaintsController]);
 })();
