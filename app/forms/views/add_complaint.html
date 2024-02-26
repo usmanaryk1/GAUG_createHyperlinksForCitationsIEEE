@@ -53,6 +53,11 @@
         padding-top: 3px;
     }
 
+    .complainantSatisfied + span.validate-has-error{
+        position: absolute;
+        top: 2.5em;
+    }
+
     @media (min-width: 768px) {
         .checkbox-right {
             text-align: end;
@@ -87,10 +92,11 @@
                         <h2 class="visible-print-block">Complaint</h2>
                         <form class="form-horizontal validate" id="add_complaint_form" novalidate=""
                             name="add_complaint_form" role="form" ng-submit="addCompCtrl.saveForm()">
+                            <!-- ng-submit="addCompCtrl.saveForm()" -->
                             <div class="row hidden-print">
                                 <div class="col-sm-12">
                                     <button class="btn btn-info btn-single gray_bt pull-right"
-                                        ng-click="addCompCtrl.resetForm()">
+                                        ng-click="clear(); addCompCtrl.resetForm()" type="button">
                                         Reset To Default
                                     </button>
                                 </div>
@@ -268,8 +274,8 @@
                                                 ng-model="addCompCtrl.complaint.complainantRelationship"
                                                 id="patientdropdownIds" data-validate="required"
                                                 data-message-required="Please select a Patient" required
-                                                ng-options='patient.id as patient.label for patient in addCompCtrl.patientList'>
-                                                <option value="" selected hidden>Select All</option>
+                                                ng-options='patient.label as patient.label for patient in addCompCtrl.patientList'>
+                                                <option value="" selected hidden>Please Select</option>
                                             </select>
                                         </div>
                                         <div ng-switch-when="EMPLOYEE">
@@ -277,8 +283,8 @@
                                                 ng-model="addCompCtrl.complaint.complainantRelationship"
                                                 id="employeedropdownIds" data-validate="required"
                                                 data-message-required="Please select a Employee"
-                                                ng-options='employee.id as employee.fName for employee in addCompCtrl.employeeList'>
-                                                <option value="" selected hidden>Select All</option>
+                                                ng-options='employee.fName as employee.fName for employee in addCompCtrl.employeeList'>
+                                                <option value="" selected hidden>Please Select</option>
                                             </select>
                                         </div>
                                         <div ng-switch-when="WORKSITE">
@@ -286,8 +292,8 @@
                                                 ng-model="addCompCtrl.complaint.complainantRelationship"
                                                 id="worksitedropdownIds" data-validate="required"
                                                 data-message-required="Please select a Worksite"
-                                                ng-options='worksite.id as worksite.name for worksite in addCompCtrl.worksiteList'>
-                                                <option value="" selected hidden>Select All</option>
+                                                ng-options='worksite.name as worksite.name for worksite in addCompCtrl.worksiteList'>
+                                                <option value="" selected hidden>Please Select</option>
                                             </select>
                                         </div>
                                         <div ng-switch-when="VENDOR">
@@ -316,7 +322,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-5">
-                                    Method
+                                    Complaint Method
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="radio-container pt-7">
@@ -345,13 +351,13 @@
                             </div>
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label for="field-11" class="col-sm-3 control-label">Type</label>
+                                <label for="field-11" class="col-sm-3 control-label">Complaint Type</label>
                                 <div class="col-sm-9">
                                     <select class="form-control" name="complaintType"
                                         ng-change="addCompCtrl.typeChange(addCompCtrl.complaint.type)"
                                         ng-model="addCompCtrl.complaint.complaintType" id="field-11"
                                         data-validate="required" data-message-required="Please select type of Complaint"
-                                        ng-options='type.value as type.title for type in addCompCtrl.complaintTypes'>
+                                        ng-options='type.title as type.title for type in addCompCtrl.complaintTypes'>
                                         <option value="" selected hidden>Select Type</option>
                                     </select>
                                     <div class="pt-7" ng-if="addCompCtrl.complaint.type == 'other'">
@@ -376,18 +382,7 @@
                                         {{addCompCtrl.complaint.complaintDescription}}</p>
                                 </div>
                             </div>
-                            <div class="form-group-separator"></div>
-                            <div class="form-group">
-                                <label for="field-13" class="col-sm-3 control-label">Resolution of the Complaint</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control hidden-print" name="ComplaintResolution"
-                                        ng-model="addCompCtrl.complaint.complaintResolution" id="field-13" cols="30"
-                                        rows="5" placeholder="Complaint Resolution" data-validate="required"
-                                        data-message-required="Please enter Complaint Resolution"></textarea>
-                                    <p class="visible-print-block" style="border: 1px solid #B0B0B0; padding: 1em;">
-                                        {{addCompCtrl.complaint.complaintResolution}}</p>
-                                </div>
-                            </div>
+                         
                             <div class="form-group-separator"></div>
 
                             <div class="form-group">
@@ -411,15 +406,16 @@
                             </div>
 
 
-                            <div class="form-group" ng-if="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
                                 <label class="col-sm-3 control-label" for="field-13">
                                     Proposed Resolution Notification Date
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
-                                        <input class="form-control datepicker" max-date="addCompCtrl.currentDate" min-date="addCompCtrl.resolutionNotifDate" 
-                                            data-format="mm/dd/yyyy" id="field-1" name="complainanttNotificationDate" type="text"
-                                            ng-model="addCompCtrl.complaint.complainanttNotificationDate" data-validate="required,date"
+                                        <!-- max-date="addCompCtrl.currentDate" min-date="addCompCtrl.resolutionNotifDate"  -->
+                                        <input class="form-control datepicker" 
+                                            data-format="mm/dd/yyyy" id="field-1" name="dateProposedResolution" type="text"
+                                            ng-model="addCompCtrl.complaint.dateProposedResolution" data-validate="required,date"
                                             data-message-required="Please Enter Complaint Receiving Date" />
                                         <div class="input-group-addon">
                                             <a href="#">
@@ -431,7 +427,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" ng-if="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <!-- <div class="form-group" ng-if="addCompCtrl.complaint.complaintFollowUp == 'false'">
                                 <label class="col-sm-3 control-label" for="field-13">
                                     Notification Method
                                 </label>
@@ -459,27 +455,39 @@
                                         </label>
                                     </div>
                                 </div>
+                            </div> -->
+
+                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                                <label for="field-13" class="col-sm-3 control-label">Resolution of the Complaint [Action Taken]</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control hidden-print" name="ComplaintResolution"
+                                        ng-model="addCompCtrl.complaint.complaintResolution" id="field-13" cols="30"
+                                        rows="5" placeholder="Complaint Resolution" data-validate="required"
+                                        data-message-required="Please enter Complaint Resolution"></textarea>
+                                    <p class="visible-print-block" style="border: 1px solid #B0B0B0; padding: 1em;">
+                                        {{addCompCtrl.complaint.complaintResolution}}</p>
+                                </div>
                             </div>
 
-                            <div class="form-group-separator"></div>
-
-                            <div class="form-group">
+                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
                                 <label class="col-sm-3 control-label" for="field-14">
                                     Was the person making the complaint satisfied with the resolution and/or action
                                     plan?
                                 </label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-9" >
                                     <div class="radio-container pt-7">
                                         <label class="radio-field">
-                                            <input value="yes" name="complainantSatisfied" type="radio" class=""
+                                            <input value="yes" name="complainantSatisfied" class="complainantSatisfied" type="radio" class=""
                                                 ng-model="addCompCtrl.complaint.complaintSatisfied"
-                                                ng-change="complainantSatisfiedChange()" />
+                                                ng-change="complainantSatisfiedChange()" data-validate="required"
+                                                data-message-required="Please select complainant satisfaction status"/>
                                             Yes
                                         </label>
                                         <label class="radio-field">
-                                            <input name="complainantSatisfied" value="no" type="radio"
+                                            <input name="complainantSatisfied" class="complainantSatisfied" value="no" type="radio"
                                                 ng-model="addCompCtrl.complaint.complaintSatisfied"
-                                                ng-change="complainantSatisfiedChange()" />
+                                                ng-change="complainantSatisfiedChange()" data-validate="required"
+                                                data-message-required="Please select complainant satisfaction status"/>
                                             No
                                         </label>
                                     </div>
@@ -492,6 +500,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                             <div class="form-group-separator"></div>
 
@@ -508,24 +517,11 @@
                             <div class="form-group">
                                 <label for="" class="col-sm-3 control-label">Signature</label>
                                 <div class="col-sm-9">
-                                    <!-- accept="applicationSubmit.accept" -->
                                     <signature-pad width="550" height="175" style="border:1px solid #B0B0B0"
                                         dataurl="addCompCtrl.signature" accept="addCompCtrl.accept"
                                         clear="clear"></signature-pad>
                                     <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
-                                        ng-click="clear(); addCompCtrl.clearSignature()">Clear signature</button>
-
-                                    <!-- <form action="" class="signature-pad-form"> -->
-                                    <!-- <div class="row mt-7">
-                                        <div class="col-sm-12" id="signature-pad-container">
-                                            <canvas class="signature-pad hidden-print"
-                                                ng-class="!addCompCtrl.isSignTouched && addCompCtrl.formSubmitted && !addCompCtrl.isSignAdded ?  'error':''"
-                                                id="signature-pad"></canvas>
-                                            <span class="error-text"
-                                                ng-if="!addCompCtrl.isSignTouched && addCompCtrl.formSubmitted && !addCompCtrl.isSignAdded">Please
-                                                add your signature</span>
-                                        </div>
-                                    </div> -->
+                                        ng-click="clear(); addCompCtrl.clearSignatureCall()">Clear signature</button>
                                     <button ng-if="addCompCtrl.isSignTouched"
                                         class="clear-btn btn delet_bt hidden-print"
                                         ng-click="addCompCtrl.clearPad()">Clear</button>
@@ -534,8 +530,6 @@
                                         ng-click="addCompCtrl.createSignature($event)">Submit</button>
                                     <button ng-if="addCompCtrl.isSignAdded" class="btn delet_bt hidden-print"
                                         ng-click="addCompCtrl.deleteSignature($event)">Delete</button>
-                                    <!-- </form> -->
-                                    <!-- disabled="!addCompCtrl.isSignTouched" -->
                                 </div>
                             </div>
 
@@ -554,13 +548,17 @@
                                 </div>
                                 <div class="row hidden-print">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-info delet_bt pull-right" style="width:auto;"
-                                            type="button">
+                                        <!-- <button class="btn btn-info delet_bt pull-right" style="width:auto;"
+                                            type="submit" ng-click="addCompCtrl.saveForm('close')">
                                             Close
-                                        </button>
+                                        </button> -->
+                                        <!-- <button class="btn btn-info green_bt pull-right" style="width:auto;"
+                                            type="submit" ng-click="addCompCtrl.saveForm('save')">
+                                            Save
+                                        </button> -->
                                         <button class="btn btn-info green_bt pull-right" style="width:auto;"
                                             type="submit">
-                                            Save
+                                            {{addCompCtrl.complaint.complaintFollowUp == 'true' ? 'Save':'Save & Close'}}
                                         </button>
                                     </div>
                                 </div>

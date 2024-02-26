@@ -16,7 +16,9 @@
         ctrl.isSignAdded = false;
         ctrl.isSignTouched = false;
         ctrl.signatureUrl = ''
+        ctrl.submitAction = true;
         ctrl.generateFormCall = generateForms;
+        ctrl.clearSignatureCall = clearSignature;
         // ctrl.signatureInitCall = signatureInit
         ctrl.getListsCall = getLists
         ctrl.complaint = {};
@@ -28,12 +30,16 @@
             ctrl.subtitle = 'Edit The Complaint By Entering Complaint Information';
             Page.setTitle("Edit Complaint")
         }
+        ctrl.closingComplaint = true;
 
         /*================   FUNCTION CALLS   ===================*/
         ctrl.generateFormCall();
         // ctrl.signatureInitCall()
         ctrl.getListsCall()
 
+        ctrl.saveComplaintForm = function (action){
+            console.log(action);
+        }
 
         // {
         //     "complaintDate": "10/02/2023",
@@ -55,6 +61,7 @@
         /*================   FORM FUNCTIONS   ===================*/
         function generateForms() {
             $rootScope.isFormDirty = false;
+            ctrl.clearSignatureCall()
 
             ctrl.complaint = {
                 complaintDate: ctrl.currentDateWithFormat,
@@ -64,32 +71,35 @@
                 complainantRelationshipType: "PATIENT",
                 complainantRelationship: "",
                 complaintMethod: "PHONE",
-                complaintType: "medication_errors",
+                complaintType: "",
                 complaintDescription: "test",
-                complaintResolution: "test",
                 complaintFollowUp: "true",
-                complaintSatisfied: "yes",
-                complaintNotificationMethod: 'PHONE',
-                complainanttNotificationDate: ctrl.currentDateWithFormat,
+                // complaintNotificationMethod: 'PHONE',
+                complaintResolution: "",
+                complaintSatisfied: "",
+                dateProposedResolution: '',
                 signature: "",
             };
 
             setupWatch()
         }
 
+        ctrl.someFun = function(action){
+            console.log(action);
+        }
+
         ctrl.resetForm = function () {
             ctrl.generateFormCall()
         }
 
-        ctrl.clearSignature = function () {
-            console.log("singaute claer");
-            console.log(ctrl.signature);
-            console.log(ctrl.signatureUrl);
+        function clearSignature  () {
             ctrl.complaint.signature = ''
             ctrl.signatureUrl = ''
         }
 
-        ctrl.saveForm = function () {
+        ctrl.saveForm = function (action) {
+            console.log(action);
+
             if ($('#add_complaint_form')[0].checkValidity()) {
                 var complaintToSave = angular.copy(ctrl.complaint);
 
@@ -244,6 +254,7 @@
                 delete ctrl.complaint.otherComplaint
             }
         }
+
 
         ctrl.complainantSatisfiedChange = function () {
             if (ctrl.complaint.complainantSatisfied !== 'no') {

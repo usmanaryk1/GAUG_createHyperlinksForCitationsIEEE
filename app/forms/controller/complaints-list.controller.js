@@ -1,14 +1,16 @@
 (function () {
-    function ComplaintsController($state, $rootScope,  $stateParams,  $modal, FormsDAO, Page) {
+    function ComplaintsController($state, $rootScope, $stateParams, $modal, FormsDAO, Page) {
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
-        ctrl.searchParams = {limit: 10, pageNo: 1};
-
+        ctrl.searchParams = { limit: 10, pageNo: 1 };
         ctrl.complaintType = $stateParams.status;
         ctrl.complaintsList = [];
         ctrl.pageInitCall = pageInit;
         ctrl.getComplaintsCall = getComplaints;
+        ctrl.remainingDaysToCloseCall = remainingDaysToClose
+        ctrl.getComplaintCloseDaysCall = getComplaintCloseDays
+        ctrl.currentDate = new Date();
         ctrl.complaintsList.push({
             id: 1243,
             date: '21/265/21',
@@ -19,11 +21,10 @@
             resolutionDate: '21/265/21',
             receivedBy: 'contact'
         })
-        
+
         ctrl.pageInitCall();
 
-        ctrl.openEditModal = function (complaint, modal_id, modal_size, modal_backdrop)
-        {
+        ctrl.openEditModal = function (complaint, modal_id, modal_size, modal_backdrop) {
             var modalInstance = $modal.open({
                 templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
                 size: modal_size,
@@ -41,6 +42,8 @@
             });
         };
 
+
+
         // ctrl.applySortingClass = function (sortBy) {
         //     if (ctrl.searchParams.sortBy !== sortBy) {
         //         return 'sorting';
@@ -53,20 +56,50 @@
         //     }
         // };
 
-        function pageInit () {
+        function remainingDaysToClose (openDate, margin, currentDate) {
+            // Convert date strings to Date objects
+            const openDateObj = new Date(openDate);
+            const currentDateObj = new Date(currentDate);
+
+            // Calculate the difference in milliseconds
+            const timeDiff = currentDateObj - openDateObj;
+
+            // Calculate the number of days
+            const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+            // Calculate the remaining days
+            const remainingDays = margin - daysPassed;
+
+            // Ensure the result is at least 0
+            return Math.max(remainingDays, 0);
+        }
+
+        function getComplaintCloseDays() {
+            FormsDAO.getComplaintPolicyResolutionTime().then(res => {
+                ctrl.complaintResDays = res.policyResolutionTime;
+            }).catch(err => {
+                toastr.error("Couldn't get complaint policy resolution time")
+            })
+        }
+
+        function pageInit() {
             let not = $rootScope.notificationsArr.find(item => item.id == 'VIEW_DISPATCH');
             let index = $rootScope.notificationsArr.indexOf(not);
-            console.log(index);
             $rootScope.notificationsArr.splice(index, 1);
+            ctrl.getComplaintCloseDaysCall()
             ctrl.getComplaintsCall()
-        } 
+        }
+
+        ctrl.getRemainingDaysForClosing = function (openDate) {
+            return ctrl.remainingDaysToCloseCall(openDate, ctrl.complaintResDays, ctrl.currentDate);
+        }
 
         function getComplaints() {
-            FormsDAO.getAllComplaints(ctrl.searchParams).then((res)=>{
+            FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
                 console.log(res);
                 ctrl.complaintsList = res;
                 toastr.success("Complaints retrieved successfully")
-            }).catch((err)=>{
+            }).catch((err) => {
                 console.log(err);
                 toastr.error("Failed to retrieve all complaints")
             })
@@ -79,5 +112,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('ComplaintsController', ["$state","$rootScope", "$stateParams", "$modal", "FormsDAO", "Page", ComplaintsController]);
+    angular.module('xenon.controllers').controller('ComplaintsController', ["$state", "$rootScope", "$stateParams", "$modal", "FormsDAO", "Page", ComplaintsController]);
 })();

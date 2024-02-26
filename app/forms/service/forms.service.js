@@ -17,12 +17,17 @@
             },
             setCompResolutionDays: {
                 method: 'POST',
-                isArray: true,
-                params: {
-                    action: 'saveComplaintPolicyResolutionTime',
-                    complaintResDays: "@complaintResDays"
-                }
+                // params: {
+                //     // action: 'saveComplaintPolicyResolutionTime',
+                //     // complaintResDays: "@complaintResDays"
+                // }
             },
+            getComplaintPolicyResolutionTime: {
+                method: 'GET',
+                params: {
+                    action: 'getComplaintPolicyResolutionTime'
+                }
+            }
         });
 
 
@@ -37,7 +42,10 @@
             },
             setCompResolutionDays: function (data){
                 console.log(data);
-                return api.setCompResolutionDays(data).$promise
+                return api.setCompResolutionDays({action: 'saveComplaintPolicyResolutionTime' + data.complaintResDays}, {}).$promise
+            },
+            getComplaintPolicyResolutionTime: function (){
+                return api.getComplaintPolicyResolutionTime().$promise
             }
         };
     };

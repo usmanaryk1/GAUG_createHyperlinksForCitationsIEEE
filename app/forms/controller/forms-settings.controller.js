@@ -10,6 +10,17 @@
 
         ctrl.typeChange = function(){
             // Typechange Code goes here
+            if(ctrl.formType == 'complaintform'){
+                ctrl.getComplaintDays()
+            }
+        }
+
+        ctrl.getComplaintDays = function (){
+            FormsDAO.getComplaintPolicyResolutionTime().then(res => {
+                ctrl.complaintResDays = res.policyResolutionTime;
+            }).catch(err => {
+                toastr.error("Couldn't get complaint policy resolution time")
+            })
         }
 
         ctrl.saveFormSetting = function () {
@@ -17,8 +28,10 @@
             if($('#formsetting_form')[0].checkValidity()){
                 FormsDAO.setCompResolutionDays({complaintResDays: ctrl.complaintResDays}).then((res)=>{
                     console.log(res);
+                    toastr.success("Complaint Resolution Days updated successfully")
                 }).catch((err)=>{
                     console.log(err);
+                    toastr.error("Couldn't update complaint resolution days")
                 })
             }
 
