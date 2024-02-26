@@ -193,6 +193,9 @@
                             ctrl.authorizationDocuments[j].careTypeTitle = ctrl.authorizationDocuments[j].companyCareType.careTypeTitle;
                             ctrl.authorizationDocuments[j].previousExpiryDate = ctrl.authorizationDocuments[j].expiryDate;
                         }
+                        ctrl.authorizationDocuments.sort(function (a, b) {
+                            return moment(new Date(b.expiryDate)) - moment(new Date(a.expiryDate));
+                        });
                     }
                     ctrl.oldDate = ctrl.patient.authorizationEndDate;
                     ctrl.lastDate = ctrl.patient.authorizationEndDate;
@@ -770,6 +773,9 @@
                         } else {
                             $scope.addPatient.authorizationDocuments.push(authObj);
                         }
+                        $scope.addPatient.authorizationDocuments.sort(function (a, b) {
+                            return moment(new Date(b.expiryDate)) - moment(new Date(a.expiryDate));
+                        });
 
                         $scope.close();
                     };
