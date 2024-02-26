@@ -301,8 +301,9 @@ ontimedata = {
     ],
     eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
     recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"},
-    reportTypes: [{id: 'workedhours', label: "Worked Hours"}, {id: 'patientcensus', label: "Patient Census"}, {id: 'timesheet', label: "Time Sheets & Patients Time Sheet Print Out"}, {id: 'employeecompliance', label: "Employee Compliance Tracker"}, {id: 'employeecensus', label: "Employee Census"}],
-    unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}]
+    reportTypes: [{id: 'workedhours', label: "Worked Hours"}, {id: 'patientcensus', label: "Patient Census"}, {id: 'timesheet', label: "Time Sheets"}, {id: 'employeecompliance', label: "Employee Compliance Tracker"}, {id: 'employeecensus', label: "Employee Census"}],
+    unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
+    reportSubTypes: [{id: 'employee', label: "Employee"}, {id: 'patient', label: "Patient"}]
 };
 
 ontimetest = {
@@ -330,7 +331,8 @@ ontimetest = {
     amazonPublicUrl: "https://s3-us-west-1.amazonaws.com/ontimeprofileimage/",
     amazonSignatureUrl: "https://s3-us-west-1.amazonaws.com/ontimepatientsign/",
     reportTypes: ontimedata.reportTypes,
-    unitValues: ontimedata.unitValues
+    unitValues: ontimedata.unitValues,
+    reportSubTypes: ontimedata.reportSubTypes
 //    'getPatients': function($scope, $rootScope, $http) {
 //        $scope.patients = ontimedata.patients;
 //    },
