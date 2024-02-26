@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    var ComplaintDAO = function (resource) {
+    var FormsDAO = function (resource) {
         var api = resource(ontime_data.weburl + 'complaint/:action/:subAction/:subAction1', {}, {
             addComplaint: {
                 method: 'POST',
@@ -15,6 +15,14 @@
                     action: 'getAllComplaints'
                 }
             },
+            setCompResolutionDays: {
+                method: 'POST',
+                isArray: true,
+                params: {
+                    action: 'saveComplaintPolicyResolutionTime',
+                    complaintResDays: "@complaintResDays"
+                }
+            },
         });
 
 
@@ -26,8 +34,12 @@
             },
             getAllComplaints: function (data) {
                 return api.getAllComplaints(data).$promise;
+            },
+            setCompResolutionDays: function (data){
+                console.log(data);
+                return api.setCompResolutionDays(data).$promise
             }
         };
     };
-    angular.module("xenon.factory").factory('ComplaintDAO', ['$resource', ComplaintDAO]);
+    angular.module("xenon.factory").factory('FormsDAO', ['$resource', FormsDAO]);
 })();

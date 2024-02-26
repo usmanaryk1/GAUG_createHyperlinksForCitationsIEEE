@@ -1,5 +1,5 @@
 (function () {
-    function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, ComplaintDAO, Page) {
+    function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, FormsDAO, Page) {
         var ctrl = this;
         Page.setTitle("Add Complaint");
         ctrl.currentUser = $rootScope.currentUser
@@ -115,7 +115,7 @@
                 }
 
                 $rootScope.maskLoading();
-                ComplaintDAO.addComplaint(complaintToSave).then((res) => {
+                FormsDAO.addComplaint(complaintToSave).then((res) => {
                     // ctrl.generateFormCall();
                     $rootScope.isFormDirty = false;
                     toastr.success("Complaint saved successfully")
@@ -357,5 +357,5 @@
         //     canvas.addEventListener('pointermove', handlePointerMove, { passive: true })
         // }
     }
-    angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO", "ComplaintDAO", "Page", AddComplaintController]);
+    angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO", "FormsDAO", "Page", AddComplaintController]);
 })();

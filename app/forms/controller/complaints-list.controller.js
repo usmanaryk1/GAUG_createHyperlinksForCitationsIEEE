@@ -1,5 +1,5 @@
 (function () {
-    function ComplaintsController($state, $rootScope,  $stateParams,  $modal, ComplaintDAO, Page) {
+    function ComplaintsController($state, $rootScope,  $stateParams,  $modal, FormsDAO, Page) {
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
@@ -62,7 +62,7 @@
         } 
 
         function getComplaints() {
-            ComplaintDAO.getAllComplaints(ctrl.searchParams).then((res)=>{
+            FormsDAO.getAllComplaints(ctrl.searchParams).then((res)=>{
                 console.log(res);
                 ctrl.complaintsList = res;
                 toastr.success("Complaints retrieved successfully")
@@ -79,5 +79,5 @@
         };
 
     }
-    angular.module('xenon.controllers').controller('ComplaintsController', ["$state","$rootScope", "$stateParams", "$modal", "ComplaintDAO", "Page", ComplaintsController]);
+    angular.module('xenon.controllers').controller('ComplaintsController', ["$state","$rootScope", "$stateParams", "$modal", "FormsDAO", "Page", ComplaintsController]);
 })();
