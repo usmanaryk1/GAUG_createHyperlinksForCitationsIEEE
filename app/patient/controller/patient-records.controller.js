@@ -73,11 +73,11 @@
         ctrl.goToEditForm = function (record, action) {
             console.log(record);
             // $state.go('app.edit_patient', { id: record.patientId, recordType: record.type });
+            if (record.type == 'Progress_Note')
             if (record.type == 'Nursing_Assessment')
                 $state.go('app.edit_patient', { id: record.patientId, recordType: record.type });
             if (record.type == 'Medication_Reconciliation')
                 $state.go('app.medication_reconciliation', { id: record.patientId });
-            if (record.type == 'Progress_Note')
                 $state.go('app.progress_note', { id: record.patientId })
             if (record.type == 'Medical_Orders')
                 $state.go('app.medical_orders', { id: record.patientId })
