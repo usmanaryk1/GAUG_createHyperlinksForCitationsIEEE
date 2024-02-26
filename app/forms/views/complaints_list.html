@@ -65,7 +65,7 @@
                                             </div>
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
                                                 <input type="search" class="form-control input-sm"
-                                                    ng-model="viewPatient.searchParams.name" placeholder="Search by []"
+                                                    ng-model="viewPatient.searchParams.name" placeholder="Search by [Complaint Type, Complaint Method, Contact Type]"
                                                     ng-change="viewPatient.applySearch()">
                                             </div>
 
@@ -86,18 +86,9 @@
                                                         <th>Method</th>
                                                         <th>Contact Info</th>
                                                         <th>Received Date</th>
-                                                        <!-- <th>Resolution Date</th> -->
                                                         <th>Received By</th>
-                                                        <th>Remaining Days</th>
-                                                        <th>Actions</th>
-                                                        <!-- <th></th>
-                                                        <th width="23%" ng-class="viewPatient.applySortingClass('lName')" ng-click="viewPatient.applySorting('lName')" >Name & Insurance Provider</th>
-                                                        <th width="12%" ng-class="viewPatient.applySortingClass('dateOfBirth')" ng-click="viewPatient.applySorting('dateOfBirth')" >Date Of Birth</th>
-                                                        <th width="15%" >Phone</th>
-                                                        <th width="18%" >Address</th>
-                                                        <th width="12%" >Languages Spoken</th>
-                                                        <th width="30%" >Actions</th> -->
-
+                                                        <th ng-if="compCtrl.complaintType == 'open'">Remaining Days</th>
+                                                        <th ng-if="compCtrl.complaintType == 'open'">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -116,15 +107,15 @@
                                                             </div>
                                                         </td>
                                                         <td>{{complaint.complaintType}}</td>
-                                                        <td>{{complaint.complaintMethod}}</td>
+                                                        <td>{{complaint.complaintMethod == 1 ? 'Phone': complaint.complaintMethod == 2? 'Writing': complaint.complaintMethod == 3? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | date}}</td>
                                                         <!-- <td>{{complaint.resolutionDate}}</td> -->
                                                         <td>{{complaint.complaintReceiverName}}</td>
-                                                        <td><span>{{compCtrl.getRemainingDaysForClosing(complaint.complaintDate)}}</span></td>
-                                                        <td>
+                                                        <td ng-if="compCtrl.complaintType == 'open'"><span>{{compCtrl.getRemainingDaysForClosing(complaint.dateInserted)}}</span></td>
+                                                        <td ng-if="compCtrl.complaintType == 'open'">
                                                             <div class="center">
-                                                                <a ui-sref="app.add-complaint({id: 12})"
+                                                                <a ui-sref="app.add-complaint({id: complaint.id})" ng-click="compCtrl.setComplaint(complaint)"
                                                                     class="btn icon-left fa fa-pencil edit_button"
                                                                     href="" tooltip="Edit"><span
                                                                         class="ed_b"></span></a>

@@ -56,6 +56,10 @@
         //     }
         // };
 
+        ctrl.setComplaint = function(complaint){
+            localStorage.setItem('complaint', JSON.stringify(complaint));
+        }
+
         function remainingDaysToClose (openDate, margin, currentDate) {
             // Convert date strings to Date objects
             const openDateObj = new Date(openDate);
@@ -95,20 +99,24 @@
         }
 
         function getComplaints() {
+            if(ctrl.complaintType == 'open'){
+                ctrl.searchParams.complaintFollowUp = true;
+            }else if(ctrl.complaintType == 'close'){
+                ctrl.searchParams.complaintFollowUp = false;
+            }
             FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
                 console.log(res);
                 ctrl.complaintsList = res;
-                toastr.success("Complaints retrieved successfully")
+                // toastr.success("Complaints retrieved successfully")
             }).catch((err) => {
                 console.log(err);
-                toastr.error("Failed to retrieve all complaints")
+                toastr.error("Failed to retrieve complaints")
             })
         }
 
         ctrl.pageChanged = function (pagenumber) {
-            console.log("pagenumber", pagenumber);
             ctrl.searchParams.pageNo = pagenumber;
-            ctrl.getAllComplaints();
+            ctrl.getComplaintsCall();
         };
 
     }

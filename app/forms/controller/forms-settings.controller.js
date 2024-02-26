@@ -26,7 +26,7 @@
         ctrl.saveFormSetting = function () {
             console.log(ctrl.complaintResDays);;
             if($('#formsetting_form')[0].checkValidity()){
-                FormsDAO.setCompResolutionDays({complaintResDays: ctrl.complaintResDays}).then((res)=>{
+                FormsDAO.setCompResolutionDays({days: ctrl.complaintResDays}).then((res)=>{
                     console.log(res);
                     toastr.success("Complaint Resolution Days updated successfully")
                 }).catch((err)=>{

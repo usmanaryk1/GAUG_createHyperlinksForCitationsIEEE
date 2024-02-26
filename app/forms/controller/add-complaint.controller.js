@@ -41,51 +41,53 @@
             console.log(action);
         }
 
-        // {
-        //     "complaintDate": "10/02/2023",
-        //     "complainantName": "John Doe",
-        //     "complainantContactType": "PHONE",
-        //     "complainantContact": "123-456-7890",
-        //     "complainantRelationshipType": "PATIENT",
-        //     "complainantRelationship": "Patient ID: 12345",
-        //     "complaintReceiverName": "Jane Doe",
-        //     "complaintMethod": "EMAIL",
-        //     "complaintType": "Service Issue",
-        //     "complaintDescription": "The service was not up to the mark.",
-        //     "complaintResolution": "Offered a discount for the next service.",
-        //     "complaintFollowUp": true,
-        //     "complaintSatisfied": true,
-        //     "signature": "base64_encoded_signature_here"
-        // }
-
         /*================   FORM FUNCTIONS   ===================*/
         function generateForms() {
             $rootScope.isFormDirty = false;
             ctrl.clearSignatureCall()
 
-            ctrl.complaint = {
-                complaintDate: ctrl.currentDateWithFormat,
-                complainantName: "Abdul Raouf",
-                complainantContactType: "PHONE",
-                complainantContact: "",
-                complainantRelationshipType: "PATIENT",
-                complainantRelationship: "",
-                complaintMethod: "PHONE",
-                complaintType: "",
-                complaintDescription: "test",
-                complaintFollowUp: "true",
-                // complaintNotificationMethod: 'PHONE',
-                complaintResolution: "",
-                complaintSatisfied: "",
-                dateProposedResolution: '',
-                signature: "",
-            };
+            if(ctrl.params?.id){
+                let complaintData = JSON.parse(localStorage.getItem('complaint'));
+                ctrl.complaint = {
+                    complaintDate: ctrl.currentDateWithFormat,
+                    complainantName: complaintData.complainantName,
+                    complainantContactType: complaintData.complainantContactType == 1 ? 'PHONE': complaintData.complainantContactType == 2? 'EMAIL': 'ADDRESS',
+                    complainantContact: complaintData.complainantContact,
+                    complainantRelationshipType: "PATIENT",
+                    complainantRelationship: "",
+                    complaintMethod: "PHONE",
+                    complaintType: "",
+                    complaintDescription: "",
+                    complaintFollowUp: "true",
+                    // complaintNotificationMethod: 'PHONE',
+                    complaintResolution: "",
+                    complaintSatisfied: "",
+                    dateProposedResolution: '',
+                    signature: "",
+                };
+            }else{
+                ctrl.complaint = {
+                    complaintDate: ctrl.currentDateWithFormat,
+                    complainantName: "",
+                    complainantContactType: "PHONE",
+                    complainantContact: "",
+                    complainantRelationshipType: "PATIENT",
+                    complainantRelationship: "",
+                    complaintMethod: "PHONE",
+                    complaintType: "",
+                    complaintDescription: "",
+                    complaintFollowUp: "true",
+                    // complaintNotificationMethod: 'PHONE',
+                    complaintResolution: "",
+                    complaintSatisfied: "",
+                    dateProposedResolution: '',
+                    signature: "",
+                };
+            }
+
+           
 
             setupWatch()
-        }
-
-        ctrl.someFun = function(action){
-            console.log(action);
         }
 
         ctrl.resetForm = function () {
@@ -142,9 +144,6 @@
                 });
             }
         }
-
-
-
 
         function deleteContactTypes(obj){
             delete obj.complainantContactPhone

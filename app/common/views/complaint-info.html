@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-4"><strong>Contact Type</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complainantContactType}}
+                    {{ComplaintInfo.complaint.complainantContactType == 1 ? 'Phone': ComplaintInfo.complaint.complainantContactType == 2? 'Email': 'Address'}}
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-4"><strong>Complainant Relation</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complainantRelationshipType}}
+                    {{ComplaintInfo.complaint.complainantRelationshipType == 1 ? 'Patient': ComplaintInfo.complaint.complainantRelationshipType == 2? 'Employee': ComplaintInfo.complaint.complainantRelationshipType == 3? 'Worksite': 'Vendor'}}
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-4"><strong>Complainant Method</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complaintMethod}}
+                    {{ComplaintInfo.complaint.complaintMethod == 1 ? 'Phone': ComplaintInfo.complaint.complaintMethod == 2? 'Writing': ComplaintInfo.complaint.complaintMethod == 3? 'Email': 'In Person'}}
                 </div>
             </div>
         </div>

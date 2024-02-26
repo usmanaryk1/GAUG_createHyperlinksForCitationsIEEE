@@ -17,10 +17,9 @@
             },
             setCompResolutionDays: {
                 method: 'POST',
-                // params: {
-                //     // action: 'saveComplaintPolicyResolutionTime',
-                //     // complaintResDays: "@complaintResDays"
-                // }
+                params: {
+                    action: 'saveComplaintPolicyResolutionTime',
+                }
             },
             getComplaintPolicyResolutionTime: {
                 method: 'GET',
@@ -42,7 +41,7 @@
             },
             setCompResolutionDays: function (data){
                 console.log(data);
-                return api.setCompResolutionDays({action: 'saveComplaintPolicyResolutionTime' + data.complaintResDays}, {}).$promise
+                return api.setCompResolutionDays(data).$promise
             },
             getComplaintPolicyResolutionTime: function (){
                 return api.getComplaintPolicyResolutionTime().$promise
