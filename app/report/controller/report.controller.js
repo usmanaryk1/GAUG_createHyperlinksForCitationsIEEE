@@ -1,9 +1,10 @@
 (function () {
-    function ReportCtrl(Page, $rootScope) {
+    function ReportCtrl(Page, $rootScope, EmployeeDAO, PatientDAO) {
         var ctrl = this;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.reportTypeList = ontimetest.reportTypes;
+        ctrl.reportSubTypeList = ontimetest.reportSubTypes;
         ctrl.searchParams = {};
         ctrl.maxDate = angular.copy($rootScope.todayDate);
         Page.setTitle("Report");
@@ -11,7 +12,7 @@
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
-                if (ctrl.reportType == 'workedhours') {
+                if (ctrl.reportType == 'workedhours' || ctrl.reportType == 'timesheet') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
@@ -19,11 +20,16 @@
                     }
                 }
                 if (valid) {
+                    $rootScope.maskLoading();
                     var path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontimetest.company_code;
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }
+                    if (ctrl.searchParams.type) {
+                        path = path + "&type=" + ctrl.searchParams.type + "&id=" + ctrl.searchParams.id;
+                    }
                     window.location.href = path;
+                    $rootScope.unmaskLoading();
                 }
             }
         };
@@ -55,6 +61,18 @@
                 }
             }
         };
+        ctrl.retrieveAllEmployees = function () {
+            EmployeeDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                ctrl.employeeList = res;
+            });
+        };
+        ctrl.retrieveAllPatients = function () {
+            PatientDAO.retrieveAll({subAction: 'active', sortBy: 'lName', order: 'asc'}).then(function (res) {
+                ctrl.patientList = res;
+            });
+        };
+        ctrl.retrieveAllEmployees();
+        ctrl.retrieveAllPatients();
     }
-    angular.module('xenon.controllers').controller('ReportCtrl', ["Page", "$rootScope", ReportCtrl]);
+    angular.module('xenon.controllers').controller('ReportCtrl', ["Page", "$rootScope", "EmployeeDAO", "PatientDAO", ReportCtrl]);
 })();

@@ -766,7 +766,7 @@
                                 authObj.id = $scope.addPatient.currentAuthorizationDocument.id;
                                 authObj.dateInserted = $scope.addPatient.currentAuthorizationDocument.dateInserted;
                             }
-                            $scope.addPatient.authorizationDocuments[$scope.currentAuthorizationDocumentIndex] = authObj;
+                            $scope.addPatient.authorizationDocuments[$scope.addPatient.currentAuthorizationDocumentIndex] = authObj;
                         } else {
                             $scope.addPatient.authorizationDocuments.push(authObj);
                         }
@@ -796,20 +796,14 @@
                         });
                     }
                     if ($scope.addPatient.currentAuthorizationDocument) {
-                        for (var i = 0; i < $scope.addPatient.authorizationDocuments.length; i++) {
-                            if ($scope.addPatient.authorizationDocuments[i].companyCareTypeId === $scope.addPatient.currentAuthorizationDocument.companyCareTypeId) {
-                                $scope.currentAuthorizationDocumentIndex = i;
-                                $scope.viewEditFileMode = true;
-                                $scope.careObj.careType = addPatient.careTypeIdMap[$scope.addPatient.authorizationDocuments[i].careType];
-                                $scope.careObj.authorizedHours = $scope.addPatient.authorizationDocuments[i].authorizedHours;
-                                $scope.careObj.expiryDate = $scope.addPatient.authorizationDocuments[i].expiryDate;
-                                $scope.careObj.previousExpiryDate = $scope.addPatient.authorizationDocuments[i].previousExpiryDate;
-                                $scope.careObj.filePath = $scope.addPatient.authorizationDocuments[i].filePath;
-                                $scope.fileName = $scope.addPatient.authorizationDocuments[i].name;
-                                $scope.fileExt = $scope.addPatient.authorizationDocuments[i].filePath.substring($scope.addPatient.authorizationDocuments[i].filePath.lastIndexOf(".") + 1);
-                                break;
-                            }
-                        }
+                        $scope.viewEditFileMode = true;
+                        $scope.careObj.careType = addPatient.careTypeIdMap[$scope.addPatient.currentAuthorizationDocument.careType];
+                        $scope.careObj.authorizedHours = $scope.addPatient.currentAuthorizationDocument.authorizedHours;
+                        $scope.careObj.expiryDate = $scope.addPatient.currentAuthorizationDocument.expiryDate;
+                        $scope.careObj.previousExpiryDate = $scope.addPatient.currentAuthorizationDocument.previousExpiryDate;
+                        $scope.careObj.filePath = $scope.addPatient.currentAuthorizationDocument.filePath;
+                        $scope.fileName = $scope.addPatient.currentAuthorizationDocument.name;
+                        $scope.fileExt = $scope.addPatient.currentAuthorizationDocument.filePath.substring($scope.addPatient.currentAuthorizationDocument.filePath.lastIndexOf(".") + 1);
                     }
                     $scope.close = function () {
                         $modalInstance.dismiss('cancel');
@@ -818,8 +812,10 @@
             });
         };
         ctrl.createOrEditAuthorizationDocument = function (editMode) {
-            if (editMode !== true)
+            if (editMode !== true) {
                 ctrl.currentAuthorizationDocument = undefined;
+                ctrl.currentAuthorizationDocumentIndex = undefined;
+            }
             ctrl.openAuthorizationDocumentModal('authorization-doc-modal', 'md', 'static');
         };
         ctrl.removeAuthorizationDocument = function (index) {
@@ -829,6 +825,7 @@
         ctrl.editAuthorizationDocument = function (index) {
             if (ctrl.authorizationDocuments && ctrl.authorizationDocuments[index]) {
                 ctrl.currentAuthorizationDocument = ctrl.authorizationDocuments[index];
+                ctrl.currentAuthorizationDocumentIndex = index;
                 ctrl.createOrEditAuthorizationDocument(true);
             }
         };

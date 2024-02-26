@@ -189,7 +189,9 @@
                                         <td class="hidden-xs text-center"> {{$index + 1}} </td>
                                         <td align="center"> {{addEmployee.typeMap[attachment.type]}} </td>
                                         <td align="center"> 
-                                            <a ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}"> {{attachment.name}} </a>
+                                            <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}">
+                                                {{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}
+                                            </a>
                                         </td>
                                         <td align="center"> 
                                             <span ng-if="attachment.type == 't' || attachment.type == 'b'">{{addEmployee.tbTestingMap[attachment.value]}}</span>
@@ -405,13 +407,13 @@
     <div class="col-sm-8 add-padding-modal">
     <div flow-init="uploadPopup.uploadFile" flow-file-added="uploadPopup.fileAdded($file, $flow)" flow-file-success="uploadPopup.fileUploaded($message,$file,$flow)" flow-files-submitted="uploadPopup.fileSelected($file,$flow)" flow-file-error="uploadPopup.fileError( $file, $message, $flow )">
     <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-12">
     <button type='button' class='btn btn-single gray_bt' id="upload" ng-model="uploadPopup.data.filePath" style="margin-bottom:0px !important" flow-btn name="upload"  ng-disabled="uploadPopup.disableUploadButton">Choose File</button>
     </div>
-    <div class="col-sm-9">
+    <div class="col-sm-12">
     <label class="control-label">
-    <a ng-show="uploadPopup.data.filePath" style="color: blue;text-decoration: underline" ng-href="{{uploadPopup.baseUrl}}file/download/{{uploadPopup.companyCode}}/a/{{uploadPopup.data.filePath}}">
-    {{uploadPopup.data.name}}
+    <a ng-show="uploadPopup.data.filePath" style="color: blue;text-decoration: underline" ng-href="{{uploadPopup.baseUrl}}file/download/{{uploadPopup.companyCode}}/a/{{uploadPopup.data.filePath}}?userFileName={{uploadPopup.data.name}}">
+    {{uploadPopup.data.name}}.{{uploadPopup.data.filePath.substring(uploadPopup.data.filePath.lastIndexOf('.') + 1)}}
     </a>
     </label>
     </div>
