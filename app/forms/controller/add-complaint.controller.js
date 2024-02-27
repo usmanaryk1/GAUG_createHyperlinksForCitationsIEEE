@@ -1,5 +1,5 @@
 (function () {
-    function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, FormsDAO, Page) {
+    function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, FormsDAO, $window, Page) {
         var ctrl = this;
         Page.setTitle("Add Complaint");
         ctrl.currentUser = $rootScope.currentUser
@@ -37,7 +37,7 @@
         // ctrl.signatureInitCall()
         ctrl.getListsCall()
 
-        ctrl.saveComplaintForm = function (action){
+        ctrl.saveComplaintForm = function (action) {
             console.log(action);
         }
 
@@ -46,26 +46,36 @@
             $rootScope.isFormDirty = false;
             ctrl.clearSignatureCall()
 
-            if(ctrl.params?.id){
-                let complaintData = JSON.parse(localStorage.getItem('complaint'));
-                ctrl.complaint = {
-                    complaintDate: ctrl.currentDateWithFormat,
-                    complainantName: complaintData.complainantName,
-                    complainantContactType: complaintData.complainantContactType == 1 ? 'PHONE': complaintData.complainantContactType == 2? 'EMAIL': 'ADDRESS',
-                    complainantContact: complaintData.complainantContact,
-                    complainantRelationshipType: "PATIENT",
-                    complainantRelationship: "",
-                    complaintMethod: "PHONE",
-                    complaintType: "",
-                    complaintDescription: "",
-                    complaintFollowUp: "true",
-                    // complaintNotificationMethod: 'PHONE',
-                    complaintResolution: "",
-                    complaintSatisfied: "",
-                    dateProposedResolution: '',
-                    signature: "",
-                };
-            }else{
+            if (ctrl.params?.id) {
+                let complaintData = {};
+                FormsDAO.getComplaintById({ id: ctrl.params?.id }).then(res => {
+                    complaintData = res;
+                    console.log(res);
+                    console.log(complaintData);
+                    ctrl.complaint = {
+                        complaintDate: ctrl.currentDateWithFormat,
+                        complainantName: complaintData.complainantName,
+                        complainantContactType: complaintData.complainantContactType == 1 ? 'PHONE' : complaintData.complainantContactType == 2 ? 'EMAIL' : 'ADDRESS',
+                        complaintMethod: complaintData.complaintMethod == 1 ? 'PHONE' : complaintData.complaintMethod == 2 ? 'WRITING' : complaintData.complaintMethod == 3 ? 'EMAIL' : 'INPERSON',
+                        complainantRelationshipType: complaintData.complainantRelationshipType == 1 ? 'PATIENT' : complaintData.complainantRelationshipType == 2 ? 'EMPLOYEE' : complaintData.complainantRelationshipType == 3 ? 'WORKSITE' : 'VENDOR',
+                        complainantRelationship: complaintData.complainantRelationship,
+                        complaintType: complaintData.complaintType,
+                        complaintDescription: complaintData.complaintDescription,
+                        complaintFollowUp: complaintData.complaintFollowUp.toString(),
+                        // complaintNotificationMethod: 'PHONE',
+                        complaintResolution: "",
+                        complaintSatisfied: "",
+                        dateProposedResolution: '',
+                        signature: "",
+                    };
+                    ctrl.getContactValue(complaintData.complainantContactType, complaintData.complainantContact);
+                    // ctrl.getRelationValue(complaintData.complaintRelationshipType, complaintData.complainantRelationship)
+                }).catch(err => {
+                    toastr.error("Couldn't get complaint");
+                    $window.history.back();
+                })
+
+            } else {
                 ctrl.complaint = {
                     complaintDate: ctrl.currentDateWithFormat,
                     complainantName: "",
@@ -83,28 +93,30 @@
                     dateProposedResolution: '',
                     signature: "",
                 };
+                setupWatch()
+
             }
 
-           
 
-            setupWatch()
+
         }
 
         ctrl.resetForm = function () {
             ctrl.generateFormCall()
         }
 
-        function clearSignature  () {
+        function clearSignature() {
             ctrl.complaint.signature = ''
             ctrl.signatureUrl = ''
         }
 
         ctrl.saveForm = function (action) {
+
             if ($('#add_complaint_form')[0].checkValidity()) {
                 var complaintToSave = angular.copy(ctrl.complaint);
 
                 complaintToSave.complainantRelationship = complaintToSave.complainantRelationship.toString()
-                complaintToSave.signature = complaintToSave.signature? complaintToSave.signature.substring(ctrl.signature.indexOf(",") + 1): '';
+                complaintToSave.signature = complaintToSave.signature ? complaintToSave.signature.substring(ctrl.signature.indexOf(",") + 1) : '';
                 complaintToSave.complaintFollowUp = JSON.parse(complaintToSave.complaintFollowUp)
                 console.log(complaintToSave);
 
@@ -125,25 +137,45 @@
                 }
 
                 $rootScope.maskLoading();
-                FormsDAO.addComplaint(complaintToSave).then((res) => {
-                    // ctrl.generateFormCall();
-                    $rootScope.isFormDirty = false;
-                    toastr.success("Complaint saved successfully")
-                    if ($.fn.dirtyForms) {
-                        $('form').dirtyForms('setClean');
-                        $('.dirty').removeClass('dirty');
-                    }
+                if (ctrl.params?.id) {
+                    complaintToSave.id = ctrl.params?.id
+                    FormsDAO.updateComplaint(complaintToSave).then((res) => {
+                        // ctrl.generateFormCall();
+                        $rootScope.isFormDirty = false;
+                        toastr.success("Complaint updated successfully")
+                        if ($.fn.dirtyForms) {
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                        }
 
-                    $state.go('app.complaints', { status: 'open' });
-                }).catch((err) => {
-                    toastr.error("Unable to save the Complaint.");
-                }).then(function () {
-                    $rootScope.unmaskLoading();
-                });
+                        $state.go('app.complaints', { status: 'open' });
+                    }).catch((err) => {
+                        toastr.error("Unable to update the Complaint.");
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    })
+                } else {
+                    FormsDAO.addComplaint(complaintToSave).then((res) => {
+                        // ctrl.generateFormCall();
+                        $rootScope.isFormDirty = false;
+                        toastr.success("Complaint saved successfully")
+                        if ($.fn.dirtyForms) {
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                        }
+
+                        $state.go('app.complaints', { status: 'open' });
+                    }).catch((err) => {
+                        toastr.error("Unable to save the Complaint.");
+                    }).then(function () {
+                        $rootScope.unmaskLoading();
+                    });
+                }
+
             }
         }
 
-        function deleteContactTypes(obj){
+        function deleteContactTypes(obj) {
             delete obj.complainantContactPhone
             delete obj.complainantContactEmail
             delete obj.complainantContactAddress
@@ -277,6 +309,26 @@
             return $filter('date')(date, 'MM/dd/yyyy')
         }
 
+        ctrl.getContactValue = function (type, value) {
+            console.log(type, value);
+            if (type == 1)
+                ctrl.complaint.complainantContactPhone = value
+            else if (type == 2)
+                ctrl.complaint.complainantContactEmail = value
+            else if (type == 3)
+                ctrl.complaint.complainantContactAddress = value
+        }
+
+        ctrl.getRelationValue = function (type, value) {
+            console.log(type, value);
+            if (type == 1)
+                ctrl.complaint.complainantContactPhone = value
+            else if (type == 2)
+                ctrl.complaint.complainantContactEmail = value
+            else if (type == 3)
+                ctrl.complaint.complainantContactAddress = value
+        }
+
         /*================   SIGNATURE CODE   ===================*/
         // function signatureInit() {
         //     const canvas = document.querySelector('#signature-pad');
@@ -365,5 +417,5 @@
         //     canvas.addEventListener('pointermove', handlePointerMove, { passive: true })
         // }
     }
-    angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO", "FormsDAO", "Page", AddComplaintController]);
+    angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO", "FormsDAO", '$window', "Page", AddComplaintController]);
 })();
