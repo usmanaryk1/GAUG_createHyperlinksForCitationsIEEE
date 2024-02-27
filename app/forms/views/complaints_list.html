@@ -121,39 +121,6 @@
                                                                         class="ed_b"></span></a>
                                                             </div>
                                                         </td>
-                                                        <!-- <td> <div ng-click="viewPatient.openEditModal(patient, 'modal-5')" style="cursor: pointer">
-                                                                <div class="emp_user_hd">
-                                                                    <div class="emp_user_name">{{patient.lName}}, {{patient.fName}} {{patient.middleInitial}}</div>
-                                                                    <p>{{viewPatient.insuranceProviderMap[patient.insuranceProviderId]}}</p>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>{{patient.dateOfBirth|date :dateFormat}}</td>
-                                                        <td>{{patient.phone| tel }}</td>
-
-                                                        <td>
-                                                            <div ng-show="patient.patientAddress">
-                                                                <div>{{patient.patientAddress.address1}}</div>
-                                                                <div ng-if="patient.patientAddress.address2 !== null">{{patient.patientAddress.address2}}</div>
-                                                                {{patient.patientAddress.city}}, {{patient.patientAddress.state}}, {{patient.patientAddress.zipcode}}
-                                                            </div>
-                                                        </td>
-                                                        <td>{{viewPatient.getLanguagesFromCode(patient.languagesSpoken)}}</td>
-                                                        <td>
-                                                            <div class="center">
-                                                                <a class="btn icon-left fa fa-pencil edit_button" href="" ui-sref="app.patient.tab1({id:patient.id})" ng-if="hasAccess('EDIT_PATIENT')" tooltip="Edit"><span class="ed_b"></span></a> 
-                                                                <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_PATIENT')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
-                                                                <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status == 'a' && hasAccess('DISCHARGE_PATIENT')" ng-click="viewPatient.openDischargeModal(patient, 'dischargeModel');" tooltip="Discharge"><span class="ed_b"></span></a>
-                                                                <a class="btn icon-left fa fa-check edit_button" ng-if="patient.status == 'd' && hasAccess('READMIT_PATIENT')" ng-click="viewPatient.openReadmitModal(patient, 'readmitModal');" tooltip="Readmit"><span class="ed_b"></span></a>
-                                                                <a ng-if="patient.authorization" class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}?viewDownload=true" target="_blank" tooltip="Download Authorization"><span class="ed_b"></span></a>
-                                                                <a ng-if="(viewPatient.validAuthorizationDate(patient.authorizationEndDate) || viewPatient.viewType === 'discharged') && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id:patient.id})" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                                <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="patient.newNotification = false;viewPatient.openNotesModal(patient.id)" tooltip="Notes" ng-class="{'has-newNotification':patient.newNotification}"><span class="ed_b"></span></a>
-                                                                <a class="btn icon-left fa fa-user-times delete_button" 
-                                                                   ng-click="viewPatient.openRejectEmployeesModal(patient.id);" 
-                                                                   tooltip="Rejected Caregivers"><span class="ed_b"></span></a>
-                                                                <a class="btn fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id: patient.id})" ng-if="hasAccess('VIEW_PATIENT_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                            </div>
-                                                        </td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>

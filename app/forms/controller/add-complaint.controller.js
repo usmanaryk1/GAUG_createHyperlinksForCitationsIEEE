@@ -7,7 +7,7 @@
         ctrl.fiveDaysAgo = new Date();
         ctrl.currentDateWithFormat = $filter('date')(ctrl.currentDate, 'MM/dd/yyyy');
         ctrl.resolutionNotifDate = $filter('date')(ctrl.fiveDaysAgo.setDate(ctrl.currentDate.getDate() - 5), 'MM/dd/yyyy');
-        ctrl.searchParamsForEmployee = { limit: 10, subActio: 'active', pageNo: 1, sortBy: 'lName', order: 'asc', name: '' };
+        ctrl.searchParamsForEmployee = { limit: 10, subActio: 'active', pageNo: 1, name: '' };
         ctrl.patientList = [];
         ctrl.employeeList = [];
         ctrl.complaintTypes = angular.copy(ontime_data.complaintTypes)
@@ -53,7 +53,7 @@
                     console.log(res);
                     console.log(complaintData);
                     ctrl.complaint = {
-                        complaintDate: ctrl.currentDateWithFormat,
+                        complaintDate: ctrl.getDate(complaintData.complaintDate),
                         complainantName: complaintData.complainantName,
                         complainantContactType: complaintData.complainantContactType == 1 ? 'PHONE' : complaintData.complainantContactType == 2 ? 'EMAIL' : 'ADDRESS',
                         complaintMethod: complaintData.complaintMethod == 1 ? 'PHONE' : complaintData.complaintMethod == 2 ? 'WRITING' : complaintData.complaintMethod == 3 ? 'EMAIL' : 'INPERSON',
