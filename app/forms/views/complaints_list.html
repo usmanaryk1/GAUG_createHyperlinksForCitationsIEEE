@@ -55,7 +55,7 @@
                                                         Entries</span></label>
                                                 <div style="width:70px; float:left;">
                                                     <select class="form-control input-sm"
-                                                        ng-model="compCtrl.searchParams.limit">
+                                                        ng-model="compCtrl.searchParams.pageSize">
                                                         <option value="10">10</option>
                                                         <option value="25">25</option>
                                                         <option value="50">50</option>
@@ -65,7 +65,7 @@
                                             </div>
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
                                                 <input type="search" class="form-control input-sm"
-                                                    ng-model="compCtrl.searchParams.search" placeholder="Search by [Complaint Type, Complainant Name]"
+                                                    ng-model="compCtrl.searchParams.search" placeholder="Search by [Complainant Name, Complaint Description]"
                                                     ng-change="compCtrl.applySearch()">
                                             </div>
 
@@ -86,6 +86,7 @@
                                                         <th>Method</th>
                                                         <th>Contact Info</th>
                                                         <th>Received Date</th>
+                                                        <th>Description</th>
                                                         <th>Received By</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Remaining Days</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Actions</th>
@@ -93,9 +94,9 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr pagination-id="viewComplaintPagination"
-                                                        dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.limit"
+                                                        dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.pageSize"
                                                         total-items="totalRecords"
-                                                        current-page="viewPatient.searchParams.pageNo">
+                                                        current-page="viewPatient.searchParams.pageNumber">
                                                         <td>
                                                             <div ng-click="compCtrl.openEditModal(complaint, 'modal-5')"
                                                                 style="cursor: pointer">
@@ -110,6 +111,7 @@
                                                         <td>{{complaint.complaintMethod == 1 ? 'Phone': complaint.complaintMethod == 2? 'Writing': complaint.complaintMethod == 3? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | date}}</td>
+                                                        <td>{{complaint.complaintDescription}}</td>
                                                         <!-- <td>{{complaint.resolutionDate}}</td> -->
                                                         <td>{{complaint.complaintReceiverName}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'open'"><span>{{compCtrl.getRemainingDaysForClosing(complaint.dateInserted)}}</span></td>
@@ -121,39 +123,6 @@
                                                                         class="ed_b"></span></a>
                                                             </div>
                                                         </td>
-                                                        <!-- <td> <div ng-click="viewPatient.openEditModal(patient, 'modal-5')" style="cursor: pointer">
-                                                                <div class="emp_user_hd">
-                                                                    <div class="emp_user_name">{{patient.lName}}, {{patient.fName}} {{patient.middleInitial}}</div>
-                                                                    <p>{{viewPatient.insuranceProviderMap[patient.insuranceProviderId]}}</p>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>{{patient.dateOfBirth|date :dateFormat}}</td>
-                                                        <td>{{patient.phone| tel }}</td>
-
-                                                        <td>
-                                                            <div ng-show="patient.patientAddress">
-                                                                <div>{{patient.patientAddress.address1}}</div>
-                                                                <div ng-if="patient.patientAddress.address2 !== null">{{patient.patientAddress.address2}}</div>
-                                                                {{patient.patientAddress.city}}, {{patient.patientAddress.state}}, {{patient.patientAddress.zipcode}}
-                                                            </div>
-                                                        </td>
-                                                        <td>{{viewPatient.getLanguagesFromCode(patient.languagesSpoken)}}</td>
-                                                        <td>
-                                                            <div class="center">
-                                                                <a class="btn icon-left fa fa-pencil edit_button" href="" ui-sref="app.patient.tab1({id:patient.id})" ng-if="hasAccess('EDIT_PATIENT')" tooltip="Edit"><span class="ed_b"></span></a> 
-                                                                <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_PATIENT')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
-                                                                <a class="btn icon-left fa fa-ban deactivate_bt" ng-if="patient.status == 'a' && hasAccess('DISCHARGE_PATIENT')" ng-click="viewPatient.openDischargeModal(patient, 'dischargeModel');" tooltip="Discharge"><span class="ed_b"></span></a>
-                                                                <a class="btn icon-left fa fa-check edit_button" ng-if="patient.status == 'd' && hasAccess('READMIT_PATIENT')" ng-click="viewPatient.openReadmitModal(patient, 'readmitModal');" tooltip="Readmit"><span class="ed_b"></span></a>
-                                                                <a ng-if="patient.authorization" class="btn icon-left fa fa-download download_bt"  ng-href="{{viewPatient.baseUrl}}file/download/{{viewPatient.companyCode}}/p/{{patient.authorization}}?viewDownload=true" target="_blank" tooltip="Download Authorization"><span class="ed_b"></span></a>
-                                                                <a ng-if="(viewPatient.validAuthorizationDate(patient.authorizationEndDate) || viewPatient.viewType === 'discharged') && hasAccess('VIEW_PATIENT_SCHEDULE')" class="btn icon-left fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id:patient.id})" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                                <a class="btn icon-left fa fa-book deactivate_bt" href="" ng-click="patient.newNotification = false;viewPatient.openNotesModal(patient.id)" tooltip="Notes" ng-class="{'has-newNotification':patient.newNotification}"><span class="ed_b"></span></a>
-                                                                <a class="btn icon-left fa fa-user-times delete_button" 
-                                                                   ng-click="viewPatient.openRejectEmployeesModal(patient.id);" 
-                                                                   tooltip="Rejected Caregivers"><span class="ed_b"></span></a>
-                                                                <a class="btn fa fa-calendar edit_button" href="" ui-sref="app.patient-calendar({id: patient.id})" ng-if="hasAccess('VIEW_PATIENT_SCHEDULE')" tooltip="Calendar"><span class="ed_b"></span></a> 
-                                                            </div>
-                                                        </td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>

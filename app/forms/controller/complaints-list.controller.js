@@ -3,7 +3,7 @@
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
-        ctrl.searchParams = { limit: 10, pageNo: 1 };
+        ctrl.searchParams = { pageSize: 10, pageNumber: 1, name: '' };
         ctrl.complaintType = $stateParams.status;
         ctrl.complaintsList = [];
         ctrl.pageInitCall = pageInit;
@@ -106,7 +106,7 @@
         }
 
         ctrl.pageChanged = function (pagenumber) {
-            ctrl.searchParams.pageNo = pagenumber;
+            ctrl.searchParams.pageNumber = pagenumber;
             getComplaints();
         };
 
