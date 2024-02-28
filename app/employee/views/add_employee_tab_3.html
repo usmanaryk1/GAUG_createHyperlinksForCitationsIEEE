@@ -179,7 +179,6 @@
                                         <th class="text-center"> No. </th>
                                         <th class="text-center"> Type </th>
                                         <th class="text-center"> File Name </th>
-                                        <th class="text-center"> Value </th>
                                         <th class="text-center"> Expiry Date </th>
                                         <th class="text-center"> <em class="fa fa-cog"> </em></th>
                                     </tr>
@@ -187,14 +186,14 @@
                                 <tbody>
                                     <tr ng-repeat="attachment in addEmployee.employee.employeeAttachments| orderBy:'-expiryDate'">
                                         <td class="hidden-xs text-center"> {{$index + 1}} </td>
-                                        <td align="center"> {{addEmployee.typeMap[attachment.type]}} </td>
+                                        <td align="center"> {{addEmployee.typeMap[attachment.type]}}
+                                            <span ng-if="attachment.type == 'b'"> - {{addEmployee.backgroundCheckMap[attachment.value]}}</span>
+                                            <span ng-if="attachment.type == 't'"> - {{addEmployee.tbTestingMap[attachment.value]}}</span>
+                                        </td>
                                         <td align="center"> 
                                             <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}">
                                                 {{attachment.name}}.{{attachment.filePath.substring(attachment.filePath.lastIndexOf('.') + 1)}}
                                             </a>
-                                        </td>
-                                        <td align="center"> 
-                                            <span ng-if="attachment.type == 't' || attachment.type == 'b'">{{addEmployee.tbTestingMap[attachment.value]}}</span>
                                         </td>
                                         <td align="center"> {{attachment.expiryDate}} </td>
                                         <td align="center">
@@ -303,144 +302,144 @@
     });
 </script>
 <script type="text/ng-template" id="upload-modal">
-    <form class="validate form-horizontal" name="uploadpopup" id="uploadpopup" >
+<form class="validate form-horizontal" name="uploadpopup" id="uploadpopup" >
     <div class="modal-header">
-    <button type="button" class="close" ng-click="uploadPopup.closePopup();" aria-hidden="true">&times;</button>
-    <h4 class="modal-title">Add Attachment</h4>
+        <button type="button" class="close" ng-click="uploadPopup.closePopup();" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Add Attachment</h4>
     </div>
 
     <div class="modal-body">
 
-    <div class="form-group">
-    <label class="col-sm-4 control-label add-padding-modal" for="password">
-    Type
-    </label>
-    <div class="col-sm-8 add-padding-modal">
-    <select class="form-control" style="margin-top:15px;" name ="type" id="type" ng-model="uploadPopup.data.type" ng-options='type.id as type.label for type in uploadPopup.typeList' data-message-required="Please select type." data-validate="required" ng-change="uploadPopup.setUploadFile()">
-    <option value="" selected hidden />
-    </select>
-    </div>
-    </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label add-padding-modal" for="password">
+                Type
+            </label>
+            <div class="col-sm-8 add-padding-modal">
+                <select class="form-control" style="margin-top:15px;" name ="type" id="type" ng-model="uploadPopup.data.type" ng-options='type.id as type.label for type in uploadPopup.typeList' data-message-required="Please select type." data-validate="required" ng-change="uploadPopup.setUploadFile()">
+                    <option value="" selected hidden />
+                </select>
+            </div>
+        </div>
 
-    <div class="form-group-separator"></div>
-    <div class="form-group">
-    <label class="col-sm-4 control-label add-padding-modal" for="password">
-    Expiry Date
-    </label>
-    <div class="col-sm-8 add-padding-modal">
-    <div class="input-group" style="z-index:1060">
-    <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-model="uploadPopup.data.expiryDate" data-validate="required,date"  data-message-required="Please select Expiry Date.">
-    <div class="input-group-addon">
-    <a href=""><i class="linecons-calendar"></i></a>
-    </div>
-    </div>
-    </div>
-    </div>
+        <div class="form-group-separator"></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label add-padding-modal" for="password">
+                Expiry Date
+            </label>
+            <div class="col-sm-8 add-padding-modal">
+                <div class="input-group" style="z-index:1060">
+                    <input type="text" class="form-control datepicker" name="fromDate2" data-format="mm/dd/yyyy" ng-model="uploadPopup.data.expiryDate" data-validate="required,date"  data-message-required="Please select Expiry Date.">
+                    <div class="input-group-addon">
+                        <a href=""><i class="linecons-calendar"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type=='t'"></div>
-    <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type=='t'">
-    <label class="col-sm-4 control-label add-padding-modal" for="password">
-    Tb Testing
-    </label>
-    <div class="col-sm-8 add-padding-modal">
-    <div class="input-group" style="z-index:1060">
-    <label class="cbr-inline">
-    <input value="P" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
-    PPD
-    </label>
-    <label class="cbr-inline">
-    <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
-    CXR
-    </label>
-    <label class="cbr-inline">
-    <input name="TBTesting" value="S" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
-    Screening
-    </label>
-    <div>
-    <div ng-show="uploadPopup.errorMsg != null && uploadPopup.errorMsg != ''">
-    <span class="red">{{uploadPopup.errorMsg}}</span>
-    </div> 
-    </div>
-    </div>
-    </div>
-    </div>
+        <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type == 't'"></div>
+        <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type == 't'">
+            <label class="col-sm-4 control-label add-padding-modal" for="password">
+                Tb Testing
+            </label>
+            <div class="col-sm-8 add-padding-modal">
+                <div class="input-group" style="z-index:1060">
+                    <label class="cbr-inline">
+                        <input value="P" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        PPD
+                    </label>
+                    <label class="cbr-inline">
+                        <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        CXR
+                    </label>
+                    <label class="cbr-inline">
+                        <input name="TBTesting" value="S" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        Screening
+                    </label>
+                    <div>
+                        <div ng-show="uploadPopup.errorMsg != null && uploadPopup.errorMsg != ''">
+                            <span class="red">{{uploadPopup.errorMsg}}</span>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type=='b'"></div>
-    <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type=='b'">
-    <label class="col-sm-4 control-label add-padding-modal" for="password">
-    Background Check
-    </label>
-    <div class="col-sm-8 add-padding-modal">
-    <div class="input-group" style="z-index:1060">
-    <label class="cbr-inline">
-    <input value="P" name="BackgroundCheck" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
-    Passed
-    </label>
-    <label class="cbr-inline">
-    <input name="BackgroundCheck" value="F" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
-    Failed
-    </label>
-    <div>
-    <div ng-show="uploadPopup.errorMsg != null && uploadPopup.errorMsg != ''">
-    <span class="red">{{uploadPopup.errorMsg}}</span>
-    </div> 
-    </div>
-    </div>
-    </div>
-
-    </div>
-    <div class="form-group-separator" ng-show="uploadPopup.data.type"></div>
-    <div class="form-group" ng-show="uploadPopup.data.type">
-    <label class="col-sm-4 control-label add-padding-modal" for="password">
-    Document Name
-    </label>
-    <div class="col-sm-8 add-padding-modal">
-    <input type="text" class="form-control" name="name" ng-model="uploadPopup.data.name">
-    </div>
-    </div>
-
-    <div class="form-group-separator" ng-if="uploadPopup.data.type"></div>
-    <div class="form-group" ng-if="uploadPopup.data.type">
-    <label class="col-sm-4 control-label add-padding-modal">
-    Upload
-    </label>
-    <div class="col-sm-8 add-padding-modal">
-    <div flow-init="uploadPopup.uploadFile" flow-file-added="uploadPopup.fileAdded($file, $flow)" flow-file-success="uploadPopup.fileUploaded($message,$file,$flow)" flow-files-submitted="uploadPopup.fileSelected($file,$flow)" flow-file-error="uploadPopup.fileError( $file, $message, $flow )">
-    <div class="row">
-    <div class="col-sm-12">
-    <button type='button' class='btn btn-single gray_bt' id="upload" ng-model="uploadPopup.data.filePath" style="margin-bottom:0px !important" flow-btn name="upload"  ng-disabled="uploadPopup.disableUploadButton">Choose File</button>
-    </div>
-    <div class="col-sm-12">
-    <label class="control-label">
-    <a ng-show="uploadPopup.data.filePath" style="color: blue;text-decoration: underline" ng-href="{{uploadPopup.baseUrl}}file/download/{{uploadPopup.companyCode}}/a/{{uploadPopup.data.filePath}}?userFileName={{uploadPopup.data.name}}">
-    {{uploadPopup.data.name}}.{{uploadPopup.data.filePath.substring(uploadPopup.data.filePath.lastIndexOf('.') + 1)}}
-    </a>
-    </label>
-    </div>
-    </div>
-    <div>
-    <div ng-show="uploadPopup.fileObj.errorMsg != null && uploadPopup.fileObj.errorMsg != ''">
-    <span class="red">{{uploadPopup.fileObj.errorMsg}}</span>
-    </div> 
-    </div>
-    <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
-    <div ng-repeat="file in transfers">
-    <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && uploadPopup.showfileProgress">
-    <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
-    <!--{{file.progress() * 100 | number : 0}} %-->
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
+        <div class="form-group-separator" ng-show="uploadPopup.data.type && uploadPopup.data.type == 'b'"></div>
+        <div class="form-group" ng-show="uploadPopup.data.type && uploadPopup.data.type == 'b'">
+            <label class="col-sm-4 control-label add-padding-modal" for="password">
+                Background Check
+            </label>
+            <div class="col-sm-8 add-padding-modal">
+                <div class="input-group" style="z-index:1060">
+                    <label class="cbr-inline">
+                        <input value="P" name="BackgroundCheck" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        Passed
+                    </label>
+                    <label class="cbr-inline">
+                        <input name="BackgroundCheck" value="F" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        Failed
+                    </label>
+                    <div>
+                        <div ng-show="uploadPopup.errorMsg != null && uploadPopup.errorMsg != ''">
+                            <span class="red">{{uploadPopup.errorMsg}}</span>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group-separator" ng-if="uploadPopup.data.type"></div>
+        <div class="form-group" ng-if="uploadPopup.data.type">
+            <label class="col-sm-4 control-label add-padding-modal">
+                Upload
+            </label>
+            <div class="col-sm-8 add-padding-modal">
+                <div flow-init="uploadPopup.uploadFile" flow-file-added="uploadPopup.fileAdded($file, $flow)" flow-file-success="uploadPopup.fileUploaded($message,$file,$flow)" flow-files-submitted="uploadPopup.fileSelected($file,$flow)" flow-file-error="uploadPopup.fileError( $file, $message, $flow )">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type='button' class='btn btn-single gray_bt' id="upload" ng-model="uploadPopup.data.filePath" style="margin-bottom:0px !important" flow-btn name="upload"  ng-disabled="uploadPopup.disableUploadButton">Choose File</button>
+                        </div>
+                        <div class="col-sm-12" ng-show="uploadPopup.data.filePath" >
+                            <label class="control-label">
+                                <a style="color: blue;text-decoration: underline" ng-href="{{uploadPopup.baseUrl}}file/download/{{uploadPopup.companyCode}}/a/{{uploadPopup.data.filePath}}?userFileName={{uploadPopup.data.name}}">
+                                    {{uploadPopup.data.name}}.{{uploadPopup.data.filePath.substring(uploadPopup.data.filePath.lastIndexOf('.') + 1)}}
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div ng-show="uploadPopup.fileObj.errorMsg != null && uploadPopup.fileObj.errorMsg != ''">
+                            <span class="red">{{uploadPopup.fileObj.errorMsg}}</span>
+                        </div> 
+                    </div>
+                    <div flow-transfers class="form-control-static" ng-show="transfers != null && transfers.length > 0 && transfers[0].progress() < 1">
+                        <div ng-repeat="file in transfers">
+                            <div id="docFileprogress" class="progress" ng-show="file.progress() < 1 && uploadPopup.showfileProgress">
+                                <div  class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: {{file.progress() * 100}}%;">
+                                    <!--{{file.progress() * 100 | number : 0}} %-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group-separator" ng-show="uploadPopup.data.type"></div>
+        <div class="form-group" ng-show="uploadPopup.data.type">
+            <label class="col-sm-4 control-label add-padding-modal" for="password">
+                Document Name
+            </label>
+            <div class="col-sm-8 add-padding-modal">
+                <input type="text" class="form-control" name="name" ng-model="uploadPopup.data.name">
+            </div>
+        </div>
+        
     </div>      
-    </div>
 
     <div class="modal-footer">
-    <button type="button" class="btn btn-white" ng-click="uploadPopup.closePopup();">Close</button>
-    <button type="submit" class="btn btn-success" ng-click="uploadPopup.save();">Save changes</button>
+        <button type="button" class="btn btn-white" ng-click="uploadPopup.closePopup();">Close</button>
+        <button type="submit" class="btn btn-success" ng-click="uploadPopup.save();">Save changes</button>
     </div>
-    </form>
+</form>
 </script>
