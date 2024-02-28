@@ -162,6 +162,8 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     }
                 }
             });
+    var includedStatesForDirtyCheck = ['app.patient.tab1', 'app.patient.tab2', 'app.patient.tab3', 'app.patient.tab4', 'app.patient.tab5',
+        'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3'];
     $rootScope.$on('$stateChangeSuccess',
             function (event, currentState) {
                 setTimeout(function () {
@@ -169,7 +171,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                         //https://github.com/snikch/jquery.dirtyforms
                         $('form:dirty').dirtyForms('setClean');
                         //Skip check in login page
-                        if (currentState.url !== '/login') {
+                        if (includedStatesForDirtyCheck.indexOf(currentState.name) > -1) {
                             $('form').dirtyForms();
                         }
                     }
