@@ -55,7 +55,7 @@
                                                         Entries</span></label>
                                                 <div style="width:70px; float:left;">
                                                     <select class="form-control input-sm"
-                                                        ng-model="compCtrl.searchParams.limit">
+                                                        ng-model="compCtrl.searchParams.pageSize">
                                                         <option value="10">10</option>
                                                         <option value="25">25</option>
                                                         <option value="50">50</option>
@@ -65,8 +65,8 @@
                                             </div>
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
                                                 <input type="search" class="form-control input-sm"
-                                                    ng-model="viewPatient.searchParams.name" placeholder="Search by [Complaint Type, Complaint Method, Contact Type]"
-                                                    ng-change="viewPatient.applySearch()">
+                                                    ng-model="compCtrl.searchParams.search" placeholder="Search by [Complainant Name, Complaint Description]"
+                                                    ng-change="compCtrl.applySearch()">
                                             </div>
 
                                         </div>
@@ -93,9 +93,9 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr pagination-id="viewComplaintPagination"
-                                                        dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.limit"
+                                                        dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.pageSize"
                                                         total-items="totalRecords"
-                                                        current-page="viewPatient.searchParams.pageNo">
+                                                        current-page="viewPatient.searchParams.pageNumber">
                                                         <td>
                                                             <div ng-click="compCtrl.openEditModal(complaint, 'modal-5')"
                                                                 style="cursor: pointer">
@@ -119,6 +119,8 @@
                                                                     class="btn icon-left fa fa-pencil edit_button"
                                                                     href="" tooltip="Edit"><span
                                                                         class="ed_b"></span></a>
+                                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('VIEW_ALL_COMPLAINTS')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
+
                                                             </div>
                                                         </td>
                                                     </tr>

@@ -5,6 +5,7 @@
         var ctrl = this;
         UserDAO.getUserFeatures().then(function (featureList) {
             ctrl.featureList = angular.copy(featureList);
+            console.log(ctrl.featureList);
         });
 
         function initialize() {

@@ -30,7 +30,7 @@ angular.module('xenon.services', []).
 
                     return this;
                 },
-                addItem: function (title, link, feature, icon)
+                addItem: function (title, link, feature, icon, notification)
                 {
                     var parent = this,
                             item = angular.extend(angular.copy(menuItemObj), {
@@ -38,7 +38,8 @@ angular.module('xenon.services', []).
                                 title: title,
                                 link: link,
                                 icon: icon,
-                                feature: feature
+                                feature: feature,
+                                notification: notification
                             });
 
                     if (item.link)
@@ -58,14 +59,15 @@ angular.module('xenon.services', []).
                 }
             };
 
-            this.addItem = function (title, link, icon, feature)
+            this.addItem = function (title, link, icon, feature, notification)
             {
                 var item = angular.extend(angular.copy(menuItemObj), {
                     title: title,
                     link: link,
                     state: this.toStatePath(link),
                     icon: icon,
-                    feature: feature
+                    feature: feature,
+                    notification: notification
                 });
 
                 this.menuItems.push(item);
@@ -91,7 +93,7 @@ angular.module('xenon.services', []).
                 var payroll = this.addItem('Payroll', '/app', 'linecons-wallet', 'VIEW_PAYROLL_HISTORY,VIEW_PAYROLL_SESSION,VIEW_PAYROLL_SETTINGS');
                 var calendar = this.addItem('Schedule', '/app', 'linecons-cog', 
                 'VIEW_COORDINATOR_SCHEDULE,VIEW_EMPLOYEE_SCHEDULE,VIEW_PATIENT_SCHEDULE,WORKSITE_SCHEDULE,SEARCH_EMPLOYEE,VIEW_DISPATCH');
-                var forms = this.addItem('Forms', '/app', 'linecons-database');
+                var forms = this.addItem('Forms', '/app', 'linecons-database', 'VIEW_FORMS');
                 var report = this.addItem('Reports', '/app/report', 'fa-eye', 'VIEW_REPORTS');
                 // Subitems of Dashboard
                 // dashboard.addItem('Dashboard 1', 	'-/variant-1'); // "-/" will append parents link
@@ -147,8 +149,8 @@ angular.module('xenon.services', []).
                 calendar.addItem('View Dispatch', './dispatch-list/active', 'VIEW_DISPATCH');
 
                 // Subitems of Forms
-                forms.addItem('Complaints', './complaints/open', 'VIEW_DISPATCH');
-                forms.addItem('Forms Setting', './forms-setting')
+                forms.addItem('Complaints', './complaints/open', 'CREATE_COMPLAINT','', 'VIEW_ALL_COMPLAINTS');
+                forms.addItem('Forms Setting', './forms-setting', 'VIEW_ALL_COMPLAINTS')
 
                 return this;
             };

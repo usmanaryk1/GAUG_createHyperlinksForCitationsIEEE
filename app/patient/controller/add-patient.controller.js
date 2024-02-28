@@ -61,6 +61,7 @@
         });
         PatientDAO.retrieveEnumType({'type': 'priorityCodes'}).then(function (res) {
             ctrl.priorityCodes = res;
+            console.log(ctrl.priorityCodes);
         }).catch(function () {
             toastr.error("Failed to retrieve priority codes.");
         });

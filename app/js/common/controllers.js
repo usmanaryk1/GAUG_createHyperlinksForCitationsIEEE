@@ -33,7 +33,7 @@ angular.module('xenon.controllers', []).
             }
 
             $rootScope.notificationsArr = [
-                {id: 'VIEW_DISPATCH', unread: 10}
+                {id: 'VIEW_ALL_COMPLAINTS', unread: 10}
             ]
             var userName = getCookie("un");
             if (userName != null) {
@@ -53,7 +53,18 @@ angular.module('xenon.controllers', []).
                 }
             }
 
+            $rootScope.getNotificationNumber = function(key){
+                if($rootScope.notificationsArr != null){
+                    let val = $rootScope.notificationsArr.find(item => item.id === key);
+                    if(val !== undefined){
+                        return val.unread
+                    }
+                    return ''
+                }
+            }
+
             $rootScope.hasAccess = function (key) {
+                // console.log("Testing");
                 if (key != null) {
                     var keys = key.split(",");
                     if ($rootScope.currentUser.allowedFeature != null) {

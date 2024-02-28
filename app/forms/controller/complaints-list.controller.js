@@ -1,9 +1,9 @@
 (function () {
-    function ComplaintsController($state, $rootScope, $stateParams, $modal, FormsDAO, Page) {
+    function ComplaintsController($state, $rootScope, $stateParams, $modal, FormsDAO, $debounce, Page) {
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
-        ctrl.searchParams = { limit: 10, pageNo: 1 };
+        ctrl.searchParams = { pageSize: 10, pageNumber: 1, name: '' };
         ctrl.complaintType = $stateParams.status;
         ctrl.complaintsList = [];
         ctrl.pageInitCall = pageInit;
@@ -43,19 +43,6 @@
         };
 
 
-
-        // ctrl.applySortingClass = function (sortBy) {
-        //     if (ctrl.searchParams.sortBy !== sortBy) {
-        //         return 'sorting';
-        //     } else {
-        //         if (ctrl.searchParams.order === "desc") {
-        //             return 'sorting_desc';
-        //         } else {
-        //             return 'sorting_asc';
-        //         }
-        //     }
-        // };
-
         ctrl.setComplaint = function(complaint){
             localStorage.setItem('complaint', JSON.stringify(complaint));
         }
@@ -87,9 +74,9 @@
         }
 
         function pageInit() {
-            let not = $rootScope.notificationsArr.find(item => item.id == 'VIEW_DISPATCH');
-            let index = $rootScope.notificationsArr.indexOf(not);
-            $rootScope.notificationsArr.splice(index, 1);
+            // let not = $rootScope.notificationsArr.find(item => item.id == 'CREATE_COMPLAINT');
+            // let index = $rootScope.notificationsArr.indexOf(not);
+            // $rootScope.notificationsArr.splice(index, 1);
             ctrl.getComplaintCloseDaysCall()
             ctrl.getComplaintsCall()
         }
@@ -98,6 +85,11 @@
             return ctrl.remainingDaysToCloseCall(openDate, ctrl.complaintResDays, ctrl.currentDate);
         }
 
+        ctrl.applySearch = function () {
+            ctrl.searchParams.pageNo = 1;
+            $debounce(getComplaints, 500);
+        };
+
         function getComplaints() {
             if(ctrl.complaintType == 'open'){
                 ctrl.searchParams.complaintFollowUp = true;
@@ -105,7 +97,6 @@
                 ctrl.searchParams.complaintFollowUp = false;
             }
             FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
-                console.log(res);
                 ctrl.complaintsList = res;
                 // toastr.success("Complaints retrieved successfully")
             }).catch((err) => {
@@ -115,10 +106,10 @@
         }
 
         ctrl.pageChanged = function (pagenumber) {
-            ctrl.searchParams.pageNo = pagenumber;
-            ctrl.getComplaintsCall();
+            ctrl.searchParams.pageNumber = pagenumber;
+            getComplaints();
         };
 
     }
-    angular.module('xenon.controllers').controller('ComplaintsController', ["$state", "$rootScope", "$stateParams", "$modal", "FormsDAO", "Page", ComplaintsController]);
+    angular.module('xenon.controllers').controller('ComplaintsController', ["$state", "$rootScope", "$stateParams", "$modal", "FormsDAO", "$debounce", "Page", ComplaintsController]);
 })();
