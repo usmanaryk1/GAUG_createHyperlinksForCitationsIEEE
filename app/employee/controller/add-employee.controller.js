@@ -15,6 +15,7 @@
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
         ctrl.tbTestingMap = {C: 'CXR', P: 'PPD', S: 'Screening'};
+        ctrl.backgroundCheckMap = {F: 'Failed', P: 'Passed'};
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
             ctrl.nextTab = tab;
