@@ -38,6 +38,12 @@
                 params: {
                     action: 'updateComplaint'
                 }
+            },
+            deleteComplaint: {
+                method: 'DELETE',
+                params: {
+                    action: 'deleteComplaint'
+                }
             }
         });
 
@@ -63,6 +69,9 @@
             },
             updateComplaint: function (data) {
                 return api.updateComplaint({subAction: data.id}, data).$promise
+            },
+            deleteComplaint: function (id) {
+                return api.deleteComplaint(id).$promise
             }
         };
     };

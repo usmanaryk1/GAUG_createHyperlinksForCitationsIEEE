@@ -65,7 +65,8 @@
                                             </div>
                                             <div class="form-group col-md-6 col-sm-6 col-xs-12 pull-right">
                                                 <input type="search" class="form-control input-sm"
-                                                    ng-model="compCtrl.searchParams.search" placeholder="Search by [Complainant Name, Complaint Description]"
+                                                    ng-model="compCtrl.searchParams.search"
+                                                    placeholder="Search by [Complainant Name]"
                                                     ng-change="compCtrl.applySearch()">
                                             </div>
 
@@ -97,7 +98,7 @@
                                                         total-items="totalRecords"
                                                         current-page="viewPatient.searchParams.pageNumber">
                                                         <td>
-                                                            <div ng-click="compCtrl.openEditModal(complaint, 'modal-5')"
+                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
                                                                 style="cursor: pointer">
                                                                 <div class="emp_user_hd">
                                                                     <div class="emp_user_name">
@@ -107,19 +108,27 @@
                                                             </div>
                                                         </td>
                                                         <td>{{complaint.complaintType}}</td>
-                                                        <td>{{complaint.complaintMethod == 1 ? 'Phone': complaint.complaintMethod == 2? 'Writing': complaint.complaintMethod == 3? 'Email': 'In Person'}}</td>
+                                                        <td>{{complaint.complaintMethod == 1 ? 'Phone':
+                                                            complaint.complaintMethod == 2? 'Writing':
+                                                            complaint.complaintMethod == 3? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | date}}</td>
                                                         <!-- <td>{{complaint.resolutionDate}}</td> -->
-                                                        <td>{{complaint.complaintReceiverName}}</td>
-                                                        <td ng-if="compCtrl.complaintType == 'open'"><span>{{compCtrl.getRemainingDaysForClosing(complaint.dateInserted)}}</span></td>
+                                                        <td>{{complaint.complaintReceiverName | titleCase}}</td>
+                                                        <td ng-if="compCtrl.complaintType == 'open'"
+                                                            ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint.dateInserted))">
+                                                        </td>
                                                         <td ng-if="compCtrl.complaintType == 'open'">
                                                             <div class="center">
-                                                                <a ui-sref="app.add-complaint({id: complaint.id})" ng-click="compCtrl.setComplaint(complaint)"
+                                                                <a ui-sref="app.add-complaint({id: complaint.id})"
+                                                                    ng-click="compCtrl.setComplaint(complaint)"
                                                                     class="btn icon-left fa fa-pencil edit_button"
                                                                     href="" tooltip="Edit"><span
                                                                         class="ed_b"></span></a>
-                                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('VIEW_ALL_COMPLAINTS')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
+                                                                <a class="btn icon-left fa fa-trash-o delete_button"
+                                                                    ng-if="hasAccess('VIEW_ALL_COMPLAINTS')"
+                                                                    ng-click="compCtrl.openDeleteModal(complaint, 'deleteModel')"
+                                                                    tooltip="Delete"><span class="ed_b"></span></a>
 
                                                             </div>
                                                         </td>
@@ -148,3 +157,21 @@
 
     </div>
 </div>
+
+
+<script type="text/ng-template" id="deleteModel">
+    <div class="modal-header">
+    <h4 class="modal-title">{{deleteComplaintModel.complaint.complainantName}} - {{deleteComplaintModel.complaint.complaintType}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to delete this Complaint?
+
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="deleteComplaintModel.delete(deleteComplaintModel.complaint);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="deleteComplaintModel.dismiss();">No</button>
+    </div>
+</script>
