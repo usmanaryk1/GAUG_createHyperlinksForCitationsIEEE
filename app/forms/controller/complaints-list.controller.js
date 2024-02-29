@@ -74,9 +74,9 @@
         }
 
         function pageInit() {
-            let not = $rootScope.notificationsArr.find(item => item.id == 'VIEW_DISPATCH');
-            let index = $rootScope.notificationsArr.indexOf(not);
-            $rootScope.notificationsArr.splice(index, 1);
+            // let not = $rootScope.notificationsArr.find(item => item.id == 'CREATE_COMPLAINT');
+            // let index = $rootScope.notificationsArr.indexOf(not);
+            // $rootScope.notificationsArr.splice(index, 1);
             ctrl.getComplaintCloseDaysCall()
             ctrl.getComplaintsCall()
         }
