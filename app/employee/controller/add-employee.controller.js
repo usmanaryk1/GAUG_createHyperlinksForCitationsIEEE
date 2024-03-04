@@ -309,6 +309,11 @@
                             $state.go('^.' + ctrl.nextTab, {id: employeeRes.id});
                         }
                         toastr.success("Employee saved.");
+                        //Reset dirty status of form
+                        if ($.fn.dirtyForms) {
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                        }
                     })
                     .catch(function () {
                         toastr.error("Employee cannot be saved.");

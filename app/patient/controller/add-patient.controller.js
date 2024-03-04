@@ -170,6 +170,11 @@
                                 }
                             }
                             toastr.success("Patient saved.");
+                            //Reset dirty status of form
+                            if ($.fn.dirtyForms) {
+                                $('form').dirtyForms('setClean');
+                                $('.dirty').removeClass('dirty');
+                            }
                         })
                         .catch(function () {
                             //exception logic
