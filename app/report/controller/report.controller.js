@@ -25,8 +25,8 @@
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }
-                    if (ctrl.searchParams.type || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
-                        path = path + "&type=" + ctrl.searchParams.type + "&id=" + ctrl.searchParams.id;
+                    if ((ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') && ctrl.searchParams.id) {
+                        path = path + "&id=" + ctrl.searchParams.id;
                     }
                     window.location.href = path;
                     $rootScope.unmaskLoading();
@@ -51,14 +51,7 @@
             if (new Date(ctrl.searchParams.fromDate).getDay() != 0 || new Date(ctrl.searchParams.toDate).getDay() != 6) {
                 ctrl.dateMessage = "From date must be Sunday & To date must be Saturday.";
             } else {
-                var a = moment(new Date(ctrl.searchParams.fromDate));
-                var b = moment(new Date(ctrl.searchParams.toDate));
-                var diff = b.diff(a, 'days');
-                if (diff > 6) {
-                    ctrl.dateMessage = "Date range should be no more of 7 days.";
-                } else {
-                    ctrl.dateMessage = null;
-                }
+                ctrl.dateMessage = null;
             }
         };
         ctrl.retrieveAllEmployees = function () {
