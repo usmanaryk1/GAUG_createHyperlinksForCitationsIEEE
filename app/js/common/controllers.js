@@ -22,7 +22,7 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state, $document, UserDAO, $timeout)
+        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state, $document, UserDAO, FormsDAO,  $timeout)
         {
             $rootScope.removeNullKeys = function (obj) {
                 for (var propName in obj) {
@@ -33,7 +33,7 @@ angular.module('xenon.controllers', []).
             }
 
             $rootScope.notificationsArr = [
-                {id: 'VIEW_ALL_COMPLAINTS', unread: 10}
+                {id: 'VIEW_ALL_COMPLAINTS'}
             ]
             var userName = getCookie("un");
             if (userName != null) {
@@ -54,12 +54,10 @@ angular.module('xenon.controllers', []).
             }
 
             $rootScope.getNotificationNumber = function(key){
-                if($rootScope.notificationsArr != null){
-                    let val = $rootScope.notificationsArr.find(item => item.id === key);
-                    if(val !== undefined){
-                        return val.unread
-                    }
-                    return ''
+                if(key == 'VIEW_ALL_COMPLAINTS'){
+                    // FormsDAO.getComplaintStatistics().then(notifications => {
+                    //     console.log(notifications);
+                    // })
                 }
             }
 

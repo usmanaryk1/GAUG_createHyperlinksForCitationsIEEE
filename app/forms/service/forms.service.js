@@ -44,6 +44,12 @@
                 params: {
                     action: 'deleteComplaint'
                 }
+            },
+            getComplaintStatistics: {
+                method: 'GET',
+                params: {
+                    action: 'getComplaintStatistics'
+                }
             }
         });
 
@@ -72,6 +78,9 @@
             },
             deleteComplaint: function (id) {
                 return api.deleteComplaint(id).$promise
+            },
+            getComplaintStatistics: function () {
+                return api.getComplaintStatistics().$promise
             }
         };
     };

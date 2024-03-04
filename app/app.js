@@ -213,7 +213,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
     KeepaliveProvider.interval(10);
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/redirect');
-    var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout) {
+    var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout, FormsDAO) {
         var deferred = $q.defer();
         if ($rootScope.currentUser.allowedFeature != null) {
             deferred.resolve();
