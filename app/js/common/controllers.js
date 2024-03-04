@@ -55,9 +55,7 @@ angular.module('xenon.controllers', []).
 
             $rootScope.getNotificationNumber = function(key){
                 if(key == 'VIEW_ALL_COMPLAINTS'){
-                    // FormsDAO.getComplaintStatistics().then(notifications => {
-                    //     console.log(notifications);
-                    // })
+                    return $rootScope.currentUser.complaintNotification > 100 ? '100+':$rootScope.currentUser.complaintNotification;
                 }
             }
 

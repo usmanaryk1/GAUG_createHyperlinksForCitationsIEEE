@@ -151,5 +151,11 @@ chips>div>input:focus {
     background-color: white;
     border-radius: 50%;
     font-size: 10px;
-    color: #2c2e2f
+    color: #2c2e2f;
+    width: 22px;
+    height: 22px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+
 }

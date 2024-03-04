@@ -213,7 +213,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
     KeepaliveProvider.interval(10);
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/redirect');
-    var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout, FormsDAO) {
+    var verifyModuleAllocated = function (UserDAO, FormsDAO, $rootScope, $q, $timeout) {
         var deferred = $q.defer();
         if ($rootScope.currentUser.allowedFeature != null) {
             deferred.resolve();
@@ -225,6 +225,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                         for (var i = 0; i < featureList.length; i++) {
                             $rootScope.currentUser.allowedFeature.push(featureList[i].label)
                         }
+                    }
+                    deferred.resolve();
+                });
+                FormsDAO.getComplaintStatistics().then(function (notifications) {
+                    $rootScope.currentUser.complaintNotification = 0;
+                    if (notifications != null) {
+                        $rootScope.currentUser.complaintNotification = notifications.open;
                     }
                     deferred.resolve();
                 });
@@ -290,8 +297,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             ASSETS.tables.datatables
                         ]);
                     },
-                    moduleAllocated: function (UserDAO, $rootScope, $q, $timeout) {
-                        return verifyModuleAllocated(UserDAO, $rootScope, $q, $timeout);
+                    moduleAllocated: function (UserDAO, FormsDAO,  $rootScope, $q, $timeout) {
+                        return verifyModuleAllocated(UserDAO, FormsDAO, $rootScope, $q, $timeout);
                     }
                 }
             })
