@@ -221,17 +221,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             $timeout(function () {
                 UserDAO.getUserFeatures().then(function (featureList) {
                     $rootScope.currentUser.allowedFeature = [];
+                                        console.log(featureList);
+
                     if (featureList != null) {
                         for (var i = 0; i < featureList.length; i++) {
                             $rootScope.currentUser.allowedFeature.push(featureList[i].label)
                         }
-                    }
-                    deferred.resolve();
-                });
-                FormsDAO.getComplaintStatistics().then(function (notifications) {
-                    $rootScope.currentUser.complaintNotification = 0;
-                    if (notifications != null) {
-                        $rootScope.currentUser.complaintNotification = notifications.open;
                     }
                     deferred.resolve();
                 });

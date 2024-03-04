@@ -54,13 +54,13 @@ angular.module('xenon.controllers', []).
             }
 
             $rootScope.getNotificationNumber = function(key){
+                // console.log("Testing");
                 if(key == 'VIEW_ALL_COMPLAINTS'){
                     return $rootScope.currentUser.complaintNotification > 100 ? '100+':$rootScope.currentUser.complaintNotification;
                 }
             }
 
             $rootScope.hasAccess = function (key) {
-                // console.log("Testing");
                 if (key != null) {
                     var keys = key.split(",");
                     if ($rootScope.currentUser.allowedFeature != null) {
@@ -325,7 +325,7 @@ angular.module('xenon.controllers', []).
                 }, 100);
             };
 
-
+            
             // Watch changes to replace checkboxes
             $scope.$watch(function ()
             {
@@ -386,7 +386,7 @@ angular.module('xenon.controllers', []).
             }
 
         }).
-        controller('SidebarMenuCtrl', function ($scope, $rootScope, $menuItems, $timeout, $location, $state, $layout)
+        controller('SidebarMenuCtrl', function ($scope, $rootScope, $menuItems, $timeout, $location, $state,FormsDAO, $layout)
         {
 
             // Menu Items
@@ -398,6 +398,13 @@ angular.module('xenon.controllers', []).
 
             $scope.menuItems = $sidebarMenuItems.prepareSidebarMenu().getAll();
 
+            FormsDAO.getComplaintStatistics().then(function (notifications) {
+                $rootScope.currentUser.complaintNotification = 0;
+                console.log(notifications);
+                if (notifications != null) {
+                    $rootScope.currentUser.complaintNotification = notifications.open;
+                }
+            });
 
             // Set Active Menu Item
             $sidebarMenuItems.setActive($location.path());
