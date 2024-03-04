@@ -86,7 +86,6 @@
                                                         <th>Method</th>
                                                         <th>Contact Info</th>
                                                         <th>Received Date</th>
-                                                        <th>Description</th>
                                                         <th>Received By</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Remaining Days</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Actions</th>
@@ -111,7 +110,6 @@
                                                         <td>{{complaint.complaintMethod == 1 ? 'Phone': complaint.complaintMethod == 2? 'Writing': complaint.complaintMethod == 3? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | date}}</td>
-                                                        <td>{{complaint.complaintDescription}}</td>
                                                         <!-- <td>{{complaint.resolutionDate}}</td> -->
                                                         <td>{{complaint.complaintReceiverName}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'open'"><span>{{compCtrl.getRemainingDaysForClosing(complaint.dateInserted)}}</span></td>
@@ -121,6 +119,8 @@
                                                                     class="btn icon-left fa fa-pencil edit_button"
                                                                     href="" tooltip="Edit"><span
                                                                         class="ed_b"></span></a>
+                                                                        <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('VIEW_ALL_COMPLAINTS')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b" ></span></a>
+
                                                             </div>
                                                         </td>
                                                     </tr>
