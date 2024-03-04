@@ -110,6 +110,8 @@
 
                 if (res) {
                     ctrl.complaintsList = res;
+                    if(ctrl.searchParams.complaintFollowUp == true)
+                    $rootScope.currentUser.complaintNotification = $rootScope.totalRecords;
                 }
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve complaints.");

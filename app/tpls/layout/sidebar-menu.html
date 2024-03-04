@@ -2,7 +2,7 @@
 	<i ng-if="item.icon" class="{{item.icon}}"></i>
 	<span class="title">{{item.title}}</span>			
 	<span ng-if="item.label" class="label label-{{item.label.classname}} pull-right" ng-class="{'hidden-collapsed': item.label.collapsedHide}">{{item.label.text}}</span>
-	<span ng-if="hasNotifications(item.notification) && hasAccess(item.notification)" class="notification pull-right">{{getNotificationNumber(item.notification)}}</span>
+	<span ng-if="hasNotifications(item.notification) && hasAccess(item.notification) && currentUser.complaintNotification  != 0" class="notification pull-right">{{getNotificationNumber(item.notification)}}</span>
 </script>
 
 <script type="text/ng-template" id="menu-items-tpl">
