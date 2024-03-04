@@ -17,35 +17,37 @@
                             </div>
                             <div class="col-sm-8">  
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="">
                                         <div class="form-group sm-layout-align">
-                                            <label class="control-label">Report Type</label>
-                                            <select class="form-control" id="reportType" ng-model='report.reportType' name="reportType"
-                                                    ng-change="report.typeChange()"
-                                                    data-validate="required" data-message-required="Please select Report Type."
-                                                    ng-options='report.id as (report.label) for report in report.reportTypeList'>
-                                                <option value="">Select the report type</option>
-                                            </select>
+                                            <label class="control-label col-sm-3">Report Type</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="reportType" ng-model='report.reportType' name="reportType"
+                                                        ng-change="report.typeChange()"
+                                                        data-validate="required" data-message-required="Please select Report Type."
+                                                        ng-options='report.id as (report.label) for report in report.reportTypeList'>
+                                                    <option value="">Select the report type</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-<!--                                <div class="row" ng-show="report.reportType == 'timesheet'">
-                                    <div class="col-sm-12">
+                                <!--                                <div class="row" ng-show="report.reportType == 'timesheet'">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group sm-layout-align">
+                                                                            <label class="control-label">Type</label>
+                                                                            <select class="form-control" id="type" ng-model='report.searchParams.type' name="type"
+                                                                                    data-validate="required" data-message-required="Please select Type." ng-required="report.reportType=='timesheet'"
+                                                                                    ng-options='report.id as (report.label) for report in report.reportSubTypeList'>
+                                                                                <option value="">Select the type</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>-->
+                                <div class="row" ng-show="report.reportType == 'employeetimesheet'" style="margin-top: 10px;">
+                                    <div class="">
                                         <div class="form-group sm-layout-align">
-                                            <label class="control-label">Type</label>
-                                            <select class="form-control" id="type" ng-model='report.searchParams.type' name="type"
-                                                    data-validate="required" data-message-required="Please select Type." ng-required="report.reportType=='timesheet'"
-                                                    ng-options='report.id as (report.label) for report in report.reportSubTypeList'>
-                                                <option value="">Select the type</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>-->
-                                <div class="row" ng-show="report.reportType == 'employeetimesheet'">
-                                    <div class="col-sm-12">
-                                        <div class="form-group sm-layout-align">
-                                            <label class="control-label">Employee</label>
-                                            <div class="pull-right col-md-12" style="padding:0;">
+                                            <label class="control-label col-sm-3">Employee</label>
+                                            <div class="col-sm-9">
                                                 <script type="text/javascript">
                                                     jQuery(document).ready(function ($)
                                                     {
@@ -69,11 +71,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" ng-show="report.reportType == 'patienttimesheet'">
-                                    <div class="col-sm-12">
+                                <div class="row" ng-show="report.reportType == 'patienttimesheet'" style="margin-top: 10px;">
+                                    <div class="">
                                         <div class="form-group sm-layout-align">
-                                            <label class="control-label">Patient</label>
-                                            <div class="pull-right col-md-12" style="padding:0;">
+                                            <label class="control-label col-sm-3">Patient</label>
+                                            <div class="col-sm-9">
                                                 <script type="text/javascript">
                                                     jQuery(document).ready(function ($)
                                                     {
@@ -97,9 +99,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" ng-show="report.reportType == 'workedhours' || report.reportType == 'patienttimesheet' || report.reportType == 'employeetimesheet'" style="margin-top: 10px;">
+                            </div>
+                        </div>
+                        <div class="row" ng-show="report.reportType == 'workedhours' || report.reportType == 'patienttimesheet' || report.reportType == 'employeetimesheet'" style="margin-top: 10px;">
+                            <div class="">
+                                <div class="col-sm-7 pull-right wd_full">
                                     <div class="col-sm-6 pad0 wd_full">
-                                        <div class="form-group">
+                                        <div class="form-group sm-layout-align">
                                             <label for="fromdate" class="col-sm-3 control-label">From</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
@@ -110,7 +116,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6 pad0">
-                                        <div class="form-group">
+                                        <div class="form-group sm-layout-align">
                                             <label for="todate" class="col-sm-3 control-label">To</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
@@ -121,14 +127,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 pad0" style="margin-top: 10px;"></div>
-                                    <div class="col-sm-12 pad0" style="margin-bottom:10px;">
-                                        <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
-                                        <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patientimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
-                                        <button type="submit" ng-if="report.reportType && report.reportType != 'patientcensus'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 pad0" style="margin-top: 10px;"></div>
+                            <div class="col-sm-12 text-right" style="margin-bottom:10px;">
+                                <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
+                                <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patientimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
+                                <button type="submit" ng-if="report.reportType && report.reportType != 'patientcensus'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                             </div>
                         </div>
                     </form>

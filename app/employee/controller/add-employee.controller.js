@@ -389,6 +389,13 @@
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.employee))
                 }).then(function () {
+                    setTimeout(function () {
+                        //Reset dirty status of form
+                        if ($.fn.dirtyForms) {
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                        }
+                    }, 100);
                     $rootScope.unmaskLoading();
                 });
             } else {
