@@ -64,6 +64,7 @@ angular.module('xenon.controllers', []).
             }
 
             $rootScope.hasAccess = function (key) {
+                // console.log("Testing");
                 if (key != null) {
                     var keys = key.split(",");
                     if ($rootScope.currentUser.allowedFeature != null) {
