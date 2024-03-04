@@ -187,8 +187,7 @@
                                     <tr ng-repeat="attachment in addEmployee.employee.employeeAttachments| orderBy:'-expiryDate'">
                                         <td class="hidden-xs text-center"> {{$index + 1}} </td>
                                         <td align="center"> {{addEmployee.typeMap[attachment.type]}}
-                                            <span ng-if="attachment.type == 'b'"> - {{addEmployee.backgroundCheckMap[attachment.value]}}</span>
-                                            <span ng-if="attachment.type == 't'"> - {{addEmployee.tbTestingMap[attachment.value]}}</span>
+                                            <span ng-if="attachment.type == 'b' || attachment.type == 't'"> - {{attachment.value}}</span>
                                         </td>
                                         <td align="center"> 
                                             <a style="color: blue;text-decoration: underline" ng-href="{{addEmployee.baseUrl}}file/download/{{addEmployee.companyCode}}/{{attachment.type}}/{{attachment.filePath}}?userFileName={{attachment.name}}">
@@ -342,15 +341,15 @@
             <div class="col-sm-8 add-padding-modal">
                 <div class="input-group" style="z-index:1060">
                     <label class="cbr-inline">
-                        <input value="P" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        <input value="PPD" name="TBTesting" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
                         PPD
                     </label>
                     <label class="cbr-inline">
-                        <input name="TBTesting" value="C" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        <input name="TBTesting" value="CXR" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
                         CXR
                     </label>
                     <label class="cbr-inline">
-                        <input name="TBTesting" value="S" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        <input name="TBTesting" value="Screening" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
                         Screening
                     </label>
                     <div>
@@ -370,11 +369,11 @@
             <div class="col-sm-8 add-padding-modal">
                 <div class="input-group" style="z-index:1060">
                     <label class="cbr-inline">
-                        <input value="P" name="BackgroundCheck" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        <input value="Passed" name="BackgroundCheck" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
                         Passed
                     </label>
                     <label class="cbr-inline">
-                        <input name="BackgroundCheck" value="F" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
+                        <input name="BackgroundCheck" value="Failed" type="radio" class="cbr cbr-primary" ng-model="uploadPopup.data.value"/>
                         Failed
                     </label>
                     <div>
