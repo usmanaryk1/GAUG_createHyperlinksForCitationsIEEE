@@ -31,18 +31,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--                                <div class="row" ng-show="report.reportType == 'timesheet'">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group sm-layout-align">
-                                                                            <label class="control-label">Type</label>
-                                                                            <select class="form-control" id="type" ng-model='report.searchParams.type' name="type"
-                                                                                    data-validate="required" data-message-required="Please select Type." ng-required="report.reportType=='timesheet'"
-                                                                                    ng-options='report.id as (report.label) for report in report.reportSubTypeList'>
-                                                                                <option value="">Select the type</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>-->
                                 <div class="row" ng-show="report.reportType == 'employeetimesheet'" style="margin-top: 10px;">
                                     <div class="">
                                         <div class="form-group sm-layout-align">
@@ -93,7 +81,7 @@
                                                         }, 200);
                                                     });</script>
                                                 <select class="form-control" name="patientdropdownIds" ng-model="report.searchParams.id" id="patientdropdownIds" ng-options='data.id as (data.lName+", "+data.fName+" "+data.middleInitial) for data in report.patientList'>
-                                                    <option value="" selected hidden />
+                                                    <option value="" selected hidden>Select All</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -133,7 +121,7 @@
                             <div class="col-sm-12 pad0" style="margin-top: 10px;"></div>
                             <div class="col-sm-12 text-right" style="margin-bottom:10px;">
                                 <button class="btn btn-single btn-white clean-margin btn-block-xs" type="button" ng-click="report.resetFilters()">Reset Filters</button>
-                                <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patientimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
+                                <button type="submit" ng-if="report.reportType && report.reportType != 'employeetimesheet' && report.reportType != 'patienttimesheet'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Excel" ng-click="report.downloadReport('xls')">Download xls</button>
                                 <button type="submit" ng-if="report.reportType && report.reportType != 'patientcensus'" class="btn btn-single btn-info clean-margin btn-block-xs" tooltip="Download Report in Pdf" ng-click="report.downloadReport('pdf')">Download pdf</button>
                             </div>
                         </div>
