@@ -28,14 +28,13 @@
                         || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet'
                         || ctrl.reportType == 'wppreport' || ctrl.reportType == 'employeeothours' || ctrl.reportType == 'weeklyotanalysis') {
                     ctrl.verifyDates();
-
                 }
                 if (ctrl.reportType == 'employeedeactivatereport' || ctrl.reportType == 'lossofhoursreport'
                         || ctrl.reportType == 'totalworkedhours' || ctrl.reportType == 'eventactivityreport' || ctrl.reportType == 'missedpunchreport'
                         || ctrl.reportType == 'loginactivityreport' || ctrl.reportType == 'notesreport' || ctrl.reportType == 'applicationlistreport'
                         || ctrl.reportType == 'revenuereconciliationreport' || ctrl.reportType == 'revenuereconciliationbycounty' || ctrl.reportType == 'detailagingreport'
                         || ctrl.reportType == 'summaryagingreport' || ctrl.reportType == 'billingmonitorreport' || ctrl.reportType == 'claimrejectionreport'
-                        || ctrl.reportType == 'evv-emedny-error-report') {
+                        || ctrl.reportType == 'evv-emedny-error-report'  || ctrl.reportType == 'complaints') {
                     ctrl.verifyDatesRequired();
                 }
                 if (ctrl.dateMessage != null) {

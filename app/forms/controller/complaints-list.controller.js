@@ -11,16 +11,6 @@
         ctrl.remainingDaysToCloseCall = remainingDaysToClose
         ctrl.getComplaintCloseDaysCall = getComplaintCloseDays
         ctrl.currentDate = new Date();
-        ctrl.complaintsList.push({
-            id: 1243,
-            date: '21/265/21',
-            type: 'Safety',
-            name: 'Complaint',
-            method: 'test',
-            contactInfo: 'contact',
-            resolutionDate: '21/265/21',
-            receivedBy: 'contact'
-        })
 
         ctrl.pageInitCall();
 
@@ -134,32 +124,6 @@
         ctrl.sanitizeHtml = function (htmlContent) {
             return $sce.trustAsHtml(htmlContent)
         };
-
-        ctrl.deleteComplaint = function (id){
-            console.log(id);
-            FormsDAO.deleteComplaint(id).then(res => {
-                showLoadingBar({
-                    delay: .5,
-                    pct: 100,
-                    finish: function () {}
-                }); // showLoadingBar
-
-                if (res) {
-                    toastr.success('Complaint deleted successfully')
-                }
-            }).catch(function (data, status) {
-                toastr.error("Failed to delete complaint.");
-                showLoadingBar({
-                    delay: .5,
-                    pct: 100,
-                    finish: function () {}
-                }); // showLoadingBar
-            }).then(function () {
-                $rootScope.unmaskLoading();
-                $rootScope.paginationLoading = false;  
-            })
-        }
-
         
         ctrl.openDeleteModal = function (complaint, modal_id, modal_size, modal_backdrop)
         {
@@ -175,19 +139,11 @@
             $rootScope.deleteComplaintModel.delete = function (complaint) {
                 $rootScope.maskLoading();
                 FormsDAO.deleteComplaint({id: complaint.id}).then(function (res) {
-                    var length = ctrl.complaintsList.length;
-
-                    for (var i = 0; i < length; i++) {
-                        if (ctrl.complaintsList[i].id === complaint.id) {
-                            ctrl.complaintsList.splice(i, 1);
-                            break;
-                        }
-                    }
                     toastr.success("Complaint deleted.");
-                    ctrl.rerenderDataTable();
                     $rootScope.deleteComplaintModel.close();
-                }).catch(function (data, status) {
-                    toastr.error(data.data);
+                    getComplaints();
+                }).catch(function () {
+                    toastr.error('Delete complaint failed');
                     $rootScope.deleteComplaintModel.close();
                 }).then(function () {
                     $rootScope.unmaskLoading();
