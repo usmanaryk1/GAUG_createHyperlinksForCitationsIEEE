@@ -15,11 +15,9 @@
         ctrl.formSubmitted = false;
         ctrl.isSignAdded = false;
         ctrl.isSignTouched = false;
-        ctrl.signatureUrl = ''
         ctrl.submitAction = true;
         ctrl.generateFormCall = generateForms;
         ctrl.clearSignatureCall = clearSignature;
-        // ctrl.signatureInitCall = signatureInit
         ctrl.getListsCall = getLists
         ctrl.complaint = {};
         ctrl.title = 'Add Complaint';
@@ -55,18 +53,18 @@
                     ctrl.complaint = {
                         complaintDate: ctrl.getDate(complaintData.complaintDate),
                         complainantName: complaintData.complainantName,
-                        complainantContactType: complaintData.complainantContactType == 1 ? 'PHONE' : complaintData.complainantContactType == 2 ? 'EMAIL' : 'ADDRESS',
-                        complaintMethod: complaintData.complaintMethod == 1 ? 'PHONE' : complaintData.complaintMethod == 2 ? 'WRITING' : complaintData.complaintMethod == 3 ? 'EMAIL' : 'INPERSON',
-                        complainantRelationshipType: complaintData.complainantRelationshipType == 1 ? 'PATIENT' : complaintData.complainantRelationshipType == 2 ? 'EMPLOYEE' : complaintData.complainantRelationshipType == 3 ? 'WORKSITE' : 'VENDOR',
+                        complainantContactType: complaintData.complainantContactType,
+                        complaintMethod: complaintData.complaintMethod,
+                        complainantRelationshipType: complaintData.complainantRelationshipType,
                         complainantRelationship: complaintData.complainantRelationship,
                         complaintType: complaintData.complaintType,
                         complaintDescription: complaintData.complaintDescription,
-                        complaintFollowUp: complaintData.complaintFollowUp.toString(),
-                        // complaintNotificationMethod: 'PHONE',
+                        isFollowUpNeeded: complaintData.isFollowUpNeeded.toString(),
                         complaintResolution: "",
-                        complaintSatisfied: "",
-                        dateProposedResolution: '',
-                        signature: "",
+                        complainantSatisfied: "",
+                        dateProposedResolution: null,
+                        signature: null,
+                        dateResolvedOn: ctrl.currentDateWithFormat,
                     };
                     ctrl.getContactValue(complaintData.complainantContactType, complaintData.complainantContact);
                     // ctrl.getRelationValue(complaintData.complaintRelationshipType, complaintData.complainantRelationship)
@@ -86,12 +84,13 @@
                     complaintMethod: "PHONE",
                     complaintType: "",
                     complaintDescription: "",
-                    complaintFollowUp: "true",
+                    isFollowUpNeeded: "true",
                     // complaintNotificationMethod: 'PHONE',
                     complaintResolution: "",
-                    complaintSatisfied: "",
-                    dateProposedResolution: '',
-                    signature: "",
+                    complainantSatisfied: "",
+                    dateProposedResolution: null,
+                    signature: null,
+                    dateResolvedOn: ctrl.currentDateWithFormat,
                 };
                 setupWatch()
 
@@ -107,7 +106,6 @@
 
         function clearSignature() {
             ctrl.complaint.signature = ''
-            ctrl.signatureUrl = ''
         }
 
         ctrl.saveForm = function (action) {
@@ -116,8 +114,8 @@
                 var complaintToSave = angular.copy(ctrl.complaint);
 
                 complaintToSave.complainantRelationship = complaintToSave.complainantRelationship.toString()
-                complaintToSave.signature = complaintToSave.signature ? complaintToSave.signature.substring(ctrl.signature.indexOf(",") + 1) : '';
-                complaintToSave.complaintFollowUp = JSON.parse(complaintToSave.complaintFollowUp)
+                complaintToSave.signature = complaintToSave.signature ? complaintToSave.signature.substring(complaintToSave.signature.indexOf(",") + 1) : null;
+                complaintToSave.isFollowUpNeeded = JSON.parse(complaintToSave.isFollowUpNeeded)
                 console.log(complaintToSave);
 
                 // Check the value of the complainantContactType field
@@ -154,7 +152,25 @@
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     })
-                } else {
+                }
+                // else if(ctrl.params?.id && !ctrl.complaint.isFollowUpNeeded){
+                //     FormsDAO.updateComplaint(complaintToSave).then((res) => {
+                //         // ctrl.generateFormCall();
+                //         $rootScope.isFormDirty = false;
+                //         toastr.success("Complaint updated successfully")
+                //         if ($.fn.dirtyForms) {
+                //             $('form').dirtyForms('setClean');
+                //             $('.dirty').removeClass('dirty');
+                //         }
+
+                //         $state.go('app.complaints', { status: 'open' });
+                //     }).catch((err) => {
+                //         toastr.error("Unable to update the Complaint.");
+                //     }).then(function () {
+                //         $rootScope.unmaskLoading();
+                //     })
+                // }
+                 else {
                     FormsDAO.addComplaint(complaintToSave).then((res) => {
                         // ctrl.generateFormCall();
                         $rootScope.isFormDirty = false;
@@ -241,14 +257,7 @@
                 }); // showLoadingBar                
                 if (res) {
                     ctrl.worksiteList = res;
-                    if (res.length === 0) {
-                        //                        $("#paginationButtons").remove();
-                        //                        toastr.error("No data in the system.");
-                    }
-                    // if (angular.equals({}, positionMap))
-                    //     retrieveActivePositions();
                 }
-
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve worksites.");
             }).then(function () {
@@ -311,11 +320,11 @@
 
         ctrl.getContactValue = function (type, value) {
             console.log(type, value);
-            if (type == 1)
+            if (type == 'PHONE')
                 ctrl.complaint.complainantContactPhone = value
-            else if (type == 2)
+            else if (type == 'EMAIL')
                 ctrl.complaint.complainantContactEmail = value
-            else if (type == 3)
+            else if (type == 'ADDRESS')
                 ctrl.complaint.complainantContactAddress = value
         }
 
@@ -329,93 +338,6 @@
                 ctrl.complaint.complainantContactAddress = value
         }
 
-        /*================   SIGNATURE CODE   ===================*/
-        // function signatureInit() {
-        //     const canvas = document.querySelector('#signature-pad');
-        //     const form = document.querySelector('#signature-pad-container')
-        //     const ctx = canvas.getContext('2d');
-        //     let writingMode = false;
-        //     ctrl.createSignature = function (event) {
-        //         event.preventDefault();
-        //         ctrl.isSignAdded = true;
-        //         const imageUrl = canvas.toDataURL();
-        //         ctrl.signatureImgUrl = canvas.toDataURL();
-        //         const image = document.createElement('img');
-        //         image.src = imageUrl;
-        //         image.height = canvas.height / 2
-        //         image.width = canvas.width / 2
-        //         image.setAttribute('id', 'sign-image')
-        //         image.style.display = 'block';
-        //         form.appendChild(image);
-        //         ctrl.clearPad()
-        //     }
-
-        //     ctrl.deleteSignature = function () {
-        //         ctrl.isSignAdded = false;
-        //         ctrl.isSignTouched = false
-        //         document.getElementById('sign-image').remove()
-        //     }
-
-        //     ctrl.clearPad = function () {
-        //         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //         ctrl.isSignTouched = false
-        //     }
-
-
-        //     function isCanvasEmpty() {
-        //         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-        //         for (let i = 0; i < imageData.length; i += 4) {
-        //             // Check if any pixel has a non-zero alpha value (indicating it has content)
-        //             if (imageData[i + 3] !== 0) {
-        //                 return false;
-        //             }
-        //         }
-
-        //         return true;
-        //     }
-
-        //     const getTargetPosition = (event) => {
-        //         positionX = event.clientX - event.target.getBoundingClientRect().x
-        //         positionY = event.clientY - event.target.getBoundingClientRect().y
-
-        //         return [positionX, positionY]
-        //     }
-
-        //     const handlePointerMove = function (event) {
-        //         if (!writingMode) return;
-
-        //         const [postionX, postionY] = getTargetPosition(event);
-        //         ctx.lineTo(postionX, postionY)
-        //         ctx.stroke()
-        //     }
-
-        //     const handlePointerUp = () => {
-        //         if (isCanvasEmpty()) {
-        //             ctrl.isSignTouched = false
-        //             console.log(ctrl.isSignTouched);
-        //         } else {
-        //             ctrl.isSignTouched = true
-        //             console.log(ctrl.isSignTouched);
-        //         }
-        //         writingMode = false;
-        //     }
-
-        //     const handlePointerDown = (event) => {
-        //         if (ctrl.isSignAdded) return;
-        //         writingMode = true;
-        //         ctx.beginPath();
-        //         const [postionX, postionY] = getTargetPosition(event)
-        //         ctx.moveTo(postionX, postionY);
-        //     }
-
-        //     ctx.lineWidth = 3;
-        //     ctx.lineJoin = ctx.lineCap = 'round';
-
-        //     canvas.addEventListener('pointerup', handlePointerUp, { passive: true })
-        //     canvas.addEventListener('pointerdown', handlePointerDown, { passive: true })
-        //     canvas.addEventListener('pointermove', handlePointerMove, { passive: true })
-        // }
     }
     angular.module('xenon.controllers').controller('AddComplaintController', ["$scope", "$state", "$timeout", "$rootScope", "$stateParams", "$modal", "$filter", "PatientDAO", "EmployeeDAO", "WorksiteDAO", "FormsDAO", '$window', "Page", AddComplaintController]);
 })();

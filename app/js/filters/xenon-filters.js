@@ -268,16 +268,32 @@ angular.module('xenon.filter', [])
             return false;
         };
     })
-    .filter('titleCase', function() {
+    .filter('titleCase', function () {
+        return function (input) {
+            if (input) {
+                return input.replace(/\w\S*/g, function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            }
+            return input;
+        };
+    }).filter('dateOnly', function($filter) {
         return function(input) {
           if (input) {
-            return input.replace(/\w\S*/g, function(txt) {
-              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            });
+            // Convert input to a JavaScript Date object
+            var date = new Date(input);
+      
+            // Format the date as 'dd/MM/yyyy'
+            var formattedDate = $filter('date')(date, 'dd/MM/yyyy');
+      
+            return formattedDate;
+          } else {
+            return '';
           }
-          return input;
         };
       });
       
+
+
 
 

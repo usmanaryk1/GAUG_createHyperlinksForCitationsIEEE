@@ -108,15 +108,15 @@
                                                             </div>
                                                         </td>
                                                         <td>{{complaint.complaintType}}</td>
-                                                        <td>{{complaint.complaintMethod == 1 ? 'Phone':
-                                                            complaint.complaintMethod == 2? 'Writing':
-                                                            complaint.complaintMethod == 3? 'Email': 'In Person'}}</td>
+                                                        <td>{{complaint.complaintMethod == 'PHONE' ? 'Phone':
+                                                            complaint.complaintMethod == 'WRITING'? 'Writing':
+                                                            complaint.complaintMethod == 'EMAIL'? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
-                                                        <td>{{complaint.complaintDate | date}}</td>
+                                                        <td>{{complaint.complaintDate | dateOnly}}</td>
                                                         <!-- <td>{{complaint.resolutionDate}}</td> -->
-                                                        <td>{{complaint.complaintReceiverName | titleCase}}</td>
+                                                        <td>{{complaint.complaintReceiver.fName  | titleCase}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'open'"
-                                                            ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint.dateInserted))">
+                                                            ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint))">
                                                         </td>
                                                         <td ng-if="compCtrl.complaintType == 'open'">
                                                             <div class="center">

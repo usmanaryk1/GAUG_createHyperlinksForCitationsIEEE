@@ -342,7 +342,7 @@
                                             Email
                                         </label>
                                         <label class="radio-field">
-                                            <input name="Method" value="INPERSON" type="radio"
+                                            <input name="Method" value="IN_PERSON" type="radio"
                                                 ng-model="addCompCtrl.complaint.complaintMethod" />
                                             In Person
                                         </label>
@@ -393,12 +393,12 @@
                                     <div class="radio-container pt-7">
                                         <label class="radio-field">
                                             <input value="true" name="followUpNeeded" type="radio" class=""
-                                                ng-model="addCompCtrl.complaint.complaintFollowUp" />
+                                                ng-model="addCompCtrl.complaint.isFollowUpNeeded" />
                                             Yes
                                         </label>
                                         <label class="radio-field">
                                             <input name="followUpNeeded" value="false" type="radio"
-                                                ng-model="addCompCtrl.complaint.complaintFollowUp" />
+                                                ng-model="addCompCtrl.complaint.isFollowUpNeeded" />
                                             No, Resolved
                                         </label>
                                     </div>
@@ -406,7 +406,7 @@
                             </div>
 
 
-                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label class="col-sm-3 control-label" for="field-13">
                                     Proposed Resolution Notification Date
                                 </label>
@@ -427,7 +427,7 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="form-group" ng-if="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <!-- <div class="form-group" ng-if="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label class="col-sm-3 control-label" for="field-13">
                                     Notification Method
                                 </label>
@@ -457,7 +457,7 @@
                                 </div>
                             </div> -->
 
-                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label for="field-13" class="col-sm-3 control-label">Resolution of the Complaint [Action Taken]</label>
                                 <div class="col-sm-9">
                                     <textarea class="form-control hidden-print" name="ComplaintResolution"
@@ -469,7 +469,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label class="col-sm-3 control-label" for="field-14">
                                     Was the person making the complaint satisfied with the resolution and/or action
                                     plan?
@@ -478,20 +478,20 @@
                                     <div class="radio-container pt-7">
                                         <label class="radio-field">
                                             <input value="yes" name="complainantSatisfied" class="complainantSatisfied" type="radio" class=""
-                                                ng-model="addCompCtrl.complaint.complaintSatisfied"
+                                                ng-model="addCompCtrl.complaint.complainantSatisfied"
                                                 ng-change="complainantSatisfiedChange()" data-validate="required"
                                                 data-message-required="Please select complainant satisfaction status"/>
                                             Yes
                                         </label>
                                         <label class="radio-field">
                                             <input name="complainantSatisfied" class="complainantSatisfied" value="no" type="radio"
-                                                ng-model="addCompCtrl.complaint.complaintSatisfied"
+                                                ng-model="addCompCtrl.complaint.complainantSatisfied"
                                                 ng-change="complainantSatisfiedChange()" data-validate="required"
                                                 data-message-required="Please select complainant satisfaction status"/>
                                             No
                                         </label>
                                     </div>
-                                    <div class="pt-7" ng-if="addCompCtrl.complaint.complaintSatisfied == 'no'">
+                                    <div class="pt-7" ng-if="addCompCtrl.complaint.complainantSatisfied == 'no'">
                                         <input class="form-control" type="text" name="implementedFollowUp" autofocus
                                             ng-model="addCompCtrl.complaint.implementedFollowUp"
                                             data-validate="required"
@@ -502,9 +502,9 @@
                             </div>
 
 
-                            <div class="form-group-separator" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'"></div>
+                            <div class="form-group-separator" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'"></div>
 
-                            <div class="form-group hidden-print" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <div class="form-group hidden-print" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <div class="col-sm-3 checkbox-right">
                                     <input type="checkbox" ng-model="addCompCtrl.reviewedComplaint" id="field-15">
                                 </div>
@@ -512,24 +512,24 @@
                                     related to this complaint including any follow up needed.</label>
                             </div>
 
-                            <div class="form-group-separator" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'"></div>
+                            <div class="form-group-separator" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'"></div>
 
-                            <div class="form-group" ng-show="addCompCtrl.complaint.complaintFollowUp == 'false'">
+                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label for="" class="col-sm-3 control-label">Signature</label>
                                 <div class="col-sm-9">
                                     <signature-pad width="550" height="175" style="border:1px solid #B0B0B0"
-                                        dataurl="addCompCtrl.signature" accept="addCompCtrl.accept"
+                                        dataurl="addCompCtrl.complaint.signature" accept="addCompCtrl.accept"
                                         clear="clear"></signature-pad>
                                     <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
                                         ng-click="clear(); addCompCtrl.clearSignatureCall()">Clear signature</button>
-                                    <button ng-if="addCompCtrl.isSignTouched"
+                                    <!-- <button ng-if="addCompCtrl.isSignTouched"
                                         class="clear-btn btn delet_bt hidden-print"
                                         ng-click="addCompCtrl.clearPad()">Clear</button>
                                     <button ng-if="!addCompCtrl.isSignAdded && addCompCtrl.isSignTouched "
                                         class="btn btn-info green_bt hidden-print"
                                         ng-click="addCompCtrl.createSignature($event)">Submit</button>
                                     <button ng-if="addCompCtrl.isSignAdded" class="btn delet_bt hidden-print"
-                                        ng-click="addCompCtrl.deleteSignature($event)">Delete</button>
+                                        ng-click="addCompCtrl.deleteSignature($event)">Delete</button> -->
                                 </div>
                             </div>
 
@@ -558,7 +558,7 @@
                                         </button> -->
                                         <button class="btn btn-info green_bt pull-right" style="width:auto;"
                                             type="submit">
-                                            {{addCompCtrl.complaint.complaintFollowUp == 'true' ? 'Save':'Save & Close'}}
+                                            {{addCompCtrl.complaint.isFollowUpNeeded == 'true' ? 'Save':'Save & Close'}}
                                         </button>
                                     </div>
                                 </div>

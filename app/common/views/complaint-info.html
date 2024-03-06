@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-4"><strong>Contact Type</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complainantContactType == 1 ? 'Phone': ComplaintInfo.complaint.complainantContactType == 2? 'Email': 'Address'}}
+                    {{ComplaintInfo.complaint.complainantContactType}}
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-4"><strong>Complainant Relation</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complainantRelationshipType == 1 ? 'Patient': ComplaintInfo.complaint.complainantRelationshipType == 2? 'Employee': ComplaintInfo.complaint.complainantRelationshipType == 3? 'Worksite': 'Vendor'}}
+                    {{ComplaintInfo.complaint.complainantRelationshipType}}
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-4"><strong>Complainant Method</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complaintMethod == 1 ? 'Phone': ComplaintInfo.complaint.complaintMethod == 2? 'Writing': ComplaintInfo.complaint.complaintMethod == 3? 'Email': 'In Person'}}
+                    {{ComplaintInfo.complaint.complaintMethod}}
                 </div>
             </div>
         </div>
@@ -94,36 +94,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-4"><strong>Complaint Resolution</strong></label>
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Proposed Resolution</strong></label>
                 <div class="col-md-8">
-                    {{ComplaintInfo.complaint.complaintResolution}}
+                    {{ComplaintInfo.complaint.dateProposedResolution | dateOnly}}
                 </div>
             </div>
         </div>
     </div>
-    <!-- {
-                                                                "id": 1,
-                                                                "complaintDate": 1696186800000,
-                                                                "complainantName": "John Doe",
-                                                                "contactType": null,
-                                                                "complainantContactType": 1,
-                                                                "complainantContact": "123-456-7890",
-                                                                "complainantRelation": null,
-                                                                "complainantRelationshipType": 1,
-                                                                "complainantRelationship": "Patient ID: 12345",
-                                                                "complaintReceiverName": "adnan",
-                                                                "complaintMethodUsed": null,
-                                                                "complaintMethod": 3,
-                                                                "complaintType": "Service Issue",
-                                                                "complaintDescription": "The service was not up to the mark.",
-                                                                "complaintResolution": "Offered a discount for the next service.",
-                                                                "complaintFollowUp": true,
-                                                                "complaintSatisfied": "Yes",
-                                                                "signature": "base64/encoded/signature/her",
-                                                                "orgCode": "AC2",
-                                                                "dateInserted": 1696343644000,
-                                                                "dateUpdated": 1696343644000
-                                                            }, -->
 </div>
 
 <div class="modal-footer">

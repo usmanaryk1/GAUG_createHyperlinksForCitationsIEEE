@@ -50,6 +50,12 @@
                 params: {
                     action: 'getComplaintStatistics'
                 }
+            },
+            closeComplaint: {
+                method: 'POST',
+                params: {
+                    action: 'closeComplaint'
+                }
             }
         });
 
@@ -81,7 +87,11 @@
             },
             getComplaintStatistics: function () {
                 return api.getComplaintStatistics().$promise
+            },
+            closeComplaint: function(data) {
+                return api.closeComplaint({subAction: data.id}, data).$promise;
             }
+
         };
     };
     angular.module("xenon.factory").factory('FormsDAO', ['$resource', FormsDAO]);

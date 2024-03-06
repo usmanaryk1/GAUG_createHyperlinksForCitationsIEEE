@@ -37,25 +37,20 @@
             localStorage.setItem('complaint', JSON.stringify(complaint));
         }
 
-        function remainingDaysToClose (openDate, margin, currentDate) {
-            // const openDateObj = new Date(openDate);
-            // const currentDateObj = new Date(currentDate);
-            // const timeDiff = currentDateObj - openDateObj;
-            // const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            // const remainingDays = margin - daysPassed;
-            // return Math.max(remainingDays, 0);
-
-            const openDateObj = new Date(openDate);
-            const currentDateObj = new Date(currentDate);
+        function remainingDaysToClose (dateInserted, proposedDate) {
+            const dateInsertedObj = new Date(dateInserted);
+            const proposedDateObj = new Date(proposedDate);
         
-            const timeDiff = currentDateObj - openDateObj;
-            const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const timeDiff = proposedDateObj - dateInsertedObj;
+            const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            console.log(daysRemaining);
         
-            if (daysPassed > margin) {
-                return `<span style="color: #cc3f44">Overdue ${daysPassed - margin}</span>`;
+            if (daysRemaining < 0) {
+                return `<span style="color: #cc3f44">Overdue ${daysRemaining}</span>`;
             } else {
-                const remainingDays = margin - daysPassed;
-                return remainingDays > 0 ? `${remainingDays}` : '<span style="color: #cc3f44;">Last Day</span>';
+                return daysRemaining >= 0 ? `${daysRemaining + 1}` : '';
+                // return daysRemaining > 0 ? `${daysRemaining}` : '<span style="color: #cc3f44;">Last Day</span>';
+                // return daysRemaining + 1;
             }
         }
 
@@ -75,8 +70,8 @@
             ctrl.getComplaintsCall()
         }
 
-        ctrl.getRemainingDaysForClosing = function (openDate) {
-            return ctrl.remainingDaysToCloseCall(openDate, ctrl.complaintResDays, ctrl.currentDate);
+        ctrl.getRemainingDaysForClosing = function (complaint) {
+            return ctrl.remainingDaysToCloseCall(complaint.dateInserted, complaint.dateProposedResolution);
         }
 
         ctrl.applySearch = function () {
@@ -86,9 +81,9 @@
 
         function getComplaints() {
             if(ctrl.complaintType == 'open'){
-                ctrl.searchParams.complaintFollowUp = true;
+                ctrl.searchParams.isFollowUpNeeded = true;
             }else if(ctrl.complaintType == 'close'){
-                ctrl.searchParams.complaintFollowUp = false;
+                ctrl.searchParams.isFollowUpNeeded = false;
             }
 
             FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
@@ -100,7 +95,7 @@
 
                 if (res) {
                     ctrl.complaintsList = res;
-                    if(ctrl.searchParams.complaintFollowUp == true)
+                    if(ctrl.searchParams.isFollowUpNeeded == true)
                     $rootScope.currentUser.complaintNotification = $rootScope.totalRecords;
                 }
             }).catch(function (data, status) {
