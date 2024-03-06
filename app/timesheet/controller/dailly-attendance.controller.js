@@ -113,6 +113,8 @@
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     obj.roundedPunchInTime = Date.parse(obj.roundedPunchInTime);
                     obj.roundedPunchOutTime = Date.parse(obj.roundedPunchOutTime);
+                    obj.punchInTimeInDate = Date.parse(obj.punchInTime);
+                    obj.punchOutTimeInDate = Date.parse(obj.punchOutTime);
                     if (obj.scheduleId) {
                         obj.scheduleId.roundedStartTime = Date.parse(obj.scheduleId.roundedStartTime);
                         obj.scheduleId.roundedEndTime = Date.parse(obj.scheduleId.roundedEndTime);
@@ -328,6 +330,8 @@
                         obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
                         obj.timeSheet.roundedPunchInTime = Date.parse(obj.timeSheet.roundedPunchInTime);
                         obj.timeSheet.roundedPunchOutTime = Date.parse(obj.timeSheet.roundedPunchOutTime);
+                        obj.timeSheet.punchInTimeInDate = Date.parse(obj.timeSheet.punchInTime);
+                        obj.timeSheet.punchOutTimeInDate = Date.parse(obj.timeSheet.punchOutTime);
                         if (temp) {
                             var t = temp.split(":");
                             var h = Number(t[0]);

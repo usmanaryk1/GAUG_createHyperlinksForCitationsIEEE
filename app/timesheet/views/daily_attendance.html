@@ -166,21 +166,25 @@
                                             <!--<div class="green_dot"></div>-->
                                             <!--Display red dot for not matched GPS location-->
                                             <!--<div class="red_dot"></div>-->
-                                            <div ng-class="{
+                                            <div ng-click="hide(this);" onclick="hide(this);" style="cursor: pointer;">
+                                                <div ng-class="{
                                                         'black_dot'
                                                                 :timesheet.punchInColorFlag== 'black', 'red_dot
                                                         ':timesheet.punchInColorFlag == 'red', 'green_dot':timesheet.punchInColorFlag == 'green'}"></div> 
-                                            {{timesheet.roundedPunchInTime|date :timeFormat}}
+                                                {{timesheet.roundedPunchInTime|date :timeFormat}}
+                                            </div>
+                                            <div style="display: none;">{{timesheet.punchInTimeInDate|date:'MM/dd/yyyy hh:mm a'}}</div>
                                         </td>
                                         <td>
-                                            <span ng-if='validNumber(timesheet.roundedPunchOutTime)'>
+                                            <div ng-if='validNumber(timesheet.roundedPunchOutTime)' style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);">
                                                 <div ng-class="{
                                                             'black_dot'
                                                                     :timesheet.punchOutColorFlag == 'black', 'red_dot
                                                                     ':timesheet.punchOutColorFlag == '
                                                             red', 'green_dot':timesheet.punchOutColorFlag == 'green'}"></div>
                                                 {{timesheet.roundedPunchOutTime|date :timeFormat}}
-                                            </span>
+                                            </div>
+                                            <div style="display: none;">{{timesheet.punchOutTimeInDate|date:'MM/dd/yyyy hh:mm a'}}</div>
                                             <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                         </td>
                                         <td>
