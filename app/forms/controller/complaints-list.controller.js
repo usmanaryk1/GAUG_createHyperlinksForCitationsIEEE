@@ -46,11 +46,9 @@
             console.log(daysRemaining);
         
             if (daysRemaining < 0) {
-                return `<span style="color: #cc3f44">Overdue ${daysRemaining}</span>`;
+                return `<span style="color: #cc3f44">Overdue ${-1 * daysRemaining}</span>`;
             } else {
                 return daysRemaining >= 0 ? `${daysRemaining + 1}` : '';
-                // return daysRemaining > 0 ? `${daysRemaining}` : '<span style="color: #cc3f44;">Last Day</span>';
-                // return daysRemaining + 1;
             }
         }
 
@@ -63,9 +61,6 @@
         }
 
         function pageInit() {
-            // let not = $rootScope.notificationsArr.find(item => item.id == 'CREATE_COMPLAINT');
-            // let index = $rootScope.notificationsArr.indexOf(not);
-            // $rootScope.notificationsArr.splice(index, 1);
             ctrl.getComplaintCloseDaysCall()
             ctrl.getComplaintsCall()
         }

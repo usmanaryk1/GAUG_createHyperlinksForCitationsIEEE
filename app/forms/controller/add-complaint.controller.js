@@ -67,7 +67,6 @@
                         dateResolvedOn: ctrl.currentDateWithFormat,
                     };
                     ctrl.getContactValue(complaintData.complainantContactType, complaintData.complainantContact);
-                    // ctrl.getRelationValue(complaintData.complaintRelationshipType, complaintData.complainantRelationship)
                 }).catch(err => {
                     toastr.error("Couldn't get complaint");
                     $window.history.back();
