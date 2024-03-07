@@ -125,7 +125,15 @@
                     </form>
                 </div>
                 <hr/>
-                <div class="dataTables_wrapper form-inline dt-bootstrap">
+                <div ng-show="dAttendance.attendanceList.length">
+                    <div id="paginationButtons" class="text-right">
+                        <span class="pull-left" style="margin-top: 15px;">Showing {{((dAttendance.searchParams.pageNo - 1) * 10) + 1}} - {{(dAttendance.searchParams.pageNo * 10) < dAttendance.totalRecords ? (dAttendance.searchParams.pageNo * 10) : dAttendance.totalRecords}} of {{dAttendance.totalRecords}} records</span>
+                        <dir-pagination-controls boundary-links="true" 
+                                                 max-size="9"
+                                                 template-url="app/tpls/dirPagination.tpl.html" pagination-id="dailyAttendancePagination" on-page-change="dAttendance.pageChanged(newPageNumber)"></dir-pagination-controls>
+                    </div>
+                </div>
+                <div class="dataTables_wrapper form-inline dt-bootstrap" style="margin-top: 10px;">
                     <div class="table-responsive border0 scroll search_hide">
                         <div ng-if="!dAttendance.searchParams.isSchedule">
                             <table id="example-1" class="table table-striped table-bordered  table-small-font" ng-if="dAttendance.attendanceList.length" cellspacing="0">
