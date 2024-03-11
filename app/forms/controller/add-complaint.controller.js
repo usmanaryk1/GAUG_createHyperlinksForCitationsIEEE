@@ -23,10 +23,11 @@
         ctrl.title = 'Add Complaint';
         ctrl.subtitle = 'Create A New Complaint By Entering Complaint Information';
         ctrl.params = $stateParams;
+        ctrl.complaintReceiver = ctrl.currentUser.userName
         if (ctrl.params?.id) {
             ctrl.title = 'Edit Complaint';
             ctrl.subtitle = 'Edit The Complaint By Entering Complaint Information';
-            Page.setTitle("Edit Complaint")
+            Page.setTitle("Edit Complaint");            
         }
         ctrl.closingComplaint = true;
 
@@ -44,8 +45,7 @@
                 let complaintData = {};
                 FormsDAO.getComplaintById({ id: ctrl.params?.id }).then(res => {
                     complaintData = res;
-                    console.log(res);
-                    console.log(complaintData);
+                    ctrl.complaintReceiver = complaintData.complaintReceiver.fName
                     ctrl.complaint = {
                         complaintDate: ctrl.getDate(complaintData.complaintDate),
                         complainantName: complaintData.complainantName,
@@ -80,7 +80,6 @@
                     complaintType: "",
                     complaintDescription: "",
                     isFollowUpNeeded: "true",
-                    // complaintNotificationMethod: 'PHONE',
                     complaintResolution: "",
                     complainantSatisfied: "",
                     dateProposedResolution: null,

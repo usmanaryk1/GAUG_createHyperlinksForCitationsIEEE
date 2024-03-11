@@ -315,7 +315,7 @@
                                 <div class="col-sm-9">
                                     <input class="form-control" disabled charactersonly id="field-10"
                                         name="complaintReceiver" type="text" maxlength="50"
-                                        placeholder="{{addCompCtrl.currentUser.userName | titleCase}}" />
+                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}" />
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -334,7 +334,7 @@
                                         <label class="radio-field">
                                             <input name="Method" value="WRITING" type="radio"
                                                 ng-model="addCompCtrl.complaint.complaintMethod" />
-                                            Writing
+                                            In Writing
                                         </label>
                                         <label class="radio-field">
                                             <input name="Method" value="EMAIL" type="radio"
@@ -399,7 +399,7 @@
                                         <label class="radio-field">
                                             <input name="followUpNeeded" value="false" type="radio"
                                                 ng-model="addCompCtrl.complaint.isFollowUpNeeded" />
-                                            No, Resolved
+                                                Mark As Resolved
                                         </label>
                                     </div>
                                 </div>

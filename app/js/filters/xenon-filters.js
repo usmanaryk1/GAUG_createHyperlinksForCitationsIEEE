@@ -284,7 +284,7 @@ angular.module('xenon.filter', [])
             var date = new Date(input);
       
             // Format the date as 'dd/MM/yyyy'
-            var formattedDate = $filter('date')(date, 'dd/MM/yyyy');
+            var formattedDate = $filter('date')(date, 'MM/dd/yyyy');
       
             return formattedDate;
           } else {
