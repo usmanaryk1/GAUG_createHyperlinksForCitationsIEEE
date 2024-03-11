@@ -533,6 +533,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'edit_patient'),
                 controller: 'PatientEditCtrl as editPatient'
             }).
+            // edit patient record page
+            state('app.medical_reconciliation', {
+                url: '/medical_reconciliation/:id/',
+                templateUrl: appHelper.viewTemplatePath('patient', 'medical_reconciliation_form'),
+                controller: 'MedReconciliation as medRecon'
+            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,
