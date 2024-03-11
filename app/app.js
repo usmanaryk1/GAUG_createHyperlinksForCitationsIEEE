@@ -1259,7 +1259,7 @@ app.constant('ASSETS', {
         'timepicker': appHelper.assetPath('js/timepicker/bootstrap-timepicker.min.js'),
         'inputmask': appHelper.assetPath('js/inputmask/jquery.inputmask.bundle.js'),
         'formWizard': appHelper.assetPath('js/formwizard/jquery.bootstrap.wizard.min.js'),
-        'jQueryValidate': appHelper.assetPath('js/jquery-validate/jquery.validate.js'),
+        'jQueryValidate': appHelper.assetPath('js/jquery-validate/jquery.validate.min.js'),
         'formDirty': appHelper.assetPath('js/jquery.dirtyforms.js'),
         'dropzone': [
             appHelper.assetPath('js/dropzone/css/dropzone.css'),
