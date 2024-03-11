@@ -127,7 +127,7 @@
                 <hr/>
                 <div ng-show="dAttendance.attendanceList.length" class="col-sm-12">
                     <div id="paginationButtons" class="text-right">
-                        <span class="pull-left" style="margin-top: 15px;">Showing {{((dAttendance.searchParams.pageNo - 1) * 10) + 1}} - {{(dAttendance.searchParams.pageNo * 10) < dAttendance.totalRecords ? (dAttendance.searchParams.pageNo * 10) : dAttendance.totalRecords}} of {{dAttendance.totalRecords}} records</span>
+                        <span class="pull-left" style="margin-top: 15px;">Showing {{((dAttendance.searchParams.pageNo - 1) * dAttendance.searchParams.limit) + 1}} - {{(dAttendance.searchParams.pageNo * dAttendance.searchParams.limit) < dAttendance.totalRecords ? (dAttendance.searchParams.pageNo * dAttendance.searchParams.limit) : dAttendance.totalRecords}} of {{dAttendance.totalRecords}} records</span>
                         <dir-pagination-controls boundary-links="true" 
                                                  max-size="9"
                                                  template-url="app/tpls/dirPagination.tpl.html" pagination-id="dailyAttendancePagination" on-page-change="dAttendance.pageChanged(newPageNumber)"></dir-pagination-controls>
