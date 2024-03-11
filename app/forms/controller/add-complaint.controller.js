@@ -35,10 +35,6 @@
         // ctrl.signatureInitCall()
         ctrl.getListsCall()
 
-        ctrl.saveComplaintForm = function (action) {
-            console.log(action);
-        }
-
         /*================   FORM FUNCTIONS   ===================*/
         function generateForms() {
             $rootScope.isFormDirty = false;

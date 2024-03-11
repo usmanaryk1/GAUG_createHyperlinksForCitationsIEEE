@@ -37,13 +37,12 @@
             localStorage.setItem('complaint', JSON.stringify(complaint));
         }
 
-        function remainingDaysToClose (dateInserted, proposedDate) {
-            const dateInsertedObj = new Date(dateInserted);
+        function remainingDaysToClose (proposedDate) {
+            const dateInsertedObj = new Date();
             const proposedDateObj = new Date(proposedDate);
         
             const timeDiff = proposedDateObj - dateInsertedObj;
             const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            console.log(daysRemaining);
         
             if (daysRemaining < 0) {
                 return `<span style="color: #cc3f44">Overdue ${-1 * daysRemaining}</span>`;
@@ -66,7 +65,7 @@
         }
 
         ctrl.getRemainingDaysForClosing = function (complaint) {
-            return ctrl.remainingDaysToCloseCall(complaint.dateInserted, complaint.dateProposedResolution);
+            return ctrl.remainingDaysToCloseCall(complaint.dateProposedResolution);
         }
 
         ctrl.applySearch = function () {
@@ -117,7 +116,6 @@
         
         ctrl.openDeleteModal = function (complaint, modal_id, modal_size, modal_backdrop)
         {
-            console.log(complaint);
             $rootScope.deleteComplaintModel = $modal.open({
                 templateUrl: modal_id,
                 size: modal_size,
