@@ -11,26 +11,10 @@
         ctrl.remainingDaysToCloseCall = remainingDaysToClose
         ctrl.getComplaintCloseDaysCall = getComplaintCloseDays
         ctrl.currentDate = new Date();
+        // ctrl.complaintTypes = angular.copy(ontime_data.complaintTypes)
 
-        ctrl.pageInitCall();
 
-        // ctrl.openViewModal = function (complaint, modal_id, modal_size, modal_backdrop) {
-        //     var modalInstance = $modal.open({
-        //         templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
-        //         size: modal_size,
-        //         backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-        //         keyboard: false,
-        //         controller: 'ComplaintInfoCtrl as ComplaintInfo',
-        //         resolve: {
-        //             complaint: function () {
-        //                 return complaint;
-        //             }
-        //         }
-        //     });
-        //     modalInstance.result.then(function () {
-        //         console.log("popup closed");
-        //     });
-        // };
+        ctrl.pageInitCall()
 
         ctrl.openViewModal = function (complaint, modal_id, modal_size, modal_backdrop) {
             $rootScope.maskLoading();
@@ -64,7 +48,10 @@
             });
         };
         
-
+        // ctrl.getComplaintType = function (type){
+        //     let selectedType =  ctrl.complaintTypes.find(item => item.value == type)
+        //     return selectedType != undefined ? selectedType.title : ''
+        // }
 
         ctrl.setComplaint = function(complaint){
             localStorage.setItem('complaint', JSON.stringify(complaint));

@@ -3,8 +3,6 @@
         var ctrl = this;
         ctrl.complaint = complaint;
 
-        console.log(complaint);
-
 
         ctrl.close = function () {
             $modalInstance.close();

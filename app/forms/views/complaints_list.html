@@ -87,6 +87,7 @@
                                                         <th>Method</th>
                                                         <th>Contact Info</th>
                                                         <th>Received Date</th>
+                                                        <th ng-if="compCtrl.complaintType == 'close'">Resolution Date</th>
                                                         <th>Received By</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Remaining Days</th>
                                                         <th ng-if="compCtrl.complaintType == 'close'">Closed By</th>
@@ -114,7 +115,7 @@
                                                             complaint.complaintMethod == 'EMAIL'? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | dateOnly}}</td>
-                                                        <!-- <td>{{complaint.resolutionDate}}</td> -->
+                                                        <td ng-if="compCtrl.complaintType == 'close'">{{complaint.dateResolvedOn | dateOnly}}</td>
                                                         <td>{{complaint.complaintReceiver.fName  | titleCase}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'open'"
                                                             ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint))">
