@@ -1,10 +1,48 @@
 (function () {
-    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO) {
+    function DailyAttendanceCtrl($timeout, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $location, Page, $filter, EventTypeDAO, PositionDAO, PatientDAO, InsurerDAO) {
         var ctrl = this;
         Page.setTitle("Daily Attendance");
         ctrl.criteriaSelected = false;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
+        ctrl.nursingCareMap = {};
+        ctrl.staffCoordinatorMap = {};
+        ctrl.insuranceProviderMap = {};
+        $rootScope.positions = {};
+        PositionDAO.retrieveAll({}).then(function (res) {
+            if (res && res.length > 0) {
+                angular.forEach(res, function (position) {
+                    $rootScope.positions[position.id] = position.position;
+                });
+            }
+        });
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.nursingCareMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve nursing care list.");
+        });
+        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve staff coordinator list.");
+        });
+        InsurerDAO.retrieveAll().then(function (res) {
+            if (res.length !== 0) {
+                for (var i = 0; i < res.length; i++) {
+                    ctrl.insuranceProviderMap[res[i].id] = res[i].insuranceName;
+                }
+            }
+        }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
         //method is called when page is changed
         ctrl.pageChanged = function (pagenumber) {
             console.log("pagenumber", pagenumber);
@@ -292,6 +330,42 @@
             };
             $rootScope.utModal.obj = {id: timesheet.id, unauthorizedTime: timesheet.ut, forPayroll: false, forBilling: false, isMissedPunch: timesheet.isMissedPunch};
         };
+        ctrl.openEmployeeModal = function (employee, modal_id, modal_size, modal_backdrop)
+        {
+            $rootScope.selectEmployeeModel = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.selectEmployeeModel.baseUrl = ctrl.baseUrl;
+            $rootScope.selectEmployeeModel.companyCode = ctrl.companyCode;
+            $rootScope.selectEmployeeModel.employee = angular.copy(employee);
+            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
+                $rootScope.selectEmployeeModel.employee.languageSpoken = employee.languageSpoken.split(",");
+            }
+
+        };
+
+        ctrl.openPatientModal = function (patient, modal_id, modal_size, modal_backdrop)
+        {
+            PatientDAO.getPatientsForSchedule({patientIds: patient.id, addressRequired: true}).then(function (patients) {
+                var patient = patients[0];
+                $rootScope.selectPatientModel = $modal.open({
+                    templateUrl: modal_id,
+                    size: modal_size,
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false
+                });
+                $rootScope.selectPatientModel.patient = angular.copy(patient);
+                $rootScope.selectPatientModel.patient.insuranceProviderName = ctrl.insuranceProviderMap[patient.insuranceProviderId];
+                $rootScope.selectPatientModel.patient.nurseCaseManagerName = ctrl.nursingCareMap[patient.nurseCaseManagerId];
+                $rootScope.selectPatientModel.patient.staffingCordinatorName = ctrl.staffCoordinatorMap[patient.staffingCordinatorId];
+                if (patient.languagesSpoken != null && patient.languagesSpoken.length > 0) {
+                    $rootScope.selectPatientModel.patient.languagesSpoken = patient.languagesSpoken.split(",");
+                }
+            });
+        };
         ctrl.filterSchedule = function () {
             ctrl.searchParams.pageNo = 1;
             if (!ctrl.searchParams.startDate || ctrl.searchParams.startDate == "") {
@@ -411,5 +485,5 @@
         };
     }
     ;
-    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", DailyAttendanceCtrl]);
+    angular.module('xenon.controllers').controller('DailyAttendanceCtrl', ["$timeout", "$rootScope", "TimesheetDAO", "EmployeeDAO", "$modal", "$location", "Page", "$filter", "EventTypeDAO", "PositionDAO", "PatientDAO", "InsurerDAO", DailyAttendanceCtrl]);
 })();

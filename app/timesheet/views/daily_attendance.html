@@ -164,10 +164,10 @@
                                             </span>
                                             <span ng-if='!validNumber(timesheet.roundedPunchOutTime)'>Not Punched</span>
                                         </th>
-                                        <td>
+                                        <td ng-click="dAttendance.openEmployeeModal(timesheet.employeeId, 'modal-5')" style="cursor: pointer;">
                                             {{timesheet.employeeId.lName + ", " + timesheet.employeeId.fName + " " + timesheet.employeeId.middleInitial}}
                                         </td>
-                                        <td>
+                                        <td ng-click="dAttendance.openPatientModal(timesheet.patientId, 'modal-6')" style="cursor: pointer;">
                                             {{timesheet.patientId.lName + ", " + timesheet.patientId.fName + " " + timesheet.patientId.middleInitial}}
                                         </td>
                                         <td>
@@ -414,6 +414,349 @@
     <button type="submit" class="btn btn-success" ng-click="utModal.approve();">Approve</button>
     </div>
     </form>
+</script>
+<script type="text/ng-template" id="modal-5">
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="user_img"> 
+    <img alt="user" class="img-cirlce img-responsive" src="assets/images/user-5.png" ng-src="{{(selectEmployeeModel.employee.profileImage!=null && selectEmployeeModel.employee.profileImage!='') ?(amazonPublicUrl+selectEmployeeModel.companyCode+'/'+selectEmployeeModel.employee.profileImage):('assets/images/user-5.png')}}"> </div>
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectEmployeeModel.employee.lName}}, {{selectEmployeeModel.employee.fName}} {{selectEmployeeModel.employee.middleInitial}}</div>
+    <p>{{positions[selectEmployeeModel.employee.companyPositionId]}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectEmployeeModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Position</strong></label>
+    <div class="col-md-7">
+    {{positions[selectEmployeeModel.employee.companyPositionId]}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Phone 2</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactName!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Name</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectEmployeeModel.employee.emergencyContactNumber!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Emergency Contact Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.emergencyContactNumber | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Address</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.address1}}<div ng-if="selectEmployeeModel.employee.address2 != null">{{selectEmployeeModel.employee.address2}}</div><div>  {{selectEmployeeModel.employee.city}}, {{selectEmployeeModel.employee.state}}, {{selectEmployeeModel.employee.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Date Of Birth</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.dateOfBirth|date :dateFormat}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Social Security Number</strong></label>
+    <div class="col-md-7">
+    {{selectEmployeeModel.employee.ssn | ssn}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-5"><strong>Languages Spoken</strong></label>
+    <div class="col-md-7">
+    <span ng-if="selectEmployeeModel.employee.languageSpoken== null || selectEmployeeModel.employee.languageSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectEmployeeModel.employee.languageSpoken">{{languages[language]}}
+    <label ng-if="$index<selectEmployeeModel.employee.languageSpoken.length-1">, </label>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectEmployeeModel.close();">Close</button>
+    </div>
+</script>
+<script type="text/ng-template" id="modal-6">
+
+
+
+    <div class="modal-body">
+    <div class="row">
+    <div class="user_panel col-md-12">
+    <div class="emp_user_hd">
+    <div class="emp_user_name">{{selectPatientModel.patient.lName}}, {{selectPatientModel.patient.fName}} {{selectPatientModel.patient.middleInitial}}</div>
+    <p>{{selectPatientModel.patient.insuranceProviderName}}</p>
+    </div>
+    <button type="button" class="close" ng-click="selectPatientModel.close();" aria-hidden="true">&times;</button>
+    </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Gender</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.gender==='M'?'Male':'Female'}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurer</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceProviderName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Insurance ID</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.insuranceId}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone Number</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.phone2!=null">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Phone 2</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.phone2 | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Languages Spoken</strong></label>
+    <div class="col-md-8">
+    <span ng-if="selectPatientModel.patient.languagesSpoken== null || selectPatientModel.patient.languagesSpoken.length==0">N/A</span>
+    <span ng-repeat="language in selectPatientModel.patient.languagesSpoken">{{languages[language]}}<label ng-if="$index<selectPatientModel.patient.languagesSpoken.length-1">, </label>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Address</strong></label>
+    <div class="col-md-8" ng-show="selectPatientModel.patient.patientAddress">
+    {{selectPatientModel.patient.patientAddress.address1}}
+    <div ng-if="selectPatientModel.patient.patientAddress.address2 != null">
+    {{selectPatientModel.patient.patientAddress.address2}}
+    </div> 
+    <div>{{selectPatientModel.patient.patientAddress.city}}, {{selectPatientModel.patient.patientAddress.state}}, {{selectPatientModel.patient.patientAddress.zipcode}}</div>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Date Of Birth</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.dateOfBirth|date :dateFormat}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.staffingCordinatorName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Nurse Case Manager</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.nurseCaseManagerName}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Care Coordinator</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinator}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Phone</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorContact | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Email</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorEmail}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>C.C. Fax</strong></label>
+    <div class="col-md-8">
+    {{selectPatientModel.patient.careCordinatorFax | tel}} 
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    <div class="row" ng-if="selectPatientModel.patient.patientCareTypeCollection && selectPatientModel.patient.patientCareTypeCollection.length>0">
+    <div class="col-md-12">
+
+    <div class="form-group">
+    <label for="field-1" class="control-label col-md-4"><strong>Authorized Services</strong></label>
+    <div class="col-md-8">
+    <span ng-repeat="care in selectPatientModel.patient.patientCareTypeCollection">
+    {{care.insuranceCareTypeId.companyCaretypeId.careTypeTitle}}
+    <span ng-if="care.authorizedHours">
+    ( {{care.authorizedHours}} hours )
+    </span>
+    <br>
+    </span>
+    </div>
+    </div>	
+
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="selectPatientModel.close();">Close</button>
+    </div>
 </script>
 <script type="text/javascript">
     function hide(obj) {
