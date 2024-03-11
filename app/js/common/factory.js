@@ -186,11 +186,7 @@ angular.module('xenon.factory').
             // Navigation to admin portal based on feature assigned
             $rootScope.navigateToPreferredMenu = function ()
             {
-
-                console.log("Routing ");
-
                 if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_USER') > -1) {
-                    console.log("User List");
                     $state.go('admin.user-list', {status: 'active'});
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_WORKSITE') > -1) {
                     console.log("VIEW worksite");

@@ -14,23 +14,56 @@
 
         ctrl.pageInitCall();
 
+        // ctrl.openViewModal = function (complaint, modal_id, modal_size, modal_backdrop) {
+        //     var modalInstance = $modal.open({
+        //         templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
+        //         size: modal_size,
+        //         backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+        //         keyboard: false,
+        //         controller: 'ComplaintInfoCtrl as ComplaintInfo',
+        //         resolve: {
+        //             complaint: function () {
+        //                 return complaint;
+        //             }
+        //         }
+        //     });
+        //     modalInstance.result.then(function () {
+        //         console.log("popup closed");
+        //     });
+        // };
+
         ctrl.openViewModal = function (complaint, modal_id, modal_size, modal_backdrop) {
-            var modalInstance = $modal.open({
-                templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false,
-                controller: 'ComplaintInfoCtrl as ComplaintInfo',
-                resolve: {
-                    complaint: function () {
-                        return complaint;
+            $rootScope.maskLoading();
+            FormsDAO.getComplaintById({ id: complaint?.id }).then(function (complaintData) {
+                
+                var modalInstance = $modal.open({
+                    templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
+                    size: modal_size,
+                    backdrop: typeof modal_backdrop === 'undefined' ? true : modal_backdrop,
+                    keyboard: false,
+                    controller: 'ComplaintInfoCtrl as ComplaintInfo',
+                    resolve: {
+                        complaint: function () {
+                            return complaintData;
+                        }
                     }
-                }
-            });
-            modalInstance.result.then(function () {
-                console.log("popup closed");
+                });
+                modalInstance.result.then(function () {
+                    console.log("popup closed");
+                });
+            }).catch(function (error) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+                    }
+                }); // showLoadingBar
+                console.error("Error fetching complaint data: ", error);
+            }).then(()=>{
+                $rootScope.unmaskLoading();
             });
         };
+        
 
 
         ctrl.setComplaint = function(complaint){

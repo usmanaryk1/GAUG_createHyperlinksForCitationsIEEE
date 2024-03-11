@@ -4,7 +4,6 @@
             <div class="emp_user_hd">
                 
                 <div class="emp_user_name">{{ComplaintInfo.complaint.complainantName}}</div>
-                <!-- <p>{{ComplaintInfo.complaint.insuranceProviderName}}</p> -->
             </div>
             <button type="button" class="close" ng-click="ComplaintInfo.close();" aria-hidden="true">&times;</button>
         </div>
@@ -107,6 +106,28 @@
                 <label for="field-1" class="control-label col-md-5"><strong>Complaint Description</strong></label>
                 <div class="col-md-7">
                     {{ComplaintInfo.complaint.complaintDescription}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="ComplaintInfo.complaint.isClosed">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-5"><strong>Closed By</strong></label>
+                <div class="col-md-7">
+                    {{ComplaintInfo.complaint.resolvedBy.fullName}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="ComplaintInfo.complaint.isClosed">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="field-1" class="control-label col-md-5"><strong>Signature</strong></label>
+                <div class="col-md-7">
+                    <!-- <img ng-src="data:image/jpeg;base64,{{ComplaintInfo.str}}" alt=""> -->
+                    <img src="https://picsum.photos/id/10/50/50" alt="">
+
                 </div>
             </div>
         </div>

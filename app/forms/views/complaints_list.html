@@ -89,7 +89,8 @@
                                                         <th>Received Date</th>
                                                         <th>Received By</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Remaining Days</th>
-                                                        <th ng-if="compCtrl.complaintType == 'open'">Actions</th>
+                                                        <th ng-if="compCtrl.complaintType == 'close'">Closed By</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -118,20 +119,24 @@
                                                         <td ng-if="compCtrl.complaintType == 'open'"
                                                             ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint))">
                                                         </td>
-                                                        <td ng-if="compCtrl.complaintType == 'open'">
+                                                        <td ng-if="compCtrl.complaintType == 'close'">{{complaint.resolvedBy == null? '':complaint.resolvedBy.fullName}}</td>
+                                                        <td>
                                                             <div class="center">
-                                                                <a ui-sref="app.add-complaint({id: complaint.id})"
+                                                                <a ng-if="compCtrl.complaintType == 'open'" ui-sref="app.add-complaint({id: complaint.id})"
                                                                     ng-click="compCtrl.setComplaint(complaint)"
                                                                     class="btn icon-left fa fa-pencil edit_button"
                                                                     href="" tooltip="Edit"><span
                                                                         class="ed_b"></span></a>
                                                                 <a class="btn icon-left fa fa-trash-o delete_button"
-                                                                    ng-if="hasAccess('VIEW_ALL_COMPLAINTS')"
+                                                                    ng-if="hasAccess('VIEW_ALL_COMPLAINTS') && compCtrl.complaintType == 'open'"
                                                                     ng-click="compCtrl.openDeleteModal(complaint, 'deleteModel')"
                                                                     tooltip="Delete"><span class="ed_b"></span></a>
-
+                                                                    <a ng-if="compCtrl.complaintType == 'close'" class="btn icon-left fa fa-search deactivate_bt"
+                                                                    ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
+                                                                    tooltip="View Details"><span class="ed_b"></span></a>
                                                             </div>
                                                         </td>
+                                                     
                                                     </tr>
                                                 </tbody>
                                             </table>
