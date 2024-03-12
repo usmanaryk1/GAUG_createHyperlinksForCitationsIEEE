@@ -301,7 +301,13 @@ ontimedata = {
     ],
     eventTypes: {S: "Schedule", A: "Available", U: "Unavailable"},
     recurranceTypes: {D: "Daily", W: "Weekly", N: "No Repeat"},
-    reportTypes: [{id: 'workedhours', label: "Worked Hours"}, {id: 'patientcensus', label: "Patient Census"}, {id: 'employeetimesheet', label: "Employee Time Sheet"}, {id: 'patienttimesheet', label: "Patient Time Sheet"}, {id: 'employeecensus', label: "Employee Census - Compliance Tracker"}],
+    reportTypes: [
+        {id: 'employeecensus', label: "Employee Census - Compliance Tracker"},
+        {id: 'employeetimesheet', label: "Employee Time Sheet"},
+        {id: 'patientcensus', label: "Patient Census"},
+        {id: 'patienttimesheet', label: "Patient Time Sheet"},
+        {id: 'workedhours', label: "Worked Hours"},
+    ],
     unitValues: [{value: 0.25, label: "15 min"}, {value: 0.5, label: "30 min"}, {value: 0.45, label: "45 min"}, {value: 1, label: "1 hr"}],
 };
 
