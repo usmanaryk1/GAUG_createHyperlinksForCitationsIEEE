@@ -1,0 +1,259 @@
+<style>
+    .form-controls-group {
+        display: grid;
+        grid-template-columns: 1fr 75px;
+    }
+
+    .frequency-group {
+        display: flex;
+        /* grid-template-columns: ; */
+    }
+
+    .frequency-group input {
+        width: auto;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .mt-7 {
+        margin-top: 7px;
+    }
+
+    .sign-pad-border {
+        border: 1px solid #B0B0B0;
+    }
+
+    .sign-pad-border-required {
+        border: 1px solid #cc3f44;
+    }
+
+    .signError {
+        padding-left: 24px;
+        color: #cc3f44;
+        font-size: 12px;
+    }
+
+    .unit-input {
+        display: block;
+        width: 100%;
+        height: 32px;
+        padding: 6px 12px;
+        font-size: 13px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #B0B0B0;
+        border-radius: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+    .unit-input:focus {
+        border-color: rgba(104, 184, 40, .5);
+        outline: 0;
+        /* -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(104, 184, 40, .6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(104, 184, 40, .6); */
+    }
+</style>
+
+<!--================== HEADER ====================-->
+<div class="page-title pad_bt0">
+    <div class="title-env">
+        <h1 class="title">{{medRecon.patientName + ' - Medication Reconciliation'}}</h1>
+        <span class="description">
+            <ol class="breadcrumb bc-1 pad_top5" xe-breadcrumb>
+                <li>
+                    <a href="#/app/patient_records"><i class="fa-home"></i>Patient Records</a>
+                </li>
+                <li>
+                    <a href="#/app/patient_records/{{medRecon.patientId}}/list">Records List</a>
+                </li>
+                <li class="active">
+                    <strong>Medical Reconciliation</strong>
+                </li>
+            </ol>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <form name="myForm" class="form-horizontal validate" role="form" id="medication_reconciliation_form"
+                ng-submit="medRecon.submitForm()" novalidate="">
+
+
+                <!-- ADD MEDICATION -->
+                <div class="med-array" ng-repeat="med in medRecon.medicationsArr track by $index">
+
+                    <div class="form-group-separator" ng-if="$index != 0">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="medication{{$index}}">Medication</label>
+                        <div class="col-md-9">
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($) {
+                                    setTimeout(function () {
+                                        $('#medications0').select2({
+                                            placeholder: 'Select Medication',
+                                        }).on('select2-open', function () {
+                                            // Adding Custom Scrollbar
+                                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                        });
+                                    }, 200);
+                                });</script>        
+
+                            <select name="medications{{$index}}" id="medications{{$index}}" required data-validate="required"
+                                data-message-required="Please select medication" class="form-control medicationsList"
+                                ng-model="med.medication">
+                                <option value="" selected>Select Medication</option>
+                                <option ng-repeat="item in medRecon.medicationsData" value="{{item.med}}">{{item.med}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div ng-show="med.medication == 'Other'" class="form-group-separator"></div>
+
+                    <div class="form-group" ng-show="med.medication == 'Other'">
+                        <label for="medicationOther{{$index}}" class="control-label col-sm-3"></label>
+                        <div class="col-sm-9">
+                            <input type="text" id="medicationOther{{$index}}" name="medicationOther{{$index}}"
+                                class="form-control" placeholder="Please enter medication name" required
+                                data-validate="required" data-message-required="Please enter medication">
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                        <label for="dosage{{$index}}" class="control-label col-sm-3">Dosage</label>
+
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <input type="number" name="dosage{{$index}}" id="dosage{{$index}}" required
+                                        data-validate="required" data-message-required="Please enter dosage value."
+                                        class="form-control" ng-model="med.dosage" placeholder="Quantity">
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="unit-input" name="dosageUnit{{$index}}" id="dosageUnit{{$index}}"
+                                        ng-model="med.dosageUnit">
+                                        <option value="mg">mg</option>
+                                        <option value="gm">gm</option>
+                                        <option value="ml">ml</option>
+                                        <option value="ltr">ltr</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Frequency</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="frequency{{$index}}" id="frequency{{$index}}" required
+                                data-validate="required" data-message-required="Please select frequency"
+                                ng-model="med.frequency">
+                                <option value="" selected hidden>Please select Frequency</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator" ng-show="med.frequency == 'Other'"></div>
+
+                    <div class="form-group" ng-show="med.frequency == 'Other'">
+                        <label for="frequencyOther{{$index}}" class="control-label col-sm-3"></label>
+                        <div class="col-md-9">
+                            <input type="text" id="frequencyOther{{$index}}" name="frequencyOther{{$index}}"
+                                ng-model="med.frquencyOther" class="form-control" placeholder="Please enter frequency"
+                                required data-validate="required" data-message-required="Please enter frequency">
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                        <label for="routes{{$index}}" class="col-sm-3 control-label">Route</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="routes{{$index}}" id="routes{{$index}}" required
+                                data-validate="required" data-message-required="Please select route." ng-model="med.route">
+                                <option value="" hidden selected>Please select Route</option>
+                                <option value="oral">Oral</option>
+                                <option value="rectal">Rectal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group-separator"></div>
+
+                    <div class="form-group">
+                        <label for="purpose{{$index}}" class="control-label col-sm-3">Purpose</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="purpose{{$index}}" name="purpose{{$index}}" class="form-control"
+                                required data-validate="required"
+                                data-message-required="Please enter purpose for medication" ng-model="med.purpose">
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button ng-if="$index == medRecon.medicationsArr.length - 1" class="btn btn-info pull-right green_bt" type="button"
+                            ng-click="medRecon.addMedication($index)">+ Medication</button>
+                            <button class="btn btn-info btn-single delet_bt pull-right"
+                                ng-if="$index != medRecon.medicationsArr.length - 1" type="button"
+                                ng-click="medRecon.removeMedication($index)">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Note</label>
+                    <div class="col-sm-9">
+                        <textarea name="medicationNote" id="medicationNote" required data-validate="required"
+                            data-message-required="Please enter note" class="form-control" id="" cols="30"
+                            rows="5" ng-model="medRecon.medObj.nurseNote"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-sm-3 control-label">Signature</label>
+                    <div class="col-sm-9">
+                        <signature-pad width="550" height="175" class="sign-pad-border"
+                            ng-class="medRecon.medObj.nurseSign  == '' && medRecon.showSignError ? 'sign-pad-border-required':''"
+                            dataurl="medRecon.medObj.nurseSign" clear="clear"></signature-pad>
+                        <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
+                            ng-click="clear(); medRecon.clearSign()" ng-disabled="!medRecon.medObj.nurseSign">Clear signature</button>
+                    </div>
+                    <div class="row" ng-if="medRecon.medObj.nurseSign  == '' && medRecon.showSignError">
+                        <span class="col-sm-9 pull-right signError">
+                            Please enter signature
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button class="btn btn-info green_bt pull-right" type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

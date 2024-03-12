@@ -32,9 +32,8 @@
         ctrl.closingComplaint = true;
 
         /*================   FUNCTION CALLS   ===================*/
-        ctrl.generateFormCall();
-        // ctrl.signatureInitCall()
         ctrl.getListsCall()
+        ctrl.generateFormCall();
 
         /*================   FORM FUNCTIONS   ===================*/
         function generateForms() {
@@ -42,30 +41,36 @@
             ctrl.clearSignatureCall()
 
             if (ctrl.params?.id) {
-                let complaintData = {};
+                $rootScope.maskLoading();
                 FormsDAO.getComplaintById({ id: ctrl.params?.id }).then(res => {
-                    complaintData = res;
-                    ctrl.complaintReceiver = complaintData.complaintReceiver.fName
+                    console.log(res);
+                    ctrl.complaintReceiver = res.complaintReceiver.fName
+                    console.log(ctrl.patientList);
                     ctrl.complaint = {
-                        complaintDate: ctrl.getDate(complaintData.complaintDate),
-                        complainantName: complaintData.complainantName,
-                        complainantContactType: complaintData.complainantContactType,
-                        complaintMethod: complaintData.complaintMethod,
-                        complainantRelationshipType: complaintData.complainantRelationshipType,
-                        complainantRelationship: complaintData.complainantRelationship,
-                        complaintType: complaintData.complaintType,
-                        complaintDescription: complaintData.complaintDescription,
-                        isFollowUpNeeded: complaintData.isFollowUpNeeded.toString(),
+                        complaintDate: ctrl.getDate(res.complaintDate),
+                        complainantName: res.complainantName,
+                        complainantContactType: res.complainantContactType,
+                        complaintMethod: res.complaintMethod,
+                        complainantRelationshipType: res.complainantRelationshipType,
+                        // complainantRelationship: 'Test, Patient1221',
+
+                        complainantRelationship: res.complainantRelationship,
+                        complaintType: res.complaintType,
+                        complaintDescription: res.complaintDescription,
+                        isFollowUpNeeded: res.isFollowUpNeeded.toString(),
                         complaintResolution: "",
                         complainantSatisfied: "",
-                        dateProposedResolution: null,
+                        dateProposedResolution: ctrl.getDate(res.dateProposedResolution),
                         signature: null,
                         dateResolvedOn: ctrl.currentDateWithFormat,
                     };
-                    ctrl.getContactValue(complaintData.complainantContactType, complaintData.complainantContact);
+                    ctrl.getContactValue(res.complainantContactType, res.complainantContact);
+                    console.log(ctrl.complaint);
                 }).catch(err => {
                     toastr.error("Couldn't get complaint");
                     $window.history.back();
+                }).then(()=>{
+                    $rootScope.unmaskLoading();
                 })
 
             } else {
@@ -103,6 +108,9 @@
         }
 
         ctrl.saveForm = function (action) {
+
+            console.log(ctrl.complaint.signature);
+
 
             if ($('#add_complaint_form')[0].checkValidity()) {
                 var complaintToSave = angular.copy(ctrl.complaint);
@@ -147,23 +155,6 @@
                         $rootScope.unmaskLoading();
                     })
                 }
-                // else if(ctrl.params?.id && !ctrl.complaint.isFollowUpNeeded){
-                //     FormsDAO.updateComplaint(complaintToSave).then((res) => {
-                //         // ctrl.generateFormCall();
-                //         $rootScope.isFormDirty = false;
-                //         toastr.success("Complaint updated successfully")
-                //         if ($.fn.dirtyForms) {
-                //             $('form').dirtyForms('setClean');
-                //             $('.dirty').removeClass('dirty');
-                //         }
-
-                //         $state.go('app.complaints', { status: 'open' });
-                //     }).catch((err) => {
-                //         toastr.error("Unable to update the Complaint.");
-                //     }).then(function () {
-                //         $rootScope.unmaskLoading();
-                //     })
-                // }
                  else {
                     FormsDAO.addComplaint(complaintToSave).then((res) => {
                         // ctrl.generateFormCall();
@@ -208,9 +199,9 @@
         function getPatientsList() {
             return PatientDAO.retrieveForSelect({ 'status': 'active' }).then(function (res) {
                 ctrl.patientList = res;
-                if ($state.params.patientId && $state.params.patientId !== '') {
-                    ctrl.search.patientId = $state.params.patientId;
-                }
+                // if ($state.params.patientId && $state.params.patientId !== '') {
+                //     ctrl.search.patientId = $state.params.patientId;
+                // }
             }).catch(function () {
                 toastr.error("Failed to retrieve patient list.");
             });

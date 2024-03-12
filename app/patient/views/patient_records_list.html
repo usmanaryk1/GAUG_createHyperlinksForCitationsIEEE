@@ -69,9 +69,9 @@
                                                 </td>
                                                 <td align="center"> {{record.expiryDate}} </td>
                                                 <td align="center">
-                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit" ui-sref="app.edit_patient({id: record.patientId, recordType: record.type})"
+                                                    <a class="btn icon-left fa fa-pencil edit_button" tooltip="Edit"
                                                         ng-if="record.attachmentType !== 'Ontime Application Form'"
-                                                        ng-click="patientRecordsCtrl.openAttachmentModal(record, 'Edit')"><span
+                                                        ng-click="patientRecordsCtrl.goToEditForm(record, 'Edit')"><span
                                                             class="ed_b"></span></a>
 
                                                     <!--                                                    <a class="btn icon-left fa fa-download download_bt" ng-if="record.attachmentType !== 'Ontime Application Form'"                                                    
