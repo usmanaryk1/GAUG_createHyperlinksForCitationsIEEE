@@ -60,7 +60,7 @@
                         isFollowUpNeeded: res.isFollowUpNeeded.toString(),
                         complaintResolution: "",
                         complainantSatisfied: "",
-                        dateProposedResolution: null,
+                        dateProposedResolution: ctrl.getDate(res.dateProposedResolution),
                         signature: null,
                         dateResolvedOn: ctrl.currentDateWithFormat,
                     };
