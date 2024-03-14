@@ -259,10 +259,10 @@
                                         <th>
                                             {{timesheet.startDate|timesheetformat}} - {{timesheet.startDate|date :dateFormat}}
                                         </th>
-                                        <td>
+                                        <td ng-click="dAttendance.openEmployeeModal(timesheet.employee, 'modal-5')" style="cursor: pointer;">
                                             <span ng-if="timesheet.employee">{{timesheet.employee.lName + ", " + timesheet.employee.fName + " " + timesheet.employee.middleInitial}}</span>
                                         </td>
-                                        <td>
+                                        <td ng-click="dAttendance.openPatientModal(timesheet.patient, 'modal-6')" style="cursor: pointer;">
                                             <span ng-if="timesheet.patient">{{timesheet.patient.lName + ", " + timesheet.patient.fName + " " + timesheet.patient.middleInitial}}</span>
                                         </td>
                                         <th>
@@ -272,11 +272,26 @@
                                             {{timesheet.roundedEndTime|date :timeFormat}}
                                         </th>
                                         <th>
-                                            {{timesheet.timeSheet.roundedPunchInTime|date : timeFormat}}
+                                            <div ng-click="hide(this);" onclick="hide(this);" style="cursor: pointer;">
+                                                <div ng-class="{
+                                                        'black_dot'
+                                                                :timesheet.timeSheet.punchInColorFlag== 'black', 'red_dot
+                                                        ':timesheet.timeSheet.punchInColorFlag == 'red', 'green_dot':timesheet.timeSheet.punchInColorFlag == 'green'}"></div> 
+                                                {{timesheet.timeSheet.roundedPunchInTime|date :timeFormat}}
+                                            </div>
+                                            <div style="display: none;">{{timesheet.timeSheet.punchInTime|date:'MM/dd/yyyy hh:mm a'}}</div>
                                         </th>
                                         <th>
-                                            <span ng-if='validNumber(timesheet.timeSheet.punchOutTime)'>{{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}</span>
-                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.punchOutTime)'>Not Punched</span>
+                                            <div ng-if='validNumber(timesheet.timeSheet.roundedPunchOutTime)' style="cursor: pointer;" ng-click="hide(this);" onclick="hide(this);">
+                                                <div ng-class="{
+                                                            'black_dot'
+                                                                    :timesheet.timeSheet.punchOutColorFlag == 'black', 'red_dot
+                                                                    ':timesheet.timeSheet.punchOutColorFlag == '
+                                                            red', 'green_dot':timesheet.timeSheet.punchOutColorFlag == 'green'}"></div>
+                                                {{timesheet.timeSheet.roundedPunchOutTime|date :timeFormat}}
+                                            </div>
+                                            <div style="display: none;">{{timesheet.timeSheet.punchOutTime|date:'MM/dd/yyyy hh:mm a'}}</div>
+                                            <span ng-if='timesheet.timeSheet && !validNumber(timesheet.timeSheet.roundedPunchOutTime)'>Not Punched</span>
                                         </th>
                                         <th>
                                 <div class="action-btn" ng-if="timesheet.timeSheet">
