@@ -539,6 +539,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'medication_reconciliation_form'),
                 controller: 'MedicationReconciliationCtrl as medRecon'
             }).
+            // Progress Note Form
+            state('app.progress_note', {
+                url: '/progress_note/:id',
+                templateUrl: appHelper.viewTemplatePath('patient', 'progress_note_form'),
+                controller: 'ProgressNotes as progressNote'
+            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,

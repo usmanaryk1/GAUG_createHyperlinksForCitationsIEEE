@@ -76,6 +76,8 @@
                 $state.go('app.edit_patient', { id: record.patientId, recordType: record.type });
             if (record.type == 'Medication_Reconciliation')
                 $state.go('app.medication_reconciliation', { id: record.patientId });
+            if (record.type == 'Progress_Note')
+                $state.go('app.progress_note', { id: record.patientId })
         }
 
     }

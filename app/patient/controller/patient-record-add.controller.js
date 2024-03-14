@@ -17,7 +17,9 @@
                 if (ctrl.type.value == 'Nursing_Assessment')
                     $state.go('app.edit_patient', { id: res.patientId, recordType: res.type });
                 if (ctrl.type.value == 'Medication_Reconciliation')
-                    $state.go('app.medical_reconciliation', { id: res.patientId});
+                    $state.go('app.medical_reconciliation', { id: res.patientId });
+                if (record.type == 'Progress_Note')
+                    $state.go('app.progress_note', { id: record.patientId })
             }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,
