@@ -371,8 +371,12 @@
             <label class="col-sm-3 control-label">Discharge Reason</label>
             <div class="col-sm-8">
             <select class="form-control" name ="reason" id="disReason" ng-model="dischargePatientModel.reason" ng-init="dischargePatientModel.reason='death'">
-                <option value="death" >Death</option>
-                <option value="other">Other</option>
+                <option value="Dis-enrolled" >Dis-enrolled</option>
+                <option value="Patient Switched Providers">Patient Switched Providers</option>
+                <option value="Expired" >Expired</option>
+                <option value="Admitted To LTC Facility">Admitted To LTC Facility</option>
+                <option value="Extended Vacation" >Extended Vacation</option>
+                <option value="Other">Other</option>
             </select>
             </div>
         </div>
