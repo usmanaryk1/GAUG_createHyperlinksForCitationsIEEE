@@ -8,11 +8,7 @@
         ctrl.patientId = $state.params.id
         ctrl.showSignError = false;
 
-        ctrl.medObj = {
-            nurseNote: '',
-            nurseSign: '',
-            medications: []
-        }
+
 
         // MEDICATION ARRAY
         ctrl.medicationsArr = [
@@ -26,6 +22,12 @@
                 purpose: ''
             }
         ]
+
+        ctrl.medObj = {
+            nurseNote: '',
+            nurseSign: '',
+            medications: ctrl.medicationsArr
+        }
 
         // Function to add a new medication
         ctrl.addMedication = function (index) {
@@ -57,16 +59,16 @@
         };
 
         ctrl.submitForm = function () {
-            console.log(ctrl.medObj.nurseSign, ctrl.showSignError);
             if (ctrl.medObj.nurseSign == '') {
                 ctrl.showSignError = true
-                console.log(ctrl.medObj.nurseSign, ctrl.showSignError);
             } else {
                 ctrl.showSignError = false
             }
 
+            console.log(ctrl.medObj);
+
             if ($('#medication_reconciliation_form')[0].checkValidity()) {
-                console.log('VERIFICATION');
+                $state.go('app.patient_records_patient', { patientId: ctrl.patientId });
             }
         }
 
@@ -89,6 +91,8 @@
         };
 
         ctrl.clearSign = function () {
+            if(ctrl.showSignError)
+            return
             ctrl.medObj.nurseSign = ''
             ctrl.showSignError = true;
         }
@@ -137,21 +141,17 @@
 
         ctrl.pageInitCall = pageInit;
 
-
-
         ctrl.routesArr = [
             { title: 'Oral', id: 1 },
             { title: 'Rectal', id: 2 },
             { title: 'Intradermal', id: 3 },
         ]
 
-
         function pageInit() {
             $rootScope.maskLoading();
             PatientDAO.get({ id: $state.params.id }).then(function (res) {
                 ctrl.patient = res;
                 ctrl.patientName = res.fName
-                console.log(res);
             }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,
@@ -165,10 +165,7 @@
             });
         }
 
-
         ctrl.pageInitCall()
-
-
     };
     angular.module('xenon.controllers').controller('MedicationReconciliationCtrl', ["$rootScope", "PatientDAO", "$state", "$http", "$sce", "$window", "$timeout", "$scope", MedicationReconciliationCtrl]);
 })();

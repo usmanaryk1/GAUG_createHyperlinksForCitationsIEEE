@@ -85,8 +85,8 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel">
-            <form name="myForm" class="form-horizontal validate" id="medication_reconciliation_form"
-                ng-submit="medRecon.submitForm()" name="medication_reconciliation_form" novalidate="">
+            <form name="myForm" class="form-horizontal validate" role="form" id="medication_reconciliation_form"
+                ng-submit="medRecon.submitForm()" novalidate="">
 
 
                 <!-- ADD MEDICATION -->
@@ -108,10 +108,7 @@
                                             $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                                         });
                                     }, 200);
-                                });</script>
-
-           
-
+                                });</script>        
 
                             <select name="medications{{$index}}" id="medications{{$index}}" required data-validate="required"
                                 data-message-required="Please select medication" class="form-control medicationsList"
@@ -168,10 +165,10 @@
                                 data-validate="required" data-message-required="Please select frequency"
                                 ng-model="med.frequency">
                                 <option value="" selected hidden>Please select Frequency</option>
-                                <option value="mg">mg</option>
-                                <option value="gm">gm</option>
-                                <option value="ml">ml</option>
-                                <option value="ltr">ltr</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -183,7 +180,7 @@
                         <label for="frequencyOther{{$index}}" class="control-label col-sm-3"></label>
                         <div class="col-md-9">
                             <input type="text" id="frequencyOther{{$index}}" name="frequencyOther{{$index}}"
-                                ng-model="med.frquencyOther" class="form-control" placeholder="Please enter value"
+                                ng-model="med.frquencyOther" class="form-control" placeholder="Please enter frequency"
                                 required data-validate="required" data-message-required="Please enter frequency">
                         </div>
                     </div>
@@ -194,7 +191,7 @@
                         <label for="routes{{$index}}" class="col-sm-3 control-label">Route</label>
                         <div class="col-sm-9">
                             <select class="form-control" name="routes{{$index}}" id="routes{{$index}}" required
-                                data-validate="required" data-message-required="Please select route." required>
+                                data-validate="required" data-message-required="Please select route." ng-model="med.route">
                                 <option value="" hidden selected>Please select Route</option>
                                 <option value="oral">Oral</option>
                                 <option value="rectal">Rectal</option>
@@ -209,7 +206,7 @@
                         <div class="col-sm-9">
                             <input type="text" id="purpose{{$index}}" name="purpose{{$index}}" class="form-control"
                                 required data-validate="required"
-                                data-message-required="Please enter purpose for medication">
+                                data-message-required="Please enter purpose for medication" ng-model="med.purpose">
                         </div>
                     </div>
 
@@ -231,7 +228,7 @@
                     <div class="col-sm-9">
                         <textarea name="medicationNote" id="medicationNote" required data-validate="required"
                             data-message-required="Please enter note" class="form-control" id="" cols="30"
-                            rows="5"></textarea>
+                            rows="5" ng-model="medRecon.medObj.nurseNote"></textarea>
                     </div>
                 </div>
 
@@ -242,7 +239,7 @@
                             ng-class="medRecon.medObj.nurseSign  == '' && medRecon.showSignError ? 'sign-pad-border-required':''"
                             dataurl="medRecon.medObj.nurseSign" clear="clear"></signature-pad>
                         <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
-                            ng-click="clear(); medRecon.clearSign()">Clear signature</button>
+                            ng-click="clear(); medRecon.clearSign()" ng-disabled="!medRecon.medObj.nurseSign">Clear signature</button>
                     </div>
                     <div class="row" ng-if="medRecon.medObj.nurseSign  == '' && medRecon.showSignError">
                         <span class="col-sm-9 pull-right signError">

@@ -400,7 +400,6 @@ angular.module('xenon.controllers', []).
 
             FormsDAO.getComplaintStatistics().then(function (notifications) {
                 $rootScope.currentUser.complaintNotification = 0;
-                console.log(notifications);
                 if (notifications != null) {
                     $rootScope.currentUser.complaintNotification = notifications.open;
                 }

@@ -15,7 +15,10 @@
 
 
         ctrl.submitForm = function () {
-
+            if($('#progress_note_form')[0].checkValidity()){
+                // $state.go('app.patient_records_patient', { patientId: ctrl.patientId });
+                console.log(ctrl.progressNoteForm);
+            }
         }
 
 
@@ -33,7 +36,6 @@
             PatientDAO.get({ id: $state.params.id }).then(function (res) {
                 ctrl.patient = res;
                 ctrl.patientName = res.fName
-                console.log(res);
             }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,
