@@ -398,7 +398,18 @@
                 localStorage.setItem('dailyAttendanceSearchParams', JSON.stringify(ctrl.searchParams));
                 angular.forEach(ctrl.attendanceList, function (obj) {
                     delete obj.color;
-                    if (obj.timeSheet) {
+                    if (!obj.timeSheet) {
+                        //No Show - Red
+                        var temp = $filter('duration')(obj.roundedStartTime, new Date());
+                        if (temp) {
+                            var t = temp.split(":");
+                            var h = Number(t[0]);
+                            var m = Number(t[1]);
+                            if (h > 0 || (h === 0 && m > 30)) {
+                                obj.color = "#F52226"; // red color
+                            }
+                        }
+                    } else {
                         var temp = $filter('duration')(obj.roundedStartTime, obj.timeSheet.roundedPunchInTime);
                         obj.timeSheet.punchInTime = Date.parse(obj.timeSheet.punchInTime);
                         obj.timeSheet.punchOutTime = Date.parse(obj.timeSheet.punchOutTime);
@@ -406,17 +417,31 @@
                         obj.timeSheet.roundedPunchOutTime = Date.parse(obj.timeSheet.roundedPunchOutTime);
                         obj.timeSheet.punchInTimeInDate = Date.parse(obj.timeSheet.punchInTime);
                         obj.timeSheet.punchOutTimeInDate = Date.parse(obj.timeSheet.punchOutTime);
-                        if (temp) {
-                            var t = temp.split(":");
-                            var h = Number(t[0]);
-                            var m = Number(t[1]);
-                            if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#ea9999"; // red color
-                            } else if (h > 0 || (h === 0 && m > 8)) {
-                                obj.color = "#FEFEB8"; // yellow color
+                        var timesheetDuration;
+                        var scheduleDuration;
+                        obj.color = null;
+                        if (obj.timeSheet.roundedPunchInTime && obj.timeSheet.roundedPunchOutTime) {
+                            timesheetDuration = $filter('duration')(obj.timeSheet.roundedPunchInTime, obj.timeSheet.roundedPunchOutTime);
+                        }
+                        if (obj.roundedStartTime && obj.roundedEndTime) {
+                            scheduleDuration = $filter('duration')(obj.roundedStartTime, obj.roundedEndTime);
+                        }
+                        //Insufficient hours worked - Pink
+                        if (timesheetDuration != null && scheduleDuration != null) {
+                            var t = timesheetDuration.split(":");
+                            var timeSheetHours = Number(t[0]);
+                            var timeSheetMins = Number(t[1]);
+                            var s = scheduleDuration.split(":");
+                            var scheduleHours = Number(s[0]);
+                            var scheduleMins = Number(s[1]);
+                            if (timeSheetHours < scheduleHours) {
+                                obj.color = "#ea9999"; // pink color
+                            } else if (timeSheetHours === scheduleHours && timeSheetMins < scheduleMins) {
+                                obj.color = "#ea9999"; // pink color
                             }
                         }
-                        if (!obj.timeSheet.punchOutTime) {
+                        //Purple- Forgot to punch out – no punch out
+                        if (obj.color === null && !obj.timeSheet.punchOutTime) {
                             var temp1 = $filter('duration')(obj.roundedEndTime, new Date());
                             if (temp1) {
                                 var t = temp1.split(":");
@@ -427,15 +452,43 @@
                                 }
                             }
                         }
-                    } else {
-                        var temp = $filter('duration')(obj.roundedStartTime, new Date());
-                        if (temp) {
+                        //Red(change To Bright Yellow)- Excessive lateness – 31 min and above 
+                        if (obj.color === null && temp) {
                             var t = temp.split(":");
                             var h = Number(t[0]);
                             var m = Number(t[1]);
                             if (h > 0 || (h === 0 && m > 30)) {
-                                obj.color = "#ea9999"; // red color
+                                obj.color = "#F5F52A"; // Bright Yellow color
                             }
+                        }
+                        //Yellow(light yellow)- moderate lateness 8-30 min
+                        if (obj.color === null && temp) {
+                            var t = temp.split(":");
+                            var h = Number(t[0]);
+                            var m = Number(t[1]);
+                            if (h === 0 && m > 8) {
+                                obj.color = "#E0E082"; // yellow color
+                            }
+                        }
+                        //Green- UT time greater than 30minutes, when approved it goes back to
+                        if (timesheetDuration != null && scheduleDuration != null) {
+                            var t = timesheetDuration.split(":");
+                            var timeSheetHours = Number(t[0]);
+                            var timeSheetMins = Number(t[1]);
+                            var s = scheduleDuration.split(":");
+                            var scheduleHours = Number(s[0]);
+                            var scheduleMins = Number(s[1]);
+                            if (!obj.timeSheet.unauthorizedTime || obj.timeSheet.unauthorizedTime == null) {
+                                if (timeSheetHours > scheduleHours) {
+                                    obj.color = "#0ECC1B"; // Green color
+                                } else if (timeSheetHours === scheduleHours && timeSheetMins > scheduleMins) {
+                                    obj.color = "#0ECC1B"; // Green color
+                                }
+                            }
+                        }
+                        //Blue- Manual punch - highlights all punches that were made manually.
+                        if (obj.color === null && !!obj.timeSheet.isManualPunch) {
+                            obj.color = "#02A7DE"; // blue color
                         }
                     }
                     obj.roundedStartTime = Date.parse(obj.roundedStartTime);
