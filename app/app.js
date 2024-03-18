@@ -551,6 +551,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'medical_orders_form'),
                 controller: 'MedicalOrdersCtrl as medOrder'
             }).
+            // Home Care Plan Form
+            state('app.home_care_plan', {
+                url: '/home_care_plan',
+                templateUrl: appHelper.viewTemplatePath('patient', 'home_care_plan'),
+                controller: 'HomeCarePlanCtrl as homeCarePlan',
+            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,
