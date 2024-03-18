@@ -78,6 +78,8 @@
                 $state.go('app.medication_reconciliation', { id: record.patientId });
             if (record.type == 'Progress_Note')
                 $state.go('app.progress_note', { id: record.patientId })
+            if (record.type == 'Medical_Orders')
+                $state.go('app.medical_orders', { id: record.patientId })
         }
 
     }

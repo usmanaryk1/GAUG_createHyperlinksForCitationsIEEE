@@ -1,6 +1,6 @@
 
 (function () {
-    function ProgressNotesCtrl($rootScope, $formService, PatientDAO, $state, $http, $sce, $window, $timeout, $scope) {
+    function MedicalOrdersCtrl($rootScope, $formService, PatientDAO, $state, $http, $sce, $window, $timeout, $scope) {
         'use strict';
         var ctrl = this;
         ctrl.patientName;
@@ -54,5 +54,5 @@
 
 
     };
-    angular.module('xenon.controllers').controller('ProgressNotesCtrl', ["$rootScope", "$formService", "PatientDAO", "$state", "$http", "$sce", "$window", "$timeout", "$scope", ProgressNotesCtrl]);
+    angular.module('xenon.controllers').controller('MedicalOrdersCtrl', ["$rootScope", "$formService", "PatientDAO", "$state", "$http", "$sce", "$window", "$timeout", "$scope", MedicalOrdersCtrl]);
 })();

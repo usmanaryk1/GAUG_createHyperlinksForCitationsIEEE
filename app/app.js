@@ -543,7 +543,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             state('app.progress_note', {
                 url: '/progress_note/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'progress_note_form'),
-                controller: 'ProgressNotes as progressNote'
+                controller: 'ProgressNotesCtrl as progressNote'
+            }).
+            // Medicla Orders Form
+            state('app.medical_orders', {
+                url: '/medical_orders/:id',
+                templateUrl: appHelper.viewTemplatePath('patient', 'medical_orders_form'),
+                controller: 'MedicalOrdersCtrl as medOrder'
             }).
             // employee creation page
             state('app.employee', {

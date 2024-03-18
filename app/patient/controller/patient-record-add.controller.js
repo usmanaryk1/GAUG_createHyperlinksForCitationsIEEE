@@ -2,10 +2,7 @@
     function PatientRecordAddCtrl($rootScope, $modalInstance, PatientRecordDAO, $state) {
         var ctrl = this;
 
-        this.options = [
-            { option: "Nursing Assessment", value: "Nursing_Assessment" },
-            { option: "Medication Reconciliation", value: "Medication_Reconciliation" },
-            { option: "Progress Note", value: "Progress_Note" }];
+        this.recordOptions = angular.copy(ontime_data.patientRecords)
 
         ctrl.save = function () {
             var request = { "type": ctrl.type.value, "expiryDate": ctrl.expiry };
@@ -18,8 +15,10 @@
                     $state.go('app.edit_patient', { id: res.patientId, recordType: res.type });
                 if (ctrl.type.value == 'Medication_Reconciliation')
                     $state.go('app.medical_reconciliation', { id: res.patientId });
-                if (record.type == 'Progress_Note')
-                    $state.go('app.progress_note', { id: record.patientId })
+                if (ctrl.type.value == 'Progress_Note')
+                    $state.go('app.progress_note', { id: res.patientId })
+                if (ctrl.type.value == 'Medical_Orders')
+                    $state.go('app.medical_orders', { id: res.patientId })
             }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,
@@ -27,7 +26,7 @@
                     finish: function () {
                     }
                 }); // showLoadingBar
-                toastr.error("Failed to retrieve patient");
+                toastr.error("Failed to retrieve patients");
             }).then(function () {
                 $rootScope.unmaskLoading();
             });
