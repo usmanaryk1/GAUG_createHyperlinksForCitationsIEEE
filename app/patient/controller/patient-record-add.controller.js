@@ -14,7 +14,7 @@
                 if (ctrl.type.value == 'Nursing_Assessment')
                     $state.go('app.edit_patient', { id: res.patientId, recordType: res.type });
                 if (ctrl.type.value == 'Medication_Reconciliation')
-                    $state.go('app.medical_reconciliation', { id: res.patientId });
+                    $state.go('app.medication_reconciliation', { id: res.patientId });
                 if (ctrl.type.value == 'Progress_Note')
                     $state.go('app.progress_note', { id: res.patientId })
                 if (ctrl.type.value == 'Medical_Orders')
@@ -26,7 +26,7 @@
                     finish: function () {
                     }
                 }); // showLoadingBar
-                toastr.error("Failed to retrieve patients");
+                toastr.error("Failed to retrieve patient data");
             }).then(function () {
                 $rootScope.unmaskLoading();
             });
