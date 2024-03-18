@@ -1,11 +1,12 @@
 (function () {
     function PatientEditCtrl($rootScope, PatientDAO, $state, $http, $sce, $window, $timeout, $scope) {
         'use strict';
-        const formUrl = appHelper.assetPath('json/patient_form.json');
         var ctrl = this;
+        ctrl.formUrl = ''
         ctrl.patientName;
         ctrl.patient = {}
         ctrl.recordType = $state.params.recordType
+        ctrl.recordTypesObj = angular.copy(ontime_data.patientRecordsObj)
         ctrl.currentDate = new Date();
         ctrl.formDefinition = []
         ctrl.formData = {};
@@ -22,6 +23,14 @@
         ctrl.getFormDataCall = getFormData;
 
         function pageInit() {
+
+            if (ctrl.recordType == 'Nursing_Assessment') 
+                ctrl.formUrl = appHelper.mockDataPath('patients/nursing_assessment_form.json')
+             else if (ctrl.recordType == 'Progress_Note')
+                ctrl.formUrl = appHelper.mockDataPath('patients/progress_note_form.json')
+             else if (ctrl.recordType == 'Medication_Reconciliation')
+                ctrl.formUrl = appHelper.mockDataPath('patients/medication_reconciliation_form.json')
+
             $rootScope.maskLoading();
             PatientDAO.get({ id: $state.params.id }).then(function (res) {
                 ctrl.patient = res;
@@ -42,7 +51,7 @@
 
         /*================   FORM BUILDER   ===================*/
         function getFormData() {
-            $http.get(formUrl).then(async function (res) {
+            $http.get(ctrl.formUrl).then(async function (res) {
                 ctrl.formDefinition = await res.data;
                 ctrl.makeFormData()
             }).catch(function (data, status) {
@@ -63,6 +72,7 @@
                     case 'text':
                     case 'date':
                     case 'select':
+                    case 'textarea':
                         ctrl.formData[field.name] = '';
                         break;
                     case 'number':
@@ -75,10 +85,11 @@
                         createScoreListing(field)
                         break;
                     case 'nestedarray':
+                    case 'multigroup':
                         ctrl.createNestedArray(field)
                         break;
-                        case 'tags':
-                            ctrl.tagsGenerator(field);
+                    case 'tags':
+                        ctrl.tagsGenerator(field);
                     default:
                         break;
                 }
@@ -135,12 +146,12 @@
             ctrl.formData[field.name].push(newObj);
         }
 
-        ctrl.tagsGenerator = function (field){
+        ctrl.tagsGenerator = function (field) {
             ctrl.formData[field.name] = [];
         }
 
-        ctrl.tagsCreated = function (event, fieldName){
-            if(event.keyCode == 13){
+        ctrl.tagsCreated = function (event, fieldName) {
+            if (event.keyCode == 13) {
                 ctrl.formData[fieldName].push(ctrl.tagsObj[fieldName])
                 ctrl.tagsObj[fieldName] = ''
             }
@@ -206,7 +217,7 @@
                 })
             } else {
                 ctrl.formData[field.name] = field.dbType === 'object' ? {} : [];
-                const optionsArr = ctrl.formData[field.name];                
+                const optionsArr = ctrl.formData[field.name];
                 field.options.forEach(option => {
                     optionsArr[option.value] = false;
                 })
@@ -238,8 +249,8 @@
         ctrl.resetForm = function () {
             ctrl.formData = {};
             ctrl.selectedRadios = {};
-            ctrl.subFields = {}; 
-            ctrl.checkBoxSubs = {}; 
+            ctrl.subFields = {};
+            ctrl.checkBoxSubs = {};
             ctrl.checkBoxes = {}
             ctrl.showSibs = {};
             ctrl.oneSelectors = {}
@@ -265,18 +276,25 @@
         ctrl.submitForm = function () {
             const obj = { ...ctrl.formData, ...ctrl.selectedRadios, ...ctrl.subFields }
             // HERE IS THE OUTPUT OBJECT WITH KEY VALUE PAIRS
+            if($('#edit_patient_form')[0].checkValidity())
+            console.log(obj);
         };
 
         ctrl.sanitizeHtml = function (htmlContent) {
-            return $sce.trustAsHtml(htmlContent).replace(/\n/g, '<br>');
+            const trustedHtml = $sce.trustAsHtml(htmlContent);
+            const sanitizedHtml = angular.element('<div>').html(trustedHtml).text(); // Convert to string
+            const htmlWithLineBreaks = sanitizedHtml.replace(/\n/g, '<br>');
+
+            return $sce.trustAsHtml(htmlWithLineBreaks);
+
         };
 
-        ctrl.setMaxDate = function(days) {
+        ctrl.setMaxDate = function (days) {
             // Filter or Directive could also be used
             var currentDate = new Date();
             var maxDate = new Date(currentDate.getTime() + days * 24 * 60 * 60 * 1000);
             return maxDate.toISOString().split('T')[0];
-          }
+        }
     };
     angular.module('xenon.controllers').controller('PatientEditCtrl', ["$rootScope", "PatientDAO", "$state", "$http", "$sce", "$window", "$timeout", "$scope", PatientEditCtrl]);
 })();

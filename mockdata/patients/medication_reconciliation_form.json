@@ -1,0 +1,118 @@
+[
+    {
+        "id": "assessment_type",
+        "type": "select",
+        "label": "Assessment Type",
+        "name": "assessmentType",
+        "required": true,
+        "data-validate": "required",
+        "data-message-required": "Please select assessment type",
+        "options": [
+            {
+                "title": "Initial Assessment",
+                "value": "initial_assessment"
+            },
+            {
+                "title": "Re-Assessment",
+                "value": "re_assessment"
+            },
+            {
+                "title": "PRN",
+                "value": "prn"
+            },
+            {
+                "title": "Other",
+                "value": "other",
+                "id": "other",
+                "subfield": {
+                    "type": "text",
+                    "name": "other_value",
+                    "value": "other_value",
+                    "placeholder": "Type here ...",
+                    "required": true
+                }
+            }
+        ]
+    },
+    {
+        "type": "radiocheck",
+        "subtype": "radio",
+        "label": "Assessment Conducted",
+        "name": "assessmentConducted",
+        "id": "assesment_conducted",
+        "options": [
+            {
+                "title": "Field",
+                "value": "field",
+                "id": "assesment_conducted_field",
+                "selected": true
+            },
+            {
+                "title": "Telephonic",
+                "value": "telephonic",
+                "id": "assesment_conducted_telephonic"
+            }
+        ]
+    },
+    {
+        "type": "textarea",
+        "label": "Progress Note",
+        "name": "progress_note",
+        "id": "progress_note",
+        "placeholder": "Please enter note",
+        "required": true
+    },
+    {
+        "multigroup": true,
+        "type": "nestedarray",
+        "label": "Medications",
+        "name": "medications",
+        "id": "medications",
+        "fields": [
+            {
+                "type": "select",
+                "label": "Med Names",
+                "value": "med_names",
+                "id": "med_names",
+                "options": [
+                    {
+                        "title": "DNS",
+                        "value": "dns"
+                    },
+                    {
+                        "title": "Pain",
+                        "value": "pain"
+                    }
+                ]
+            },
+            {
+                "type": "text",
+                "label": "Dosage",
+                "value": "dosage",
+                "id": "medication_dosage",
+                "placeholder": "Dosage"
+            },
+            {
+                "type": "text",
+                "label": "Frequency",
+                "value": "frequency",
+                "id": "medication_frequency",
+                "placeholder": "Frequency"
+            },
+            {
+                "type": "text",
+                "label": "Route",
+                "value": "route",
+                "id": "medication_route",
+                "placeholder": "Route"
+            },
+            {
+                "type": "text",
+                "label": "Purpose",
+                "value": "purpose",
+                "id": "medication_purpose",
+                "placeholder": "Purpose"
+            }
+        ]
+    }
+]

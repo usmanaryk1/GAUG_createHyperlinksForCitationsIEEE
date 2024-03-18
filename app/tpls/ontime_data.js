@@ -51,6 +51,12 @@ ontime_data = {
         { option: "Progress Note", value: "Progress_Note" },
         { option: "Medical Orders", value: "Medical_Orders" },
     ],
+    patientRecordsObj: {
+        Nursing_Assessment: 'Nursing Assessment',
+        Medication_Reconciliation: 'Medication Reconciliation',
+        Progress_Note: 'Progress Note',
+        Medical_Orders: 'Medical Orders'
+    },
     'pastEventAuthorizationPassword': '!avalanche!',
     'hrPassword': 'Avalanche!HR',
     'date_time_format': "yyyy/MM/dd hh:mm:ss a",

@@ -698,7 +698,7 @@ angular.module('xenon.directives', []).
                                 {
                                     error.insertAfter(element);
                                 }
-                                // for dynaic validation we can not use data-validate, so For required field validations 
+                                // for dynamic validation we can not use data-validate, so For required field validations 
                                 // For such elements set itemid attribute with Element name. - by hardik
                                 if (error[0].innerText === 'This field is required.' && element.attr("itemid")) {
                                     error[0].innerText = 'Please enter ' + element.attr("itemid") + '.';
