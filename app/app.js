@@ -442,6 +442,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/biling_history',
                 templateUrl: appHelper.templatePath('biling_history'),
             }).
+            // biling_history
+            state('app.biling_setting', {
+                url: '/biling_setting',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_settings'),
+                controller: 'BillingSettingsCtrl as billingSetting'
+            }).
             // Dashboards
             state('app.dashboard', {
                 url: '/dashboard',

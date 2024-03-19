@@ -116,6 +116,7 @@ angular.module('xenon.services', []).
                 // Subitems of billing
                 billing.addItem('Billing Session', './billing_tab_1');
                 billing.addItem('Billing History', './biling_history');
+                billing.addItem('Billing Setting', './biling_setting');
                 billing.addItem('Manual Claim', './manual_claim');
 
                 // Subitems of payroll
