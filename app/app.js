@@ -98,6 +98,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             $rootScope.isFormDirty = false
         });
     };
+
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
@@ -1007,7 +1008,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // Add complaint
             state('app.add-complaint', {
-                url: '/add-complaint?id',
+                url: '/add-complaint?id&print',
                 templateUrl: appHelper.viewTemplatePath('forms', 'add_complaint'),
                 controller: 'AddComplaintController as addCompCtrl'
             }).

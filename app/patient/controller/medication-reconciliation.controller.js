@@ -2,7 +2,6 @@
 (function () {
     function MedicationReconciliationCtrl($rootScope, PatientDAO, $state, $http, $sce, $window, $timeout, $scope) {
         'use strict';
-        const formUrl = appHelper.assetPath('json/patient_form.json');
         var ctrl = this;
         ctrl.patientName;
         ctrl.patientId = $state.params.id

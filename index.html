@@ -40,6 +40,7 @@
                 templatesDir: 'app/tpls',
                 moduleTemplatesDir: 'app',
                 assetsDir: 'assets',
+                mockPath: 'mockdata',
                 // Methods
                 viewTemplatePath: function (module, view_name) {
                     return this.moduleTemplatesDir + '/' + module + '/views/' + view_name + '.html';
@@ -51,7 +52,10 @@
                 assetPath: function (file_path)
                 {
                     return this.assetsDir + '/' + file_path;
-                }
+                },
+                mockDataPath: function (file_path){
+                    return this.mockPath + '/' + file_path
+                } 
             };
         </script>
 

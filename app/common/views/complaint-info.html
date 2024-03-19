@@ -35,7 +35,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-5"><strong>Contact Type</strong></label>
                 <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complainantContactType}}
+                    {{ComplaintInfo.complaint.complainantContactType | customFilter}}
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-5"><strong>Contact info</strong></label>
                 <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complainantContact}}
+                    {{ComplaintInfo.complaint.complainantContact | tel}}
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-5"><strong>Complainant Relation</strong></label>
                 <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complainantRelationshipType}}
+                    {{ComplaintInfo.complaint.complainantRelationshipType | customFilter}}
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-5"><strong>Complainant Method</strong></label>
                 <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complaintMethod}}
+                    {{ComplaintInfo.complaint.complaintMethod | customFilter}}
                 </div>
             </div>
         </div>
