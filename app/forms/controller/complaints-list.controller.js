@@ -75,7 +75,7 @@
             FormsDAO.getComplaintPolicyResolutionTime().then(res => {
                 ctrl.complaintResDays = res.policyResolutionTime;
             }).catch(err => {
-                toastr.error("Couldn't get complaint policy resolution time")
+                toastr.error(err.data)
             })
         }
 
@@ -112,8 +112,8 @@
                     if(ctrl.searchParams.isFollowUpNeeded == true)
                     $rootScope.currentUser.complaintNotification = $rootScope.totalRecords;
                 }
-            }).catch(function (data, status) {
-                toastr.error("Failed to retrieve complaints.");
+            }).catch(function (err) {
+                toastr.error(err.data);
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -147,11 +147,12 @@
             $rootScope.deleteComplaintModel.delete = function (complaint) {
                 $rootScope.maskLoading();
                 FormsDAO.deleteComplaint({id: complaint.id}).then(function (res) {
-                    toastr.success("Complaint deleted.");
+                    const characterArray = Object.values(res).filter(value => typeof value === 'string');
+                    toastr.success(Object.values(characterArray))
                     $rootScope.deleteComplaintModel.close();
                     getComplaints();
-                }).catch(function () {
-                    toastr.error('Delete complaint failed');
+                }).catch(function (err) {
+                    toastr.error(err.data);
                     $rootScope.deleteComplaintModel.close();
                 }).then(function () {
                     $rootScope.unmaskLoading();

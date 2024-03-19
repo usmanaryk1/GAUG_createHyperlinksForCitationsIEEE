@@ -27,7 +27,7 @@
         if (ctrl.params?.id) {
             ctrl.title = 'Edit Complaint';
             ctrl.subtitle = 'Edit The Complaint By Entering Complaint Information';
-            Page.setTitle("Edit Complaint");            
+            Page.setTitle("Edit Complaint");
         }
         ctrl.closingComplaint = true;
 
@@ -43,9 +43,7 @@
             if (ctrl.params?.id) {
                 $rootScope.maskLoading();
                 FormsDAO.getComplaintById({ id: ctrl.params?.id }).then(res => {
-                    console.log(res);
                     ctrl.complaintReceiver = res.complaintReceiver.fName
-                    console.log(ctrl.patientList);
                     ctrl.complaint = {
                         complaintDate: ctrl.getDate(res.complaintDate),
                         complainantName: res.complainantName,
@@ -65,11 +63,10 @@
                         dateResolvedOn: ctrl.currentDateWithFormat,
                     };
                     ctrl.getContactValue(res.complainantContactType, res.complainantContact);
-                    console.log(ctrl.complaint);
                 }).catch(err => {
                     toastr.error("Couldn't get complaint");
                     $window.history.back();
-                }).then(()=>{
+                }).then(() => {
                     $rootScope.unmaskLoading();
                 })
 
@@ -109,16 +106,12 @@
 
         ctrl.saveForm = function (action) {
 
-            console.log(ctrl.complaint.signature);
-
-
             if ($('#add_complaint_form')[0].checkValidity()) {
                 var complaintToSave = angular.copy(ctrl.complaint);
 
                 complaintToSave.complainantRelationship = complaintToSave.complainantRelationship.toString()
                 complaintToSave.signature = complaintToSave.signature ? complaintToSave.signature.substring(complaintToSave.signature.indexOf(",") + 1) : null;
                 complaintToSave.isFollowUpNeeded = JSON.parse(complaintToSave.isFollowUpNeeded)
-                console.log(complaintToSave);
 
                 // Check the value of the complainantContactType field
                 switch (complaintToSave.complainantContactType) {
@@ -150,16 +143,16 @@
 
                         $state.go('app.complaints', { status: 'open' });
                     }).catch((err) => {
-                        toastr.error("Unable to update the Complaint.");
+                        toastr.error(err.data);
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     })
                 }
-                 else {
+                else {
                     FormsDAO.addComplaint(complaintToSave).then((res) => {
-                        // ctrl.generateFormCall();
                         $rootScope.isFormDirty = false;
-                        toastr.success("Complaint saved successfully")
+                        const characterArray = Object.values(res).filter(value => typeof value === 'string');
+                        toastr.success(Object.values(characterArray))
                         if ($.fn.dirtyForms) {
                             $('form').dirtyForms('setClean');
                             $('.dirty').removeClass('dirty');
@@ -167,7 +160,7 @@
 
                         $state.go('app.complaints', { status: 'open' });
                     }).catch((err) => {
-                        toastr.error("Unable to save the Complaint.");
+                        toastr.error(err.data);
                     }).then(function () {
                         $rootScope.unmaskLoading();
                     });
@@ -191,7 +184,6 @@
                     getWorksiteList()
                 ]);
             } catch (error) {
-                console.error('Error:', error);
                 toastr.error('An error occurred while fetching data.');
             }
         }
@@ -304,7 +296,6 @@
         }
 
         ctrl.getContactValue = function (type, value) {
-            console.log(type, value);
             if (type == 'PHONE')
                 ctrl.complaint.complainantContactPhone = value
             else if (type == 'EMAIL')
@@ -314,7 +305,6 @@
         }
 
         ctrl.getRelationValue = function (type, value) {
-            console.log(type, value);
             if (type == 1)
                 ctrl.complaint.complainantContactPhone = value
             else if (type == 2)

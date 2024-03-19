@@ -105,7 +105,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-1">
-                                    Date the complaint was received
+                                    Complaint received date
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
@@ -126,7 +126,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-2">
-                                    Name Of Person Making the complaint
+                                    Complainant's name
                                 </label>
                                 <div class="col-sm-9">
                                     <input class="form-control" charactersonly id="field-2" name="complainant"
@@ -212,7 +212,7 @@
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-5">
-                                    Relationship To Organization
+                                    Organizational affiliation
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="radio-container pt-7">
@@ -283,7 +283,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-10">
-                                    Complaint Receiver Name
+                                    Recipient's Name
                                 </label>
                                 <div class="col-sm-9">
                                     <input class="form-control" disabled charactersonly id="field-10"
@@ -345,7 +345,7 @@
                             </div>
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label for="field-12" class="col-sm-3 control-label">Description of Complaint</label>
+                                <label for="field-12" class="col-sm-3 control-label">Complaint's Description</label>
                                 <div class="col-sm-9">
                                     <textarea class="form-control hidden-print" name="ComplaintDescription"
                                         ng-model="addCompCtrl.complaint.complaintDescription" id="field-12" cols="30"
@@ -381,7 +381,7 @@
 
                             <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label class="col-sm-3 control-label" for="field-13">
-                                    Proposed Resolution Notification Date
+                                    Resolution Notification Date
                                 </label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
@@ -400,38 +400,8 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="form-group" ng-if="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
-                                <label class="col-sm-3 control-label" for="field-13">
-                                    Notification Method
-                                </label>
-                                <div class="col-sm-9">
-                                    <div class="radio-container pt-7">
-                                        <label class="radio-field">
-                                            <input value="PHONE" name="complaintNotificationMethod" type="radio" class=""
-                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
-                                            Phone
-                                        </label>
-                                        <label class="radio-field">
-                                            <input name="complaintNotificationMethod" value="WRITING" type="radio"
-                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
-                                            Writing
-                                        </label>
-                                        <label class="radio-field">
-                                            <input name="complaintNotificationMethod" value="EMAIL" type="radio"
-                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
-                                            Email
-                                        </label>
-                                        <label class="radio-field">
-                                            <input name="complaintNotificationMethod" value="INPERSON" type="radio"
-                                                ng-model="addCompCtrl.complaint.complaintNotificationMethod" />
-                                            In Person
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> -->
-
                             <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
-                                <label for="field-13" class="col-sm-3 control-label">Resolution of the Complaint [Action Taken]</label>
+                                <label for="field-13" class="col-sm-3 control-label">Complaint Resolved [Actions]</label>
                                 <div class="col-sm-9">
                                     <textarea class="form-control hidden-print" name="ComplaintResolution"
                                         ng-model="addCompCtrl.complaint.complaintResolution" id="field-13" cols="30"
@@ -444,8 +414,7 @@
 
                             <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label class="col-sm-3 control-label" for="field-14">
-                                    Was the person making the complaint satisfied with the resolution and/or action
-                                    plan?
+                                    Complainant satisfied with actions plan?
                                 </label>
                                 <div class="col-sm-9" >
                                     <div class="radio-container pt-7">
