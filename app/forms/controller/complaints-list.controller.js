@@ -3,6 +3,7 @@
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
+        $rootScope.maskLoading();
         ctrl.searchParams = { pageSize: 10, pageNumber: 1, name: '' };
         ctrl.complaintType = $stateParams.status;
         ctrl.complaintsList = [];
@@ -22,7 +23,7 @@
                 
                 var modalInstance = $modal.open({
                     templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
-                    size: modal_size,
+                    size: modal_size ,
                     backdrop: typeof modal_backdrop === 'undefined' ? true : modal_backdrop,
                     keyboard: false,
                     controller: 'ComplaintInfoCtrl as ComplaintInfo',
@@ -41,7 +42,9 @@
                     pct: 100,
                     finish: function () {
                     }
-                }); // showLoadingBar
+                    
+                }); 
+                $rootScope.unmaskLoading();// showLoadingBar
                 console.error("Error fetching complaint data: ", error);
             }).then(()=>{
                 $rootScope.unmaskLoading();
@@ -56,6 +59,11 @@
         ctrl.setComplaint = function(complaint){
             localStorage.setItem('complaint', JSON.stringify(complaint));
         }
+
+        ctrl.navigateToComplaintDetails = function(complaint) {
+            // Manually update the URL with the 'print' parameter
+            $state.go('app.add-complaint', { id: complaint.id, print: true });
+        };
 
         function remainingDaysToClose (proposedDate) {
             const dateInsertedObj = new Date();
@@ -101,6 +109,7 @@
             }
 
             FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
+                $rootScope.maskLoading();
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -111,6 +120,7 @@
                     ctrl.complaintsList = res;
                     if(ctrl.searchParams.isFollowUpNeeded == true)
                     $rootScope.currentUser.complaintNotification = $rootScope.totalRecords;
+                    $rootScope.unmaskLoading();
                 }
             }).catch(function (err) {
                 toastr.error(err.data);
@@ -119,6 +129,7 @@
                     pct: 100,
                     finish: function () {}
                 }); // showLoadingBar
+                $rootScope.unmaskLoading();
             }).then(function () {
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;

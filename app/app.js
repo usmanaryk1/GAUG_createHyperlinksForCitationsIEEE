@@ -1001,7 +1001,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // Add complaint
             state('app.add-complaint', {
-                url: '/add-complaint?id',
+                url: '/add-complaint?id&print',
                 templateUrl: appHelper.viewTemplatePath('forms', 'add_complaint'),
                 controller: 'AddComplaintController as addCompCtrl'
             }).

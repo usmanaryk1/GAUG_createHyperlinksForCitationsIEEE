@@ -111,7 +111,7 @@
                                                         total-items="totalRecords"
                                                         current-page="viewPatient.searchParams.pageNumber">
                                                         <td>
-                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
+                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5', 'lg')"
                                                                 style="cursor: pointer">
                                                                 <div class="emp_user_hd">
                                                                     <div class="emp_user_name">
@@ -144,7 +144,7 @@
                                                                     ng-click="compCtrl.openDeleteModal(complaint, 'deleteModel')"
                                                                     tooltip="Delete"><span class="ed_b"></span></a>
                                                                     <a ng-if="compCtrl.complaintType == 'close'" class="btn icon-left fa fa-search deactivate_bt"
-                                                                    ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
+                                                                    ng-click="compCtrl.setComplaint(complaint); compCtrl.navigateToComplaintDetails(complaint) "
                                                                     tooltip="View Details"><span class="ed_b"></span></a>
                                                             </div>
                                                         </td>

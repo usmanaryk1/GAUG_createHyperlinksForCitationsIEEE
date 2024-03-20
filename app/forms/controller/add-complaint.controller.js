@@ -1,6 +1,7 @@
 (function () {
     function AddComplaintController($scope, $state, $timeout, $rootScope, $stateParams, $modal, $filter, PatientDAO, EmployeeDAO, WorksiteDAO, FormsDAO, $window, Page) {
         var ctrl = this;
+        $rootScope.maskLoading();
         Page.setTitle("Add Complaint");
         ctrl.currentUser = $rootScope.currentUser
         ctrl.currentDate = new Date();
@@ -24,13 +25,24 @@
         ctrl.subtitle = 'Create A New Complaint By Entering Complaint Information';
         ctrl.params = $stateParams;
         ctrl.complaintReceiver = ctrl.currentUser.userName
-        if (ctrl.params?.id) {
+        if (ctrl.params?.id && !ctrl.print) {
             ctrl.title = 'Edit Complaint';
             ctrl.subtitle = 'Edit The Complaint By Entering Complaint Information';
             Page.setTitle("Edit Complaint");
         }
         ctrl.closingComplaint = true;
-
+        
+        // for printing only hit comes from complaint-list
+        ctrl.printParam = $stateParams?.print; 
+        ctrl.print = ctrl?.printParam ? true : false;
+        ctrl.signatureClosedByPrint= "";
+        ctrl.signaturePrint= "";
+        if (ctrl.params?.id && ctrl.print) {
+            ctrl.title = 'Closed Complaint';
+            ctrl.subtitle = 'Closed The Complaint Information';
+            Page.setTitle("Print Complaint");
+        }
+        
         /*================   FUNCTION CALLS   ===================*/
         ctrl.getListsCall()
         ctrl.generateFormCall();
@@ -41,6 +53,7 @@
             ctrl.clearSignatureCall()
 
             if (ctrl.params?.id) {
+
                 $rootScope.maskLoading();
                 FormsDAO.getComplaintById({ id: ctrl.params?.id }).then(res => {
                     ctrl.complaintReceiver = res.complaintReceiver.fName
@@ -62,7 +75,19 @@
                         signature: null,
                         dateResolvedOn: ctrl.currentDateWithFormat,
                     };
+
                     ctrl.getContactValue(res.complainantContactType, res.complainantContact);
+
+                    if(ctrl?.print===true){
+                        ctrl.signatureClosedByPrint= `${res?.resolvedBy?.fName} ${res?.resolvedBy?.lName}`;
+                        ctrl.signaturePrint= res?.signature;
+                        ctrl.complaint.complaintResolution= res?.complaintResolution;
+                        ctrl.complaint.complainantSatisfied= res?.complainantSatisfied;
+                        // Reset the form state only when ctrl.print is true
+                        $rootScope.isFormDirty = false;
+                        setupWatch();
+                    }
+                    
                 }).catch(err => {
                     toastr.error("Couldn't get complaint");
                     $window.history.back();
@@ -88,8 +113,8 @@
                     signature: null,
                     dateResolvedOn: ctrl.currentDateWithFormat,
                 };
-                setupWatch()
-
+                setupWatch();
+                $rootScope.unmaskLoading();
             }
 
 
@@ -218,7 +243,7 @@
                     }
                 });
             }).then(function () {
-                $rootScope.unmaskLoading();
+                // $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
         }
@@ -238,7 +263,7 @@
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve worksites.");
             }).then(function () {
-                $rootScope.unmaskLoading();
+                // $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;
             });
         }
@@ -286,7 +311,13 @@
                 return ctrl.complaint
             }, function (newValue, oldValue) {
                 if (newValue != oldValue) {
-                    $rootScope.isFormDirty = true;
+                    $rootScope.isFormDirty = false;
+                        // Reset the form state only when ctrl.print is not true
+                        if (ctrl?.print === true) {
+                            $rootScope.isFormDirty = false;
+                            $('form').dirtyForms('setClean');
+                            $('.dirty').removeClass('dirty');
+                          }
                 }
             }, true);
         }
