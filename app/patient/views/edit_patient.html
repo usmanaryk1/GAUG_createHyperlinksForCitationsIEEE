@@ -172,7 +172,9 @@
                         </button>
                     </div>
                 </div>
-                <div ng-repeat="field in editPatient.formDefinition track by field.id" class="form-group">
+                <!-- track by field.id -->
+                <div ng-repeat="field in editPatient.formDefinition " class="form-group">
+
                     <div class="form-group-separator"></div>
 
                     <!-- MULTIGROUP -->
@@ -212,7 +214,8 @@
                                 <!--================== SELECT BOX ====================-->
                                 <select class="form-control" name="{{field.name}}" id="" ng-switch-when="select"
                                     ng-model="editPatient.formData[field.name]" onblur="setValidationMessage(this)"
-                                    itemid="Payroll Company Code A">
+                                    itemid="Payroll Company Code A"
+                                    ng-required="field.required">
                                     <option value="" selected hidden>Please Select</option>
                                     <option value="{{option.value}}" ng-repeat="option in field.options">
                                         {{option.title}}
@@ -356,6 +359,13 @@
                                 </div>
 
                                 <!--================== TAGS ====================-->
+                                <!-- <div ng-switch-when="tags">
+                                    <input class="form-control" type="text" ng-model="editPatient.tagsObj[field.name]"
+                                        ng-keypress="editPatient.tagsCreated($event, field.name)">
+                                    <div class="tags">
+                                        <span ng-repeat="item in editPatient.formData[field.name]">{{item}}</span>
+                                    </div>
+                                </div> -->
                                 <div ng-switch-when="tags">
                                     <input class="form-control" type="text" ng-model="editPatient.tagsObj[field.name]"
                                         ng-keypress="editPatient.tagsCreated($event, field.name)">
@@ -419,7 +429,14 @@
         var elementName = element.getAttribute("name") + "-error";
         var itemId = element.getAttribute("itemid");
         $("#" + elementName).text('Please enter ' + itemId + '.');
-        console.log(elementName);
-        console.log($('#' + elementName));
+        console.error(elementName, itemId);
+        console.info($('#' + elementName));
+
+        //var errorMessage = 'Please enter ' + itemId + '.';
+        // Remove any existing error message
+        //$("#" + elementName).remove();
+        // Add the error message element below the field
+        //$(element).after('<div id="' + elementName + '" style="color: red;">' + errorMessage + '</div>');
+
     }
 </script>

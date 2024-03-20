@@ -84,10 +84,10 @@
 
                                     <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                                         <div class="table-responsive scroll">
-                                            <div class="data-not-found" ng-if="!compCtrl.complaintsList.length">
+                                            <div class="data-not-found" ng-if="compCtrl.complaintsList.length === 0">
                                                 <p>No Complaint Found</p>
                                             </div>
-                                            <table id="example-4" ng-if="compCtrl.complaintsList.length"
+                                            <table id="example-4" ng-if="compCtrl.complaintsList.length > 0"
                                                 class="table table-striped table-bordered  table-small-font"
                                                 cellspacing="0">
                                                 <thead>
@@ -111,7 +111,7 @@
                                                         total-items="totalRecords"
                                                         current-page="viewPatient.searchParams.pageNumber">
                                                         <td>
-                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
+                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5', 'lg')"
                                                                 style="cursor: pointer">
                                                                 <div class="emp_user_hd">
                                                                     <div class="emp_user_name">
@@ -143,9 +143,11 @@
                                                                     ng-if="hasAccess('VIEW_ALL_COMPLAINTS') && compCtrl.complaintType == 'open'"
                                                                     ng-click="compCtrl.openDeleteModal(complaint, 'deleteModel')"
                                                                     tooltip="Delete"><span class="ed_b"></span></a>
-                                                                    <a ng-if="compCtrl.complaintType == 'close'" class="btn icon-left fa fa-search deactivate_bt"
-                                                                    ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
+                                                                <a ng-if="compCtrl.complaintType == 'close'" class="btn icon-left fa fa-search deactivate_bt"
+                                                                    ui-sref="app.add-complaint({id: complaint.id, print: true})"
+                                                                    ng-click="compCtrl.setComplaint(complaint); "
                                                                     tooltip="View Details"><span class="ed_b"></span></a>
+                                                                    <!-- compCtrl.navigateToComplaintDetails(complaint)  -->
                                                             </div>
                                                         </td>
                                                      

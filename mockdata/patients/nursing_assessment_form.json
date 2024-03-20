@@ -3,13 +3,14 @@
         "type": "date",
         "label": "Visit Date",
         "name": "visit_date",
-        "errormsg": "Please select a specific date"
+        "errormsg": "Please select a specific date",
+        "required": false
     },
     {
         "type": "select",
         "label": "Assesment Type",
         "name": "assesment_type",
-        "required": true,
+        "required": false,
         "errormsg": "Please select one of the following assesesment type",
         "options": [
             {
@@ -211,17 +212,67 @@
         "options": [
             {
                 "title": "English",
-                "value": "english",
+                "value": "English",
                 "id": "english"
             },
             {
+                "title": "Creole",
+                "value": "Creole",
+                "id": "creole"
+            },
+            {
                 "title": "Spanish",
-                "value": "spanish",
+                "value": "Spanish",
                 "id": "spanish"
             },
             {
+                "title": "Russian",
+                "value": "Russian",
+                "id": "russian"
+            },
+            {
+                "title": "French",
+                "value": "French",
+                "id": "french"
+            },
+            {
+                "title": "Hindi",
+                "value": "Hindi",
+                "id": "hindi"
+            },
+            {
+                "title": "Bengali",
+                "value": "Bengali",
+                "id": "bengali"
+            },
+            {
+                "title": "Mandarin",
+                "value": "Mandarin",
+                "id": "mandarin"
+            },
+            {
+                "title": "Korean",
+                "value": "Korean",
+                "id": "korean"
+            },
+            {
+                "title": "Arabic",
+                "value": "Arabic",
+                "id": "arabic"
+            },
+            {
+                "title": "Farsi",
+                "value": "Farsi",
+                "id": "farsi"
+            },
+            {
+                "title": "Urdu",
+                "value": "Urdu",
+                "id": "urdu"
+            },
+            {
                 "title": "Other",
-                "value": "other_language",
+                "value": "Other",
                 "id": "other_language",
                 "subfield": {
                     "type": "text",
@@ -335,7 +386,6 @@
                 "title": "Yes",
                 "value": "yes",
                 "id": "pets_yes",
-                "selected": true,
                 "subfield": {
                     "type": "select",
                     "name": "pets_type",
@@ -353,7 +403,8 @@
             {
                 "title": "No",
                 "value": "no",
-                "id": "pets_no"
+                "id": "pets_no",
+                "selected": true
             }
         ]
     },
@@ -1638,14 +1689,14 @@
                     {
                         "subfield": "N/A",
                         "name": "describe_pain",
-                        "value": "N/A",
+                        "value": "N_A",
                         "checktype": "checkbox",
                         "dbType": "object",
                         "id": "N/A_no_pain"
                     },
                     {
                         "name": "pain_aggravation",
-                        "value": "N/A",
+                        "value": "N_A",
                         "checktype": "radio"
                     },
                     {
@@ -1821,14 +1872,14 @@
                 "id": "describe_pain_other",
                 "subfield": {
                     "type": "text",
-                    "name": "pain_medication_yes_value",
-                    "value": "pain_medication_yes_value",
+                    "name": "describe_pain_yes_value",
+                    "value": "describe_pain_yes_value",
                     "placeholder": "Type here ..."
                 }
             },
             {
                 "title": "N/A",
-                "value": "N/A",
+                "value": "N_A",
                 "id": "N/A_no_pain"
             }
         ]
@@ -1854,7 +1905,7 @@
             },
             {
                 "title": "N/A - No",
-                "value": "N/A",
+                "value": "no-aggravation",
                 "id": "pain_aggravation_no"
             }
         ]
@@ -1985,7 +2036,7 @@
             },
             {
                 "title": "Diagnosis - 3 or more coexisting diagnosed conditions",
-                "value": "diagnosed conditions",
+                "value": "diagnosed_conditions",
                 "id": "fall_rist_assessment_diagnosis",
                 "points": 2
             },
@@ -2054,7 +2105,7 @@
             },
             {
                 "title": "N/A score 3 or less",
-                "value": "N/A",
+                "value": "N_A",
                 "id": "therapy_service_NA"
             }
         ]
@@ -2067,7 +2118,7 @@
         "id": "recent_fall",
         "options": [
             {
-                "title": "Yes (describe)",
+                "title": "Yes",
                 "value": "yes",
                 "id": "recent_fall_yes",
                 "selected": true,
@@ -2106,7 +2157,7 @@
                     "type": "text",
                     "name": "allergies_enter_allergies_value",
                     "value": "allergies_enter_allergies_value",
-                    "placeholder": "Type here..."
+                    "placeholder": "First one, Second, Third"
                 }
             }
         ]
@@ -2192,7 +2243,7 @@
     {
         "type": "radiocheck",
         "subtype": "radio",
-        "label": "DOES CLIENT REQUIRE MEDICATION BOX SET-UP/PREPOUR?",
+        "label": "Does client require medication box setup/pre-pour?",
         "name": "client_needs_medications",
         "id": "client_needs_medications",
         "options": [
@@ -2212,7 +2263,7 @@
     {
         "type": "radiocheck",
         "subtype": "radio",
-        "label": "Is client compliant with medication regimen??",
+        "label": "Is client compliant with medication regimen?",
         "name": "client_compliant_with_regimen",
         "id": "client_compliant_with_regimen",
         "options": [
@@ -2268,14 +2319,14 @@
     {
         "type": "radiocheck",
         "subtype": "checkbox",
-        "label": "How were instructions provided",
+        "label": "How were instructions provided?",
         "name": "instructions_provided",
         "id": "instructions_provided",
         "options": [
             {
-                "title": "Verbal Instructions Provided",
-                "value": "verbal_instructions_provided",
-                "id": "instructions_provided_verbal"
+                "title": "Verbal",
+                "value": "verbal",
+                "id": "instructions"
             },
             {
                 "title": "demonstration",
@@ -2292,7 +2343,7 @@
     {
         "type": "radiocheck",
         "subtype": "checkbox",
-        "label": "RESPONSE",
+        "label": "Response to instruction?",
         "name": "response",
         "id": "response",
         "options": [
@@ -2329,7 +2380,8 @@
             {
                 "title": "Yes",
                 "value": "yes",
-                "id": "educated_to_remind_patient_yes"
+                "id": "educated_to_remind_patient_yes",
+                "selected": true
             }
         ]
     },
@@ -2396,7 +2448,7 @@
     {
         "type": "radiocheck",
         "subtype": "radio",
-        "label": "Eye Exam",
+        "label": "Eye Exam - within 1 year",
         "name": "eye_exam",
         "id": "eye_exam",
         "options": [
@@ -2427,7 +2479,7 @@
     {
         "type": "radiocheck",
         "subtype": "radio",
-        "label": "Hearing Exam",
+        "label": "Hearing Exam - within 1 year",
         "name": "hearing_exam",
         "id": "hearing_exam",
         "options": [
@@ -2458,7 +2510,7 @@
     {
         "type": "radiocheck",
         "subtype": "radio",
-        "label": "Denta; Exam",
+        "label": "Denta Exam - within 1 year",
         "name": "dental_exam",
         "id": "dental_exam",
         "options": [
@@ -2675,7 +2727,7 @@
             },
             {
                 "title": "02 Concentrator",
-                "value": "02_concentrator",
+                "value": "concentrator_02",
                 "id": "dme_supplies_02_concentrator"
             },
             {
@@ -2739,7 +2791,7 @@
             },
             {
                 "title": "N/A",
-                "value": "N/A"
+                "value": "N_A"
             }
         ],
         "options": [
@@ -2760,7 +2812,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "elevator_N/A",
                         "selected": true
                     }
@@ -2783,7 +2835,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "firescape_secondary_N/A",
                         "selected": true
                     }
@@ -2806,7 +2858,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "rug_secure_N/A",
                         "selected": true
                     }
@@ -2829,7 +2881,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "sharps_container_disposal_N/A",
                         "selected": true
                     }
@@ -2852,7 +2904,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "unobstructed_stairs_N/A",
                         "selected": true
                     }
@@ -2875,7 +2927,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "safe_environemt_for_oxygen_N/A",
                         "selected": true
                     }
@@ -2898,7 +2950,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "oxygen_in_home_N/A",
                         "selected": true
                     }
@@ -2921,7 +2973,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "loca_companies_notified_N/A",
                         "selected": true
                     }
@@ -2944,7 +2996,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "sanitary_for_provision_N/A",
                         "selected": true
                     }
@@ -2967,7 +3019,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "adequate_lighting_N/A",
                         "selected": true
                     }
@@ -2990,7 +3042,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "electrical_hazards_N/A",
                         "selected": true
                     }
@@ -3013,7 +3065,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "can_access_emergency_services_N/A",
                         "selected": true
                     }
@@ -3036,7 +3088,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "equiptment_supplies_N/A",
                         "selected": true
                     }
@@ -3059,7 +3111,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "medicine_labeled_N/A",
                         "selected": true
                     }
@@ -3082,7 +3134,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "functioning_smoke_alarm_N/A",
                         "selected": true
                     }
@@ -3105,7 +3157,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "functioning_co_alarm_N/A",
                         "selected": true
                     }
@@ -3128,7 +3180,7 @@
                     },
                     {
                         "title": "N/A",
-                        "value": "N/A",
+                        "value": "N_A",
                         "id": "working_utilities_N/A",
                         "selected": true
                     }
@@ -3187,7 +3239,7 @@
         "options": [
             {
                 "title": "N/A - Not live in case",
-                "value": "N/A",
+                "value": "not_live_in_case",
                 "id": "not_live_in_case"
             },
             {
