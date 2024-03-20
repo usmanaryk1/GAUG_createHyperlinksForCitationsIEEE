@@ -5,9 +5,9 @@
             retrieveAll: {
                 method: 'GET',
                 isArray: true,
-                params: {
-                    action: 'retrieveAll'
-                }
+                // params: {
+                //     action: 'retrieveAll'
+                // }
             },
             saveRecord: {
                 method: "POST"
