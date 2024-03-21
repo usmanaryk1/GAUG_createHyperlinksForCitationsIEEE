@@ -32,8 +32,8 @@
   // Initialize form data
   ctrl.homeCarePlanForm = {
     position: "",
-    tasks: [],
-    goals: [],
+    // tasks: [],
+    // goals: [],
     canBeLeftAlone: 'true',
     emergencyContact: {
       phoneNumber: "",
@@ -41,29 +41,25 @@
     },
     patientProxySignature: null,
     nurseSignature: null,
-    // Add other fields as needed
   };
 
-  // Sample data for tasks and goals
-  ctrl.tasks = [
-    { name: "Task 1" },
-    { name: "Task 2" },
-    // Add more tasks as needed
-  ];
+  
+//   ctrl.tasks = [
+//     { name: "Task 1" },
+//     { name: "Task 2" },
+//   ];
 
-  ctrl.goals = [
-    { name: "Fall & Injury Prevention" },
-    { name: "Hospitalization Reduction" },
-    { name: "Personal Care Needs Will Be Met" },
-    { name: "Rehabilitation" },
-    { name: "Social & Recreational Activities Met" },
-    // Add more goals as needed
-];
-  // Sample data for position options
+//   ctrl.goals = [
+//     { name: "Fall & Injury Prevention" },
+//     { name: "Hospitalization Reduction" },
+//     { name: "Personal Care Needs Will Be Met" },
+//     { name: "Rehabilitation" },
+//     { name: "Social & Recreational Activities Met" },
+// ];
+
   ctrl.positionOptions = [
     "Position 1",
     "Position 2",
-    // Add more positions as needed
   ];
 
   // Function to submit the form
