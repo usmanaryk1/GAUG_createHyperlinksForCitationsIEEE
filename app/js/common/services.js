@@ -108,7 +108,6 @@ angular.module('xenon.services', []).
                 patient.addItem('Add Patient', './patient/tab1/', 'CREATE_PATIENT');
                 patient.addItem('View Patient', './patient-list/active', 'VIEW_PATIENT');
                 patient.addItem('Patient Records', './patient_records', 'VIEW_PATIENT');
-                patient.addItem('Home Care Plan', './home_care_plan', 'VIEW_PATIENT');
 
 
                 // Subitems of timeSheet
@@ -187,8 +186,6 @@ angular.module('xenon.services', []).
                 patient.addItem('Add Patient', './patient/tab1');
                 patient.addItem('View Patient', './view_patient_tab_1');
                 patient.addItem('Patient Records', './patient_records', 'VIEW_PATIENT');
-                patient.addItem('Home Care Plan', './home_care_plan', 'VIEW_PATIENT');
-
 
 
                 // Subitems of timeSheet

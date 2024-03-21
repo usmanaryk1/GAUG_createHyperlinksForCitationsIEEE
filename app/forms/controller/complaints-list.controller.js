@@ -3,7 +3,6 @@
         'use strict';
         Page.setTitle("Complaints")
         var ctrl = this;
-        $rootScope.maskLoading();
         ctrl.searchParams = { pageSize: 10, pageNumber: 1, name: '' };
         ctrl.complaintType = $stateParams.status;
         ctrl.complaintsList = [];
@@ -12,58 +11,31 @@
         ctrl.remainingDaysToCloseCall = remainingDaysToClose
         ctrl.getComplaintCloseDaysCall = getComplaintCloseDays
         ctrl.currentDate = new Date();
-        // ctrl.complaintTypes = angular.copy(ontime_data.complaintTypes)
 
-
-        ctrl.pageInitCall()
+        ctrl.pageInitCall();
 
         ctrl.openViewModal = function (complaint, modal_id, modal_size, modal_backdrop) {
-            $rootScope.maskLoading();
-            FormsDAO.getComplaintById({ id: complaint?.id }).then(function (complaintData) {
-                
-                var modalInstance = $modal.open({
-                    templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
-                    size: modal_size ,
-                    backdrop: typeof modal_backdrop === 'undefined' ? true : modal_backdrop,
-                    keyboard: false,
-                    controller: 'ComplaintInfoCtrl as ComplaintInfo',
-                    resolve: {
-                        complaint: function () {
-                            return complaintData;
-                        }
+            var modalInstance = $modal.open({
+                templateUrl: appHelper.viewTemplatePath('common', 'complaint-info'),
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false,
+                controller: 'ComplaintInfoCtrl as ComplaintInfo',
+                resolve: {
+                    complaint: function () {
+                        return complaint;
                     }
-                });
-                modalInstance.result.then(function () {
-                    console.log("popup closed");
-                });
-            }).catch(function (error) {
-                showLoadingBar({
-                    delay: .5,
-                    pct: 100,
-                    finish: function () {
-                    }
-                    
-                }); 
-                $rootScope.unmaskLoading();// showLoadingBar
-                console.error("Error fetching complaint data: ", error);
-            }).then(()=>{
-                $rootScope.unmaskLoading();
+                }
+            });
+            modalInstance.result.then(function () {
+                console.log("popup closed");
             });
         };
-        
-        // ctrl.getComplaintType = function (type){
-        //     let selectedType =  ctrl.complaintTypes.find(item => item.value == type)
-        //     return selectedType != undefined ? selectedType.title : ''
-        // }
+
 
         ctrl.setComplaint = function(complaint){
             localStorage.setItem('complaint', JSON.stringify(complaint));
         }
-
-        ctrl.navigateToComplaintDetails = function(complaint) {
-            // Manually update the URL with the 'print' parameter
-            $state.go('app.add-complaint', { id: complaint.id, print: true });
-        };
 
         function remainingDaysToClose (proposedDate) {
             const dateInsertedObj = new Date();
@@ -83,7 +55,7 @@
             FormsDAO.getComplaintPolicyResolutionTime().then(res => {
                 ctrl.complaintResDays = res.policyResolutionTime;
             }).catch(err => {
-                toastr.error(err.data)
+                toastr.error("Couldn't get complaint policy resolution time")
             })
         }
 
@@ -102,7 +74,6 @@
         };
 
         function getComplaints() {
-            $rootScope.paginationLoading = true;
             if(ctrl.complaintType == 'open'){
                 ctrl.searchParams.isFollowUpNeeded = true;
             }else if(ctrl.complaintType == 'close'){
@@ -110,7 +81,6 @@
             }
 
             FormsDAO.getAllComplaints(ctrl.searchParams).then((res) => {
-                $rootScope.maskLoading();
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -121,21 +91,17 @@
                     ctrl.complaintsList = res;
                     if(ctrl.searchParams.isFollowUpNeeded == true)
                     $rootScope.currentUser.complaintNotification = $rootScope.totalRecords;
-                    $rootScope.unmaskLoading();
                 }
-            }).catch(function (err) {
-                toastr.error(err.data);
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve complaints.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
                     finish: function () {}
                 }); // showLoadingBar
-                $rootScope.unmaskLoading();
             }).then(function () {
                 $rootScope.unmaskLoading();
-            }).then(function () {
                 $rootScope.paginationLoading = false;
-                $rootScope.unmaskLoading();
             });
         }
 
@@ -161,12 +127,11 @@
             $rootScope.deleteComplaintModel.delete = function (complaint) {
                 $rootScope.maskLoading();
                 FormsDAO.deleteComplaint({id: complaint.id}).then(function (res) {
-                    const characterArray = Object.values(res).filter(value => typeof value === 'string');
-                    toastr.success(Object.values(characterArray))
+                    toastr.success("Complaint deleted.");
                     $rootScope.deleteComplaintModel.close();
                     getComplaints();
-                }).catch(function (err) {
-                    toastr.error(err.data);
+                }).catch(function () {
+                    toastr.error('Delete complaint failed');
                     $rootScope.deleteComplaintModel.close();
                 }).then(function () {
                     $rootScope.unmaskLoading();

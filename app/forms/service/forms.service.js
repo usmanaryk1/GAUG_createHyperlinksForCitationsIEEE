@@ -70,6 +70,7 @@
                 return api.getAllComplaints(data).$promise;
             },
             setCompResolutionDays: function (data){
+                console.log(data);
                 return api.setCompResolutionDays(data).$promise
             },
             getComplaintPolicyResolutionTime: function (){

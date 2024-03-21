@@ -4,6 +4,7 @@
             <div class="emp_user_hd">
                 
                 <div class="emp_user_name">{{ComplaintInfo.complaint.complainantName}}</div>
+                <!-- <p>{{ComplaintInfo.complaint.insuranceProviderName}}</p> -->
             </div>
             <button type="button" class="close" ng-click="ComplaintInfo.close();" aria-hidden="true">&times;</button>
         </div>
@@ -13,8 +14,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complaint Date</strong></label>
-                <div class="col-md-7">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Date</strong></label>
+                <div class="col-md-8">
                     {{ComplaintInfo.complaint.complaintDate | dateOnly}}
                 </div>
             </div>
@@ -23,8 +24,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complaint Type</strong></label>
-                <div class="col-md-7">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Type</strong></label>
+                <div class="col-md-8">
                     {{ComplaintInfo.complaint.complaintType}}
                 </div>
             </div>
@@ -33,9 +34,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Contact Type</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complainantContactType | customFilter}}
+                <label for="field-1" class="control-label col-md-4"><strong>Contact Type</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantContactType}}
                 </div>
             </div>
         </div>
@@ -43,9 +44,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Contact info</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complainantContact | tel}}
+                <label for="field-1" class="control-label col-md-4"><strong>Contact info</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantContact}}
                 </div>
             </div>
         </div>
@@ -53,9 +54,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complainant Relation</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complainantRelationshipType | customFilter}}
+                <label for="field-1" class="control-label col-md-4"><strong>Complainant Relation</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complainantRelationshipType}}
                 </div>
             </div>
         </div>
@@ -63,8 +64,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complaint Relationship Name</strong></label>
-                <div class="col-md-7">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Relationship Name</strong></label>
+                <div class="col-md-8">
                     {{ComplaintInfo.complaint.complainantRelationship}}
                 </div>
             </div>
@@ -73,9 +74,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complainant Method</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complaintMethod | customFilter}}
+                <label for="field-1" class="control-label col-md-4"><strong>Complainant Method</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.complaintMethod}}
                 </div>
             </div>
         </div>
@@ -83,49 +84,19 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complaint Proposed Resolution</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.dateProposedResolution | dateOnly}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Received By</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.complaintReceiver.fName}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Complaint Description</strong></label>
-                <div class="col-md-7">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Description</strong></label>
+                <div class="col-md-8">
                     {{ComplaintInfo.complaint.complaintDescription}}
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" ng-if="ComplaintInfo.complaint.isClosed">
+    <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Closed By</strong></label>
-                <div class="col-md-7">
-                    {{ComplaintInfo.complaint.resolvedBy.fullName}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row" ng-if="ComplaintInfo.complaint.isClosed">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Signature</strong></label>
-                <div class="col-md-7">
-                    <img width="100%" ng-src="data:image/jpeg;base64,{{ComplaintInfo.complaint.signature}}" alt="">
+                <label for="field-1" class="control-label col-md-4"><strong>Complaint Proposed Resolution</strong></label>
+                <div class="col-md-8">
+                    {{ComplaintInfo.complaint.dateProposedResolution | dateOnly}}
                 </div>
             </div>
         </div>
