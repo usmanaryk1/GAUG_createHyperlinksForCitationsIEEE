@@ -310,25 +310,25 @@
         });
     }
 
-    function getWorksiteList() {
-      return WorksiteDAO.retrieveAll({ subAction: "active" })
-        .then(function (res) {
-          showLoadingBar({
-            delay: 0.5,
-            pct: 100,
-            finish: function () {},
-          }); // showLoadingBar
-          if (res) {
-            ctrl.worksiteList = res;
-          }
-        })
-        .catch(function (data, status) {
-          toastr.error("Failed to retrieve worksites.");
-        })
-        .then(function () {
-          $rootScope.paginationLoading = false;
-        });
-    }
+        function getWorksiteList() {
+            return WorksiteDAO.retrieveAll({ subAction: 'active' }).then(function (res) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+                    }
+
+                }); // showLoadingBar                
+                if (res) {
+                    ctrl.worksiteList = res;
+                }
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve worksites.");
+            }).then(function () {
+                // $rootScope.unmaskLoading();
+                $rootScope.paginationLoading = false;
+            });
+        }
 
     /*================   UTILITY FUNCTIONS   ===================*/
     ctrl.relationToOrgChange = function () {

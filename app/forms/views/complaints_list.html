@@ -109,7 +109,7 @@
                                                     <tr pagination-id="viewComplaintPagination"
                                                         dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.pageSize"
                                                         total-items="totalRecords"
-                                                        current-page="viewPatient.searchParams.pageNumber">
+                                                        current-page="compCtrl.searchParams.pageNumber">
                                                         <td>
                                                             <div ng-click="compCtrl.openViewModal(complaint, 'modal-5', 'lg')"
                                                                 style="cursor: pointer">
