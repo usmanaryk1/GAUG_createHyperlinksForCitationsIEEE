@@ -20,7 +20,7 @@
         opacity: 1;
         margin-top: 0;
     }
-   
+
     textarea {
         resize: vertical;
     }
@@ -69,6 +69,20 @@
             height: auto;
         }
     }
+
+    .length-message {
+        text-align: end;
+        margin-top: 3px;
+    }
+
+    .disabled-para {
+        cursor: not-allowed;
+        background-color: #eee;
+        opacity: 1;
+        border: 1px solid #B0B0B0;
+        padding: 1em;
+        color: #4C4D4C;
+    }
 </style>
 
 <div class="page-body">
@@ -112,11 +126,10 @@
                                         <input class="form-control datepicker" max-date="addCompCtrl.currentDate"
                                             data-format="mm/dd/yyyy" id="field-1" name="DateofComplaint" type="text"
                                             ng-model="addCompCtrl.complaint.complaintDate" data-validate="required,date"
-                                            data-message-required="Please Enter Complaint Receiving Date"
-                                            />
-                                        <div class="input-group-addon" >
+                                            data-message-required="Please Enter Complaint Receiving Date" />
+                                        <div class="input-group-addon">
                                             <a href="#">
-                                                <i class="linecons-calendar" >
+                                                <i class="linecons-calendar">
                                                 </i>
                                             </a>
                                         </div>
@@ -202,10 +215,8 @@
                                 </div>
                                 <div class="col-sm-9" ng-if="addCompCtrl.print">
                                     <input class="form-control" name="complainantContactPhone"
-                                        ng-model="addCompCtrl.complaint.complainantContactPhone" 
-                                        placeholder="Enter phone"
-                                        type="text" 
-                                        ng-disabled="addCompCtrl.print" />
+                                        ng-model="addCompCtrl.complaint.complainantContactPhone"
+                                        placeholder="Enter phone" type="text" ng-disabled="addCompCtrl.print" />
                                 </div>
                             </div>
 
@@ -289,8 +300,7 @@
                                                 id="employeedropdownIds" data-validate="required"
                                                 data-message-required="Please select an Employee"
                                                 ng-options='employee.fName as employee.fName for employee in addCompCtrl.employeeList'
-                                                ng-disabled="addCompCtrl.print"
-                                                ng-disabled="addCompCtrl.print" >
+                                                ng-disabled="addCompCtrl.print" ng-disabled="addCompCtrl.print">
                                                 <option value="" selected hidden>Please Select</option>
                                             </select>
                                         </div>
@@ -324,8 +334,7 @@
                                 <div class="col-sm-9">
                                     <input class="form-control" disabled charactersonly id="field-10"
                                         name="complaintReceiver" type="text" maxlength="50"
-                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}"
-                                        ng-disabled="addCompCtrl.print" />
+                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}" />
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -391,17 +400,21 @@
                                 <div class="col-sm-9">
                                     <textarea class="form-control hidden-print" name="ComplaintDescription"
                                         ng-model="addCompCtrl.complaint.complaintDescription" id="field-12" cols="30"
-                                        rows="5" placeholder="Complaint Description" data-validate="required"
+                                        maxlength="1000" rows="5" placeholder="Complaint Description"
+                                        data-validate="required"
                                         data-message-required="Please enter Complaint Description"
-                                        ng-disabled="addCompCtrl.print"></textarea>
-                                    <p class="visible-print-block" style="border: 1px solid #B0B0B0; padding: 1em">
+                                        data-message-maxlength="Description must be 1000 characters or fewer" ng-disabled="addCompCtrl.print"></textarea>
+                                    <p class="length-message hidden-print">
+                                        {{addCompCtrl.complaint.complaintDescription.length}}/1000</p>
+                                    <p class="disabled-para visible-print-block">
                                         {{addCompCtrl.complaint.complaintDescription}}</p>
+
                                 </div>
                             </div>
 
                             <div class="form-group-separator"></div>
 
-                            <div class="form-group" >
+                            <div class="form-group">
                                 <label class="col-sm-3 control-label" for="field-13">
                                     Follow up Needed
                                 </label>
@@ -467,30 +480,32 @@
                                     Resolution Notification Date
                                 </label>
                                 <div class="col-sm-9">
-                                    <input class="form-control datepicker" 
-                                        data-format="mm/dd/yyyy"
-                                        ng-model="addCompCtrl.complaint.dateProposedResolution" 
-                                        ng-disabled="addCompCtrl.print" 
-                                        />
+                                    <input class="form-control datepicker" data-format="mm/dd/yyyy"
+                                        ng-model="addCompCtrl.complaint.dateProposedResolution"
+                                        ng-disabled="addCompCtrl.print" />
                                 </div>
                             </div>
 
-                            
 
-                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'" >
-                                <label for="field-13" class="col-sm-3 control-label">Complaint Resolved [Actions]</label>
+
+                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
+                                <label for="field-13" class="col-sm-3 control-label">Complaint Resolved
+                                    [Actions]</label>
                                 <div class="col-sm-9">
-                                    <textarea class="form-control hidden-print" name="ComplaintResolution"
-                                        ng-model="addCompCtrl.complaint.complaintResolution" id="field-13" cols="30"
-                                        rows="5" placeholder="Complaint Resolution" data-validate="required"
+                                    <textarea maxlength="1000" class="form-control hidden-print"
+                                        name="ComplaintResolution" ng-model="addCompCtrl.complaint.complaintResolution"
+                                        id="field-13" cols="30" rows="5" placeholder="Complaint Resolution"
+                                        data-validate="required"
                                         data-message-required="Please enter Complaint Resolution"
                                         ng-disabled="addCompCtrl.print"></textarea>
-                                    <p class="visible-print-block" style="border: 1px solid #B0B0B0; padding: 1em;">
+                                    <p class="length-message hidden-print">
+                                        {{addCompCtrl.complaint.complaintResolution.length}}/1000</p>
+                                    <p class="visible-print-block disabled-para">
                                         {{addCompCtrl.complaint.complaintResolution}}</p>
                                 </div>
                             </div>
 
-                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'" >
+                            <div class="form-group" ng-show="addCompCtrl.complaint.isFollowUpNeeded == 'false'">
                                 <label class="col-sm-3 control-label" for="field-14">
                                     Complainant satisfied with actions plan?
                                 </label>
@@ -547,7 +562,7 @@
                                 <div class="col-sm-9">
                                     <signature-pad width="550" height="175" style="border:1px solid #B0B0B0"
                                         dataurl="addCompCtrl.complaint.signature" accept="addCompCtrl.accept"
-                                        clear="clear" ></signature-pad>
+                                        clear="clear"></signature-pad>
                                     <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
                                         ng-click="clear(); addCompCtrl.clearSignatureCall()">Clear signature</button>
                                 </div>
@@ -567,7 +582,7 @@
                                 ng-if="addCompCtrl.print">
                                 <label for="" class="col-sm-3 control-label">Signature</label>
                                 <div class="col-sm-9">
-                                    <img width="100%" ng-src="data:image/jpeg;base64,{{addCompCtrl.signaturePrint}}"
+                                    <img width="250" ng-src="data:image/jpeg;base64,{{addCompCtrl.signaturePrint}}"
                                         alt="">
                                 </div>
                             </div>
