@@ -102,6 +102,7 @@
         };
 
         function getComplaints() {
+            $rootScope.paginationLoading = true;
             if(ctrl.complaintType == 'open'){
                 ctrl.searchParams.isFollowUpNeeded = true;
             }else if(ctrl.complaintType == 'close'){
