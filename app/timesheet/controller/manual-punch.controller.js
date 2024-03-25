@@ -63,6 +63,7 @@
             }
             if (ctrl.attendanceObj.patientId != null) {
                 ctrl.attendanceObj.patientId = ctrl.attendanceObj.patientId.id;
+                ctrl.retrievePatient();
                 $timeout(function () {
                     $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
                 });
@@ -109,6 +110,7 @@
                     var param = JSON.parse(dailyAttendanceNoPunch);
                     if (param.patientId) {
                         ctrl.attendanceObj.patientId = Number(param.patientId);
+                        ctrl.retrievePatient();
                         $timeout(function () {
                             $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
                         });
@@ -134,6 +136,7 @@
                     }
                 } else if ($state.current.name.indexOf('patient') > 0) {
                     ctrl.attendanceObj.patientId = Number(id);
+                    ctrl.retrievePatient();
                     $timeout(function () {
                         $("#sboxit-1").select2("val", ctrl.attendanceObj.patientId);
                     });
@@ -191,6 +194,28 @@
                 if (res.companyPositionId && ctrl.officeStaffIds.indexOf(res.companyPositionId) > -1) {
                     ctrl.patientMandatory = false;
                 }
+            });
+        }
+
+        ctrl.retrievePatient = function (reset) {
+            if (reset) {
+                $rootScope.paginationLoading = true;
+                delete ctrl.attendanceObj.careTypeId;
+            }
+            
+            PatientDAO.getPatientsForSchedule({patientIds: ctrl.attendanceObj.patientId}).then(function (res) {
+                var patientObj = res[0];
+                if (patientObj && patientObj.patientCareTypeCollection && patientObj.patientCareTypeCollection.length > 0) {
+                    ctrl.careTypes = [];
+                    var length = patientObj.patientCareTypeCollection.length;
+                    for (var i = 0; i < length; i++) {
+                        ctrl.careTypes.push(patientObj.patientCareTypeCollection[i].insuranceCareTypeId.companyCaretypeId);
+                    }
+                }
+            }).catch(function (data, status) {
+                toastr.error("Failed to retrieve patient.");
+            }).then(function () {
+                $rootScope.paginationLoading = false;
             });
         }
 

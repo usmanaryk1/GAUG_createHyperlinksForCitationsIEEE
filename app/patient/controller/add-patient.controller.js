@@ -359,6 +359,7 @@
                         ctrl.patient.subscriberInfo[0].nameSuffix = ctrl.patient.nameSuffix;
                         ctrl.patient.subscriberInfo[0].dateOfBirth = ctrl.patient.dateOfBirth;
                         ctrl.patient.subscriberInfo[0].gender = ctrl.patient.gender;
+                        ctrl.patient.subscriberInfo[0].phone = ctrl.patient.phone;
                         ctrl.patient.subscriberInfo[0].relationshipWithPatient = 'I';
 
                     }
