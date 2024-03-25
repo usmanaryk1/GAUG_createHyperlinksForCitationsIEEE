@@ -114,12 +114,13 @@
                 <div class="form-group">
                     <label for="position" class="control-label col-sm-3">Select Position:</label>
                     <div class="col-sm-9">
+                        <!-- emp.id as emp.label for emp in addWorksite.employeeList track by emp.id -->
                     <select id="position" name="position" class="form-control" 
-                        ng-model="homeCarePlan.homeCarePlanForm.position" 
-                        ng-options="position.position for position in homeCarePlan.positionList"
+                        ng-model="homeCarePlan.homeCarePlanForm.positionId" 
+                        ng-options="position.id as position.position for position in homeCarePlan.positionList"
                         data-validate="required"  
                         data-message-required="Please select Position." 
-                        
+                        ng-change="homeCarePlan.setPositionTaskDataCall(homeCarePlan.homeCarePlanForm.positionId)"
                     >
                         <option value="" disabled selected>Select Position</option>
                     </select>
@@ -156,7 +157,7 @@
                             </script>
                             <select class="form-control" id="tasks" multiple="multiple" name="tasks"
                                     ng-model="homeCarePlan.selectedTasks"
-                                    ng-options="ct.id as ct.task for ct in homeCarePlan.taskList| orderBy:'task'"
+                                    ng-options="ct.id as ct.task for ct in homeCarePlan.positionTasksList| orderBy:'task'"
                                     ng-change="homeCarePlan.homeCarePlanForm.taskScheduleSet.length"
                                     >
                                     
@@ -247,7 +248,7 @@
                     <label for="emergencyContactPhone" class="control-label col-sm-3">Emergency Contact Phone number:</label>
                     <div class="col-sm-9">
                         <input class="form-control" name="emergencyContactPhone"
-                            ng-model="homeCarePlan.homeCarePlanForm.emergencyContact.phoneNumber" numbers-only="true"
+                            ng-model="homeCarePlan.homeCarePlanForm.phoneNumber" numbers-only="true"
                             maxlength="10" id="emergencyContactPhone" placeholder="Enter phone"
                             data-validate="required,number,minlength[10],maxlength[10]"
                             data-message-required="Please enter Phone Number."
@@ -259,7 +260,7 @@
                     <label for="emergencyContactName" class="control-label col-sm-3">Emergency Contact Name:</label>
                     <div class="col-sm-9">
                     <input type="text" id="emergencyContactName" name="emergencyContactName" class="form-control" 
-                        ng-model="homeCarePlan.homeCarePlanForm.emergencyContact.name" 
+                        ng-model="homeCarePlan.homeCarePlanForm.name"
                         placeholder="Enter name"
                         data-validate="required"  
                         data-message-required="Emergency contact name required."

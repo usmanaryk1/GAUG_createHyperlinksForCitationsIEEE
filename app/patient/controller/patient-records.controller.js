@@ -81,6 +81,8 @@
                 $state.go('app.progress_note', { id: record.patientId })
             if (record.type == 'Medical_Orders')
                 $state.go('app.medical_orders', { id: record.patientId })
+            if (record.type == 'Home_Care_Plan')
+                $state.go('app.home_care_plan', { id: record.patientId, recordType: record.type })
         }
 
     }

@@ -53,12 +53,14 @@ ontime_data = {
         { option: "Medication Reconciliation", value: "Medication_Reconciliation" },
         { option: "Progress Note", value: "Progress_Note" },
         { option: "Medical Orders", value: "Medical_Orders" },
+        { option: "Home Care Plan", value: "Home_Care_Plan" },
     ],
     patientRecordsObj: {
         Nursing_Assessment: 'Nursing Assessment',
         Medication_Reconciliation: 'Medication Reconciliation',
         Progress_Note: 'Progress Note',
-        Medical_Orders: 'Medical Orders'
+        Medical_Orders: 'Medical Orders',
+        Home_Care_Plan: 'Home Care Plan'
     },
     'pastEventAuthorizationPassword': '!avalanche!',
     'hrPassword': 'Avalanche!HR',

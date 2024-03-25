@@ -3,7 +3,7 @@
         var ctrl = this;
 
         this.recordOptions = angular.copy(ontime_data.patientRecords)
-
+        console.log("ontime_data", ontime_data, ontime_data.patientRecords);
         ctrl.save = function () {
             var request = { "type": ctrl.type.value, "expiryDate": ctrl.expiry };
             request.patientId = $modalInstance.id;
@@ -19,6 +19,8 @@
                     $state.go('app.progress_note', { id: res.patientId })
                 if (ctrl.type.value == 'Medical_Orders')
                     $state.go('app.medical_orders', { id: res.patientId })
+                if (ctrl.type.value == 'Home_care_plan')
+                    $state.go('app.home_care_plan', { id: res.patientId, recordType: res.type })
             }).catch(function (data, status) {
                 showLoadingBar({
                     delay: .5,

@@ -554,7 +554,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // Home Care Plan Form
             state('app.home_care_plan', {
-                url: '/home_care_plan',
+                url: '/home_care_plan/:id/:recordType',
                 templateUrl: appHelper.viewTemplatePath('patient', 'home_care_plan'),
                 controller: 'HomeCarePlanCtrl as homeCarePlan',
             }).

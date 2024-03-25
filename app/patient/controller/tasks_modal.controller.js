@@ -22,7 +22,6 @@
             frequency: "", 
             additionalInstructions: "" 
         };  
-
         if (selectedType !== null) {
             ctrl.selectedTasksObj = selectedType[0];
         }
@@ -59,7 +58,7 @@
         ctrl.save = function () {
              //Check validity for days
             if (ctrl.parameters.selectedDays.length === 0) {
-                console.log("validate days ");
+                // console.log("validate days ");
                 // Rest of your save logic
             return  ctrl.daysErrorMsg = "Please select at least one day."
             }
