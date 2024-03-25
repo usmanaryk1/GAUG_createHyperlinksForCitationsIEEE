@@ -45,6 +45,7 @@
     ctrl.generateFormCall = generateForms;
     ctrl.clearSignatureCall = clearSignature;
     ctrl.getListsCall = getLists;
+    ctrl.getListsCallForClosedCall = getListsCallForClosed;
     ctrl.complaint = {};
     ctrl.title = "Add Complaint";
     ctrl.subtitle = "Create A New Complaint By Entering Complaint Information";
@@ -87,8 +88,27 @@
       }
     }
 
+    async function getListsCallForClosed() {
+      $rootScope.maskLoading();
+      try {
+        await Promise.all([
+          generateForms(),
+        ]);
+      } catch (error) {
+          toastr.error("An error occurred while fetching data.");
+          $rootScope.unmaskLoading();
+      } finally {
+        $rootScope.unmaskLoading();
+      }
+    }
+
     /*================   FUNCTION CALLS   ===================*/
-    ctrl.getListsCall();
+    if(!ctrl.print){
+      ctrl.getListsCall();
+    }else {
+      getListsCallForClosed()
+    }
+
 
     /*================   FORM FUNCTIONS   ===================*/
     function generateForms() {
@@ -116,6 +136,10 @@
               signature: null,
               dateResolvedOn: res?.dateResolvedOn || ctrl.currentDateWithFormat,
             };
+
+            // if(ctrl.print){
+            //   ctrl.complaint.complainantRelationship = res.complainantRelationship
+            // }
 
             ctrl.getContactValue(
               res.complainantContactType,
@@ -186,6 +210,14 @@
     ctrl.saveForm = function (action) {
       if ($("#add_complaint_form")[0].checkValidity()) {
         var complaintToSave = angular.copy(ctrl.complaint);
+
+        if(complaintToSave.isFollowUpNeeded){
+          complaintToSave.complaintResolution = ""
+          complaintToSave.complainantSatisfied = "yes"
+          complaintToSave.dateProposedResolution = null
+          complaintToSave.signature = null
+          complaintToSave.dateResolvedOn = null 
+        }
 
         complaintToSave.complainantRelationship =
           complaintToSave.complainantRelationship.toString();
@@ -267,6 +299,16 @@
         }
       }
     };
+
+    ctrl.resolvingComplaint = function(resolving){
+      if(!resolving){
+        ctrl.complaintResolution = ""
+        ctrl.complainantSatisfied = "yes"
+        ctrl.dateProposedResolution = null
+        ctrl.signature = null
+        ctrl.dateResolvedOn = ctrl.currentDateWithFormat
+      }
+    }
 
     function deleteContactTypes(obj) {
       delete obj.complainantContactPhone;

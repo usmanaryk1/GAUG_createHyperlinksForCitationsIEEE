@@ -127,7 +127,7 @@
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | dateOnly}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'close'">{{complaint.dateResolvedOn | dateOnly}}</td>
-                                                        <td>{{complaint.complaintReceiver.fName  | titleCase}}</td>
+                                                        <td>{{complaint.complaintResolved.fName  | titleCase}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'open'"
                                                             ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint))">
                                                         </td>

@@ -115,17 +115,7 @@
             <div class="form-group">
                 <label for="field-1" class="control-label col-md-5"><strong>Closed By</strong></label>
                 <div class="col-md-7">
-                    {{ComplaintInfo.complaint.resolvedBy.fullName}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row" ng-if="ComplaintInfo.complaint.isClosed">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="field-1" class="control-label col-md-5"><strong>Signature</strong></label>
-                <div class="col-md-7">
-                    <img width="100%" ng-src="data:image/jpeg;base64,{{ComplaintInfo.complaint.signature}}" alt="">
+                    {{ComplaintInfo.complaint.resolvedBy.fName + ' ' + ComplaintInfo.complaint.resolvedBy.lName}}
                 </div>
             </div>
         </div>

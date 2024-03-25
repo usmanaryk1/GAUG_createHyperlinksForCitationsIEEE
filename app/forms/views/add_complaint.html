@@ -283,7 +283,8 @@
                                             Vendor
                                         </label>
                                     </div>
-                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.complainantRelationshipType">
+                                    <div class="pt-7" ng-switch="addCompCtrl.complaint.complainantRelationshipType"
+                                        ng-if="!addCompCtrl.print">
                                         <div ng-switch-when="PATIENT">
                                             <select class="form-control" name="patientdropdownIds"
                                                 ng-model="addCompCtrl.complaint.complainantRelationship"
@@ -322,6 +323,12 @@
                                                 ng-disabled="addCompCtrl.print" />
                                         </div>
                                     </div>
+
+                                    <input class="form-control mt-7" ng-if="addCompCtrl.print" charactersonly id="field-10"
+                                        name="complaintReceiver" type="text" maxlength="50"
+                                        ng-model="addCompCtrl.complaint.complainantRelationship"
+                                        ng-disabled="addCompCtrl.print" />
+
 
                                 </div>
                             </div>
@@ -423,13 +430,13 @@
                                         <label class="radio-field">
                                             <input value="true" name="followUpNeeded" type="radio" class=""
                                                 ng-model="addCompCtrl.complaint.isFollowUpNeeded"
-                                                ng-disabled="addCompCtrl.print" />
+                                                ng-disabled="addCompCtrl.print" ng-change="addCompCtrl.resolvingComplaint(false)"/>
                                             Yes
                                         </label>
                                         <label class="radio-field">
                                             <input name="followUpNeeded" value="false" type="radio"
                                                 ng-model="addCompCtrl.complaint.isFollowUpNeeded"
-                                                ng-disabled="addCompCtrl.print" />
+                                                ng-disabled="addCompCtrl.print" ng-change="addCompCtrl.resolvingComplaint(true)"/>
                                             Mark As Resolved
                                         </label>
                                     </div>
