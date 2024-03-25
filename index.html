@@ -40,6 +40,7 @@
                 templatesDir: 'app/tpls',
                 moduleTemplatesDir: 'app',
                 assetsDir: 'assets',
+                mockPath: 'mockdata',
                 // Methods
                 viewTemplatePath: function (module, view_name) {
                     return this.moduleTemplatesDir + '/' + module + '/views/' + view_name + '.html';
@@ -51,7 +52,10 @@
                 assetPath: function (file_path)
                 {
                     return this.assetsDir + '/' + file_path;
-                }
+                },
+                mockDataPath: function (file_path){
+                    return this.mockPath + '/' + file_path
+                } 
             };
         </script>
 
@@ -206,6 +210,7 @@
         <script src="app/application/service/application-public.service.js?version=@$7.0.1$@"></script>
         <script src="app/application/service/application.service.js?version=@$7.0.1$@"></script>
         <!-- application-->
+        <script src="app/patient/service/home_care_plan.service.js?version=@$7.0.1$@"></script>
         <script src="app/patient/service/patient-records.service.js?version=@$7.0.1$@"></script>
         <script src="app/patient/service/patient.service.js?version=@$7.0.1$@"></script>
         <script src="app/employee/service/employee.service.js?version=@$7.0.1$@"></script>
@@ -250,9 +255,13 @@
         <script src="app/benefits/controller/benefit-payouts.controller.js?version=@$7.0.1$@"></script>
         <script src="app/patient/controller/add-patient.controller.js?version=@$7.0.1$@"></script>
         <script src="app/patient/controller/view-patients.controller.js?version=@$7.0.1$@"></script>
+        <script src="app/patient/controller/home_care_plan.controller.js?version=@$7.0.1$@"></script>
         <script src="app/patient/controller/patient-records.controller.js?version=@$7.0.1$@"></script>
         <script src="app/patient/controller/patient-record-add.controller.js?version=@$7.0.1$@"></script>
         <script src="app/patient/controller/edit-patient.controller.js?version@7.0.1$@"></script>
+        <script src="app/patient/controller/medication-reconciliation.controller.js?version=@$7.0.1$@"></script>
+        <script src="app/patient/controller/progress_note.controller.js?version=@$7.0.1$@"></script>
+        <script src="app/patient/controller/medical_orders.controller.js?version=@$7.0.1$@"></script>
         <script src="app/billing/controller/billing-tab-1.controller.js?version=@$7.0.1$@"></script>
         <script src="app/billing/controller/billing-settings.controller.js?version=@$7.0.1$@"></script>
         <script src="app/billing/controller/billing-session.controller.js?version=@$7.0.1$@"></script>

@@ -98,6 +98,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
             $rootScope.isFormDirty = false
         });
     };
+
     //this will be called when any state change starts
     $rootScope.$on('$stateChangeStart',
             function (event, toState, toParams, fromState, fromParams) {
@@ -154,6 +155,7 @@ app.run(function ($rootScope, $modal, $state, Idle, $http)
                 }
             })
             ;
+
     $rootScope.$on('$locationChangeStart',
             function (event, newUrl, oldUrl) {
                 var pattern = /(#\/app)\/([^\/]+)[$|\/]?/;
@@ -213,7 +215,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
     KeepaliveProvider.interval(10);
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/redirect');
-    var verifyModuleAllocated = function (UserDAO, FormsDAO, $rootScope, $q, $timeout) {
+    var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout) {
         var deferred = $q.defer();
         if ($rootScope.currentUser.allowedFeature != null) {
             deferred.resolve();
@@ -221,8 +223,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             $timeout(function () {
                 UserDAO.getUserFeatures().then(function (featureList) {
                     $rootScope.currentUser.allowedFeature = [];
-                                        console.log(featureList);
-
                     if (featureList != null) {
                         for (var i = 0; i < featureList.length; i++) {
                             $rootScope.currentUser.allowedFeature.push(featureList[i].label)
@@ -292,8 +292,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             ASSETS.tables.datatables
                         ]);
                     },
-                    moduleAllocated: function (UserDAO, FormsDAO,  $rootScope, $q, $timeout) {
-                        return verifyModuleAllocated(UserDAO, FormsDAO, $rootScope, $q, $timeout);
+                    moduleAllocated: function (UserDAO ,  $rootScope, $q, $timeout) {
+                        return verifyModuleAllocated(UserDAO, $rootScope, $q, $timeout);
                     }
                 }
             })
@@ -984,7 +984,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             }).
             // Add complaint
             state('app.add-complaint', {
-                url: '/add-complaint?id',
+                url: '/add-complaint?id&print',
                 templateUrl: appHelper.viewTemplatePath('forms', 'add_complaint'),
                 controller: 'AddComplaintController as addCompCtrl'
             }).
@@ -1959,8 +1959,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             delete_cookie("cc");
                             delete_cookie("token");
                             delete_cookie("un");
-                            window.location.
-                            h = '#/app/login';
+                            window.location.hash = '#/app/login';
                             toastr.clear();
                         } else {
                             delete_cookie("cc");

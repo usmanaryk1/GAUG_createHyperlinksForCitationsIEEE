@@ -1,3 +1,11 @@
+<style>
+    .data-not-found{
+        display: flex;
+        justify-content: center;
+        padding-block: 1em;
+    }
+</style>
+
 <div class="page-body">
 
     <div>
@@ -76,7 +84,10 @@
 
                                     <div id="example-1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                                         <div class="table-responsive scroll">
-                                            <table id="example-4" ng-if="compCtrl.complaintsList.length"
+                                            <div class="data-not-found" ng-if="compCtrl.complaintsList.length === 0">
+                                                <p>No Complaint Found</p>
+                                            </div>
+                                            <table id="example-4" ng-if="compCtrl.complaintsList.length > 0"
                                                 class="table table-striped table-bordered  table-small-font"
                                                 cellspacing="0">
                                                 <thead>
@@ -87,18 +98,20 @@
                                                         <th>Method</th>
                                                         <th>Contact Info</th>
                                                         <th>Received Date</th>
+                                                        <th ng-if="compCtrl.complaintType == 'close'">Resolution Date</th>
                                                         <th>Received By</th>
                                                         <th ng-if="compCtrl.complaintType == 'open'">Remaining Days</th>
-                                                        <th ng-if="compCtrl.complaintType == 'open'">Actions</th>
+                                                        <th ng-if="compCtrl.complaintType == 'close'">Closed By</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr pagination-id="viewComplaintPagination"
                                                         dir-paginate="complaint in compCtrl.complaintsList| itemsPerPage: compCtrl.searchParams.pageSize"
                                                         total-items="totalRecords"
-                                                        current-page="viewPatient.searchParams.pageNumber">
+                                                        current-page="compCtrl.searchParams.pageNumber">
                                                         <td>
-                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5')"
+                                                            <div ng-click="compCtrl.openViewModal(complaint, 'modal-5', 'lg')"
                                                                 style="cursor: pointer">
                                                                 <div class="emp_user_hd">
                                                                     <div class="emp_user_name">
@@ -113,25 +126,31 @@
                                                             complaint.complaintMethod == 'EMAIL'? 'Email': 'In Person'}}</td>
                                                         <td>{{complaint.complainantContact}}</td>
                                                         <td>{{complaint.complaintDate | dateOnly}}</td>
-                                                        <!-- <td>{{complaint.resolutionDate}}</td> -->
+                                                        <td ng-if="compCtrl.complaintType == 'close'">{{complaint.dateResolvedOn | dateOnly}}</td>
                                                         <td>{{complaint.complaintReceiver.fName  | titleCase}}</td>
                                                         <td ng-if="compCtrl.complaintType == 'open'"
                                                             ng-bind-html="compCtrl.sanitizeHtml(compCtrl.getRemainingDaysForClosing(complaint))">
                                                         </td>
-                                                        <td ng-if="compCtrl.complaintType == 'open'">
+                                                        <td ng-if="compCtrl.complaintType == 'close'">{{complaint.resolvedBy == null? '':complaint.resolvedBy.fullName}}</td>
+                                                        <td>
                                                             <div class="center">
-                                                                <a ui-sref="app.add-complaint({id: complaint.id})"
+                                                                <a ng-if="compCtrl.complaintType == 'open'" ui-sref="app.add-complaint({id: complaint.id})"
                                                                     ng-click="compCtrl.setComplaint(complaint)"
                                                                     class="btn icon-left fa fa-pencil edit_button"
                                                                     href="" tooltip="Edit"><span
                                                                         class="ed_b"></span></a>
                                                                 <a class="btn icon-left fa fa-trash-o delete_button"
-                                                                    ng-if="hasAccess('VIEW_ALL_COMPLAINTS')"
+                                                                    ng-if="hasAccess('VIEW_ALL_COMPLAINTS') && compCtrl.complaintType == 'open'"
                                                                     ng-click="compCtrl.openDeleteModal(complaint, 'deleteModel')"
                                                                     tooltip="Delete"><span class="ed_b"></span></a>
-
+                                                                <a ng-if="compCtrl.complaintType == 'close'" class="btn icon-left fa fa-search deactivate_bt"
+                                                                    ui-sref="app.add-complaint({id: complaint.id, print: true})"
+                                                                    ng-click="compCtrl.setComplaint(complaint); "
+                                                                    tooltip="View Details"><span class="ed_b"></span></a>
+                                                                    <!-- compCtrl.navigateToComplaintDetails(complaint)  -->
                                                             </div>
                                                         </td>
+                                                     
                                                     </tr>
                                                 </tbody>
                                             </table>
