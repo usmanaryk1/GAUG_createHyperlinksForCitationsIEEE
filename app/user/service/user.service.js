@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var UserDAO = function (resource) {
-        var api = resource(ontimetest.weburl + 'admin/user/:action/:subAction/:subAction1', {}, {            
+        var api = resource(ontimetest.weburl + 'admin/user/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,
@@ -18,9 +18,23 @@
             },
             changestatus: {
                 method: 'GET'
+            },
+            getAllRoles: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'allroles'
+                }
+            },
+            changePassword: {
+                method: 'POST',
+                params: {
+                    action: "changepassword"
+                }
             }
+
         });
-        return {            
+        return {
             retrieveAll: function (filter) {
                 return api.retrieveAll(filter).$promise;
             },
@@ -35,7 +49,14 @@
             },
             get: function (params) {
                 return api.get({action: params.id}).$promise;
+            },
+            getAllRoles: function () {
+                return api.getAllRoles().$promise;
+            },
+            changePassword: function (data) {
+                return api.changePassword(data).$promise;
             }
+
         };
     };
     angular.module("xenon.factory").factory('UserDAO', ['$resource', UserDAO]);

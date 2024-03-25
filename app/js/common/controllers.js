@@ -22,7 +22,7 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state,$document)
+        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state,$document, UserDAO, $timeout)
         {
             var userName = getCookie("un");
             if (userName != null) {
@@ -48,7 +48,39 @@ angular.module('xenon.controllers', []).
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
 
             $scope.showMenu = false;
+            $rootScope.openResetPasswordModal = function (modal_id, modal_size, modal_backdrop)
+            {
+                $rootScope.resetPasswordModal = $modal.open({
+                    templateUrl: modal_id,
+                    size: modal_size,
+                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                    keyboard: false
+                });
+                $rootScope.resetPasswordModal.save = function () {
+                    $timeout(function () {
+                        if ($rootScope.resetPasswordModal.password != $rootScope.resetPasswordModal.confirmPassword) {
+                            $rootScope.resetPasswordModal.passwordNotMatch = true;
+                        } else {
+                            $rootScope.resetPasswordModal.passwordNotMatch = false;
+                        }
 
+                        if ($("#reset_password_form")[0].checkValidity() && !$rootScope.resetPasswordModal.passwordNotMatch) {
+                            $rootScope.maskLoading();
+                            UserDAO.changePassword({username: $rootScope.currentUser.userName, password: $rootScope.resetPasswordModal.password}).then(function (res) {
+                                toastr.success("Password changed successfully.");
+                                setCookie("changePassword", false, 7);
+                                $rootScope.resetPasswordModal.close();                                
+                            }).catch(function (data, status) {
+                                toastr.error("Password cannot be changed.");
+                                $rootScope.resetPasswordModal.close();                               
+                            }).then(function () {
+                                $rootScope.unmaskLoading();
+                            });
+                        }
+                    });
+                };
+            };
+            
                 $scope.openMenu = function($event) {
                 $event.stopPropagation()
                 if (!$scope.showMenu) {

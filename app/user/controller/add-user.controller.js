@@ -6,18 +6,23 @@
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.user = {};
-        ctrl.roles = ["Organization Admin", "User"];
         ctrl.user.employee = {employeeAttachments: []};
         ctrl.refreshLanguages = function () {
             $timeout(function () {
                 $('#languageOtherText').tagsinput("add", ctrl.user.employee.otherLanguages);
             });
         };
+        ctrl.getAllRoles = function () {
+            UserDAO.getAllRoles().then(function (res) {
+                ctrl.roles = res;
+            });
+        };
         ctrl.bindToExistingChange = function () {
+            var email = ctrl.user.employee.email;
             if (ctrl.user.bindToExisting) {
                 ctrl.user.employee = null;
             } else {
-                ctrl.user.employee = {};
+                ctrl.user.employee = {email: email};
                 if (!ctrl.user.employee.gender) {
                     ctrl.user.employee.gender = 'M';
                 }
@@ -99,21 +104,6 @@
         ctrl.pageInitCall = pageInit;
         var form_data;
 
-
-        //ceck if form has been changed or not
-        //If changed then it should be valid
-        ctrl.navigateToTab = function (event, state) {
-            $scope.resetForm = false;
-            if ($('#add_employee_form').serialize() !== form_data) {
-                ctrl.formDirty = true;
-            }
-            if (($('#add_employee_form').valid()) || !ctrl.formDirty) {
-                $state.go('^.' + state);
-
-            }
-            event.stopPropagation();
-        };
-
         //Check if ssn number is already present.
         $scope.checkSsnNumber = function () {
             if (ctrl.user.employee.ssn && ctrl.user.employee.ssn.trim().length > 0) {
@@ -137,60 +127,59 @@
         function saveEmployeeData() {
             $scope.resetForm = false;
             ctrl.formSubmitted = true;
-            if (ctrl.user.employee.id != null && ctrl.empIdObjMap[ctrl.user.employee.id] != null) {
-                var employeeToSave = angular.copy(ctrl.user.employee);
-                if (employeeToSave.phone) {
-                    employeeToSave.phone = employeeToSave.phone.toString();
+            var employeeToSave = angular.copy(ctrl.user.employee);
+            if (employeeToSave.phone) {
+                employeeToSave.phone = employeeToSave.phone.toString();
+            }
+            if (employeeToSave.phone2) {
+                employeeToSave.phone2 = employeeToSave.phone2.toString();
+            }
+            employeeToSave.languageSpoken = [];
+            angular.forEach(ctrl.languagesKeyValue, function (obj) {
+                if (obj.value == true) {
+                    employeeToSave.languageSpoken.push(obj.key);
                 }
-                if (employeeToSave.phone2) {
-                    employeeToSave.phone2 = employeeToSave.phone2.toString();
-                }
-                employeeToSave.languageSpoken = [];
-                angular.forEach(ctrl.languagesKeyValue, function (obj) {
-                    if (obj.value == true) {
-                        employeeToSave.languageSpoken.push(obj.key);
-                    }
-                });
-                employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
-                delete employeeToSave.careRatesList;
-                delete employeeToSave.employeeCareRatesList;
-                if ($('#add_employee_form')[0].checkValidity()) {
-                    //Check if ssn number is already present
-                    EmployeeDAO.checkIfSsnExists({Id: ctrl.user.employee.id, ssn: ctrl.user.employee.ssn})
-                            .then(function (res) {
-                                if (res.data) {
-                                    ctrl.ssn.exists = true;
-                                    $('#SocialSecurity').focus();
-                                } else {
-                                    ctrl.ssn.exists = false;
-                                    var reqParam;
-                                    if (ctrl.user.id && ctrl.user.id !== null) {
-                                        reqParam = 'updateuser';
-                                        if (ctrl.user.employee.careRatesList && ctrl.user.employee.careRatesList !== null) {
-                                            var careRateList = angular.copy(ctrl.user.employee.careRatesList);
-                                            careRateList.employeeId = ctrl.user.employee.id;
-                                            EmployeeDAO.updateCareRates(careRateList)
-                                                    .then(function () {
-                                                        updateUser(reqParam, employeeToSave);
-                                                    })
-                                                    .catch(function () {
-                                                        console.log(JSON.stringify(careRateList));
-                                                    });
-                                        } else {
-                                            updateUser(reqParam, employeeToSave);
-                                        }
+            });
+            employeeToSave.languageSpoken = employeeToSave.languageSpoken.toString();
+            delete employeeToSave.careRatesList;
+            delete employeeToSave.employeeCareRatesList;
+            if ($('#add_employee_form')[0].checkValidity()) {
+                //Check if ssn number is already present
+                EmployeeDAO.checkIfSsnExists({Id: ctrl.user.employee.id, ssn: ctrl.user.employee.ssn})
+                        .then(function (res) {
+                            if (res.data) {
+                                ctrl.ssn.exists = true;
+                                $('#SocialSecurity').focus();
+                            } else {
+                                ctrl.ssn.exists = false;
+                                var reqParam;
+                                if (ctrl.user.id && ctrl.user.id !== null) {
+                                    reqParam = 'updateuser';
+                                    if (ctrl.user.employee.careRatesList && ctrl.user.employee.careRatesList !== null) {
+                                        var careRateList = angular.copy(ctrl.user.employee.careRatesList);
+                                        careRateList.employeeId = ctrl.user.employee.id;
+                                        EmployeeDAO.updateCareRates(careRateList)
+                                                .then(function () {
+                                                    updateUser(reqParam, employeeToSave);
+                                                })
+                                                .catch(function () {
+                                                    console.log(JSON.stringify(careRateList));
+                                                });
                                     } else {
-                                        employeeToSave.orgCode = ontimetest.company_code;
-                                        ctrl.user.employee.orgCode = ontimetest.company_code;
-                                        reqParam = 'saveuser';
                                         updateUser(reqParam, employeeToSave);
                                     }
+                                } else {
+                                    employeeToSave.orgCode = ontimetest.company_code;
+                                    ctrl.user.employee.orgCode = ontimetest.company_code;
+                                    reqParam = 'saveuser';
+                                    updateUser(reqParam, employeeToSave);
                                 }
-                            })
-                            .catch(function () {
-                            });
-                }
+                            }
+                        })
+                        .catch(function () {
+                        });
             }
+
         }
 
         function updateUser(reqParam, employeeToSave) {
@@ -229,7 +218,7 @@
                                     });
                                     EmployeeDAO.updateCareRates(careRateList)
                                             .then(function () {
-                                                retrieveEmployeeCareTypeAfterSave(employeeRes);
+//                                                retrieveEmployeeCareTypeAfterSave(employeeRes);
                                             })
                                             .catch(function () {
                                                 console.log(JSON.stringify(careRateList));
@@ -237,9 +226,10 @@
                                 });
                             }
                         } else {
-                            retrieveEmployeeCareTypeAfterSave(employeeRes);
+//                            retrieveEmployeeCareTypeAfterSave(employeeRes);
                         }
                         toastr.success("User saved.");
+                        $state.go('admin.user-list', {status: 'active'});
                         //Reset dirty status of form
                         if ($.fn.dirtyForms) {
                             $('form').dirtyForms('setClean');
@@ -257,25 +247,12 @@
                 $rootScope.unmaskLoading();
             });
         }
-
-        function retrieveEmployeeCareTypeAfterSave(employeeRes) {
-            EmployeeDAO.retrieveEmployeeCareRates({employee_id: employeeRes.id}).then(function (res) {
-                ctrl.user.employee = employeeRes;
-                ctrl.displayDocumentsByPosition();
-                ctrl.user.employee.careRatesList = res;
-                $timeout(function () {
-                    $("#rate2").multiSelect('refresh');
-                    $("#rate1").multiSelect('refresh');
-                }, 100);
-            });
-        }
-
         //function called on page initialization.
         function pageInit() {
             retrieveEmployeesData();
-
+            ctrl.getAllRoles();
             if (ctrl.editMode) {
-                $rootScope.maskLoading();
+//                $rootScope.maskLoading();
                 UserDAO.get({id: $state.params.id}).then(function (res) {
                     showLoadingBar({
                         delay: .5,
@@ -283,7 +260,7 @@
                         finish: function () {
                         }
                     }); // showLoadingBar
-                    
+
                     ctrl.user = res;
                     if (ctrl.user.employee.profileImage != null && ctrl.user.employee.profileImage != '') {
                         ctrl.hideLoadingImage = false;
@@ -323,7 +300,7 @@
                         toastr.error("Failed to retrieve employee care rates.");
                     });
                 }).catch(function (data, status) {
-                    toastr.error("Failed to retrieve employee.");
+                    toastr.error("Failed to retrieve user.");
                     ctrl.retrivalRunning = false;
                     console.log(JSON.stringify(ctrl.user.employee))
                 }).then(function () {
@@ -334,7 +311,7 @@
                             $('.dirty').removeClass('dirty');
                         }
                     }, 100);
-                    $rootScope.unmaskLoading();
+//                    $rootScope.unmaskLoading();
                 });
             } else {
                 ctrl.retrivalRunning = false;
@@ -486,136 +463,6 @@
             ctrl.user.employee.employeeAttachments = $filter('orderBy')(ctrl.user.employee.employeeAttachments, '-expiryDate');
             ctrl.user.employee.employeeAttachments.splice(i, 1);
         };
-
-        ctrl.openAttachmentModal = function (modal_id, modal_size, modal_backdrop)
-        {
-            $rootScope.unmaskLoading();
-            $rootScope.uploadPopup = $modal.open({
-                templateUrl: modal_id,
-                size: modal_size,
-                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                keyboard: false
-            });
-            $rootScope.uploadPopup.baseUrl = ontimetest.weburl;
-            $rootScope.uploadPopup.companyCode = ontimetest.company_code;
-            $rootScope.uploadPopup.data = {employeeId: ctrl.user.employee.id};
-            $rootScope.uploadPopup.fileObj = {};
-            $rootScope.uploadPopup.closePopup = function () {
-                $rootScope.uploadPopup.close();
-            };
-            $rootScope.uploadPopup.save = function () {
-                var required = true;
-                if ($rootScope.uploadPopup.data.type == 'l' && ctrl.position == 'staff') {
-                    required = false;
-                }
-                if (required) {
-                    if (!$rootScope.uploadPopup.data.filePath) {
-                        $rootScope.uploadPopup.fileObj.errorMsg = "Please upload File.";
-                    } else if ($rootScope.uploadPopup.data.type == 't' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
-                        $rootScope.uploadPopup.errorMsg = "Please select Tb Testing.";
-                    } else if ($rootScope.uploadPopup.data.type == 'b' && (!$rootScope.uploadPopup.data.value || $rootScope.uploadPopup.data.value == '')) {
-                        $rootScope.uploadPopup.errorMsg = "Please select Background Status.";
-                    } else {
-                        ctrl.user.employee.employeeAttachments.push($rootScope.uploadPopup.data);
-                        $rootScope.uploadPopup.closePopup();
-                    }
-                } else {
-                    ctrl.user.employee.employeeAttachments.push($rootScope.uploadPopup.data);
-                    $rootScope.uploadPopup.closePopup();
-                }
-
-            };
-            $rootScope.uploadPopup.typeList = [];
-            if (ctrl.displayDocumentsByPositionMap['l']) {
-                if (ctrl.position == 'staff') {
-                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License"});
-                } else {
-                    $rootScope.uploadPopup.typeList.push({id: 'l', label: "License or Certificate"});
-                }
-            }
-            if (ctrl.displayDocumentsByPositionMap['9']) {
-                $rootScope.uploadPopup.typeList.push({id: '9', label: "I-9 Eligibility"});
-            }
-            if (ctrl.displayDocumentsByPositionMap['z']) {
-                $rootScope.uploadPopup.typeList.push({id: 'z', label: "Physical"});
-            }
-            if (ctrl.displayDocumentsByPositionMap['t']) {
-                $rootScope.uploadPopup.typeList.push({id: 't', label: "Tb Testing"});
-            }
-            if (ctrl.displayDocumentsByPositionMap['b']) {
-                $rootScope.uploadPopup.typeList.push({id: 'b', label: "Background Check"});
-            }
-            $rootScope.uploadPopup.setUploadFile = function () {
-                $formService.resetRadios();
-                $rootScope.uploadPopup.disableUploadButton = false;
-                if ($rootScope.uploadPopup.fileObj.flowObj != null) {
-                    $rootScope.uploadPopup.fileObj.flowObj.cancel();
-                }
-                delete $rootScope.uploadPopup.errorMsg;
-                $rootScope.uploadPopup.fileObj = {};
-                delete $rootScope.uploadPopup.data.filePath;
-                if ($rootScope.uploadPopup.data.type == 't' || $rootScope.uploadPopup.data.type == 'b') {
-                    delete $rootScope.uploadPopup.data.result;
-                    delete $rootScope.uploadPopup.data.name;
-                }
-                $rootScope.uploadPopup.uploadFile = {
-                    target: ontimetest.weburl + 'file/upload',
-                    chunkSize: 1024 * 1024 * 1024,
-                    testChunks: false,
-                    fileParameterName: "fileUpload",
-                    singleFile: true,
-                    headers: {
-                        type: $rootScope.uploadPopup.data.type,
-                        company_code: ontimetest.company_code
-                    }
-                };
-            }
-            //When file is selected from browser file picker
-            $rootScope.uploadPopup.fileSelected = function (file, flow) {
-                $rootScope.uploadPopup.fileObj.flowObj = flow;
-                $rootScope.maskLoading();
-                $rootScope.uploadPopup.fileObj.flowObj.upload();
-            };
-            //When file is uploaded this method will be called.
-            $rootScope.uploadPopup.fileUploaded = function (response, file, flow) {
-                if (response != null) {
-                    response = JSON.parse(response);
-                    if (response.fileName != null && response.status != null && response.status == 's') {
-                        $rootScope.uploadPopup.data.filePath = response.fileName;
-                        if ($rootScope.uploadPopup.data.name == null || $rootScope.uploadPopup.data.name == '') {
-                            $rootScope.uploadPopup.data.name = file.name.substring(0, file.name.lastIndexOf('.'));
-                        }
-                    }
-                }
-                $rootScope.uploadPopup.disableSaveButton = false;
-                $rootScope.uploadPopup.disableUploadButton = false;
-                $rootScope.unmaskLoading();
-            };
-            $rootScope.uploadPopup.fileError = function ($file, $message, $flow) {
-                $flow.cancel();
-                $rootScope.uploadPopup.disableSaveButton = false;
-                $rootScope.uploadPopup.disableUploadButton = false;
-                $rootScope.uploadPopup.data.filePath = null;
-                $rootScope.uploadPopup.data.name = null;
-                $rootScope.uploadPopup.fileObj.errorMsg = "File cannot be uploaded";
-                $rootScope.unmaskLoading();
-            };
-            //When file is added in file upload
-            $rootScope.uploadPopup.fileAdded = function (file, flow) { //It will allow all types of attahcments'
-                $rootScope.uploadPopup.formDirty = true;
-                $rootScope.uploadPopup.data.filePath = null;
-                if ($rootScope.validFileTypes.indexOf(file.getExtension()) < 0) {
-                    $rootScope.uploadPopup.fileObj.errorMsg = "Please upload a valid file.";
-                    return false;
-                }
-                $rootScope.uploadPopup.disableSaveButton = true;
-                $rootScope.uploadPopup.disableUploadButton = true;
-                $rootScope.uploadPopup.showfileProgress = true;
-                $rootScope.uploadPopup.fileObj.errorMsg = null;
-                $rootScope.uploadPopup.fileObj.flow = flow;
-                return true;
-            };
-        };
         ctrl.officeStaffIds = [];
         PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
             if (res && res.length > 0) {
@@ -636,7 +483,6 @@
                 ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
             }
         };
-
 
         function retrieveEmployeesData() {
             if (ctrl.editMode) {

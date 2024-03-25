@@ -74,9 +74,9 @@
                                     Role
                                 </label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" id="sboxit-1" name="Role" ng-model="addEmployee.user.role"
+                                    <select class="form-control" id="sboxit-1" name="Role" ng-model="addEmployee.user.roleId"
                                                 data-validate="required" data-message-required="Please select a role."
-                                                ng-options="role as role for role in addEmployee.roles">
+                                                ng-options="role.id as role.name for role in addEmployee.roles">
                                             <option value="">
                                                 Select a role
                                             </option>

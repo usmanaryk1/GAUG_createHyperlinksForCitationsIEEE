@@ -176,6 +176,10 @@ app.run(function ($rootScope, $modal, $state, Idle)
                         }
                     }
                 }, 1000);
+                if ($rootScope.currentUser != null && getCookie('changePassword') != null && getCookie('changePassword') == 'true') {
+                    $rootScope.openResetPasswordModal("resetPasswordModal", 'md', "static");
+                }
+
             });
 });
 

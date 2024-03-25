@@ -46,6 +46,9 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                                 if (appData.authResult.token != null) {
                                     setCookie("token", appData.authResult.token, 7);
                                 }
+                                if (appData.authResult.changePassword != null) {
+                                    setCookie("changePassword", appData.authResult.changePassword, 7);
+                                }
                                 if (appData.authResult.cc != null) {
                                     setCookie("cc", appData.authResult.cc, 7);
                                 }

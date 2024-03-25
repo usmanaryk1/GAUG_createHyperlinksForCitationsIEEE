@@ -79,7 +79,7 @@
 //                    toastr.error("No data in the system.");
                 }
             }).catch(function (data, status) {
-                toastr.error("Failed to retrieve employees.");
+                toastr.error("Failed to retrieve users.");
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -96,11 +96,11 @@
         }
 
         function edit(employee) {
-            $state.go('app.employee.tab1', {id: employee.id});
+            $state.go('admin.user', {id: employee.id});
         }
 
         ctrl.retrieveUsers();
-        ctrl.openEditModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openEditModal = function (user, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.selectUserModel = $modal.open({
                 templateUrl: modal_id,
@@ -110,9 +110,9 @@
             });
             $rootScope.selectUserModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectUserModel.companyCode = ctrl.companyCode;
-            $rootScope.selectUserModel.employee = angular.copy(employee);
-            if (employee.languageSpoken != null && employee.languageSpoken.length > 0) {
-                $rootScope.selectUserModel.employee.languageSpoken = employee.languageSpoken.split(",");
+            $rootScope.selectUserModel.user = angular.copy(user);            
+            if (user.employee.languageSpoken != null && user.employee.languageSpoken.length > 0) {
+                $rootScope.selectUserModel.user.employee.languageSpoken = user.employee.languageSpoken.split(",");
             }
 
         };
@@ -164,7 +164,7 @@
         ctrl.deactivateUser = function (employee,status)
         {
             $rootScope.maskLoading();
-            UserDAO.changestatus({id: employee.id, status: 'inactive'}).then(function (res) {
+            UserDAO.changestatus({id: employee.id, status: 'deactivate'}).then(function (res) {
                 var length = ctrl.employeeList.length;
                 for (var i = 0; i < length; i++) {
                     if (ctrl.employeeList[i].id === employee.id) {
@@ -188,7 +188,7 @@
         
         ctrl.activateUser = function (employee) {
             $rootScope.maskLoading();
-            UserDAO.changestatus({id: employee.id, status: 'active'}).then(function (res) {
+            UserDAO.changestatus({id: employee.id, status: 'activate'}).then(function (res) {
                 var length = ctrl.employeeList.length;
 
                 for (var i = 0; i < length; i++) {
