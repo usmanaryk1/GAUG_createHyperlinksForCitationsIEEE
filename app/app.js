@@ -427,7 +427,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/manual_claim',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
                 controller: 'ManualClaimCtrl as manualClaim',
-                params : { claim1500Data: null, }
+                params: {claim1500Data: null, }
             }).
             state('app.billing_tab_1', {
                 url: '/billing_tab_1',
@@ -503,6 +503,57 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/report',
                 templateUrl: appHelper.viewTemplatePath('report', 'report'),
                 controller: 'ReportCtrl as report'
+            }).
+            state('admin', {
+                abstract: true,
+                url: '/admin',
+                templateUrl: appHelper.templatePath('layout/app-body'),
+                controller: function ($rootScope) {
+                    $rootScope.isLoginPage = false;
+                    $rootScope.isLightLoginPage = false;
+                    $rootScope.isLockscreenPage = false;
+                    $rootScope.isMainPage = true;
+                    $rootScope.isAdminPortal = true;
+                },
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.forms.formDirty,
+                            ASSETS.extra.toastr,
+                            ASSETS.forms.inputmask,
+                            ASSETS.forms.tagsinput,
+                            ASSETS.core.moment,
+                            ASSETS.forms.daterangepicker,
+                            ASSETS.forms.select2,
+                            ASSETS.tables.datatables
+                        ]);
+                    },
+                }
+            }).
+            state('admin.dashboard', {
+                url: '/dashboard',
+                templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard')
+            }).
+            state('admin.user', {
+                url: '/user/:id',
+                templateUrl: appHelper.viewTemplatePath('user', 'add_user'),
+                controller: 'AddUserCtrl as addEmployee'
+            }).
+            state('admin.user-list', {
+                url: '/user-list/:status',
+                templateUrl: appHelper.viewTemplatePath('user', 'view_user'),
+                controller: 'ViewUsersCtrl as viewUser',
+            }).
+            state('admin.manage_role', {
+                url: '/manage_role',
+                templateUrl: appHelper.viewTemplatePath('security', 'manage_role'),
+                controller: 'ManageRoleCtrl as manageRole',
+            }).
+            state('admin.manage_access', {
+                url: '/manage_access',
+                templateUrl: appHelper.viewTemplatePath('security', 'manage_access'),
+                controller: 'ManageAccessCtrl as manageAccess',
             }).
             // Update Highlights
 //            state('app.update-highlights', {

@@ -47,25 +47,25 @@ angular.module('xenon.controllers', []).
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
 
-               $scope.showMenu = false;
+            $scope.showMenu = false;
 
                 $scope.openMenu = function($event) {
-                  $event.stopPropagation()
-                    if (!$scope.showMenu) {
+                $event.stopPropagation()
+                if (!$scope.showMenu) {
                         var closeMe = function() { 
-                          $scope.showMenu = false;
-                          $document.unbind('click', this);
-                        };
+                        $scope.showMenu = false;
+                        $document.unbind('click', this);
+                    };
                         $document.bind('click', function(event) {
                         $scope.$apply(function(){
-                           closeMe($scope)
+                            closeMe($scope)
                         })
-                          }); 
-                        $scope.showMenu = true;
-                    } else {
-                        $scope.showMenu = false;
-                    } 
-                };
+                    });
+                    $scope.showMenu = true;
+                } else {
+                    $scope.showMenu = false;
+                }
+            };
 
             $rootScope.maskLoading = function () {
                 $rootScope.maskLoadingRunning = true;
@@ -293,12 +293,21 @@ angular.module('xenon.controllers', []).
 
             $scope.menuItems = $sidebarMenuItems.prepareSidebarMenu().getAll();
 
+            var $sidebarMenuItems = $menuItems.instantiate();
+
+            $scope.menuItems = $sidebarMenuItems.prepareSidebarMenu().getAll();
+
+
             // Set Active Menu Item
             $sidebarMenuItems.setActive($location.path());
+            var $sidebarAdminMenuItems = $menuItems.instantiate();
+            $scope.adminMenuItems = $sidebarAdminMenuItems.prepareAdminMenu().getAll();
+            $sidebarAdminMenuItems.setActive($state.current.name);
 
             $rootScope.$on('$stateChangeSuccess', function ()
             {
                 $sidebarMenuItems.setActive($state.current.name);
+                $sidebarAdminMenuItems.setActive($state.current.name);
             });
 
             // Trigger menu setup

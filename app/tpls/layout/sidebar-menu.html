@@ -5,8 +5,14 @@
 </script>
 
 <script type="text/ng-template" id="menu-items-tpl">
-	<li ng-repeat="item in menuItems" ng-class="{'opened': item.isOpen, 'active': item.isActive, 'has-sub': item.menuItems.length}">
+	<li ng-if="!isAdminPortal" ng-repeat="item in menuItems" ng-class="{'opened': item.isOpen, 'active': item.isActive, 'has-sub': item.menuItems.length}">
 		<a href="#{{item.link}}" ng-include="'menu-item-link-tpl'"></a>
+		
+		<ul ng-if="item.menuItems.length" ng-init="subItems = item.menuItems" ng-include="'menu-items-recursive-tpl'" ng-class="{'hide':layoutOptions.sidebar.isCollapsed}"></ul>
+	</li>
+        <li ng-if="isAdminPortal" ng-repeat="item in adminMenuItems" ng-class="{'opened': item.isOpen, 'active': item.isActive, 'has-sub': item.menuItems.length}">
+		
+            <a href="#{{item.link}}" ng-include="'menu-item-link-tpl'"></a>
 		
 		<ul ng-if="item.menuItems.length" ng-init="subItems = item.menuItems" ng-include="'menu-items-recursive-tpl'" ng-class="{'hide':layoutOptions.sidebar.isCollapsed}"></ul>
 	</li>

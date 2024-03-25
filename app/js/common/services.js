@@ -186,6 +186,21 @@ angular.module('xenon.services', []).
                 return this;
             }
 
+            this.prepareAdminMenu = function ()
+            {
+                var dashboard = this.addItem('Dashboard', '/admin/dashboard', 'fa-home');
+                var users = this.addItem('Users', '/admin', 'linecons-user');
+                var security = this.addItem('Security', '/admin', 'linecons-lock');
+              
+                // Subitems of users
+                users.addItem('Add User', './user/');
+                users.addItem('View Users', './user-list/active');
+               
+                security.addItem('Manage Role', './manage_role')
+                security.addItem('Manage Access', './manage_access')
+                return this;
+            }
+
             this.instantiate = function ()
             {
                 return angular.copy(this);
