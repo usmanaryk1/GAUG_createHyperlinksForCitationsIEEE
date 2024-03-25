@@ -105,7 +105,11 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     if ($(this).css('display') === 'block') { // Current display
                         $(this).css('display', 'none');
                     }
-                });
+                });                
+                if (toState.name.indexOf("admin") >= 0 && $rootScope.currentUser.roleId != 1) {
+                        event.preventDefault();
+                        $state.transitionTo(ontimetest.defaultState);                    
+                }
                 if (toState.url.indexOf("login") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {

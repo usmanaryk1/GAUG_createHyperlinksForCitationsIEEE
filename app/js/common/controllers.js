@@ -22,11 +22,12 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state,$document, UserDAO, $timeout)
+        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state, $document, UserDAO, $timeout)
         {
             var userName = getCookie("un");
+            var roleId = Number(getCookie("roleId"));
             if (userName != null) {
-                $rootScope.currentUser = {userName: userName};
+                $rootScope.currentUser = {userName: userName, roleId: roleId};
                 $rootScope.startIdle();
             }
             $rootScope.serverPath = ontimetest.weburl;
@@ -50,12 +51,14 @@ angular.module('xenon.controllers', []).
             $scope.showMenu = false;
             $rootScope.openResetPasswordModal = function (modal_id, modal_size, modal_backdrop)
             {
-                $rootScope.resetPasswordModal = $modal.open({
-                    templateUrl: modal_id,
-                    size: modal_size,
-                    backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-                    keyboard: false
-                });
+                if ($state.current.name != 'login') {
+                    $rootScope.resetPasswordModal = $modal.open({
+                        templateUrl: modal_id,
+                        size: modal_size,
+                        backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                        keyboard: false
+                    });
+                }
                 $rootScope.resetPasswordModal.save = function () {
                     $timeout(function () {
                         if ($rootScope.resetPasswordModal.password != $rootScope.resetPasswordModal.confirmPassword) {
@@ -66,13 +69,16 @@ angular.module('xenon.controllers', []).
 
                         if ($("#reset_password_form")[0].checkValidity() && !$rootScope.resetPasswordModal.passwordNotMatch) {
                             $rootScope.maskLoading();
+                            if ($rootScope.currentUser.userName == null) {
+                                $rootScope.currentUser.userName = getCookie("un");
+                            }
                             UserDAO.changePassword({username: $rootScope.currentUser.userName, password: $rootScope.resetPasswordModal.password}).then(function (res) {
                                 toastr.success("Password changed successfully.");
                                 setCookie("changePassword", false, 7);
-                                $rootScope.resetPasswordModal.close();                                
+                                $rootScope.resetPasswordModal.close();
                             }).catch(function (data, status) {
                                 toastr.error("Password cannot be changed.");
-                                $rootScope.resetPasswordModal.close();                               
+                                $rootScope.resetPasswordModal.close();
                             }).then(function () {
                                 $rootScope.unmaskLoading();
                             });
@@ -80,16 +86,16 @@ angular.module('xenon.controllers', []).
                     });
                 };
             };
-            
-                $scope.openMenu = function($event) {
+
+            $scope.openMenu = function ($event) {
                 $event.stopPropagation()
                 if (!$scope.showMenu) {
-                        var closeMe = function() { 
+                    var closeMe = function () {
                         $scope.showMenu = false;
                         $document.unbind('click', this);
                     };
-                        $document.bind('click', function(event) {
-                        $scope.$apply(function(){
+                    $document.bind('click', function (event) {
+                        $scope.$apply(function () {
                             closeMe($scope)
                         })
                     });

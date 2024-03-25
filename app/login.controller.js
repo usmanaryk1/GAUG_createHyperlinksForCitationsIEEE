@@ -3,6 +3,7 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
     $scope.username = "";
     $scope.password = "";
     $scope.ordCode="";
+//    setCookie("changePassword", false, 7);
     $scope.submitHandler = function() {
         if ($("form#login").valid()) {
             showLoadingBar(70); // Fill progress bar to 70% (just a given value)
@@ -42,6 +43,7 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                     finish: function() {
                         if (data.status == 's') {
                             appData.authResult = data;
+                            console.log(JSON.stringify(data));
                             if (appData.authResult != null) {
                                 if (appData.authResult.token != null) {
                                     setCookie("token", appData.authResult.token, 7);
@@ -55,6 +57,10 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                                 if (appData.authResult.un != null) {
                                     setCookie("un", appData.authResult.un, 7);
                                     $rootScope.currentUser = {userName: appData.authResult.un};
+                                }
+                                if(appData.authResult.roleId!=null){
+                                    setCookie("roleId", appData.authResult.roleId, 7);
+                                    $rootScope.currentUser = {roleId: appData.authResult.roleId};
                                 }
                             }
 //                            window.location.hash = '#/app/dashboard';
