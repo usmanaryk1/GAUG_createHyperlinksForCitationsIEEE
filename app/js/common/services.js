@@ -188,6 +188,7 @@ angular.module('xenon.services', []).
                 patient.addItem('Patient Records', './patient_records', 'VIEW_PATIENT');
 
 
+
                 // Subitems of timeSheet
                 timeSheet.addItem('Edit Timesheet', './edit_timesheet');
 

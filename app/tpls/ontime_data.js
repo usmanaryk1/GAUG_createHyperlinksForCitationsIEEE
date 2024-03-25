@@ -44,6 +44,20 @@ ontime_data = {
         'STAFFING_COORDINATOR': "SC",
         'OFFICE_STAFF': "OS"
     },
+    patientRecords: [
+        { option: "Nursing Assessment", value: "Nursing_Assessment" },
+        { option: "Medication Reconciliation", value: "Medication_Reconciliation" },
+        { option: "Progress Note", value: "Progress_Note" },
+        { option: "Medical Orders", value: "Medical_Orders" },
+        { option: "Home Care Plan", value: "Home_Care_Plan" },
+    ],
+    patientRecordsObj: {
+        Nursing_Assessment: 'Nursing Assessment',
+        Medication_Reconciliation: 'Medication Reconciliation',
+        Progress_Note: 'Progress Note',
+        Medical_Orders: 'Medical Orders',
+        Home_Care_Plan: 'Home Care Plan'
+    },
     'pastEventAuthorizationPassword': '!avalanche!',
     'hrPassword': 'Avalanche!HR',
     'date_time_format': "yyyy/MM/dd hh:mm:ss a",
