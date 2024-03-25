@@ -84,7 +84,19 @@
                 var language = option.title;
                 option.checked = dynamicLanguageData[language];
             });
-            //ctrl.formDefinition[8].options.find(option => option.value === "other_language").subfield.value = other_language_value;
+
+            ctrl.formDefinition[8].options.find(option => {
+                if(option.value === "Other"){
+                    ctrl.showSubField(option);
+                    ctrl.subFields[option.subfield.name] = other_language_value
+                    // console.log("option.subfield.value",option.subfield.value,  ctrl.formDefinition[8].options);
+                }
+            }
+                
+                
+                )
+                //.subfield.value = other_language_value;
+                    //ctrl.showSubField(option);
         
         
             console.log("seee", ctrl.formDefinition, ctrl.formDefinition[8].options)
@@ -134,6 +146,9 @@
                 ctrl.formData[field.name] = {};
                 angular.forEach(field.options, option => {
                     ctrl.formData[field.name][option.value] = Boolean(option.checked);
+                    console.log("option.checked",option.checked);
+                    // ctrl.showSubField(option);
+
                 });
             }
         }
@@ -250,6 +265,7 @@
 
         /*================   SUB FIELDS   ===================*/
         ctrl.showSubField = function (option) {
+            console.log("change call", option);
             const checkBoxSubsArr = ctrl.checkBoxSubs;
             if (option.id in checkBoxSubsArr) {
                 delete checkBoxSubsArr[option.id];

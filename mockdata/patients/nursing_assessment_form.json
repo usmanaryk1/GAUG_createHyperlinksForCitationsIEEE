@@ -263,7 +263,8 @@
             {
                 "title": "Farsi",
                 "value": "Farsi",
-                "id": "farsi"
+                "id": "farsi",
+                "checked": true
             },
             {
                 "title": "Urdu",
