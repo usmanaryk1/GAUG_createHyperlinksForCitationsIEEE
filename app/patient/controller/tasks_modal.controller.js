@@ -5,7 +5,7 @@
         
         // console.log("selectedType, taskScheduleSet, editMode",selectedType, taskScheduleSet, editMode,);
         // Define the days of the week
-        ctrl.daysOfWeek = ['Su', 'Mo',];
+        ctrl.daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
         
         ctrl.generateFormCall = generateForms;
