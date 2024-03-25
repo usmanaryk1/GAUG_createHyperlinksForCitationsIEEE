@@ -20,7 +20,8 @@
         opacity: 1;
         margin-top: 0;
     }
-   
+
+
     textarea {
         resize: vertical;
     }
@@ -201,7 +202,15 @@
                                         data-validate="required,number,minlength[10],maxlength[10]"
                                         data-message-required="Please enter Phone Number."
                                         data-message-minlength="Phone Number must contain 10 digits"
-                                        data-message-maxlength="Phone Number must contain 10 digits" type="text" />
+                                        data-message-maxlength="Phone Number must contain 10 digits" type="text" 
+                                        ng-disabled="addCompCtrl.print" />
+                                </div>
+                                <div class="col-sm-9" ng-if="addCompCtrl.print">
+                                    <input class="form-control" name="complainantContactPhone"
+                                        ng-model="addCompCtrl.complaint.complainantContactPhone" 
+                                        placeholder="Enter phone"
+                                        type="text" 
+                                        ng-disabled="addCompCtrl.print" />
                                 </div>
                                 <div class="col-sm-9" ng-if="addCompCtrl.print">
                                     <input class="form-control" name="complainantContactPhone"
@@ -222,6 +231,8 @@
                                         id="field-51" data-validate="required,email"
                                         data-message-required="Please enter a Contact Email."
                                         data-message-email="Please enter valid Contact Email." placeholder="Enter email"
+                                        type="text" 
+                                        ng-disabled="addCompCtrl.print" />
                                         type="text" 
                                         ng-disabled="addCompCtrl.print" />
                                 </div>
@@ -327,7 +338,8 @@
                                 <div class="col-sm-9">
                                     <input class="form-control" disabled charactersonly id="field-10"
                                         name="complaintReceiver" type="text" maxlength="50"
-                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}" />
+                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}" 
+                                        ng-disabled="addCompCtrl.print" />
                                 </div>
                             </div>
                             <div class="form-group-separator">

@@ -62,7 +62,7 @@
 
         ctrl.navigateToComplaintDetails = function(complaint) {
             // Manually update the URL with the 'print' parameter
-            $state.go('app.add-complaint',{id: complaint.id, print: true}); 
+            $state.go('app.add-complaint', { id: complaint.id, print: true });
         };
 
         function remainingDaysToClose (proposedDate) {
@@ -121,6 +121,7 @@
                     ctrl.complaintsList = res;
                     if(ctrl.searchParams.isFollowUpNeeded == true)
                     $rootScope.currentUser.complaintNotification = $rootScope.totalRecords;
+                    $rootScope.unmaskLoading();
                 }
             }).catch(function (err) {
                 toastr.error(err.data);
@@ -129,6 +130,8 @@
                     pct: 100,
                     finish: function () {}
                 }); // showLoadingBar
+                $rootScope.unmaskLoading();
+            }).then(function () {
                 $rootScope.unmaskLoading();
             }).then(function () {
                 $rootScope.paginationLoading = false;
