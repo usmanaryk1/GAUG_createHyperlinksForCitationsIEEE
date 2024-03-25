@@ -534,30 +534,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('patient', 'edit_patient'),
                 controller: 'PatientEditCtrl as editPatient'
             }).
-            // Medical Reconciliation Form
-            state('app.medication_reconciliation', {
-                url: '/medication_reconciliation/:id',
-                templateUrl: appHelper.viewTemplatePath('patient', 'medication_reconciliation_form'),
-                controller: 'MedicationReconciliationCtrl as medRecon'
-            }).
-            // Progress Note Form
-            state('app.progress_note', {
-                url: '/progress_note/:id',
-                templateUrl: appHelper.viewTemplatePath('patient', 'progress_note_form'),
-                controller: 'ProgressNotesCtrl as progressNote'
-            }).
-            // Medicla Orders Form
-            state('app.medical_orders', {
-                url: '/medical_orders/:id',
-                templateUrl: appHelper.viewTemplatePath('patient', 'medical_orders_form'),
-                controller: 'MedicalOrdersCtrl as medOrder'
-            }).
-            // Home Care Plan Form
-            state('app.home_care_plan', {
-                url: '/home_care_plan',
-                templateUrl: appHelper.viewTemplatePath('patient', 'home_care_plan'),
-                controller: 'HomeCarePlanCtrl as homeCarePlan',
-            }).
             // employee creation page
             state('app.employee', {
                 abstract: true,

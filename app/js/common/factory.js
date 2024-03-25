@@ -189,7 +189,6 @@ angular.module('xenon.factory').
                 if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_USER') > -1) {
                     $state.go('admin.user-list', {status: 'active'});
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_WORKSITE') > -1) {
-                    console.log("VIEW worksite");
                     $state.go('admin.worksite-list', {status: 'active'});
                 } else if ($rootScope.currentUser.allowedFeature.indexOf('VIEW_BENEFIT') > -1) {
                     $state.go('admin.benefits');

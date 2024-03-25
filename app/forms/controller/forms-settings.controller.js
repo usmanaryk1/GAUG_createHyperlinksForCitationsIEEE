@@ -1,5 +1,5 @@
 (function () {
-    function FormSettingController($state, $stateParams, $modal, FormsDAO, Page) {
+    function FormSettingController($rootScope, $state, $stateParams, $modal, FormsDAO, Page) {
         'use strict';
         var ctrl = this;
         Page.setTitle("Forms Setting");
@@ -16,10 +16,14 @@
         }
 
         ctrl.getComplaintDays = function () {
+            $rootScope.maskLoading();
             FormsDAO.getComplaintPolicyResolutionTime().then(res => {
-                ctrl.complaintResDays = res.policyResolutionTime;
+                ctrl.complaintResDays = res.complaintPolicyResolutionTime;
             }).catch(err => {
                 toastr.error(err.data)
+                $rootScope.unmaskLoading();// showLoadingBar
+            }).then((res)=>{
+                $rootScope.unmaskLoading();
             })
         }
 
@@ -37,5 +41,5 @@
         }
 
     }
-    angular.module('xenon.controllers').controller('FormSettingController', ["$state", "$stateParams", "$modal", "FormsDAO", "Page", FormSettingController]);
+    angular.module('xenon.controllers').controller('FormSettingController', ["$rootScope", "$state", "$stateParams", "$modal", "FormsDAO", "Page", FormSettingController]);
 })();
