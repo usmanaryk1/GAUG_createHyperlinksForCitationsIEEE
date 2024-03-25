@@ -5,8 +5,8 @@
         this.recordOptions = angular.copy(ontime_data.patientRecords)
         console.log("ontime_data", ontime_data, ontime_data.patientRecords);
         ctrl.save = function () {
-            var request = { "type": ctrl.type.value, "expiryDate": ctrl.expiry };
-            request.patientId = $modalInstance.id;
+            var request = { "type" : ctrl.type.value , "expiryDate" : ctrl.expiry};
+            request.patientId=$modalInstance.id;
             $rootScope.maskLoading();
 
             PatientRecordDAO.saveRecord(request).then(function (res) {
@@ -41,5 +41,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('PatientRecordAddCtrl', ["$rootScope", "$modalInstance", "PatientRecordDAO", "$state", PatientRecordAddCtrl]);
+    angular.module('xenon.controllers').controller('PatientRecordAddCtrl', [ "$rootScope", "$modalInstance", "PatientRecordDAO", "$state", PatientRecordAddCtrl]);
 })();
