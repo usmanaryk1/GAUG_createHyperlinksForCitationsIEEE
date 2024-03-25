@@ -305,7 +305,7 @@
                                             </select>
                                         </div>
                                         <div ng-switch-when="VENDOR">
-                                            <input class="form-control" maxlength="10" id="field-2" name="vendorvalue"
+                                            <input class="form-control" maxlength="50" id="field-2" name="vendorvalue"
                                                 type="text" maxlength="50" placeholder="Enter Name"
                                                 data-validate="required" data-message-required="Please enter a value"
                                                 ng-model="addCompCtrl.complaint.complainantRelationship"
@@ -324,8 +324,7 @@
                                 <div class="col-sm-9">
                                     <input class="form-control" disabled charactersonly id="field-10"
                                         name="complaintReceiver" type="text" maxlength="50"
-                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}"
-                                        ng-disabled="addCompCtrl.print" />
+                                        placeholder="{{addCompCtrl.complaintReceiver | titleCase}}" />
                                 </div>
                             </div>
                             <div class="form-group-separator">
