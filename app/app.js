@@ -433,19 +433,20 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
                 controller: 'ManualClaimCtrl as manualClaim'
             }).
-            state('app.billing_tab_1', {
-                url: '/billing_tab_1',
-                templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_1'),
-                controller: 'BillingTab1Ctrl as billing1',
-            }).
-            state('app.billing_tab_2', {
-                url: '/billing_tab_2',
-                templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_2'),
-            }).
+//            state('app.billing_tab_1', {
+//                url: '/billing_tab_1',
+//                templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_1'),
+//                controller: 'BillingTab1Ctrl as billing1',
+//            }).
+//            state('app.billing_tab_2', {
+//                url: '/billing_tab_2',
+//                templateUrl: appHelper.viewTemplatePath('billing', 'billing_tab_2'),
+//            }).
             // biling_history
             state('app.biling_history', {
                 url: '/biling_history',
-                templateUrl: appHelper.templatePath('biling_history'),
+                templateUrl: appHelper.viewTemplatePath('billing', 'biling_history'),
+                controller: 'BillingHistoryCtrl as billingHistory'
             }).
             // biling_history
             state('app.biling_setting', {
@@ -453,13 +454,13 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_settings'),
                 controller: 'BillingSettingsCtrl as billingSetting'
             }).
-            // payroll_session
+            // billing_session
             state('app.billing_session', {
                 url: '/billing_session',
                 controller: 'BillingSessionCtrl as billingSession',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_session'),
             }).
-            // payroll_session
+            // existing billing batch
             state('app.billing_batch', {
                 url: '/billing_session/:id',
                 controller: 'BillingSessionCtrl as billingSession',

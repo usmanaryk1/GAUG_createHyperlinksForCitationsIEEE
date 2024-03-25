@@ -13,6 +13,28 @@
         }).catch(function () {
             toastr.error("Failed to retrieve insurance provider list.");
         });
+        if ($state.params.id && $state.params.id !== '') {
+            ctrl.processdMode = true;
+            $rootScope.maskLoading();
+            BillingDAO.getSessionById({paramId:$state.params.id}).then(function(res){
+                $rootScope.unmaskLoading();
+                if(res && res.billingClaims){
+                    ctrl.billingSessions = res.billingClaims;
+                    ctrl.sessionId = res.id;
+                    ctrl.insuranceProvider = res.insuranceProvider;
+                    ctrl.totalCharges = res.totalCharges;
+                    ctrl.totalClaims = res.totalClaims;
+                    ctrl.sessionStartDate = res.sessionStartDate;
+                    ctrl.sessionEndDate = res.sessionEndDate;
+                    ctrl.rerenderDataTable();
+                }
+            }).catch(function(err){
+                $rootScope.unmaskLoading();
+                toastr.error("Some arror occurred while retrieving existing session.");
+            });
+        } else {
+            ctrl.processdMode = false;
+        }
         var otHdConstant = 1;
         ctrl.resetFilters = function () {
             ctrl.searchParams.fromDate = null;
@@ -114,7 +136,7 @@
         };
         ctrl.openClaim1500 = function (claim) {
             _setClaim1500InLocalStorage(claim);
-            var url = $state.href('app.manual_claim_review', {id: claim.uniqueId});
+            var url = $state.href('app.manual_claim_review', {id: claim.uniqueId ? claim.uniqueId : claim.id});
             var params = [
                 'height=' + screen.height,
                 'width=' + screen.width,
