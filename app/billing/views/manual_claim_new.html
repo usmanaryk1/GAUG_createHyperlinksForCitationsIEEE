@@ -66,15 +66,15 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">Manual Claim 1500</h1>
-            <p class="description">Fill Form To Create A Manual Claim</p>
+            <p class="description" ng-if="!manualClaim.reviewMode">Fill Form To Create A Manual Claim</p>
         </div>
     </div>
     <!--PAGE TITLE END -->
 
 
-    <div class="main"><!-- ng-style="{{layoutOptions.sidebar.isCollapsed?'width: 1120px;':'width: 1060px;'}}" -->
+    <div class="main"><!-- ng-style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode)?'width: 1120px;':'width: 1060px;'}}" -->
         <form class="form-horizontal" id="manual_claim_form" name="manual_claim_form" role="form">
-            <div class="row">
+            <div class="row" ng-if="!manualClaim.reviewMode">
                 <div class="col-sm-12">
                     <div class="pull-right">
                         <button type="button" class="btn btn-info btn-single  pull-right">Process</button>
@@ -303,7 +303,7 @@
                             <b>PATIENT'S ADDRESS </b><small>(Last,First, MI) </small><br />
                             <p>
                                 STREET: 
-                                <input type="text"  style="{{layoutOptions.sidebar.isCollapsed ?'width: 85%;':'width:82%;'}}" name="patientStreet" ng-model="manualClaim.manualClaimObj.patientStreet" /><br />
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="patientStreet" ng-model="manualClaim.manualClaimObj.patientStreet" /><br />
                             </p>
                             <p>
                                 CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -311,7 +311,7 @@
                                 ST:
                                 <input type="text" class="width_15" name="patientZip" ng-model="manualClaim.manualClaimObj.patientZip" />&nbsp;&nbsp;
                                 ZIP:
-                                <input type="text" style="{{layoutOptions.sidebar.isCollapsed ?'width: 23%;':'width:15%;'}}" name="patientState" ng-model="manualClaim.manualClaimObj.patientState" />
+                                <input type="text" style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="patientState" ng-model="manualClaim.manualClaimObj.patientState" />
                             </p>
                             <p>
                                 PHONE:&nbsp;
@@ -344,7 +344,7 @@
                             <b>PATIENT'S ADDRESS </b><small>(Last,First, MI) </small><br />
                             <p>
                                 STREET: 
-                                <input type="text"  style="{{layoutOptions.sidebar.isCollapsed ?'width: 85%;':'width:82%;'}}" name="insuredStreet" ng-model="manualClaim.manualClaimObj.insuredStreet" /><br />
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="insuredStreet" ng-model="manualClaim.manualClaimObj.insuredStreet" /><br />
                             </p>
                             <p>
                                 CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -352,7 +352,7 @@
                                 ST:
                                 <input type="text"  class="width_15" name="insuredState" ng-model="manualClaim.manualClaimObj.insuredState" />&nbsp;&nbsp;
                                 ZIP:
-                                <input type="text"  style="{{layoutOptions.sidebar.isCollapsed ?'width: 23%;':'width:15%;'}}" name="insuredZip" ng-model="manualClaim.manualClaimObj.insuredZip"/>
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="insuredZip" ng-model="manualClaim.manualClaimObj.insuredZip"/>
                             </p>
                             <p>
                                 PHONE:&nbsp;
@@ -860,7 +860,7 @@
                             Rendering #Provider ID.
                         </td>
                     </tr>
-                    <tr ng-repeat-start="serviceLine in manualClaim.manualClaimObj.serviceLines"><!-- ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines"-->
+                    <tr ng-repeat-start="serviceLine in manualClaim.manualClaimObj.serviceLines" on-repeat-end="manualClaim.checkReviewMode()"><!-- ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines"-->
                         <td class="border width_1" rowspan="2" >1</td>
                         <td class="border" >
                             <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.hospitalizationStartDate" max-date="todayDate"/>&nbsp;

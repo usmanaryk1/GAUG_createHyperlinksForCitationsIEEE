@@ -136,7 +136,7 @@
                                         <td class="text-center">{{session.authorizedCodes}}</td>
                                         <td class="text-center">
                                             <div class="center">
-                                                <a class="btn icon-left fa fa-file-text-o edit_button" tooltip="View Claim" tooltip-append-to-body="true" ui-sref="app.manual_claim({claim1500Data:session.claim1500Data})"><span class="ed_b"></span></a>
+                                                <a class="btn icon-left fa fa-file-text-o edit_button" tooltip="View Claim" tooltip-append-to-body="true" ng-click="billingSession.openClaim1500(session);"><span class="ed_b"></span></a>
                                             </div>
                                         </td>
                                     </tr>

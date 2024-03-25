@@ -19,6 +19,7 @@
             ctrl.searchParams.toDate = null;
             ctrl.searchParams.insuranceProviderId = undefined;
             ctrl.billingSessions = [];
+            ctrl.billingSessionToProcess = [];
             ctrl.criteriaSelected = false;
             ctrl.rerenderDataTable();
             ctrl.processClicked = false;
@@ -44,6 +45,7 @@
             } else {
                 ctrl.criteriaSelected = false;
                 ctrl.billingSessions = [];
+                ctrl.billingSessionToProcess = [];
                 ctrl.rerenderDataTable();
             }
         };
@@ -59,6 +61,7 @@
                 BillingDAO.reviewSessions(ctrl.searchParams).then(function (res) {
                     ctrl.dataRetrieved = true;
                     ctrl.billingSessions = res;
+                    ctrl.billingSessionToProcess = angular.copy(res);
                     angular.forEach(ctrl.billingSessions, function (billingObj) {
                         billingObj.patientBirthDate = Date.parse(billingObj.patientBirthDate);
 //                        billingObj.claim1500Data = JSON.parse(billingObj.claim1500Data);
@@ -102,7 +105,28 @@
         ctrl.changeViewRecords = function () {
             ctrl.datatableObj.page.len(ctrl.viewRecords).draw();
         };
-
+        _setClaim1500InLocalStorage = function (claim) {
+            if (!claim || !claim.claim1500Data)
+                return;
+            var claim1500 = {};
+            claim1500[claim.uniqueId] = JSON.parse(claim.claim1500Data);
+            localStorage.setItem('claim1500', JSON.stringify(claim1500));
+        };
+        ctrl.openClaim1500 = function (claim) {
+            _setClaim1500InLocalStorage(claim);
+            var url = $state.href('app.manual_claim_review', {id: claim.uniqueId});
+            var params = [
+                'height=' + screen.height,
+                'width=' + screen.width,
+                'location=0',
+                'fullscreen=yes' // only works in IE, but here for completeness
+            ].join(',');
+            var newwindow = window.open(url, claim.uniqueId, params);
+            if (window.focus) {
+                newwindow.moveTo(0, 0);
+                newwindow.focus();
+            }
+        };
         ctrl.rerenderDataTable = function () {
             var pageInfo;
             if (ctrl.datatableObj.page != null) {

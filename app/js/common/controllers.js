@@ -296,9 +296,11 @@ angular.module('xenon.controllers', []).
             // Set Active Menu Item
             $sidebarMenuItems.setActive($location.path());
 
-            $rootScope.$on('$stateChangeSuccess', function ()
+            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams)
             {
                 $sidebarMenuItems.setActive($state.current.name);
+                //Show menu for all states. To be overrided by respective controllers.
+                $rootScope.layoutOptions.sidebar.hideMenu = false;
             });
 
             // Trigger menu setup
