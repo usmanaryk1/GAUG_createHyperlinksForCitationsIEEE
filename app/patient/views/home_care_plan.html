@@ -98,13 +98,29 @@
             <div class="panel">
 
                 <form class="form-horizontal validate" id="home_care_plan_form" novalidate=""
-                name="home_care_plan_form" role="form" ng-submit="homeCarePlan.submitForm()">
-        
+                name="homeCarePlanFormName" role="form" ng-submit="homeCarePlan.submitForm()">
+                <div class="row">
+                    <div class="col-sm-12 pull-right">
+                        <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="homeCarePlan.disableSaveButton">
+                            Save Changes
+                        </button>
+                        <button class="btn btn-info btn-single gray_bt pull-right" type="reset" ng-click="homeCarePlan.resetForm()">
+                            Reset To Default
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Position Selection -->
                 <div class="form-group">
                     <label for="position" class="control-label col-sm-3">Select Position:</label>
                     <div class="col-sm-9">
-                    <select id="position" name="position" class="form-control" ng-model="homeCarePlan.homeCarePlanForm.position" ng-options="position for position in homeCarePlan.positionOptions">
+                    <select id="position" name="position" class="form-control" 
+                        ng-model="homeCarePlan.homeCarePlanForm.position" 
+                        ng-options="position.position for position in homeCarePlan.positionList"
+                        data-validate="required"  
+                        data-message-required="Please select Position." 
+                        ng-required='true'
+                    >
                         <option value="" disabled>Select Position</option>
                     </select>
                     </div>
@@ -114,14 +130,98 @@
 
                 <!-- Tasks Swipe Right Box -->
                 <div class="swipe-right-box">
-                    
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="tasks">
+                            Tasks
+                        </label>
+                        <div class="col-sm-9" >
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                                {
+                                    // setTimeout(function () {
+                                        $("#tasks").multiSelect({
+                                            afterInit: function ()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function ()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    // }, 100); 
+                                });
+                            </script>
+                            <select class="form-control" id="tasks" multiple="multiple" name="tasks"
+                                    ng-model="homeCarePlan.selectedTasks"
+                                    ng-options="ct.id as ct.task for ct in homeCarePlan.taskList| orderBy:'task'"
+                                    ng-change="homeCarePlan.homeCarePlanForm.taskScheduleSet.length"
+                                    >
+                                    
+                                    <!-- data-validate="required"  
+                                    data-message-required="Please select Task." 
+                                    ng-required='homeCarePlan.selectedTasks.length === 0' -->
+                            </select>
+
+                            <!-- <div ng-show="homeCarePlan.tasksErrorMsg !== null && homeCarePlan.formSubmitted">
+                                <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>{{homeCarePlan.tasksErrorMsg}}</span>
+                            </div> -->
+                            <div ng-show="homeCarePlan.homeCarePlanForm.taskScheduleSet.length == 0 && homeCarePlan.isTasksSelected">
+                                <div style=" color: #cc3f44; display: block; font-size: 12px; padding-top: 5px; ">
+                                    Please select at least one task.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
             <!-- <div class="form-group-separator"></div> -->
 
                 <!-- Goals Swipe Right Box -->
                 <div class="swipe-right-box">
-                    
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="goals">Goals</label>
+                        
+                        <div class="col-sm-9">
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($)
+                                {
+                                    setTimeout(function () {
+                                        $("#goals").multiSelect({
+                                            afterInit: function()
+                                            {
+                                                // Add alternative scrollbar to list
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                                            },
+                                            afterSelect: function()
+                                            {
+                                                // Update scrollbar size
+                                                this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                                            }
+                                        });
+                                    }, 100);
+                                });
+                            </script>
+                            
+                            <select class="form-control" multiple="multiple" id="goals" name="goals" 
+                            ng-model="homeCarePlan.homeCarePlanForm.goals"
+                            ng-options="goal.name as goal.name for goal in homeCarePlan.goals"
+                            ng-change="isGoalsRequired = homeCarePlan.homeCarePlanForm.goals.length === 0 ? true : false"
+                            >
+                            <!-- data-validate="required"  
+                            data-message-required="Please select Goals." 
+                            ng-required='isGoalsRequired' -->
+                            </select>
+                            <!-- Example for Goals -->
+                            <div ng-show="homeCarePlanFormName.goals.$dirty && isGoalsRequired ">
+                                <div style=" color: #cc3f44; display: block; font-size: 12px; padding-top: 5px; ">
+                                    Please select at least one goal.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             <div class="form-group-separator"></div>
@@ -130,7 +230,11 @@
                 <div class="form-group">
                     <label for="canBeLeftAlone" class="control-label col-sm-3">Can patient be left alone?</label>
                     <div class="col-sm-9">
-                    <select id="canBeLeftAlone" name="canBeLeftAlone" class="form-control" ng-model="homeCarePlan.homeCarePlanForm.canBeLeftAlone">
+                    <select id="canBeLeftAlone" name="canBeLeftAlone" class="form-control" 
+                        ng-model="homeCarePlan.homeCarePlanForm.canBeLeftAlone"
+                        data-validate="required"  
+                        ng-required='true'
+                    >
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
@@ -155,7 +259,12 @@
                 <div class="form-group">
                     <label for="emergencyContactName" class="control-label col-sm-3">Emergency Contact Name:</label>
                     <div class="col-sm-9">
-                    <input type="text" id="emergencyContactName" name="emergencyContactName" class="form-control" ng-model="homeCarePlan.homeCarePlanForm.emergencyContact.name" placeholder="Enter name" />
+                    <input type="text" id="emergencyContactName" name="emergencyContactName" class="form-control" 
+                        ng-model="homeCarePlan.homeCarePlanForm.emergencyContact.name" 
+                        placeholder="Enter name"
+                        data-validate="required"  
+                        ng-required='true'
+                         />
                     </div>
                 </div>
                 
@@ -168,8 +277,14 @@
         <label for="patientProxySignature" class="col-sm-3 control-label">Patient/Proxy Signature</label>
         <div class="col-sm-9">
           <signature-pad width="550" height="175" style="border: 1px solid #B0B0B0"
-            dataurl="homeCarePlan.homeCarePlanForm.patientProxySignature" accept="homeCarePlan.acceptPatientProxySignature"
-            clear="homeCarePlan.clearPatientProxySignature"></signature-pad>
+            dataurl="homeCarePlan.homeCarePlanForm.patientProxySignature" 
+            accept="homeCarePlan.acceptPatientProxySignature"
+            clear="homeCarePlan.clearPatientProxySignature"
+            ng-model="homeCarePlan.homeCarePlanForm.patientProxySignature"
+            class="form-control" 
+            data-validate="required"  
+            ng-required='true'
+            ></signature-pad>
           <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
             ng-click="homeCarePlan.clearPatientProxySignature(); homeCarePlan.clearPatientProxySignatureCall()">Clear signature</button>
         </div>
@@ -182,8 +297,14 @@
         <label for="nurseSignature" class="col-sm-3 control-label">Nurse Signature</label>
         <div class="col-sm-9">
           <signature-pad width="550" height="175" style="border: 1px solid #B0B0B0"
-            dataurl="homeCarePlan.homeCarePlanForm.nurseSignature" accept="homeCarePlan.acceptNurseSignature"
-            clear="homeCarePlan.clearNurseSignature"></signature-pad>
+            dataurl="homeCarePlan.homeCarePlanForm.nurseSignature" 
+            accept="homeCarePlan.acceptNurseSignature"
+            clear="homeCarePlan.clearNurseSignature"
+            ng-model="homeCarePlan.homeCarePlanForm.nurseSignature"
+            class="form-control" 
+            data-validate="required"  
+            ng-required='true'
+            ></signature-pad>
           <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
             ng-click="homeCarePlan.clearNurseSignature(); homeCarePlan.clearNurseSignatureCall()">Clear signature</button>
         </div>
