@@ -42,18 +42,20 @@
     
     ctrl.taskList = [];
     ctrl.retrieveTasks = retrieveTasksData;
-    var avoidWatch = true;
+    ctrl.resetVar = false;
+    ctrl.avoidWatch = true;
     ctrl.selectedTasks = [];
     ctrl.tasksErrorMsg = null;
     ctrl.isTasksSelected= false;
 
-    ctrl.clearPatientProxySignatureCall = clearPatientProxySignature;
-    ctrl.clearNurseSignatureCall = clearNurseSignature;
+    ctrl.isGoalsSelected= false;
 
-    ctrl.homeCarePlanFormName={};//form validation
+    
     ctrl.homeCarePlanForm = {}
     ctrl.generateFormCall = generateForms;
-
+    
+    ctrl.clearPatientProxySignatureCall = clearPatientProxySignature;
+    ctrl.clearNurseSignatureCall = clearNurseSignature;
 
     /*================   FUNCTION CALLS   ===================*/
     ctrl.retrievePositions();
@@ -63,21 +65,55 @@
     /*================   FORM FUNCTIONS   ===================*/
     function generateForms() {
       $rootScope.isFormDirty = false;
-      if (ctrl.params?.id) {
-        // $rootScope.maskLoading();
-        // PatientDAO.get({ id: $state.params.id }).then(function (res) {
-        //   ctrl.patient = res;
-        //   ctrl.patientName = res.fName;
-        //   ctrl.homeCarePlanForm = {
-        //     orders: res?.orders
-        //       ? res?.orders
-        //       : [{ discipline: "", frequency: "", duration: "" }],
-        //   };
+      console.log("generateForms nurseSignature", ctrl.homeCarePlanForm.nurseSignature, ctrl.params?.id);
 
-        //   $rootScope.unmaskLoading();
-        // });
+      if (ctrl.params?.id) {
+        console.info("id -----------",ctrl.params.id);
+        $rootScope.maskLoading();
+        PatientDAO.get({ id: $state.params.id }).then(function (res) {
+          // ctrl.avoidWatch = false;
+          ctrl.patient = res;
+          ctrl.patientName = res.fName;
+          // Initialize form data
+          ctrl.homeCarePlanForm = {
+            position: res.position,
+            taskScheduleSet: res.taskScheduleSet, // Added array to store task schedules
+            goals: res.goals,
+            canBeLeftAlone: res.canBeLeftAlone,
+            emergencyContact: {
+              phoneNumber: res.emergencyContact.phoneNumber,
+              name: res.emergencyContact.name,
+            },
+            patientProxySignature: res.patientProxySignature,
+            nurseSignature: res.nurseSignature,
+          };
+
+          // ctrl.selectedTasks; //assign the selected task according to taskScheduleSet
+
+        //   $timeout(function () {
+        //     if (ctrl.user.employee.id != null) {
+        //         $("#sboxit-2").select2("val", ctrl.user.employee.id);
+        //     }
+        // }, 500);
+
+          $rootScope.unmaskLoading();
+        }).catch(function (data, status) {
+          toastr.error("Failed to retrieve user.");
+          // ctrl.retrivalRunning = false;
+          // console.log(JSON.stringify(ctrl.user.employee))
+      }).then(function () {
+          // setTimeout(function () {
+          //     //Reset dirty status of form
+          //     if ($.fn.dirtyForms) {
+          //         $('form').dirtyForms('setClean');
+          //         $('.dirty').removeClass('dirty');
+          //     }
+          // }, 100);
+      });
       } else {
           // Initialize form data
+          console.log("form else ctrl.avoidWatch , ctrl.selectedTasks ", ctrl.avoidWatch , ctrl.selectedTasks);
+          
           ctrl.homeCarePlanForm = {
             position: "",
             taskScheduleSet: [], // Added array to store task schedules
@@ -90,9 +126,19 @@
             patientProxySignature: null,
             nurseSignature: null,
           };
-
+        }
+        console.log("form else 1 ctrl.resetVar, ctrl.avoidWatch , ctrl.selectedTasks", ctrl.resetVar, ctrl.avoidWatch , ctrl.selectedTasks);
         setupWatch();
-      }
+        console.log("form else 2 ctrl.resetVar, ctrl.avoidWatch , ctrl.selectedTasks", ctrl.resetVar, ctrl.avoidWatch , ctrl.selectedTasks);
+        if( ctrl.resetVar === true ){
+          if (ctrl.selectedTasks.length != 0 ) {    
+            ctrl.avoidWatch= true;
+              ctrl.selectedTasks = [];
+          }
+        }
+
+        console.log("form else nurseSignature", ctrl.homeCarePlanForm.nurseSignature);
+
     }
 
   //All task lists reterives
@@ -151,11 +197,18 @@ function retrievePositionsData(){
 
   // Function to submit the form
   ctrl.submitForm = function () {
+
+    console.log("Is the form dirty?", $scope.home_care_plan_form.$dirty);
+console.log("Is the form invalid?", $scope.home_care_plan_form.$invalid);
+console.log("Is the form valid?", $scope.home_care_plan_form.$valid);
+console.log("Form name:", $scope.home_care_plan_form.$name);
     
+    console.log("00 $('#home_care_plan_form')[0]",$('#home_care_plan_form')[0], );
+    // Validate custom checks
+    var validationCheck = ctrl.isValidCustomCheck();
+    console.log("return",validationCheck );
+console.log("submit ctrl.homeCarePlanForm", ctrl.homeCarePlanForm);
         
-          if(ctrl.homeCarePlanForm.taskScheduleSet.length==0){
-            return ctrl.isTasksSelected = true;
-          }
 
     // Implement form submission logic here
     var medicalOrderFormToSave = angular.copy(ctrl.homeCarePlanForm);
@@ -166,44 +219,80 @@ function retrievePositionsData(){
     //     )
     //   : null;
 
-    // console.log("Home Care Plan Form Submitted", ctrl.homeCarePlanForm);
-console.log("$('#home_care_plan_form')[0]",$('#home_care_plan_form')[0], ctrl.homeCarePlanFormName);
+    if ($('#home_care_plan_form')[0].checkValidity() && ctrl.isValidCustomCheck() === true ) {
+console.log("validate true", ctrl.homeCarePlanForm);
+            // $scope.resetForm = true;
 
-    if ($('#home_care_plan_form')[0].checkValidity()) {
-console.log("validate true");
+    }else{
+      $scope.resetForm = false;
+      ctrl.resetVar = false;
     }
 
   };
+
+  ctrl.isValidCustomCheck= function () {
+    var validCheckAll= true;
+    if(ctrl.homeCarePlanForm.taskScheduleSet.length==0){
+      // $scope.resetForm = false;
+      ctrl.isTasksSelected = true;
+      validCheckAll = false;
+    }
+    if(ctrl.homeCarePlanForm.goals.length==0){
+      // $scope.resetForm = false;
+      ctrl.isGoalsSelected = true;
+      validCheckAll = false;
+    }
+
+    return validCheckAll;
+  }
  
 
 
-  ctrl.resetForm = function(){   
-    ctrl.avoidWatch = true;
-    ctrl.isTasksSelected = false;
-    ctrl.clearPatientProxySignature();
-    ctrl.clearNurseSignature();
-    ctrl.generateFormCall();
-    // ctrl.selectedBenefits = [];
-    // delete ctrl.benifitObj.packageName;
-    // ctrl.benifitObj.benefitPackageLineSet = _.remove(ctrl.benifitObj.benefitPackageLineSet,function(benefitPackageLine){
-    //     return typeof benefitPackageLine.id !== 'undefined';
-    // });
+  ctrl.resetForm = function(){ 
+    console.log("reset nurseSignature", ctrl.homeCarePlanForm.nurseSignature);
+
+    ctrl.resetVar = true; 
+    console.log(" resetForm ctrl.avoidWatch",ctrl.avoidWatch , ctrl.selectedTasks );
+    // if (ctrl.selectedTasks.length === 0) {
+    //   ctrl.avoidWatch = false;
+    // } else {
+    //   ctrl.avoidWatch = true;
+      // ctrl.selectedTasks = [];
+    // }
     
-    // _.each(ctrl.benifitObj.benefitPackageLineSet,function(benefitPackageLine){
-    //     benefitPackageLine.isDeleted = true;
-    // });
+    ctrl.isTasksSelected = false;
+    console.log(" resetForm ctrl.avoidWatch 1",ctrl.avoidWatch , ctrl.selectedTasks );
+    
+    ctrl.isGoalsSelected = false;
+    // ctrl.clearPatientProxySignature();
+    // ctrl.clearNurseSignature();
+    
     $timeout(function () {
       $('#tasks').multiSelect('refresh');
       $('#goals').multiSelect('refresh');
-  });
+    });
+    console.log(" resetForm ctrl.avoidWatch 2 ",ctrl.avoidWatch , ctrl.selectedTasks );
+    
+    // ctrl.selectedTasks = [];
+    console.log(" resetForm ctrl.avoidWatch 3",ctrl.avoidWatch , ctrl.selectedTasks );
+    $scope.resetForm = true;
+    ctrl.generateFormCall();
+    console.log(" resetForm ctrl.avoidWatch 4",ctrl.avoidWatch , ctrl.selectedTasks );
 
-    console.log("ctrl.homeCarePlanForm",ctrl.homeCarePlanForm);
+    console.log("$('#home_care_plan_form')[0]",$('#home_care_plan_form')[0], );
+    // console.log("reset form ctrl.homeCarePlanForm",ctrl.homeCarePlanForm);
+    //after reset 
+    console.log(" resetForm ctrl.avoidWatch 5 ",ctrl.avoidWatch , ctrl.selectedTasks );
+    ctrl.resetVar = false; 
+    console.log(" resetForm ctrl.avoidWatch 6",ctrl.avoidWatch , ctrl.selectedTasks );
+
   }
 
     
   
 
 ctrl.openTaskModal = function (editMode) {
+  console.log("open  model", ctrl.avoidWatch , ctrl.selectedTasks);
   var modalInstance = $modal.open({
       templateUrl: appHelper.viewTemplatePath('patient', 'tasks_modal'),
       size: 'md',
@@ -226,7 +315,9 @@ ctrl.openTaskModal = function (editMode) {
 
   modalInstance.result.then(function (result) {
     if (result.reverse) {
-        avoidWatch = true;
+      console.log("modalInstance.result",ctrl.avoidWatch, result);
+      ctrl.avoidWatch = true;
+      console.log("modalInstance.result 1",ctrl.avoidWatch);
         if (!editMode){
           ctrl.selectedTasks.splice(ctrl.selectedTasks.indexOf(parseInt(ctrl.newSelectedType)), 1);
         }
@@ -244,7 +335,9 @@ ctrl.openTaskModal = function (editMode) {
           $scope.$watch(function () {
             return ctrl.selectedTasks;
         }, function (newValue, oldValue) {
-            if (avoidWatch === false) {
+            if (ctrl.avoidWatch === false) {
+              console.log(" watch ",ctrl.avoidWatch , ctrl.selectedTasks );
+
                 $timeout(function () {
                     $("#tasks").multiSelect('refresh');
                 });
@@ -266,7 +359,8 @@ ctrl.openTaskModal = function (editMode) {
                     ctrl.openTaskModal(true);  // Pass 'true' to indicate edit mode
                 }
             } else {
-                avoidWatch = false;
+                ctrl.avoidWatch = false;
+                console.log(" watch else 1",ctrl.avoidWatch , ctrl.selectedTasks );
                 $timeout(function () {
                     $("#tasks").multiSelect('refresh');
                 });
@@ -282,6 +376,9 @@ ctrl.openTaskModal = function (editMode) {
           },
           function (newValue, oldValue) {
             if (newValue != oldValue) {
+              console.log("watch nurseSignature", ctrl.homeCarePlanForm.nurseSignature);
+              console.log("watch patientProxySignature", ctrl.homeCarePlanForm.patientProxySignature);
+              console.log("again watch", ctrl.avoidWatch , ctrl.selectedTasks, newValue, oldValue);
               $rootScope.isFormDirty = true;
             }
           },
@@ -290,10 +387,10 @@ ctrl.openTaskModal = function (editMode) {
       }
 
       function clearPatientProxySignature() {
-        ctrl.homeCarePlanForm.patientProxySignature = "";
+        ctrl.homeCarePlanForm.patientProxySignature = null;
       }
     function clearNurseSignature() {
-        ctrl.homeCarePlanForm.nurseSignature="";
+        ctrl.homeCarePlanForm.nurseSignature= null;
       }
       
      

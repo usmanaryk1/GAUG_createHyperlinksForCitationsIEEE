@@ -97,8 +97,8 @@
         <div class="col-sm-12">
             <div class="panel">
 
-                <form class="form-horizontal validate" id="home_care_plan_form" novalidate=""
-                name="homeCarePlanFormName" role="form" ng-submit="homeCarePlan.submitForm()">
+                <form class="form-horizontal validate" id="home_care_plan_form" 
+                name="home_care_plan_form" role="form" ng-submit="homeCarePlan.submitForm()">
                 <div class="row">
                     <div class="col-sm-12 pull-right">
                         <button class="btn btn-info green_bt pull-right" type="submit" ng-disabled="homeCarePlan.disableSaveButton">
@@ -119,9 +119,9 @@
                         ng-options="position.position for position in homeCarePlan.positionList"
                         data-validate="required"  
                         data-message-required="Please select Position." 
-                        ng-required='true'
+                        
                     >
-                        <option value="" disabled>Select Position</option>
+                        <option value="" disabled selected>Select Position</option>
                     </select>
                     </div>
                 </div>
@@ -208,14 +208,14 @@
                             <select class="form-control" multiple="multiple" id="goals" name="goals" 
                             ng-model="homeCarePlan.homeCarePlanForm.goals"
                             ng-options="goal.name as goal.name for goal in homeCarePlan.goals"
-                            ng-change="isGoalsRequired = homeCarePlan.homeCarePlanForm.goals.length === 0 ? true : false"
+                            ng-change="homeCarePlan.isGoalsSelected = homeCarePlan.homeCarePlanForm.goals.length === 0 ? true : false"
                             >
                             <!-- data-validate="required"  
                             data-message-required="Please select Goals." 
                             ng-required='isGoalsRequired' -->
                             </select>
                             <!-- Example for Goals -->
-                            <div ng-show="homeCarePlanFormName.goals.$dirty && isGoalsRequired ">
+                            <div ng-show="homeCarePlan.homeCarePlanForm.goals.length == 0 && homeCarePlan.isGoalsSelected ">
                                 <div style=" color: #cc3f44; display: block; font-size: 12px; padding-top: 5px; ">
                                     Please select at least one goal.
                                 </div>
@@ -233,7 +233,6 @@
                     <select id="canBeLeftAlone" name="canBeLeftAlone" class="form-control" 
                         ng-model="homeCarePlan.homeCarePlanForm.canBeLeftAlone"
                         data-validate="required"  
-                        ng-required='true'
                     >
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -263,7 +262,7 @@
                         ng-model="homeCarePlan.homeCarePlanForm.emergencyContact.name" 
                         placeholder="Enter name"
                         data-validate="required"  
-                        ng-required='true'
+                        data-message-required="Emergency contact name required."
                          />
                     </div>
                 </div>
@@ -283,7 +282,7 @@
             ng-model="homeCarePlan.homeCarePlanForm.patientProxySignature"
             class="form-control" 
             data-validate="required"  
-            ng-required='true'
+            data-message-required="Patient/Proxy Signature required."
             ></signature-pad>
           <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
             ng-click="homeCarePlan.clearPatientProxySignature(); homeCarePlan.clearPatientProxySignatureCall()">Clear signature</button>
@@ -302,8 +301,8 @@
             clear="homeCarePlan.clearNurseSignature"
             ng-model="homeCarePlan.homeCarePlanForm.nurseSignature"
             class="form-control" 
-            data-validate="required"  
-            ng-required='true'
+            data-validate="required" 
+            data-message-required="Nurse Signature required."
             ></signature-pad>
           <button type="button" class="btn btn-default mt-7 btn-default-bootstrap"
             ng-click="homeCarePlan.clearNurseSignature(); homeCarePlan.clearNurseSignatureCall()">Clear signature</button>
