@@ -13,6 +13,19 @@
                 params: {
                     action: 'settings'
                 }
+            },
+            reviewSessions: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'review'
+                }
+            },
+            processSessions: {
+                method: 'POST',
+                params: {
+                    action: 'process'
+                }
             }
         });
         return {
@@ -21,6 +34,12 @@
             },
             getSettings: function() {
                 return api.getSettings().$promise;
+            },
+            reviewSessions: function(param) {
+                return api.reviewSessions(param).$promise;
+            },
+            processSessions: function(param,data) {
+                return api.processSessions(param,data).$promise;
             }
 
         };

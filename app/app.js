@@ -425,8 +425,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
 //            }).
             state('app.manual_claim', {
                 url: '/manual_claim',
-                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim'),
-                controller: 'BillingTab1Ctrl as billing1',
+                templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
+                controller: 'ManualClaimCtrl as manualClaim',
+                params : { claim1500Data: null, }
             }).
             state('app.billing_tab_1', {
                 url: '/billing_tab_1',
@@ -447,6 +448,18 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/biling_setting',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_settings'),
                 controller: 'BillingSettingsCtrl as billingSetting'
+            }).
+            // payroll_session
+            state('app.billing_session', {
+                url: '/billing_session',
+                controller: 'BillingSessionCtrl as billingSession',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_session'),
+            }).
+            // payroll_session
+            state('app.billing_batch', {
+                url: '/billing_session/:id',
+                controller: 'BillingSessionCtrl as billingSession',
+                templateUrl: appHelper.viewTemplatePath('billing', 'billing_session'),
             }).
             // Dashboards
             state('app.dashboard', {
