@@ -59,6 +59,22 @@
         color:black;  
     }	
 </style>
+<style type="text/css" media="print">
+    
+  @page { size: landscape;margin: 0mm 0mm 0mm 0mm;   }
+  body {
+   size: landscape;
+   margin: 5mm 5mm 5mm 5mm;
+}
+</style>
+<script type="text/javascript">
+    function print_page() {
+        var ButtonControl = document.getElementById("btnprint");
+        ButtonControl.style.display = "none";
+        window.print();
+        ButtonControl.style.display = "block";
+    }
+</script>
 <div class="page-body"> 
 
 
@@ -73,14 +89,21 @@
 
 
     <div class="main"><!-- ng-style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode)?'width: 1120px;':'width: 1060px;'}}" -->
-        <form class="form-horizontal" id="manual_claim_form" name="manual_claim_form" role="form">
-            <div class="row" ng-if="!manualClaim.reviewMode">
-                <div class="col-sm-12">
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-info btn-single  pull-right">Process</button>
-                    </div>
+        <div class="row" ng-if="!manualClaim.reviewMode">
+            <div class="col-sm-12">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-info btn-single  pull-right">Process</button>
                 </div>
             </div>
+        </div>
+        <div  id="btnprint" class="row" ng-if="manualClaim.reviewMode">
+            <div class="col-sm-12">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-info btn-single  pull-right" onclick="print_page()">Print</button>
+                </div>
+            </div>
+        </div>
+        <form class="form-horizontal" id="manual_claim_form" name="manual_claim_form" role="form">
             <div class="row">&nbsp;</div>
 
             <!-- section 1 -->
@@ -119,7 +142,7 @@
                             </center>
                     </td>
                     <td>
-                    <center style="margin-top:4px;"><input type="radio" value="mcd" id="healthInsuranceType" name="healthInsuranceType" ng-model="manualClaim.manualClaimObj.healthInsuranceType" /> <br /> 
+                <center style="margin-top:4px;"><input type="radio" value="mcd" id="healthInsuranceType" name="healthInsuranceType" ng-model="manualClaim.manualClaimObj.healthInsuranceType" /> <br /> 
                     <small>(Medicaid #)</small> 
                 </center>
                 </td>
@@ -303,7 +326,7 @@
                             <b>PATIENT'S ADDRESS </b><small>(Last,First, MI) </small><br />
                             <p>
                                 STREET: 
-                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="patientStreet" ng-model="manualClaim.manualClaimObj.patientStreet" /><br />
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="patientStreet" ng-model="manualClaim.manualClaimObj.patientStreet" /><br />
                             </p>
                             <p>
                                 CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -311,7 +334,7 @@
                                 ST:
                                 <input type="text" class="width_15" name="patientZip" ng-model="manualClaim.manualClaimObj.patientZip" />&nbsp;&nbsp;
                                 ZIP:
-                                <input type="text" style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="patientState" ng-model="manualClaim.manualClaimObj.patientState" />
+                                <input type="text" style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="patientState" ng-model="manualClaim.manualClaimObj.patientState" />
                             </p>
                             <p>
                                 PHONE:&nbsp;
@@ -344,7 +367,7 @@
                             <b>PATIENT'S ADDRESS </b><small>(Last,First, MI) </small><br />
                             <p>
                                 STREET: 
-                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="insuredStreet" ng-model="manualClaim.manualClaimObj.insuredStreet" /><br />
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="insuredStreet" ng-model="manualClaim.manualClaimObj.insuredStreet" /><br />
                             </p>
                             <p>
                                 CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -352,7 +375,7 @@
                                 ST:
                                 <input type="text"  class="width_15" name="insuredState" ng-model="manualClaim.manualClaimObj.insuredState" />&nbsp;&nbsp;
                                 ZIP:
-                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="insuredZip" ng-model="manualClaim.manualClaimObj.insuredZip"/>
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="insuredZip" ng-model="manualClaim.manualClaimObj.insuredZip"/>
                             </p>
                             <p>
                                 PHONE:&nbsp;
@@ -789,43 +812,43 @@
                 <table class="width_100" cellspacing="0">
                     <tr>
                         <th class="border" style="width: 3%">
-                            <div class="first_sec">
-                                <font class="numbers">24 </font>
-                            </div>
-                        </th>
-                        <th class="border"  style="width: 20%">
+                    <div class="first_sec">
+                        <font class="numbers">24 </font>
+                    </div>
+                    </th>
+                    <th class="border"  style="width: 20%">
 
-                            A 
+                        A 
 
-                        </th>
-                        <th class="border" style="width: 7%">
+                    </th>
+                    <th class="border" style="width: 7%">
 
-                            B 
-                        </th>
-                        <th class="border" style="width: 7%">
-                            C 
-                        </th>
-                        <th class="border"  style="width: 22%">
-                            D 
-                        </th>
-                        <th class="border"  style="width: 8%">
-                            E 
-                        </th>
-                        <th class="border"  style="width: 7%">
-                            F 
-                        </th>
-                        <th class="border"  style="width: 7%">
-                            G 
-                        </th>
-                        <th class="border"  style="width: 7%">
-                            H 
-                        </th>
-                        <th class="border" >
-                            I 
-                        </th>
-                        <th class="border_2" style="width: 7%">
-                            J 
-                        </th>
+                        B 
+                    </th>
+                    <th class="border" style="width: 7%">
+                        C 
+                    </th>
+                    <th class="border"  style="width: 22%">
+                        D 
+                    </th>
+                    <th class="border"  style="width: 8%">
+                        E 
+                    </th>
+                    <th class="border"  style="width: 7%">
+                        F 
+                    </th>
+                    <th class="border"  style="width: 7%">
+                        G 
+                    </th>
+                    <th class="border"  style="width: 7%">
+                        H 
+                    </th>
+                    <th class="border" >
+                        I 
+                    </th>
+                    <th class="border_2" style="width: 7%">
+                        J 
+                    </th>
                     </tr>
                     <tr>
                         <td class="border width_1">#</td>
