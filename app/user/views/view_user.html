@@ -101,8 +101,8 @@
                                                 <div class="center">
                                                     <a class="btn icon-left fa fa-pencil edit_button" href="" ng-click="viewUser.edit(emp)" tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-trash-o delete_button" href="" ng-click="viewUser.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a'" ng-click="viewUser.deactivateUser(emp)" tooltip="Deactivate"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i'" ng-click="viewUser.activateUser(emp)" tooltip="Activate"><span class="ed_b"></span></a>                                                    
+                                                    <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a'" ng-click="viewUser.openActivateDeactivateModal(emp,'activateDeactivateModel','deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i'" ng-click="viewUser.openActivateDeactivateModal(emp,'activateDeactivateModel','activate')" tooltip="Activate"><span class="ed_b"></span></a>                                                    
                                                 </div>
                                             </td>
                                             </tr>
@@ -268,7 +268,7 @@
 </script>
 <script type="text/ng-template" id="deleteModel">
     <div class="modal-header">		
-    <h4 class="modal-title">{{deleteUserModel.employee.lName}} {{deleteUserModel.employee.fName}} {{deleteUserModel.employee.middleInitial}}</h4>
+    <h4 class="modal-title">{{deleteUserModel.user.employee.lName}} {{deleteUserModel.user.employee.fName}} {{deleteUserModel.user.employee.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
@@ -278,32 +278,23 @@
     </div>
 
     <div class="modal-footer">
-    <button type="button" class="btn btn-success" ng-click="deleteUserModel.delete(deleteUserModel.employee);">Yes</button>
+    <button type="button" class="btn btn-success" ng-click="deleteUserModel.delete(deleteUserModel.user);">Yes</button>
     <button type="button" class="btn btn-red" ng-click="deleteUserModel.dismiss();">No</button>
     </div>
 </script>
-<script type="text/ng-template" id="activateModel">
-    <form class="form-horizontal validate" role="form" name="popupActEmployees" id="popup_act_employees" >     
+<script type="text/ng-template" id="activateDeactivateModel">
     <div class="modal-header">		
-    <h4 class="modal-title">{{activateEmployeeModel.employee.lName}} {{activateEmployeeModel.employee.fName}} {{activateEmployeeModel.employee.middleInitial}}</h4>
+    <h4 class="modal-title">{{activateModal.user.employee.lName}} {{activateModal.user.employee.fName}} {{activateModal.user.employee.middleInitial}}</h4>
     </div>
 
     <div class="modal-body">
 
-    
-        <div class="form-group">
-            <label class="col-sm-7 control-label">To activate user please enter password:</label>
-            <div class="col-sm-4">
-            <input class="form-control" id="actPass" name="actPass" type="password" ng-model="activateEmployeeModel.password" 
-                                       data-validate="required" required/>
-            </div>
-            
-        </div>
+    Are you sure you want to {{activateModal.action}} this User?
+
     </div>
 
     <div class="modal-footer">
-    <button type="button" class="btn btn-success" ng-click="activateEmployeeModel.activate(activateEmployeeModel.employee);">Activate</button>
-    <button type="button" class="btn btn-red" ng-click="activateEmployeeModel.dismiss();">Cancel</button>
+    <button type="button" class="btn btn-success" ng-click="activateModal.confirm(activateModal.user);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="activateModal.dismiss();">No</button>
     </div>
-    </form>
 </script>

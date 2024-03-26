@@ -110,14 +110,14 @@
             });
             $rootScope.selectUserModel.baseUrl = ctrl.baseUrl;
             $rootScope.selectUserModel.companyCode = ctrl.companyCode;
-            $rootScope.selectUserModel.user = angular.copy(user);            
+            $rootScope.selectUserModel.user = angular.copy(user);
             if (user.employee.languageSpoken != null && user.employee.languageSpoken.length > 0) {
                 $rootScope.selectUserModel.user.employee.languageSpoken = user.employee.languageSpoken.split(",");
             }
 
         };
 
-        ctrl.openDeleteModal = function (employee, modal_id, modal_size, modal_backdrop)
+        ctrl.openDeleteModal = function (user, modal_id, modal_size, modal_backdrop)
         {
             $rootScope.deleteUserModel = $modal.open({
                 templateUrl: modal_id,
@@ -125,15 +125,15 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.deleteUserModel.employee = employee;
+            $rootScope.deleteUserModel.user = user;
 
-            $rootScope.deleteUserModel.delete = function (employee) {
+            $rootScope.deleteUserModel.delete = function (user) {
                 $rootScope.maskLoading();
-                UserDAO.delete({id: employee.id}).then(function (res) {
+                UserDAO.delete({id: user.id}).then(function (res) {
                     var length = ctrl.employeeList.length;
 
                     for (var i = 0; i < length; i++) {
-                        if (ctrl.employeeList[i].id === employee.id) {
+                        if (ctrl.employeeList[i].id === user.id) {
                             ctrl.employeeList.splice(i, 1);
                             break;
                         }
@@ -150,6 +150,26 @@
             };
 
         };
+        ctrl.openActivateDeactivateModal = function (user, modal_id, action, modal_size, modal_backdrop)
+        {
+            $rootScope.activateModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.activateModal.action = action;
+            $rootScope.activateModal.user = user;
+
+            $rootScope.activateModal.confirm = function (user) {
+                if (action == 'activate') {
+                    ctrl.activateUser(user);
+                }else{
+                    ctrl.deactivateUser(user);
+                }
+            };
+
+        };
         ctrl.rerenderDataTable = function () {
             if (ctrl.employeeList.length === 0) {
                 if (ctrl.searchParams.pageNo > 1) {
@@ -161,7 +181,7 @@
             }
         };
 
-        ctrl.deactivateUser = function (employee,status)
+        ctrl.deactivateUser = function (employee, status)
         {
             $rootScope.maskLoading();
             UserDAO.changestatus({id: employee.id, status: 'deactivate'}).then(function (res) {
@@ -177,15 +197,16 @@
                     }
                 }
                 ctrl.rerenderDataTable();
-                toastr.success("User deactivated.");                
+                toastr.success("User deactivated.");
             }
             ).catch(function (data, status) {
-                toastr.error("User cannot be deactivated.");                
+                toastr.error("User cannot be deactivated.");
             }).then(function () {
+                $rootScope.activateModal.close();
                 $rootScope.unmaskLoading();
             });
         };
-        
+
         ctrl.activateUser = function (employee) {
             $rootScope.maskLoading();
             UserDAO.changestatus({id: employee.id, status: 'activate'}).then(function (res) {
@@ -202,10 +223,11 @@
                     }
                 }
                 ctrl.rerenderDataTable();
-                toastr.success("User activated.");               
+                toastr.success("User activated.");
             }).catch(function (data, status) {
-                toastr.error("User cannot be activated.");                
+                toastr.error("User cannot be activated.");
             }).then(function () {
+                $rootScope.activateModal.close();
                 $rootScope.unmaskLoading();
             });
         }

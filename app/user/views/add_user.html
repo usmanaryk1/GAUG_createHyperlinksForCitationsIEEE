@@ -38,7 +38,7 @@
                                     <button class="btn btn-info green_bt pull-right" type="submit" ng-click="addEmployee.setFromNext('tab1')">
                                         Save Changes
                                     </button>
-                                    <button class="btn btn-info btn-single gray_bt pull-right" type="reset"  ng-click="addEmployee.resetEmployeeTab1()">
+                                    <button class="btn btn-info btn-single gray_bt pull-right" ng-if="!addEmployee.editMode" type="reset"  ng-click="addEmployee.resetEmployeeTab1()">
                                         Reset To Default
                                     </button>
                                 </div>
@@ -50,7 +50,7 @@
                                     Username
                                 </label>
                                 <div class="col-sm-9">
-                                    <input charactersonly class="form-control" name="FirstName" type="text" maxlength="100" 
+                                    <input charactersonly class="form-control" name="FirstName" type="text" maxlength="100" ng-disabled="addEmployee.editMode"
                                            ng-model="addEmployee.user.username"
                                            data-validate="required" data-message-required="Please enter Username."/>
 
