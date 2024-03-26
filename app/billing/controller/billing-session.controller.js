@@ -16,19 +16,21 @@
         if ($state.params.id && $state.params.id !== '') {
             ctrl.processdMode = true;
             $rootScope.maskLoading();
-            BillingDAO.getSessionById({paramId:$state.params.id}).then(function(res){
+            BillingDAO.getSessionById({paramId: $state.params.id}).then(function (res) {
                 $rootScope.unmaskLoading();
-                if(res && res.billingClaims){
+                if (res && res.billingClaims) {
                     ctrl.billingSessions = res.billingClaims;
                     ctrl.sessionId = res.id;
                     ctrl.insuranceProvider = res.insuranceProvider;
                     ctrl.totalCharges = res.totalCharges;
                     ctrl.totalClaims = res.totalClaims;
-                    ctrl.sessionStartDate = res.sessionStartDate;
-                    ctrl.sessionEndDate = res.sessionEndDate;
+                    if (res.sessionStartDate)
+                        ctrl.sessionStartDate = Date.parse(res.sessionStartDate);
+                    if (res.sessionEndDate)
+                        ctrl.sessionEndDate = Date.parse(res.sessionEndDate);
                     ctrl.rerenderDataTable();
                 }
-            }).catch(function(err){
+            }).catch(function (err) {
                 $rootScope.unmaskLoading();
                 toastr.error("Some arror occurred while retrieving existing session.");
             });
