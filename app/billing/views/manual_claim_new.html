@@ -884,10 +884,10 @@
                         </td>
                     </tr>
                     <tr ng-repeat-start="serviceLine in manualClaim.manualClaimObj.serviceLines" on-repeat-end="manualClaim.checkReviewMode()"><!-- ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines"-->
-                        <td class="border width_1" rowspan="2" >1</td>
+                        <td class="border width_1" rowspan="2" >{{$index + 1}}</td>
                         <td class="border" >
-                            <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.hospitalizationStartDate" max-date="todayDate"/>&nbsp;
-                                TO: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_35 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.hospitalizationStartDate" max-date="todayDate"/>&nbsp; </div>
+                            <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceFromDate" max-date="todayDate"/>&nbsp;
+                                TO: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_35 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate"/>&nbsp; </div>
                         </td>
                         <td class="border" >
 

@@ -1,31 +1,47 @@
 (function () {
-    function ManualClaimCtrl($rootScope, $http, $state, $timeout, InsurerDAO, BillingDAO) {
+    function ManualClaimCtrl($rootScope, $http, $state, $timeout, $filter, InsurerDAO, BillingDAO) {
         var ctrl = this;
         //Constants i.e. we need to fill the form
         //healthInsuranceType = [{label: "Medicaid", value: "mcd"}, {label: "Medicare", value: "mcr"}, {label: "Tricare Champus", value: "tc"}, {label: "ChampVA", value: "cva"}, {label: "Group Healthplan", value: "gh"}, {label: "Feca Black Lung", value: "fbl"}, {label: "Blue Cross", value: "bc"}, {label: "Blue Shield", value: "bs"}, {label: "Blue Cross/Blue Sheild (BCBS)", value: "bcb"}, {label: "Other", value: "oth"}];
         ctrl.manualClaimObj = {};
         ctrl.reviewMode = false;
-        if ($state.params.id && $state.params.id !== ''){
+        if ($state.params.id && $state.params.id !== '') {
             ctrl.reviewMode = true;
             $rootScope.layoutOptions.sidebar.hideMenu = true;
             var claim1500 = JSON.parse(localStorage.getItem('claim1500'));
-            if(claim1500 && claim1500[$state.params.id]){
+            if (claim1500 && claim1500[$state.params.id]) {
                 ctrl.manualClaimObj = claim1500[$state.params.id];
-            }else{
+                if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                    angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        if (serviceLine.serviceFromDate)
+                            serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
+                        if (serviceLine.serviceToDate)
+                            serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                    });
+                }
+            } else {
                 $rootScope.maskLoading();
-                BillingDAO.getClaimById({paramId:$state.params.id}).then(function(res){
+                BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
                     $rootScope.unmaskLoading();
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
-                }).catch(function(err){
+                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                            if (serviceLine.serviceFromDate)
+                                serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
+                            if (serviceLine.serviceToDate)
+                                serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                        });
+                    }
+                }).catch(function (err) {
                     $rootScope.unmaskLoading();
                     toastr.error("Unable to retrieve claim details");
                     $state.go('app.manual_claim');
                 });
             }
         }
-        
-        ctrl.checkReviewMode = function(){
-            if(ctrl.reviewMode)
+
+        ctrl.checkReviewMode = function () {
+            if (ctrl.reviewMode)
                 $("#manual_claim_form :input").prop("disabled", true);
         };
 
@@ -36,5 +52,5 @@
         });
     }
     ;
-    angular.module('xenon.controllers').controller('ManualClaimCtrl', ["$rootScope", "$http", "$state", "$timeout", "InsurerDAO", "BillingDAO", ManualClaimCtrl]);
+    angular.module('xenon.controllers').controller('ManualClaimCtrl', ["$rootScope", "$http", "$state", "$timeout", "$filter", "InsurerDAO", "BillingDAO", ManualClaimCtrl]);
 })();
