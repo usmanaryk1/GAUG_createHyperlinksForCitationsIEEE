@@ -2,12 +2,12 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
     $rootScope.stopIdle();
     $scope.username = "";
     $scope.password = "";
-    $scope.ordCode="";
+    $scope.ordCode = "";
 //    setCookie("changePassword", false, 7);
-    $scope.submitHandler = function() {
+    $scope.submitHandler = function () {
         if ($("form#login").valid()) {
             showLoadingBar(70); // Fill progress bar to 70% (just a given value)
-            
+
             var opts = {
                 "closeButton": true,
                 "debug": false,
@@ -33,17 +33,16 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                     orgCode: $scope.orgCode,
                 },
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                transformRequest: function(data) {
+                transformRequest: function (data) {
                     return $.param(data); // jquery util
                 }
-            }).success(function(data, status, headers, config) {
+            }).success(function (data, status, headers, config) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
-                    finish: function() {
+                    finish: function () {
                         if (data.status == 's') {
-                            appData.authResult = data;
-                            console.log(JSON.stringify(data));
+                            appData.authResult = data;                            
                             if (appData.authResult != null) {
                                 if (appData.authResult.token != null) {
                                     setCookie("token", appData.authResult.token, 7);
@@ -58,9 +57,8 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                                     setCookie("un", appData.authResult.un, 7);
                                     $rootScope.currentUser = {userName: appData.authResult.un};
                                 }
-                                if(appData.authResult.roleId!=null){
-                                    setCookie("roleId", appData.authResult.roleId, 7);
-                                    $rootScope.currentUser = {roleId: appData.authResult.roleId};
+                                if (appData.authResult.allowedFeature != null) {
+                                    $rootScope.currentUser.allowedFeature = appData.authResult.allowedFeature.split(",");
                                 }
                             }
 //                            window.location.hash = '#/app/dashboard';
@@ -69,13 +67,13 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                             $rootScope.startIdle();
                             $rootScope.unmaskLoading();
                             // window.location.hash = '#/app/add_patient_tab_1';
-                        }else{
+                        } else {
                             $rootScope.unmaskLoading();
                         }
                     }
                 });
                 Page.setTitle("Welcome");
-                
+
                 // Remove any alert
                 $(".errors-container .alert").slideUp('fast');
 
@@ -93,7 +91,7 @@ function loginCtrlr($scope, $rootScope, $http, $state, Page) {
                     $(".errors-container .alert").hide().slideDown();
                     //$(form).find('#password').select();
                 }
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 alert("Error");
                 // window.location.hash = '#/app/dashboard-variant-1';
             }); // end of http post

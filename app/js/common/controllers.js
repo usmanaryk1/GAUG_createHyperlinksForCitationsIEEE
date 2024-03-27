@@ -25,11 +25,26 @@ angular.module('xenon.controllers', []).
         controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state, $document, UserDAO, $timeout)
         {
             var userName = getCookie("un");
-            var roleId = Number(getCookie("roleId"));
             if (userName != null) {
-                $rootScope.currentUser = {userName: userName, roleId: roleId};
+                $rootScope.currentUser = {userName: userName};
                 $rootScope.startIdle();
-            }
+            }            
+            $rootScope.hasAccess = function (key) {
+                if (key != null) {
+                    var keys = key.split(",");
+                    if ($rootScope.currentUser.allowedFeature != null) {
+                        for (var i = 0; i < keys.length; i++) {                            
+                            if ($rootScope.currentUser.allowedFeature.indexOf(keys[i]) >= 0) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
+            };
+
             $rootScope.serverPath = ontimetest.weburl;
             $rootScope.validNumber = function (number) {
                 return !isNaN(number);

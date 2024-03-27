@@ -105,11 +105,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     if ($(this).css('display') === 'block') { // Current display
                         $(this).css('display', 'none');
                     }
-                });                
-                if (toState.name.indexOf("admin") >= 0 && $rootScope.currentUser.roleId != 1) {
-                        event.preventDefault();
-                        $state.transitionTo(ontimetest.defaultState);                    
-                }
+                });
                 if (toState.url.indexOf("login") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
@@ -170,6 +166,19 @@ app.run(function ($rootScope, $modal, $state, Idle)
         'app.employee.tab1', 'app.employee.tab2', 'app.employee.tab3'];
     $rootScope.$on('$stateChangeSuccess',
             function (event, currentState) {
+                if (currentState.data != null && currentState.data.feature != null && $rootScope.currentUser.allowedFeature != null) {
+                    var features = currentState.data.feature.split(",");
+                    var featureAllowed = 0;
+                    for (var i = 0; i < features.length; i++) {
+                        if ($rootScope.currentUser.allowedFeature.indexOf(features[i]) >= 0) {
+                            featureAllowed++;
+                        }
+                    }
+                    if (featureAllowed == 0) {
+                        event.preventDefault();
+                        $state.transitionTo(ontimetest.defaultState);
+                    }
+                }
                 setTimeout(function () {
                     if ($.fn.dirtyForms) {
                         //https://github.com/snikch/jquery.dirtyforms
@@ -194,7 +203,23 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
 
     //$urlRouterProvider.otherwise('/add_patient_tab_1');
     $urlRouterProvider.otherwise('/login');
+    var verifyModuleAllocated = function (UserDAO, $rootScope, $q, $timeout) {
+        var deferred = $q.defer();
+        if ($rootScope.currentUser.allowedFeature != null) {
+            deferred.resolve();
+        } else {
+            $timeout(function () {
+                UserDAO.getUserFeatures({subAction: getCookie("un")}).then(function (res) {
+                    if (res.data != null) {
+                        $rootScope.currentUser.allowedFeature = res.data.split(",");
+                    }
+                    deferred.resolve();
+                });
+            });
+        }
+        return deferred.promise;
 
+    }
     $stateProvider.
             // Main Layout Structure
             state('app', {
@@ -221,6 +246,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             ASSETS.tables.datatables
                         ]);
                     },
+                    moduleAllocated: function (UserDAO, $rootScope, $q, $timeout) {
+                        return verifyModuleAllocated(UserDAO, $rootScope, $q, $timeout);
+                    }
                 }
             }).
             // Login
@@ -241,7 +269,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab1/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_1'),
                 data: {
-                    tabNo: 1
+                    tabNo: 1,
+                    feature: 'CREATE_PATIENT'
                 }
             }).
             // add_patient_tab_2
@@ -249,7 +278,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_2'),
                 data: {
-                    tabNo: 2
+                    tabNo: 2,
+                    feature: 'CREATE_PATIENT'
                 }
             }).
             // add_patient_tab_3
@@ -257,7 +287,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab3/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_3'),
                 data: {
-                    tabNo: 3
+                    tabNo: 3,
+                    feature: 'CREATE_PATIENT'
                 }
             }).
             // add_patient_tab_4
@@ -265,7 +296,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab4/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_4'),
                 data: {
-                    tabNo: 4
+                    tabNo: 4,
+                    feature: 'CREATE_PATIENT'
                 }
             }).
             // add_patient_tab_5
@@ -273,7 +305,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab5/:id',
                 templateUrl: appHelper.viewTemplatePath('patient', 'add_patient_tab_5'),
                 data: {
-                    tabNo: 5
+                    tabNo: 5,
+                    feature: 'CREATE_PATIENT'
                 }
             }).
             // view patients single page
@@ -281,6 +314,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/patient-list/:status',
                 templateUrl: appHelper.viewTemplatePath('patient', 'view_patient'),
                 controller: 'ViewPatientsCtrl as viewPatient',
+                data: {
+                    feature: 'VIEW_PATIENT'
+                }
             }).
             // employee creation page
             state('app.employee', {
@@ -294,7 +330,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab1/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_1'),
                 data: {
-                    tabNo: 1
+                    tabNo: 1,
+                    feature: 'CREATE_EMPLOYEE'
                 }
             }).
             // add_employee_tab_2
@@ -302,7 +339,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab2/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_2'),
                 data: {
-                    tabNo: 2
+                    tabNo: 2,
+                    feature: 'CREATE_EMPLOYEE'
                 }
             }).
             // add_employee_tab_3
@@ -310,7 +348,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/tab3/:id',
                 templateUrl: appHelper.viewTemplatePath('employee', 'add_employee_tab_3'),
                 data: {
-                    tabNo: 3
+                    tabNo: 3,
+                    feature: 'CREATE_EMPLOYEE'
                 }
             }).
             //view employees single page
@@ -318,12 +357,18 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/employee-list/:status',
                 templateUrl: appHelper.viewTemplatePath('employee', 'view_employee'),
                 controller: 'ViewEmployeesCtrl as viewEmployee',
+                data: {
+                    feature: 'VIEW_EMPLOYEE'
+                }
             }).
             // edit_timesheet
             state('app.edit_timesheet', {
                 url: '/edit_timesheet/:id?empId&patId&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
+                data: {
+                    feature: 'EDIT_EMPLOYEE_TIMESHEET,EDIT_PATIENT_TIMESHEET'
+                }
             }).
             // edit_missed_punch
             state('app.edit_missed_punch', {
@@ -336,24 +381,36 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/employee_timesheet?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'employee_timesheet'),
                 controller: 'EmployeeTimeSheetCtrl as empTimesheet',
+                data: {
+                    feature: 'VIEW_EMPLOYEE_TIMESHEET'
+                }
             }).
             // manual_punch
             state('app.manual_punch', {
                 url: '/manual_punch',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
+                data: {
+                    feature: 'CREATE_MANUAL_PUNCH'
+                }
             }).
             // manual_punch
             state('app.manual_punch_employee', {
                 url: '/manual_punch/employee/:id?from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
+                data: {
+                    feature: 'CREATE_MANUAL_PUNCH'
+                }
             }).
             // manual_punch
             state('app.manual_punch_patient', {
                 url: '/manual_punch/patient/:id',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'manual_punch'),
                 controller: 'ManualPunchCtrl as manualPunch',
+                data: {
+                    feature: 'CREATE_MANUAL_PUNCH'
+                }
             }).
             // manual_punch
             state('app.manual_punch_schedule', {
@@ -366,24 +423,36 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/patient_time_sheet?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'patient_time_sheet'),
                 controller: 'PatientTimeSheetCtrl as patTimesheet',
+                data: {
+                    feature: 'VIEW_PATIENT_TIMESHEET'
+                }
             }).
             // daily_attendance
             state('app.daily_attendance', {
                 url: '/daily_attendance?id&from&to&lastPage',
                 templateUrl: appHelper.viewTemplatePath('timesheet', 'daily_attendance'),
                 controller: 'DailyAttendanceCtrl as dAttendance',
+                data: {
+                    feature: 'VIEW_DAILY_ATTENDANCE'
+                }
             }).
             // add_inusrer
             state('app.insurer', {
                 url: '/insurer/:id',
                 controller: 'AddInsurerCtrl as addInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'add_inusrer'),
+                data: {
+                    feature: 'CREATE_INSURANCE_PROVIDER'
+                }
             }).
             // view_insurer
             state('app.insurer-list', {
                 url: '/insurer-list',
                 controller: 'ViewInsurersCtrl as viewInsurer',
                 templateUrl: appHelper.viewTemplatePath('insurer', 'view_insurer'),
+                data: {
+                    feature: 'VIEW_INSURANCE_PROVIDER'
+                }
             }).
             // pay_rates
             state('app.pay_rates', {
@@ -395,6 +464,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/payroll_history',
                 controller: 'PayrollHistoryCtrl as payrollHist',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_history'),
+                data: {
+                    feature: 'VIEW_PAYROLL_HISTORY'
+                }
             }).
             // payroll_review
             state('app.payroll_review', {
@@ -406,17 +478,26 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/payroll_session',
                 controller: 'PayrollSessionCtrl as payrollSession',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_session'),
+                data: {
+                    feature: 'VIEW_PAYROLL_SESSION'
+                }
             }).
             state('app.batch_session', {
                 url: '/payroll_session/:id',
                 controller: 'PayrollSessionCtrl as payrollSession',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_session'),
+                data: {
+                    feature: 'EDIT_PAYROLL_SESSION'
+                }
             }).
             // payroll_settings
             state('app.payroll_settings', {
                 url: '/payroll_settings',
                 templateUrl: appHelper.viewTemplatePath('payroll', 'payroll_settings'),
                 controller: 'PayrollSettingsCtrl as payrollSet',
+                data: {
+                    feature: 'VIEW_PAYROLL_SETTINGS'
+                }
             }).
             // biling
 //            state('app.biling', {
@@ -435,7 +516,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/manual_claim',
                 templateUrl: appHelper.viewTemplatePath('billing', 'manual_claim_new'),
                 controller: 'ManualClaimCtrl as manualClaim',
-                params: {claim1500Data: null, }
+                params: {claim1500Data: null, },
+                data: {
+                    feature: 'CREATE_MANUAL_CLAIM'
+                }
             }).
             state('app.billing_tab_1', {
                 url: '/billing_tab_1',
@@ -450,18 +534,27 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             state('app.biling_history', {
                 url: '/biling_history',
                 templateUrl: appHelper.templatePath('biling_history'),
+                data: {
+                    feature: 'VIEW_BILLING_HISTORY'
+                }
             }).
             // biling_history
             state('app.biling_setting', {
                 url: '/biling_setting',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_settings'),
-                controller: 'BillingSettingsCtrl as billingSetting'
+                controller: 'BillingSettingsCtrl as billingSetting',
+                data: {
+                    feature: 'CREATE_BILLING_SETTING'
+                }
             }).
             // payroll_session
             state('app.billing_session', {
                 url: '/billing_session',
                 controller: 'BillingSessionCtrl as billingSession',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_session'),
+                data: {
+                    feature: 'VIEW_BILLING_SESSION'
+                }
             }).
             // payroll_session
             state('app.billing_batch', {
@@ -493,24 +586,37 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/company_information',
                 templateUrl: appHelper.viewTemplatePath('company', 'company_information'),
                 controller: 'AddCompanyCtrl as addCompany',
+                data: {
+                    feature: 'CREATE_COMPANY_INFORMATION'
+                }
+
             }).
             // Employee Calendar
             state('app.employee-calendar', {
                 url: '/employee-calendar/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'employee_calendar'),
-                controller: 'CalendarCtrl as calendar'
+                controller: 'CalendarCtrl as calendar',
+                data: {
+                    feature: 'VIEW_EMPLOYEE_SCHEDULE'
+                }
             }).
             // Patient Calendar
             state('app.patient-calendar', {
                 url: '/patient-calendar/:id',
                 templateUrl: appHelper.viewTemplatePath('calendar', 'patient_calendar'),
                 controller: 'PatientCalendarCtrl as patientcalendar',
+                data: {
+                    feature: 'VIEW_PATIENT_SCHEDULE'
+                }
             }).
             // Report
             state('app.report', {
                 url: '/report',
                 templateUrl: appHelper.viewTemplatePath('report', 'report'),
-                controller: 'ReportCtrl as report'
+                controller: 'ReportCtrl as report',
+                data: {
+                    feature: 'VIEW_REPORTS'
+                }
             }).
             state('admin', {
                 abstract: true,
@@ -537,6 +643,9 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                             ASSETS.tables.datatables
                         ]);
                     },
+                    moduleAllocated: function (UserDAO, $rootScope, $q, $timeout) {
+                        return verifyModuleAllocated(UserDAO, $rootScope, $q, $timeout);
+                    }
                 }
             }).
             state('admin.dashboard', {
@@ -546,17 +655,23 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             state('admin.user', {
                 url: '/user/:id',
                 templateUrl: appHelper.viewTemplatePath('user', 'add_user'),
-                controller: 'AddUserCtrl as addEmployee'
+                controller: 'AddUserCtrl as addEmployee',
+                data: {
+                    feature: 'CREATE_USER'
+                }
             }).
             state('admin.user-list', {
                 url: '/user-list/:status',
                 templateUrl: appHelper.viewTemplatePath('user', 'view_user'),
                 controller: 'ViewUsersCtrl as viewUser',
+                data: {
+                    feature: 'VIEW_USER'
+                }
             }).
             state('admin.manage_role', {
                 url: '/manage_role',
                 templateUrl: appHelper.viewTemplatePath('security', 'manage_role'),
-                controller: 'ManageRoleCtrl as manageRole',
+                controller: 'ManageRoleCtrl as manageRole'
             }).
             state('admin.manage_access', {
                 url: '/manage_access',

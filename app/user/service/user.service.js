@@ -31,6 +31,15 @@
                 params: {
                     action: "changepassword"
                 }
+            },
+            getUserFeatures: {
+                method: 'GET',
+                params: {
+                    action: 'userfeatures'
+                },
+                transformResponse: function (data) {
+                    return {data: data};
+                }
             }
 
         });
@@ -55,6 +64,9 @@
             },
             changePassword: function (data) {
                 return api.changePassword(data).$promise;
+            },
+            getUserFeatures: function (data) {
+                return api.getUserFeatures(data).$promise;
             }
 
         };
