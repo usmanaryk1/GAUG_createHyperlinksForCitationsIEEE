@@ -45,6 +45,19 @@
                 params: {
                     action: 'process'
                 }
+            },
+            getPatientDetails: {
+                method: 'GET',
+                params: {
+                    action: 'manualclaim'
+                }
+            },
+            processManualClaim: {
+                method: 'POST',
+                params: {
+                    action: 'process',
+                    paramId: 'manualclaim'
+                }
             }
         });
         return {
@@ -68,6 +81,12 @@
             },
             processSessions: function(param,data) {
                 return api.processSessions(param,data).$promise;
+            },
+            getPatientDetails: function(param) {
+                return api.getPatientDetails(param).$promise;
+            },
+            processManualClaim: function(param, data) {
+                return api.processManualClaim(param, data).$promise;
             }
 
         };

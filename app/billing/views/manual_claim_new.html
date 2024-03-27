@@ -71,13 +71,43 @@
     </div>
     <!--PAGE TITLE END -->
 
+    <div class="col-sm-8" ng-if="!manualClaim.reviewMode">
+        <label class="col-sm-3 control-label text-right" style="margin-top:7px;">
+            Patient Name
+        </label>
+        <div class="col-sm-9" >
+            <script type="text/javascript">
+                jQuery(document).ready(function ($)
+                {
+                    setTimeout(function () {
+                        $("#sboxit-1").select2({
+//                                                        minimumResultsForSearch: -1,
+                            placeholder: 'Select Patient...',
+//                                                        minimumInputLength: 1,
+//                                                        placeholder: 'Search',
+                        }).on('select2-open', function ()
+                        {
+                            // Adding Custom Scrollbar
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                    }, 200);
+
+                });
+            </script>
+            <select id="sboxit-1" name="PatientName" 
+                    ng-change="manualClaim.getPatientDetail(manualClaim.patientId);" ng-model="manualClaim.patientId" ng-options="pat.id as (pat.label) for pat in manualClaim.patientList track by pat.id" >
+                <option value="" selected hidden />
+            </select>
+        </div>
+    </div>
+
 
     <div class="main"><!-- ng-style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode)?'width: 1120px;':'width: 1060px;'}}" -->
         <form class="form-horizontal" id="manual_claim_form" name="manual_claim_form" role="form">
             <div class="row" ng-if="!manualClaim.reviewMode">
                 <div class="col-sm-12">
                     <div class="pull-right">
-                        <button type="button" class="btn btn-info btn-single  pull-right">Process</button>
+                        <button type="button" class="btn btn-info btn-single  pull-right" ng-click="manualClaim.processManualClaim();">Process</button>
                     </div>
                 </div>
             </div>
@@ -86,12 +116,13 @@
             <!-- section 1 -->
             <div class="first_sec payor">
                 <font> PAYOR : &nbsp;</font>
-                <select class="width_20" name="payor" ng-model="manualClaim.manualClaimObj.payor"
+                <input style="width: 20%;" name="payor" ng-model="manualClaim.manualClaimObj.payor"/>
+<!--                <select class="width_20" name="payor" ng-model="manualClaim.manualClaimObj.payor"
                         ng-options='ins.id as (ins.insuranceName) for ins in manualClaim.payorList'>
                     <option value="">
                         Select a payor
                     </option>
-                </select>
+                </select>-->
             </div>
             <table cellspacing="0" class="width_100">
                 <tr>
@@ -119,7 +150,7 @@
                             </center>
                     </td>
                     <td>
-                    <center style="margin-top:4px;"><input type="radio" value="mcd" id="healthInsuranceType" name="healthInsuranceType" ng-model="manualClaim.manualClaimObj.healthInsuranceType" /> <br /> 
+                <center style="margin-top:4px;"><input type="radio" value="mcd" id="healthInsuranceType" name="healthInsuranceType" ng-model="manualClaim.manualClaimObj.healthInsuranceType" /> <br /> 
                     <small>(Medicaid #)</small> 
                 </center>
                 </td>
@@ -303,7 +334,7 @@
                             <b>PATIENT'S ADDRESS </b><small>(Last,First, MI) </small><br />
                             <p>
                                 STREET: 
-                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="patientStreet" ng-model="manualClaim.manualClaimObj.patientStreet" /><br />
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="patientStreet" ng-model="manualClaim.manualClaimObj.patientStreet" /><br />
                             </p>
                             <p>
                                 CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -311,7 +342,7 @@
                                 ST:
                                 <input type="text" class="width_15" name="patientZip" ng-model="manualClaim.manualClaimObj.patientZip" />&nbsp;&nbsp;
                                 ZIP:
-                                <input type="text" style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="patientState" ng-model="manualClaim.manualClaimObj.patientState" />
+                                <input type="text" style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="patientState" ng-model="manualClaim.manualClaimObj.patientState" />
                             </p>
                             <p>
                                 PHONE:&nbsp;
@@ -325,10 +356,10 @@
                             <font class="numbers">6 </font>
                             <b>PATIENT RELATIONSHIP TO INSURED </b><br />  
                             <p>  
-                                <input type="radio" value="I" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />SELF
-                                <input type="radio" value="S" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />SPOUSE
-                                <input type="radio" value="P" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />CHILD
-                                <input type="radio" value="O" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />OTHER
+                                <input type="radio" value="18" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />SELF
+                                <input type="radio" value="01" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />SPOUSE
+                                <input type="radio" value="19" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />CHILD
+                                <input type="radio" value="G8" name="patientRelationship" ng-model="manualClaim.manualClaimObj.patientRelationship"  />OTHER
                             </p><br />
 
                             <font class="numbers">8 </font>
@@ -344,7 +375,7 @@
                             <b>PATIENT'S ADDRESS </b><small>(Last,First, MI) </small><br />
                             <p>
                                 STREET: 
-                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="insuredStreet" ng-model="manualClaim.manualClaimObj.insuredStreet" /><br />
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 85%;':'width:82%;'}}" name="insuredStreet" ng-model="manualClaim.manualClaimObj.insuredStreet" /><br />
                             </p>
                             <p>
                                 CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -352,7 +383,7 @@
                                 ST:
                                 <input type="text"  class="width_15" name="insuredState" ng-model="manualClaim.manualClaimObj.insuredState" />&nbsp;&nbsp;
                                 ZIP:
-                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed || manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="insuredZip" ng-model="manualClaim.manualClaimObj.insuredZip"/>
+                                <input type="text"  style="{{(layoutOptions.sidebar.isCollapsed|| manualClaim.reviewMode) ?'width: 23%;':'width:15%;'}}" name="insuredZip" ng-model="manualClaim.manualClaimObj.insuredZip"/>
                             </p>
                             <p>
                                 PHONE:&nbsp;
@@ -398,8 +429,8 @@
                                 <input type="radio" value="true" name="patientConditionRelatedAA" ng-model="manualClaim.manualClaimObj.patientConditionRelatedAA"  />YES
                                 <input type="radio" value="true" name="patientConditionRelatedAA" ng-model="manualClaim.manualClaimObj.patientConditionRelatedAA"  />NO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 | STATE &nbsp;
-                                <select name="patientConditionRelatedAAState" ng-model="manualClaim.manualClaimObj.patientConditionRelatedAAState">
-                                    <option></option>
+                                <select name="patientConditionRelatedAAState" ng-model="manualClaim.manualClaimObj.patientConditionRelatedAAState"
+                                        ng-options="state.abbreviation as state.abbreviation for state in states">
                                 </select>
                             </p><br />
                             <p> 
@@ -501,7 +532,7 @@
                     </td>
                     <td class="border width_33">
                         <div class="first_sec">
-                            <font class="numbers">10D </font>claimCodes
+                            <font class="numbers">10D </font>
                             <b>CLAIM CODES </b><br />
                             <p> 
                                 <input type="text"  class="width_70" name="claimCodes" ng-model="manualClaim.manualClaimObj.claimCodes" />&nbsp;
@@ -856,15 +887,16 @@
                         <td class="border width_1">
                             ID. QUAL
                         </td>
-                        <td class="border_2 width_1">
+                        <td class="border_2 width_1" style="position: relative;">
                             Rendering #Provider ID.
+                            <span class="glyphicon glyphicon-plus-sign" style="position: absolute;top: -7px;right: -20px;cursor: pointer;" ng-click="manualClaim.addServiceLine();" title="Add service line"></span>
                         </td>
                     </tr>
                     <tr ng-repeat-start="serviceLine in manualClaim.manualClaimObj.serviceLines" on-repeat-end="manualClaim.checkReviewMode()"><!-- ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines"-->
                         <td class="border width_1" rowspan="2" >{{$index + 1}}</td>
                         <td class="border" >
                             <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceFromDate" max-date="todayDate"/>&nbsp;
-                                TO: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_35 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate"/>&nbsp; </div>
+                                TO: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate"/>&nbsp; </div>
                         </td>
                         <td class="border" >
 
@@ -937,9 +969,10 @@
 
                         </td>
 
-                        <td class="border_2" >
+                        <td class="border_2" style="position: relative;">
 
                             <input type="text" class="width_100" name="serviceNPI" ng-model="serviceLine.serviceNPI" />
+                            <span class="glyphicon glyphicon-minus-sign" style="position: absolute;top: -7px;right: -20px;cursor: pointer;" ng-click="manualClaim.removeServiceLine($index);" title="Remove service line"></span>
 
                         </td>
 
@@ -977,8 +1010,8 @@
                                 <b>ACCEPTASSIGNMENT </b>
                                 <br />
                                 <p>   
-                                    <input type="radio" value="A" name="acceptAssignment" ng-model="manualClaim.manualClaimObj.acceptAssignment"  />YES &nbsp;
-                                    <input type="radio" value="C" name="acceptAssignment" ng-model="manualClaim.manualClaimObj.acceptAssignment"/>NO &nbsp;
+                                    <input type="radio" value="Y" name="acceptAssignment" ng-model="manualClaim.manualClaimObj.acceptAssignment"  />YES &nbsp;
+                                    <input type="radio" value="N" name="acceptAssignment" ng-model="manualClaim.manualClaimObj.acceptAssignment"/>NO &nbsp;
                                 </p> 
                             </div>  
                         </td>
@@ -1062,33 +1095,32 @@
                                 <font class="numbers">33 </font>
                                 <b> BILLING PROVIDER INFO & PHONE # </b><br /> 
                                 <p> 
-                                    NAME: &nbsp;&nbsp;&nbsp;<input type="text"  class="width_60" /><br />
+                                    NAME: &nbsp;&nbsp;&nbsp;<input type="text" name="companyName"  class="width_60" ng-model="manualClaim.manualClaimObj.companyName" /><br />
                                 </p>
                                 <p>  
-                                    STREET:<input type="text"  class="width_70" /><br />
+                                    STREET:<input type="text" name="companyStreet" class="width_70" ng-model="manualClaim.manualClaimObj.companyStreet" /><br />
                                 </p>
                                 <p>
                                     CITY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="text"  class="width_30" />&nbsp;&nbsp;
+                                    <input type="text" name="companyCity" class="width_30" ng-model="manualClaim.manualClaimObj.companyCity" />&nbsp;&nbsp;
                                     ST:
-                                    <select>
-                                        <option></option>
-                                        <option></option>
+                                    <select name="companyState" ng-model="manualClaim.manualClaimObj.companyState"
+                                            ng-options="state.abbreviation as state.abbreviation for state in states">
                                     </select>
                                     ZIP:
-                                    <input type="text"  class="width_25" /><br />
+                                    <input type="text" name="companyZip" class="width_25" ng-model="manualClaim.manualClaimObj.companyZip" /><br />
                                 </p>
                                 <p>
                                     PHONE:
-                                    <input type="text" class="width_30" />&nbsp;&nbsp;
+                                    <input type="text" name="companyPhone" class="width_30" ng-model="manualClaim.manualClaimObj.companyPhone" />&nbsp;&nbsp;
                                     (xxx-xxx-xxxx)
                                 </p>
                                 <p> 
-                                    33A.NPI:&nbsp;<input type="text" class="width_30" />
-                                    33B.LEGACY:<input type="text"  class="width_30" />
+                                    33A.NPI:&nbsp;<input type="text" name="companyNPI" class="width_30" ng-model="manualClaim.manualClaimObj.companyNPI" />
+                                    33B.LEGACY:<input type="text" name="companyLegacy" class="width_30" ng-model="manualClaim.manualClaimObj.companyLegacy" />
                                 </p>
                                 <p>
-                                    <input type="text"  class="width_70" />
+                                    <input type="text" name="companyQualifier" class="width_70" ng-model="manualClaim.manualClaimObj.companyQualifier" />
                                 </p>
 
                             </div>  
