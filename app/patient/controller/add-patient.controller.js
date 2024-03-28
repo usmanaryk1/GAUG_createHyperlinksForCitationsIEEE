@@ -152,7 +152,7 @@
                 }
                 $rootScope.maskLoading();
                 PatientDAO.update({action: reqParam, data: patientToSave})
-                        .then(function (res) {
+                        .then(function (res, status) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
 
@@ -176,10 +176,13 @@
                                 $('.dirty').removeClass('dirty');
                             }
                         })
-                        .catch(function () {
+                        .catch(function (data) {
                             //exception logic
-                            toastr.error("Patient cannot be saved.");
-                            console.log('Patient Object : ' + JSON.stringify(patientToSave));
+                            if (data && data.status === 417) {
+                                toastr.error("Patient saved, but schedule creation failed due to less authorized hours.");
+                            } else {
+                                toastr.error("Patient cannot be saved.");
+                            }
                         }).then(function () {
                     $rootScope.unmaskLoading();
                 });
@@ -725,6 +728,8 @@
                             $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
                         } else if ($scope.careObj.expiryDate == $scope.careObj.previousExpiryDate) {
                             $scope.careObj.changeSchedule = false;
+                        } else if (!$scope.addPatient.currentAuthorizationDocument) {
+                            $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, true, $scope.careObj);
                         }
                     };
 
@@ -1051,7 +1056,7 @@
 
             $rootScope.existingModel.cancel = function () {
                 $timeout(function () {
-                    careObj.expiryDate = careObj.actualExpiryDate;
+                    careObj.expiryDate = careObj.previousExpiryDate;
                     $rootScope.existingModel.close();
                 });
             };
