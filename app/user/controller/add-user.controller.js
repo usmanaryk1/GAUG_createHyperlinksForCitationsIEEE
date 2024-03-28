@@ -249,11 +249,12 @@
         }
         //function called on page initialization.
         function pageInit() {
-            retrieveEmployeesData();
+
             ctrl.getAllRoles();
             if (ctrl.editMode) {
 //                $rootScope.maskLoading();
                 UserDAO.get({id: $state.params.id}).then(function (res) {
+                    retrieveEmployeesData();
                     showLoadingBar({
                         delay: .5,
                         pct: 100,
@@ -314,6 +315,7 @@
 //                    $rootScope.unmaskLoading();
                 });
             } else {
+                retrieveEmployeesData();
                 ctrl.retrivalRunning = false;
             }
         }
@@ -488,8 +490,11 @@
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
             }
-            EmployeeDAO.retrieveAll({subAction: 'active'}).then(function (res) {
+            EmployeeDAO.getEmployeeExceptUser().then(function (res) {
                 ctrl.employeeList = res;
+                if (ctrl.user.employee != null) {
+                    ctrl.employeeList = ctrl.employeeList.concat(ctrl.user.employee);
+                }
                 ctrl.empIdObjMap = {};
                 angular.forEach(res, function (obj) {
                     ctrl.empIdObjMap[obj.id] = obj;
