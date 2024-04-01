@@ -138,22 +138,25 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">State</label>
                         <div class="col-sm-9"> 
-                            <script type="text/javascript">
-                                // jQuery(document).ready(function($)
-                                // {
-                                // 	$("#sboxit-1").selectBoxIt().on('open', function()
-                                // 	{
-                                // 		// Adding Custom Scrollbar
-                                // 		$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
-                                // 	});
-                                // });
-                            </script>
                             <select class="form-control" id="State" name="State" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
                                     ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state"
                                     data-validate="required" data-message-required="Please select the state."
                                     ng-options="state.abbreviation as state.name for state in states">
                                 <option value="">
                                     Select the state
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-separator"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">County</label>
+                        <div class="col-sm-9"> 
+                            <select class="form-control" id="State" name="County" ng-disabled="addPatient.isBillingAddressSameAsPatient==='Yes'"
+                                    ng-model="addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].county"
+                                    ng-options="county as county for county in stateCountyList[addPatient.patient.subscriberInfo[0].subscriberAddressCollection[0].state]">
+                                <option value="">
+                                    Select the county
                                 </option>
                             </select>
                         </div>

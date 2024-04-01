@@ -378,6 +378,7 @@
                             address.address2 = ctrl.patient.patientAddress.address2;
                             address.city = ctrl.patient.patientAddress.city;
                             address.state = ctrl.patient.patientAddress.state;
+                            address.county = ctrl.patient.patientAddress.county;
                             address.zipcode = ctrl.patient.patientAddress.zipcode;
                         }
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
@@ -408,11 +409,13 @@
                 address.address2 = ctrl.patient.patientAddress.address2;
                 address.city = ctrl.patient.patientAddress.city;
                 address.state = ctrl.patient.patientAddress.state;
+                address.county = ctrl.patient.patientAddress.county;
                 address.zipcode = ctrl.patient.patientAddress.zipcode;
                 $("#Address1").blur();
                 $("#Address2").blur();
                 $("#City").blur();
                 $("#State").blur();
+                $("#County").blur();
                 $("#ZipCode").blur();
             }
             ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
