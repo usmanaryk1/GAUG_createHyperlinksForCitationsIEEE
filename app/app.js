@@ -8,7 +8,7 @@ var app = angular.module('xenon-app', [
     'oc.lazyLoad',
     'xenon.controllers',
     'xenon.directives',
-    'xenon.factory',
+    'xenon.factory',    
     'xenon.services',
     'xenon.filter',
     'mwl.calendar',
@@ -655,7 +655,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             state('admin.user', {
                 url: '/user/:id',
                 templateUrl: appHelper.viewTemplatePath('user', 'add_user'),
-                controller: 'AddUserCtrl as addEmployee',
+                controller: 'AddUserCtrl as addUser',
                 data: {
                     feature: 'CREATE_USER'
                 }

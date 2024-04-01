@@ -1,5 +1,5 @@
 (function () {
-    function AddUserCtrl($scope, CareTypeDAO, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, UserDAO, PatientDAO, moment) {
+    function AddUserCtrl($scope, $state, $modal, $filter, EmployeeDAO, $timeout, $formService, $rootScope, Page, PositionDAO, UserDAO) {
         var ctrl = this;
         ctrl.staticPosition;
         ctrl.retrivalRunning = true;
@@ -34,6 +34,11 @@
             }
             $formService.resetRadios();
         };
+        $scope.$watch(function () {
+            return ctrl.user.bindToExisting;
+        }, function (value) {
+            $formService.resetRadios();
+        });
         ctrl.companyCode = ontimetest.company_code;
         ctrl.baseUrl = ontimetest.weburl;
         ctrl.nextTab;
@@ -53,8 +58,7 @@
                 }
             }
             $formService.resetRadios();
-        });
-        ctrl.user.employee.careRatesList = {rate1: {careTypes: []}, rate2: {careTypes: []}};
+        });        
         ctrl.applicationFileObj = {};
         ctrl.w4FileObj = {};
         ctrl.ssn = {};
@@ -155,19 +159,7 @@
                                 var reqParam;
                                 if (ctrl.user.id && ctrl.user.id !== null) {
                                     reqParam = 'updateuser';
-                                    if (ctrl.user.employee.careRatesList && ctrl.user.employee.careRatesList !== null) {
-                                        var careRateList = angular.copy(ctrl.user.employee.careRatesList);
-                                        careRateList.employeeId = ctrl.user.employee.id;
-                                        EmployeeDAO.updateCareRates(careRateList)
-                                                .then(function () {
-                                                    updateUser(reqParam, employeeToSave);
-                                                })
-                                                .catch(function () {
-                                                    console.log(JSON.stringify(careRateList));
-                                                });
-                                    } else {
-                                        updateUser(reqParam, employeeToSave);
-                                    }
+                                    updateUser(reqParam, employeeToSave);                                    
                                 } else {
                                     employeeToSave.orgCode = ontimetest.company_code;
                                     ctrl.user.employee.orgCode = ontimetest.company_code;
@@ -197,37 +189,7 @@
             userToSave.orgCode = ontimetest.company_code;
             delete userToSave.bindToExisting;
             UserDAO.update({action: reqParam, data: userToSave})
-                    .then(function (employeeRes) {
-                        if (!ctrl.user.employee.id || ctrl.user.employee.id === null) {
-                            ctrl.editMode = true;
-                            //to set the default data in employee with position 'pc'
-                            if (ctrl.staticPosition && ctrl.user.employee.companyPositionId === ctrl.staticPosition) {
-                                var rate1CareTypes = ['Personal Care HHA Hourly', 'Personal Care HHA Live In', 'PCA/HHA - One Client', 'PCA/HHA - Live In One Client', "CDPAP - One Client", "CDPAP - Live In One Client"];
-                                var rate2CareTypes = ['Personal Care HHA Mutual', 'Personal Care HHA Live In-Mutual', "PCA/HHA - Mutual Care", "PCA/HHA - Live In Mutual Care", "CDPAP - Mutual Care", "CDPAP - Live In Mutual Care"];
-                                CareTypeDAO.retrieveAll({positionId: ctrl.user.employee.companyPositionId}).then(function (careTypes) {
-                                    var careRateList = {employeeId: employeeRes.id};
-                                    careRateList.rate1 = {rate: 10, careTypes: []};
-                                    careRateList.rate2 = {rate: 10.7, careTypes: []};
-                                    angular.forEach(careTypes, function (obj) {
-                                        if (rate1CareTypes.indexOf(obj.careTypeTitle) >= 0) {
-                                            careRateList.rate1.careTypes.push(obj.id);
-                                        }
-                                        if (rate2CareTypes.indexOf(obj.careTypeTitle) >= 0) {
-                                            careRateList.rate2.careTypes.push(obj.id);
-                                        }
-                                    });
-                                    EmployeeDAO.updateCareRates(careRateList)
-                                            .then(function () {
-//                                                retrieveEmployeeCareTypeAfterSave(employeeRes);
-                                            })
-                                            .catch(function () {
-                                                console.log(JSON.stringify(careRateList));
-                                            });
-                                });
-                            }
-                        } else {
-//                            retrieveEmployeeCareTypeAfterSave(employeeRes);
-                        }
+                    .then(function (employeeRes) {                        
                         toastr.success("User saved.");
                         $state.go('admin.user-list', {status: 'active'});
                         //Reset dirty status of form
@@ -283,23 +245,7 @@
                         ctrl.otherLanguageCheckbox = true;
                         ctrl.refreshLanguages();
                     }
-                    ctrl.retrivalRunning = false;
-                    EmployeeDAO.retrieveEmployeeCareRates({employee_id: ctrl.user.employee.id}).then(function (res) {
-                        ctrl.user.employee.careRatesList = res;
-                        $timeout(function () {
-                            $("#rate2").multiSelect('refresh');
-                            $("#rate1").multiSelect('refresh');
-                        }, 200);
-                        ctrl.retrivalRunning = false;
-                        if (ctrl.user.employee.careRatesList.rate1 != null && ctrl.user.employee.careRatesList.rate1.rate != null) {
-                            ctrl.user.employee.careRatesList.rate1.rate = ctrl.user.employee.careRatesList.rate1.rate.toFixed(2);
-                        }
-                        if (ctrl.user.employee.careRatesList.rate2 != null && ctrl.user.employee.careRatesList.rate2.rate != null) {
-                            ctrl.user.employee.careRatesList.rate2.rate = ctrl.user.employee.careRatesList.rate2.rate.toFixed(2);
-                        }
-                    }).catch(function () {
-                        toastr.error("Failed to retrieve employee care rates.");
-                    });
+                    ctrl.retrivalRunning = false;                    
                 }).catch(function (data, status) {
                     toastr.error("Failed to retrieve user.");
                     ctrl.retrivalRunning = false;
@@ -312,7 +258,6 @@
                             $('.dirty').removeClass('dirty');
                         }
                     }, 100);
-//                    $rootScope.unmaskLoading();
                 });
             } else {
                 retrieveEmployeesData();
@@ -322,13 +267,14 @@
         ;
 
         ctrl.tab1DataInit = function () {
-            ctrl.formDirty = false;
+            ctrl.formDirty = false;             
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             //to set edit mode in tab change
             if (!$state.params.id || $state.params.id === '') {
                 ctrl.editMode = false;
                 ctrl.user.employee = {};
             } else {
+               
                 ctrl.editMode = true;
             }
             //to set radio buttons on tab init..
@@ -465,27 +411,6 @@
             ctrl.user.employee.employeeAttachments = $filter('orderBy')(ctrl.user.employee.employeeAttachments, '-expiryDate');
             ctrl.user.employee.employeeAttachments.splice(i, 1);
         };
-        ctrl.officeStaffIds = [];
-        PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
-            if (res && res.length > 0) {
-                angular.forEach(res, function (position) {
-                    ctrl.officeStaffIds.push(position.id);
-                });
-            }
-        });
-        ctrl.displayDocumentsByPosition = function () {
-            ctrl.displayDocumentsByPositionMap = {};
-            if (ctrl.user.employee.companyPositionId && ctrl.officeStaffIds.indexOf(ctrl.user.employee.companyPositionId) > -1) {
-                ctrl.position = "staff";
-                ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, l: false};
-                ctrl.typeMap = {'l': "License", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing"};
-            } else {
-                ctrl.position = "other";
-                ctrl.displayDocumentsByPositionMap = {a: true, 9: true, w: true, r: true, z: true, t: true, b: true, l: true};
-                ctrl.typeMap = {'l': "License or Certificate", '9': "I-9 Eligibility", 'z': "Physical", 't': "Tb Testing", 'b': "Background Check"};
-            }
-        };
-
         function retrieveEmployeesData() {
             if (ctrl.editMode) {
                 $rootScope.maskLoading();
@@ -513,5 +438,5 @@
 
     }
     ;
-    angular.module('xenon.controllers').controller('AddUserCtrl', ["$scope", "CareTypeDAO", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "UserDAO", "PatientDAO", "moment", AddUserCtrl]);
+    angular.module('xenon.controllers').controller('AddUserCtrl', ["$scope", "$state", "$modal", "$filter", "EmployeeDAO", "$timeout", "$formService", "$rootScope", "Page", "PositionDAO", "UserDAO", AddUserCtrl]);
 })();

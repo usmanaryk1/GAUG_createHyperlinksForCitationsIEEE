@@ -98,11 +98,11 @@
                                             </td>
                                             <!--<td>{{viewUser.getLanguagesFromCode(emp.employee.languageSpoken)}}</td>-->
                                             <td>
-                                                <div class="center">
+                                                <div class="center" ng-if="currentUser.userName != emp.username">
                                                     <a class="btn icon-left fa fa-pencil edit_button" href="" ng-if="hasAccess('EDIT_USER')" ng-click="viewUser.edit(emp)" tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_USER')" href="" ng-click="viewUser.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('DEACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp,'activateDeactivateModel','deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp,'activateDeactivateModel','activate')" tooltip="Activate"><span class="ed_b"></span></a>                                                    
+                                                    <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('DEACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp, 'activateDeactivateModel', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp, 'activateDeactivateModel', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>                                                    
                                                 </div>
                                             </td>
                                             </tr>
@@ -177,7 +177,7 @@
 
     </div>
     </div>
-<div class="row" ng-if="selectUserModel.user.employee.phone2!=null">
+    <div class="row" ng-if="selectUserModel.user.employee.phone2!=null">
     <div class="col-md-12">
 
     <div class="form-group">
@@ -201,7 +201,7 @@
 
     </div>
     </div>
-       <div class="row" ng-if="selectUserModel.user.employee.emergencyContactNumber!=null">
+    <div class="row" ng-if="selectUserModel.user.employee.emergencyContactNumber!=null">
     <div class="col-md-12">
 
     <div class="form-group">
