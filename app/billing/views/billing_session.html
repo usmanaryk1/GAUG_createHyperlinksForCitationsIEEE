@@ -124,21 +124,21 @@
 
                                         <th nowrap><span class="">Billed</span></th>
                                         <th nowrap class="text-center"><span class="">Authorized Codes</span></th>
-                                        <th nowrap class='nosorting text-center'>
+                                        <th nowrap class='nosorting text-center' ng-if="!billingSession.processdMode">
                                             <span class="">View Claim</span>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr style="cursor: pointer" ng-repeat="session in billingSession.billingSessions">
-                                        <td ng-if="billingSession.processdMode">{{session.id}}</td>
+                                        <td ng-if="billingSession.processdMode" ng-click="billingSession.openClaim1500(session);"><b>{{session.id}}</b></td>
                                         <td>{{session.patientName}}</td>
                                         <!-- span with ng-hide for sorting in data table -->
                                         <td><span class="ng-hide">{{session.patientBirthDate|date:'yyyyMMdd'}}</span>{{session.patientBirthDate|date:dateFormat}}</td>
                                         <td>{{session.totalServiceLines ? session.totalServiceLines: 0}}</td>
                                         <td>${{session.totalCosts ? (session.totalCosts | number:2): 0}}</td>
                                         <td class="text-center">{{session.authorizedCodes}}</td>
-                                        <td class="text-center">
+                                        <td class="text-center" ng-if="!billingSession.processdMode">
                                             <div class="center">
                                                 <a class="btn icon-left fa fa-file-text-o edit_button" tooltip="View Claim" tooltip-append-to-body="true" ng-click="billingSession.openClaim1500(session);"><span class="ed_b"></span></a>
                                             </div>
