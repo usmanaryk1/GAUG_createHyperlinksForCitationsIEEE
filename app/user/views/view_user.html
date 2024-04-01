@@ -87,7 +87,7 @@
                                                 </div>
                                                 <div class="emp_user_hd">
                                                     <div class="emp_user_name">{{emp.employee.lName}}, {{emp.employee.fName}} {{emp.employee.middleInitial}}</div>
-                                                    <p>{{emp.role}} <span ng-if="positions[emp.employee.companyPositionId]!=null">- {{positions[emp.employee.companyPositionId]}}</span></p>
+                                                    <p>{{emp.role}} <span ng-if="positions[emp.employee.companyPositionId] != null">- {{positions[emp.employee.companyPositionId]}}</span></p>
                                                 </div>
                                             </div>
                                             </th>
@@ -102,7 +102,8 @@
                                                     <a class="btn icon-left fa fa-pencil edit_button" href="" ng-if="hasAccess('EDIT_USER')" ng-click="viewUser.edit(emp)" tooltip="Edit"><span class="ed_b"></span></a> 
                                                     <a class="btn icon-left fa fa-trash-o delete_button" ng-if="hasAccess('DELETE_USER')" href="" ng-click="viewUser.openDeleteModal(emp, 'deleteModel')" tooltip="Delete"><span class="ed_b"></span></a>
                                                     <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="emp.status == 'a' && hasAccess('DEACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp, 'activateDeactivateModel', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp, 'activateDeactivateModel', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>                                                    
+                                                    <a class="btn icon-left fa fa-check edit_button" href="" ng-if="emp.status == 'i' && hasAccess('ACTIVATE_USER')" ng-click="viewUser.openActivateDeactivateModal(emp, 'activateDeactivateModel', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
+                                                    <a class="btn icon-left fa fa-key reset_password_button" href="" ng-click="viewUser.openUserResetPasswordModal(emp, 'md', 'static')" tooltip="Reset Password"><span class="ed_b"></span></a>
                                                 </div>
                                             </td>
                                             </tr>
@@ -290,11 +291,49 @@
     <div class="modal-body">
 
     Are you sure you want to {{activateModal.action}} this User?
-
+    <form class="form-horizontal" ng-if="activateModal.user.employee!=null && activateModal.activateEmployee!=null">
+    <div class="form-group">
+    <label class="col-sm-2 control-label">
+    Employee
+    </label>
+    <div class="col-sm-9 form-control-static">
+    <div>
+    <label>
+    <input value="a" name="activateEmployee" type="radio" class="cbr cbr-primary" ng-model="activateModal.activateEmployee" />
+    Activate
+    </label>&nbsp;
+    <label>
+    <input name="activateEmployee" value="i" type="radio" class="cbr cbr-primary" ng-model="activateModal.activateEmployee"/>
+    Deactivate
+    </label>
+    </div>
+    </div>
+    </div>
+    </form>
     </div>
 
     <div class="modal-footer">
     <button type="button" class="btn btn-success" ng-click="activateModal.confirm(activateModal.user);">Yes</button>
     <button type="button" class="btn btn-red" ng-click="activateModal.dismiss();">No</button>
     </div>
+</script>
+<script type="text/ng-template" id="resetUserPasswordModal">
+    <form class="validate form-horizontal" name="resetPasswordForm" id="reset_user_password_form" >
+    <div class="modal-header">
+    <button type="button" class="close" ng-click="resetUserPasswordModal.close();" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" >Reset Password</h4>            
+    </div>
+
+    <div class="modal-body">
+    <div class="row">
+    <label class="col-sm-12" for="password">
+        Are you sure you want to reset password for {{resetUserPasswordModal.user.employee.lName}}, {{resetUserPasswordModal.user.employee.fName}} {{resetUserPasswordModal.user.employee.middleInitial}}?
+    </label>
+    </div>            
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="resetUserPasswordModal.save();">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="resetUserPasswordModal.close();">No</button>    
+    </div>
+    </form>
 </script>

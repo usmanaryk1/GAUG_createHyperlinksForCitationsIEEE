@@ -1,5 +1,5 @@
 (function () {
-    function ViewUsersCtrl(UserDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO) {
+    function ViewUsersCtrl(UserDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, PositionDAO, $timeout, $formService) {
         var ctrl = this;
         $rootScope.maskLoading();
         ctrl.datatableObj = {};
@@ -158,13 +158,14 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            $formService.resetRadios();
             $rootScope.activateModal.action = action;
             $rootScope.activateModal.user = user;
-
+            $rootScope.activateModal.activateEmployee = user.employee.status;
             $rootScope.activateModal.confirm = function (user) {
                 if (action == 'activate') {
                     ctrl.activateUser(user);
-                }else{
+                } else {
                     ctrl.deactivateUser(user);
                 }
             };
@@ -250,14 +251,34 @@
         ctrl.navigateToCalendar = function (employee) {
             $state.go('app.employee-calendar', {id: employee.id});
         };
-//        
-//        $scope.$watch(function() {
-//            return ctrl.viewType;
-//        }, function(newVal, oldValue) {
-//            ctrl.employeeList = [];
-//            ctrl.retrieveUsers();
-        //        });
+        ctrl.openUserResetPasswordModal = function (user, modal_size, modal_backdrop)
+        {
+            $rootScope.resetUserPasswordModal = $modal.open({
+                templateUrl: 'resetUserPasswordModal',
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            $rootScope.resetUserPasswordModal.user = user;
+            $rootScope.resetUserPasswordModal.save = function () {
+                $rootScope.maskLoading();
+                UserDAO.resetUserPassword({userName: user.username}).then(function (res) {
+                    toastr.success("Password reset successfully.");
+                    setCookie("changePassword", false, 7);
+                    $rootScope.resetUserPasswordModal.close();
+                }).catch(function (data) {
+                    if (data.data != null) {
+                        toastr.error(data.data);
+                    } else {
+                        toastr.error("Password cannot be reset.");
+                    }                    
+                }).then(function () {
+                    $rootScope.resetUserPasswordModal.close();
+                    $rootScope.unmaskLoading();
+                });
+            };
+        };
     }
     ;
-    angular.module('xenon.controllers').controller('ViewUsersCtrl', ["UserDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", ViewUsersCtrl]);
+    angular.module('xenon.controllers').controller('ViewUsersCtrl', ["UserDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "PositionDAO", "$timeout", "$formService", ViewUsersCtrl]);
 })();

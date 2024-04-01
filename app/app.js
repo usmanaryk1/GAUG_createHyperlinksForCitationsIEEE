@@ -8,7 +8,7 @@ var app = angular.module('xenon-app', [
     'oc.lazyLoad',
     'xenon.controllers',
     'xenon.directives',
-    'xenon.factory',    
+    'xenon.factory',
     'xenon.services',
     'xenon.filter',
     'mwl.calendar',
@@ -106,7 +106,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                         $(this).css('display', 'none');
                     }
                 });
-                if (toState.url.indexOf("login") < 0) {
+                if (toState.url.indexOf("login") < 0 && toState.url.indexOf("forgotpassword") < 0) {
                     var token = getCookie("token");
                     if (token == null || token == '') {
                         event.preventDefault();
@@ -176,7 +176,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     }
                     if (featureAllowed == 0) {
                         event.preventDefault();
-                        $state.transitionTo(ontimetest.defaultState);
+                        $state.transitionTo(ontimetest.defaultState);                      
                     }
                 }
                 setTimeout(function () {
@@ -190,7 +190,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     }
                 }, 1000);
                 if ($rootScope.currentUser != null && getCookie('changePassword') != null && getCookie('changePassword') == 'true') {
-                    $rootScope.openResetPasswordModal("resetPasswordModal", 'md', "static");
+                    $rootScope.openResetPasswordModal("resetPasswordModal", 'md', "static", false);
                 }
 
             });
@@ -256,6 +256,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/login',
                 templateUrl: appHelper.templatePath('login'),
                 controller: 'LoginCtrl',
+            }).
+            state('forgotpassword', {
+                url: '/forgotpassword',
+                templateUrl: appHelper.templatePath('forgot_password'),
+                controller: 'ForgotPasswordCtrl as forgotPwd',
+                resolve: {
+                    resources: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            ASSETS.forms.jQueryValidate,
+                            ASSETS.extra.toastr,
+                        ]);
+                    },
+                }
             }).
             // patient creation page
             state('app.patient', {
@@ -1362,6 +1375,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                     ontimetest.company_code = getCookie("cc");
                     if (ontimetest.company_code != null) {
                         $httpProvider.defaults.headers.common['company_code'] = ontimetest.company_code;
+                        config.headers.company_code = ontimetest.company_code;
                     }
                     var token = getCookie("token");
                     if (token != null) {
