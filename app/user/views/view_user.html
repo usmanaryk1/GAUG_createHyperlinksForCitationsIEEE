@@ -87,7 +87,7 @@
                                                 </div>
                                                 <div class="emp_user_hd">
                                                     <div class="emp_user_name">{{emp.employee.lName}}, {{emp.employee.fName}} {{emp.employee.middleInitial}}</div>
-                                                    <p>{{positions[emp.employee.companyPositionId]}}</p>
+                                                    <p>{{emp.role}} <span ng-if="positions[emp.employee.companyPositionId]!=null">- {{positions[emp.employee.companyPositionId]}}</span></p>
                                                 </div>
                                             </div>
                                             </th>
