@@ -12,7 +12,7 @@
         ctrl.downloadReport = function (format) {
             if ($('#report_form')[0].checkValidity() && ctrl.reportType) {
                 var valid = true;
-                if (ctrl.reportType == 'workedhours' || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
+                if (ctrl.reportType == 'employeeworkedhoursbycounty'||ctrl.reportType == 'workedhours' || ctrl.reportType == 'employeetimesheet' || ctrl.reportType == 'patienttimesheet') {
                     ctrl.verifyDates();
                     if (ctrl.dateMessage != null) {
                         valid = false;
