@@ -200,6 +200,7 @@ angular.module('xenon.controllers', []).
                 {name: 'WI - WISCONSIN', abbreviation: 'WI'},
                 {name: 'WY - WYOMING', abbreviation: 'WY'}
             ];
+            $rootScope.stateCountyList = {'NY':['Bronx','Kings','Nassau','New York','Putnam','Queens','Richmond','Rockland','Suffolk','Westchester']}
 //                    ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $rootScope.layoutOptions = {
                 horizontalMenu: {
@@ -357,9 +358,11 @@ angular.module('xenon.controllers', []).
             $scope.adminMenuItems = $sidebarAdminMenuItems.prepareAdminMenu().getAll();
             $sidebarAdminMenuItems.setActive($state.current.name);
 
-            $rootScope.$on('$stateChangeSuccess', function ()
+            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams)
             {
                 $sidebarMenuItems.setActive($state.current.name);
+                //Show menu for all states. To be overrided by respective controllers.
+                $rootScope.layoutOptions.sidebar.hideMenu = false;
                 $sidebarAdminMenuItems.setActive($state.current.name);
             });
 

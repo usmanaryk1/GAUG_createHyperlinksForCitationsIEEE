@@ -78,13 +78,24 @@
 
                                     });
                                 </script>
-                                <select class="form-control" id="sboxit-1" name="PatientName" ng-model="manualPunch.attendanceObj.patientId" ng-options="pat.id as (pat.label) for pat in manualPunch.patientList track by pat.id" >
+                                <select class="form-control" id="sboxit-1" name="PatientName" 
+                                        ng-change="manualPunch.retrievePatient(true)" ng-model="manualPunch.attendanceObj.patientId" ng-options="pat.id as (pat.label) for pat in manualPunch.patientList track by pat.id" >
                                     <option value="" selected hidden />
                                 </select>
                                 <div ng-show='manualPunch.attendanceObj.patientId == null && manualPunch.formSubmitted && manualPunch.patientMandatory'>
                                     <span style='color: #cc3f44;display: block;font-size: 12px;padding-top: 5px;'>Please select Patient Name.</span>
                                 </div>
                                 <!--<div class="form-control-static" ng-if="manualPunch.editTimesheet">{{manualPunch.patientObj.fName+" "+manualPunch.patientObj.lName}}</div>-->
+                            </div>
+                        </div>
+                        <div class="form-group-separator"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Care Type</label>
+
+                            <div class="col-sm-9">
+                                <select class="form-control" id="care" name="care" ng-model="manualPunch.attendanceObj.careTypeId" ng-options="care.id as care.careTypeTitle for care in manualPunch.careTypes" data-validate="required" data-message-required="Please select care type.">
+                                    <option value="">Select the care type</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group-separator">
@@ -248,15 +259,15 @@
     </label>-->
     <div class="col-sm-12">
     <select class="form-control" id="task_value" name="task_value" ng-model="taskModal.taskValue"
-                                 data-required="true"   ng-options="answerOption as answerOption for answerOption in taskModal.answerOptions">
-            <option value="" selected hidden />                
+    data-required="true"   ng-options="answerOption as answerOption for answerOption in taskModal.answerOptions">
+    <option value="" selected hidden />                
     </select>
-            
+
     </div>
     </div>
     </div>
     </div>
-    
+
     <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="taskModal.cancel();">Close</button>
     <button type="submit" class="btn btn-info" ng-click="taskModal.save();">Save</button>

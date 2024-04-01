@@ -152,7 +152,7 @@
                 }
                 $rootScope.maskLoading();
                 PatientDAO.update({action: reqParam, data: patientToSave})
-                        .then(function (res) {
+                        .then(function (res, status) {
                             if (!ctrl.patient.id || ctrl.patient.id === null) {
                                 ctrl.editMode = true;
 
@@ -176,10 +176,13 @@
                                 $('.dirty').removeClass('dirty');
                             }
                         })
-                        .catch(function () {
+                        .catch(function (data) {
                             //exception logic
-                            toastr.error("Patient cannot be saved.");
-                            console.log('Patient Object : ' + JSON.stringify(patientToSave));
+                            if (data && data.status === 417) {
+                                toastr.error("Patient saved, but schedule creation failed due to less authorized hours.");
+                            } else {
+                                toastr.error("Patient cannot be saved.");
+                            }
                         }).then(function () {
                     $rootScope.unmaskLoading();
                 });
@@ -359,6 +362,7 @@
                         ctrl.patient.subscriberInfo[0].nameSuffix = ctrl.patient.nameSuffix;
                         ctrl.patient.subscriberInfo[0].dateOfBirth = ctrl.patient.dateOfBirth;
                         ctrl.patient.subscriberInfo[0].gender = ctrl.patient.gender;
+                        ctrl.patient.subscriberInfo[0].phone = ctrl.patient.phone;
                         ctrl.patient.subscriberInfo[0].relationshipWithPatient = 'I';
 
                     }
@@ -374,6 +378,7 @@
                             address.address2 = ctrl.patient.patientAddress.address2;
                             address.city = ctrl.patient.patientAddress.city;
                             address.state = ctrl.patient.patientAddress.state;
+                            address.county = ctrl.patient.patientAddress.county;
                             address.zipcode = ctrl.patient.patientAddress.zipcode;
                         }
                         ctrl.patient.subscriberInfo[0].subscriberAddressCollection = [];
@@ -404,11 +409,13 @@
                 address.address2 = ctrl.patient.patientAddress.address2;
                 address.city = ctrl.patient.patientAddress.city;
                 address.state = ctrl.patient.patientAddress.state;
+                address.county = ctrl.patient.patientAddress.county;
                 address.zipcode = ctrl.patient.patientAddress.zipcode;
                 $("#Address1").blur();
                 $("#Address2").blur();
                 $("#City").blur();
                 $("#State").blur();
+                $("#County").blur();
                 $("#ZipCode").blur();
             }
             ctrl.patient.subscriberInfo[0].subscriberAddressCollection[0] = address;
@@ -724,6 +731,8 @@
                             $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, extend, $scope.careObj);
                         } else if ($scope.careObj.expiryDate == $scope.careObj.previousExpiryDate) {
                             $scope.careObj.changeSchedule = false;
+                        } else if (!$scope.addPatient.currentAuthorizationDocument) {
+                            $scope.addPatient.openModalExisting('exist-schedule-modal', 'md', 'static', false, true, $scope.careObj);
                         }
                     };
 
@@ -1050,7 +1059,7 @@
 
             $rootScope.existingModel.cancel = function () {
                 $timeout(function () {
-                    careObj.expiryDate = careObj.actualExpiryDate;
+                    careObj.expiryDate = careObj.previousExpiryDate;
                     $rootScope.existingModel.close();
                 });
             };
