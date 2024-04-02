@@ -431,7 +431,7 @@
                     if (ctrl.user.employee.id != null) {
                         $("#sboxit-2").select2("val", ctrl.user.employee.id);
                     }
-                });
+                },500);
                 $rootScope.unmaskLoading();
             }).catch(function (data, status) {
                 $rootScope.unmaskLoading();

@@ -185,7 +185,15 @@
         ctrl.deactivateUser = function (employee, status)
         {
             $rootScope.maskLoading();
-            UserDAO.changestatus({id: employee.id, status: 'deactivate'}).then(function (res) {
+            var empStatus;
+            if (employee.employee != null) {
+                if ($rootScope.activateModal.activateEmployee == 'a') {
+                    empStatus = 'activate';
+                } else {
+                    empStatus = 'deactivate';
+                }
+            }
+            UserDAO.changestatus({id: employee.id, status: 'deactivate', employeeStatus: empStatus}).then(function (res) {
                 var length = ctrl.employeeList.length;
                 for (var i = 0; i < length; i++) {
                     if (ctrl.employeeList[i].id === employee.id) {
@@ -210,7 +218,15 @@
 
         ctrl.activateUser = function (employee) {
             $rootScope.maskLoading();
-            UserDAO.changestatus({id: employee.id, status: 'activate'}).then(function (res) {
+            var empStatus;
+            if (employee.employee != null) {
+                if ($rootScope.activateModal.activateEmployee == 'a') {
+                    empStatus = 'activate';
+                } else {
+                    empStatus = 'deactivate';
+                }
+            }
+            UserDAO.changestatus({id: employee.id, status: 'activate', employeeStatus: empStatus}).then(function (res) {
                 var length = ctrl.employeeList.length;
 
                 for (var i = 0; i < length; i++) {
@@ -271,7 +287,7 @@
                         toastr.error(data.data);
                     } else {
                         toastr.error("Password cannot be reset.");
-                    }                    
+                    }
                 }).then(function () {
                     $rootScope.resetUserPasswordModal.close();
                     $rootScope.unmaskLoading();

@@ -114,7 +114,7 @@
                                 <div class="form-group-separator">
                                 </div>
                             </div>
-                            <div ng-if="addUser.user.bindToExisting == 'e' || addUser.editMode == true">
+                            <div ng-if="(addUser.user.bindToExisting == 'e' || addUser.editMode == true) && (addUser.user.employee.id != null || addUser.user.bindToExisting == 'e')">
                                 <div class="form-group" >
                                     <label class="col-sm-3 control-label">
                                         Select Employee
@@ -149,7 +149,7 @@
                                 <div class="form-group-separator">
                                 </div>
                             </div>
-                            <div ng-if='addUser.user.bindToExisting == "w"'>
+                            <div ng-if='addUser.user.bindToExisting == "w" || (addUser.user.employee.id == null && addUser.editMode == true)'>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">
                                         First Name
