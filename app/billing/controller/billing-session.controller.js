@@ -63,7 +63,7 @@
                 ctrl.searchParams.toDate = null;
                 ctrl.errorMsg.toDate = true;
             }
-            if (ctrl.searchParams.fromDate != null && ctrl.searchParams.toDate != null) {
+            if (ctrl.searchParams.fromDate != null && ctrl.searchParams.toDate != null && ctrl.searchParams.insuranceProviderId != null) {
                 ctrl.criteriaSelected = true;
                 ctrl.retrieveSessions();
             } else {
@@ -117,7 +117,7 @@
             BillingDAO.processSessions(ctrl.reviewedFilters, payload).then(function (res) {
                 console.log(res);
                 ctrl.resetFilters();
-                toastr.error("Billing sessions are processed.");
+                toastr.success("Billing sessions are processed.");
 //                $state.go('app.batch_session', {id: res.id});
             }).catch(function (e) {
                 toastr.error("Billing sessions cannot be processed.");
@@ -156,7 +156,6 @@
             if (ctrl.datatableObj.page != null) {
                 pageInfo = ctrl.datatableObj.page.info();
             }
-            ctrl.datatableObj = {};
             var billingSessions = angular.copy(ctrl.billingSessions);
             ctrl.billingSessions = [];
             $("#example-1_wrapper").remove();

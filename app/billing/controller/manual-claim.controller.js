@@ -59,6 +59,7 @@
                 if (res && res.claim1500Data) {
                     ctrl.bilingClaimObj = res;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    ctrl.unbindPatientCondition();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                             if (serviceLine.serviceFromDate)
@@ -83,21 +84,92 @@
             ctrl.manualClaimObj.serviceLines.splice(index, 1);
         };
 
-        ctrl.processManualClaim = function () {
-            ctrl.bilingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
-            if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                ctrl.bilingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
-                ctrl.bilingClaimObj.totalCosts = 0;
-                angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                    ctrl.bilingClaimObj.totalCosts += serviceLine.serviceTotalBill ? serviceLine.serviceTotalBill : 0;
-                });
+        ctrl.unbindPatientCondition = function () {
+            if (ctrl.manualClaimObj.patientConditionRelated) {
+                if (ctrl.manualClaimObj.patientConditionRelated === 'EM') {
+                    ctrl.manualClaimObj.patientConditionRelatedEM === 'true';
+                    ctrl.manualClaimObj.patientConditionRelatedAA = 'false';
+                    ctrl.manualClaimObj.patientConditionRelatedOA = 'false';
+                } else if (ctrl.manualClaimObj.patientConditionRelated === 'OA') {
+                    ctrl.manualClaimObj.patientConditionRelatedOA === 'true';
+                    ctrl.manualClaimObj.patientConditionRelatedEM = 'false';
+                    ctrl.manualClaimObj.patientConditionRelatedAA = 'false';
+                } else if (ctrl.manualClaimObj.patientConditionRelated.indexOf('AA:') > -1) {
+                    ctrl.manualClaimObj.patientConditionRelatedAA === 'true';
+                    ctrl.manualClaimObj.patientConditionRelatedEM = 'false';
+                    ctrl.manualClaimObj.patientConditionRelatedOA = 'false';
+                    ctrl.manualClaimObj.patientConditionRelatedAAState = ctrl.manualClaimObj.patientConditionRelated.split(':')[1];
+                }
             }
-            BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat)}, ctrl.bilingClaimObj)
-                    .then(function (res) {
-                        $state.go('app.billing_batch', {id: res.id});
-                    }).catch(function () {
-                toastr.error("Can not process manual claim.");
-            });
+        };
+
+        ctrl.bindPatientCondition = function (type) {
+            switch (type) {
+                case 'EM':
+                    if (ctrl.manualClaimObj.patientConditionRelatedEM === 'true') {
+                        if (ctrl.manualClaimObj.patientConditionRelatedAA === 'true')
+                            ctrl.manualClaimObj.patientConditionRelatedAA = 'false';
+                        if (ctrl.manualClaimObj.patientConditionRelatedOA === 'true')
+                            ctrl.manualClaimObj.patientConditionRelatedOA = 'false';
+                        ctrl.manualClaimObj.patientConditionRelated = 'EM';
+                    } else {
+                        ctrl.manualClaimObj.patientConditionRelated = null;
+                    }
+                    break;
+                case 'AA':
+                    if (ctrl.manualClaimObj.patientConditionRelatedAA === 'true') {
+                        if (ctrl.manualClaimObj.patientConditionRelatedEM === 'true')
+                            ctrl.manualClaimObj.patientConditionRelatedEM = 'false';
+                        if (ctrl.manualClaimObj.patientConditionRelatedOA === 'true')
+                            ctrl.manualClaimObj.patientConditionRelatedOA = 'false';
+                        ctrl.manualClaimObj.patientConditionRelated = 'AA' + ctrl.manualClaimObj.patientConditionRelatedAAState ? ':' + ctrl.manualClaimObj.patientConditionRelatedAAState : '';
+                    } else {
+                        ctrl.manualClaimObj.patientConditionRelated = null;
+                    }
+                    break;
+                case 'OA':
+                    if (ctrl.manualClaimObj.patientConditionRelatedOA === 'true') {
+                        if (ctrl.manualClaimObj.patientConditionRelatedEM === 'true')
+                            ctrl.manualClaimObj.patientConditionRelatedEM = 'false';
+                        if (ctrl.manualClaimObj.patientConditionRelatedAA === 'true')
+                            ctrl.manualClaimObj.patientConditionRelatedAA = 'false';
+                        ctrl.manualClaimObj.patientConditionRelated = 'OA';
+                    } else {
+                        ctrl.manualClaimObj.patientConditionRelated = null;
+                    }
+                    break;
+                case 'STATE':
+                    ctrl.manualClaimObj.patientConditionRelated = 'AA:' + ctrl.manualClaimObj.patientConditionRelatedAAState;
+            }
+        };
+
+
+        ctrl.processManualClaim = function () {
+            if ($('#manual_claim_form')[0].checkValidity()) {
+//                console.log('valid');
+                if (!ctrl.manualClaimObj.serviceLines || ctrl.manualClaimObj.serviceLines.length === 0) {
+                    toastr.error("Please add atleast one service line.");
+                    return;
+                }
+                ctrl.bilingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
+                if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                    ctrl.bilingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
+                    ctrl.bilingClaimObj.totalCosts = 0;
+                    angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        ctrl.bilingClaimObj.totalCosts += serviceLine.serviceTotalBill ? serviceLine.serviceTotalBill : 0;
+                    });
+                }
+                BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat)}, ctrl.bilingClaimObj)
+                        .then(function (res) {
+                            $state.go('app.billing_batch', {id: res.id});
+                        }).catch(function () {
+                    toastr.error("Can not process manual claim.");
+                });
+            } else {
+//                console.log('invalid');
+                $('input,textarea,select').filter('[required]:visible').addClass('danger-input');
+                $('input,textarea,select').filter('.ng-invalid:first').focus();
+            }
         };
 
 //        InsurerDAO.retrieveAll().then(function (res) {
