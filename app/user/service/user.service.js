@@ -13,7 +13,8 @@
             update: {
                 method: 'POST',
                 params: {
-                    withoutEmployee: '@withoutEmployee'
+                    withoutEmployee: '@withoutEmployee',
+                    appPath: window.location.toString()
                 }
             },
             delete: {
@@ -40,7 +41,8 @@
                 method: 'POST',
                 params: {
                     action: "resetpassword",
-                    userName: "@userName"
+                    userName: "@userName",
+                    appPath: window.location.toString()
                 }
             },
             getUserFeatures: {
@@ -65,7 +67,7 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status,employeeStatus:data.employeeStatus}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, employeeStatus: data.employeeStatus}).$promise;
             },
             get: function (params) {
                 return api.get({action: params.id}).$promise;
