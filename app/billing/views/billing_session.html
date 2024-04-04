@@ -107,7 +107,7 @@
                             <br/>
                             Insurance Provider: {{billingSession.insuranceProvider}}
                             <br/>
-                            Pay Period: {{billingSession.sessionStartDate|date :dateFormat}} - {{billingSession.sessionEndDate|date :dateFormat}}
+                            <span ng-if="billingSession.sessionStartDate && billingSession.sessionEndDate">Pay Period: {{billingSession.sessionStartDate|date :dateFormat}} - {{billingSession.sessionEndDate|date :dateFormat}}</span>
                         </div>
 
                     </div>
