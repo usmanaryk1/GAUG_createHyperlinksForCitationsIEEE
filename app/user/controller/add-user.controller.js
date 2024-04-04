@@ -285,7 +285,7 @@
                 if (!ctrl.retrivalRunning) {
 
 
-                    if (ctrl.user.bindToExisting == null) {
+                    if (!ctrl.editMode && ctrl.user.bindToExisting == null) {
                         ctrl.user.bindToExisting = "e";
                     }
 
