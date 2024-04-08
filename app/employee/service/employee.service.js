@@ -54,6 +54,13 @@
                 transformResponse: function (data, headersGetter, status) {
                     return {data: JSON.parse(data)};
                 }
+            },
+            getEmployeeExceptUser: {
+                method: 'GET',
+                isArray: true,
+                params: {
+                    action: 'selectexceptruser'
+                }
             }
         });
         return {
@@ -89,6 +96,9 @@
             },
             checkIfSsnExists: function (data) {
                 return api.verifySsn(data).$promise;
+            },
+            getEmployeeExceptUser: function () {
+                return api.getEmployeeExceptUser().$promise;
             }
         };
     };

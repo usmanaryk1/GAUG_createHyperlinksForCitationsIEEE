@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="angular-bootstrap-calendar.css">
 
         <script src="assets/js/jquery-1.11.1.min.js"></script>
-    
+
         <script>
             var appData = {};
 
@@ -59,7 +59,7 @@
 
     </head>
     <body class="page-body" ng-controller="MainCtrl" ng-class="{'settings-pane-open': layoutOptions.settingsPane.isOpen, 'chat-open': layoutOptions.chat.isOpen, 'login-page': isLoginPage && isMainPage == false, 'login-light': (isLoginPage || isLightLoginPage) && isMainPage == false, 'lockscreen-page': isLockscreenPage && isMainPage == false, 'right-sidebar': layoutOptions.sidebar.isRight, 'boxed-container': layoutOptions.container.isBoxed}">
-        
+
         <!-- 
         <settings-pane></settings-pane>
     
@@ -74,17 +74,54 @@
             </div>
 
         </script>
+        <script type="text/ng-template" id="resetPasswordModal">
+
+    <form class="validate form-horizontal" name="resetPasswordForm" id="reset_password_form" >
+        <div class="modal-header">
+            <h4 class="modal-title">Reset Password</h4>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label add-padding-modal" for="password">
+                        New Password
+                    </label>
+                    <div class="col-sm-6 add-padding-modal">
+                        <input class="form-control" id="password" name="password" type="password" ng-model="resetPasswordModal.password" data-validate="required"  data-message-required="Please enter password.">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group" ng-class="{'validate-has-error':resetPasswordModal.passwordNotMatch}">
+                    <label class="col-sm-4 control-label add-padding-modal" for="confirmPassword">
+                        Confirm Password
+                    </label>
+                    <div class="col-sm-6 add-padding-modal">
+                        <input class="form-control" id="confirmPassword" name="confirmPassword" type="password" ng-model="resetPasswordModal.confirmPassword" data-validate="required"  data-message-required="Please enter confirm password.">
+                        <span id="password-error" class="validate-has-error" ng-if="resetPasswordModal.passwordNotMatch">Password and confirm password does not match.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success" ng-click="resetPasswordModal.save();">Save</button>            
+        </div>
+</form>
+        </script>
+
         <div ng-cloak style="{{(paginationLoading==true && !maskLoadingRunning)?'display: block;position: fixed;top: 0;left: 0;right: 0;z-index: 10000;':'display:none'}}">
             <div style="width: 80px;
-                margin: 0 auto;
-                padding: 4px 10px;
-                color: #ae6200;
-                font-weight: bold;
-                text-align: center;
-                background: #ffe7c2;
-                border: 2px solid #ff9d00;
-                border-top: 0;
-                box-shadow: 0 0 10px rgba(0,0,0,0.5);">Loading</div>
+                 margin: 0 auto;
+                 padding: 4px 10px;
+                 color: #ae6200;
+                 font-weight: bold;
+                 text-align: center;
+                 background: #ffe7c2;
+                 border: 2px solid #ff9d00;
+                 border-top: 0;
+                 box-shadow: 0 0 10px rgba(0,0,0,0.5);">Loading</div>
         </div>
         <div id="mainDiv" class="page-container" ui-view></div>
         <!--        <div class="page-loading-overlay">
@@ -154,6 +191,7 @@
         <script src="app/common/service/position.service.js"></script>
         <script src="app/common/service/eventtype.service.js"></script>
         <script src="app/report/service/report.service.js"></script>
+        <script src="app/user/service/user.service.js"></script>
 
         <!--Controllers-->
         <script src="app/login.controller.js"></script>
@@ -182,12 +220,18 @@
         <script src="app/calendar/controller/patient-calendar.controller.js"></script>
         <script src="app/report/controller/report.controller.js"></script>
 
+        <script src="app/user/controller/view-users.controller.js"></script>
+        <script src="app/admin/controller/dashboard.controller.js"></script>
+        <script src="app/security/controller/manage-role.controller.js"></script>
+        <script src="app/security/controller/manage-access.controller.js"></script>
+        <script src="app/user/controller/add-user.controller.js"></script>
+
         <!-- JavaScripts initializations and stuff -->
         <script src="app/xenon-custom.js"></script>
         <script src="assets/js/xenon-custom.js"></script>
 
         <!-- Bottom Scripts -->
-       <script src="assets/js/download/jquery.dataTables.min.js"></script>
+        <script src="assets/js/download/jquery.dataTables.min.js"></script>
         <!-- 
         <script src="assets/js/datatables/js/jquery.dataTables.min.js"></script>
         -->
@@ -216,25 +260,25 @@
         <script src="app/js/angular-google-maps/load-google-maps.js"></script>
         <script>
 
-        function sticky_relocate() {
-            $element = $('#sticky-anchor');
-            if (jQuery.contains(document, $element[0])) {
-                var window_top = $(window).scrollTop();
-                var div_top = $('#sticky-anchor').offset().top;
-                var width = $("div#sticky").width();
-                if (window_top > div_top) {
-                    $('#sticky').addClass('stick');
-                    $('#sticky').width(width);
-                } else {
-                    $('#sticky').removeClass('stick');
-                    $('#sticky').removeAttr( 'style' );
+                function sticky_relocate() {
+                    $element = $('#sticky-anchor');
+                    if (jQuery.contains(document, $element[0])) {
+                        var window_top = $(window).scrollTop();
+                        var div_top = $('#sticky-anchor').offset().top;
+                        var width = $("div#sticky").width();
+                        if (window_top > div_top) {
+                            $('#sticky').addClass('stick');
+                            $('#sticky').width(width);
+                        } else {
+                            $('#sticky').removeClass('stick');
+                            $('#sticky').removeAttr('style');
+                        }
+                    }
                 }
-            }
-        }
 
-        $(function () {
-            $(window).scroll(sticky_relocate);
-        });
+                $(function () {
+                    $(window).scroll(sticky_relocate);
+                });
         </script>
     </body>
 </html>

@@ -22,13 +22,29 @@ angular.module('xenon.controllers', []).
             $rootScope.isLockscreenPage = true;
             $rootScope.isMainPage = false;
         }).
-        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state,$document)
+        controller('MainCtrl', function ($scope, $rootScope, $location, $layout, $layoutToggles, $pageLoadingBar, Fullscreen, $modal, Idle, $state, $document, UserDAO, $timeout)
         {
             var userName = getCookie("un");
             if (userName != null) {
                 $rootScope.currentUser = {userName: userName};
                 $rootScope.startIdle();
-            }
+            }            
+            $rootScope.hasAccess = function (key) {
+                if (key != null) {
+                    var keys = key.split(",");
+                    if ($rootScope.currentUser.allowedFeature != null) {
+                        for (var i = 0; i < keys.length; i++) {                            
+                            if ($rootScope.currentUser.allowedFeature.indexOf(keys[i]) >= 0) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
+            };
+
             $rootScope.serverPath = ontimetest.weburl;
             $rootScope.validNumber = function (number) {
                 return !isNaN(number);
@@ -47,25 +63,62 @@ angular.module('xenon.controllers', []).
             $rootScope.validFileTypes = ["bmp", "png", "jpg", "jpeg", "gif", "txt", "xls", "xlsx", "doc", "docx", "pdf", "csv"];
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
 
-               $scope.showMenu = false;
+            $scope.showMenu = false;
+            $rootScope.openResetPasswordModal = function (modal_id, modal_size, modal_backdrop)
+            {
+                if ($state.current.name != 'login') {
+                    $rootScope.resetPasswordModal = $modal.open({
+                        templateUrl: modal_id,
+                        size: modal_size,
+                        backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                        keyboard: false
+                    });
+                }
+                $rootScope.resetPasswordModal.save = function () {
+                    $timeout(function () {
+                        if ($rootScope.resetPasswordModal.password != $rootScope.resetPasswordModal.confirmPassword) {
+                            $rootScope.resetPasswordModal.passwordNotMatch = true;
+                        } else {
+                            $rootScope.resetPasswordModal.passwordNotMatch = false;
+                        }
 
-                $scope.openMenu = function($event) {
-                  $event.stopPropagation()
-                    if (!$scope.showMenu) {
-                        var closeMe = function() { 
-                          $scope.showMenu = false;
-                          $document.unbind('click', this);
-                        };
-                        $document.bind('click', function(event) {
-                        $scope.$apply(function(){
-                           closeMe($scope)
-                        })
-                          }); 
-                        $scope.showMenu = true;
-                    } else {
-                        $scope.showMenu = false;
-                    } 
+                        if ($("#reset_password_form")[0].checkValidity() && !$rootScope.resetPasswordModal.passwordNotMatch) {
+                            $rootScope.maskLoading();
+                            if ($rootScope.currentUser.userName == null) {
+                                $rootScope.currentUser.userName = getCookie("un");
+                            }
+                            UserDAO.changePassword({username: $rootScope.currentUser.userName, password: $rootScope.resetPasswordModal.password}).then(function (res) {
+                                toastr.success("Password changed successfully.");
+                                setCookie("changePassword", false, 7);
+                                $rootScope.resetPasswordModal.close();
+                            }).catch(function (data, status) {
+                                toastr.error("Password cannot be changed.");
+                                $rootScope.resetPasswordModal.close();
+                            }).then(function () {
+                                $rootScope.unmaskLoading();
+                            });
+                        }
+                    });
                 };
+            };
+
+            $scope.openMenu = function ($event) {
+                $event.stopPropagation()
+                if (!$scope.showMenu) {
+                    var closeMe = function () {
+                        $scope.showMenu = false;
+                        $document.unbind('click', this);
+                    };
+                    $document.bind('click', function (event) {
+                        $scope.$apply(function () {
+                            closeMe($scope)
+                        })
+                    });
+                    $scope.showMenu = true;
+                } else {
+                    $scope.showMenu = false;
+                }
+            };
 
             $rootScope.maskLoading = function () {
                 $rootScope.maskLoadingRunning = true;
@@ -294,14 +347,23 @@ angular.module('xenon.controllers', []).
 
             $scope.menuItems = $sidebarMenuItems.prepareSidebarMenu().getAll();
 
+            var $sidebarMenuItems = $menuItems.instantiate();
+
+            $scope.menuItems = $sidebarMenuItems.prepareSidebarMenu().getAll();
+
+
             // Set Active Menu Item
             $sidebarMenuItems.setActive($location.path());
+            var $sidebarAdminMenuItems = $menuItems.instantiate();
+            $scope.adminMenuItems = $sidebarAdminMenuItems.prepareAdminMenu().getAll();
+            $sidebarAdminMenuItems.setActive($state.current.name);
 
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams)
             {
                 $sidebarMenuItems.setActive($state.current.name);
                 //Show menu for all states. To be overrided by respective controllers.
                 $rootScope.layoutOptions.sidebar.hideMenu = false;
+                $sidebarAdminMenuItems.setActive($state.current.name);
             });
 
             // Trigger menu setup
