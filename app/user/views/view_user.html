@@ -294,11 +294,12 @@
     <form class="form-horizontal" ng-if="activateModal.user.employee!=null && activateModal.activateEmployee!=null">
     
     <div class="form-group">
-        <label class="col-sm-5 control-label"> </br>
+        </br>
+        <div class="col-sm-5" style="padding-top:4px;">
             Employee associated with user
-        </label>
-        <div class="col-sm-5 form-control-static">
-            <toggle-switch
+        </div>
+        <div class="col-sm-5">
+            <toggle-switch  
                   ng-model="activateModal.activateEmployee"
                   on-label="Activate"
                   off-label="Deactivate"
