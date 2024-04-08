@@ -1,6 +1,7 @@
 (function () {
     function BillingHistoryCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, BillingDAO, InsurerDAO, $state, Page) {
         var ctrl = this;
+        Page.setTitle("Billing History");
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
@@ -52,7 +53,7 @@
                 BillingDAO.searchSessions(ctrl.searchParams).then(function (res) {
                     ctrl.dataRetrieved = true;
                     ctrl.billingSessions = res;
-                    console.log(res);
+//                    console.log(res);
                     angular.forEach(ctrl.billingSessions, function (billingObj) {
                         billingObj.processedOn = Date.parse(billingObj.processedOn);
                     });

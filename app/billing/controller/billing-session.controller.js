@@ -1,6 +1,7 @@
 (function () {
     function BillingSessionCtrl($rootScope, $filter, $modal, $timeout, PayrollDAO, BillingDAO, InsurerDAO, $state, Page) {
         var ctrl = this;
+        Page.setTitle("Billing Session");
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         ctrl.searchParams = {};
@@ -115,7 +116,7 @@
             ctrl.reviewedFilters.processedOn = $filter('date')(new Date(), $rootScope.dateFormat);
             $rootScope.maskLoading();
             BillingDAO.processSessions(ctrl.reviewedFilters, payload).then(function (res) {
-                console.log(res);
+//                console.log(res);
                 ctrl.resetFilters();
                 toastr.success("Billing sessions are processed.");
 //                $state.go('app.batch_session', {id: res.id});
