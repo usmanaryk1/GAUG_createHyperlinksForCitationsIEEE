@@ -6,6 +6,21 @@
         ctrl.manualClaimObj = {};
         ctrl.reviewMode = false;
         ctrl.showPatientError = false;
+        ctrl.calculateTotalCharges = function () {
+            if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                var totalCharges = 0;
+                angular.forEach(ctrl.manualClaimObj.serviceLines, function (item) {
+                    if (!isNaN(item.serviceTotalBill)) {
+                        totalCharges += parseFloat(item.serviceTotalBill);
+                    }
+                });
+                ctrl.manualClaimObj.totalCharges = totalCharges;
+            } else {
+                if (!ctrl.manualClaimObj)
+                    ctrl.manualClaimObj = {};
+                ctrl.manualClaimObj.totalCharges = totalCharges;
+            }
+        };
         if ($state.params.id && $state.params.id !== '') {
             ctrl.reviewMode = true;
             Page.setTitle("Claim 1500");
@@ -13,6 +28,7 @@
             var claim1500 = JSON.parse(localStorage.getItem('claim1500'));
             if (claim1500 && claim1500[$state.params.id]) {
                 ctrl.manualClaimObj = claim1500[$state.params.id];
+                ctrl.calculateTotalCharges();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                         if (serviceLine.serviceFromDate)
@@ -26,6 +42,7 @@
                 BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
                     $rootScope.unmaskLoading();
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    ctrl.calculateTotalCharges();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                             if (serviceLine.serviceFromDate)
@@ -63,6 +80,7 @@
                 if (res && res.claim1500Data) {
                     ctrl.billingClaimObj = res;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    ctrl.calculateTotalCharges();
 //                    console.log(JSON.stringify(ctrl.billingClaimObj));
                     ctrl.unbindPatientCondition();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
@@ -76,7 +94,7 @@
                 }
             }).catch(function () {
                 toastr.error("Failed to retrieve patients.");
-            }).then(function(){
+            }).then(function () {
                 $rootScope.paginationLoading = false;
             });
         };
@@ -173,7 +191,7 @@
                     ctrl.billingClaimObj.authorizedCodes = [];
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
                         ctrl.billingClaimObj.totalCosts += serviceLine.serviceTotalBill ? serviceLine.serviceTotalBill : 0;
-                        if(ctrl.billingClaimObj.authorizedCodes.indexOf(serviceLine.serviceProcedureCode) === -1){
+                        if (ctrl.billingClaimObj.authorizedCodes.indexOf(serviceLine.serviceProcedureCode) === -1) {
                             ctrl.billingClaimObj.authorizedCodes.push(serviceLine.serviceProcedureCode);
                         }
                     });
@@ -192,11 +210,11 @@
             }
         };
 
-//        InsurerDAO.retrieveAll().then(function (res) {
-//            ctrl.payorList = res;
-//        }).catch(function () {
-//            toastr.error("Failed to retrieve insurance provider list.");
-//        });
+        InsurerDAO.retrieveAll().then(function (res) {
+            ctrl.payorList = res;
+        }).catch(function () {
+            toastr.error("Failed to retrieve insurance provider list.");
+        });
 
     }
     ;
