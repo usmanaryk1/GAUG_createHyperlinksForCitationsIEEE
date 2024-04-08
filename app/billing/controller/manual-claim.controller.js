@@ -6,6 +6,7 @@
         ctrl.manualClaimObj = {};
         ctrl.reviewMode = false;
         ctrl.showPatientError = false;
+        ctrl.claimId = undefined;
         ctrl.calculateTotalCharges = function () {
             if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                 var totalCharges = 0;
@@ -41,6 +42,7 @@
                 $rootScope.maskLoading();
                 BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
                     $rootScope.unmaskLoading();
+                    ctrl.claimId = res.id;
                     ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
                     ctrl.calculateTotalCharges();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
