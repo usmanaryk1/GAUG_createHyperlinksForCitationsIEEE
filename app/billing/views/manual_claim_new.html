@@ -86,6 +86,9 @@
     .print-width-30{
         width: 30%!important;
     }
+    .print-width-55{
+        width: 55%!important;
+    }
     .print-text-left{
         float: left!important;
         margin-left: 0px!important;
@@ -705,8 +708,8 @@
                         <font class="numbers">16 </font>
                         <b>DATES PATIENT UNABLE TO WORK IN<br /><p>CURRENT OCCUPATION  <small>(MM/DD/YYYY)</small> </p>
                             <p> 
-                                FROM: <input type="text" id="field-93" name="absenceFromDate" class="width_35 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="manualClaim.manualClaimObj.absenceFromDate" max-date="todayDate"/>&nbsp;
-                                TO: <input type="text" id="field-93" name="absenceToDate" class="width_35 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="manualClaim.manualClaimObj.absenceToDate" max-date="todayDate"/>&nbsp;
+                                FROM: <input type="text" id="field-93" name="absenceFromDate" class="width_40 print-width-30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="manualClaim.manualClaimObj.absenceFromDate" max-date="todayDate"/>&nbsp;
+                                TO: <input type="text" id="field-93" name="absenceToDate" class="width_40 print-width-30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="manualClaim.manualClaimObj.absenceToDate" max-date="todayDate"/>&nbsp;
 
                             </p> </br>
                     </div>  
@@ -803,7 +806,7 @@
                         </p>
                     </div>  
 
-                    <div class="text_right" style="font-size:10px;">
+                    <div class="text_right print-no-margin" style="font-size:10px;">
                         <b>$ CHARGES </b>
                         <p>  
                             <input type="text" class="width_40" name="outsideLabPrice" ng-model="manualClaim.manualClaimObj.outsideLabPrice" />
@@ -896,13 +899,13 @@
 
                         B 
                     </th>
-                    <th class="border" style="width: 7%">
+                    <th class="border" style="width: 6%">
                         C 
                     </th>
                     <th class="border"  style="width: 22%">
                         D 
                     </th>
-                    <th class="border"  style="width: 8%">
+                    <th class="border"  style="width: 6%">
                         E 
                     </th>
                     <th class="border"  style="width: 7%">
@@ -917,7 +920,7 @@
                     <th class="border" >
                         I 
                     </th>
-                    <th class="border_2" style="width: 7%">
+                    <th class="border_2" style="width: 9%">
                         J 
                     </th>
                 </tr>
@@ -958,10 +961,10 @@
                 <tr ng-repeat-start="serviceLine in manualClaim.manualClaimObj.serviceLines" on-repeat-end="manualClaim.checkReviewMode()"><!-- ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines"-->
                     <td class="border width_1" rowspan="2" >{{$index + 1}}</td>
                     <td class="border" >
-                        <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceFromDate" max-date="todayDate" required/>&nbsp;
+                        <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 print-width-55 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceFromDate" max-date="todayDate" required/>&nbsp;
                             <div class="clearfix display-print"></div>
                             <div class="display-print">&nbsp;</div>
-                            TO: <span class="display-print" style="display: inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate" required/>&nbsp; </div>
+                            TO: <span class="display-print" style="display: inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 print-width-55 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate" required/>&nbsp; </div>
                     </td>
                     <td class="border" >
 
