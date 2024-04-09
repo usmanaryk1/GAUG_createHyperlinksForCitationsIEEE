@@ -162,9 +162,10 @@
             $formService.resetRadios();
             $rootScope.activateModal.action = action;
             $rootScope.activateModal.user = user;
-            if(user.employee.status == 'i')
+            
+            if(user.employee.status == 'a')
                 $rootScope.activateModal.activateEmployee = true;
-            else
+            else if(user.employee.status == 'i')
                 $rootScope.activateModal.activateEmployee = false;
             
             $rootScope.activateModal.confirm = function (user) {
