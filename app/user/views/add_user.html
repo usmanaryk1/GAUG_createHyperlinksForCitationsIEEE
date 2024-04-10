@@ -75,12 +75,12 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <select class="form-control" ng-disabled="currentUser.userName == addUser.user.username" id="Role" name="Role" ng-model="addUser.user.roleId"
-                                                data-validate="required" data-message-required="Please select a role."
-                                                ng-options="role.id as role.name for role in addUser.roles">
-                                            <option value="">
-                                                Select a role
-                                            </option>
-                                        </select>
+                                            data-validate="required" data-message-required="Please select a role."
+                                            ng-options="role.id as role.name for role in addUser.roles">
+                                        <option value="">
+                                            Select a role
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group-separator">
@@ -88,25 +88,33 @@
                             <div ng-if="!addUser.editMode">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">
-                                        Do you want to bind existing employee with this user?
+                                        Create user with
                                     </label>
                                     <div class="col-sm-9">
-                                        <div class="input-group">
-                                            <label class="cbr-inline">
-                                                <input class="cbr cbr-primary" name="BindToExisting" type="radio" ng-value="true" ng-model="addUser.user.bindToExisting" ng-change="addUser.bindToExistingChange()"/>
-                                                Yes                                        
-                                            </label>
-                                            <label class="cbr-inline">
-                                                <input class="cbr cbr-primary" name="BindToExisting" type="radio" ng-value="false" ng-model="addUser.user.bindToExisting" ng-change="addUser.bindToExistingChange()"/>
-                                                No                                        
-                                            </label>
+                                        <div class="form-block">
+                                            <div>
+                                                <label>
+                                                    <input class="cbr cbr-primary" name="BindToExisting" type="radio" ng-value="'e'" ng-model="addUser.user.bindToExisting" ng-change="addUser.bindToExistingChange()"/>
+                                                    Existing employee                                                   
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input class="cbr cbr-primary" name="BindToExisting" type="radio" ng-value="'n'" ng-model="addUser.user.bindToExisting" ng-change="addUser.bindToExistingChange()"/>
+                                                    New employee
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input class="cbr cbr-primary" name="BindToExisting" type="radio" ng-value="'w'" ng-model="addUser.user.bindToExisting" ng-change="addUser.bindToExistingChange()"/>
+                                                    Without employee
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group-separator">
                                 </div>
                             </div>
-                            <div ng-if="addUser.user.bindToExisting == true || addUser.editMode == true">
+                            <div ng-if="(addUser.user.bindToExisting == 'e' || addUser.editMode == true) && (addUser.user.employee.id != null || addUser.user.bindToExisting == 'e')">
                                 <div class="form-group" >
                                     <label class="col-sm-3 control-label">
                                         Select Employee
@@ -141,7 +149,32 @@
                                 <div class="form-group-separator">
                                 </div>
                             </div>
-                            <div ng-show="addUser.user.bindToExisting == false && !addUser.editMode">
+                            <div ng-if='addUser.user.bindToExisting == "w" || (addUser.user.employee.id == null && addUser.editMode == true)'>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">
+                                        First Name
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input charactersonly class="form-control" name="FirstName" type="text" maxlength="100" 
+                                               ng-model="addUser.user.employee.fName"
+                                               data-validate="required" data-message-required="Please enter First Name."/>
+                                    </div>
+                                </div>
+                                <div class="form-group-separator">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">
+                                        Last Name
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input charactersonly class="form-control" name="LastName" type="text" maxlength="100" ng-model="addUser.user.employee.lName"
+                                               data-validate="required" data-message-required="Please enter Last Name."/>
+                                    </div>
+                                </div>
+                                <div class="form-group-separator">
+                                </div>
+                            </div>
+                            <div ng-show="addUser.user.bindToExisting == 'n' && !addUser.editMode">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">
                                         First Name
@@ -268,7 +301,8 @@
                                         Social Security #
                                     </label>
                                     <div class="col-sm-9">
-                                        <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{'border-danger':addUser.ssn.exists}" name="SocialSecurity" type="text" ng-model="addUser.user.employee.ssn"
+                                        <input id="SocialSecurity" numbers-only="true" class="form-control" ng-class="{
+                                                    'border-danger':addUser.ssn.exists}" name="SocialSecurity" type="text" ng-model="addUser.user.employee.ssn"
                                                data-validate="required" data-message-required="Please enter Social Security." maxlength="9" 
                                                ng-blur="checkSsnNumber();" ng-change="addUser.ssn.exists = false;"/>
                                         <span ng-if="addUser.ssn.exists" class="validate-has-error">Social security number already exists.</span>
@@ -295,7 +329,7 @@
                                 </div>
                                 <div class="form-group-separator">
                                 </div>                                
-                                <div class="form-group" ng-if="addUser.user.bindToExisting == false && !addUser.editMode">
+                                <div class="form-group" ng-if="addUser.user.bindToExisting == 'n' && !addUser.editMode">
                                     <label class="col-sm-3 control-label">
                                         Gender
                                     </label>
@@ -441,7 +475,7 @@
                                 </div>
                                 <div class="form-group-separator">
                                 </div>
-                                <div class="form-group" ng-if="addUser.user.bindToExisting == false && !addUser.editMode">
+                                <div class="form-group" ng-if="addUser.user.bindToExisting == 'n' && !addUser.editMode">
                                     <label class="col-sm-3 control-label">
                                         Position
                                     </label>

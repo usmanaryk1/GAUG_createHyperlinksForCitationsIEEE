@@ -19,7 +19,7 @@
         };
         ctrl.bindToExistingChange = function () {
             var email = ctrl.user.employee.email;
-            if (ctrl.user.bindToExisting) {
+            if (ctrl.user.bindToExisting == 'e') {
                 ctrl.user.employee = null;
             } else {
                 ctrl.user.employee = {email: email};
@@ -58,7 +58,7 @@
                 }
             }
             $formService.resetRadios();
-        });        
+        });
         ctrl.applicationFileObj = {};
         ctrl.w4FileObj = {};
         ctrl.ssn = {};
@@ -159,7 +159,7 @@
                                 var reqParam;
                                 if (ctrl.user.id && ctrl.user.id !== null) {
                                     reqParam = 'updateuser';
-                                    updateUser(reqParam, employeeToSave);                                    
+                                    updateUser(reqParam, employeeToSave);
                                 } else {
                                     employeeToSave.orgCode = ontimetest.company_code;
                                     ctrl.user.employee.orgCode = ontimetest.company_code;
@@ -188,8 +188,11 @@
             userToSave.employee = employeeToSave;
             userToSave.orgCode = ontimetest.company_code;
             delete userToSave.bindToExisting;
+            if (ctrl.user.bindToExisting == 'w') {                
+                userToSave.withoutEmployee = 'y';
+            }
             UserDAO.update({action: reqParam, data: userToSave})
-                    .then(function (employeeRes) {                        
+                    .then(function (employeeRes) {
                         toastr.success("User saved.");
                         $state.go('admin.user-list', {status: 'active'});
                         //Reset dirty status of form
@@ -245,7 +248,7 @@
                         ctrl.otherLanguageCheckbox = true;
                         ctrl.refreshLanguages();
                     }
-                    ctrl.retrivalRunning = false;                    
+                    ctrl.retrivalRunning = false;
                 }).catch(function (data, status) {
                     toastr.error("Failed to retrieve user.");
                     ctrl.retrivalRunning = false;
@@ -267,14 +270,14 @@
         ;
 
         ctrl.tab1DataInit = function () {
-            ctrl.formDirty = false;             
+            ctrl.formDirty = false;
             $("#add_employee_form input:text, #add_employee_form textarea #add_employee_form select").first().focus();
             //to set edit mode in tab change
             if (!$state.params.id || $state.params.id === '') {
                 ctrl.editMode = false;
                 ctrl.user.employee = {};
             } else {
-               
+
                 ctrl.editMode = true;
             }
             //to set radio buttons on tab init..
@@ -282,8 +285,8 @@
                 if (!ctrl.retrivalRunning) {
 
 
-                    if (ctrl.user.bindToExisting == null) {
-                        ctrl.user.bindToExisting = true;
+                    if (!ctrl.editMode && ctrl.user.bindToExisting == null) {
+                        ctrl.user.bindToExisting = "e";
                     }
 
 //                    $formService.setRadioValues('Position', ctrl.user.employee.position);
@@ -428,7 +431,7 @@
                     if (ctrl.user.employee.id != null) {
                         $("#sboxit-2").select2("val", ctrl.user.employee.id);
                     }
-                });
+                },500);
                 $rootScope.unmaskLoading();
             }).catch(function (data, status) {
                 $rootScope.unmaskLoading();

@@ -11,7 +11,11 @@
             },
             //this method will be used for user save or update based on the action passed
             update: {
-                method: 'POST'
+                method: 'POST',
+                params: {
+                    withoutEmployee: '@withoutEmployee',
+                    appPath: window.location.toString()
+                }
             },
             delete: {
                 method: 'GET'
@@ -29,7 +33,16 @@
             changePassword: {
                 method: 'POST',
                 params: {
-                    action: "changepassword"
+                    action: "changepassword",
+                    oldPassword: "@oldPassword"
+                }
+            },
+            resetUserPassword: {
+                method: 'POST',
+                params: {
+                    action: "resetpassword",
+                    userName: "@userName",
+                    appPath: window.location.toString()
                 }
             },
             getUserFeatures: {
@@ -54,7 +67,7 @@
                 return api.delete({action: 'delete', subAction: data.id}).$promise;
             },
             changestatus: function (data) {
-                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
+                return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, employeeStatus: data.employeeStatus}).$promise;
             },
             get: function (params) {
                 return api.get({action: params.id}).$promise;
@@ -64,6 +77,9 @@
             },
             changePassword: function (data) {
                 return api.changePassword(data).$promise;
+            },
+            resetUserPassword: function (data) {
+                return api.resetUserPassword(null, data).$promise;
             },
             getUserFeatures: function (data) {
                 return api.getUserFeatures(data).$promise;

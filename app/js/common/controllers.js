@@ -28,12 +28,12 @@ angular.module('xenon.controllers', []).
             if (userName != null) {
                 $rootScope.currentUser = {userName: userName};
                 $rootScope.startIdle();
-            }            
+            }
             $rootScope.hasAccess = function (key) {
                 if (key != null) {
                     var keys = key.split(",");
                     if ($rootScope.currentUser.allowedFeature != null) {
-                        for (var i = 0; i < keys.length; i++) {                            
+                        for (var i = 0; i < keys.length; i++) {
                             if ($rootScope.currentUser.allowedFeature.indexOf(keys[i]) >= 0) {
                                 return true;
                             }
@@ -64,8 +64,9 @@ angular.module('xenon.controllers', []).
             $rootScope.validImageFileTypes = ["bmp", "png", "jpg", "jpeg", "gif"];
 
             $scope.showMenu = false;
-            $rootScope.openResetPasswordModal = function (modal_id, modal_size, modal_backdrop)
+            $rootScope.openResetPasswordModal = function (modal_id, modal_size, modal_backdrop, changePassword)
             {
+
                 if ($state.current.name != 'login') {
                     $rootScope.resetPasswordModal = $modal.open({
                         templateUrl: modal_id,
@@ -73,6 +74,7 @@ angular.module('xenon.controllers', []).
                         backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                         keyboard: false
                     });
+                    $rootScope.resetPasswordModal.changePassword = changePassword;
                 }
                 $rootScope.resetPasswordModal.save = function () {
                     $timeout(function () {
@@ -87,13 +89,21 @@ angular.module('xenon.controllers', []).
                             if ($rootScope.currentUser.userName == null) {
                                 $rootScope.currentUser.userName = getCookie("un");
                             }
-                            UserDAO.changePassword({username: $rootScope.currentUser.userName, password: $rootScope.resetPasswordModal.password}).then(function (res) {
+                            var objToSend = {username: $rootScope.currentUser.userName, password: $rootScope.resetPasswordModal.password};
+                            if ($rootScope.resetPasswordModal.changePassword) {
+                                objToSend.oldPassword = $rootScope.resetPasswordModal.oldPassword;
+                            }
+                            UserDAO.changePassword(objToSend).then(function (res) {
                                 toastr.success("Password changed successfully.");
                                 setCookie("changePassword", false, 7);
                                 $rootScope.resetPasswordModal.close();
                             }).catch(function (data, status) {
-                                toastr.error("Password cannot be changed.");
-                                $rootScope.resetPasswordModal.close();
+                                if (data.data != null) {
+                                    toastr.error(data.data);
+                                } else {
+                                    toastr.error("Password cannot be changed.");
+                                    $rootScope.resetPasswordModal.close();
+                                }                                
                             }).then(function () {
                                 $rootScope.unmaskLoading();
                             });
@@ -200,7 +210,7 @@ angular.module('xenon.controllers', []).
                 {name: 'WI - WISCONSIN', abbreviation: 'WI'},
                 {name: 'WY - WYOMING', abbreviation: 'WY'}
             ];
-            $rootScope.stateCountyList = {'NY':['Bronx','Kings','Nassau','New York','Putnam','Queens','Richmond','Rockland','Suffolk','Westchester']}
+            $rootScope.stateCountyList = {'NY': ['Bronx', 'Kings', 'Nassau', 'New York', 'Putnam', 'Queens', 'Richmond', 'Rockland', 'Suffolk', 'Westchester']}
 //                    ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $rootScope.layoutOptions = {
                 horizontalMenu: {
