@@ -9,6 +9,7 @@
         ctrl.criteriaSelected = false;
         ctrl.errorMsg = {};
         ctrl.insuranceProviderList = [];
+        ctrl.baseUrl = ontimetest.weburl;
         InsurerDAO.retrieveAll().then(function (res) {
             ctrl.insuranceProviderList = res;
         }).catch(function () {
