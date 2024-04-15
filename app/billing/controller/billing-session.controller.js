@@ -88,10 +88,13 @@
                     ctrl.dataRetrieved = true;
                     ctrl.billingSessions = res;
                     ctrl.billingSessionToProcess = angular.copy(res);
+                    ctrl.totalClaims = ctrl.billingSessions.length;
+                    ctrl.totalCharges = 0;
                     angular.forEach(ctrl.billingSessions, function (billingObj) {
                         billingObj.patientBirthDate = Date.parse(billingObj.patientBirthDate);
 //                        billingObj.claim1500Data = JSON.parse(billingObj.claim1500Data);
                         billingObj.uniqueId = randomString();
+                        ctrl.totalCharges = ctrl.totalCharges + billingObj.totalCosts;
                     });
                     ctrl.rerenderDataTable();
                 }, function (e) {
