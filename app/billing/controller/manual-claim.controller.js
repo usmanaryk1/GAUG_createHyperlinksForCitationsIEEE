@@ -7,6 +7,16 @@
         ctrl.reviewMode = false;
         ctrl.showPatientError = false;
         ctrl.claimId = undefined;
+        ctrl.parseModifiers = function (serviceLineObj) {
+            if (serviceLineObj.seviceProcedureModifiers != null) {
+                serviceLineObj.seviceProcedureModifiers = JSON.parse(serviceLineObj.seviceProcedureModifiers);
+            }
+        }
+        ctrl.stringifyModifiers = function (serviceLineObj) {
+            if (serviceLineObj.seviceProcedureModifiers != null) {
+                serviceLineObj.seviceProcedureModifiers = JSON.stringify(serviceLineObj.seviceProcedureModifiers);
+            }
+        }
         ctrl.calculateTotalCharges = function () {
             if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                 var totalCharges = 0;
@@ -14,6 +24,7 @@
                     if (!isNaN(item.serviceTotalBill)) {
                         totalCharges += parseFloat(item.serviceTotalBill);
                     }
+                    ctrl.parseModifiers(serviceLine);
                 });
                 ctrl.manualClaimObj.totalCharges = totalCharges;
             } else {
@@ -186,7 +197,6 @@
                     toastr.error("Please add atleast one service line.");
                     return;
                 }
-                ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     ctrl.billingClaimObj.totalServiceLines = ctrl.manualClaimObj.serviceLines.length;
                     ctrl.billingClaimObj.totalCosts = 0;
@@ -196,9 +206,11 @@
                         if (ctrl.billingClaimObj.authorizedCodes.indexOf(serviceLine.serviceProcedureCode) === -1) {
                             ctrl.billingClaimObj.authorizedCodes.push(serviceLine.serviceProcedureCode);
                         }
+                        ctrl.stringifyModifiers(serviceLine);
                     });
                     ctrl.billingClaimObj.authorizedCodes = ctrl.billingClaimObj.authorizedCodes.join(',');
                 }
+                ctrl.billingClaimObj.claim1500Data = JSON.stringify(ctrl.manualClaimObj);
                 BillingDAO.processManualClaim({patientId: ctrl.patientId, processedOn: $filter('date')(new Date(), $rootScope.dateFormat)}, ctrl.billingClaimObj)
                         .then(function (res) {
                             $state.go('app.billing_batch', {id: res.id});
