@@ -24,7 +24,7 @@
                     if (!isNaN(item.serviceTotalBill)) {
                         totalCharges += parseFloat(item.serviceTotalBill);
                     }
-                    ctrl.parseModifiers(serviceLine);
+                    ctrl.parseModifiers(item);
                 });
                 ctrl.manualClaimObj.totalCharges = totalCharges;
             } else {
