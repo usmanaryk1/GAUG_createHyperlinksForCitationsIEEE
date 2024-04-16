@@ -105,6 +105,54 @@
                     </div>
                     <div class="form-group-separator">
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            Patient's condition related to
+                        </label>
+                        <div class="col-sm-9 input-group">
+                            <label class="col-md-3 control-label" style="text-align: left">
+                                Employment? 
+                            </label>
+                            <label class="cbr-inline">
+                                <input class='cbr cbr-primary' type="radio" ng-value="true" name="patientConditionRelatedEM" ng-model="addPatient.patient.patientConditionRelatedEM" ng-change="addPatient.bindPatientCondition('EM');"/>YES
+                            </label>
+                            <label class="cbr-inline">
+                                <input class='cbr cbr-primary' type="radio" ng-value="false" name="patientConditionRelatedEM" ng-model="addPatient.patient.patientConditionRelatedEM" ng-change="addPatient.bindPatientCondition('EM');"/>NO
+                            </label>
+                        </div>
+                        <label class="col-sm-3 control-label">
+                        </label>
+                        <div class="col-sm-9 input-group">
+                            <label class="col-md-3 control-label" style="text-align: left">
+                                Auto Accident?  
+                            </label>
+                            <label class="cbr-inline">
+                                <input class='cbr cbr-primary' type="radio" value="true" name="patientConditionRelatedAA" ng-model="addPatient.patient.patientConditionRelatedAA" ng-change="addPatient.bindPatientCondition('AA');"/>YES
+                            </label>
+                            <label class="cbr-inline">
+                                <input class='cbr cbr-primary' type="radio" value="false" name="patientConditionRelatedAA" ng-model="addPatient.patient.patientConditionRelatedAA" ng-change="addPatient.bindPatientCondition('AA');"/>NO
+                                 &nbsp;&nbsp;&nbsp;&nbsp;| State &nbsp;
+                                <select name="patientConditionRelatedAAState" ng-model="addPatient.patient.patientConditionRelatedAAState" ng-disabled="addPatient.patient.patientConditionRelatedAA === 'false'"
+                                        ng-options="state.abbreviation as state.abbreviation for state in states" ng-change="addPatient.bindPatientCondition('STATE');">
+                                </select>
+                            </label>
+                        </div>
+                        <label class="col-sm-3 control-label">
+                        </label>
+                        <div class="col-sm-9 input-group">
+                            <label class="col-md-3 control-label" style="text-align: left">
+                                Other Accident?  
+                            </label>
+                            <label class="cbr-inline">
+                                <input class='cbr cbr-primary' type="radio" value="true" name="patientConditionRelatedOA" ng-model="addPatient.patient.patientConditionRelatedOA" ng-change="addPatient.bindPatientCondition('OA');"/>YES
+                            </label>
+                            <label class="cbr-inline">
+                                <input class='cbr cbr-primary' type="radio" value="false" name="patientConditionRelatedOA" ng-model="addPatient.patient.patientConditionRelatedOA" ng-change="addPatient.bindPatientCondition('OA');"/>NO
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group-separator">
+                    </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <button class="btn btn-info green_bt pull-right" style="width:auto;" type="submit" ng-click="addPatient.setFromNext('tab4')">
@@ -124,9 +172,9 @@
 <script type="text/javascript">
     // validate
     customJqueryValidation();
-    jQuery(document).ready(function($) {
-        
-        setTimeout(function() {
+    jQuery(document).ready(function ($) {
+
+        setTimeout(function () {
             $(".fade-in-effect").addClass('in');
             cbr_replace();
         }, 100);

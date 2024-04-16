@@ -308,6 +308,7 @@
                     if (!ctrl.patient.isSubscriber && ctrl.patient.isSubscriber !== false) {
                         ctrl.patient.isSubscriber = true;
                     }
+                    ctrl.unbindPatientCondition();
                     $formService.setRadioValues('IsSubscriber', ctrl.patient.isSubscriber);
                     form_data = $('#add_patient_form').serialize();
                     $formService.resetRadios();
@@ -1074,6 +1075,77 @@
                             ctrl.existingSchedule = JSON.parse(res.data);
                     });
         }
+
+        ctrl.unbindPatientCondition = function () {
+            if (ctrl.patient.patientConditionRelatedTo) {
+                if (ctrl.patient.patientConditionRelatedTo === 'EM') {
+                    ctrl.patient.patientConditionRelatedEM = 'true';
+                    ctrl.patient.patientConditionRelatedAA = 'false';
+                    ctrl.patient.patientConditionRelatedOA = 'false';
+                } else if (ctrl.patient.patientConditionRelatedTo === 'OA') {
+                    ctrl.patient.patientConditionRelatedOA = 'true';
+                    ctrl.patient.patientConditionRelatedEM = 'false';
+                    ctrl.patient.patientConditionRelatedAA = 'false';
+                } else if (ctrl.patient.patientConditionRelatedTo.indexOf('AA:') > -1) {
+                    ctrl.patient.patientConditionRelatedAA = 'true';
+                    ctrl.patient.patientConditionRelatedEM = 'false';
+                    ctrl.patient.patientConditionRelatedOA = 'false';
+                    ctrl.patient.patientConditionRelatedAAState = ctrl.patient.patientConditionRelatedTo.split(':')[1];
+                }
+            } else {
+                ctrl.patient.patientConditionRelatedEM = 'false';
+                ctrl.patient.patientConditionRelatedAA = 'false';
+                ctrl.patient.patientConditionRelatedOA = 'false';
+            }
+            $formService.setRadioValues('patientConditionRelatedEM', ctrl.patient.patientConditionRelatedEM);
+            $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
+            $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
+//            $formService.resetRadios();
+        };
+
+        ctrl.bindPatientCondition = function (type) {
+            switch (type) {
+                case 'EM':
+                    if (ctrl.patient.patientConditionRelatedEM === 'true') {
+                        if (ctrl.patient.patientConditionRelatedAA === 'true')
+                            ctrl.patient.patientConditionRelatedAA = 'false';
+                        if (ctrl.patient.patientConditionRelatedOA === 'true')
+                            ctrl.patient.patientConditionRelatedOA = 'false';
+                        ctrl.patient.patientConditionRelatedTo = 'EM';
+                    } else {
+                        ctrl.patient.patientConditionRelatedTo = null;
+                    }
+                    break;
+                case 'AA':
+                    if (ctrl.patient.patientConditionRelatedAA === 'true') {
+                        if (ctrl.patient.patientConditionRelatedEM === 'true')
+                            ctrl.patient.patientConditionRelatedEM = 'false';
+                        if (ctrl.patient.patientConditionRelatedOA === 'true')
+                            ctrl.patient.patientConditionRelatedOA = 'false';
+                        ctrl.patient.patientConditionRelatedTo = 'AA' + ctrl.patient.patientConditionRelatedAAState ? ':' + ctrl.patient.patientConditionRelatedAAState : '';
+                    } else {
+                        ctrl.patient.patientConditionRelatedTo = null;
+                    }
+                    break;
+                case 'OA':
+                    if (ctrl.patient.patientConditionRelatedOA === 'true') {
+                        if (ctrl.patient.patientConditionRelatedEM === 'true')
+                            ctrl.patient.patientConditionRelatedEM = 'false';
+                        if (ctrl.patient.patientConditionRelatedAA === 'true')
+                            ctrl.patient.patientConditionRelatedAA = 'false';
+                        ctrl.patient.patientConditionRelatedTo = 'OA';
+                    } else {
+                        ctrl.patient.patientConditionRelatedTo = null;
+                    }
+                    break;
+                case 'STATE':
+                    ctrl.patient.patientConditionRelatedTo = 'AA:' + ctrl.patient.patientConditionRelatedAAState;
+            }
+            $formService.setRadioValues('patientConditionRelatedEM', ctrl.patient.patientConditionRelatedEM);
+            $formService.setRadioValues('patientConditionRelatedAA', ctrl.patient.patientConditionRelatedAA);
+            $formService.setRadioValues('patientConditionRelatedOA', ctrl.patient.patientConditionRelatedOA);
+//            $formService.resetRadios();
+        };
     }
     angular.module('xenon.controllers').controller('AddPatientCtrl', ["$formService", "$state", "PatientDAO", "$timeout", "$scope", "$rootScope", "CareTypeDAO", "EmployeeDAO", "InsurerDAO", "Page", "$modal", AddPatientCtrl]);
 })();

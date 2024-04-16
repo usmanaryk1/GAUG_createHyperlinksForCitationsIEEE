@@ -125,15 +125,15 @@
         ctrl.unbindPatientCondition = function () {
             if (ctrl.manualClaimObj.patientConditionRelated) {
                 if (ctrl.manualClaimObj.patientConditionRelated === 'EM') {
-                    ctrl.manualClaimObj.patientConditionRelatedEM === 'true';
+                    ctrl.manualClaimObj.patientConditionRelatedEM = 'true';
                     ctrl.manualClaimObj.patientConditionRelatedAA = 'false';
                     ctrl.manualClaimObj.patientConditionRelatedOA = 'false';
                 } else if (ctrl.manualClaimObj.patientConditionRelated === 'OA') {
-                    ctrl.manualClaimObj.patientConditionRelatedOA === 'true';
+                    ctrl.manualClaimObj.patientConditionRelatedOA = 'true';
                     ctrl.manualClaimObj.patientConditionRelatedEM = 'false';
                     ctrl.manualClaimObj.patientConditionRelatedAA = 'false';
                 } else if (ctrl.manualClaimObj.patientConditionRelated.indexOf('AA:') > -1) {
-                    ctrl.manualClaimObj.patientConditionRelatedAA === 'true';
+                    ctrl.manualClaimObj.patientConditionRelatedAA = 'true';
                     ctrl.manualClaimObj.patientConditionRelatedEM = 'false';
                     ctrl.manualClaimObj.patientConditionRelatedOA = 'false';
                     ctrl.manualClaimObj.patientConditionRelatedAAState = ctrl.manualClaimObj.patientConditionRelated.split(':')[1];
