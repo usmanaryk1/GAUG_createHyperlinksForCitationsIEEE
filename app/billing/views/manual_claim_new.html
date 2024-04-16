@@ -13,11 +13,11 @@
     table th {text-align:center;}   
     .border {border-top:black solid 1px;
              border-left:black solid 1px;
-             padding:5px;}
+             padding:3px 2px;}
     .border_2 {border-top:black solid 1px;
                border-left:black solid 1px;
                border-right:black solid 1px;
-               padding:5px;}		 
+               padding:3px 2px;}		 
     .numbers {float:left;
               color:#333333;
               padding-right:5px;
@@ -88,6 +88,9 @@
     .display-print{
         display: none;
     }
+    .font-10-5{
+        font-size: 10.5px;
+    }
 </style>
 <style type="text/css" media="print">
 
@@ -101,7 +104,13 @@
     }
     input, button, select, textarea{
         padding: 1px;
-        font-size: 10px!important;
+        font-size: 9px!important;
+    }
+    small {font-size:8px;}
+    .first_sec {
+        font-size:9px!important;}
+    .font-10-5{
+        font-size: 9px;
     }
     .width_15{width:8%;}
     .print-width-25{
@@ -220,7 +229,7 @@
             <tr>
                 <td class="border" rowspan="2"> 
                     <!--<font class="numbers" style="padding-top:8px;">1 </font>-->
-                    <table cellspacing="0" style="font-size: 10.5px; border-width: 0px; text-align: center " class="width_100">
+                    <table cellspacing="0" style="border-width: 0px; text-align: center " class="width_100 font-10-5">
                         <tr>
                             <td><font class="numbers">1 </font></td>
                             <td style="width: 10%"><b>MEDICARE</b></td>
@@ -990,11 +999,11 @@
                         <div class="first_sec"> FROM: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 print-width-55 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceFromDate" max-date="todayDate" required/>&nbsp;
                             <div class="clearfix display-print"></div>
                             <div class="display-print">&nbsp;</div>
-                            TO: <span class="display-print">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 print-width-55 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate" required/>&nbsp; </div>
+                            TO: <input type="text" id="field-93" name="hospitalizationStartDate" class="width_30 print-width-55 datepicker" enabled='M' data-format="mm/dd/yyyy" ng-model="serviceLine.serviceToDate" max-date="todayDate" required/>&nbsp; </div>
                     </td>
                     <td class="border" >
-
-                        <input type="text" class="width_100 first_sec" name="serviceLocation" ng-model="serviceLine.serviceLocation" required />
+                        <input type="text" class="first_sec" ng-class="{'width_80':!manualClaim.reviewMode,'width_100':manualClaim.reviewMode}" name="serviceLocation" id="serviceLocation-{{$index}}" ng-model="serviceLine.serviceLocation" required />
+                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-search" title="Lookup places" style="width: 0%;cursor: pointer;font-size: 12px;margin-top: 4px;" ng-click="manualClaim.openLocationLookup('serviceLocation-'+$index);"></span>
 
                     </td>
                     <td class="border" >
