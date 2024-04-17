@@ -85,6 +85,7 @@
         ctrl.checkReviewMode = function () {
             if (ctrl.reviewMode)
                 $("#manual_claim_form :input").prop("disabled", true);
+                $("#manual_claim_form :input").css('background-color','#fff');
         };
 
         ctrl.getPatientDetail = function (patientId) {
@@ -221,6 +222,21 @@
 //                console.log('invalid');
                 $('input,textarea,select').filter('[required]:visible').addClass('danger-input');
                 $('input,textarea,select').filter('.ng-invalid:first').focus();
+            }
+        };
+
+        ctrl.openLocationLookup = function (elemId) {
+            localStorage.setItem('locationLookup',elemId);
+            var url = $state.href('app.location_lookup');
+            var params = [
+                'height=' + screen.height/1.5,
+                'width=' + screen.width/1.5,
+                'location=0'
+            ].join(',');
+            var newwindow = window.open(url, "LocationLookup", params);
+            if (window.focus) {
+                newwindow.moveTo(50, 50);
+                newwindow.focus();
             }
         };
 
