@@ -20,10 +20,10 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                Place Of Service
+                Resubmission Code
             </h1>
             <p class="description">
-                Find a place of service
+                Find a resubmission code
             </p>
         </div>
     </div>
@@ -33,29 +33,29 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="border0 scroll">
-                        <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="locationLookup.locations.length" datatable-setup display-print="false" datatable-obj="locationLookup.datatableObj">
+                        <table id="example-1" class="table table-striped table-bordered  table table-small-font table-bordered table-striped" cellspacing="0" ng-if="resubmissionLookup.records.length" datatable-setup display-print="false" datatable-obj="resubmissionLookup.datatableObj">
                             <thead>
                                 <tr>
                                     <th class="text-center" nowrap><span class="">Select</span></th>
-                                    <th class="" nowrap><span class="">Place Code</span></th>
-                                    <th class="" nowrap><span class="">Place Of Service</span></th>
+                                    <th class="" nowrap><span class="">Code</span></th>
+                                    <th class="" nowrap><span class="">Claim Type</span></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="location in locationLookup.locations">
+                                <tr ng-repeat="record in resubmissionLookup.records">
                                     <td class="text-center">
-                                        <input type="radio" value="{{location.code}}" name="locationselection" ng-model="locationLookup.selectedLocation"  />
+                                        <input type="radio" value="{{record.code}}" name="locationselection" ng-model="resubmissionLookup.selectedCode"  />
                                     </td>
-                                    <td class="">{{location.code}}</td>
-                                    <td class="">{{location.name}}</td>
+                                    <td class="">{{record.code}}</td>
+                                    <td class="">{{record.name}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="clearfix"></div>
                     <div class="text-center">
-                        <button type="button" class="btn btn-danger btn-single" ng-click="locationLookup.close();">Cancel</button>
-                        <button ng-disabled="!locationLookup.selectedLocation" type="button" class="btn btn-info btn-single" ng-click="locationLookup.submit();">Submit</button>
+                        <button type="button" class="btn btn-danger btn-single" ng-click="resubmissionLookup.close();">Cancel</button>
+                        <button ng-disabled="!resubmissionLookup.selectedCode" type="button" class="btn btn-info btn-single" ng-click="resubmissionLookup.submit();">Submit</button>
                     </div>
                 </div>
             </div>

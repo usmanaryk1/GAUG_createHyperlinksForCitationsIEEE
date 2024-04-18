@@ -95,10 +95,10 @@
 <style type="text/css" media="print">
 
     @page { 
-        /*size: landscape;*/
+        size: portrait;
         margin: 0mm 0mm 0mm 0mm;   }
     body {
-        /*size: landscape;*/
+        size: portrait;
         margin: 5mm 5mm 5mm 5mm;
         font-size: 8px;
     }
@@ -107,6 +107,9 @@
         font-size: 9px!important;
     }
     small {font-size:8px;}
+    p{
+        margin: 0px 0 1px!important;;
+    }
     .first_sec {
         font-size:9px!important;}
     .font-10-5{
@@ -663,9 +666,9 @@
                     <div class="first_sec">
                         <font class="numbers">12 </font>
                         <b>PATIENT'S OR AUTHORIZED PERSON'S SIGNATURE </small><br />
-                            <a href="#">READ BEFORE COMPLETING AND SIGNING </a> <br />
-                            I authorize the release of any medical or other information necessary to process this claim. I also request
-                            payment of government benefits either to myself or to the party who accepts assignment below.<br />
+                        <a href="#"><small>READ BEFORE COMPLETING AND SIGNING </small></a> <br />
+                            <small>I authorize the release of any medical or other information necessary to process this claim. I also request
+                            payment of government benefits either to myself or to the party who accepts assignment below.</small><br />
                             <p>
                                 <label class="radio-label"><input type="radio" value="Y" name="isAuthorizedByPatient" ng-model="manualClaim.manualClaimObj.isAuthorizedByPatient" />YES</label>&nbsp;&nbsp;
                                 <label class="radio-label"><input type="radio" value="I" name="isAuthorizedByPatient" ng-model="manualClaim.manualClaimObj.isAuthorizedByPatient" />NO</label>&nbsp;&nbsp;
@@ -679,8 +682,8 @@
                     <div class="first_sec">
                         <font class="numbers">13 </font>
                         <b>INSURED'S OR AUTHORIZED PERSON'S SIGNATURE <br />
-                            I authorize payment of medical benefits to the undersigned physician or supplier for services described
-                            below.
+                            <small>I authorize payment of medical benefits to the undersigned physician or supplier for services described
+                            below.</small>
                             <p>
                                 <label class="radio-label"><input type="radio" value="Y" name="isAuthorizedByInsured" ng-model="manualClaim.manualClaimObj.isAuthorizedByInsured" />YES</label>&nbsp;&nbsp;
                                 <label class="radio-label"><input type="radio" value="I" name="isAuthorizedByInsured" ng-model="manualClaim.manualClaimObj.isAuthorizedByInsured" />NO</label>&nbsp;&nbsp;
@@ -854,7 +857,8 @@
                     <div class="first_sec">
                         <font class="numbers">22 </font>
                         <b> RESUBMISSION CODE </b><br>
-                        <input type="text" class="width_100" name="resubmissionCode" ng-model="manualClaim.manualClaimObj.resubmissionCode" />
+                        <input type="text" ng-class="{'width_80':!manualClaim.reviewMode,'width_100':manualClaim.reviewMode}" name="resubmissionCode" id="resubmissionCode" ng-model="manualClaim.manualClaimObj.resubmissionCode" />
+                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-search" title="Lookup places" style="width: 0%;cursor: pointer;font-size: 12px;margin-top: 4px;" ng-click="manualClaim.openLookup('resubmission');"></span>
 
                     </div>  
                     <div class="clearfix display-print"></div>
@@ -1003,7 +1007,7 @@
                     </td>
                     <td class="border" >
                         <input type="text" class="first_sec" ng-class="{'width_80':!manualClaim.reviewMode,'width_100':manualClaim.reviewMode}" name="serviceLocation" id="serviceLocation-{{$index}}" ng-model="serviceLine.serviceLocation" required />
-                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-search" title="Lookup places" style="width: 0%;cursor: pointer;font-size: 12px;margin-top: 4px;" ng-click="manualClaim.openLocationLookup('serviceLocation-'+$index);"></span>
+                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-search" title="Lookup places" style="width: 0%;cursor: pointer;font-size: 12px;margin-top: 4px;" ng-click="manualClaim.openLookup('location', 'serviceLocation-' + $index);"></span>
 
                     </td>
                     <td class="border" >

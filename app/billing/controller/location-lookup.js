@@ -19,7 +19,7 @@
             {code: '14', name: 'Group Home*'},
             {code: '15', name: 'Mobile Unit'},
             {code: '16', name: 'Temporary Lodging'},
-            {code: '17', name: 'Walk-in Retail Health Clinic'},
+            {code: '17', name: 'Walk-in Retail Health Clinic'}
         ];
         if (window.opener) {
 //            inside a pop-up window or target=_blank window
