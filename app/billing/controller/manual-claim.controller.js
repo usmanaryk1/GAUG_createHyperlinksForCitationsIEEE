@@ -17,112 +17,8 @@
                 serviceLineObj.seviceProcedureModifiers = JSON.stringify(serviceLineObj.seviceProcedureModifiers);
             }
         }
-        ctrl.calculateTotalCharges = function () {
-            if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                var totalCharges = 0;
-                angular.forEach(ctrl.manualClaimObj.serviceLines, function (item) {
-                    if (!isNaN(item.serviceTotalBill)) {
-                        totalCharges += parseFloat(item.serviceTotalBill);
-                    }
-                    ctrl.parseModifiers(item);
-                });
-                ctrl.manualClaimObj.totalCharges = totalCharges;
-            } else {
-                if (!ctrl.manualClaimObj)
-                    ctrl.manualClaimObj = {};
-                ctrl.manualClaimObj.totalCharges = totalCharges;
-            }
-        };
-        if ($state.params.id && $state.params.id !== '') {
-            ctrl.reviewMode = true;
-            Page.setTitle("Claim 1500");
-            $rootScope.layoutOptions.sidebar.hideMenu = true;
-            var claim1500 = JSON.parse(localStorage.getItem('claim1500'));
-            if (claim1500 && claim1500[$state.params.id]) {
-                ctrl.manualClaimObj = claim1500[$state.params.id];
-                ctrl.calculateTotalCharges();
-                if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                    angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                        if (serviceLine.serviceFromDate)
-                            serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
-                        if (serviceLine.serviceToDate)
-                            serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
-                    });
-                }
-            } else {
-                $rootScope.maskLoading();
-                BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
-                    $rootScope.unmaskLoading();
-                    ctrl.claimId = res.id;
-                    ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
-                    ctrl.calculateTotalCharges();
-                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                            if (serviceLine.serviceFromDate)
-                                serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
-                            if (serviceLine.serviceToDate)
-                                serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
-                        });
-                    }
-                }).catch(function (err) {
-                    $rootScope.unmaskLoading();
-                    toastr.error("Unable to retrieve claim details");
-                    $state.go('app.manual_claim');
-                });
-            }
-        } else {
-            $rootScope.maskLoading();
-            PatientDAO.retrieveForSelect({}).then(function (res) {
-                ctrl.patientList = res;
-            }).catch(function (data, status) {
-                ctrl.patientList = ontimetest.patients;
-            }).then(function () {
-                $rootScope.unmaskLoading();
-            });
-            ctrl.manualClaimObj.serviceLines = [{}];
-        }
-
-        ctrl.checkReviewMode = function () {
-            if (ctrl.reviewMode)
-                $("#manual_claim_form :input").prop("disabled", true);
-            $("#manual_claim_form :input").css('background-color', '#fff');
-        };
-
-        ctrl.getPatientDetail = function (patientId) {
-            $rootScope.paginationLoading = true;
-            BillingDAO.getPatientDetails({patientId: patientId}).then(function (res) {
-                if (res && res.claim1500Data) {
-                    ctrl.billingClaimObj = res;
-                    ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
-                    ctrl.calculateTotalCharges();
-//                    console.log(JSON.stringify(ctrl.billingClaimObj));
-                    ctrl.unbindPatientCondition();
-                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
-                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
-                            if (serviceLine.serviceFromDate)
-                                serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
-                            if (serviceLine.serviceToDate)
-                                serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
-                        });
-                    }
-                }
-            }).catch(function () {
-                toastr.error("Failed to retrieve patients.");
-            }).then(function () {
-                $rootScope.paginationLoading = false;
-            });
-        };
-
-        ctrl.addServiceLine = function () {
-            if (!ctrl.manualClaimObj.serviceLines) {
-                ctrl.manualClaimObj.serviceLines = [];
-            }
-            ctrl.manualClaimObj.serviceLines.push({});
-        };
-        ctrl.removeServiceLine = function (index) {
-            ctrl.manualClaimObj.serviceLines.splice(index, 1);
-        };
-
+        
+        
         ctrl.unbindPatientCondition = function () {
             if (ctrl.manualClaimObj.patientConditionRelated) {
                 if (ctrl.manualClaimObj.patientConditionRelated === 'EM') {
@@ -185,7 +81,114 @@
                     ctrl.manualClaimObj.patientConditionRelated = 'AA:' + ctrl.manualClaimObj.patientConditionRelatedAAState;
             }
         };
+        
+        ctrl.calculateTotalCharges = function () {
+            if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                var totalCharges = 0;
+                angular.forEach(ctrl.manualClaimObj.serviceLines, function (item) {
+                    if (!isNaN(item.serviceTotalBill)) {
+                        totalCharges += parseFloat(item.serviceTotalBill);
+                    }
+                    ctrl.parseModifiers(item);
+                });
+                ctrl.manualClaimObj.totalCharges = totalCharges;
+            } else {
+                if (!ctrl.manualClaimObj)
+                    ctrl.manualClaimObj = {};
+                ctrl.manualClaimObj.totalCharges = totalCharges;
+            }
+        };
+        if ($state.params.id && $state.params.id !== '') {
+            ctrl.reviewMode = true;
+            Page.setTitle("Claim 1500");
+            $rootScope.layoutOptions.sidebar.hideMenu = true;
+            var claim1500 = JSON.parse(localStorage.getItem('claim1500'));
+            if (claim1500 && claim1500[$state.params.id]) {
+                ctrl.manualClaimObj = claim1500[$state.params.id];
+                ctrl.calculateTotalCharges();
+                ctrl.unbindPatientCondition();
+                if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                    angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        if (serviceLine.serviceFromDate)
+                            serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
+                        if (serviceLine.serviceToDate)
+                            serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                    });
+                }
+            } else {
+                $rootScope.maskLoading();
+                BillingDAO.getClaimById({paramId: $state.params.id}).then(function (res) {
+                    $rootScope.unmaskLoading();
+                    ctrl.claimId = res.id;
+                    ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    ctrl.calculateTotalCharges();
+                    ctrl.unbindPatientCondition();
+                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                            if (serviceLine.serviceFromDate)
+                                serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
+                            if (serviceLine.serviceToDate)
+                                serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                        });
+                    }
+                }).catch(function (err) {
+                    $rootScope.unmaskLoading();
+                    toastr.error("Unable to retrieve claim details");
+                    $state.go('app.manual_claim');
+                });
+            }
+        } else {
+            $rootScope.maskLoading();
+            PatientDAO.retrieveForSelect({}).then(function (res) {
+                ctrl.patientList = res;
+            }).catch(function (data, status) {
+                ctrl.patientList = ontimetest.patients;
+            }).then(function () {
+                $rootScope.unmaskLoading();
+            });
+            ctrl.manualClaimObj.serviceLines = [{}];
+        }
 
+        ctrl.checkReviewMode = function () {
+            if (ctrl.reviewMode)
+                $("#manual_claim_form :input").prop("disabled", true);
+            $("#manual_claim_form :input").css('background-color', '#fff');
+        };
+
+        ctrl.getPatientDetail = function (patientId) {
+            $rootScope.paginationLoading = true;
+            BillingDAO.getPatientDetails({patientId: patientId}).then(function (res) {
+                if (res && res.claim1500Data) {
+                    ctrl.billingClaimObj = res;
+                    ctrl.manualClaimObj = JSON.parse(res.claim1500Data);
+                    ctrl.calculateTotalCharges();
+//                    console.log(JSON.stringify(ctrl.billingClaimObj));
+                    ctrl.unbindPatientCondition();
+                    if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
+                        angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                            if (serviceLine.serviceFromDate)
+                                serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
+                            if (serviceLine.serviceToDate)
+                                serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                        });
+                    }
+                }
+            }).catch(function () {
+                toastr.error("Failed to retrieve patients.");
+            }).then(function () {
+                $rootScope.paginationLoading = false;
+            });
+        };
+
+        ctrl.addServiceLine = function () {
+            if (!ctrl.manualClaimObj.serviceLines) {
+                ctrl.manualClaimObj.serviceLines = [];
+            }
+            ctrl.manualClaimObj.serviceLines.push({'serviceNPI':ctrl.manualClaimObj.companyNPI});
+        };
+        ctrl.removeServiceLine = function (index) {
+            ctrl.manualClaimObj.serviceLines.splice(index, 1);
+        };
 
         ctrl.processManualClaim = function () {
             if (!ctrl.patientId || ctrl.patientId === '') {
