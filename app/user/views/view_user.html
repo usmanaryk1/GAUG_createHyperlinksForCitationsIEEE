@@ -292,22 +292,20 @@
 
     Are you sure you want to {{activateModal.action}} this User?
     <form class="form-horizontal" ng-if="activateModal.user.employee!=null && activateModal.activateEmployee!=null">
+    
     <div class="form-group">
-    <label class="col-sm-2 control-label">
-    Deactivate employee associated with user
-    </label>
-    <div class="col-sm-9 form-control-static">
-    <div>
-    <label>
-    <input value="a" name="activateEmployee" type="radio" class="cbr cbr-primary" ng-model="activateModal.activateEmployee" />
-    Activate
-    </label>&nbsp;
-    <label>
-    <input name="activateEmployee" value="i" type="radio" class="cbr cbr-primary" ng-model="activateModal.activateEmployee"/>
-    Deactivate
-    </label>
-    </div>
-    </div>
+        </br>
+        <div class="col-sm-5" style="padding-top:4px;">
+            Employee associated with user
+        </div>
+        <div class="col-sm-5">
+            <toggle-switch  
+                  ng-model="activateModal.activateEmployee"
+                  on-label="Activate"
+                  off-label="Deactivate"
+                  class="switch-success">
+            </toggle-switch>
+        </div>
     </div>
     </form>
     </div>
