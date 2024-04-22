@@ -158,10 +158,16 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
+            
             $formService.resetRadios();
             $rootScope.activateModal.action = action;
             $rootScope.activateModal.user = user;
-            $rootScope.activateModal.activateEmployee = user.employee.status;
+            
+            if(user.employee.status == 'a')
+                $rootScope.activateModal.activateEmployee = true;
+            else if(user.employee.status == 'i')
+                $rootScope.activateModal.activateEmployee = false;
+            
             $rootScope.activateModal.confirm = function (user) {
                 if (action == 'activate') {
                     ctrl.activateUser(user);
@@ -187,7 +193,7 @@
             $rootScope.maskLoading();
             var empStatus;
             if (employee.employee != null) {
-                if ($rootScope.activateModal.activateEmployee == 'a') {
+                if ($rootScope.activateModal.activateEmployee == true) {
                     empStatus = 'activate';
                 } else {
                     empStatus = 'deactivate';
@@ -220,7 +226,7 @@
             $rootScope.maskLoading();
             var empStatus;
             if (employee.employee != null) {
-                if ($rootScope.activateModal.activateEmployee == 'a') {
+                if ($rootScope.activateModal.activateEmployee == true) {
                     empStatus = 'activate';
                 } else {
                     empStatus = 'deactivate';
