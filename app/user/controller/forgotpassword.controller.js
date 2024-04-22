@@ -5,7 +5,7 @@
             if ($('#forgotPassword').valid()) {
                 setCookie("cc", ctrl.companyCode, 7);
                 $rootScope.maskLoading();
-                UserDAO.resetUserPassword({userName: ctrl.username}).then(function (res) {
+                UserDAO.resetUserPassword({userName: ctrl.username, passwordType: "f"}).then(function (res) {
                     toastr.success("Instuction for resetting your password has been sent.");
                     $state.transitionTo(ontimetest.defaultState);
                 }).catch(function (data, status) {
