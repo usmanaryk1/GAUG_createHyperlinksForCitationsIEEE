@@ -83,7 +83,7 @@
                 ctrl.dateMessage = null;
             }
         };
-        //        ctrl.payrollSessions = ontimetest.payrollSessions;
+        //        ctrl.payrollSessions = ontime_data.payrollSessions;
         ctrl.retrieveSessions = function () {
             ctrl.verifyDates();
             if (ctrl.criteriaSelected && ctrl.dateMessage == null) {

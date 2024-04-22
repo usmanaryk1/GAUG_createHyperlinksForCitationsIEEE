@@ -1,10 +1,10 @@
 (function () {
     function ReportCtrl(Page, $rootScope, EmployeeDAO, PatientDAO) {
         var ctrl = this;
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
-        ctrl.reportTypeList = ontimetest.reportTypes;
-        ctrl.reportSubTypeList = ontimetest.reportSubTypes;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
+        ctrl.reportTypeList = ontime_data.reportTypes;
+        ctrl.reportSubTypeList = ontime_data.reportSubTypes;
         ctrl.searchParams = {};
         ctrl.maxDate = angular.copy($rootScope.todayDate);
         Page.setTitle("Report");
@@ -21,7 +21,7 @@
                 }
                 if (valid) {
                     $rootScope.maskLoading();
-                    var path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontimetest.company_code;
+                    var path = $rootScope.serverPath + 'reports/' + ctrl.reportType + '/download?format=' + format + "&companyCode=" + ontime_data.company_code;
                     if (ctrl.searchParams.fromDate && ctrl.searchParams.toDate) {
                         path = path + "&fromDate=" + ctrl.searchParams.fromDate + "&toDate=" + ctrl.searchParams.toDate;
                     }

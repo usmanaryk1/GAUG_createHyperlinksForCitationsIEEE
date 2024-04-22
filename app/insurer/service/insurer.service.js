@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var InsurerDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'insurance/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontime_data.weburl + 'insurance/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,

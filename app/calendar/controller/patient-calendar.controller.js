@@ -241,7 +241,7 @@
 
         ctrl.retrieveAllCoordinators = function () {
             $rootScope.maskLoading();
-            EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR + "," + ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+            EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR + "," + ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
                 ctrl.employeeCoordinateList = res;
                 $rootScope.unmaskLoading();
             }).catch(function (data, status) {
@@ -279,7 +279,7 @@
                     $rootScope.unmaskLoading();
                 });
             } else {
-                obj.action = ontimetest.eventTypes[obj.action].toLowerCase();
+                obj.action = ontime_data.eventTypes[obj.action].toLowerCase();
                 if (obj.data.scheduleId)
                     obj.subAction = obj.data.scheduleId;
                 if (obj.data.unavailabilityId)
@@ -304,7 +304,7 @@
             });
             $rootScope.passwordPopup.save = function () {
                 if ($('#popuppassword')[0].checkValidity()) {
-                    if ($rootScope.passwordPopup.password != ontimetest.pastEventAuthorizationPassword) {
+                    if ($rootScope.passwordPopup.password != ontime_data.pastEventAuthorizationPassword) {
                         toastr.error('Authorization Failed');
                         $rootScope.passwordPopup.closePopup();
                     } else {
@@ -374,10 +374,10 @@
                 }
                 $rootScope.patientPopup.calendarView = ctrl.calendarView;
                 $rootScope.patientPopup.patientList = ctrl.patientList;
-                $rootScope.patientPopup.reasons = ontimetest.patientReasons;
+                $rootScope.patientPopup.reasons = ontime_data.patientReasons;
                 $rootScope.patientPopup.employees = [];
-                $rootScope.patientPopup.eventTypes = ontimetest.eventTypes;
-                $rootScope.patientPopup.recurranceTypes = ontimetest.recurranceTypes;
+                $rootScope.patientPopup.eventTypes = ontime_data.eventTypes;
+                $rootScope.patientPopup.recurranceTypes = ontime_data.recurranceTypes;
                 $rootScope.patientPopup.patient = angular.copy(patientObj);
                 if (data == null) {
                     $rootScope.patientPopup.isNew = true;
@@ -549,7 +549,7 @@
                     if (obj.unavailabilityId)
                         id = obj.unavailabilityId;
                     $rootScope.maskLoading();
-                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: false}).then(function (res) {
+                    EventTypeDAO.delete({subAction: id, action: ontime_data.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: false}).then(function (res) {
                         ctrl.retrievePatients();
                         toastr.success("Event deleted.");
                         $rootScope.patientPopup.close();
@@ -645,7 +645,7 @@
                                 if (data.unavailabilityId)
                                     id = data.unavailabilityId;
                                 if (id) {
-                                    var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
+                                    var obj = {action: ontime_data.eventTypes[data.eventType].toLowerCase(), subAction: id};
                                     EventTypeDAO.retrieveEventType(obj).then(function (res) {
                                         data = angular.copy(res);
                                         data.applyTo = "SINGLE";
@@ -684,7 +684,7 @@
             patientObj = {};
             open();
         };
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
@@ -693,7 +693,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;

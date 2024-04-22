@@ -2,14 +2,14 @@
     function BillingSettingsCtrl($rootScope, $scope, $http, $modal, $timeout, BillingDAO, $filter, Page) {
         var ctrl = this;
         Page.setTitle("Billing Settings");
-        ctrl.billingObj = {orgCode: ontimetest.company_code};
+        ctrl.billingObj = {orgCode: ontime_data.company_code};
         ctrl.billingClearanceHouse = [{id: 'MDONLINE', text: 'MDONLINE - Ability'}];
         ctrl.initSettings = function () {
             $rootScope.maskLoading();
             BillingDAO.getSettings().then(function (res) {
                 if (res != null) {
                     ctrl.billingObj = res;
-                    ctrl.billingObj.orgCode = ontimetest.company_code;
+                    ctrl.billingObj.orgCode = ontime_data.company_code;
                 }
             }).catch(function () {
                 toastr.error("Billing settings cannot be retrieved.");

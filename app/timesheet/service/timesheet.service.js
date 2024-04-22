@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     var TimesheetDAO = function (resource) {
-        var api = resource(ontimetest.weburl + 'timesheets/:action/:subAction/:subAction1/:id', {}, {
+        var api = resource(ontime_data.weburl + 'timesheets/:action/:subAction/:subAction1/:id', {}, {
             retrieveAllDailyAttendance: {
                 method: 'GET',
 //                isArray: true,

@@ -4,8 +4,8 @@
         ctrl.companyObj = {};
         ctrl.profileFileObj = {};
         ctrl.saveCompany = saveCompanyData;
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.bucketKey = 'c';
         Page.setTitle("Company Information");
         ctrl.initForm = function () {
@@ -13,7 +13,7 @@
         };
         ctrl.retrieveCompany = function () {
             $rootScope.maskLoading();
-            CompanyDAO.retrieveByCompanyCode({companyCode: ontimetest.company_code}).then(function (res) {
+            CompanyDAO.retrieveByCompanyCode({companyCode: ontime_data.company_code}).then(function (res) {
                 ctrl.companyObj = res;
                 if (ctrl.companyObj != null) {
 
@@ -30,14 +30,14 @@
         };
 
         ctrl.profileUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "c",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker

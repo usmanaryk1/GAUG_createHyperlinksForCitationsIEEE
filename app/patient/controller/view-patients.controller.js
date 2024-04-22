@@ -2,11 +2,11 @@
     function ViewPatientsCtrl(PatientDAO, $rootScope, $stateParams, $state, $modal, $debounce, EmployeeDAO, InsurerDAO, Page, CareTypeDAO) {
         var ctrl = this;
         $rootScope.maskLoading();
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         Page.setTitle("View Patients");
         if ($stateParams.status !== 'active' && $stateParams.status !== 'discharged' && $stateParams.status !== 'all') {
-            $state.transitionTo(ontimetest.defaultState);
+            $state.transitionTo(ontime_data.defaultState);
         } else {
             ctrl.viewType = $stateParams.status;
         }
@@ -19,7 +19,7 @@
         ctrl.staffCoordinatorMap = {};
         ctrl.insuranceProviderMap = {};
         
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.nursingCareMap[res[i].id] = res[i].label;
@@ -28,7 +28,7 @@
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             if (res.length !== 0) {
                 for (var i = 0; i < res.length; i++) {
                     ctrl.staffCoordinatorMap[res[i].id] = res[i].label;
@@ -122,7 +122,7 @@
 
                     }
                 }); // showLoadingBar
-//                ctrl.patientList = ontimetest.patients;
+//                ctrl.patientList = ontime_data.patients;
             }).then(function () {
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;

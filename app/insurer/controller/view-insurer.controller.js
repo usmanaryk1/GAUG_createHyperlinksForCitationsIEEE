@@ -4,8 +4,8 @@
         $rootScope.maskLoading();
         ctrl.retrieveInsurers = retrieveInsurersData;
         ctrl.edit = edit;
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         Page.setTitle("View Insurance Providers");
 
         ctrl.insurerList = [];
@@ -74,7 +74,7 @@
                     }
                 }); // showLoadingBar
                 toastr.error("Failed to retrieve insurance provider.");
-//                ctrl.insurerList = ontimetest.insuranceProviders;
+//                ctrl.insurerList = ontime_data.insuranceProviders;
             }).then(function() {
                 $rootScope.unmaskLoading();
                 $rootScope.paginationLoading = false;

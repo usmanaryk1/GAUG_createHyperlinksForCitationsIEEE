@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var BillingDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'billing/:action/:paramId', {paramId:'@paramId'}, {
+        var api = resource(ontime_data.weburl + 'billing/:action/:paramId', {paramId:'@paramId'}, {
             updateSettings: {
                 method: 'POST',
                 params: {
