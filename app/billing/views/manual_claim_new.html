@@ -994,7 +994,7 @@
                     </td>
                     <td class="border_2 width_1" style="position: relative;">
                         Rendering #Provider ID.
-                        <span class="glyphicon glyphicon-plus-sign" ng-if="!manualClaim.reviewMode" style="position: absolute;top: -7px;right: -20px;cursor: pointer;" ng-click="manualClaim.addServiceLine();" title="Add service line"></span>
+                        <span class="glyphicon glyphicon-plus-sign" ng-if="!manualClaim.reviewMode" style="color: green; position: absolute;top: -7px;right: -20px;cursor: pointer;" ng-click="manualClaim.addServiceLine();" title="Add service line"></span>
                     </td>
                 </tr>
                 <tr ng-repeat-start="serviceLine in manualClaim.manualClaimObj.serviceLines" on-repeat-end="manualClaim.checkReviewMode()"><!-- ng-repeat="serviceLine in manualClaim.manualClaimObj.serviceLines"-->
@@ -1079,7 +1079,7 @@
                     <td class="border_2" style="position: relative;">
 
                         <input type="text" class="width_100" name="serviceNPI" ng-model="serviceLine.serviceNPI" required />
-                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-minus-sign" style="position: absolute;top: -7px;right: -20px;cursor: pointer;" ng-click="manualClaim.removeServiceLine($index);" title="Remove service line"></span>
+                        <span ng-if="!manualClaim.reviewMode" class="glyphicon glyphicon-minus-sign" style="color: red; position: absolute;top: -7px;right: -20px;cursor: pointer;" ng-click="manualClaim.removeServiceLine($index);" title="Remove service line"></span>
 
                     </td>
 

@@ -5,7 +5,7 @@
         $rootScope.layoutOptions.sidebar.hideMenu = true;
         ctrl.companyCode = ontimetest.company_code;
         ctrl.records = [
-            {code: '1', name: 'Original Claim'},
+//            {code: '1', name: 'Original Claim'},
             {code: '6', name: 'Corrected Claim'},
             {code: '7', name: 'Labled Replacement'},
             {code: '8', name: 'Mark as void'}
