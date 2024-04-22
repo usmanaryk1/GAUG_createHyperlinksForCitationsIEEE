@@ -4,8 +4,8 @@
         ctrl.insurerObj = {insuranceCareTypeCollection: []};
         ctrl.selectedCareTypes = [];
         ctrl.fileObj = {};
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.unselecteModalOpen = false;
         ctrl.insuranceCareTypeMap = {};
         ctrl.planTypes = [{label: "Medicaid", value: "mcd"}, {label: "Medicare", value: "mcr"}, {label: "Tricare Champus", value: "tc"}, {label: "ChampVA", value: "cva"}, {label: "Group Healthplan", value: "gh"}, {label: "Feca Black Lung", value: "fbl"}, {label: "Blue Cross", value: "bc"}, {label: "Blue Shield", value: "bs"}, {label: "Blue Cross/Blue Sheild (BCBS)", value: "bcb"}, {label: "Other", value: "oth"}];
@@ -23,7 +23,7 @@
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontimetest.defaultState);
+                $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
             ctrl.displayCareTypeModal = false;
@@ -172,7 +172,7 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.careTypeModel.unitValues = ontimetest.unitValues;
+            $rootScope.careTypeModel.unitValues = ontime_data.unitValues;
             //to not open the popup for changes done in this modals
             if (selection) {
                 ctrl.selecteModalOpen = true;
@@ -314,14 +314,14 @@
             }
         }, true);
         ctrl.uploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "i",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker

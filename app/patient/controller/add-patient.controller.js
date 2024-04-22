@@ -4,8 +4,8 @@
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
         ctrl.retrivalRunning = true;
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.nextTab;
 //        ctrl.fileObj = {};
@@ -25,7 +25,7 @@
         ctrl.insuranceProviderList = [];
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontimetest.defaultState);
+                $state.transitionTo(ontime_data.defaultState);
             }
             Page.setTitle("Update Patient");
             ctrl.editMode = true;
@@ -33,15 +33,15 @@
             Page.setTitle("Add Patient");
             ctrl.editMode = false;
         } else {
-            $state.transitionTo(ontimetest.defaultState);
+            $state.transitionTo(ontime_data.defaultState);
         }
         var form_data;
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.NURSING_CARE_COORDINATOR}).then(function (res) {
             ctrl.nursingCareList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve nursing care list.");
         });
-        EmployeeDAO.retrieveByPosition({'position': ontimetest.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
+        EmployeeDAO.retrieveByPosition({'position': ontime_data.positionGroups.STAFFING_COORDINATOR}).then(function (res) {
             ctrl.staffCoordinatorList = res;
         }).catch(function () {
             toastr.error("Failed to retrieve staff coordinator list.");
@@ -128,8 +128,8 @@
                         patientToSave.patientCareTypeCollection = finalCareTypeCollection;
                     }
                 } else {
-                    ctrl.patient.orgCode = ontimetest.company_code;
-                    patientToSave.orgCode = ontimetest.company_code;
+                    ctrl.patient.orgCode = ontime_data.company_code;
+                    patientToSave.orgCode = ontime_data.company_code;
                     reqParam = 'save';
                 }
                 if (ctrl.authorizationDocuments && ctrl.authorizationDocuments.length > 0) {
@@ -244,9 +244,9 @@
                         finish: function () {
                         }
                     }); // showLoadingBar
-                    ctrl.patient = ontimetest.patients[($state.params.id - 1)];
+//                    ctrl.patient = ontime_data.patients[($state.params.id - 1)];
                     ctrl.retrivalRunning = false;
-                    console.log(JSON.stringify(ctrl.patient));
+//                    console.log(JSON.stringify(ctrl.patient));
                     toastr.error("Failed to retrieve patient");
                 }).then(function () {
                     setTimeout(function () {
@@ -640,14 +640,14 @@
                     $scope.careObj = {};
 
                     $scope.uploadFile = {
-                        target: ontimetest.weburl + 'file/upload',
+                        target: ontime_data.weburl + 'file/upload',
                         chunkSize: 1024 * 1024 * 1024,
                         testChunks: false,
                         fileParameterName: "fileUpload",
                         singleFile: true,
                         headers: {
                             type: "p",
-                            company_code: ontimetest.company_code
+                            company_code: ontime_data.company_code
                         }
                     };
                     //When file is selected from browser file picker
@@ -978,14 +978,14 @@
             });
         }
 //        ctrl.uploadFile = {
-//            target: ontimetest.weburl + 'file/upload',
+//            target: ontime_data.weburl + 'file/upload',
 //            chunkSize: 1024 * 1024 * 1024,
 //            testChunks: false,
 //            fileParameterName: "fileUpload",
 //            singleFile: true,
 //            headers: {
 //                type: "p",
-//                company_code: ontimetest.company_code
+//                company_code: ontime_data.company_code
 //            }
 //        };
 //        //When file is selected from browser file picker

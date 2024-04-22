@@ -177,7 +177,7 @@
                 }
             });
             ctrl.officeStaffIds = [];
-            PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+            PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
                 if (res && res.length > 0) {
                     angular.forEach(res, function (position) {
                         ctrl.officeStaffIds.push(position.id)
@@ -194,7 +194,7 @@
             });
             $rootScope.passwordPopup.save = function () {
                 if ($('#popuppassword')[0].checkValidity()) {
-                    if ($rootScope.passwordPopup.password != ontimetest.pastEventAuthorizationPassword) {
+                    if ($rootScope.passwordPopup.password != ontime_data.pastEventAuthorizationPassword) {
                         toastr.error('Authorization Failed');
                         $rootScope.passwordPopup.closePopup();
                     } else {
@@ -273,9 +273,9 @@
                 $rootScope.employeePopup.calendarView = ctrl.calendarView;
                 $rootScope.employeePopup.employeeList = ctrl.employeeList;
                 $rootScope.employeePopup.patients = patients;
-                $rootScope.employeePopup.reasons = ontimetest.employeeReasons;
-                $rootScope.employeePopup.eventTypes = ontimetest.eventTypes;
-                $rootScope.employeePopup.recurranceTypes = ontimetest.recurranceTypes;
+                $rootScope.employeePopup.reasons = ontime_data.employeeReasons;
+                $rootScope.employeePopup.eventTypes = ontime_data.eventTypes;
+                $rootScope.employeePopup.recurranceTypes = ontime_data.recurranceTypes;
                 $rootScope.employeePopup.employee = angular.copy(employeeObj);
                 $rootScope.employeePopup.patientMandatory = true;
                 if (data == null) {
@@ -454,7 +454,7 @@
                     if (obj.unavailabilityId)
                         id = obj.unavailabilityId;
                     $rootScope.maskLoading();
-                    EventTypeDAO.delete({subAction: id, action: ontimetest.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: true}).then(function (res) {
+                    EventTypeDAO.delete({subAction: id, action: ontime_data.eventTypes[obj.eventType].toLowerCase(), applyTo: obj.applyTo, isEmployeeSchedule: true}).then(function (res) {
                         ctrl.retrieveEmployees();
                         toastr.success("Event deleted.");
                         $rootScope.employeePopup.close();
@@ -545,7 +545,7 @@
                                 if (data.unavailabilityId)
                                     id = data.unavailabilityId;
                                 if (id) {
-                                    var obj = {action: ontimetest.eventTypes[data.eventType].toLowerCase(), subAction: id};
+                                    var obj = {action: ontime_data.eventTypes[data.eventType].toLowerCase(), subAction: id};
                                     EventTypeDAO.retrieveEventType(obj).then(function (res) {
                                         data = angular.copy(res);
                                         data.applyTo = "SINGLE";
@@ -614,7 +614,7 @@
                     $rootScope.unmaskLoading();
                 });
             } else {
-                obj.action = ontimetest.eventTypes[obj.action].toLowerCase();
+                obj.action = ontime_data.eventTypes[obj.action].toLowerCase();
                 if (obj.data.availabilityId)
                     obj.subAction = obj.data.availabilityId;
                 if (obj.data.scheduleId)

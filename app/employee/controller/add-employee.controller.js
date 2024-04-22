@@ -11,8 +11,8 @@
                 $('#languageOtherText').tagsinput("add", ctrl.employee.otherLanguages);
             });
         };
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.nextTab;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
         ctrl.setFromNext = function (tab) {
@@ -122,7 +122,7 @@
 
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id))) {
-                $state.transitionTo(ontimetest.defaultState);
+                $state.transitionTo(ontime_data.defaultState);
             }
             ctrl.editMode = true;
             Page.setTitle("Update Employee");
@@ -131,7 +131,7 @@
             ctrl.editMode = false;
             Page.setTitle("Add Employee");
         } else {
-            $state.transitionTo(ontimetest.defaultState);
+            $state.transitionTo(ontime_data.defaultState);
         }
 
 
@@ -249,8 +249,8 @@
                                         updateEmployee(reqParam, employeeToSave);
                                     }
                                 } else {
-                                    employeeToSave.orgCode = ontimetest.company_code;
-                                    ctrl.employee.orgCode = ontimetest.company_code;
+                                    employeeToSave.orgCode = ontime_data.company_code;
+                                    ctrl.employee.orgCode = ontime_data.company_code;
                                     reqParam = 'saveemployee';
                                     updateEmployee(reqParam, employeeToSave);
                                 }
@@ -602,14 +602,14 @@
         };
 
         ctrl.applicationUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "a",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -652,14 +652,14 @@
         };
 
         ctrl.licenceUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "l",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -702,14 +702,14 @@
         };
 
         ctrl.i9eligibilityUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "9",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -752,14 +752,14 @@
         };
 
         ctrl.w4UploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "w",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -802,14 +802,14 @@
         };
 
         ctrl.referencesUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "r",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -852,14 +852,14 @@
         };
 
         ctrl.physicalUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "z",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -902,14 +902,14 @@
         };
 
         ctrl.profileUploadFile = {
-            target: ontimetest.weburl + 'file/upload',
+            target: ontime_data.weburl + 'file/upload',
             chunkSize: 1024 * 1024 * 1024,
             testChunks: false,
             fileParameterName: "fileUpload",
             singleFile: true,
             headers: {
                 type: "c",
-                company_code: ontimetest.company_code
+                company_code: ontime_data.company_code
             }
         };
         //When file is selected from browser file picker
@@ -1043,8 +1043,8 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.uploadPopup.baseUrl = ontimetest.weburl;
-            $rootScope.uploadPopup.companyCode = ontimetest.company_code;
+            $rootScope.uploadPopup.baseUrl = ontime_data.weburl;
+            $rootScope.uploadPopup.companyCode = ontime_data.company_code;
             $rootScope.uploadPopup.data = {employeeId: ctrl.employee.id};
             $rootScope.uploadPopup.fileObj = {};
             $rootScope.uploadPopup.closePopup = function () {
@@ -1106,14 +1106,14 @@
                     delete $rootScope.uploadPopup.data.name;
                 }
                 $rootScope.uploadPopup.uploadFile = {
-                    target: ontimetest.weburl + 'file/upload',
+                    target: ontime_data.weburl + 'file/upload',
                     chunkSize: 1024 * 1024 * 1024,
                     testChunks: false,
                     fileParameterName: "fileUpload",
                     singleFile: true,
                     headers: {
                         type: $rootScope.uploadPopup.data.type,
-                        company_code: ontimetest.company_code
+                        company_code: ontime_data.company_code
                     }
                 };
             }
@@ -1164,7 +1164,7 @@
             };
         };
         ctrl.officeStaffIds = [];
-        PositionDAO.retrieveAll({positionGroup: ontimetest.positionGroups.OFFICE_STAFF}).then(function (res) {
+        PositionDAO.retrieveAll({positionGroup: ontime_data.positionGroups.OFFICE_STAFF}).then(function (res) {
             if (res && res.length > 0) {
                 angular.forEach(res, function (position) {
                     ctrl.officeStaffIds.push(position.id);

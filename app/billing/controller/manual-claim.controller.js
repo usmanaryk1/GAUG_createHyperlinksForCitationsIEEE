@@ -142,7 +142,7 @@
             PatientDAO.retrieveForSelect({}).then(function (res) {
                 ctrl.patientList = res;
             }).catch(function (data, status) {
-                ctrl.patientList = ontimetest.patients;
+//                ctrl.patientList = ontime_data.patients;
             }).then(function () {
                 $rootScope.unmaskLoading();
             });

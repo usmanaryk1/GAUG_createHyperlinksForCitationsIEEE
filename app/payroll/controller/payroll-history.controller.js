@@ -1,8 +1,8 @@
 (function () {
     function PayrollHistoryCtrl($rootScope, $location, $http, PayrollDAO, $timeout, $state, Page) {
         var ctrl = this;
-//        ctrl.companyCode = ontimetest.company_code;
-//        ctrl.baseUrl = ontimetest.weburl;
+//        ctrl.companyCode = ontime_data.company_code;
+//        ctrl.baseUrl = ontime_data.weburl;
         ctrl.datatableObj = {};
         ctrl.viewRecords = 10;
         Page.setTitle("Payroll History");

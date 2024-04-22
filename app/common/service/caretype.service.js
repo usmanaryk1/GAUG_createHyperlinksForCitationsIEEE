@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var CareTypeDAO = function(resource) {
-        var api = resource(ontimetest.weburl + 'caretypes/:action/:subAction/:subAction1', {}, {
+        var api = resource(ontime_data.weburl + 'caretypes/:action/:subAction/:subAction1', {}, {
             retrieveAll: {
                 method: 'GET',
                 isArray: true,

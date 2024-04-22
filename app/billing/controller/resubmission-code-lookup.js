@@ -3,7 +3,7 @@
         var ctrl = this;
         Page.setTitle("Resubmission Code Lookup");
         $rootScope.layoutOptions.sidebar.hideMenu = true;
-        ctrl.companyCode = ontimetest.company_code;
+        ctrl.companyCode = ontime_data.company_code;
         ctrl.records = [
 //            {code: '1', name: 'Original Claim'},
             {code: '6', name: 'Corrected Claim'},

@@ -2,8 +2,8 @@
     function EmployeeTimeSheetCtrl($scope, $rootScope, TimesheetDAO, EmployeeDAO, $modal, $timeout, PositionDAO, Page, $filter) {
         var ctrl = this;
         Page.setTitle("Employee Timesheet");
-        ctrl.companyCode = ontimetest.company_code;
-        ctrl.baseUrl = ontimetest.weburl;
+        ctrl.companyCode = ontime_data.company_code;
+        ctrl.baseUrl = ontime_data.weburl;
         ctrl.criteriaSelected = false;
         ctrl.employeeIdMap = {};
         ctrl.employeeList = [];
@@ -126,7 +126,7 @@
 
                     }
                 }); // showLoadingBar
-                //                ctrl.timesheetList = ontimetest.employeeTimesheet;
+                //                ctrl.timesheetList = ontime_data.employeeTimesheet;
             }).then(function () {
                 if (ctrl.searchParams.employeeId !== null) {
                     $scope.hideDefaultImage = true;
@@ -158,7 +158,7 @@
                 }
             }).catch(function (data, status) {
                 $rootScope.unmaskLoading();
-                //                ctrl.employeeList = ontimetest.employees;
+                //                ctrl.employeeList = ontime_data.employees;
             });
         }
         ;
@@ -255,8 +255,8 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            $rootScope.utModal.companyCode = ontimetest.company_code;
-            $rootScope.utModal.baseUrl = ontimetest.weburl;
+            $rootScope.utModal.companyCode = ontime_data.company_code;
+            $rootScope.utModal.baseUrl = ontime_data.weburl;
             $rootScope.utModal.docFileObj = {};
             $rootScope.utModal.cancel = function () {
                 $rootScope.utModal.close();
@@ -276,14 +276,14 @@
                 });
             };
             $rootScope.utModal.documentUploadFile = {
-                target: ontimetest.weburl + 'file/upload',
+                target: ontime_data.weburl + 'file/upload',
                 chunkSize: 1024 * 1024 * 1024,
                 testChunks: false,
                 fileParameterName: "fileUpload",
                 singleFile: true,
                 headers: {
                     type: "u",
-                    company_code: ontimetest.company_code
+                    company_code: ontime_data.company_code
                 }
             };
             //When file is selected from browser file picker

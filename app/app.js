@@ -111,7 +111,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     var token = getCookie("token");
                     if (token == null || token == '') {
                         event.preventDefault();
-                        $state.transitionTo(ontimetest.defaultState);
+                        $state.transitionTo(ontime_data.defaultState);
                     }
                 }
                 if (toParams.lastPage) {
@@ -177,7 +177,7 @@ app.run(function ($rootScope, $modal, $state, Idle)
                     }
                     if (featureAllowed == 0) {
                         event.preventDefault();
-                        $state.transitionTo(ontimetest.defaultState);                      
+                        $state.transitionTo(ontime_data.defaultState);                      
                     }
                 }
                 setTimeout(function () {
@@ -1383,10 +1383,10 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
             return {
                 request: function (config) {
                     config.headers = config.headers || {};
-                    ontimetest.company_code = getCookie("cc");
-                    if (ontimetest.company_code != null) {
-                        $httpProvider.defaults.headers.common['company_code'] = ontimetest.company_code;
-                        config.headers.company_code = ontimetest.company_code;
+                    ontime_data.company_code = getCookie("cc");
+                    if (ontime_data.company_code != null) {
+                        $httpProvider.defaults.headers.common['company_code'] = ontime_data.company_code;
+                        config.headers.company_code = ontime_data.company_code;
                     }
                     var token = getCookie("token");
                     if (token != null) {

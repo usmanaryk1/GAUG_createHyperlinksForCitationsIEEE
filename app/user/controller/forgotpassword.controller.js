@@ -7,7 +7,7 @@
                 $rootScope.maskLoading();
                 UserDAO.resetUserPassword({userName: ctrl.username, passwordType: "f"}).then(function (res) {
                     toastr.success("Instuction for resetting your password has been sent.");
-                    $state.transitionTo(ontimetest.defaultState);
+                    $state.transitionTo(ontime_data.defaultState);
                 }).catch(function (data, status) {
                     toastr.error(data.data);
                 }).then(function () {

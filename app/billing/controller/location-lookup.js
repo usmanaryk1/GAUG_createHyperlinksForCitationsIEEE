@@ -3,7 +3,7 @@
         var ctrl = this;
         Page.setTitle("Location Lookup");
         $rootScope.layoutOptions.sidebar.hideMenu = true;
-        ctrl.companyCode = ontimetest.company_code;
+        ctrl.companyCode = ontime_data.company_code;
         ctrl.locations = [
             {code: '1', name: 'Pharmacy**'}, 
             {code: '3', name: 'School'}, 
