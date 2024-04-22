@@ -580,11 +580,15 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 controller: 'BillingSessionCtrl as billingSession',
                 templateUrl: appHelper.viewTemplatePath('billing', 'billing_session'),
             }).
-                    // existing billing batch
             state('app.location_lookup', {
                 url: '/location_lookup',
                 controller: 'LocationLookupCtrl as locationLookup',
                 templateUrl: appHelper.viewTemplatePath('billing', 'location_lookup'),
+            }).
+            state('app.resubmission_lookup', {
+                url: '/resubmission_lookup',
+                controller: 'ResubmissionLookupCtrl as resubmissionLookup',
+                templateUrl: appHelper.viewTemplatePath('billing', 'resubmission_code_lookup'),
             }).
             // Dashboards
             state('app.dashboard', {

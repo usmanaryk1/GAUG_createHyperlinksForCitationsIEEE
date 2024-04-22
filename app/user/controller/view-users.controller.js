@@ -278,7 +278,7 @@
             $rootScope.resetUserPasswordModal.user = user;
             $rootScope.resetUserPasswordModal.save = function () {
                 $rootScope.maskLoading();
-                UserDAO.resetUserPassword({userName: user.username}).then(function (res) {
+                UserDAO.resetUserPassword({userName: user.username, passwordType: "r"}).then(function (res) {
                     toastr.success("Instruction to reset password has been sent to " + user.employee.fName + " " + user.employee.lName);
                     setCookie("changePassword", false, 7);
                     $rootScope.resetUserPasswordModal.close();

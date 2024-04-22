@@ -85,7 +85,7 @@
         ctrl.checkReviewMode = function () {
             if (ctrl.reviewMode)
                 $("#manual_claim_form :input").prop("disabled", true);
-                $("#manual_claim_form :input").css('background-color','#fff');
+            $("#manual_claim_form :input").css('background-color', '#fff');
         };
 
         ctrl.getPatientDetail = function (patientId) {
@@ -225,15 +225,23 @@
             }
         };
 
-        ctrl.openLocationLookup = function (elemId) {
-            localStorage.setItem('locationLookup',elemId);
-            var url = $state.href('app.location_lookup');
+        ctrl.openLookup = function (type, elemId) {
+            var url, title;
+            if (type === 'location') {
+                localStorage.setItem('locationLookup', elemId);
+                url = $state.href('app.location_lookup');
+                title = "LocationLookup";
+            }
+            if (type === 'resubmission') {
+                url = $state.href('app.resubmission_lookup');
+                title = "ResubmissionLookup";
+            }
             var params = [
-                'height=' + screen.height/1.5,
-                'width=' + screen.width/1.5,
+                'height=' + screen.height / 1.5,
+                'width=' + screen.width / 1.5,
                 'location=0'
             ].join(',');
-            var newwindow = window.open(url, "LocationLookup", params);
+            var newwindow = window.open(url, title, params);
             if (window.focus) {
                 newwindow.moveTo(50, 50);
                 newwindow.focus();

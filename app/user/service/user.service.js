@@ -42,6 +42,7 @@
                 params: {
                     action: "resetpassword",
                     userName: "@userName",
+                    passwordType: "@passwordType",
                     appPath: window.location.toString()
                 }
             },
