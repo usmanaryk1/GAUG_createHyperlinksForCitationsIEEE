@@ -5,9 +5,9 @@
         var ctrl = this;
         ctrl.currentDate = new Date();
         ctrl.maxBirthDate = new Date().setYear((ctrl.currentDate.getYear() + 1900) - 10);
-        ctrl.retrivalRunning = true;
         ctrl.companyCode = ontime_data.company_code;
         ctrl.baseUrl = ontime_data.weburl;
+        ctrl.retrivalRunning = true;
         ctrl.stateCountyList = geo_data.stateCountyList;
         ctrl.stateCountyList['NY'] = $rootScope.nyStateCountyList;
         ctrl.languagesKeyValue = [{key: "English"}, {key: "Creole"}, {key: "Spanish"}, {key: "Russian"}, {key: "French"}, {key: "Hindi"}, {key: "Bengali"}, {key: "Mandarin"}, {key: "Korean"}, {key: "Arabic"}, {key: "Farsi"}, {key: "Urdu"}];
