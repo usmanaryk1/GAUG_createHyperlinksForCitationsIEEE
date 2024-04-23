@@ -17,8 +17,8 @@
                 serviceLineObj.seviceProcedureModifiers = JSON.stringify(serviceLineObj.seviceProcedureModifiers);
             }
         }
-        
-        
+
+
         ctrl.unbindPatientCondition = function () {
             if (ctrl.manualClaimObj.patientConditionRelated) {
                 if (ctrl.manualClaimObj.patientConditionRelated === 'EM') {
@@ -81,7 +81,7 @@
                     ctrl.manualClaimObj.patientConditionRelated = 'AA:' + ctrl.manualClaimObj.patientConditionRelatedAAState;
             }
         };
-        
+
         ctrl.calculateTotalCharges = function () {
             if (ctrl.manualClaimObj && ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                 var totalCharges = 0;
@@ -91,11 +91,11 @@
                     }
                     ctrl.parseModifiers(item);
                 });
-                ctrl.manualClaimObj.totalCharges = totalCharges;
+                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2);
             } else {
                 if (!ctrl.manualClaimObj)
                     ctrl.manualClaimObj = {};
-                ctrl.manualClaimObj.totalCharges = totalCharges;
+                ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2);
             }
         };
         if ($state.params.id && $state.params.id !== '') {
@@ -114,6 +114,9 @@
                         if (serviceLine.serviceToDate)
                             serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
                     });
+                    ctrl.manualClaimObj.serviceLines.sort(function (a, b) {
+                        return Date.parse(a.serviceFromDate) - Date.parse(b.serviceFromDate);
+                    });
                 }
             } else {
                 $rootScope.maskLoading();
@@ -129,6 +132,9 @@
                                 serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
                             if (serviceLine.serviceToDate)
                                 serviceLine.serviceToDate = $filter('date')(Date.parse(serviceLine.serviceToDate), $rootScope.dateFormat);
+                        });
+                        ctrl.manualClaimObj.serviceLines.sort(function (a, b) {
+                            return Date.parse(a.serviceFromDate) - Date.parse(b.serviceFromDate);
                         });
                     }
                 }).catch(function (err) {
@@ -184,7 +190,7 @@
             if (!ctrl.manualClaimObj.serviceLines) {
                 ctrl.manualClaimObj.serviceLines = [];
             }
-            ctrl.manualClaimObj.serviceLines.push({'serviceNPI':ctrl.manualClaimObj.companyNPI});
+            ctrl.manualClaimObj.serviceLines.push({'serviceNPI': ctrl.manualClaimObj.companyNPI});
         };
         ctrl.removeServiceLine = function (index) {
             ctrl.manualClaimObj.serviceLines.splice(index, 1);
