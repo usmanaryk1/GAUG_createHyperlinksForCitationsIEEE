@@ -681,6 +681,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/dashboard',
                 templateUrl: appHelper.viewTemplatePath('dashboard', 'dashboard')
             }).
+            state('admin.position-list', {
+                url: '/position-list',
+                templateUrl: appHelper.viewTemplatePath('position', 'view_position'),
+                controller: 'ViewPositionsCtrl as viewPosition'
+            }).
             state('admin.user', {
                 url: '/user/:id',
                 templateUrl: appHelper.viewTemplatePath('user', 'add_user'),
