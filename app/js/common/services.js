@@ -192,7 +192,11 @@ angular.module('xenon.services', []).
             this.prepareAdminMenu = function ()
             {
                 var dashboard = this.addItem('Dashboard', '/admin/dashboard', 'fa-home');
-                var users = this.addItem('Users', '/admin', 'linecons-user','CREATE_USER,EDIT_USER');
+                var users = this.addItem('Users', '/admin', 'linecons-user','CREATE_USER,EDIT_USER,VIEW_USER');
+                var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md', 'CREATE_POSITION,EDIT_POSITION,VIEW_POSITION');
+                var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o', 'CREATE_CARETYPE,UPDATE_CARETYPE,VIEW_CARETYPE');
+                var languages = this.addItem('Languages', './admin/language-list', 'fa-language','UPDATE_LANGUAGE, VIEW_LANGUAGE');
+                var tasks = this.addItem('Tasks', './admin/task-list', 'fa-tasks');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
 
                 // Subitems of users
