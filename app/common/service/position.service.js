@@ -22,7 +22,7 @@
                 return api.retrieveAll(filter).$promise;
             },
             update: function (data) {
-                return api.update({action: data.action}, data.data).$promise;
+                return api.update({action: data.action}, data).$promise;
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status, positionStatus: data.positionStatus}).$promise;

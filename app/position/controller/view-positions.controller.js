@@ -77,10 +77,10 @@
 
             if(positionCopy == undefined) { 
                 $rootScope.positionModel.position = {};
-                $rootScope.positionModel.position.action = 'save';
+                $rootScope.positionModel.position.action = 'saveposition';
             }else{
                 $rootScope.positionModel.position = positionCopy;
-                $rootScope.positionModel.position.action = 'update';
+                $rootScope.positionModel.position.action = 'updateposition';
                 if(positionCopy.positionGroup == undefined){
                     $rootScope.positionModel.position.positionGroup = [];
                 }else{
@@ -107,7 +107,13 @@
                     finish: function () {
                     }
                 }); // showLoadingBar
-                ctrl.positionList = res;
+                toastr.success("Company Position saved.");
+                $state.go('admin.position-list');
+                //Reset dirty status of form
+                if ($.fn.dirtyForms) {
+                    $('form').dirtyForms('setClean');
+                    $('.dirty').removeClass('dirty');
+                }
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve users.");
                 showLoadingBar({
