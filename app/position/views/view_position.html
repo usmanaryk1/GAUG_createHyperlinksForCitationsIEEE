@@ -29,8 +29,8 @@
                     <td>
                         <div class="center">
                             <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPosition.addEditPopup(position);" tooltip="Edit"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="position.status == 'a'" ng-click="viewPosition.activateDeactivatePopup(position, 'activateDeactivateModel', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="position.status == 'i'" ng-click="viewPosition.activateDeactivatePopup(position, 'activateDeactivateModel', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
+                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="position.status == 'a'" ng-click="viewPosition.activateDeactivatePopup(position, 'positionActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="position.status == 'i'" ng-click="viewPosition.activateDeactivatePopup(position, 'positionActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
                         </div>
                     </td>
                 </tr>
@@ -96,7 +96,22 @@
             </div>
         </div>
     </div>
+</script>
+
+<script type="text/ng-template" id="positionActivateModal">
+    <div class="modal-header">      
+    <h4 class="modal-title"> Activate/Deactivate Position</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to {{positionActivateModal.action}} this Position?
     
-    
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="positionActivateModal.confirm(positionActivateModal.position);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="positionActivateModal.dismiss();">No</button>
+    </div>
 </script>
 

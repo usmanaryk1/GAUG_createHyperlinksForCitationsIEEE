@@ -13,6 +13,8 @@
             ctrl.retrievePositions = retrievePositionsData;
             ctrl.addEditPopup = addEditPopup;
             ctrl.save = save;
+            ctrl.activateDeactivatePopup = activateDeactivatePopup;
+            ctrl.activateDeactivatePosition = activateDeactivatePosition;
             //ctrl.changeStatus = changeStatus;
             ctrl.retrievePositions();
         }
@@ -37,7 +39,7 @@
 
         function retrievePositionsData(){
 
-            PositionDAO.retrieveAll().then(function (res) {
+            PositionDAO.view({subAction: 'all'}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -144,14 +146,26 @@
             $rootScope.positionActivateModal.action = action;
             $rootScope.positionActivateModal.position = position;
             
-            $rootScope.positionActivateModal.confirm = function (user) {
-                if (action == 'activate') {
-                    ctrl.activateUser(user);
-                } else {
-                    ctrl.deactivateUser(user);
-                }
+            $rootScope.positionActivateModal.confirm = function (position) {
+                ctrl.activateDeactivatePosition(position, action);
             };
 
+            $rootScope.positionActivateModal.dismiss = function(){
+                $rootScope.positionActivateModal.close();
+            }
+
+        }
+
+        function activateDeactivatePosition(position, action){
+            PositionDAO.changestatus({id: position.id, status: action}).then(function (res) {
+                toastr.success("Position " + action + "d.");
+                ctrl.retrievePositions();
+            }).catch(function (data, status) {
+                toastr.error("Position cannot be " +  action  + "d.");
+            }).then(function () {
+                $rootScope.positionActivateModal.close();
+                $rootScope.unmaskLoading();
+            });
         }
 
         initialize();
