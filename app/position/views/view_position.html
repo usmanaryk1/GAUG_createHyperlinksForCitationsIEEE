@@ -28,8 +28,9 @@
                     <td><span style="display: block;width:20px;height: 20px;border-radius: 100%;background-color: {{position.colorCode}};float: left;"></span> <span style="vertical-align: inherit;">&nbsp;&nbsp;&nbsp;{{position.colorCode}}</span></td>
                     <td>
                         <div class="center">
-                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPosition.addEditPopup(position);" tooltip="Edit"><span class="ed_b"></span></a> 
-                            <a class="btn icon-left fa fa-trash-o delete_button ng-scope" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPosition.addEditPopup(position);" tooltip="Edit"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="position.status == 'a'" ng-click="viewPosition.activateDeactivatePopup(position, 'activateDeactivateModel', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="position.status == 'i'" ng-click="viewPosition.activateDeactivatePopup(position, 'activateDeactivateModel', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
                         </div>
                     </td>
                 </tr>
@@ -48,13 +49,13 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- <form role="form" class="form-horizontal ng-pristine ng-valid col-md-12"> -->
-                <form class="form-horizontal validate col-md-12" id="position_form" name="position_form" role="form"  ng-submit="positionModel.save()">
+                <form class="form-horizontal validate col-md-12" id="position_form" name="positionModel.position_form" role="form"  ng-submit="positionModel.save()">
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="field-1">Title</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="title" placeholder="Enter Title" ng-model="positionModel.position.position" data-validate="required" data-message-required="Please enter Title.">
+                            <input type="text" class="form-control" id="position" name="position" placeholder="Enter Title" ng-required='true' ng-model="positionModel.position.position" data-validate="required" data-message-required="Please enter Title.">
                         </div>
                     </div>
 
@@ -84,14 +85,18 @@
                             <input type="color" ng-model="positionModel.position.colorCode" class="form-control" id="color_code" placeholder="Enter Color Code ">
                         </div>
                     </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" >Save changes</button>
+                        <button type="button" class="btn btn-white" ng-click="positionModel.closePopup();">Close</button>
+                    </div>
+
+                    
                 </form>
             </div>
         </div>
     </div>
     
-    <div class="modal-footer">
-        <button type="button" class="btn btn-white" ng-click="positionModel.closePopup();">Close</button>
-        <button type="button" class="btn btn-info" ng-click="positionModel.save();">Save changes</button>
-    </div>
+    
 </script>
 

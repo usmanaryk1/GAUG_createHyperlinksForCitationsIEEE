@@ -1,21 +1,19 @@
 (function () {
     function ViewPositionsCtrl(PositionDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService) {
         var ctrl = this;
-        $rootScope.maskLoading();
-        ctrl.datatableObj = {};
-        $rootScope.selectUserModel = {};
-        Page.setTitle("Positions");
-        ctrl.companyCode = ontime_data.company_code;
-        ctrl.baseUrl = ontime_data.weburl;
-
-        ctrl.positionList = [];
-        
-        ctrl.retrievePositions = retrievePositionsData;
-        ctrl.addEditPopup = addEditPopup;
-        ctrl.save = save;
-        //ctrl.changeStatus = changeStatus;
         
         function initialize(){
+            $rootScope.maskLoading();
+            Page.setTitle("Positions");
+            ctrl.companyCode = ontime_data.company_code;
+            ctrl.baseUrl = ontime_data.weburl;
+
+            ctrl.positionList = [];
+            
+            ctrl.retrievePositions = retrievePositionsData;
+            ctrl.addEditPopup = addEditPopup;
+            ctrl.save = save;
+            //ctrl.changeStatus = changeStatus;
             ctrl.retrievePositions();
         }
 
@@ -38,6 +36,7 @@
 
 
         function retrievePositionsData(){
+
             PositionDAO.retrieveAll().then(function (res) {
                 showLoadingBar({
                     delay: .5,
@@ -78,6 +77,7 @@
             if(positionCopy == undefined) { 
                 $rootScope.positionModel.position = {};
                 $rootScope.positionModel.position.action = 'saveposition';
+                $rootScope.positionModel.position.colorCode = '#000000';
             }else{
                 $rootScope.positionModel.position = positionCopy;
                 $rootScope.positionModel.position.action = 'updateposition';
@@ -93,13 +93,16 @@
             }
 
             $rootScope.positionModel.save = function(){
-                ctrl.save($rootScope.positionModel.position);
-                $rootScope.positionModel.close();
+                if($rootScope.positionModel.position_form.$valid){
+                    ctrl.save($rootScope.positionModel.position);
+                    $rootScope.positionModel.close();    
+                }                
             }
             initMultiSelect();
         }
 
         function save(position){
+            //position.positionGroup = position.positionGroup.join(',');
             PositionDAO.update(position).then(function (res) {
                 showLoadingBar({
                     delay: .5,
@@ -108,7 +111,7 @@
                     }
                 }); // showLoadingBar
                 toastr.success("Company Position saved.");
-                $state.go('admin.position-list');
+                ctrl.retrievePositions();
                 //Reset dirty status of form
                 if ($.fn.dirtyForms) {
                     $('form').dirtyForms('setClean');
@@ -127,6 +130,28 @@
             }).then(function () {
                 $rootScope.unmaskLoading();
             });
+        }
+
+        function activateDeactivatePopup(position, modal_id, action, modal_size, modal_backdrop)
+        {
+            $rootScope.positionActivateModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            
+            $rootScope.positionActivateModal.action = action;
+            $rootScope.positionActivateModal.position = position;
+            
+            $rootScope.positionActivateModal.confirm = function (user) {
+                if (action == 'activate') {
+                    ctrl.activateUser(user);
+                } else {
+                    ctrl.deactivateUser(user);
+                }
+            };
+
         }
 
         initialize();
