@@ -70,25 +70,25 @@
         }
 
         function addEditPopup(position) {
+            var positionCopy = angular.copy(position);
             $rootScope.positionModel = $modal.open({
                 templateUrl: 'positionModel'
             });
 
-            if(position == undefined) { 
+            if(positionCopy == undefined) { 
                 $rootScope.positionModel.position = {};
                 $rootScope.positionModel.position.action = 'save';
             }else{
-                $rootScope.positionModel.position = position;
+                $rootScope.positionModel.position = positionCopy;
                 $rootScope.positionModel.position.action = 'update';
-                if(position.positionGroup == undefined){
+                if(positionCopy.positionGroup == undefined){
                     $rootScope.positionModel.position.positionGroup = [];
                 }else{
-                    $rootScope.positionModel.position.positionGroup = position.positionGroup.split(",");
+                    $rootScope.positionModel.position.positionGroup = positionCopy.positionGroup.split(",");
                 }
             }
             
             $rootScope.positionModel.closePopup = function(){
-
                 $rootScope.positionModel.close();
             }
 
