@@ -96,8 +96,7 @@
 
             $rootScope.positionModel.save = function(){
                 if($rootScope.positionModel.position_form.$valid){
-                    ctrl.save($rootScope.positionModel.position);
-                    $rootScope.positionModel.close();    
+                    ctrl.save($rootScope.positionModel.position);   
                 }                
             }
             initMultiSelect();
@@ -113,6 +112,7 @@
                     }
                 }); // showLoadingBar
                 toastr.success("Company Position saved.");
+                $rootScope.positionModel.close(); 
                 ctrl.retrievePositions();
                 //Reset dirty status of form
                 if ($.fn.dirtyForms) {
@@ -120,7 +120,7 @@
                     $('.dirty').removeClass('dirty');
                 }
             }).catch(function (data, status) {
-                toastr.error("Failed to retrieve users.");
+                toastr.error(data.data);
                 showLoadingBar({
                     delay: .5,
                     pct: 100,

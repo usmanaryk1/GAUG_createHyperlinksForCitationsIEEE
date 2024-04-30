@@ -685,6 +685,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 url: '/position-list',
                 templateUrl: appHelper.viewTemplatePath('position', 'view_position'),
                 controller: 'ViewPositionsCtrl as viewPosition'
+            }).            
+            state('admin.caretype-list', {
+                url: '/caretype-list',
+                templateUrl: appHelper.viewTemplatePath('caretype', 'view_caretype'),
+                controller: 'ViewCareTypesCtrl as viewCareType'
             }).
             state('admin.user', {
                 url: '/user/:id',
