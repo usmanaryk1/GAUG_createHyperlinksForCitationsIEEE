@@ -15,7 +15,7 @@
             ctrl.retrieveCareTypes = retrieveCareTypes;
             ctrl.addEditPopup = addEditPopup;
             ctrl.getPositions = getPositions;
-            //ctrl.save = save;
+            ctrl.save = save;
             //ctrl.activateDeactivatePopup = activateDeactivatePopup;
             //ctrl.activateDeactivatePosition = activateDeactivatePosition;
             //ctrl.changeStatus = changeStatus;
@@ -78,6 +78,38 @@
                     ctrl.save($rootScope.careTypeModel.caretype);   
                 }                
             }
+        }
+
+        function save(position){
+            //position.positionGroup = position.positionGroup.join(',');
+            CareTypeDAO.update(position).then(function (res) {
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+                    }
+                }); // showLoadingBar
+                toastr.success("Company Position saved.");
+                $rootScope.careTypeModel.close(); 
+                ctrl.retrievePositions();
+                //Reset dirty status of form
+                if ($.fn.dirtyForms) {
+                    $('form').dirtyForms('setClean');
+                    $('.dirty').removeClass('dirty');
+                }
+            }).catch(function (data, status) {
+                toastr.error(data.data);
+                showLoadingBar({
+                    delay: .5,
+                    pct: 100,
+                    finish: function () {
+
+                    }
+                }); // showLoadingBar
+                console.log('Error in retrieving data')
+            }).then(function () {
+                $rootScope.unmaskLoading();
+            });
         }
 
         initialize();
