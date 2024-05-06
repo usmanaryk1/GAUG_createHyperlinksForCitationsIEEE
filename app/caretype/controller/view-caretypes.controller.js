@@ -91,7 +91,7 @@
                 }); // showLoadingBar
                 toastr.success("Company Position saved.");
                 $rootScope.careTypeModel.close(); 
-                ctrl.retrievePositions();
+                ctrl.retrieveCareTypes();
                 //Reset dirty status of form
                 if ($.fn.dirtyForms) {
                     $('form').dirtyForms('setClean');
