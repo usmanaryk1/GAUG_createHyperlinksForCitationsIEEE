@@ -16,9 +16,8 @@
             ctrl.addEditPopup = addEditPopup;
             ctrl.getPositions = getPositions;
             ctrl.save = save;
-            //ctrl.activateDeactivatePopup = activateDeactivatePopup;
-            //ctrl.activateDeactivatePosition = activateDeactivatePosition;
-            //ctrl.changeStatus = changeStatus;
+            ctrl.activateDeactivatePopup = activateDeactivatePopup;
+            ctrl.activateDeactivateCareType = activateDeactivateCareType;
             ctrl.retrieveCareTypes();
         }
 
@@ -111,6 +110,41 @@
                 $rootScope.unmaskLoading();
             });
         }
+
+        function activateDeactivatePopup(caretype, modal_id, action, modal_size, modal_backdrop)
+        {
+            $rootScope.careTypeActivateModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
+            
+            $rootScope.careTypeActivateModal.action = action;
+            $rootScope.careTypeActivateModal.caretype = caretype;
+            
+            $rootScope.careTypeActivateModal.confirm = function (caretype) {
+                ctrl.activateDeactivateCareType(caretype, action);
+            };
+
+            $rootScope.careTypeActivateModal.dismiss = function(){
+                $rootScope.careTypeActivateModal.close();
+            }
+
+        }
+
+        function activateDeactivateCareType(caretype, action){
+            PositionDAO.changestatus({id: caretype.id, status: action}).then(function (res) {
+                toastr.success("Care Type " + action + "d.");
+                ctrl.retrieveCareTypes();
+            }).catch(function (data, status) {
+                toastr.error("Care Type cannot be " +  action  + "d.");
+            }).then(function () {
+                $rootScope.careTypeActivateModal.close();
+                $rootScope.unmaskLoading();
+            });
+        }
+
 
         initialize();
     };

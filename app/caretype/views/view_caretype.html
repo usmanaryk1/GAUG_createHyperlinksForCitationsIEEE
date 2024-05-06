@@ -26,8 +26,8 @@
 					<td>
 						<div class="center">
 							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewCareType.addEditPopup(caretype);" tooltip="Edit"><span class="ed_b"></span></a> 
-							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="caretype.status == 'a'" ng-click="viewPosition.activateDeactivatePopup(caretype, 'positionActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="caretype.status == 'i'" ng-click="viewPosition.activateDeactivatePopup(caretype, 'positionActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
+							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="caretype.status == 'a'" ng-click="viewCareType.activateDeactivatePopup(caretype, 'careTypeActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="caretype.status == 'i'" ng-click="viewCareType.activateDeactivatePopup(caretype, 'careTypeActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
 						</div>
 					</td>
 				</tr>
@@ -88,3 +88,19 @@
 	</div>
 </script>
 
+<script type="text/ng-template" id="careTypeActivateModal">
+    <div class="modal-header">      
+    <h4 class="modal-title"> Activate/Deactivate Care Type</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to {{careTypeActivateModal.action}} this Care Type?
+    
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="careTypeActivateModal.confirm(careTypeActivateModal.caretype);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="careTypeActivateModal.dismiss();">No</button>
+    </div>
+</script>
