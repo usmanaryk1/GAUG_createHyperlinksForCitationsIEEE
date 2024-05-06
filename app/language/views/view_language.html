@@ -1,0 +1,158 @@
+<div class="page-title full-width" ng-if="layoutOptions.pageTitles" title="Native Elements" description="Plain text boxes, select dropdowns and other basic form elements">
+	<div class="title-env" style="width:80%">
+		<h1 class="title ng-binding">Languages</h1>
+		<p class="description ng-binding">Listing of Languages</p>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<table class="table table-bordered table-striped" id="example-2">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			
+			<tbody class="middle-align">
+				<tr role="row" class="odd" ng-repeat="language in viewLanguage.languageList" 
+                                                    total-items="totalRecords">
+					<td>{{language.language}}</td>
+					<td>
+						<div class="center">
+							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="language.status == 'a'" ng-click="viewLanguage.activateDeactivatePopup(language, 'languageActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="language.status == 'i'" ng-click="viewLanguage.activateDeactivatePopup(language, 'languageActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/ng-template" id="languageActivateModal">
+    <div class="modal-header">      
+    <h4 class="modal-title"> Activate/Deactivate Language</h4>
+    </div>
+
+    <div class="modal-body">
+
+    Are you sure you want to {{languageActivateModal.action}} this Language?
+    
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="languageActivateModal.confirm(languageActivateModal.language);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="languageActivateModal.dismiss();">No</button>
+    </div>
+</script>
+
+<!-- <div class="page-title full-width" ng-if="layoutOptions.pageTitles" title="Native Elements" description="Plain text boxes, select dropdowns and other basic form elements">
+	<div class="title-env" style="width:80%">
+		<h1 class="title ng-binding">Add Task</h1>
+		<p class="description ng-binding">Add new task</p>
+	</div>
+	<div class="title-env" style="width:20%">
+		<a href="#" class="btn btn-secondary pull-right" style="margin-top: 10px;">List of Tasks</a>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default" style="padding: 0;">
+			<div class="panel-body form-horizontal">
+
+				<form role="form" class="form-horizontal ng-pristine ng-valid col-md-12">
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="field-1">Title</label>
+
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="title" placeholder="Enter Title">
+						</div>
+					</div>
+
+					<div class="form-group-separator"></div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="field-1">Organization Code </label>
+
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="org_code" placeholder="Enter Organization Code ">
+						</div>
+					</div>
+					<div class="form-group-separator"></div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Options</label>
+						
+						<div class="col-sm-10">
+						<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#s2example-2").select2({
+									placeholder: 'Choose Options',
+									allowClear: true
+								}).on('select2-open', function()
+								{
+									// Adding Custom Scrollbar
+									$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+								});
+								
+							});
+						</script>
+						
+						<select class="form-control" id="s2example-2" multiple>
+							<option></option>
+							<optgroup label="">
+								<option>Good</option>
+								<option>No</option>
+								<option>Poor</option>
+							</optgroup>
+						</select>
+						</div>
+					</div>
+
+					<div class="form-group-separator"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="tagsinput-1">Company position</label>
+						
+						<div class="col-sm-10">
+							
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#multi-select").multiSelect({
+										afterInit: function()
+										{
+											// Add alternative scrollbar to list
+											this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+										},
+										afterSelect: function()
+										{
+											// Update scrollbar size
+											this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+										}
+									});
+								});
+							</script>
+							<select class="form-control" multiple="multiple" id="multi-select" name="my-select[]">
+								<option value="1">Position 1</option>
+								<option value="2">Position 2</option>
+								<option value="3">Position 3</option>
+							</select>
+							
+						</div>
+					</div>
+
+					<div class="form-group-separator"></div>
+
+					<div class="col-md-12">
+						<button type="button" class="btn btn-success pull-right" ng-click="currentModal.dismiss();">Save changes</button>
+					</div>
+				</form>
+		</div>
+	</div>
+</div>
+</div> -->
+
