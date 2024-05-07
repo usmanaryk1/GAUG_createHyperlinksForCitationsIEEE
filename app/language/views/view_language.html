@@ -19,7 +19,7 @@
                                                     total-items="totalRecords">
 					<td>{{language.language}}</td>
 					<td>
-						<div class="center">
+						<div class="center" ng-if="language.language != 'English US'">
 							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="language.status == 'a'" ng-click="viewLanguage.activateDeactivatePopup(language, 'languageActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
                             <a class="btn icon-left fa fa-check edit_button" href="" ng-if="language.status == 'i'" ng-click="viewLanguage.activateDeactivatePopup(language, 'languageActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
 						</div>
