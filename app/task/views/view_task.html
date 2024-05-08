@@ -1,0 +1,38 @@
+<div class="page-title full-width" ng-if="layoutOptions.pageTitles" title="Native Elements" description="Plain text boxes, select dropdowns and other basic form elements">
+	<div class="title-env" style="width:80%">
+		<h1 class="title ng-binding">Tasks</h1>
+		<p class="description ng-binding">Listing of Tasks</p>
+	</div>
+	<div class="title-env" style="width:20%">
+		<a href="#/app/add_position" class="btn btn-secondary pull-right" ng-click="task.openModal('modal-5', 'lg');" style="margin-top: 10px;">Add New Task</a>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<table class="table table-bordered table-striped" id="example-2">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Options</th>
+					<th>Company Position</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			
+			<tbody class="middle-align">
+				<tr role="row" class="odd" ng-repeat="task in viewTask.taskList" 
+                                                    total-items="totalRecords">
+					<td>{{task.task}}</td>
+					<td>Good|No|Poor</td>
+					<td>pc</td>
+					<td>
+						<div class="center">
+							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPatient.edit(patient);" tooltip="Edit"><span class="ed_b"></span></a> 
+							<a class="btn icon-left fa fa-trash-o delete_button ng-scope" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b"></span></a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
