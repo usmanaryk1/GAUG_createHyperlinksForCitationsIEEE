@@ -196,6 +196,7 @@ angular.module('xenon.services', []).
                 var positions = this.addItem('Positions', '/admin/position-list', 'linecons-user');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'linecons-user');
                 var languages = this.addItem('Languages', './admin/language-list', 'linecons-user');
+                var languages = this.addItem('Tasks', './admin/task-list', 'linecons-user');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
 
                 // Subitems of users

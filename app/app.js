@@ -696,6 +696,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, AS
                 templateUrl: appHelper.viewTemplatePath('language', 'view_language'),
                 controller: 'ViewLanguagesCtrl as viewLanguage'
             }).
+            state('admin.task-list', {
+                url: '/task-list',
+                templateUrl: appHelper.viewTemplatePath('task', 'view_task'),
+                controller: 'ViewTasksCtrl as viewTask'
+            }).
             state('admin.user', {
                 url: '/user/:id',
                 templateUrl: appHelper.viewTemplatePath('user', 'add_user'),
