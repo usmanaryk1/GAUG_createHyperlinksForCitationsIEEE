@@ -103,7 +103,9 @@
         }
 
         function save(position){
-            //position.positionGroup = position.positionGroup.join(',');
+            console.log("In Save Position");
+            console.log(position);
+            position.positionGroup = position.positionGroup.join(',');
             PositionDAO.update(position).then(function (res) {
                 showLoadingBar({
                     delay: .5,

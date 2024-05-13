@@ -4,7 +4,7 @@
 		<p class="description ng-binding">Listing of Tasks</p>
 	</div>
 	<div class="title-env" style="width:20%">
-		<a href="#/app/add_position" class="btn btn-secondary pull-right" ng-click="task.openModal('modal-5', 'lg');" style="margin-top: 10px;">Add New Task</a>
+		<a href="#/app/add_position" class="btn btn-secondary pull-right" ng-if="hasAccess('CREATE_TASK')" ng-click="task.openModal('modal-5', 'lg');" style="margin-top: 10px;">Add New Task</a>
 	</div>
 </div>
 <div class="panel panel-default">
@@ -27,8 +27,8 @@
 					<td>pc</td>
 					<td>
 						<div class="center">
-							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPatient.edit(patient);" tooltip="Edit"><span class="ed_b"></span></a> 
-							<a class="btn icon-left fa fa-trash-o delete_button ng-scope" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b"></span></a>
+							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_TASK')" ng-click="viewPatient.edit(patient);" tooltip="Edit"><span class="ed_b"></span></a> 
+							<a class="btn icon-left fa fa-trash-o delete_button ng-scope" ng-if="hasAccess('UPDATE_TASK')" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b"></span></a>
 						</div>
 					</td>
 				</tr>

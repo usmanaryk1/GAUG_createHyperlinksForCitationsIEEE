@@ -4,7 +4,7 @@
         <p class="description ng-binding">Listing of positions</p>
     </div>
     <div class="title-env" style="width:20%" >
-        <a class="btn btn-secondary pull-right" ng-click="viewPosition.addEditPopup()" style="margin-top: 10px;">Add New Position</a>
+        <a class="btn btn-secondary pull-right" ng-click="viewPosition.addEditPopup()" ng-if="hasAccess('CREATE_POSITION') style="margin-top: 10px;">Add New Position</a>
     </div>
 </div>
 <div class="panel panel-default">
@@ -28,9 +28,9 @@
                     <td><span style="display: block;width:20px;height: 20px;border-radius: 100%;background-color: {{position.colorCode}};float: left;"></span> <span style="vertical-align: inherit;">&nbsp;&nbsp;&nbsp;{{position.colorCode}}</span></td>
                     <td>
                         <div class="center">
-                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPosition.addEditPopup(position);" tooltip="Edit"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="position.status == 'a'" ng-click="viewPosition.activateDeactivatePopup(position, 'positionActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
-                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="position.status == 'i'" ng-click="viewPosition.activateDeactivatePopup(position, 'positionActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
+                            <a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_POSITION')" ng-click="viewPosition.addEditPopup(position);" tooltip="Edit"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="hasAccess('UPDATE_POSITION') && position.status == 'a'" ng-click="viewPosition.activateDeactivatePopup(position, 'positionActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="hasAccess('UPDATE_POSITION') && position.status == 'i'" ng-click="viewPosition.activateDeactivatePopup(position, 'positionActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a> 
                         </div>
                     </td>
                 </tr>
