@@ -1,5 +1,5 @@
 (function () {
-    function ViewTasksCtrl(TasksDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService) {
+    function ViewTasksCtrl(TasksDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService, PositionDAO, LanguageDAO) {
         var ctrl = this;
         
         function initialize(){
@@ -11,12 +11,51 @@
             ctrl.taskList = [];
             
             ctrl.retrieveTasks = retrieveTasksData;
-            //ctrl.addEditPopup = addEditPopup;
+            ctrl.addEditPopup = addEditPopup;
+            ctrl.getPositions = getPositions;
+            ctrl.getLanguages = getLanguages;
             //ctrl.save = save;
-            //ctrl.activateDeactivatePopup = activateDeactivatePopup;
-            //ctrl.activateDeactivatePosition = activateDeactivatePosition;
+            ctrl.activateDeactivatePopup = activateDeactivatePopup;
+            ctrl.activateDeactivateTask = activateDeactivateTask;
             //ctrl.changeStatus = changeStatus;
             ctrl.retrieveTasks();
+        }
+
+        function initMultiSelect(){
+            setTimeout(function () {
+                $("#companyPositionId").multiSelect({
+                    afterInit: function()
+                    {
+                        // Add alternative scrollbar to list
+                        this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                    },
+                    afterSelect: function()
+                    {
+                        // Update scrollbar size
+                        this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                    }
+                });
+                $("#options").select2({
+                    placeholder: 'Choose Options',
+                    allowClear: true
+                }).on('select2-open', function()
+                {
+                    // Adding Custom Scrollbar
+                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                });
+            }, 100);
+        }
+
+        function getPositions() {
+            PositionDAO.view({subAction: 'active'}).then(function (res) {
+                $rootScope.taskModel.positions = res;
+            });
+        };
+
+        function getLanguages(){
+            LanguageDAO.view({subAction: 'active'}).then(function (res) {
+                $rootScope.taskModel.languages = res;
+            });
         }
 
         function retrieveTasksData(){
@@ -44,37 +83,34 @@
             });
         }
 
-        // function addEditPopup(position) {
-        //     var positionCopy = angular.copy(position);
-        //     $rootScope.positionModel = $modal.open({
-        //         templateUrl: 'positionModel'
-        //     });
+        function addEditPopup(task) {
+            var taskCopy = angular.copy(task);
+            $rootScope.taskModel = $modal.open({
+                templateUrl: 'taskModel'
+            });
 
-        //     if(positionCopy == undefined) { 
-        //         $rootScope.positionModel.position = {};
-        //         $rootScope.positionModel.position.action = 'saveposition';
-        //         $rootScope.positionModel.position.colorCode = '#000000';
-        //     }else{
-        //         $rootScope.positionModel.position = positionCopy;
-        //         $rootScope.positionModel.position.action = 'updateposition';
-        //         if(positionCopy.positionGroup == undefined){
-        //             $rootScope.positionModel.position.positionGroup = [];
-        //         }else{
-        //             $rootScope.positionModel.position.positionGroup = positionCopy.positionGroup.split(",");
-        //         }
-        //     }
+            if(taskCopy == undefined) { 
+                $rootScope.taskModel.position = {};
+                $rootScope.taskModel.position.action = 'savetask';
+            }else{
+                $rootScope.taskModel.position = taskCopy;
+                $rootScope.taskModel.position.action = 'updatetask';
+            }
+
+            ctrl.getPositions();
+            ctrl.getLanguages();
             
-        //     $rootScope.positionModel.closePopup = function(){
-        //         $rootScope.positionModel.close();
-        //     }
+            $rootScope.taskModel.closePopup = function(){
+                $rootScope.taskModel.close();
+            }
 
-        //     $rootScope.positionModel.save = function(){
-        //         if($rootScope.positionModel.position_form.$valid){
-        //             ctrl.save($rootScope.positionModel.position);   
-        //         }                
-        //     }
-        //     initMultiSelect();
-        // }
+            $rootScope.taskModel.save = function(){
+                if($rootScope.taskModel.task_form.$valid){
+                   // ctrl.save($rootScope.taskModel.task);   
+                }                
+            }
+            initMultiSelect();
+        }
 
         // function save(position){
         //     //position.positionGroup = position.positionGroup.join(',');
@@ -108,42 +144,42 @@
         //     });
         // }
 
-        // function activateDeactivatePopup(position, modal_id, action, modal_size, modal_backdrop)
-        // {
-        //     $rootScope.positionActivateModal = $modal.open({
-        //         templateUrl: modal_id,
-        //         size: modal_size,
-        //         backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
-        //         keyboard: false
-        //     });
+        function activateDeactivatePopup(task, modal_id, action, modal_size, modal_backdrop)
+        {
+            $rootScope.taskActivateModal = $modal.open({
+                templateUrl: modal_id,
+                size: modal_size,
+                backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
+                keyboard: false
+            });
             
-        //     $rootScope.positionActivateModal.action = action;
-        //     $rootScope.positionActivateModal.position = position;
+            $rootScope.taskActivateModal.action = action;
+            $rootScope.taskActivateModal.task = task;
             
-        //     $rootScope.positionActivateModal.confirm = function (position) {
-        //         ctrl.activateDeactivatePosition(position, action);
-        //     };
+            $rootScope.taskActivateModal.confirm = function (task) {
+                ctrl.activateDeactivateTask(task, action);
+            };
 
-        //     $rootScope.positionActivateModal.dismiss = function(){
-        //         $rootScope.positionActivateModal.close();
-        //     }
+            $rootScope.taskActivateModal.dismiss = function(){
+                $rootScope.taskActivateModal.close();
+            }
 
-        // }
+        }
 
-        // function activateDeactivatePosition(position, action){
-        //     PositionDAO.changestatus({id: position.id, status: action}).then(function (res) {
-        //         toastr.success("Position " + action + "d.");
-        //         ctrl.retrievePositions();
-        //     }).catch(function (data, status) {
-        //         toastr.error("Position cannot be " +  action  + "d.");
-        //     }).then(function () {
-        //         $rootScope.positionActivateModal.close();
-        //         $rootScope.unmaskLoading();
-        //     });
-        // }
+        function activateDeactivateTask(task, action){
+            TaskDAO.changestatus({id: task.id, status: action}).then(function (res) {
+                toastr.success("Task " + action + "d.");
+                ctrl.retrieveTasks();
+            }).catch(function (data, status) {
+                toastr.error("Task cannot be " +  action  + "d.");
+            }).then(function () {
+                $rootScope.taskActivateModal.close();
+                $rootScope.unmaskLoading();
+            });
+        }
 
         initialize();
     };
 
-    angular.module('xenon.controllers').controller('ViewTasksCtrl', ["TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", ViewTasksCtrl]);
+    angular.module('xenon.controllers').controller('ViewTasksCtrl', ["TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl]);
 })();

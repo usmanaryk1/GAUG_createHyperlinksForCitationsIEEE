@@ -4,7 +4,7 @@
 		<p class="description ng-binding">Listing of Tasks</p>
 	</div>
 	<div class="title-env" style="width:20%">
-		<a href="#/app/add_position" class="btn btn-secondary pull-right" ng-click="task.openModal('modal-5', 'lg');" style="margin-top: 10px;">Add New Task</a>
+		<a class="btn btn-secondary pull-right" ng-click="viewTask.addEditPopup();" style="margin-top: 10px;">Add New Task</a>
 	</div>
 </div>
 <div class="panel panel-default">
@@ -27,8 +27,9 @@
 					<td>pc</td>
 					<td>
 						<div class="center">
-							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewPatient.edit(patient);" tooltip="Edit"><span class="ed_b"></span></a> 
-							<a class="btn icon-left fa fa-trash-o delete_button ng-scope" ng-click="viewPatient.openDeleteModal(patient, 'deleteModel');" tooltip="Delete"><span class="ed_b"></span></a>
+							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewTask.addEditPopup(task);" tooltip="Edit"><span class="ed_b"></span></a> 
+							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="task.status == 'a'" ng-click="viewTask.activateDeactivatePopup(task, 'careTypeActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+                            <a class="btn icon-left fa fa-check edit_button" href="" ng-if="task.status == 'i'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
 						</div>
 					</td>
 				</tr>
@@ -36,3 +37,95 @@
 		</table>
 	</div>
 </div>
+
+
+<script type="text/ng-template" id="taskModel">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="taskModel.closePopup();" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" >Add New Task</h4>
+    </div>
+	
+    
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- <form role="form" class="form-horizontal ng-pristine ng-valid col-md-12"> -->
+                <form class="form-horizontal validate col-md-12" id="task_form" name="taskModel.task_form" role="form"  ng-submit="taskModel.save()">
+
+                	<div class="form-group">
+						<label class="col-sm-2 control-label" for="tagsinput-1">Company position</label>
+						
+						<div class="col-sm-10">
+							<select class="form-control" name="companyPositionId" multiple="multiple" id="companyPositionId"
+						      ng-model="taskModel.task.companyPositionId" data-validate="required" data-message-required="Please select the company position." ng-options="position.id as position.position for position in taskModel.positions">						        
+					      		<option value="">Select Company Position</option>
+					      	</select>
+						</div>
+					</div>
+
+					<div class="form-group-separator"></div>
+
+					<div class="form-group">
+
+						<div class="col-sm-12">
+							<accordion close-others="true" ng-repeat="language in taskModel.languages" 
+                                                    total-items="totalRecords">
+
+								<accordion-group is-open="status1.open" ng-class="{'expanded': status1.open}">
+									<accordion-heading>{{language.language}}</accordion-heading>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="field-1">Title</label>
+
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="title" placeholder="Enter Title">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">Options</label>
+										
+										<div class="col-sm-10">
+											<select class="form-control" id="options" multiple>
+												<option></option>
+												<optgroup label="">
+													<option>Good</option>
+													<option>No</option>
+													<option>Poor</option>
+												</optgroup>
+											</select>
+										</div>
+									</div>
+								</accordion-group>
+							</accordion>
+						</div>
+					</div>	
+
+                	<div class="modal-footer">
+                        <button type="button" class="btn btn-white" ng-click="taskModel.closePopup();">Close</button>
+                        <button type="submit" class="btn btn-info" >Save changes</button>
+                    </div>
+
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="taskActivateModal">
+    <div class="modal-header">      
+    <h4 class="modal-title"> Activate/Deactivate Care Type</h4>
+    </div>
+
+    <div class="modal-body">
+
+    	Are you sure you want to {{taskActivateModal.action}} this Care Type?
+    
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="taskActivateModal.confirm(taskActivateModal.task);">Yes</button>
+    <button type="button" class="btn btn-red" ng-click="taskActivateModal.dismiss();">No</button>
+    </div>
+</script>
+
+
