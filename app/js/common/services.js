@@ -196,7 +196,7 @@ angular.module('xenon.services', []).
                 var positions = this.addItem('Positions', '/admin/position-list', 'fa-user-md');
                 var caretypes = this.addItem('Care Types', '/admin/caretype-list', 'fa-hospital-o');
                 var languages = this.addItem('Languages', './admin/language-list', 'fa-language');
-                var languages = this.addItem('Tasks', './admin/task-list', 'fa-tasks');
+                //var languages = this.addItem('Tasks', './admin/task-list', 'fa-tasks');
 //                var security = this.addItem('Security', '/admin', 'linecons-lock');
 
                 // Subitems of users
