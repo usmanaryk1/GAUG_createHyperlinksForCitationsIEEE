@@ -25,8 +25,8 @@
                 $('#languageOtherText').tagsinput("add", ctrl.patient.otherLanguages);
             });
         };
-        ctrl.staffCoordinatorList = [];
         ctrl.nursingCareList = [];
+        ctrl.staffCoordinatorList = [];
         ctrl.insuranceProviderList = [];
         if ($state.params.id && $state.params.id !== '') {
             if (isNaN(parseFloat($state.params.id)) || $rootScope.currentUser.allowedFeature.indexOf('EDIT_PATIENT') === -1) {
