@@ -79,16 +79,16 @@
             }
         }
 
-        function save(position){
+        function save(caretype){
             //position.positionGroup = position.positionGroup.join(',');
-            CareTypeDAO.update(position).then(function (res) {
+            CareTypeDAO.update(caretype).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
                     finish: function () {
                     }
                 }); // showLoadingBar
-                toastr.success("Company Position saved.");
+                toastr.success("Company Care Type saved.");
                 $rootScope.careTypeModel.close(); 
                 ctrl.retrieveCareTypes();
                 //Reset dirty status of form
@@ -134,7 +134,7 @@
         }
 
         function activateDeactivateCareType(caretype, action){
-            PositionDAO.changestatus({id: caretype.id, status: action}).then(function (res) {
+            CareTypeDAO.changestatus({id: caretype.id, status: action}).then(function (res) {
                 toastr.success("Care Type " + action + "d.");
                 ctrl.retrieveCareTypes();
             }).catch(function (data, status) {
