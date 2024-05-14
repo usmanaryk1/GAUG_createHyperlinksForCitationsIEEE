@@ -4,7 +4,7 @@
 		<p class="description ng-binding">Listing of Tasks</p>
 	</div>
 	<div class="title-env" style="width:20%">
-		<a class="btn btn-secondary pull-right" ng-click="viewTask.addEditPopup();" style="margin-top: 10px;">Add New Task</a>
+		<a class="btn btn-secondary pull-right" ng-click="viewTask.addEditPopup();" ng-if="hasAccess('CREATE_TASK')" style="margin-top: 10px;">Add New Task</a>
 	</div>
 </div>
 <div class="panel panel-default">
@@ -27,7 +27,7 @@
 					<td>pc</td>
 					<td>
 						<div class="center">
-							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-click="viewTask.addEditPopup(task);" tooltip="Edit"><span class="ed_b"></span></a> 
+							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_TASK')" ng-click="viewTask.addEditPopup(task);" tooltip="Edit"><span class="ed_b"></span></a> 
 							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="task.status == 'a'" ng-click="viewTask.activateDeactivatePopup(task, 'careTypeActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
                             <a class="btn icon-left fa fa-check edit_button" href="" ng-if="task.status == 'i'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
 						</div>
