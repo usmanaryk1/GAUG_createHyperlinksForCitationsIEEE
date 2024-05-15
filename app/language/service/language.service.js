@@ -5,7 +5,7 @@
             view: {
                 method: 'GET',
                 params: {
-                    action: 'viewAll'
+                    action: 'view'
                 },
                 isArray: true
             },

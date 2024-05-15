@@ -19,7 +19,7 @@
 
         function retrieveLanguagesData(){
 
-            LanguageDAO.view().then(function (res) {
+            LanguageDAO.view({subAction: 'all'}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
