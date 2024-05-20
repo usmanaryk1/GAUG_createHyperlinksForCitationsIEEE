@@ -90,9 +90,11 @@
             });
 
             if(taskCopy == undefined) { 
+                $rootScope.taskModel.title = 'Add New Task';
                 $rootScope.taskModel.position = {};
                 $rootScope.taskModel.position.action = 'savetask';
             }else{
+                $rootScope.taskModel.title = 'Edit Task';
                 $rootScope.taskModel.position = taskCopy;
                 $rootScope.taskModel.position.action = 'updatetask';
             }
@@ -155,6 +157,13 @@
             
             $rootScope.taskActivateModal.action = action;
             $rootScope.taskActivateModal.task = task;
+
+            if(action == 'activate'){
+                $rootScope.taskActivateModal.title = 'Activate Task';
+            }else{
+                $rootScope.taskActivateModal.title = 'Deactivate Task';
+            }
+            
             
             $rootScope.taskActivateModal.confirm = function (task) {
                 ctrl.activateDeactivateTask(task, action);

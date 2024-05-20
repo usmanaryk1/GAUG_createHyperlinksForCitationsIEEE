@@ -54,6 +54,13 @@
             $rootScope.languageActivateModal.action = action;
             $rootScope.languageActivateModal.language = language;
             
+            if(action == 'activate'){
+                $rootScope.languageActivateModal.title = 'Activate Language';
+            }else{
+                $rootScope.languageActivateModal.title = 'Deactivate Language';
+            }
+            
+
             $rootScope.languageActivateModal.confirm = function (language) {
                 ctrl.activateDeactivateLanguage(language, action);
             };

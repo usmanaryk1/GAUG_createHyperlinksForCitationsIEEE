@@ -39,7 +39,7 @@
 <script type="text/ng-template" id="careTypeModel">
 	<div class="modal-header">
         <button type="button" class="close" ng-click="careTypeModel.closePopup();" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" >Add Care Type</h4>
+        <h4 class="modal-title" > {{ careTypeModel.title }}</h4>
     </div>
 
     <div class="modal-body">
@@ -90,7 +90,7 @@
 
 <script type="text/ng-template" id="careTypeActivateModal">
     <div class="modal-header">      
-    <h4 class="modal-title"> Activate/Deactivate Care Type</h4>
+    <h4 class="modal-title"> {{ careTypeActivateModal.title }}</h4>
     </div>
 
     <div class="modal-body">

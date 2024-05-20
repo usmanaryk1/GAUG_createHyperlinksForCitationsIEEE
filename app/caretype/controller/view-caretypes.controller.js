@@ -58,9 +58,11 @@
             });
 
             if(caretypeCopy == undefined) { 
+                $rootScope.careTypeModel.title = 'Add New Care Type';
                 $rootScope.careTypeModel.caretype = {};
                 $rootScope.careTypeModel.caretype.action = 'savecaretype';
             }else{
+                $rootScope.careTypeModel.title = 'Edit Care Type';
                 $rootScope.careTypeModel.caretype = caretypeCopy;
                 $rootScope.careTypeModel.caretype.action = 'updatecaretype';
             }
@@ -122,6 +124,13 @@
             
             $rootScope.careTypeActivateModal.action = action;
             $rootScope.careTypeActivateModal.caretype = caretype;
+
+            if(action == 'activate'){
+                $rootScope.careTypeActivateModal.title = 'Activate Care Type';
+            }else{
+                $rootScope.careTypeActivateModal.title = 'Deactivate Care Type';
+            }
+            
             
             $rootScope.careTypeActivateModal.confirm = function (caretype) {
                 ctrl.activateDeactivateCareType(caretype, action);

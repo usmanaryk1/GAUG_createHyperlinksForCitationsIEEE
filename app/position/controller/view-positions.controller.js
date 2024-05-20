@@ -77,10 +77,12 @@
             });
 
             if(positionCopy == undefined) { 
+                $rootScope.positionModel.title = 'Add New Position';
                 $rootScope.positionModel.position = {};
                 $rootScope.positionModel.position.action = 'saveposition';
                 $rootScope.positionModel.position.colorCode = '#000000';
             }else{
+                $rootScope.positionModel.title = 'Edit Position';
                 $rootScope.positionModel.position = positionCopy;
                 $rootScope.positionModel.position.action = 'updateposition';
                 if(positionCopy.positionGroup == undefined){
@@ -147,6 +149,12 @@
             
             $rootScope.positionActivateModal.action = action;
             $rootScope.positionActivateModal.position = position;
+
+            if(action == 'activate'){
+                $rootScope.positionActivateModal.title = 'Activate Position';
+            }else{
+                $rootScope.positionActivateModal.title = 'Deactivate Position';
+            }
             
             $rootScope.positionActivateModal.confirm = function (position) {
                 ctrl.activateDeactivatePosition(position, action);
