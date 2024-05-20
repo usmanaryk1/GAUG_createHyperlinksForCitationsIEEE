@@ -13,8 +13,8 @@
         } else {
             ctrl.viewType = $stateParams.status;
         }
+        
         ctrl.patientList = [];
-
         ctrl.searchParams = {limit: 10, pageNo: 1, sortBy: 'lName', order: 'asc', name: ''};
         ctrl.retrievePatients = retrievePatientsData;
         ctrl.nursingCareMap = {};
