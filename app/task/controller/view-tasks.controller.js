@@ -176,7 +176,7 @@
         }
 
         function activateDeactivateTask(task, action){
-            TaskDAO.changestatus({id: task.id, status: action}).then(function (res) {
+            TasksDAO.changestatus({id: task.id, status: action}).then(function (res) {
                 toastr.success("Task " + action + "d.");
                 ctrl.retrieveTasks();
             }).catch(function (data, status) {

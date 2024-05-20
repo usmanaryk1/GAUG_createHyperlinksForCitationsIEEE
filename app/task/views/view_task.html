@@ -23,12 +23,12 @@
 				<tr role="row" class="odd" ng-repeat="task in viewTask.taskList" 
                                                     total-items="totalRecords">
 					<td>{{task.task}}</td>
-					<td>Good|No|Poor</td>
-					<td>pc</td>
+					<td>{{task.options}}</td>
+					<td>{{task.companyPositionsString}}</td>
 					<td>
 						<div class="center">
 							<a class="btn icon-left fa fa-pencil edit_button ng-scope" ng-if="hasAccess('UPDATE_TASK')" ng-click="viewTask.addEditPopup(task);" tooltip="Edit"><span class="ed_b"></span></a> 
-							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="task.status == 'a'" ng-click="viewTask.activateDeactivatePopup(task, 'careTypeActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
+							<a class="btn icon-left fa fa-ban deactivate_bt" href="" ng-if="task.status == 'a'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'deactivate')" tooltip="Deactivate"><span class="ed_b"></span></a>
                             <a class="btn icon-left fa fa-check edit_button" href="" ng-if="task.status == 'i'" ng-click="viewTask.activateDeactivatePopup(task, 'taskActivateModal', 'activate')" tooltip="Activate"><span class="ed_b"></span></a>
 						</div>
 					</td>
@@ -118,7 +118,7 @@
 
     <div class="modal-body">
 
-    	Are you sure you want to {{taskActivateModal.action}} this Care Type?
+    	Are you sure you want to {{taskActivateModal.action}} this Task?
     
     </div>
 
