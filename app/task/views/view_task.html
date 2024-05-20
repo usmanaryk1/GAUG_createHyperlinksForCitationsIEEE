@@ -20,8 +20,7 @@
 			</thead>
 			
 			<tbody class="middle-align">
-				<tr role="row" class="odd" ng-repeat="task in viewTask.taskList" 
-                                                    total-items="totalRecords">
+				<tr role="row" class="odd" ng-repeat="task in viewTask.taskList" total-items="totalRecords">
 					<td>{{task.task}}</td>
 					<td>{{task.options}}</td>
 					<td>{{task.companyPositionsString}}</td>
@@ -37,79 +36,6 @@
 		</table>
 	</div>
 </div>
-
-
-<script type="text/ng-template" id="taskModel">
-    <div class="modal-header">
-        <button type="button" class="close" ng-click="taskModel.closePopup();" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" > {{ taskModel.title }}</h4>
-    </div>
-	
-    
-    <div class="modal-body">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- <form role="form" class="form-horizontal ng-pristine ng-valid col-md-12"> -->
-                <form class="form-horizontal validate col-md-12" id="task_form" name="taskModel.task_form" role="form"  ng-submit="taskModel.save()">
-
-                	<div class="form-group">
-						<label class="col-sm-2 control-label" for="tagsinput-1">Company position</label>
-						
-						<div class="col-sm-10">
-							<select class="form-control" name="companyPositionId" multiple="multiple" id="companyPositionId"
-						      ng-model="taskModel.task.companyPositionId" data-validate="required" data-message-required="Please select the company position." ng-options="position.id as position.position for position in taskModel.positions">						        
-					      		<option value="">Select Company Position</option>
-					      	</select>
-						</div>
-					</div>
-
-					<div class="form-group-separator"></div>
-
-					<div class="form-group">
-
-						<div class="col-sm-12">
-							<accordion close-others="true" ng-repeat="language in taskModel.languages" 
-                                                    total-items="totalRecords">
-
-								<accordion-group is-open="status1.open" ng-class="{'expanded': status1.open}">
-									<accordion-heading>{{language.language}}</accordion-heading>
-									<div class="form-group">
-										<label class="col-sm-2 control-label" for="field-1">Title</label>
-
-										<div class="col-sm-10">
-											<input type="text" class="form-control" id="title" placeholder="Enter Title">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 control-label">Options</label>
-										
-										<div class="col-sm-10">
-											<select class="form-control" id="options" multiple>
-												<option></option>
-												<optgroup label="">
-													<option>Good</option>
-													<option>No</option>
-													<option>Poor</option>
-												</optgroup>
-											</select>
-										</div>
-									</div>
-								</accordion-group>
-							</accordion>
-						</div>
-					</div>	
-
-                	<div class="modal-footer">
-                        <button type="button" class="btn btn-white" ng-click="taskModel.closePopup();">Close</button>
-                        <button type="submit" class="btn btn-info" >Save changes</button>
-                    </div>
-
-                    
-                </form>
-            </div>
-        </div>
-    </div>
-</script>
 
 <script type="text/ng-template" id="taskActivateModal">
     <div class="modal-header">      
@@ -127,5 +53,3 @@
     <button type="button" class="btn btn-red" ng-click="taskActivateModal.dismiss();">No</button>
     </div>
 </script>
-
-

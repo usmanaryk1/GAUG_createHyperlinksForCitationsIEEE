@@ -17,7 +17,8 @@ var app = angular.module('xenon-app', [
     'flow',
     'ngIdle',
     'angularUtils.directives.dirPagination',
-    'toggle-switch'
+    'toggle-switch',
+    'angular.chips'
 ]);
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();

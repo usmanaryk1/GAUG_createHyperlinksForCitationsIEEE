@@ -1,5 +1,5 @@
 (function () {
-    function ViewTasksCtrl(TasksDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService, PositionDAO, LanguageDAO) {
+    function ViewTasksCtrl($scope, TasksDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService, PositionDAO, LanguageDAO) {
         var ctrl = this;
         
         function initialize(){
@@ -48,7 +48,8 @@
 
         function getPositions() {
             PositionDAO.view({subAction: 'active'}).then(function (res) {
-                $rootScope.taskModel.positions = res;
+                ctrl.positions = res;
+                console.log($scope);
             });
         };
 
@@ -85,33 +86,15 @@
 
         function addEditPopup(task) {
             var taskCopy = angular.copy(task);
-            $rootScope.taskModel = $modal.open({
-                templateUrl: 'taskModel'
+
+            var modalInstance = $modal.open({
+                templateUrl: 'app/task/views/create-task.html',
+                controller: 'CreateTaskCtrl',
+                controllerAs : 'task'
             });
 
-            if(taskCopy == undefined) { 
-                $rootScope.taskModel.title = 'Add New Task';
-                $rootScope.taskModel.position = {};
-                $rootScope.taskModel.position.action = 'savetask';
-            }else{
-                $rootScope.taskModel.title = 'Edit Task';
-                $rootScope.taskModel.position = taskCopy;
-                $rootScope.taskModel.position.action = 'updatetask';
-            }
 
-            ctrl.getPositions();
-            ctrl.getLanguages();
-            
-            $rootScope.taskModel.closePopup = function(){
-                $rootScope.taskModel.close();
-            }
-
-            $rootScope.taskModel.save = function(){
-                if($rootScope.taskModel.task_form.$valid){
-                   // ctrl.save($rootScope.taskModel.task);   
-                }                
-            }
-            initMultiSelect();
+            //initMultiSelect();
         }
 
         // function save(position){
@@ -188,7 +171,58 @@
         }
 
         initialize();
-    };
+    }
 
-    angular.module('xenon.controllers').controller('ViewTasksCtrl', ["TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl]);
+    function  CreateTaskCtrl(PositionDAO, $q, LanguageDAO) {
+        var vm = this;
+
+        vm.title = 'Add New Task';
+        vm.position = {};
+        vm.position.action = 'savetask';
+        vm.companyPositionId = [];
+
+        // }else{
+        //     $rootScope.taskModel.title = 'Edit Task';
+        //     $rootScope.taskModel.position = taskCopy;
+        //     $rootScope.taskModel.position.action = 'updatetask';
+        // }
+
+        activate();
+
+        function activate() {
+            var promises = [getPositions(), getLanguages()];
+            $q.all(promises).then(function (response) {
+
+            })
+        }
+        
+        function getPositions() {
+            PositionDAO.view({subAction: 'active'}).then(function (res) {
+                vm.positions = res;
+                delete vm.positions["$promise"];
+                delete vm.positions["$resolved"];
+                console.log(vm.positions);
+            });
+        };
+
+        function getLanguages(){
+            LanguageDAO.view({subAction: 'active'}).then(function (res) {
+                vm.languages = res;
+            });
+        }
+        
+        // $rootScope.taskModel.closePopup = function(){
+        //     $rootScope.taskModel.close();
+        // }
+
+        // $rootScope.taskModel.save = function(){
+        //     if($rootScope.taskModel.task_form.$valid){
+        //        // ctrl.save($rootScope.taskModel.task);   
+        //     }                
+        // }
+    }
+
+    angular.module('xenon.controllers')
+    .controller('ViewTasksCtrl', ["$scope","TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl])
+    .controller('CreateTaskCtrl',["PositionDAO", "$q", "LanguageDAO", CreateTaskCtrl]);
 })();
