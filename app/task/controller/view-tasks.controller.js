@@ -60,7 +60,7 @@
 
         function retrieveTasksData(){
 
-            TasksDAO.retrieveAll().then(function (res) {
+            TasksDAO.view({subAction: 'all'}).then(function (res) {
                 showLoadingBar({
                     delay: .5,
                     pct: 100,
@@ -68,6 +68,8 @@
                     }
                 }); // showLoadingBar
                 ctrl.taskList = res;
+                console.log("retrieve task");
+                console.log(ctrl.taskList);
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve tasks.");
                 showLoadingBar({

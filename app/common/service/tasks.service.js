@@ -8,6 +8,13 @@
             },
             changestatus: {
                 method: 'GET'
+            },
+            view: {
+                method: 'GET',
+                params: {
+                    action: 'view'
+                },
+                isArray: true
             }
         });
         return {
@@ -16,7 +23,10 @@
             },
             changestatus: function (data) {
                 return api.changestatus({action: 'changestatus', subAction: data.id, status: data.status}).$promise;
-            }
+            },
+            view: function (filter) {
+                return api.view(filter).$promise;
+            },
         };
     };
     angular.module("xenon.factory").factory('TasksDAO', ['$resource', TasksDAO]);
