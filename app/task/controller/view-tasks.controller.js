@@ -49,7 +49,6 @@
         function getPositions() {
             PositionDAO.view({subAction: 'active'}).then(function (res) {
                 ctrl.positions = res;
-                console.log($scope);
             });
         };
 
@@ -95,8 +94,11 @@
                 controllerAs : 'task'
             });
 
-
-            //initMultiSelect();
+            modalInstance.result.then(function (selectedItem) {
+                  initMultiSelect();
+                }, function () {
+                  
+                }); 
         }
 
         // function save(position){
@@ -175,13 +177,16 @@
         initialize();
     }
 
-    function  CreateTaskCtrl(PositionDAO, $q, LanguageDAO) {
+    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance) {
         var vm = this;
 
+        vm.closePopup = closePopup;
+        vm.save = save;
+
         vm.title = 'Add New Task';
-        vm.position = {};
-        vm.position.action = 'savetask';
-        vm.companyPositionId = [];
+        vm.task = {};
+        //vm.task.action = 'savetask';
+        vm.positions = [];
 
         // }else{
         //     $rootScope.taskModel.title = 'Edit Task';
@@ -203,7 +208,6 @@
                 vm.positions = res;
                 delete vm.positions["$promise"];
                 delete vm.positions["$resolved"];
-                console.log(vm.positions);
             });
         };
 
@@ -212,19 +216,50 @@
                 vm.languages = res;
             });
         }
-        
-        // $rootScope.taskModel.closePopup = function(){
-        //     $rootScope.taskModel.close();
-        // }
 
-        // $rootScope.taskModel.save = function(){
-        //     if($rootScope.taskModel.task_form.$valid){
-        //        // ctrl.save($rootScope.taskModel.task);   
-        //     }                
-        // }
+        $scope.$watch(function () {
+            return vm.positions;
+        }, function (newVal, oldValue) {
+            if (vm.positions) {
+                $timeout(function () {
+                    $('#companyPositionId').multiSelect('refresh');
+                }, 100);
+            }
+        });
+        
+        function closePopup(){
+            $modalInstance.dismiss();
+        }
+
+        function save(){
+
+            vm.task.positionTasks = [];
+            angular.forEach(vm.companyPositionId, function (value) {
+                vm.task.positionTasks.push({
+                    companyPoistionId: value
+                })
+            })
+
+            vm.task.taskLanguages = [];
+            angular.forEach(vm.languages, function (value) {
+                vm.task.taskLanguages.push({
+                    languageId: value.id,
+                    task: value.task,
+                    options: value.options
+                })
+
+                if(value.languageCode == "EN-US") {
+                    vm.task.languageId = value.id;
+                    vm.task.task = value.task;
+                    vm.task.options = value.options;
+                }
+            })
+
+           $modalInstance.close();               
+        }
     }
 
     angular.module('xenon.controllers')
     .controller('ViewTasksCtrl', ["$scope","TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl])
-    .controller('CreateTaskCtrl',["PositionDAO", "$q", "LanguageDAO", CreateTaskCtrl]);
+    .controller('CreateTaskCtrl',["$scope","PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", CreateTaskCtrl]);
 })();

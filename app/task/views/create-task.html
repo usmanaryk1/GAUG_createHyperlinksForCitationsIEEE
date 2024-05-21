@@ -9,11 +9,10 @@
             <div class="col-md-12">
                 <!-- <form role="form" class="form-horizontal ng-pristine ng-valid col-md-12"> -->
                 <form class="form-horizontal validate col-md-12" id="task_form" name="taskModel.task_form" role="form"  ng-submit="taskModel.save()">
-                	<div class="form-group">{{task.positions}}
+                	<div class="form-group">
 						<label class="col-sm-2 control-label" for="tagsinput-1">Company position</label>
 						<div class="col-sm-10">
-							<select class="form-control" name="companyPositionId" multiple="multiple" id="companyPositionId" ng-options="cp.id as cp.position for cp in task.positions" itemid="companyPositionId">	        
-					      		<!-- <option value="">Select Company Position</option> -->
+							<select class="form-control" name="companyPositionId" multiple="multiple" id="companyPositionId" ng-model="task.companyPositionId" onblur="setSelectValidationMessage(this)" ng-options="cp.id as cp.position for cp in task.positions" itemid="Company Position">
 					      	</select>
 						</div>
 					</div>
@@ -23,8 +22,7 @@
 					<div class="form-group">
 
 						<div class="col-sm-12">
-							<accordion close-others="true" ng-repeat="language in task.languages" 
-                                                    total-items="totalRecords">
+							<accordion close-others="true" ng-repeat="language in task.languages" total-items="totalRecords">
 
 								<accordion-group is-open="status1.open" ng-class="{'expanded': status1.open}">
 									<accordion-heading>{{language.language}}</accordion-heading>
@@ -32,14 +30,14 @@
 										<label class="col-sm-2 control-label" for="field-1">Title</label>
 
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="title" placeholder="Enter Title">
+											<input type="text" class="form-control" id="title" placeholder="Enter Title" ng-model="language.task">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label">Options</label>
 										
 										<div class="col-sm-10">
-											<chips ng-model="viewTask.companies">
+											<chips ng-model="language.options">
 											    <chip-tmpl>
 											        <div class="default-chip">
 											            {{chip}}
@@ -48,14 +46,6 @@
 											    </chip-tmpl>
 											    <input chip-control></input>
 											</chips>
-											<!-- <select class="form-control" id="options" multiple>
-												<option></option>
-												<optgroup label="">
-													<option>Good</option>
-													<option>No</option>
-													<option>Poor</option>
-												</optgroup>
-											</select> -->
 										</div>
 									</div>
 								</accordion-group>
@@ -65,7 +55,7 @@
 
                 	<div class="modal-footer">
                         <button type="button" class="btn btn-white" ng-click="task.closePopup();">Close</button>
-                        <button type="submit" class="btn btn-info" >Save changes</button>
+                        <button type="submit" class="btn btn-info" ng-click="task.save();">Save changes</button>
                     </div>
 
                     
