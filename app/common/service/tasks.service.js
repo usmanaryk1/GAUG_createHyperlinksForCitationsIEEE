@@ -15,6 +15,9 @@
                     action: 'view'
                 },
                 isArray: true
+            },
+            update: {
+                method: 'POST'
             }
         });
         return {
@@ -27,6 +30,9 @@
             view: function (filter) {
                 return api.view(filter).$promise;
             },
+            update: function (data) {
+                return api.update({action: data.action}, data).$promise;
+            }
         };
     };
     angular.module("xenon.factory").factory('TasksDAO', ['$resource', TasksDAO]);

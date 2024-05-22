@@ -1,15 +1,15 @@
 (function () {
     function ViewTasksCtrl($scope, TasksDAO, $rootScope, $stateParams, $state, $modal, Page, $debounce, $timeout, $formService, PositionDAO, LanguageDAO) {
         var ctrl = this;
-        
-        function initialize(){
+
+        function initialize() {
             $rootScope.maskLoading();
             Page.setTitle("Tasks");
             ctrl.companyCode = ontime_data.company_code;
             ctrl.baseUrl = ontime_data.weburl;
 
             ctrl.taskList = [];
-            
+
             ctrl.retrieveTasks = retrieveTasksData;
             ctrl.addEditPopup = addEditPopup;
             ctrl.getPositions = getPositions;
@@ -21,15 +21,15 @@
             ctrl.retrieveTasks();
         }
 
-        function initMultiSelect(){
+        function initMultiSelect() {
             setTimeout(function () {
                 $("#companyPositionId").multiSelect({
-                    afterInit: function()
+                    afterInit: function ()
                     {
                         // Add alternative scrollbar to list
                         this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
                     },
-                    afterSelect: function()
+                    afterSelect: function ()
                     {
                         // Update scrollbar size
                         this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
@@ -38,7 +38,7 @@
                 $("#options").select2({
                     placeholder: 'Choose Options',
                     allowClear: true
-                }).on('select2-open', function()
+                }).on('select2-open', function ()
                 {
                     // Adding Custom Scrollbar
                     $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
@@ -50,15 +50,16 @@
             PositionDAO.view({subAction: 'active'}).then(function (res) {
                 ctrl.positions = res;
             });
-        };
+        }
+        ;
 
-        function getLanguages(){
+        function getLanguages() {
             LanguageDAO.view({subAction: 'active'}).then(function (res) {
                 $rootScope.taskModel.languages = res;
             });
         }
 
-        function retrieveTasksData(){
+        function retrieveTasksData() {
 
             TasksDAO.view({subAction: 'all'}).then(function (res) {
                 showLoadingBar({
@@ -91,14 +92,14 @@
             var modalInstance = $modal.open({
                 templateUrl: 'app/task/views/create-task.html',
                 controller: 'CreateTaskCtrl',
-                controllerAs : 'task'
+                controllerAs: 'task'
             });
 
             modalInstance.result.then(function (selectedItem) {
-                  initMultiSelect();
-                }, function () {
-                  
-                }); 
+                initMultiSelect();
+            }, function () {
+
+            });
         }
 
         // function save(position){
@@ -141,33 +142,33 @@
                 backdrop: typeof modal_backdrop == 'undefined' ? true : modal_backdrop,
                 keyboard: false
             });
-            
+
             $rootScope.taskActivateModal.action = action;
             $rootScope.taskActivateModal.task = task;
 
-            if(action == 'activate'){
+            if (action == 'activate') {
                 $rootScope.taskActivateModal.title = 'Activate Task';
-            }else{
+            } else {
                 $rootScope.taskActivateModal.title = 'Deactivate Task';
             }
-            
-            
+
+
             $rootScope.taskActivateModal.confirm = function (task) {
                 ctrl.activateDeactivateTask(task, action);
             };
 
-            $rootScope.taskActivateModal.dismiss = function(){
+            $rootScope.taskActivateModal.dismiss = function () {
                 $rootScope.taskActivateModal.close();
             }
 
         }
 
-        function activateDeactivateTask(task, action){
+        function activateDeactivateTask(task, action) {
             TasksDAO.changestatus({id: task.id, status: action}).then(function (res) {
                 toastr.success("Task " + action + "d.");
                 ctrl.retrieveTasks();
             }).catch(function (data, status) {
-                toastr.error("Task cannot be " +  action  + "d.");
+                toastr.error("Task cannot be " + action + "d.");
             }).then(function () {
                 $rootScope.taskActivateModal.close();
                 $rootScope.unmaskLoading();
@@ -177,7 +178,7 @@
         initialize();
     }
 
-    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance) {
+    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO) {
         var vm = this;
 
         vm.closePopup = closePopup;
@@ -202,16 +203,16 @@
 
             })
         }
-        
+
         function getPositions() {
             PositionDAO.view({subAction: 'active'}).then(function (res) {
                 vm.positions = res;
                 delete vm.positions["$promise"];
                 delete vm.positions["$resolved"];
             });
-        };
+        }
 
-        function getLanguages(){
+        function getLanguages() {
             LanguageDAO.view({subAction: 'active'}).then(function (res) {
                 vm.languages = res;
             });
@@ -226,40 +227,40 @@
                 }, 100);
             }
         });
-        
-        function closePopup(){
+
+        function closePopup() {
             $modalInstance.dismiss();
         }
 
-        function save(){
-
+        function save() {
+            console.log("save called");
             vm.task.positionTasks = [];
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
                     companyPoistionId: value
                 })
-            })
-
+            });
+            vm.task.action = "savetask";
             vm.task.taskLanguages = [];
             angular.forEach(vm.languages, function (value) {
                 vm.task.taskLanguages.push({
                     languageId: value.id,
                     task: value.task,
                     options: value.options
-                })
-
-                if(value.languageCode == "EN-US") {
+                });
+                if (value.languageCode == "EN-US") {
                     vm.task.languageId = value.id;
                     vm.task.task = value.task;
                     vm.task.options = value.options;
                 }
-            })
-
-           $modalInstance.close();               
+            });
+            console.log(vm.task);
+            TasksDAO.update(vm.task);
+            $modalInstance.close();
         }
     }
 
     angular.module('xenon.controllers')
-    .controller('ViewTasksCtrl', ["$scope","TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl])
-    .controller('CreateTaskCtrl',["$scope","PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", CreateTaskCtrl]);
+            .controller('ViewTasksCtrl', ["$scope", "TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl])
+            .controller('CreateTaskCtrl', ["$scope", "PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", "TasksDAO", CreateTaskCtrl]);
 })();
