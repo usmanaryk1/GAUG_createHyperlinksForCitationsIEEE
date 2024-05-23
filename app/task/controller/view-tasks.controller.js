@@ -11,13 +11,12 @@
             ctrl.taskList = [];
 
             ctrl.retrieveTasks = retrieveTasksData;
-            ctrl.addEditPopup = addEditPopup;
+            ctrl.addPopup = addPopup;
+            ctrl.editPopup = editPopup;
             ctrl.getPositions = getPositions;
             ctrl.getLanguages = getLanguages;
-            //ctrl.save = save;
             ctrl.activateDeactivatePopup = activateDeactivatePopup;
             ctrl.activateDeactivateTask = activateDeactivateTask;
-            //ctrl.changeStatus = changeStatus;
             ctrl.retrieveTasks();
         }
 
@@ -70,7 +69,6 @@
                 }); // showLoadingBar
                 ctrl.taskList = res;
                 console.log("retrieve task");
-                console.log(ctrl.taskList);
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve tasks.");
                 showLoadingBar({
@@ -86,7 +84,21 @@
             });
         }
 
-        function addEditPopup(task) {
+        function addPopup() {
+            var modalInstance = $modal.open({
+                templateUrl: 'app/task/views/create-task.html',
+                controller: 'CreateTaskCtrl',
+                controllerAs: 'task'
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                initMultiSelect();
+            }, function () {
+
+            });
+        }
+
+        function editPopup(task) {
             var taskCopy = angular.copy(task);
 
             var modalInstance = $modal.open({
@@ -186,14 +198,8 @@
 
         vm.title = 'Add New Task';
         vm.task = {};
-        //vm.task.action = 'savetask';
+        vm.task.action = 'savetask';
         vm.positions = [];
-
-        // }else{
-        //     $rootScope.taskModel.title = 'Edit Task';
-        //     $rootScope.taskModel.position = taskCopy;
-        //     $rootScope.taskModel.position.action = 'updatetask';
-        // }
 
         activate();
 
@@ -234,13 +240,14 @@
 
         function save() {
             console.log("save called");
+
             vm.task.positionTasks = [];
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
                     companyPoistionId: value
                 })
             });
-            vm.task.action = "savetask";
+
             vm.task.taskLanguages = [];
             angular.forEach(vm.languages, function (value) {
                 vm.task.taskLanguages.push({
@@ -251,12 +258,13 @@
                 if (value.languageCode == "EN-US") {
                     vm.task.languageId = value.id;
                     vm.task.task = value.task;
-                    vm.task.options = value.options;
+                    //vm.task.options = value.options;
                 }
             });
-            console.log(vm.task);
-            TasksDAO.update(vm.task);
-            $modalInstance.close();
+
+            TasksDAO.update(vm.task).then(function () {
+                $modalInstance.close();
+            });
         }
     }
 
