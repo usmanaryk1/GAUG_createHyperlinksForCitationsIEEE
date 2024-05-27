@@ -18,6 +18,9 @@
             },
             update: {
                 method: 'POST'
+            },
+            save: {
+                method: 'POST'
             }
         });
         return {
@@ -31,7 +34,10 @@
                 return api.view(filter).$promise;
             },
             update: function (data) {
-                return api.update({action: data.action}, data).$promise;
+                return api.update({action: 'updatetask'}, data).$promise;
+            },
+            save: function (data) {
+                return api.update({action: 'savetask'}, data).$promise;
             }
         };
     };

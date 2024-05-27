@@ -204,7 +204,6 @@
 
         vm.title = 'Add New Task';
         vm.task = {};
-        vm.task.action = 'savetask';
         vm.positions = [];
 
         activate();
@@ -262,20 +261,21 @@
                     vm.task.taskLanguageSet.push({
                         languageId: {'id' : value.id},
                         task: value.task,
-                        options: value.options+""
+                        options: value.options.join("|"),
+                        companyPositionId : {id : 1}
                     });
                 } else {
                     vm.task.taskLanguageSet.push({
                         languageId: {'id' : value.id},
                         task: value.task,
-                        options: ""
+                        options: "",
+                        companyPositionId : {id : 1}
                     });
                 }
 
                 if (value.languageCode == "EN-US") {
                     vm.task.languageId = {'id' : value.id};
                     vm.task.task = value.task;
-                    //vm.task.options = value.options;
                 }
             });
 
@@ -296,7 +296,6 @@
 
         vm.title = 'Edit Task';
         vm.task = {};
-        vm.task.action = 'updatetask';
         vm.positions = [];
         vm.companyPositionId = [];
         vm.languages = [];
@@ -327,7 +326,7 @@
                     vm.languages.push({
                         id: value.languageId.id,
                         language: value.languageId.language,
-                        options: value.options.split(","),
+                        options: value.options.split("|"),
                         task: value.task
                     })
                 }
@@ -375,20 +374,21 @@
                     vm.task.taskLanguageSet.push({
                         languageId: {'id' : value.id},
                         task: value.task,
-                        options: value.options+""
+                        options: value.options.join("|"),
+                        companyPositionId : {id : 1}
                     });
                 } else {
                     vm.task.taskLanguageSet.push({
                         languageId: {'id' : value.id},
                         task: value.task,
-                        options: ""
+                        options: "",
+                        companyPositionId : {id : 1}
                     });
                 }
 
                 if (value.languageCode == "EN-US") {
                     vm.task.languageId = {'id' : value.id};
                     vm.task.task = value.task;
-                    //vm.task.options = value.options;
                 }
             });
 
