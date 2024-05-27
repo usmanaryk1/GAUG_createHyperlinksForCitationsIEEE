@@ -68,7 +68,6 @@
                     }
                 }); // showLoadingBar
                 ctrl.taskList = res;
-                console.log("retrieve task");
             }).catch(function (data, status) {
                 toastr.error("Failed to retrieve tasks.");
                 showLoadingBar({
@@ -78,7 +77,6 @@
 
                     }
                 }); // showLoadingBar
-                console.log('Error in retrieving data')
             }).then(function () {
                 $rootScope.unmaskLoading();
             });
@@ -100,7 +98,6 @@
 
         function editPopup(task) {
             var taskCopy = angular.copy(task);
-            console.log(taskCopy);
 
             var modalInstance = $modal.open({
                 templateUrl: 'app/task/views/edit-task.html',
@@ -196,7 +193,7 @@
         initialize();
     }
 
-    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO) {
+    function  CreateTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO,$state) {
         var vm = this;
 
         vm.closePopup = closePopup;
@@ -243,52 +240,67 @@
             $modalInstance.dismiss();
         }
 
-        function save() {
-            console.log("save called");
-
+        function save(action) {
             vm.task.positionTasks = [];
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
-                   
                     positionTaskPK: {'companyPositionId': value},
-                    status:'a'
+                    status: 'a'
                 })
             });
 
             vm.task.taskLanguageSet = [];
             angular.forEach(vm.languages, function (value) {
-                if(!angular.isUndefined(value.options) && value.options.length > 0) {
+                
+                if (!angular.isUndefined(value.options) && value.options.length > 0) {
                     vm.task.taskLanguageSet.push({
-                        languageId: {'id' : value.id},
+                        languageId: {'id': value.id},
                         task: value.task,
                         options: value.options.join("|"),
-                        companyPositionId : {id : 1}
+                        companyPositionId: {id: 1}
                     });
+                    if (value.languageCode == "EN-US") {
+//                        vm.task.languageId = {'id': value.id};
+                        vm.task.task = value.task;
+                        vm.task.options = value.options.join("|")
+                    }
                 } else {
                     vm.task.taskLanguageSet.push({
-                        languageId: {'id' : value.id},
+                        languageId: {'id': value.id},
                         task: value.task,
                         options: "",
-                        companyPositionId : {id : 1}
+                        companyPositionId: {id: 1}
                     });
+                    if (value.languageCode == "EN-US") {
+//                        vm.task.languageId = {'id': value.id};
+                        vm.task.task = value.task;
+                        vm.task.options = "";
+                    }
                 }
 
-                if (value.languageCode == "EN-US") {
-                    vm.task.languageId = {'id' : value.id};
-                    vm.task.task = value.task;
-                }
-            });
 
-            TasksDAO.update(vm.task).then(function () {
-                $modalInstance.close();
-                toastr.success("Task saved");
-            }, function () {
-                toastr.error("Something went wrong!");
             });
+            if (action == 'updatetask') {
+                TasksDAO.update(vm.task).then(function () {
+                    $modalInstance.close();
+                    toastr.success("Task saved successfully.");
+                    $state.go("admin.task-list", {status: 'all'});
+                }, function () {
+                    toastr.error("Something went wrong!");
+                });
+            } else {
+                TasksDAO.save(vm.task).then(function () {
+                    $modalInstance.close();
+                    toastr.success("Task saved successfully.");
+                    $state.go("admin.task-list", {status: 'all'});
+                }, function () {
+                    toastr.error("Something went wrong!");
+                });
+            }
         }
     }
 
-    function  EditTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO, task_detail) {
+    function  EditTaskCtrl($scope, PositionDAO, $q, LanguageDAO, $timeout, $modalInstance, TasksDAO, task_detail, $state) {
         var vm = this;
 
         vm.closePopup = closePopup;
@@ -315,19 +327,22 @@
             })
 
             angular.forEach(task_detail.taskLanguageSet, function (value) {
-                if(value.options == null) {
+                if (value.options == null) {
                     vm.languages.push({
                         id: value.languageId.id,
                         language: value.languageId.language,
                         options: [],
-                        task: value.task
+                        task: value.task,
+                        languageCode : value.languageId.languageCode
                     })
                 } else {
                     vm.languages.push({
                         id: value.languageId.id,
                         language: value.languageId.language,
                         options: value.options.split("|"),
-                        task: value.task
+                        task: value.task,
+                        languageCode : value.languageId.languageCode
+                        
                     })
                 }
             })
@@ -356,45 +371,47 @@
         }
 
         function save() {
-            console.log("updated called");
-
             vm.task.id = task_detail.id;
+            vm.task.orgCode = task_detail.orgCode;
+            vm.task.status='a';
             vm.task.positionTasks = [];
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
-                   
                     positionTaskPK: {'companyPositionId': value},
-                    status:'a'
+                    status: 'a'
                 })
             });
 
             vm.task.taskLanguageSet = [];
             angular.forEach(vm.languages, function (value) {
-                if(!angular.isUndefined(value.options) && value.options.length > 0) {
+                if (!angular.isUndefined(value.options) && value.options.length > 0) {
                     vm.task.taskLanguageSet.push({
-                        languageId: {'id' : value.id},
+                        languageId: {'id': value.id},
                         task: value.task,
                         options: value.options.join("|"),
-                        companyPositionId : {id : 1}
+                        companyPositionId: {id: 1}
                     });
+                    if (value.languageCode == "EN-US") {
+                        vm.task.task  = value.task;
+                        vm.task.options = value.options.join("|")
+                    }
                 } else {
                     vm.task.taskLanguageSet.push({
-                        languageId: {'id' : value.id},
+                        languageId: {'id': value.id},
                         task: value.task,
                         options: "",
-                        companyPositionId : {id : 1}
+                        companyPositionId: {id: 1}
                     });
-                }
-
-                if (value.languageCode == "EN-US") {
-                    vm.task.languageId = {'id' : value.id};
-                    vm.task.task = value.task;
+                    if (value.languageCode == "EN-US") {
+                        vm.task.task  = value.task;
+                        vm.task.options = "";
+                    }
                 }
             });
-
             TasksDAO.update(vm.task).then(function () {
                 $modalInstance.close();
                 toastr.success("Task updated");
+                 $state.go("admin.task-list", {status: 'all'}, {reload: true});
             }, function () {
                 toastr.error("Something went wrong!");
             });
@@ -403,6 +420,6 @@
 
     angular.module('xenon.controllers')
             .controller('ViewTasksCtrl', ["$scope", "TasksDAO", "$rootScope", "$stateParams", "$state", "$modal", "Page", "$debounce", "$timeout", "$formService", "PositionDAO", "LanguageDAO", ViewTasksCtrl])
-            .controller('CreateTaskCtrl', ["$scope", "PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", "TasksDAO", CreateTaskCtrl])
-            .controller('EditTaskCtrl', ["$scope", "PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", "TasksDAO", "task_detail", EditTaskCtrl]);
+            .controller('CreateTaskCtrl', ["$scope", "PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", "TasksDAO", "$state", CreateTaskCtrl])
+            .controller('EditTaskCtrl', ["$scope", "PositionDAO", "$q", "LanguageDAO", "$timeout", "$modalInstance", "TasksDAO", "task_detail", "$state", EditTaskCtrl]);
 })();
