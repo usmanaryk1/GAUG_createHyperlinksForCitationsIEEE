@@ -244,19 +244,26 @@
             vm.task.positionTasks = [];
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
-                    companyPoistionId: value
+                   
+                    positionTaskPK: {'companyPositionId': value},
+                    status:'a'
                 })
             });
+<<<<<<< HEAD
 
             vm.task.taskLanguages = [];
+=======
+            vm.task.action = "savetask";
+            vm.task.taskLanguageSet = [];
+>>>>>>> origin/user-management
             angular.forEach(vm.languages, function (value) {
-                vm.task.taskLanguages.push({
-                    languageId: value.id,
+                vm.task.taskLanguageSet.push({
+                    languageId: {'id' : value.id},
                     task: value.task,
                     options: value.options
                 });
                 if (value.languageCode == "EN-US") {
-                    vm.task.languageId = value.id;
+                    vm.task.languageId = {'id' : value.id};
                     vm.task.task = value.task;
                     //vm.task.options = value.options;
                 }
