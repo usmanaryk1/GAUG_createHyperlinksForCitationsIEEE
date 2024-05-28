@@ -284,7 +284,7 @@
                 TasksDAO.update(vm.task).then(function () {
                     $modalInstance.close();
                     toastr.success("Task saved successfully.");
-                    $state.go("admin.task-list", {status: 'all'});
+                     $state.go("admin.task-list", {status: 'all'}, {reload: true});
                 }, function () {
                     toastr.error("Something went wrong!");
                 });
@@ -292,7 +292,7 @@
                 TasksDAO.save(vm.task).then(function () {
                     $modalInstance.close();
                     toastr.success("Task saved successfully.");
-                    $state.go("admin.task-list", {status: 'all'});
+                   $state.go("admin.task-list", {status: 'all'}, {reload: true});
                 }, function () {
                     toastr.error("Something went wrong!");
                 });
@@ -322,6 +322,7 @@
         }
 
         function uiDataBind() {
+            console.log(task_detail);
             angular.forEach(task_detail.positionTasks, function (value) {
                 vm.companyPositionId.push(value.companyPositionId);
             })
