@@ -98,6 +98,8 @@
 
         function editPopup(task) {
             var taskCopy = angular.copy(task);
+            console.log(task);
+            console.log(taskCopy);
 
             var modalInstance = $modal.open({
                 templateUrl: 'app/task/views/edit-task.html',
@@ -202,6 +204,7 @@
         vm.title = 'Add New Task';
         vm.task = {};
         vm.positions = [];
+        vm.companyPositionId = [];
 
         activate();
 
@@ -242,6 +245,11 @@
 
         function save(action) {
             vm.task.positionTasks = [];
+
+            if(vm.companyPositionId.length == 0 ){
+                toastr.error('Please select atleast one company position');
+                return;
+            }
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
                     positionTaskPK: {'companyPositionId': value},
@@ -250,6 +258,7 @@
             });
 
             vm.task.taskLanguageSet = [];
+            var flag = 0;
             angular.forEach(vm.languages, function (value) {
                 
                 if (!angular.isUndefined(value.options) && value.options.length > 0) {
@@ -260,7 +269,15 @@
                         companyPositionId: {id: 1}
                     });
                     if (value.languageCode == "EN-US") {
-//                        vm.task.languageId = {'id': value.id};
+                       //vm.task.languageId = {'id': value.id};
+                            if(value.task == null){
+                                toastr.error('Please enter title in English');
+                                flag = 1;
+                            }
+                           if(value.options == null || value.options.length == 0 ){
+                               toastr.error('Please enter atleast one option in English');
+                               flag = 1;
+                           }
                         vm.task.task = value.task;
                         vm.task.options = value.options.join("|")
                     }
@@ -272,31 +289,32 @@
                         companyPositionId: {id: 1}
                     });
                     if (value.languageCode == "EN-US") {
-//                        vm.task.languageId = {'id': value.id};
+                        //vm.task.languageId = {'id': value.id};
+                        if(value.task == null){
+                            toastr.error('Please enter title in English');
+                            flag = 1;
+                        }
+                        if(value.options == null || value.options.length == 0 ){
+                            toastr.error('Please enter atleast one option in English');
+                            flag = 1;
+                        }
                         vm.task.task = value.task;
                         vm.task.options = "";
                     }
                 }
-
-
             });
-            if (action == 'updatetask') {
-                TasksDAO.update(vm.task).then(function () {
-                    $modalInstance.close();
-                    toastr.success("Task saved successfully.");
-                     $state.go("admin.task-list", {status: 'all'}, {reload: true});
-                }, function () {
-                    toastr.error("Something went wrong!");
-                });
-            } else {
-                TasksDAO.save(vm.task).then(function () {
-                    $modalInstance.close();
-                    toastr.success("Task saved successfully.");
-                   $state.go("admin.task-list", {status: 'all'}, {reload: true});
-                }, function () {
-                    toastr.error("Something went wrong!");
-                });
+
+            if(flag == 1) {
+                return;
             }
+
+            TasksDAO.save(vm.task).then(function () {
+                $modalInstance.close();
+                toastr.success("Task saved successfully.");
+               $state.go("admin.task-list", {status: 'all'}, {reload: true});
+            }, function () {
+                toastr.error("Something went wrong!");
+            });
         }
     }
 
@@ -374,8 +392,15 @@
         function save() {
             vm.task.id = task_detail.id;
             vm.task.orgCode = task_detail.orgCode;
-            vm.task.status='a';
+            vm.task.status = 'a';
+
+
             vm.task.positionTasks = [];
+
+            if(vm.companyPositionId.length == 0 ){
+                toastr.error('Please select atleast one company position');
+                return;
+            }
             angular.forEach(vm.companyPositionId, function (value) {
                 vm.task.positionTasks.push({
                     positionTaskPK: {'companyPositionId': value},
@@ -384,7 +409,9 @@
             });
 
             vm.task.taskLanguageSet = [];
+            var flag = 0;
             angular.forEach(vm.languages, function (value) {
+                
                 if (!angular.isUndefined(value.options) && value.options.length > 0) {
                     vm.task.taskLanguageSet.push({
                         languageId: {'id': value.id},
@@ -393,7 +420,16 @@
                         companyPositionId: {id: 1}
                     });
                     if (value.languageCode == "EN-US") {
-                        vm.task.task  = value.task;
+                       //vm.task.languageId = {'id': value.id};
+                            if(value.task == null){
+                                toastr.error('Please enter title in English');
+                                flag = 1;
+                            }
+                           if(value.options == null || value.options.length == 0 ){
+                               toastr.error('Please enter atleast one option in English');
+                               flag = 1;
+                           }
+                        vm.task.task = value.task;
                         vm.task.options = value.options.join("|")
                     }
                 } else {
@@ -404,11 +440,25 @@
                         companyPositionId: {id: 1}
                     });
                     if (value.languageCode == "EN-US") {
-                        vm.task.task  = value.task;
+                        //vm.task.languageId = {'id': value.id};
+                        if(value.task == null){
+                            toastr.error('Please enter title in English');
+                            flag = 1;
+                        }
+                        if(value.options == null || value.options.length == 0 ){
+                            toastr.error('Please enter atleast one option in English');
+                            flag = 1;
+                        }
+                        vm.task.task = value.task;
                         vm.task.options = "";
                     }
                 }
             });
+
+            if(flag == 1) {
+                return;
+            }
+
             TasksDAO.update(vm.task).then(function () {
                 $modalInstance.close();
                 toastr.success("Task updated");

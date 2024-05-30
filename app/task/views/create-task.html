@@ -69,8 +69,9 @@
     	    var itemId = element.getAttribute("itemid");
     	    $("#" + elementName).text('Please select ' + itemId + '.');
     	}
-    </script>
-    <script type="text/javascript">
+        
+        customJqueryValidation();
+
         jQuery(document).ready(function($)
         {
             $("#companyPositionId").multiSelect({
