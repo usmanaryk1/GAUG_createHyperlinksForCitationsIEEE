@@ -89,7 +89,6 @@
                     if (!isNaN(item.serviceTotalBill)) {
                         totalCharges += parseFloat(item.serviceTotalBill);
                     }
-                    ctrl.parseModifiers(item);
                 });
                 ctrl.manualClaimObj.totalCharges = $filter('number')(totalCharges, 2);
             } else {
@@ -109,6 +108,7 @@
                 ctrl.unbindPatientCondition();
                 if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                     angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                        ctrl.parseModifiers(serviceLine);
                         if (serviceLine.serviceFromDate)
                             serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
                         if (serviceLine.serviceToDate)
@@ -128,6 +128,7 @@
                     ctrl.unbindPatientCondition();
                     if (ctrl.manualClaimObj.serviceLines && ctrl.manualClaimObj.serviceLines.length > 0) {
                         angular.forEach(ctrl.manualClaimObj.serviceLines, function (serviceLine) {
+                            ctrl.parseModifiers(serviceLine);
                             if (serviceLine.serviceFromDate)
                                 serviceLine.serviceFromDate = $filter('date')(Date.parse(serviceLine.serviceFromDate), $rootScope.dateFormat);
                             if (serviceLine.serviceToDate)
