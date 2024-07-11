@@ -6,11 +6,6 @@ How to setup this:
 3. start tomcat to run frontend and backend together
 
 4. visit url http://localhost:8080/ontime-web_frontend/
-	By default it will display loginpage
-	username: Sam
-	password: samsam
-	orgCode: 12345
-
 5. example urls: 
    1) http://localhost:8080/ontime-web_frontend/#/app/add_patient_tab_1
    2) http://localhost:8080/ontime-web_frontend/#/app/add_patient_tab_2
